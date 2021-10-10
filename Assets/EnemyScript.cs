@@ -2,17 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShotScript : MonoBehaviour
+public class EnemyScript : MonoBehaviour
 {
-    public float speed = 10f;
-    public Rigidbody2D rigidbody;
-    void Start()
-    {
-        rigidbody.velocity = transform.up * speed;
-    }
     void OnTriggerEnter2D(Collider2D hitInfo){
         Debug.Log(hitInfo.name); 
         Destroy(gameObject);
     }
-
 }
