@@ -8,7 +8,7 @@ public class ShotScript : MonoBehaviour
     public Rigidbody2D rigidbody;
     void Start()
     {
-        rigidbody.velocity = transform.up * speed;
+        rigidbody.velocity = transform.right * speed;
     }
     void OnTriggerEnter2D(Collider2D hitInfo){
         Debug.Log(hitInfo.name); 

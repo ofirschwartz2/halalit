@@ -9,13 +9,25 @@ public class gunController : MonoBehaviour
     public Joystick gunJoystick;
     public float cooldownTime = 0;
     public float cooldownInterval = 1;
+    public static float radius = 2.6f;
+    public float circumference = 2 * radius * Mathf.PI;
+
+
     void Update()
     {
-        Debug.Log("ANGLE IS: "+ getAngle());
         //Debug.Log("HORIZONTAL: " + gunJoystick.Horizontal + ", VERTICAL: " + gunJoystick.Vertical);
         if (coolDownPassed() && joystickShouldShoot()){
             shoot();
         }
+        gunLocation();
+    }
+    void gunLocation(){
+        float x = radius  * Mathf.Cos(getAngle() * Mathf.PI/180);
+        float y = radius  * Mathf.Sin(getAngle() * Mathf.PI/180);
+        //Debug.Log("X: " + x + ", Y: " + y);
+        // TODO: understand what is 11.05f. I don't understand...
+        firePoint.position = new Vector2(x / 11.05f * 2.6f, y/ 11.05f * 2.6f);
+        firePoint.rotation=  Quaternion.AngleAxis(getAngle(), Vector3.forward);
     }
     float getAngle(){
         if(gunJoystick.Vertical > 0){
