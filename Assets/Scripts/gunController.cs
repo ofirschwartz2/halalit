@@ -11,6 +11,7 @@ public class gunController : MonoBehaviour
     public float cooldownInterval = 1;
     public static float radius = 2.6f;
     public float circumference = 2 * radius * Mathf.PI;
+    public float shootingTH = 0.8f;
 
 
     void Update()
@@ -24,12 +25,27 @@ public class gunController : MonoBehaviour
     void gunLocation(){
         float x = radius  * Mathf.Cos(getAngle() * Mathf.PI/180);
         float y = radius  * Mathf.Sin(getAngle() * Mathf.PI/180);
-        //Debug.Log("X: " + x + ", Y: " + y);
+        //Debug.Log("X: " + x + ", Y: " + y + ", Angle: " + getAngle() + ", Vertical: " + gunJoystick.Vertical + ", Horizontal: " + gunJoystick.Horizontal);
         // TODO: understand what is 11.05f. I don't understand...
-        firePoint.position = new Vector2(x / 11.05f * 2.6f, y/ 11.05f * 2.6f);
+        firePoint.position = new Vector2(x / 11f * 2.6f, y/ 11f * 2.6f);
         firePoint.rotation=  Quaternion.AngleAxis(getAngle(), Vector3.forward);
     }
     float getAngle(){
+        Vector2 input = new Vector2(gunJoystick.Horizontal, gunJoystick.Vertical);
+        float angle = Vector2.Angle(input, Vector2.right);
+        if(gunJoystick.Vertical < 0)
+                angle = Vector2.Angle(input, Vector2.left) + 180f;
+        return angle;
+        /*
+        if(gunJoystick.Vertical > 0 && gunJoystick.Horizontal > 0){
+            angle = 90 - angle;
+        } else if (gunJoystick.Vertical < 0 && gunJoystick.Horizontal > 0){
+            angle = 180 + angle;
+        }
+        
+        Debug.Log("Angle: " +      angle ) ;  
+        
+
         if(gunJoystick.Vertical > 0){
             if(gunJoystick.Horizontal > 0) {
                 return (Mathf.Asin(gunJoystick.Vertical / gunJoystick.Horizontal) * 180/Mathf.PI);
@@ -43,6 +59,8 @@ public class gunController : MonoBehaviour
                 return (360 - (Mathf.Asin((gunJoystick.Vertical * -1) / gunJoystick.Horizontal) * 180/Mathf.PI));
             }
         }
+        */
+        
     }
     bool coolDownPassed(){
         if(Time.time >= cooldownTime){
@@ -52,7 +70,7 @@ public class gunController : MonoBehaviour
     }
     bool joystickShouldShoot(){
         //Debug.Log("SHOULDSHOOT: " + Mathf.Sqrt(Mathf.Pow(gunJoystick.Horizontal, 2) + Mathf.Pow(gunJoystick.Vertical, 2)));
-        if (Mathf.Sqrt(Mathf.Pow(gunJoystick.Horizontal, 2) + Mathf.Pow(gunJoystick.Vertical, 2))  > 0.9){
+        if (Mathf.Sqrt(Mathf.Pow(gunJoystick.Horizontal, 2) + Mathf.Pow(gunJoystick.Vertical, 2))  > shootingTH){
             return true;
         }
         return false;
