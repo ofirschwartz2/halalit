@@ -8,7 +8,7 @@ public class gunController : MonoBehaviour
     public GameObject shotPrefab;
     public Joystick gunJoystick;
     public float cooldownTime = 0;
-    public float cooldownInterval = 1;
+    public float cooldownInterval = 0.5f;
     public static float radius = 2.6f;
     public float shootingTH = 0.8f;
 
