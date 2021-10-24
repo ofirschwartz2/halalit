@@ -1,106 +1,131 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class HalalitMovementController : MonoBehaviour
 {
-    
-    public float XVelocityLimit, YVelocityLimit, VelocityMultiplier, SlowDownVelocity;
+    const float STOP_THRESHOLD = 0.05f;
+
+    public float VelocityMultiplier; // = 10;
+    public float SlowDownVelocity; // = 2;
+    public Joystick Joystick;
 
     private Rigidbody2D _rigidBody;
-    private bool _movementInAllDirections;
+    private bool _shouldSlowDown;
 
     void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
-        _movementInAllDirections = true;
+        _shouldSlowDown = true;
     }
 
     void Update()
     {
-        if (_movementInAllDirections)
-            MovementInAllDirectionsCycle();
+        RotateByMovementJoystick();
+        MoveInRotateDirection();
+        SlowingDown();
+        Stopping();
     }
 
-    private void MovementInAllDirectionsCycle()
+    private void RotateByMovementJoystick()
     {
-        Debug.Log("velocity = " + _rigidBody.velocity + "X = " + Input.GetAxis("Horizontal") + " Y = " + Input.GetAxis("Vertical"));
-
-        MovementInAllDirectionsHandler();
-        SlowingDownHandler();
-    }
-
-    private void MovementInAllDirectionsHandler()
-    {
-        float horizontalInput = 0;
-        float verticalInput = 0;
-
-        if (ValidPositiveXVelocity() || ValidNegativeXVelocity())
+        if (!NoMovementInput())
         {
-            horizontalInput = Input.GetAxis("Horizontal") * VelocityMultiplier;
+            float angle = Vector2ToDegree(Joystick.Horizontal, Joystick.Vertical);
+            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
-
-        if (ValidPositiveYVelocity() || ValidNegativeYVelocity())
-        {
-            verticalInput = Input.GetAxis("Vertical") * VelocityMultiplier;
-        }
-
-        _rigidBody.AddForce(new Vector2(horizontalInput, verticalInput));
     }
 
-    private void SlowingDownHandler()
+    private void MoveInRotateDirection()
     {
-        if (NoXMovement())
+        if (NoMovementInput())
+            _shouldSlowDown = true;
+        else
+        {
+            _shouldSlowDown = false;
+            Vector2 direction = DegreeToVector2(transform.rotation.eulerAngles.z);
+
+            float horizontalVelocity = direction.x * Math.Abs(Joystick.Horizontal) * VelocityMultiplier;
+            float verticalVelocity = direction.y * Math.Abs(Joystick.Vertical) * VelocityMultiplier;
+
+            _rigidBody.velocity = new Vector2(horizontalVelocity, verticalVelocity);
+        }
+    }
+
+    private void SlowingDown()
+    {
+        if (ShouldSlowDownInDirection(_rigidBody.velocity.x))
         {
             float slowDownXVelocity = SlowDownVelocity;
 
             if (_rigidBody.velocity.x > 0)
                 slowDownXVelocity *= -1;
 
-             _rigidBody.AddForce(new Vector2(slowDownXVelocity, 0));
+            _rigidBody.AddForce(new Vector2(slowDownXVelocity, 0));
         }
 
-        if (NoYMovement())
+        if (ShouldSlowDownInDirection(_rigidBody.velocity.y))
         {
             float slowDownYVelocity = SlowDownVelocity;
 
             if (_rigidBody.velocity.y > 0)
                 slowDownYVelocity *= -1;
 
-             _rigidBody.AddForce(new Vector2(0, slowDownYVelocity));
+            _rigidBody.AddForce(new Vector2(0, slowDownYVelocity));
         }
+    }
+
+    private void Stopping()
+    {
+        if (ShouldStop())
+            _rigidBody.velocity = Vector2.zero;
     }
 
     #region predicates
 
-    private bool ValidPositiveXVelocity()
+    private bool NoMovementInput()
     {
-        return _rigidBody.velocity.x <= XVelocityLimit && Input.GetAxis("Horizontal") > 0;
+        return NoXInput() && NoYInput();
     }
 
-    private bool ValidNegativeXVelocity()
+    private bool NoXInput()
     {
-        return _rigidBody.velocity.x > XVelocityLimit * -1 && Input.GetAxis("Horizontal") < 0;
+        return Joystick.Horizontal == 0;
     }
 
-    private bool ValidPositiveYVelocity()
+    private bool NoYInput()
     {
-        return _rigidBody.velocity.y <= YVelocityLimit && Input.GetAxis("Vertical") > 0;
+        return Joystick.Vertical == 0;
     }
 
-    private bool ValidNegativeYVelocity()
+    private bool ShouldStop()
     {
-        return _rigidBody.velocity.y > YVelocityLimit * -1 && Input.GetAxis("Vertical") < 0;
+        return _shouldSlowDown &&
+            Math.Abs(_rigidBody.velocity.x) <= STOP_THRESHOLD &&
+            Math.Abs(_rigidBody.velocity.y) <= STOP_THRESHOLD;
     }
 
-    private bool NoXMovement()
+    private bool ShouldSlowDownInDirection(float velocity)
     {
-        return Input.GetAxis("Horizontal") == 0;
+        return _shouldSlowDown && Math.Abs(velocity) > STOP_THRESHOLD;
     }
 
-    private bool NoYMovement()
+    #endregion
+
+    #region Math Helper Function
+
+    public static float Vector2ToDegree(float x, float y)
     {
-        return Input.GetAxis("Vertical") == 0;
+        return Mathf.Atan2(y, x) * Mathf.Rad2Deg;
+    }
+
+    public static Vector2 DegreeToVector2(float degree)
+    {
+        return RadianToVector2(degree * Mathf.Deg2Rad);
+    }
+
+    public static Vector2 RadianToVector2(float radian)
+    {
+        return new Vector2(Mathf.Cos(radian), Mathf.Sin(radian));
     }
 
     #endregion
