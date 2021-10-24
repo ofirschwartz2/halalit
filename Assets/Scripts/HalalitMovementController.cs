@@ -17,7 +17,6 @@ public class HalalitMovementController : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody2D>();
         _shouldSlowDown = true;
     }
-
     void Update()
     {
         RotateByMovementJoystick();

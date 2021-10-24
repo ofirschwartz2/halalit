@@ -1795,9 +1795,9 @@ GameObject:
   - component: {fileID: 2130719623}
   - component: {fileID: 2130719622}
   - component: {fileID: 2130719624}
+  - component: {fileID: 2130719626}
   - component: {fileID: 2130719625}
   - component: {fileID: 2130719627}
-  - component: {fileID: 2130719626}
   m_Layer: 0
   m_Name: Halalit
   m_TagString: Untagged
@@ -1931,9 +1931,9 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2130719621}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f1f894ea3ed19747b91896ba6b6f510, type: 3}
+  m_Script: {fileID: 11500000, guid: 57c3850a5ae3cb843a0342e9c71d2c81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2135516712
