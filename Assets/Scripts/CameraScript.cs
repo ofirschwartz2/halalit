@@ -7,6 +7,10 @@ public class CameraScript : MonoBehaviour
     
     public Camera MainCam;
     public GameObject halalit;
+    void Start()
+    {
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
+    }
     private void FixedUpdate() {
          MainCam.transform.position = new Vector3(halalit.transform.position.x, halalit.transform.position.y, MainCam.transform.position.z);
     }
