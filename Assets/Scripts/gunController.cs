@@ -32,7 +32,7 @@ public class gunController : MonoBehaviour
         float x = GetXFromAngle(RADIUS, angle);
         float y = GetYFromAngle(RADIUS, angle);
         firePoint.position = new Vector2(x, y);
-        firePoint.rotation = Quaternion.AngleAxis(GetAngle(), Vector3.forward);
+        firePoint.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
     private float GetAngle()
