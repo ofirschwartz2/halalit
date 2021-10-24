@@ -3,18 +3,19 @@ using UnityEngine;
 
 public class HalalitMovementController : MonoBehaviour
 {
-    const float VERY_SMALL_NUMBER = 0.05f;
+    const float STOP_THRESHOLD = 0.05f;
 
-    public float VelocityMultiplier, SlowDownVelocity;
+    public float VelocityMultiplier; // = 10;
+    public float SlowDownVelocity; // = 2;
     public Joystick Joystick;
 
     private Rigidbody2D _rigidBody;
-    private bool _slowDown;
+    private bool _shouldSlowDown;
 
     void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
-        _slowDown = true;
+        _shouldSlowDown = true;
     }
 
     void Update()
@@ -36,49 +37,46 @@ public class HalalitMovementController : MonoBehaviour
 
     private void MoveInRotateDirection()
     {
-        float horizontalFinalVelocity;
-        float verticalFinalVelocity;
-
         if (NoMovementInput())
-            _slowDown = true;
+            _shouldSlowDown = true;
         else
         {
-            _slowDown = false;
+            _shouldSlowDown = false;
             Vector2 direction = DegreeToVector2(transform.rotation.eulerAngles.z);
 
-            horizontalFinalVelocity = direction.x * Math.Abs(Joystick.Horizontal) * VelocityMultiplier;
-            verticalFinalVelocity = direction.y * Math.Abs(Joystick.Vertical) * VelocityMultiplier;
+            float horizontalVelocity = direction.x * Math.Abs(Joystick.Horizontal) * VelocityMultiplier;
+            float verticalVelocity = direction.y * Math.Abs(Joystick.Vertical) * VelocityMultiplier;
 
-            _rigidBody.velocity = new Vector2(horizontalFinalVelocity, verticalFinalVelocity);
+            _rigidBody.velocity = new Vector2(horizontalVelocity, verticalVelocity);
         }
     }
 
     private void SlowingDown()
     {
-        if (_slowDown && Math.Abs(_rigidBody.velocity.x) > VERY_SMALL_NUMBER)
+        if (ShouldSlowDownInDirection(_rigidBody.velocity.x))
         {
             float slowDownXVelocity = SlowDownVelocity;
 
             if (_rigidBody.velocity.x > 0)
                 slowDownXVelocity *= -1;
 
-             _rigidBody.AddForce(new Vector2(slowDownXVelocity, 0));
+            _rigidBody.AddForce(new Vector2(slowDownXVelocity, 0));
         }
 
-        if (_slowDown && Math.Abs(_rigidBody.velocity.y) > VERY_SMALL_NUMBER)
+        if (ShouldSlowDownInDirection(_rigidBody.velocity.y))
         {
             float slowDownYVelocity = SlowDownVelocity;
-            
+
             if (_rigidBody.velocity.y > 0)
                 slowDownYVelocity *= -1;
 
-             _rigidBody.AddForce(new Vector2(0, slowDownYVelocity));
+            _rigidBody.AddForce(new Vector2(0, slowDownYVelocity));
         }
     }
 
     private void Stopping()
     {
-        if (ValidStopping())
+        if (ShouldStop())
             _rigidBody.velocity = Vector2.zero;
     }
 
@@ -99,11 +97,16 @@ public class HalalitMovementController : MonoBehaviour
         return Joystick.Vertical == 0;
     }
 
-    private bool ValidStopping()
+    private bool ShouldStop()
     {
-        return _slowDown &&
-            Math.Abs(_rigidBody.velocity.x) <= VERY_SMALL_NUMBER &&
-            Math.Abs(_rigidBody.velocity.y) <= VERY_SMALL_NUMBER;
+        return _shouldSlowDown &&
+            Math.Abs(_rigidBody.velocity.x) <= STOP_THRESHOLD &&
+            Math.Abs(_rigidBody.velocity.y) <= STOP_THRESHOLD;
+    }
+
+    private bool ShouldSlowDownInDirection(float velocity)
+    {
+        return _shouldSlowDown && Math.Abs(velocity) > STOP_THRESHOLD;
     }
 
     #endregion
