@@ -5,17 +5,15 @@ using UnityEngine;
 public class EnemyFactory : MonoBehaviour
 {
     public GameObject EnemyPrefab;
-    //public int numberOfEnemies = 5;
-    //public float[,] positions = new float[3][numberOfEnemies]; { { 1, 2 }, { 3, 4 }, { 5, 6 }, { 7, 8 } };
-    //public float[,] rotaions = new float[4,numberOfEnemies];
-
-
+    public float bottomRandom = -0.1f;
+    public float topRandom = 0.1f;
+    public int numberOfEnemies = 5;
     void Start()
     {
-            float bottomRandom=-20f;
-            float topRandom=20f;
-            Instantiate(EnemyPrefab,  new Vector3(Random.Range(bottomRandom, topRandom),Random.Range(bottomRandom, topRandom)), Quaternion.AngleAxis(0, Vector3.forward));
-            Instantiate(EnemyPrefab,  new Vector3(Random.Range(bottomRandom, topRandom),Random.Range(bottomRandom, topRandom)), Quaternion.AngleAxis(0, Vector3.forward));
+        for (int i=0; i<numberOfEnemies; i++)
+        {
+            Instantiate(EnemyPrefab,  new Vector3(Random.Range(bottomRandom, topRandom),Random.Range(bottomRandom, topRandom),0), Quaternion.AngleAxis(0, Vector3.forward));
+        }
     }
 
 }
