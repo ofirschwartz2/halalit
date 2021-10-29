@@ -10,6 +10,7 @@ public class gunController : MonoBehaviour
     public float cooldownTime = 0;
     public Transform firePoint;
     public GameObject shotPrefab;
+    public GameObject halalit;
     public Joystick gunJoystick;
 
 
@@ -29,8 +30,8 @@ public class gunController : MonoBehaviour
     private void ChangeGunPosition()
     {
         float angle = GetAngle();
-        float x = GetXFromAngle(RADIUS, angle);
-        float y = GetYFromAngle(RADIUS, angle);
+        float x = GetXFromAngle(RADIUS, angle) + halalit.transform.position.x;
+        float y = GetYFromAngle(RADIUS, angle) + halalit.transform.position.y;
         firePoint.position = new Vector2(x, y);
         firePoint.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
