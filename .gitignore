@@ -95,3 +95,10 @@ $RECYCLE.BIN/
 *.lnk
 /.vsconfig
 /Assets
+
+# Scenes
+*.unity
+
+# projectSettings
+EditorSettings.asset
+ProjectSettings.asset
