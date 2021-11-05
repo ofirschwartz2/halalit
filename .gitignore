@@ -94,7 +94,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 /.vsconfig
-/Assets
+/Assets/Joystick Pack
 
 # Scenes
 *.unity
