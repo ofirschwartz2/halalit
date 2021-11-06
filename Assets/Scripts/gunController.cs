@@ -59,7 +59,7 @@ public class gunController : MonoBehaviour
 
     private void Shoot() 
     {
-        Debug.Log("firePoint.position " + firePoint.position + ", firePoint.rotation " + firePoint.rotation);
+        // Debug.Log("firePoint.position " + firePoint.position + ", firePoint.rotation " + firePoint.rotation);
         Instantiate(shotPrefab, firePoint.position, firePoint.rotation);
         cooldownTime = Time.time + COOL_DOWN_INTERVAL;
     }

@@ -12,10 +12,6 @@ public class HalalitMovementController : MonoBehaviour
     private Rigidbody2D _rigidBody;
     private bool _shouldSlowDown;
 
-    private void OnCollisionEnter2D(Collision2D collider)
-    {
-        Debug.Log("hit detected");
-    }
     void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>();

@@ -5,9 +5,11 @@ using UnityEngine;
 public class ShotScript : MonoBehaviour
 {
     public float speed = 10f;
-    public Rigidbody2D _rigidbody;
+    private Rigidbody2D _rigidbody;
+
     void Start()
     {
+        _rigidbody = GetComponent<Rigidbody2D>();
         _rigidbody.velocity = transform.right * speed;
     }
     void OnTriggerEnter2D(Collider2D hitInfo){
