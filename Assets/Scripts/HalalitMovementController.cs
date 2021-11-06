@@ -4,7 +4,7 @@ using UnityEngine;
 public class HalalitMovementController : MonoBehaviour
 {
     public float VelocityMultiplier; // = 10;
-    public float SlowDownVelocity; // = 2;
+    public float SpinSpeed;
     public Joystick Joystick;
 
     private Rigidbody2D _rigidBody;
@@ -27,9 +27,27 @@ public class HalalitMovementController : MonoBehaviour
     {
         if (IsMovementInput())
         {
-            float angle = Vector2ToDegree(Joystick.Horizontal, Joystick.Vertical);
-            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            float joystickAngle = Vector2ToDegree(Joystick.Horizontal, Joystick.Vertical);
+            float rotationZ = transform.rotation.eulerAngles.z;
+
+            float normalizedJoystickAngle = AngleNormalizationBy360(joystickAngle);
+            float normalizedRotationZ = AngleNormalizationBy360(rotationZ);
+
+            float deltaAngle = normalizedJoystickAngle - normalizedRotationZ;
+            float shorterDeltaAngle = GetShorterSpin(deltaAngle);
+
+            transform.Rotate(new Vector3(0, 0, shorterDeltaAngle) * Time.deltaTime * SpinSpeed);
         }
+    }
+
+    private float GetShorterSpin(float angle)
+    {
+        if (angle > 180)
+            return angle - 360;
+        else if (angle < -180)
+            return angle + 360;
+        else
+            return angle;
     }
 
     private void MoveInRotateDirection()
@@ -95,6 +113,14 @@ public class HalalitMovementController : MonoBehaviour
     public static float VectorToAbsoluteValue(Vector2 vector2)
     {
         return (float)Math.Sqrt(Math.Pow(vector2.x, 2) + Math.Pow(vector2.y, 2));
+    }
+
+    public static float AngleNormalizationBy360(float angle)
+    {
+        if (angle < 0)
+            angle += 360;
+
+        return angle;
     }
 
     #endregion
