@@ -12,8 +12,8 @@ public class ShotScript : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
         _rigidbody.velocity = transform.right * speed;
     }
-    void OnTriggerEnter2D(Collider2D hitInfo){
-        Debug.Log(hitInfo.name); 
+    private void OnTriggerEnter2D(Collider2D hitInfo){
+        Debug.Log("SHOT COLLIDE WITH: " + hitInfo.tag);
         Destroy(gameObject);
     }
 
