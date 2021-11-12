@@ -3,21 +3,29 @@ using UnityEngine;
 
 public class HalalitMovementController : MonoBehaviour
 {
+    const float COOL_DOWN_INTERVAL = 0.1f;
+    public float cooldownTime = 0;
+    public float speedLimit = 10;
+
     public float VelocityMultiplier; // = 10;
     public float SpinSpeed;
     public Joystick Joystick;
-
     private Rigidbody2D _rigidBody;
+    private float _halalitThrust;
 
     void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
         _rigidBody.drag = 2;
+        _halalitThrust = 5f;
     }
     void Update()
     {
-        RotateByMovementJoystick();
-        MoveInRotateDirection();
+        if (CooldownFromCollision())
+        {
+            RotateByMovementJoystick();
+            MoveInRotateDirection();
+        }
     }
 
     #region Moving 
@@ -51,14 +59,14 @@ public class HalalitMovementController : MonoBehaviour
 
     private void MoveInRotateDirection()
     {
-        if (IsMovementInput())
+        if (IsMovementInput() && IsUnderSpeedLimit())
         {
             Vector2 direction = DegreeToVector2(transform.rotation.eulerAngles.z);
 
             float horizontalVelocity = direction.x * Math.Abs(Joystick.Horizontal) * VelocityMultiplier;
             float verticalVelocity = direction.y * Math.Abs(Joystick.Vertical) * VelocityMultiplier;
 
-            _rigidBody.velocity = new Vector2(horizontalVelocity, verticalVelocity);
+            _rigidBody.AddForce(new Vector2(horizontalVelocity, verticalVelocity));
         }
     }
 
@@ -69,6 +77,16 @@ public class HalalitMovementController : MonoBehaviour
     private bool IsMovementInput()
     {
         return !NoXInput() || !NoYInput();
+    }
+
+    private bool IsUnderSpeedLimit()
+    {
+        return VectorToAbsoluteValue(_rigidBody.velocity) < speedLimit;
+    }
+
+    private bool CooldownFromCollision()
+    {
+        return Time.time > cooldownTime;
     }
 
     private bool NoXInput()
@@ -123,4 +141,16 @@ public class HalalitMovementController : MonoBehaviour
     }
 
     #endregion
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+            KnockBack(other);
+    }
+    private void KnockBack(Collider2D otherCollider2D)
+    {
+        Vector2 normalizedDifference = (_rigidBody.transform.position - otherCollider2D.transform.position).normalized;
+        _rigidBody.AddForce(normalizedDifference * _halalitThrust, ForceMode2D.Impulse);
+        cooldownTime = Time.time + COOL_DOWN_INTERVAL;
+    }
 }
