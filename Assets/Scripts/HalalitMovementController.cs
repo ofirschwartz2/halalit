@@ -6,6 +6,7 @@ public class HalalitMovementController : MonoBehaviour
     public float VelocityMultiplier; // = 10;
     public float SpinSpeed;
     public Joystick Joystick;
+    private float _halalitThrust; // = 1
 
     private Rigidbody2D _rigidBody;
 
@@ -13,6 +14,8 @@ public class HalalitMovementController : MonoBehaviour
     {
         _rigidBody = GetComponent<Rigidbody2D>();
         _rigidBody.drag = 2;
+        _halalitThrust = 0.5f;
+
     }
     void Update()
     {
@@ -123,4 +126,21 @@ public class HalalitMovementController : MonoBehaviour
     }
 
     #endregion
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+            KnockBack(other);
+    }
+
+    private void KnockBack(Collider2D otherCollider2D)
+    {
+        Vector2 normalizedDifference = (_rigidBody.transform.position - otherCollider2D.transform.position).normalized;
+        _rigidBody.AddForce(normalizedDifference * normalizedSpeed(otherCollider2D), ForceMode2D.Impulse);
+    }
+
+    private float normalizedSpeed(Collider2D otherCollider2D)
+    {
+        return (HalalitMovementController.VectorToAbsoluteValue(otherCollider2D.GetComponent<Rigidbody2D>().velocity) + HalalitMovementController.VectorToAbsoluteValue(_rigidBody.velocity)) * _halalitThrust;
+    }
 }
