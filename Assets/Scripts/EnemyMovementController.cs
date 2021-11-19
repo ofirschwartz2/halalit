@@ -13,8 +13,8 @@ public class EnemyMovementController : MonoBehaviour
     void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>(); 
-        xSpeed = Random.Range(-0.001f, 0.001f);
-        ySpeed = Random.Range(-0.002f, 0.002f);
+        xSpeed = Random.Range(-0.005f, 0.005f);
+        ySpeed = Random.Range(-0.005f, 0.005f);
         _enemyThrust = 0.5f;
     }
 

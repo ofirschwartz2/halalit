@@ -1,21 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Common;
 using UnityEngine;
 
 public class EnemyFactory : MonoBehaviour
 {
     public GameObject EnemyPrefab;
-    public float bottomRandom; // = -0.1f
-    public float topRandom; // = 0.1f
-    public int numberOfEnemies; // = 5
-    public Vector3 screenTopLeft = new Vector3(-67f,37f);
-    public float xGreedSpacing = 67f / 10f * 2f;
-    public float yGreedSpacing = 37f / 10f * 2f;
+    public int numberOfEnemies;
+    public Vector3 screenTopLeft; 
+    public float XGreedSpacing; 
+    public float YGreedSpacing; 
+    public float MaxNumberOfEnemies;
     public bool[,] enemiesOnGameGreed = new bool[10,10];
-    public int maxNumberOfEnemies = 30;
+    public bool UseConfigFile;
+
     void Start()
     {
-        if (numberOfEnemies > maxNumberOfEnemies) 
+        if (UseConfigFile)
+        {
+            string[] props = { "XGreedSpacing", "YGreedSpacing", "XScreenTopLeft", "YScreenTopLeft", "MaxNumberOfEnemies"};
+            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
+
+            XGreedSpacing = propsFromConfig["XGreedSpacing"];
+            YGreedSpacing = propsFromConfig["YGreedSpacing"];
+            MaxNumberOfEnemies = propsFromConfig["MaxNumberOfEnemies"];
+            screenTopLeft = new Vector3(propsFromConfig["XScreenTopLeft"],propsFromConfig["YScreenTopLeft"]);
+        }
+        if (numberOfEnemies > MaxNumberOfEnemies) 
             throw new System.Exception("Number Of Enemies is wayyy too big, abort");
         
         for (int i = 0; i < numberOfEnemies; i++)
@@ -27,7 +38,7 @@ public class EnemyFactory : MonoBehaviour
 
     private Vector3 GetPointOnGreed(float xInGameGrid, float yInGameGrid)
     {
-        return screenTopLeft + new Vector3(xGreedSpacing * xInGameGrid, (-1) * yGreedSpacing * yInGameGrid);
+        return screenTopLeft + new Vector3(XGreedSpacing * xInGameGrid, (-1) * YGreedSpacing * yInGameGrid);
     }
 
     public Vector2 GetNewEnemyEntryPointOnGreed()
