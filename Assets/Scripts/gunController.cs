@@ -1,18 +1,32 @@
+using Assets.Common;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class gunController : MonoBehaviour
 {
-    const float RADIUS = 2.6f;
-    const float SHOOTING_TH = 0.8f;
-    const float COOL_DOWN_INTERVAL = 0.5f;
-    public float cooldownTime = 0;
+    private const float RADIUS = 2.6f;
+    private const float SHOOTING_TH = 0.8f;
+    private const float COOL_DOWN_INTERVAL = 0.5f;
+
+    public bool UseConfigFile;
+    public float CooldownTime = 0;
     public Transform firePoint;
     public GameObject shotPrefab;
+    // TODO: the gun should not hold it's parent (halalit), it's a bad practice, it only need it's x and y positions, so it should use a function of the halalitMovementController that will get them.
     public GameObject halalit;
     public Joystick gunJoystick;
 
+    void Start()
+    {
+        if (UseConfigFile)
+        {
+            string[] props = { "CooldownTime" };
+            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
+
+            CooldownTime = propsFromConfig["CooldownTime"];
+        }
+    }
 
     void Update()
     {
@@ -49,24 +63,19 @@ public class gunController : MonoBehaviour
 
     private bool CoolDownPassed()
     {
-        return Time.time >= cooldownTime;
+        return Time.time >= CooldownTime;
     }
 
     private bool JoystickShooting()
     {
-        return LengthOfLine(gunJoystick.Horizontal, gunJoystick.Vertical) > SHOOTING_TH;
+        return Utils.GetLengthOfLine(gunJoystick.Horizontal, gunJoystick.Vertical) > SHOOTING_TH;
     }
 
     private void Shoot() 
     {
         // Debug.Log("firePoint.position " + firePoint.position + ", firePoint.rotation " + firePoint.rotation);
         Instantiate(shotPrefab, firePoint.position, firePoint.rotation);
-        cooldownTime = Time.time + COOL_DOWN_INTERVAL;
-    }
-
-    private float LengthOfLine(float x, float y)
-    {
-        return Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(y, 2));
+        CooldownTime = Time.time + COOL_DOWN_INTERVAL;
     }
 
     private float GetXFromAngle(float radius, float angle)

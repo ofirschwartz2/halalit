@@ -1,20 +1,31 @@
+using Assets.Common;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ShotScript : MonoBehaviour
 {
-    public float speed = 10f;
-    private Rigidbody2D _rigidbody;
+    public bool UseConfigFile;
+    public float Speed;
+    private Rigidbody2D _rigidBody;
 
     void Start()
     {
-        _rigidbody = GetComponent<Rigidbody2D>();
-        _rigidbody.velocity = transform.right * speed;
+        _rigidBody = GetComponent<Rigidbody2D>(); 
+        if (UseConfigFile)
+        {
+            string[] props = { "Speed" };
+            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
+
+            Speed = propsFromConfig["Speed"];
+        }
+
+        _rigidBody.velocity = transform.right * Speed;
     }
-    private void OnTriggerEnter2D(Collider2D other){
-        if (other.gameObject.CompareTag("Enemy"))
-            Destroy(gameObject);
+
+    void OnTriggerEnter2D(Collider2D hitInfo){
+        Debug.Log(hitInfo.name); 
+        Destroy(gameObject);
     }
 
 }
