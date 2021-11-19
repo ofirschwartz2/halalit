@@ -100,7 +100,7 @@ public class HalalitMovementController : MonoBehaviour
 
     private float getAbsoluteSpeed()
     {
-        return Utils.GetLength(_rigidBody.velocity);
+        return Utils.VectorToAbsoluteValue(_rigidBody.velocity);
     }
 
     #endregion
