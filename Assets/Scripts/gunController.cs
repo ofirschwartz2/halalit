@@ -1,18 +1,32 @@
+using Assets.Common;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class gunController : MonoBehaviour
 {
-    const float RADIUS = 2.6f;
-    const float SHOOTING_TH = 0.8f;
-    const float COOL_DOWN_INTERVAL = 0.5f;
-    public float cooldownTime = 0;
+    private const float RADIUS = 2.6f;
+    private const float SHOOTING_TH = 0.8f;
+    private const float COOL_DOWN_INTERVAL = 0.5f;
+
+    public bool UseConfigFile;
+    public float CooldownTime = 0;
     public Transform firePoint;
     public GameObject shotPrefab;
+    // TODO: the gun should not hold it's parent (halalit), it's a bad practice, it only need it's x and y positions, so it should use a function of the halalitMovementController that will get them.
     public GameObject halalit;
     public Joystick gunJoystick;
 
+    void Start()
+    {
+        if (UseConfigFile)
+        {
+            string[] props = { "CooldownTime" };
+            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
+
+            CooldownTime = propsFromConfig["CooldownTime"];
+        }
+    }
 
     void Update()
     {
@@ -49,7 +63,7 @@ public class gunController : MonoBehaviour
 
     private bool CoolDownPassed()
     {
-        return Time.time >= cooldownTime;
+        return Time.time >= CooldownTime;
     }
 
     private bool JoystickShooting()
@@ -60,7 +74,7 @@ public class gunController : MonoBehaviour
     private void Shoot() 
     {
         Instantiate(shotPrefab, firePoint.position, firePoint.rotation);
-        cooldownTime = Time.time + COOL_DOWN_INTERVAL;
+        CooldownTime = Time.time + COOL_DOWN_INTERVAL;
     }
 
     private float LengthOfLine(float x, float y)
