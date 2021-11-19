@@ -102,3 +102,6 @@ $RECYCLE.BIN/
 # projectSettings
 EditorSettings.asset
 ProjectSettings.asset
+
+# Metas
+*.meta
