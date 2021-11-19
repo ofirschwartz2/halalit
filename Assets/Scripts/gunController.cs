@@ -68,18 +68,13 @@ public class gunController : MonoBehaviour
 
     private bool JoystickShooting()
     {
-        return LengthOfLine(gunJoystick.Horizontal, gunJoystick.Vertical) > SHOOTING_TH;
+        return Utils.GetLengthOfLine(gunJoystick.Horizontal, gunJoystick.Vertical) > SHOOTING_TH;
     }
 
     private void Shoot() 
     {
         Instantiate(shotPrefab, firePoint.position, firePoint.rotation);
         CooldownTime = Time.time + COOL_DOWN_INTERVAL;
-    }
-
-    private float LengthOfLine(float x, float y)
-    {
-        return Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(y, 2));
     }
 
     private float GetXFromAngle(float radius, float angle)
