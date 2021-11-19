@@ -1,47 +1,71 @@
+using Assets.Common;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class HalalitMovementController : MonoBehaviour
 {
-    const float STOP_THRESHOLD = 0.05f;
-
-    public float VelocityMultiplier; // = 10;
-    public float SlowDownVelocity; // = 2;
+    public bool UseConfigFile;
+    public float VelocityMultiplier;
+    public float SpinSpeed;
     public Joystick Joystick;
 
     private Rigidbody2D _rigidBody;
-    private bool _shouldSlowDown;
 
     void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
-        _shouldSlowDown = true;
+
+        if (UseConfigFile)
+        {
+            string[] props = { "VelocityMultiplier", "SpinSpeed", "_rigidBody.drag" };
+            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
+
+            VelocityMultiplier = propsFromConfig["VelocityMultiplier"];
+            SpinSpeed = propsFromConfig["SpinSpeed"];
+            _rigidBody.drag = propsFromConfig["_rigidBody.drag"];
+        }
     }
     void Update()
     {
         RotateByMovementJoystick();
         MoveInRotateDirection();
-        SlowingDown();
-        Stopping();
     }
+
+    #region Moving 
 
     private void RotateByMovementJoystick()
     {
-        if (!NoMovementInput())
+        if (IsMovementInput())
         {
-            float angle = Vector2ToDegree(Joystick.Horizontal, Joystick.Vertical);
-            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            float joystickAngle = Utils.Vector2ToDegree(Joystick.Horizontal, Joystick.Vertical);
+            float rotationZ = transform.rotation.eulerAngles.z;
+
+            float normalizedJoystickAngle = Utils.AngleNormalizationBy360(joystickAngle);
+            float normalizedRotationZ = Utils.AngleNormalizationBy360(rotationZ);
+
+            float deltaAngle = normalizedJoystickAngle - normalizedRotationZ;
+            float shorterDeltaAngle = GetShorterSpin(deltaAngle);
+
+            transform.Rotate(new Vector3(0, 0, shorterDeltaAngle) * Time.deltaTime * SpinSpeed);
         }
+    }
+
+    private float GetShorterSpin(float angle)
+    {
+        if (angle > 180)
+            return angle - 360;
+        else if (angle < -180)
+            return angle + 360;
+        else
+            return angle;
     }
 
     private void MoveInRotateDirection()
     {
-        if (NoMovementInput())
-            _shouldSlowDown = true;
-        else
+        if (IsMovementInput())
         {
-            _shouldSlowDown = false;
-            Vector2 direction = DegreeToVector2(transform.rotation.eulerAngles.z);
+            Vector2 direction = Utils.DegreeToVector2(transform.rotation.eulerAngles.z);
 
             float horizontalVelocity = direction.x * Math.Abs(Joystick.Horizontal) * VelocityMultiplier;
             float verticalVelocity = direction.y * Math.Abs(Joystick.Vertical) * VelocityMultiplier;
@@ -50,40 +74,13 @@ public class HalalitMovementController : MonoBehaviour
         }
     }
 
-    private void SlowingDown()
+    #endregion
+
+    #region Predicates
+
+    private bool IsMovementInput()
     {
-        if (ShouldSlowDownInDirection(_rigidBody.velocity.x))
-        {
-            float slowDownXVelocity = SlowDownVelocity;
-
-            if (_rigidBody.velocity.x > 0)
-                slowDownXVelocity *= -1;
-
-            _rigidBody.AddForce(new Vector2(slowDownXVelocity, 0));
-        }
-
-        if (ShouldSlowDownInDirection(_rigidBody.velocity.y))
-        {
-            float slowDownYVelocity = SlowDownVelocity;
-
-            if (_rigidBody.velocity.y > 0)
-                slowDownYVelocity *= -1;
-
-            _rigidBody.AddForce(new Vector2(0, slowDownYVelocity));
-        }
-    }
-
-    private void Stopping()
-    {
-        if (ShouldStop())
-            _rigidBody.velocity = Vector2.zero;
-    }
-
-    #region predicates
-
-    private bool NoMovementInput()
-    {
-        return NoXInput() && NoYInput();
+        return !NoXInput() || !NoYInput();
     }
 
     private bool NoXInput()
@@ -96,35 +93,13 @@ public class HalalitMovementController : MonoBehaviour
         return Joystick.Vertical == 0;
     }
 
-    private bool ShouldStop()
-    {
-        return _shouldSlowDown &&
-            Math.Abs(_rigidBody.velocity.x) <= STOP_THRESHOLD &&
-            Math.Abs(_rigidBody.velocity.y) <= STOP_THRESHOLD;
-    }
-
-    private bool ShouldSlowDownInDirection(float velocity)
-    {
-        return _shouldSlowDown && Math.Abs(velocity) > STOP_THRESHOLD;
-    }
-
     #endregion
 
-    #region Math Helper Function
+    #region Calculators
 
-    public static float Vector2ToDegree(float x, float y)
+    private float getAbsoluteSpeed()
     {
-        return Mathf.Atan2(y, x) * Mathf.Rad2Deg;
-    }
-
-    public static Vector2 DegreeToVector2(float degree)
-    {
-        return RadianToVector2(degree * Mathf.Deg2Rad);
-    }
-
-    public static Vector2 RadianToVector2(float radian)
-    {
-        return new Vector2(Mathf.Cos(radian), Mathf.Sin(radian));
+        return Utils.VectorToAbsoluteValue(_rigidBody.velocity);
     }
 
     #endregion
