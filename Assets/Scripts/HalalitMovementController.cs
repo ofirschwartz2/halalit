@@ -1,9 +1,12 @@
+using Assets.Common;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class HalalitMovementController : MonoBehaviour
 {
-    public float VelocityMultiplier; // = 10;
+    public bool UseConfigFile;
+    public float VelocityMultiplier;
     public float SpinSpeed;
     public Joystick Joystick;
 
@@ -12,7 +15,16 @@ public class HalalitMovementController : MonoBehaviour
     void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
-        _rigidBody.drag = 2;
+
+        if (UseConfigFile)
+        {
+            string[] props = { "VelocityMultiplier", "SpinSpeed", "_rigidBody.drag" };
+            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
+
+            VelocityMultiplier = propsFromConfig["VelocityMultiplier"];
+            SpinSpeed = propsFromConfig["SpinSpeed"];
+            _rigidBody.drag = propsFromConfig["_rigidBody.drag"];
+        }
     }
 
     void Update()
