@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Common;
 using UnityEngine;
 
 public class EnemyMovementController : MonoBehaviour
@@ -39,6 +40,6 @@ public class EnemyMovementController : MonoBehaviour
 
     private float normalizedSpeed(Collider2D otherCollider2D)
     {
-        return (HalalitMovementController.VectorToAbsoluteValue(otherCollider2D.GetComponent<Rigidbody2D>().velocity) + HalalitMovementController.VectorToAbsoluteValue(_rigidBody.velocity)) * _enemyThrust;
+        return (Utils.VectorToAbsoluteValue(otherCollider2D.GetComponent<Rigidbody2D>().velocity) + Utils.VectorToAbsoluteValue(_rigidBody.velocity)) * _enemyThrust;
     }
 }
