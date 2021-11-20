@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ShotScript : MonoBehaviour
 {
+
     public bool UseConfigFile;
     public float Speed;
     private Rigidbody2D _rigidBody;
@@ -19,7 +20,6 @@ public class ShotScript : MonoBehaviour
 
             Speed = propsFromConfig["Speed"];
         }
-
         _rigidBody.velocity = transform.right * Speed;
     }
 

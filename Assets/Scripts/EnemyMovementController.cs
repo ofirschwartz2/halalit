@@ -5,22 +5,38 @@ using UnityEngine;
 
 public class EnemyMovementController : MonoBehaviour
 {
+    public float MinXSpeed;
+    public float MaxXSpeed;
+    public float MinYSpeed;
+    public float MaxYSpeed;
+    public float EnemyThrust;
+    public bool UseConfigFile;
+    private float _xSpeed;
+    private float _ySpeed;
     private Rigidbody2D _rigidBody;
-    private float xSpeed;
-    private float ySpeed;
-    private float _enemyThrust;
 
+    
     void Start()
     {
+        if (UseConfigFile)
+        {
+            Debug.Log("BB");
+            string[] props = { "MinXSpeed", "MaxXSpeed", "MinYSpeed", "MaxYSpeed", "EnemyThrust"};
+            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
+            MinXSpeed = propsFromConfig["MinXSpeed"];
+            MaxXSpeed = propsFromConfig["MaxXSpeed"];
+            MinYSpeed = propsFromConfig["MinYSpeed"];
+            MaxYSpeed = propsFromConfig["MaxYSpeed"];
+            EnemyThrust = propsFromConfig["EnemyThrust"];
+        }
         _rigidBody = GetComponent<Rigidbody2D>(); 
-        xSpeed = Random.Range(-0.001f, 0.001f);
-        ySpeed = Random.Range(-0.002f, 0.002f);
-        _enemyThrust = 0.5f;
+        _xSpeed = Random.Range(MinXSpeed, MaxXSpeed);
+        _ySpeed = Random.Range(MinYSpeed, MaxYSpeed);
     }
 
     void Update()
     {
-        _rigidBody.velocity = new Vector2(_rigidBody.velocity.x + xSpeed, _rigidBody.velocity.y + ySpeed);
+        _rigidBody.velocity = new Vector2(_xSpeed, _ySpeed);
         tag = "Enemy";
     }
 
@@ -40,6 +56,6 @@ public class EnemyMovementController : MonoBehaviour
 
     private float normalizedSpeed(Collider2D otherCollider2D)
     {
-        return (Utils.VectorToAbsoluteValue(otherCollider2D.GetComponent<Rigidbody2D>().velocity) + Utils.VectorToAbsoluteValue(_rigidBody.velocity)) * _enemyThrust;
+        return (Utils.VectorToAbsoluteValue(otherCollider2D.GetComponent<Rigidbody2D>().velocity) + Utils.VectorToAbsoluteValue(_rigidBody.velocity)) * EnemyThrust;
     }
 }
