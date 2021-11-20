@@ -6,21 +6,23 @@ using UnityEngine;
 public class EnemyMovementController : MonoBehaviour
 {
     private Rigidbody2D _rigidBody;
-    private float xSpeed;
-    private float ySpeed;
-    private float _enemyThrust;
 
+    private float _xSpeed;
+    private float _ySpeed;
+    private float _enemyThrust;
+    
     void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>(); 
-        xSpeed = Random.Range(-0.5f, 0.5f);
-        ySpeed = Random.Range(-0.5f, 0.5f);
+        _xSpeed = Random.Range(-0.001f, 0.001f);
+        _ySpeed = Random.Range(-0.002f, 0.002f);
         _enemyThrust = 0.5f;
+
     }
 
     void Update()
     {
-        _rigidBody.velocity = new Vector2(xSpeed, ySpeed);
+        _rigidBody.velocity = new Vector2(_xSpeed, _ySpeed);
         tag = "Enemy";
     }
 
@@ -38,19 +40,19 @@ public class EnemyMovementController : MonoBehaviour
     {
             if (_rigidBody.transform.position.x > 65f)
             {
-                xSpeed = Random.Range(-0.005f, 0f);
+                _xSpeed = Random.Range(-0.005f, 0f);
             } 
             else if (_rigidBody.transform.position.x < -65f)
             {
-                xSpeed = Random.Range(0f, 0.005f);
+                _xSpeed = Random.Range(0f, 0.005f);
             }
             if (_rigidBody.transform.position.y > 35f)
             {
-                ySpeed = Random.Range(-0.005f, 0f);
+                _ySpeed = Random.Range(-0.005f, 0f);
             } 
             else if (_rigidBody.transform.position.y < -35f)
             {
-                ySpeed = Random.Range(0f, 0.005f);
+                _ySpeed = Random.Range(0f, 0.005f);
             }
             _rigidBody.velocity = new Vector2(0f, 0f);        
     }
@@ -58,6 +60,7 @@ public class EnemyMovementController : MonoBehaviour
     {
         Vector2 normalizedDifference = (_rigidBody.transform.position - otherCollider2D.transform.position).normalized;
         _rigidBody.AddForce(normalizedDifference * NormalizedSpeed(otherCollider2D), ForceMode2D.Impulse);
+
     }
 
     private float NormalizedSpeed(Collider2D otherCollider2D)
