@@ -31,16 +31,11 @@ public class EnemyMovementController : MonoBehaviour
         else if (other.gameObject.CompareTag("Halalit"))
             KnockBack(other);
         else if (other.gameObject.CompareTag("Background"))
-        {
-            Debug.Log("Background HIT");
             GoInAnotherDirection();
-        }
     }
 
     private void GoInAnotherDirection()
     {
-            Debug.Log(_rigidBody.transform.position.x + " " + _rigidBody.transform.position.y);
-
             if (_rigidBody.transform.position.x > 65f)
             {
                 xSpeed = Random.Range(-0.005f, 0f);
