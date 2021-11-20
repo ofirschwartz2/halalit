@@ -19,7 +19,6 @@ public class EnemyMovementController : MonoBehaviour
     
     void Start()
     {
-        Debug.Log("AA");
         if (UseConfigFile)
         {
             Debug.Log("BB");
