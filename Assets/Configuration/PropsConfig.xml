@@ -12,6 +12,16 @@
     <YScreenTopLeft>37</YScreenTopLeft>
     <MaxNumberOfEnemies>30</MaxNumberOfEnemies>
   </EnemyFactory>
+  <EnemyMovementController>
+    <MinXSpeed>-5</MinXSpeed>
+    <MaxXSpeed>5</MaxXSpeed>
+    <MinYSpeed>-5</MinYSpeed>
+    <MaxYSpeed>5</MaxYSpeed>
+    <XofEndOfMap>65</XofEndOfMap>
+    <YofEndOfMap>35</YofEndOfMap>
+    <YofEndOfMap>35</YofEndOfMap>
+    <EnemyThrust>0.5</EnemyThrust>
+  </EnemyMovementController>
   <ShotScript>
     <Speed>10</Speed>
   </ShotScript>
