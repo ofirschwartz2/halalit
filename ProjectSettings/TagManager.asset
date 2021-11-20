@@ -9,6 +9,7 @@ TagManager:
   - Shot
   - Gun
   - Engine
+  - Background
   layers:
   - Default
   - TransparentFX
