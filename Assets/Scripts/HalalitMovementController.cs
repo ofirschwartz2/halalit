@@ -26,7 +26,6 @@ public class HalalitMovementController : MonoBehaviour
             _rigidBody.drag = propsFromConfig["_rigidBody.drag"];
         }
     }
-
     void Update()
     {
         RotateByMovementJoystick();
