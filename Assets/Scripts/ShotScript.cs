@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class ShotScript : MonoBehaviour
 {
-
     public bool UseConfigFile;
     public float Speed;
     private Rigidbody2D _rigidBody;

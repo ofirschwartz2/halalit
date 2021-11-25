@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-
 namespace Assets.Common
 {
     static class Utils
@@ -41,6 +40,10 @@ namespace Assets.Common
         public static float GetNormalizedSpeed(Rigidbody2D myRigidBody2D, Rigidbody2D otherRigidBody2D, float thrust)
         {
             return (Utils.VectorToAbsoluteValue(myRigidBody2D.velocity) + Utils.VectorToAbsoluteValue(otherRigidBody2D.velocity)) * thrust;
+        }
+        public static Vector2 GetRandomVector(int minX, int maxX, int minY, int maxY)
+        {
+            return new Vector2(UnityEngine.Random.Range(minX, maxX), UnityEngine.Random.Range(minY, maxY));
         }
     }
 }

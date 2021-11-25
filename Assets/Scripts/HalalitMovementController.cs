@@ -19,8 +19,6 @@ public class HalalitMovementController : MonoBehaviour
     void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
-
-
         if (UseConfigFile)
         {
             string[] props = { "ForceMultiplier", "SpinSpeed", "_rigidBody.drag", "halalitThrust", "speedLimit", "coolDownInterval" };
@@ -109,12 +107,13 @@ public class HalalitMovementController : MonoBehaviour
 
     #region Calculators
 
-    private float getAbsoluteSpeed()
+    private bool IsUnderSpeedLimit()
     {
-        return Utils.VectorToAbsoluteValue(_rigidBody.velocity);
+        return Utils.VectorToAbsoluteValue(_rigidBody.velocity) < speedLimit;
     }
-
     #endregion
+
+    #region Knockback
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -133,8 +132,6 @@ public class HalalitMovementController : MonoBehaviour
     {
         return Time.time > cooldownTime;
     }
-    private bool IsUnderSpeedLimit()
-    {
-        return Utils.VectorToAbsoluteValue(_rigidBody.velocity) < speedLimit;
-    }
+    
+    #endregion
 }
