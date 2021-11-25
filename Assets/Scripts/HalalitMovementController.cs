@@ -6,7 +6,7 @@ using UnityEngine;
 public class HalalitMovementController : MonoBehaviour
 {
     public bool UseConfigFile;
-    public float VelocityMultiplier;
+    public float ForceMultiplier;
     public float SpinSpeed;
     public Joystick Joystick;
     public float halalitThrust;
@@ -23,10 +23,10 @@ public class HalalitMovementController : MonoBehaviour
 
         if (UseConfigFile)
         {
-            string[] props = { "VelocityMultiplier", "SpinSpeed", "_rigidBody.drag", "halalitThrust", "speedLimit", "coolDownInterval" };
+            string[] props = { "ForceMultiplier", "SpinSpeed", "_rigidBody.drag", "halalitThrust", "speedLimit", "coolDownInterval" };
             Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
 
-            VelocityMultiplier = propsFromConfig["VelocityMultiplier"];
+            ForceMultiplier = propsFromConfig["ForceMultiplier"];
             SpinSpeed = propsFromConfig["SpinSpeed"];
             _rigidBody.drag = propsFromConfig["_rigidBody.drag"];
             halalitThrust = propsFromConfig["halalitThrust"];
@@ -79,12 +79,10 @@ public class HalalitMovementController : MonoBehaviour
         {
             Vector2 direction = Utils.DegreeToVector2(transform.rotation.eulerAngles.z);
 
-            float horizontalVelocity = direction.x * Math.Abs(Joystick.Horizontal) * VelocityMultiplier;
-            float verticalVelocity = direction.y * Math.Abs(Joystick.Vertical) * VelocityMultiplier;
+            float horizontalForce = direction.x * Math.Abs(Joystick.Horizontal) * ForceMultiplier;
+            float verticalForce = direction.y * Math.Abs(Joystick.Vertical) * ForceMultiplier;
 
-            _rigidBody.AddForce(new Vector2(horizontalVelocity, verticalVelocity));
-
-            //_rigidBody.velocity = new Vector2(horizontalVelocity, verticalVelocity);
+            _rigidBody.AddForce(new Vector2(horizontalForce, verticalForce));
         }
     }
 
