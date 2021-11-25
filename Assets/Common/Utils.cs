@@ -37,5 +37,10 @@ namespace Assets.Common
         {
             return Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(y, 2));
         }
+
+        public static float GetNormalizedSpeed(Rigidbody2D myRigidBody2D, Rigidbody2D otherRigidBody2D, float thrust)
+        {
+            return (Utils.VectorToAbsoluteValue(myRigidBody2D.velocity) + Utils.VectorToAbsoluteValue(otherRigidBody2D.velocity)) * thrust;
+        }
     }
 }
