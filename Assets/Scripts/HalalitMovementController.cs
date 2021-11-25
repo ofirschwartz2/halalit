@@ -9,7 +9,7 @@ public class HalalitMovementController : MonoBehaviour
     public float VelocityMultiplier;
     public float SpinSpeed;
     public Joystick Joystick;
-    private float _halalitThrust; // = 1
+    public float halalitThrust;
 
     private Rigidbody2D _rigidBody;
 
@@ -121,6 +121,6 @@ public class HalalitMovementController : MonoBehaviour
 
     private float normalizedSpeed(Collider2D otherCollider2D)
     {
-        return (Utils.VectorToAbsoluteValue(otherCollider2D.GetComponent<Rigidbody2D>().velocity) + Utils.VectorToAbsoluteValue(_rigidBody.velocity)) * _halalitThrust;
+        return (Utils.VectorToAbsoluteValue(otherCollider2D.GetComponent<Rigidbody2D>().velocity) + Utils.VectorToAbsoluteValue(_rigidBody.velocity)) * halalitThrust;
     }
 }

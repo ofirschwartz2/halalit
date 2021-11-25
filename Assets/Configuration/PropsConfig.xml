@@ -4,6 +4,7 @@
     <VelocityMultiplier>10</VelocityMultiplier>
     <SpinSpeed>10</SpinSpeed>
     <_rigidBody.drag>2</_rigidBody.drag>
+    <halalitThrust>1</halalitThrust>
   </HalalitMovementController>
   <EnemyMovementController>
     <MinXSpeed>-5</MinXSpeed>
