@@ -6,8 +6,8 @@ using UnityEngine;
 public class EnemyFactory : MonoBehaviour
 {
     public GameObject EnemyPrefab;
-    public int numberOfEnemies;
-    public Vector3 screenTopLeft; 
+    public int NumberOfEnemies;
+    public Vector3 BottomLeftPoint; 
     public float XGreedSpacing; 
     public float YGreedSpacing; 
     public float MaxNumberOfEnemies;
@@ -18,18 +18,19 @@ public class EnemyFactory : MonoBehaviour
     {
         if (UseConfigFile)
         {
-            string[] props = { "XGreedSpacing", "YGreedSpacing", "XScreenTopLeft", "YScreenTopLeft", "MaxNumberOfEnemies"};
+            string[] props = { "XGreedSpacing", "YGreedSpacing", "XScreenBottomLeft", "YScreenBottomLeft", "MaxNumberOfEnemies","NumberOfEnemies"};
             Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
 
             XGreedSpacing = propsFromConfig["XGreedSpacing"];
             YGreedSpacing = propsFromConfig["YGreedSpacing"];
             MaxNumberOfEnemies = propsFromConfig["MaxNumberOfEnemies"];
-            screenTopLeft = new Vector3(propsFromConfig["XScreenTopLeft"],propsFromConfig["YScreenTopLeft"]);
+            BottomLeftPoint = new Vector3(propsFromConfig["XScreenBottomLeft"],propsFromConfig["YScreenBottomLeft"]);
+            NumberOfEnemies = (int)propsFromConfig["NumberOfEnemies"];
         }
-        if (numberOfEnemies > MaxNumberOfEnemies) 
+        if (NumberOfEnemies > MaxNumberOfEnemies) 
             throw new System.Exception("Number Of Enemies is wayyy too big, abort");
         
-        for (int i = 0; i < numberOfEnemies; i++)
+        for (int i = 0; i < NumberOfEnemies; i++)
         {
             Vector2 entryPointOnGreed = GetNewEnemyEntryPointOnGreed();
             Instantiate(EnemyPrefab,  GetPointOnGreed(entryPointOnGreed.x,entryPointOnGreed.y), Quaternion.AngleAxis(0, Vector3.forward));
@@ -38,12 +39,13 @@ public class EnemyFactory : MonoBehaviour
 
     private Vector3 GetPointOnGreed(float xInGameGrid, float yInGameGrid)
     {
-        return screenTopLeft + new Vector3(XGreedSpacing * xInGameGrid, (-1) * YGreedSpacing * yInGameGrid);
+        return BottomLeftPoint + new Vector3(XGreedSpacing * xInGameGrid, YGreedSpacing * yInGameGrid);
     }
 
     public Vector2 GetNewEnemyEntryPointOnGreed()
     {
-        Vector2 rand = GetRandomPointOnOneOfTheEdges();;
+        Vector2 rand = GetRandomPointOnOneOfTheEdges();
+        Debug.Log("BZZZ:" + rand);
         while (enemiesOnGameGreed[(int)rand.x, (int)rand.y])
             rand = GetRandomPointOnOneOfTheEdges();
         enemiesOnGameGreed[(int)rand.x, (int)rand.y] = true;
@@ -55,13 +57,13 @@ public class EnemyFactory : MonoBehaviour
     switch(Random.Range(0,4))
         {
             case 0:
-                return new Vector2(Random.Range(0,1),Random.Range(0,10));
+                return Utils.GetRandomVector(0, 1, 0, enemiesOnGameGreed.GetLength(0));
             case 1:
-                return new Vector2(Random.Range(9,10),Random.Range(0,10));
+                return Utils.GetRandomVector(enemiesOnGameGreed.GetLength(0) - 1, enemiesOnGameGreed.GetLength(0), 0, enemiesOnGameGreed.GetLength(0));
             case 2:
-                return new Vector2(Random.Range(0,10),Random.Range(0,1));
+                return Utils.GetRandomVector(0, enemiesOnGameGreed.GetLength(0), 0, 1);
             case 3:
-                return new Vector2(Random.Range(0,10),Random.Range(9,10));
+                return Utils.GetRandomVector(0, enemiesOnGameGreed.GetLength(0), enemiesOnGameGreed.GetLength(0) - 1, enemiesOnGameGreed.GetLength(0));
         }
         throw new System.Exception("Not a random between 0 to 3, abort");   
     }
