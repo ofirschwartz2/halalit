@@ -6,9 +6,13 @@ using UnityEngine;
 public class HalalitMovementController : MonoBehaviour
 {
     public bool UseConfigFile;
-    public float VelocityMultiplier;
+    public float ForceMultiplier;
     public float SpinSpeed;
     public Joystick Joystick;
+    public float halalitThrust;
+    public float speedLimit;
+    public float coolDownInterval;
+    public float cooldownTime = 0;
 
     private Rigidbody2D _rigidBody;
 
@@ -16,20 +20,28 @@ public class HalalitMovementController : MonoBehaviour
     {
         _rigidBody = GetComponent<Rigidbody2D>();
 
+
         if (UseConfigFile)
         {
-            string[] props = { "VelocityMultiplier", "SpinSpeed", "_rigidBody.drag" };
+            string[] props = { "ForceMultiplier", "SpinSpeed", "_rigidBody.drag", "halalitThrust", "speedLimit", "coolDownInterval" };
             Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
 
-            VelocityMultiplier = propsFromConfig["VelocityMultiplier"];
+            ForceMultiplier = propsFromConfig["ForceMultiplier"];
             SpinSpeed = propsFromConfig["SpinSpeed"];
             _rigidBody.drag = propsFromConfig["_rigidBody.drag"];
+            halalitThrust = propsFromConfig["halalitThrust"];
+            speedLimit = propsFromConfig["speedLimit"];
+            coolDownInterval = propsFromConfig["coolDownInterval"];
         }
     }
+    
     void Update()
     {
-        RotateByMovementJoystick();
-        MoveInRotateDirection();
+        if (CooldownFromCollision())
+        {
+            RotateByMovementJoystick();
+            MoveInRotateDirection();
+        }  
     }
 
     #region Moving 
@@ -63,14 +75,14 @@ public class HalalitMovementController : MonoBehaviour
 
     private void MoveInRotateDirection()
     {
-        if (IsMovementInput())
+        if (IsMovementInput() && IsUnderSpeedLimit())
         {
             Vector2 direction = Utils.DegreeToVector2(transform.rotation.eulerAngles.z);
 
-            float horizontalVelocity = direction.x * Math.Abs(Joystick.Horizontal) * VelocityMultiplier;
-            float verticalVelocity = direction.y * Math.Abs(Joystick.Vertical) * VelocityMultiplier;
+            float horizontalForce = direction.x * Math.Abs(Joystick.Horizontal) * ForceMultiplier;
+            float verticalForce = direction.y * Math.Abs(Joystick.Vertical) * ForceMultiplier;
 
-            _rigidBody.velocity = new Vector2(horizontalVelocity, verticalVelocity);
+            _rigidBody.AddForce(new Vector2(horizontalForce, verticalForce));
         }
     }
 
@@ -103,4 +115,26 @@ public class HalalitMovementController : MonoBehaviour
     }
 
     #endregion
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+            KnockBack(other);
+    }
+
+    private void KnockBack(Collider2D otherCollider2D)
+    {
+        Vector2 normalizedDifference = (_rigidBody.transform.position - otherCollider2D.transform.position).normalized;
+        _rigidBody.AddForce(normalizedDifference * Utils.GetNormalizedSpeed(_rigidBody, otherCollider2D.GetComponent<Rigidbody2D>(), halalitThrust), ForceMode2D.Impulse);
+        cooldownTime = Time.time + coolDownInterval;
+    }
+
+    private bool CooldownFromCollision()
+    {
+        return Time.time > cooldownTime;
+    }
+    private bool IsUnderSpeedLimit()
+    {
+        return Utils.VectorToAbsoluteValue(_rigidBody.velocity) < speedLimit;
+    }
 }
