@@ -6,8 +6,8 @@ using UnityEngine;
 public class EnemyFactory : MonoBehaviour
 {
     public GameObject EnemyPrefab;
-    public int numberOfEnemies;
-    public Vector3 screenTopLeft; 
+    public int NumberOfEnemies;
+    public Vector3 BottomLeftPoint; 
     public float XGreedSpacing; 
     public float YGreedSpacing; 
     public float MaxNumberOfEnemies;
@@ -18,18 +18,19 @@ public class EnemyFactory : MonoBehaviour
     {
         if (UseConfigFile)
         {
-            string[] props = { "XGreedSpacing", "YGreedSpacing", "XScreenTopLeft", "YScreenTopLeft", "MaxNumberOfEnemies"};
+            string[] props = { "XGreedSpacing", "YGreedSpacing", "XScreenBottomLeft", "YScreenBottomLeft", "MaxNumberOfEnemies","NumberOfEnemies"};
             Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
 
             XGreedSpacing = propsFromConfig["XGreedSpacing"];
             YGreedSpacing = propsFromConfig["YGreedSpacing"];
             MaxNumberOfEnemies = propsFromConfig["MaxNumberOfEnemies"];
-            screenTopLeft = new Vector3(propsFromConfig["XScreenTopLeft"],propsFromConfig["YScreenTopLeft"]);
+            BottomLeftPoint = new Vector3(propsFromConfig["XScreenBottomLeft"],propsFromConfig["YScreenBottomLeft"]);
+            NumberOfEnemies = (int)propsFromConfig["NumberOfEnemies"];
         }
-        if (numberOfEnemies > MaxNumberOfEnemies) 
+        if (NumberOfEnemies > MaxNumberOfEnemies) 
             throw new System.Exception("Number Of Enemies is wayyy too big, abort");
         
-        for (int i = 0; i < numberOfEnemies; i++)
+        for (int i = 0; i < NumberOfEnemies; i++)
         {
             Vector2 entryPointOnGreed = GetNewEnemyEntryPointOnGreed();
             Instantiate(EnemyPrefab,  GetPointOnGreed(entryPointOnGreed.x,entryPointOnGreed.y), Quaternion.AngleAxis(0, Vector3.forward));
@@ -38,7 +39,7 @@ public class EnemyFactory : MonoBehaviour
 
     private Vector3 GetPointOnGreed(float xInGameGrid, float yInGameGrid)
     {
-        return screenTopLeft + new Vector3(XGreedSpacing * xInGameGrid, (-1) * YGreedSpacing * yInGameGrid);
+        return BottomLeftPoint + new Vector3(XGreedSpacing * xInGameGrid, YGreedSpacing * yInGameGrid);
     }
 
     public Vector2 GetNewEnemyEntryPointOnGreed()

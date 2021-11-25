@@ -8,9 +8,10 @@
   <EnemyFactory>
     <XGreedSpacing>13.4</XGreedSpacing>
     <YGreedSpacing>7.4</YGreedSpacing>
-    <XScreenTopLeft>-67</XScreenTopLeft>
-    <YScreenTopLeft>37</YScreenTopLeft>
+    <XScreenBottomLeft>-67</XScreenBottomLeft>
+    <YScreenBottomLeft>-37</YScreenBottomLeft>
     <MaxNumberOfEnemies>30</MaxNumberOfEnemies>
+    <NumberOfEnemies>30</NumberOfEnemies>
   </EnemyFactory>
   <ShotScript>
     <Speed>10</Speed>
