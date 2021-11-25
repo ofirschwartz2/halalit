@@ -107,12 +107,13 @@ public class HalalitMovementController : MonoBehaviour
 
     #region Calculators
 
-    private float getAbsoluteSpeed()
+    private bool IsUnderSpeedLimit()
     {
-        return Utils.VectorToAbsoluteValue(_rigidBody.velocity);
+        return Utils.VectorToAbsoluteValue(_rigidBody.velocity) < speedLimit;
     }
-
     #endregion
+
+    #region Knockback
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -131,8 +132,6 @@ public class HalalitMovementController : MonoBehaviour
     {
         return Time.time > cooldownTime;
     }
-    private bool IsUnderSpeedLimit()
-    {
-        return Utils.VectorToAbsoluteValue(_rigidBody.velocity) < speedLimit;
-    }
+    
+    #endregion
 }
