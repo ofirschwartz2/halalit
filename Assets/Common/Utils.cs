@@ -19,6 +19,16 @@ namespace Assets.Common
             return new Vector2(Mathf.Cos(radian), Mathf.Sin(radian));
         }
 
+        public static Vector3 AngleAndRadiusToPointOnCircle(float degreeAngle, float radius)
+        {
+            return new Vector3(radius * Mathf.Cos(DegreeToRadian(degreeAngle)), radius * Mathf.Sin(DegreeToRadian(degreeAngle)));
+        }
+        
+        public static float DegreeToRadian(float degree)
+        {
+            return degree * Mathf.PI/180;
+        }
+
         public static float VectorToAbsoluteValue(Vector2 vector2)
         {
             return GetLengthOfLine(vector2.x, vector2.y);
