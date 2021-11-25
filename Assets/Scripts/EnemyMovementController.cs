@@ -22,7 +22,6 @@ public class EnemyMovementController : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody2D>(); 
         if (UseConfigFile)
         {
-            Debug.Log("BB");
             string[] props = { "MinXSpeed", "MaxXSpeed", "MinYSpeed", "MaxYSpeed", "EnemyThrust", "speedLimit", "_rigidBody.drag"};
             Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
             MinXSpeed = propsFromConfig["MinXSpeed"];
@@ -40,7 +39,6 @@ public class EnemyMovementController : MonoBehaviour
 
     void Update()
     {
-        //_rigidBody.velocity = new Vector2(_xSpeed, _ySpeed);
         if(IsUnderSpeedLimit())
             _rigidBody.AddForce(new Vector2(_xForce, _yForce));
     }

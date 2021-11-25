@@ -24,7 +24,6 @@ public class ShotScript : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D hitInfo){
-        Debug.Log(hitInfo.name); 
         Destroy(gameObject);
     }
 
