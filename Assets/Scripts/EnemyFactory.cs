@@ -45,6 +45,7 @@ public class EnemyFactory : MonoBehaviour
     public Vector2 GetNewEnemyEntryPointOnGreed()
     {
         Vector2 rand = GetRandomPointOnOneOfTheEdges();
+        Debug.Log("BZZZ:" + rand);
         while (enemiesOnGameGreed[(int)rand.x, (int)rand.y])
             rand = GetRandomPointOnOneOfTheEdges();
         enemiesOnGameGreed[(int)rand.x, (int)rand.y] = true;
@@ -56,13 +57,13 @@ public class EnemyFactory : MonoBehaviour
     switch(Random.Range(0,4))
         {
             case 0:
-                return new Vector2(Random.Range(0,1),Random.Range(0,10));
+                return Utils.GetRandomVector(0, 1, 0, enemiesOnGameGreed.GetLength(0));
             case 1:
-                return new Vector2(Random.Range(9,10),Random.Range(0,10));
+                return Utils.GetRandomVector(enemiesOnGameGreed.GetLength(0) - 1, enemiesOnGameGreed.GetLength(0), 0, enemiesOnGameGreed.GetLength(0));
             case 2:
-                return new Vector2(Random.Range(0,10),Random.Range(0,1));
+                return Utils.GetRandomVector(0, enemiesOnGameGreed.GetLength(0), 0, 1);
             case 3:
-                return new Vector2(Random.Range(0,10),Random.Range(9,10));
+                return Utils.GetRandomVector(0, enemiesOnGameGreed.GetLength(0), enemiesOnGameGreed.GetLength(0) - 1, enemiesOnGameGreed.GetLength(0));
         }
         throw new System.Exception("Not a random between 0 to 3, abort");   
     }
