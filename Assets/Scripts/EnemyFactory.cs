@@ -44,7 +44,7 @@ public class EnemyFactory : MonoBehaviour
 
     public Vector2 GetNewEnemyEntryPointOnGreed()
     {
-        Vector2 rand = GetRandomPointOnOneOfTheEdges();;
+        Vector2 rand = GetRandomPointOnOneOfTheEdges();
         while (enemiesOnGameGreed[(int)rand.x, (int)rand.y])
             rand = GetRandomPointOnOneOfTheEdges();
         enemiesOnGameGreed[(int)rand.x, (int)rand.y] = true;
