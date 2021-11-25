@@ -14,6 +14,8 @@
     <MinYSpeed>-5</MinYSpeed>
     <MaxYSpeed>5</MaxYSpeed>
     <EnemyThrust>0.5</EnemyThrust>
+    <speedLimit>2</speedLimit>
+    <_rigidBody.drag>2</_rigidBody.drag>
   </EnemyMovementController>
   <ShotScript>
     <Speed>10</Speed>
