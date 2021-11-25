@@ -51,11 +51,6 @@ public class EnemyMovementController : MonoBehaviour
     private void KnockBack(Collider2D otherCollider2D)
     {
         Vector2 normalizedDifference = (_rigidBody.transform.position - otherCollider2D.transform.position).normalized;
-        _rigidBody.AddForce(normalizedDifference * normalizedSpeed(otherCollider2D), ForceMode2D.Impulse);
-    }
-
-    private float normalizedSpeed(Collider2D otherCollider2D)
-    {
-        return (Utils.VectorToAbsoluteValue(otherCollider2D.GetComponent<Rigidbody2D>().velocity) + Utils.VectorToAbsoluteValue(_rigidBody.velocity)) * EnemyThrust;
+        _rigidBody.AddForce(normalizedDifference * Utils.GetNormalizedSpeed(_rigidBody, otherCollider2D.GetComponent<Rigidbody2D>(), EnemyThrust), ForceMode2D.Impulse);
     }
 }
