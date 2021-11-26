@@ -148,7 +148,10 @@ MonoBehaviour:
   MaxXSpeed: 0
   MinYSpeed: 0
   MaxYSpeed: 0
+<<<<<<< HEAD
   XofEndOfMap: 0
   YofEndOfMap: 0
+=======
+>>>>>>> main
   EnemyThrust: 0
   UseConfigFile: 1

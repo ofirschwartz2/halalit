@@ -1,26 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <scripts>
   <HalalitMovementController>
-    <VelocityMultiplier>10</VelocityMultiplier>
+    <ForceMultiplier>10</ForceMultiplier>
     <SpinSpeed>10</SpinSpeed>
     <_rigidBody.drag>2</_rigidBody.drag>
+    <halalitThrust>0.5</halalitThrust>
+    <speedLimit>15</speedLimit>
+    <coolDownInterval>0.1</coolDownInterval>
   </HalalitMovementController>
   <EnemyFactory>
     <XGreedSpacing>13.4</XGreedSpacing>
     <YGreedSpacing>7.4</YGreedSpacing>
-    <XScreenTopLeft>-67</XScreenTopLeft>
-    <YScreenTopLeft>37</YScreenTopLeft>
+    <XScreenBottomLeft>-67</XScreenBottomLeft>
+    <YScreenBottomLeft>-37</YScreenBottomLeft>
     <MaxNumberOfEnemies>30</MaxNumberOfEnemies>
+    <NumberOfEnemies>30</NumberOfEnemies>
   </EnemyFactory>
   <EnemyMovementController>
     <MinXSpeed>-5</MinXSpeed>
     <MaxXSpeed>5</MaxXSpeed>
     <MinYSpeed>-5</MinYSpeed>
     <MaxYSpeed>5</MaxYSpeed>
-    <XofEndOfMap>65</XofEndOfMap>
-    <YofEndOfMap>35</YofEndOfMap>
-    <YofEndOfMap>35</YofEndOfMap>
+    <XofEndOfMap>68</XofEndOfMap>
+    <YofEndOfMap>38</YofEndOfMap>
     <EnemyThrust>0.5</EnemyThrust>
+    <speedLimit>2</speedLimit>
+    <_rigidBody.drag>2</_rigidBody.drag>
   </EnemyMovementController>
   <ShotScript>
     <Speed>10</Speed>
