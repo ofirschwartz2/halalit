@@ -21,6 +21,8 @@
     <MaxXSpeed>5</MaxXSpeed>
     <MinYSpeed>-5</MinYSpeed>
     <MaxYSpeed>5</MaxYSpeed>
+    <XofEndOfMap>68</XofEndOfMap>
+    <YofEndOfMap>38</YofEndOfMap>
     <EnemyThrust>0.5</EnemyThrust>
     <speedLimit>2</speedLimit>
     <_rigidBody.drag>2</_rigidBody.drag>
