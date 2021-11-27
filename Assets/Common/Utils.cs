@@ -51,6 +51,7 @@ namespace Assets.Common
         {
             return (Utils.VectorToAbsoluteValue(myRigidBody2D.velocity) + Utils.VectorToAbsoluteValue(otherRigidBody2D.velocity)) * thrust;
         }
+
         public static Vector2 GetRandomVector(int minX, int maxX, int minY, int maxY)
         {
             return new Vector2(UnityEngine.Random.Range(minX, maxX), UnityEngine.Random.Range(minY, maxY));
