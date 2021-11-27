@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class ShotScript : MonoBehaviour
 {
-
     public bool UseConfigFile;
     public float Speed;
-    public Rigidbody2D RigidBody;
+    private Rigidbody2D _rigidBody;
 
     void Start()
     {
+        _rigidBody = GetComponent<Rigidbody2D>(); 
         if (UseConfigFile)
         {
             string[] props = { "Speed" };
@@ -19,12 +19,10 @@ public class ShotScript : MonoBehaviour
 
             Speed = propsFromConfig["Speed"];
         }
-
-        RigidBody.velocity = transform.right * Speed;
+        _rigidBody.velocity = transform.right * Speed;
     }
 
     void OnTriggerEnter2D(Collider2D hitInfo){
-        Debug.Log(hitInfo.name); 
         Destroy(gameObject);
     }
 

@@ -116,7 +116,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -144,6 +144,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9403f12e486ac734cb824a5efda66c05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rigidBody: {fileID: 7855985066294020757}
-  xSpeed: -0.001
-  ySpeed: -0.003
+  MinXSpeed: 0
+  MaxXSpeed: 0
+  MinYSpeed: 0
+  MaxYSpeed: 0
+<<<<<<< HEAD
+  XofEndOfMap: 0
+  YofEndOfMap: 0
+=======
+>>>>>>> main
+  EnemyThrust: 0
+  UseConfigFile: 1

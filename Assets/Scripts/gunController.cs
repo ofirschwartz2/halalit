@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class gunController : MonoBehaviour
 {
-    private const float RADIUS = 2.6f;
+    private const float RADIUS = 0.65f;
     private const float SHOOTING_TH = 0.8f;
     private const float COOL_DOWN_INTERVAL = 0.5f;
 
@@ -44,9 +44,7 @@ public class gunController : MonoBehaviour
     private void ChangeGunPosition()
     {
         float angle = GetAngle();
-        float x = GetXFromAngle(RADIUS, angle) + halalit.transform.position.x;
-        float y = GetYFromAngle(RADIUS, angle) + halalit.transform.position.y;
-        firePoint.position = new Vector2(x, y);
+        firePoint.position = Utils.AngleAndRadiusToPointOnCircle(angle, RADIUS) + halalit.transform.position;  //new Vector2(x, y);
         firePoint.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
@@ -76,17 +74,5 @@ public class gunController : MonoBehaviour
         // Debug.Log("firePoint.position " + firePoint.position + ", firePoint.rotation " + firePoint.rotation);
         Instantiate(shotPrefab, firePoint.position, firePoint.rotation);
         CooldownTime = Time.time + COOL_DOWN_INTERVAL;
-    }
-
-    private float GetXFromAngle(float radius, float angle)
-    {
-        // TODO: understand what is 11f. I don't understand...
-        return radius * Mathf.Cos(angle * Mathf.PI/180) / 11f * radius;
-    }
-
-    private float GetYFromAngle(float radius, float angle)
-    {
-        // TODO: understand what is 11f. I don't understand...
-        return radius * Mathf.Sin(angle * Mathf.PI/180) / 11f * radius;
     }
 }
