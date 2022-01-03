@@ -1,5 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <scripts>
+  <CameraScript>
+    <UpperEdge>5.918</UpperEdge>
+    <LowerEdge>-5.687</LowerEdge>
+    <RightEdge>7.985</RightEdge>
+    <LeftEdge>-7.917</LeftEdge>
+  </CameraScript>
   <HalalitMovementController>
     <ForceMultiplier>10</ForceMultiplier>
     <SpinSpeed>10</SpinSpeed>
