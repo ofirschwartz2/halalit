@@ -96,9 +96,6 @@ $RECYCLE.BIN/
 /.vsconfig
 /Assets/Joystick Pack
 
-# Scenes
-*.unity
-
 # projectSettings
 EditorSettings.asset
 ProjectSettings.asset
