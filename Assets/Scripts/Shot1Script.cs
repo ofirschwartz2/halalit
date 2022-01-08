@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShotScript : MonoBehaviour
+public class Shot1Script : MonoBehaviour
 {
     public bool UseConfigFile;
     public float Speed;
