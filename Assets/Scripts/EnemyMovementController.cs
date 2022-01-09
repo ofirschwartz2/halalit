@@ -24,7 +24,6 @@ public class EnemyMovementController : MonoBehaviour
     {
         if (UseConfigFile)
         {
-            Debug.Log("BB");
             string[] props = { "MinXSpeed", "MaxXSpeed", "MinYSpeed", "MaxYSpeed", "XofEndOfMap", "YofEndOfMap", "EnemyThrust"};
             Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
             MinXSpeed = propsFromConfig["MinXSpeed"];

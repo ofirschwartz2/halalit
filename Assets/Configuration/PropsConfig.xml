@@ -42,4 +42,10 @@
   <gunController>
     <CooldownTime>0</CooldownTime>
   </gunController>
+  <AstroidtMovementController>
+    <MinXSpeed>-3</MinXSpeed>
+    <MaxXSpeed>0</MaxXSpeed>
+    <MinYSpeed>-3</MinYSpeed>
+    <MaxYSpeed>0</MaxYSpeed>
+  </AstroidtMovementController>
 </scripts>
