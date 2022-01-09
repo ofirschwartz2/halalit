@@ -13,7 +13,7 @@ public class gunController : MonoBehaviour
     public bool UseConfigFile;
     public float CooldownTime = 0;
     public Transform firePoint;
-    public GameObject[] shotsPrefab = new GameObject[2];
+    public List<GameObject> shotsPrefab;
     private int currentWeapon = 0;
     private bool canSwitch = true;
     private GameObject shotPrefab;
@@ -106,7 +106,7 @@ public class gunController : MonoBehaviour
 
     private void SwitchGunUp()
     {
-        if (currentWeapon == shotsPrefab.Length - 1)
+        if (currentWeapon == shotsPrefab.Count - 1)
             currentWeapon = 0;
         else
             currentWeapon++;
@@ -117,7 +117,7 @@ public class gunController : MonoBehaviour
     private void SwitchGunDown()
     {
         if (currentWeapon == 0)
-            currentWeapon = shotsPrefab.Length - 1; 
+            currentWeapon = shotsPrefab.Count - 1; 
         else
             currentWeapon--;
         shotPrefab = shotsPrefab[currentWeapon];    

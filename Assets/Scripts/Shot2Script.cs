@@ -28,10 +28,6 @@ public class Shot2Script : MonoBehaviour
             Destroy(gameObject);
     }
 
-    void OnTriggerEnter2D(Collider2D hitInfo){
-        Destroy(gameObject);
-    }
-
     private bool CoolDownPassed()
     {
         return Time.time >= endOfLiveTime;
