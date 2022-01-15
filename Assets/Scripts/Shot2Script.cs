@@ -7,7 +7,7 @@ public class Shot2Script : MonoBehaviour
 {
     public bool UseConfigFile;
     public float Lifetime;
-    private float endOfLiveTime = 0;
+    private float _endOfLiveTime = 0;
 
 
     void Start()
@@ -19,7 +19,7 @@ public class Shot2Script : MonoBehaviour
 
             Lifetime = propsFromConfig["Lifetime"];
         }
-        endOfLiveTime = Time.time + Lifetime;
+        _endOfLiveTime = Time.time + Lifetime;
     }
 
     void Update()
@@ -30,6 +30,6 @@ public class Shot2Script : MonoBehaviour
 
     private bool CoolDownPassed()
     {
-        return Time.time >= endOfLiveTime;
+        return Time.time >= _endOfLiveTime;
     }
 }
