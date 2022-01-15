@@ -10,7 +10,7 @@ public class HalalitMovementController : MonoBehaviour
     public float SpinSpeed;
     public Joystick Joystick;
     public float halalitThrust;
-    public float speedLimit;
+    public float SpeedLimit;
     public float coolDownInterval;
     public float cooldownTime = 0;
 
@@ -21,14 +21,14 @@ public class HalalitMovementController : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody2D>();
         if (UseConfigFile)
         {
-            string[] props = { "ForceMultiplier", "SpinSpeed", "_rigidBody.drag", "halalitThrust", "speedLimit", "coolDownInterval" };
+            string[] props = { "ForceMultiplier", "SpinSpeed", "_rigidBody.drag", "halalitThrust", "SpeedLimit", "coolDownInterval" };
             Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
 
             ForceMultiplier = propsFromConfig["ForceMultiplier"];
             SpinSpeed = propsFromConfig["SpinSpeed"];
             _rigidBody.drag = propsFromConfig["_rigidBody.drag"];
             halalitThrust = propsFromConfig["halalitThrust"];
-            speedLimit = propsFromConfig["speedLimit"];
+            SpeedLimit = propsFromConfig["SpeedLimit"];
             coolDownInterval = propsFromConfig["coolDownInterval"];
         }
     }
@@ -55,20 +55,10 @@ public class HalalitMovementController : MonoBehaviour
             float normalizedRotationZ = Utils.AngleNormalizationBy360(rotationZ);
 
             float deltaAngle = normalizedJoystickAngle - normalizedRotationZ;
-            float shorterDeltaAngle = GetShorterSpin(deltaAngle);
+            float shorterDeltaAngle = Utils.GetShorterSpin(deltaAngle);
 
             transform.Rotate(new Vector3(0, 0, shorterDeltaAngle) * Time.deltaTime * SpinSpeed);
         }
-    }
-
-    private float GetShorterSpin(float angle)
-    {
-        if (angle > 180)
-            return angle - 360;
-        else if (angle < -180)
-            return angle + 360;
-        else
-            return angle;
     }
 
     private void MoveInRotateDirection()
@@ -109,7 +99,7 @@ public class HalalitMovementController : MonoBehaviour
 
     private bool IsUnderSpeedLimit()
     {
-        return Utils.VectorToAbsoluteValue(_rigidBody.velocity) < speedLimit;
+        return Utils.VectorToAbsoluteValue(_rigidBody.velocity) < SpeedLimit;
     }
     #endregion
 

@@ -56,5 +56,15 @@ namespace Assets.Common
         {
             return new Vector2(UnityEngine.Random.Range(minX, maxX), UnityEngine.Random.Range(minY, maxY));
         }
+
+        public static float GetShorterSpin(float angle)
+        {
+            if (angle > 180)
+                return angle - 360;
+            else if (angle < -180)
+                return angle + 360;
+            else
+                return angle;
+        }
     }
 }
