@@ -15,12 +15,12 @@
     <coolDownInterval>0.1</coolDownInterval>
   </HalalitMovementController>
   <EnemyFactory>
-    <XGreedSpacing>13.4</XGreedSpacing>
-    <YGreedSpacing>7.4</YGreedSpacing>
-    <XScreenBottomLeft>-67</XScreenBottomLeft>
-    <YScreenBottomLeft>-37</YScreenBottomLeft>
-    <MaxNumberOfEnemies>30</MaxNumberOfEnemies>
-    <NumberOfEnemies>30</NumberOfEnemies>
+    <XGreedSpacing>4</XGreedSpacing>
+    <YGreedSpacing>2.5</YGreedSpacing>
+    <XScreenBottomLeft>-20</XScreenBottomLeft>
+    <YScreenBottomLeft>-12</YScreenBottomLeft>
+    <MaxNumberOfEnemies>10</MaxNumberOfEnemies>
+    <NumberOfEnemies>5</NumberOfEnemies>
   </EnemyFactory>
   <EnemyMovementController>
     <MinXSpeed>-5</MinXSpeed>
@@ -33,9 +33,12 @@
     <speedLimit>2</speedLimit>
     <_rigidBody.drag>2</_rigidBody.drag>
   </EnemyMovementController>
-  <ShotScript>
+  <Shot1Script>
     <Speed>10</Speed>
-  </ShotScript>
+  </Shot1Script>
+  <Shot2Script>
+    <Lifetime>0.2</Lifetime>
+  </Shot2Script>
   <gunController>
     <CooldownTime>0</CooldownTime>
   </gunController>
