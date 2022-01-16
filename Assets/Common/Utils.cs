@@ -29,7 +29,7 @@ namespace Assets.Common
             return degree * Mathf.PI/180;
         }
 
-        public static float VectorToAbsoluteValue(Vector2 vector2)
+        public static float GetVectorMagnitude(Vector2 vector2)
         {
             return GetLengthOfLine(vector2.x, vector2.y);
         }
@@ -42,6 +42,14 @@ namespace Assets.Common
             return angle;
         }
 
+        public static float GetDistanceBetweenTwoPoints(Vector2 point1, Vector2 point2)
+        {
+            float deltaX = Math.Abs(point1.x - point2.x);
+            float deltaY = Math.Abs(point1.y - point2.y);
+
+            return GetLengthOfLine(deltaX, deltaY);
+        }
+
         public static float GetLengthOfLine(float x, float y)
         {
             return Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(y, 2));
@@ -49,7 +57,7 @@ namespace Assets.Common
 
         public static float GetNormalizedSpeed(Rigidbody2D myRigidBody2D, Rigidbody2D otherRigidBody2D, float thrust)
         {
-            return (Utils.VectorToAbsoluteValue(myRigidBody2D.velocity) + Utils.VectorToAbsoluteValue(otherRigidBody2D.velocity)) * thrust;
+            return (Utils.GetVectorMagnitude(myRigidBody2D.velocity) + Utils.GetVectorMagnitude(otherRigidBody2D.velocity)) * thrust;
         }
 
         public static Vector2 GetRandomVector(int minX, int maxX, int minY, int maxY)
