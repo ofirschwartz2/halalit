@@ -12,19 +12,19 @@ public class gunController : MonoBehaviour
 
     public bool UseConfigFile;
     public float CooldownTime = 0;
-    public Transform firePoint;
-    public List<GameObject> shotsPrefab;
-    private int currentWeapon = 0;
-    private bool canSwitch = true;
-    private GameObject shotPrefab;
-    // TODO: the gun should not hold it's parent (halalit), it's a bad practice, it only need it's x and y positions, so it should use a function of the halalitMovementController that will get them.
+    public Transform FirePoint;
+    public List<GameObject> ShotsPrefab;
     public GameObject Halalit;
     public Joystick GunJoystick;
     public Joystick WeaponSwitchJoystick;
+    private int _currentWeapon = 0;
+    private bool _canSwitch = true;
+    private GameObject ShotPrefab;
+
 
     void Start()
     {
-        shotPrefab = shotsPrefab[currentWeapon];
+        ShotPrefab = ShotsPrefab[_currentWeapon];
         if (UseConfigFile)
         {
             string[] props = { "CooldownTime" };
@@ -46,7 +46,7 @@ public class gunController : MonoBehaviour
         else if(ShouldSwitchGunDown())
             SwitchGunDown();
         else if (IsUnderSwitchGunTH())
-            canSwitch = true;
+            _canSwitch = true;
     }
 
     private bool GunJoystickPressed()
@@ -57,8 +57,8 @@ public class gunController : MonoBehaviour
     private void ChangeGunPosition()
     {
         float angle = GetAngle();
-        firePoint.position = Utils.AngleAndRadiusToPointOnCircle(angle, RADIUS) + Halalit.transform.position;  //new Vector2(x, y);
-        firePoint.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        FirePoint.position = Utils.AngleAndRadiusToPointOnCircle(angle, RADIUS) + Halalit.transform.position;  //new Vector2(x, y);
+        FirePoint.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
     private float GetAngle()
@@ -84,12 +84,12 @@ public class gunController : MonoBehaviour
 
     private bool ShouldSwitchGunUp()
     {
-        return canSwitch && WeaponSwitchJoystick.Vertical > SWITCH_GUN_TH;
+        return _canSwitch && WeaponSwitchJoystick.Vertical > SWITCH_GUN_TH;
     }
 
     private bool ShouldSwitchGunDown()
     {
-        return canSwitch && WeaponSwitchJoystick.Vertical < SWITCH_GUN_TH * (-1);
+        return _canSwitch && WeaponSwitchJoystick.Vertical < SWITCH_GUN_TH * (-1);
     }
 
     private bool IsUnderSwitchGunTH()
@@ -99,28 +99,28 @@ public class gunController : MonoBehaviour
 
     private void Shoot() 
     {
-        // Debug.Log("firePoint.position " + firePoint.position + ", firePoint.rotation " + firePoint.rotation);
-        Instantiate(shotPrefab, firePoint.position, firePoint.rotation);
+        // Debug.Log("FirePoint.position " + FirePoint.position + ", firePoint.rotation " + firePoint.rotation);
+        Instantiate(ShotPrefab, FirePoint.position, FirePoint.rotation);
         CooldownTime = Time.time + COOL_DOWN_INTERVAL;
     }
 
     private void SwitchGunUp()
     {
-        if (currentWeapon == shotsPrefab.Count - 1)
-            currentWeapon = 0;
+        if (_currentWeapon == ShotsPrefab.Count - 1)
+            _currentWeapon = 0;
         else
-            currentWeapon++;
-        shotPrefab = shotsPrefab[currentWeapon];
-        canSwitch = false;
+            _currentWeapon++;
+        ShotPrefab = ShotsPrefab[_currentWeapon];
+        _canSwitch = false;
     }
 
     private void SwitchGunDown()
     {
-        if (currentWeapon == 0)
-            currentWeapon = shotsPrefab.Count - 1; 
+        if (_currentWeapon == 0)
+            _currentWeapon = ShotsPrefab.Count - 1; 
         else
-            currentWeapon--;
-        shotPrefab = shotsPrefab[currentWeapon];    
-        canSwitch = false;
+            _currentWeapon--;
+        ShotPrefab = ShotsPrefab[_currentWeapon];    
+        _canSwitch = false;
     }
 }
