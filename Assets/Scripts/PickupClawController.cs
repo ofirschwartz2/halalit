@@ -11,7 +11,7 @@ public class PickupClawController : MonoBehaviour
     public GameObject Halalit;
 
     private Rigidbody2D _rigidBody;
-    private Vector2 _shootDirection;
+    private Vector2 _pcDirection;
     private Vector2 _halalitCurrentPosition;
     private Vector2 _halalitLastFramePsotion;
     private Vector2 _shootPoint;
@@ -47,15 +47,9 @@ public class PickupClawController : MonoBehaviour
 
     private void Shoot()
     {
-        if (Input.GetMouseButtonDown(0) && IsInHalalit())
+        if (Input.GetMouseButtonDown(0) && PcBeforeShoot() && ShootPointIsValid())
         {
-            SetShootPointByMousePosition();
-           
-            if (ShootPointIsValid() && !_movingForward)
-            {
-                UpdateShootDirection();
-                SetShootingVariables();
-            }
+            InitShooting();
         }
 
         if (ReachShootPoint() || AtFullRopeLength())
@@ -69,16 +63,17 @@ public class PickupClawController : MonoBehaviour
         }
     }
 
-    private void SetShootingVariables()
+    private void InitShooting()
     {
+        _shootPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         _rigidBody.bodyType = RigidbodyType2D.Dynamic;
-        gameObject.transform.parent = null;
         _movingForward = true;
+        gameObject.transform.parent = null;
     }
 
     private void MoveForward()
     {
-        UpdateShootDirection();
+        UpdatePcDirection(_shootPoint);
         MoveRelativeToHalalit();
         RotateInShootDirectionRelativeToHalalit();
         UpdateVelocityByShootDirection();
@@ -97,22 +92,17 @@ public class PickupClawController : MonoBehaviour
 
     #region Moving
 
-    private void SetShootPointByMousePosition()
+    private void UpdatePcDirection(Vector2 goal)
     {
-        _shootPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-    }
+        float deltaX = Math.Abs(transform.position.x - goal.x);
+        float deltaY = Math.Abs(transform.position.y - goal.y);
 
-    private void UpdateShootDirection()
-    {
-        float deltaX = Math.Abs(transform.position.x - _shootPoint.x);
-        float deltaY = Math.Abs(transform.position.y - _shootPoint.y);
-
-        float relativeDeltaX = transform.position.x < _shootPoint.x ? deltaX : deltaX * -1;
-        float relativeDeltaY = transform.position.y < _shootPoint.y ? deltaY : deltaY * -1;
+        float relativeDeltaX = transform.position.x < goal.x ? deltaX : deltaX * -1;
+        float relativeDeltaY = transform.position.y < goal.y ? deltaY : deltaY * -1;
 
         float shootDirectionMagnitude = Utils.GetVectorMagnitude(new Vector2(relativeDeltaX, relativeDeltaY));
 
-        _shootDirection = new Vector2(relativeDeltaX / shootDirectionMagnitude, relativeDeltaY / shootDirectionMagnitude);
+        _pcDirection = new Vector2(relativeDeltaX / shootDirectionMagnitude, relativeDeltaY / shootDirectionMagnitude);
     }
 
     private void MoveRelativeToHalalit()
@@ -129,15 +119,15 @@ public class PickupClawController : MonoBehaviour
 
     private void RotateInShootDirectionRelativeToHalalit()
     {
-        float shootDirectionAngle = Utils.Vector2ToDegree(_shootDirection.x, _shootDirection.y);
+        float shootDirectionAngle = Utils.Vector2ToDegree(_pcDirection.x, _pcDirection.y);
         float clawDirectionAngle = transform.rotation.eulerAngles.z - _initialRotationl;
         transform.Rotate(new Vector3(0, 0, shootDirectionAngle - clawDirectionAngle));
     }
 
     private void UpdateVelocityByShootDirection()
     {
-        float horizontalVelocity = _shootDirection.x * VelocityMultiplier;
-        float verticalVelocity = _shootDirection.y * VelocityMultiplier;
+        float horizontalVelocity = _pcDirection.x * VelocityMultiplier;
+        float verticalVelocity = _pcDirection.y * VelocityMultiplier;
 
         _rigidBody.velocity = new Vector2(horizontalVelocity, verticalVelocity);
     }
@@ -157,10 +147,11 @@ public class PickupClawController : MonoBehaviour
     private bool ShootPointIsValid()
     {
         // TODO: fix this... this should include all screen but not include the most left and right parts of the canvas.
-        return _shootPoint.x > -8 && _shootPoint.x < 8; 
+        Vector2 potentialShootPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        return potentialShootPoint.x > -8 && potentialShootPoint.x < 8; 
     }
 
-    private bool IsInHalalit()
+    private bool PcBeforeShoot()
     {
         return !_movingForward && !_movingBackward;
     }
