@@ -23,6 +23,12 @@ public class AstroidtMovementController : MonoBehaviour
             MinYSpeed = propsFromConfig["MinYSpeed"];
             MaxYSpeed = propsFromConfig["MaxYSpeed"];
         }
-        GetComponent<Rigidbody2D>().velocity = new Vector2(UnityEngine.Random.Range(MinXSpeed, MaxXSpeed), UnityEngine.Random.Range(MinYSpeed, MaxYSpeed));
+        
+        GetComponent<Rigidbody2D>().velocity = GetAstroidtVelocity(MinXSpeed, MaxXSpeed, MinYSpeed, MaxYSpeed);
+    }
+
+    private Vector2 GetAstroidtVelocity(float minXSpeed, float maxXSpeed, float minYSpeed, float maxYSpeed)
+    {
+        return new Vector2(UnityEngine.Random.Range(MinXSpeed, MaxXSpeed), UnityEngine.Random.Range(MinYSpeed, MaxYSpeed));
     }
 }

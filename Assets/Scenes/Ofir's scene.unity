@@ -1249,9 +1249,9 @@ MonoBehaviour:
   shotsPrefab:
   - {fileID: 4043514594342984741, guid: c1409429b528d8a4996de605d78d7765, type: 3}
   - {fileID: 6558306382352585984, guid: ed85493b62cdf144c97493a61934fcb0, type: 3}
-  halalit: {fileID: 2130719621}
-  gunJoystick: {fileID: 1115015985}
-  weaponSwitchJoystick: {fileID: 2062673036}
+  Halalit: {fileID: 2130719621}
+  GunJoystick: {fileID: 1115015985}
+  WeaponSwitchJoystick: {fileID: 2062673036}
 --- !u!1 &814139006
 GameObject:
   m_ObjectHideFlags: 0
@@ -1519,11 +1519,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 913
+      value: 3125
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 265
+      value: 279
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1871,11 +1871,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 913
+      value: 3125
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 67
+      value: 81
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
