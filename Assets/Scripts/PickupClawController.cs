@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class PickupClawController : MonoBehaviour
 {
-    private const float MIN_PROXIMITY = 0.3f;
+    private const float MIN_PROXIMITY = 0.2f;
 
     public float VelocityMultiplier;
     public float RopeLength;
@@ -50,19 +50,13 @@ public class PickupClawController : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && PcBeforeShoot() && ShootPointIsValid())
         {
             InitShooting();
+            Move(_shootPoint, false);
         }
 
-        if (_movingForward)
+        if (_movingForward && (ReachGoal(_shootPoint) || AtFullRopeLength()))
         {
-            if (ReachGoal(_shootPoint) || AtFullRopeLength())
-            {
-                _caughtSomething = true;
-                _movingForward = false;
-            }
-            else if (_movingForward)
-            {
-                Move(_shootPoint, false);
-            }
+            _caughtSomething = true;
+            _movingForward = false;
         }
     }
 
@@ -84,14 +78,6 @@ public class PickupClawController : MonoBehaviour
                 Move(_halalitCurrentPosition, true);
             }
         }
-    }
-
-    private void Move(Vector2 goal, bool isBackward)
-    {
-        UpdatePcDirection(goal);
-        MoveRelativeToHalalit();
-        RotateInPcDirectionRelativeToHalalit(isBackward);
-        UpdateVelocityByPcDirection();
     }
 
     private void InitShooting()
@@ -116,6 +102,19 @@ public class PickupClawController : MonoBehaviour
     #endregion
 
     #region Moving
+
+    private void Move(Vector2 goal, bool isBackward)
+    {
+        UpdatePcDirection(goal);
+
+        if (isBackward)
+        {
+            MoveRelativeToHalalit();
+        }
+
+        RotateInPcDirectionRelativeToHalalit(isBackward);
+        UpdateVelocityByPcDirection();
+    }
 
     private void UpdatePcDirection(Vector2 goal)
     {
@@ -184,11 +183,7 @@ public class PickupClawController : MonoBehaviour
 
     private bool ReachGoal(Vector2 goal)
     {
-        return 
-            transform.position.x < goal.x + MIN_PROXIMITY &&
-            transform.position.x > goal.x - MIN_PROXIMITY &&
-            transform.position.y < goal.y + MIN_PROXIMITY &&
-            transform.position.y > goal.y - MIN_PROXIMITY;
+        return Utils.GetDistanceBetweenTwoPoints(transform.position, goal) <= MIN_PROXIMITY;
     }
 
     #endregion
