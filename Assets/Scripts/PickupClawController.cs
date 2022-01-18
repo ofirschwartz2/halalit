@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PickupClawController : MonoBehaviour
 {
-    private const float MAX_PROXIMITY = 0.3f;
+    private const float MIN_PROXIMITY = 0.3f;
 
     public float VelocityMultiplier;
     public float RopeLength;
@@ -13,9 +13,9 @@ public class PickupClawController : MonoBehaviour
     private Rigidbody2D _rigidBody;
     private Vector2 _pcDirection;
     private Vector2 _halalitCurrentPosition;
-    private Vector2 _halalitLastFramePsotion;
+    private Vector2 _halalitLastFramePosition;
     private Vector2 _shootPoint;
-    private float _initialRotationl;
+    private float _initialRotation;
     private bool _movingForward;
     private bool _movingBackward;
     private bool _caughtSomething;
@@ -24,12 +24,11 @@ public class PickupClawController : MonoBehaviour
     void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
-        _initialRotationl = transform.rotation.eulerAngles.z;
+        _initialRotation = transform.rotation.eulerAngles.z;
         _movingForward = false;
         _movingBackward = false;
         _caughtSomething = false;
-        _halalitLastFramePsotion = Halalit.transform.position;
-
+        _halalitLastFramePosition = Halalit.transform.position;
         _rigidBody.bodyType = RigidbodyType2D.Kinematic;
     }
 
@@ -40,10 +39,10 @@ public class PickupClawController : MonoBehaviour
         Shoot();
         Retract();
 
-        _halalitLastFramePsotion = Halalit.transform.position;
+        _halalitLastFramePosition = Halalit.transform.position;
     }
 
-    #region Forward controllers
+    #region Shoot & Retract controllers
 
     private void Shoot()
     {
@@ -52,15 +51,46 @@ public class PickupClawController : MonoBehaviour
             InitShooting();
         }
 
-        if (ReachShootPoint() || AtFullRopeLength())
+        if (_movingForward)
         {
-            _rigidBody.velocity = new Vector2(0, 0); //TODO: remove this
-            _movingForward = false;
+            if (ReachGoal(_shootPoint) || AtFullRopeLength())
+            {
+                _caughtSomething = true;
+                _movingForward = false;
+            }
+            else if (_movingForward)
+            {
+                Move(_shootPoint, false);
+            }
         }
-        else if (_movingForward)
+    }
+
+    private void Retract()
+    {
+        if (_caughtSomething || AtFullRopeLength())
         {
-            MoveForward();
+            _movingBackward = true;
         }
+
+        if (_movingBackward)
+        {
+            if (ReachGoal(_halalitCurrentPosition))
+            {
+                FinalizeRetraction();
+            }
+            else if (_movingBackward)
+            {
+                Move(_halalitCurrentPosition, true);
+            }
+        }
+    }
+
+    private void Move(Vector2 goal, bool isBackward)
+    {
+        UpdatePcDirection(goal);
+        MoveRelativeToHalalit();
+        RotateInPcDirectionRelativeToHalalit(isBackward);
+        UpdateVelocityByPcDirection();
     }
 
     private void InitShooting()
@@ -71,21 +101,15 @@ public class PickupClawController : MonoBehaviour
         gameObject.transform.parent = null;
     }
 
-    private void MoveForward()
+    private void FinalizeRetraction()
     {
-        UpdatePcDirection(_shootPoint);
-        MoveRelativeToHalalit();
-        RotateInShootDirectionRelativeToHalalit();
-        UpdateVelocityByShootDirection();
-    }
-
-    #endregion
-
-    #region Backward controllers
-
-    private void Retract()
-    {
-
+        
+        transform.position = _halalitCurrentPosition;
+        _rigidBody.bodyType = RigidbodyType2D.Kinematic;
+        _rigidBody.velocity = Vector2.zero;
+        _caughtSomething = false;
+        _movingBackward = false;
+        gameObject.transform.SetParent(Halalit.transform);
     }
 
     #endregion
@@ -111,20 +135,26 @@ public class PickupClawController : MonoBehaviour
         float clawToShootPointDistance = Utils.GetDistanceBetweenTwoPoints(transform.position, _shootPoint);
         float relativeMultiplier = clawToShootPointDistance / halalitToShootPointDistance;
 
-        float relativeDeltaX = relativeMultiplier * (_halalitCurrentPosition.x - _halalitLastFramePsotion.x);
-        float relativeDeltaY = relativeMultiplier * (_halalitCurrentPosition.y - _halalitLastFramePsotion.y);
+        float relativeDeltaX = relativeMultiplier * (_halalitCurrentPosition.x - _halalitLastFramePosition.x);
+        float relativeDeltaY = relativeMultiplier * (_halalitCurrentPosition.y - _halalitLastFramePosition.y);
 
         transform.position = new Vector2(transform.position.x + relativeDeltaX, transform.position.y + relativeDeltaY);
     }
 
-    private void RotateInShootDirectionRelativeToHalalit()
+    private void RotateInPcDirectionRelativeToHalalit(bool isBackward)
     {
-        float shootDirectionAngle = Utils.Vector2ToDegree(_pcDirection.x, _pcDirection.y);
-        float clawDirectionAngle = transform.rotation.eulerAngles.z - _initialRotationl;
-        transform.Rotate(new Vector3(0, 0, shootDirectionAngle - clawDirectionAngle));
+        float pcDirectionAngle = Utils.Vector2ToDegree(_pcDirection.x, _pcDirection.y);
+        float pcRotation = transform.rotation.eulerAngles.z - _initialRotation; ;
+
+        if (isBackward)
+        {
+            pcRotation += 180;
+        }
+        
+        transform.Rotate(new Vector3(0, 0, pcDirectionAngle - pcRotation));
     }
 
-    private void UpdateVelocityByShootDirection()
+    private void UpdateVelocityByPcDirection()
     {
         float horizontalVelocity = _pcDirection.x * VelocityMultiplier;
         float verticalVelocity = _pcDirection.y * VelocityMultiplier;
@@ -138,10 +168,7 @@ public class PickupClawController : MonoBehaviour
 
     private bool AtFullRopeLength()
     {
-        float deltaX = Math.Abs(transform.position.x - _halalitCurrentPosition.x);
-        float deltaY = Math.Abs(transform.position.y - _halalitCurrentPosition.y);
-
-        return Utils.GetLengthOfLine(deltaX, deltaY) >= RopeLength;
+        return Utils.GetDistanceBetweenTwoPoints(transform.position, _halalitCurrentPosition) >= RopeLength;
     }
 
     private bool ShootPointIsValid()
@@ -156,13 +183,13 @@ public class PickupClawController : MonoBehaviour
         return !_movingForward && !_movingBackward;
     }
 
-    private bool ReachShootPoint()
+    private bool ReachGoal(Vector2 goal)
     {
         return 
-            transform.position.x < _shootPoint.x + MAX_PROXIMITY &&
-            transform.position.x > _shootPoint.x - MAX_PROXIMITY &&
-            transform.position.y < _shootPoint.y + MAX_PROXIMITY &&
-            transform.position.y > _shootPoint.y - MAX_PROXIMITY;
+            transform.position.x < goal.x + MIN_PROXIMITY &&
+            transform.position.x > goal.x - MIN_PROXIMITY &&
+            transform.position.y < goal.y + MIN_PROXIMITY &&
+            transform.position.y > goal.y - MIN_PROXIMITY;
     }
 
     #endregion
