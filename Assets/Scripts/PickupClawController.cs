@@ -1,6 +1,7 @@
 using Assets.Common;
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PickupClawController : MonoBehaviour
 {
@@ -173,9 +174,7 @@ public class PickupClawController : MonoBehaviour
 
     private bool ShootPointIsValid()
     {
-        // TODO: fix this... this should include all screen but not include the most left and right parts of the canvas.
-        Vector2 potentialShootPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        return potentialShootPoint.x > -8 && potentialShootPoint.x < 8; 
+        return !EventSystem.current.IsPointerOverGameObject();
     }
 
     private bool PcBeforeShoot()
