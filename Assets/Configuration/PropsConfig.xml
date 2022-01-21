@@ -47,5 +47,7 @@
     <MaxXSpeed>0</MaxXSpeed>
     <MinYSpeed>-3</MinYSpeed>
     <MaxYSpeed>0</MaxYSpeed>
+    <MinRotation>0.1</MinRotation>
+    <MaxRotation>1</MaxRotation>
   </AstroidtMovementController>
 </scripts>

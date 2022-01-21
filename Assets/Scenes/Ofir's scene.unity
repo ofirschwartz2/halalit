@@ -1035,6 +1035,8 @@ MonoBehaviour:
   MaxXSpeed: 0
   MinYSpeed: 0
   MaxYSpeed: 0
+  MinRotation: 0
+  MaxRotation: 0
 --- !u!1001 &709582700
 PrefabInstance:
   m_ObjectHideFlags: 0
