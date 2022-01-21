@@ -7,7 +7,7 @@ public class Shot2Script : MonoBehaviour
 {
     public bool UseConfigFile;
     public float Lifetime;
-    private float endOfLiveTime = 0;
+    private float _endOfLiveTime = 0;
 
 
     void Start()
@@ -19,17 +19,17 @@ public class Shot2Script : MonoBehaviour
 
             Lifetime = propsFromConfig["Lifetime"];
         }
-        endOfLiveTime = Time.time + Lifetime;
+        _endOfLiveTime = Time.time + Lifetime;
     }
 
     void Update()
     {
-        if (CoolDownPassed())
+        if (ShotDied())
             Destroy(gameObject);
     }
 
-    private bool CoolDownPassed()
+    private bool ShotDied()
     {
-        return Time.time >= endOfLiveTime;
+        return Time.time >= _endOfLiveTime;
     }
 }
