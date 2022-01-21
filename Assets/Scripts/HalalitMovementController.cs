@@ -9,10 +9,10 @@ public class HalalitMovementController : MonoBehaviour
     public float ForceMultiplier;
     public float SpinSpeed;
     public Joystick Joystick;
-    public float halalitThrust;
-    public float speedLimit;
-    public float coolDownInterval;
-    public float cooldownTime = 0;
+    public float HalalitThrust;
+    public float SpeedLimit;
+    public float CoolDownInterval;
+    private float _cooldownTime = 0;
 
     private Rigidbody2D _rigidBody;
 
@@ -21,15 +21,15 @@ public class HalalitMovementController : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody2D>();
         if (UseConfigFile)
         {
-            string[] props = { "ForceMultiplier", "SpinSpeed", "_rigidBody.drag", "halalitThrust", "speedLimit", "coolDownInterval" };
+            string[] props = { "ForceMultiplier", "SpinSpeed", "_rigidBody.drag", "HalalitThrust", "SpeedLimit", "CoolDownInterval" };
             Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
 
             ForceMultiplier = propsFromConfig["ForceMultiplier"];
             SpinSpeed = propsFromConfig["SpinSpeed"];
             _rigidBody.drag = propsFromConfig["_rigidBody.drag"];
-            halalitThrust = propsFromConfig["halalitThrust"];
-            speedLimit = propsFromConfig["speedLimit"];
-            coolDownInterval = propsFromConfig["coolDownInterval"];
+            HalalitThrust = propsFromConfig["HalalitThrust"];
+            SpeedLimit = propsFromConfig["SpeedLimit"];
+            CoolDownInterval = propsFromConfig["CoolDownInterval"];
         }
     }
     
@@ -109,7 +109,7 @@ public class HalalitMovementController : MonoBehaviour
 
     private bool IsUnderSpeedLimit()
     {
-        return Utils.VectorToAbsoluteValue(_rigidBody.velocity) < speedLimit;
+        return Utils.VectorToAbsoluteValue(_rigidBody.velocity) < SpeedLimit;
     }
     #endregion
 
@@ -124,13 +124,13 @@ public class HalalitMovementController : MonoBehaviour
     private void KnockBack(Collider2D otherCollider2D)
     {
         Vector2 normalizedDifference = (_rigidBody.transform.position - otherCollider2D.transform.position).normalized;
-        _rigidBody.AddForce(normalizedDifference * Utils.GetNormalizedSpeed(_rigidBody, otherCollider2D.GetComponent<Rigidbody2D>(), halalitThrust), ForceMode2D.Impulse);
-        cooldownTime = Time.time + coolDownInterval;
+        _rigidBody.AddForce(normalizedDifference * Utils.GetNormalizedSpeed(_rigidBody, otherCollider2D.GetComponent<Rigidbody2D>(), HalalitThrust), ForceMode2D.Impulse);
+        _cooldownTime = Time.time + CoolDownInterval;
     }
 
     private bool CooldownFromCollision()
     {
-        return Time.time > cooldownTime;
+        return Time.time > _cooldownTime;
     }
     
     #endregion

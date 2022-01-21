@@ -5,10 +5,6 @@ using UnityEngine;
 
 public class gunController : MonoBehaviour
 {
-    private const float RADIUS = 0.65f;
-    private const float SHOOTING_TH = 0.8f;
-    private const float SWITCH_GUN_TH = 0.8f;
-    private const float COOL_DOWN_INTERVAL = 0.5f;
 
     public bool UseConfigFile;
     public float CooldownTime = 0;
@@ -20,6 +16,10 @@ public class gunController : MonoBehaviour
     private int _currentWeapon = 0;
     private bool _canSwitch = true;
     private GameObject ShotPrefab;
+    private const float RADIUS = 0.65f;
+    private const float SHOOTING_TH = 0.8f;
+    private const float SWITCH_GUN_TH = 0.8f;
+    private const float COOL_DOWN_INTERVAL = 0.5f;
 
 
     void Start()
