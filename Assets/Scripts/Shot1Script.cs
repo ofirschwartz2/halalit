@@ -22,7 +22,7 @@ public class Shot1Script : MonoBehaviour
         _rigidBody.velocity = transform.right * Speed;
     }
 
-    void OnTriggerEnter2D(Collider2D hitInfo){
+    void OnTriggerEnter2D(Collider2D other){
         Destroy(gameObject);
     }
 

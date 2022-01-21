@@ -24,11 +24,11 @@ public class Shot2Script : MonoBehaviour
 
     void Update()
     {
-        if (CoolDownPassed())
+        if (ShotDied())
             Destroy(gameObject);
     }
 
-    private bool CoolDownPassed()
+    private bool ShotDied()
     {
         return Time.time >= _endOfLiveTime;
     }

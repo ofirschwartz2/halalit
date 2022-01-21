@@ -31,4 +31,10 @@ public class AstroidtMovementController : MonoBehaviour
     {
         return new Vector2(UnityEngine.Random.Range(MinXSpeed, MaxXSpeed), UnityEngine.Random.Range(MinYSpeed, MaxYSpeed));
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Shot") || other.gameObject.CompareTag("Background"))
+            Destroy(gameObject);
+    }
 }
