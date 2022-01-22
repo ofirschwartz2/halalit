@@ -17,12 +17,8 @@
     <CoolDownInterval>0.1</CoolDownInterval>
   </HalalitMovementController>
   <EnemyFactory>
-    <XGreedSpacing>4</XGreedSpacing>
-    <YGreedSpacing>2.5</YGreedSpacing>
-    <XScreenBottomLeft>-20</XScreenBottomLeft>
-    <YScreenBottomLeft>-12</YScreenBottomLeft>
-    <MaxNumberOfEnemies>10</MaxNumberOfEnemies>
-    <NumberOfEnemies>5</NumberOfEnemies>
+    <MaxNumberOfEnemies>30</MaxNumberOfEnemies>
+    <NumberOfEnemies>20</NumberOfEnemies>
   </EnemyFactory>
   <EnemyMovementController>
     <MinXSpeed>-5</MinXSpeed>

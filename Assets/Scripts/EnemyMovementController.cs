@@ -15,8 +15,6 @@ public class EnemyMovementController : MonoBehaviour
     public bool UseConfigFile;
     public float SpeedLimit;
     private Rigidbody2D _rigidBody;
-    private float _xSpeed;
-    private float _ySpeed;
     private float _xForce;
     private float _yForce;
     
@@ -70,9 +68,11 @@ public class EnemyMovementController : MonoBehaviour
 
     private void GoInAnotherDirection()
     {
+        Debug.Log("ANOTHER DIRECTION");      
         _xForce = GoInAnotherXDirection();
         _yForce = GoInAnotherYDirection();
-        _rigidBody.velocity = new Vector2(0f, 0f);        
+        _rigidBody.velocity = new Vector2(0f, 0f);  
+        Debug.Log("ANOTHER X DIRECTION" + _xForce + "ANOTHER Y DIRECTION" + _yForce);      
     }
 
     private float GoInAnotherXDirection() 

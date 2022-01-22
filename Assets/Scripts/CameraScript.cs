@@ -10,7 +10,6 @@ public class CameraScript : MonoBehaviour
     public GameObject Halalit;
     public GameObject Background;
     public float CameraXSize, CameraYSize;
-    private Vector3 _bgSize;
     private float _leftSceneEdge, _rightSceneEdge, _topSceneEdge, _bottomSceneEdge;
 
     void Start()
@@ -59,10 +58,11 @@ public class CameraScript : MonoBehaviour
 
     private void SetBackgroundSizes()
     {
-        _bgSize = Background.GetComponent<Renderer>().bounds.size ;
-        _rightSceneEdge = _bgSize.x / 2; 
+        var bgSize = Background.GetComponent<Renderer>().bounds.size;
+
+        _rightSceneEdge = bgSize.x / 2; 
         _leftSceneEdge = _rightSceneEdge * (-1);
-        _topSceneEdge = _bgSize.y / 2;
+        _topSceneEdge = bgSize.y / 2;
         _bottomSceneEdge = _topSceneEdge * (-1);
     }
 }

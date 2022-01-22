@@ -7,29 +7,34 @@ public class EnemyFactory : MonoBehaviour
 {
     public GameObject EnemyPrefab;
     public int NumberOfEnemies;
-    public Vector3 BottomLeftPoint; 
-    public float XGreedSpacing; 
-    public float YGreedSpacing; 
     public float MaxNumberOfEnemies;
     public bool[,] enemiesOnGameGreed = new bool[10,10];
     public bool UseConfigFile;
+    public GameObject Background;
+    private float _leftGreedEdge, _bottomGreedEdge, _xGreedSpacing, _yGreedSpacing;
+    private Vector3 _bottomLeftPoint; 
+
 
     void Start()
     {
         if (UseConfigFile)
         {
-            string[] props = { "XGreedSpacing", "YGreedSpacing", "XScreenBottomLeft", "YScreenBottomLeft", "MaxNumberOfEnemies","NumberOfEnemies"};
+            string[] props = {"MaxNumberOfEnemies", "NumberOfEnemies"};
             Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
 
-            XGreedSpacing = propsFromConfig["XGreedSpacing"];
-            YGreedSpacing = propsFromConfig["YGreedSpacing"];
             MaxNumberOfEnemies = propsFromConfig["MaxNumberOfEnemies"];
-            BottomLeftPoint = new Vector3(propsFromConfig["XScreenBottomLeft"],propsFromConfig["YScreenBottomLeft"]);
             NumberOfEnemies = (int)propsFromConfig["NumberOfEnemies"];
         }
+
         if (NumberOfEnemies > MaxNumberOfEnemies) 
             throw new System.Exception("Number Of Enemies is wayyy too big, abort");
         
+        SetGreedSizes();
+        InstantiateAllEnemies();
+    }
+
+    private void InstantiateAllEnemies()
+    {
         for (int i = 0; i < NumberOfEnemies; i++)
         {
             Vector2 entryPointOnGreed = GetNewEnemyEntryPointOnGreed();
@@ -39,7 +44,7 @@ public class EnemyFactory : MonoBehaviour
 
     private Vector3 GetPointOnGreed(float xInGameGrid, float yInGameGrid)
     {
-        return BottomLeftPoint + new Vector3(XGreedSpacing * xInGameGrid, YGreedSpacing * yInGameGrid);
+        return _bottomLeftPoint + new Vector3(_xGreedSpacing * xInGameGrid + (_xGreedSpacing / 2), _yGreedSpacing * yInGameGrid + (_yGreedSpacing / 2));
     }
 
     public Vector2 GetNewEnemyEntryPointOnGreed()
@@ -65,5 +70,16 @@ public class EnemyFactory : MonoBehaviour
                 return Utils.GetRandomVector(0, enemiesOnGameGreed.GetLength(0), enemiesOnGameGreed.GetLength(0) - 1, enemiesOnGameGreed.GetLength(0));
         }
         throw new System.Exception("Not a random between 0 to 3, abort");   
+    }
+
+    private void SetGreedSizes()
+    {
+        var bgSize = Background.GetComponent<Renderer>().bounds.size;
+
+        _leftGreedEdge = bgSize.x / 2 * (-1);
+        _bottomGreedEdge = bgSize.y / 2 * (-1);
+        _bottomLeftPoint = new Vector3(_leftGreedEdge, _bottomGreedEdge);
+        _xGreedSpacing = bgSize.x / 10;
+        _yGreedSpacing = bgSize.y / 10;
     }
 }
