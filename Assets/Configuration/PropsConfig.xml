@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <scripts>
   <CameraScript>
-    <UpperEdge>5.918</UpperEdge>
-    <LowerEdge>-5.687</LowerEdge>
-    <RightEdge>10</RightEdge>
-    <LeftEdge>-35</LeftEdge>
     <CameraXSize>24</CameraXSize>
     <CameraYSize>12</CameraYSize>
   </CameraScript>
