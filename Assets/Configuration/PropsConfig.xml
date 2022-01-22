@@ -3,8 +3,10 @@
   <CameraScript>
     <UpperEdge>5.918</UpperEdge>
     <LowerEdge>-5.687</LowerEdge>
-    <RightEdge>7.985</RightEdge>
-    <LeftEdge>-7.917</LeftEdge>
+    <RightEdge>10</RightEdge>
+    <LeftEdge>-35</LeftEdge>
+    <CameraXSize>24</CameraXSize>
+    <CameraYSize>12</CameraYSize>
   </CameraScript>
   <HalalitMovementController>
     <ForceMultiplier>10</ForceMultiplier>
