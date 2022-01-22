@@ -1,118 +1,137 @@
 using Assets.Common;
+using Assets.Enums;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class PickupClawController : MonoBehaviour
 {
-    private const float MIN_PROXIMITY = 0.2f;
+    private const float POSITION_MIN_PROXIMITY = 0.2f;
+    private const float ROTATION_MIN_PROXIMITY = 1;
 
     public float VelocityMultiplier;
     public float RopeLength;
     public GameObject Halalit;
 
+    private PickupClawStatus _pcStatus;
     private Rigidbody2D _rigidBody;
+    private Animator _animator;
+    private GameObject _item;
     private Vector2 _pcDirection;
     private Vector2 _halalitCurrentPosition;
     private Vector2 _halalitLastFramePosition;
     private Vector2 _shootPoint;
     private float _initialRotation;
-    private bool _movingForward;
-    private bool _movingBackward;
-    private bool _caughtSomething;
-
+    private bool _perfectRotationToHalalit;
 
     void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
         _initialRotation = transform.rotation.eulerAngles.z;
-        _movingForward = false;
-        _movingBackward = false;
-        _caughtSomething = false;
+        _pcStatus = PickupClawStatus.IN_HALALIT;
+        _item = null;
         _halalitLastFramePosition = Halalit.transform.position;
         _rigidBody.bodyType = RigidbodyType2D.Kinematic;
+        _perfectRotationToHalalit = false;
     }
 
     void Update()
     {
         _halalitCurrentPosition = Halalit.transform.position;
 
-        Shoot();
-        Retract();
+        ShootingController();
+        RetractionController();
 
         _halalitLastFramePosition = Halalit.transform.position;
     }
 
-    #region Shoot & Retract controllers
+    #region Shooting & Retraction controllers
 
-    private void Shoot()
+    private void ShootingController()
     {
-        if (Input.GetMouseButtonDown(0) && PcBeforeShoot() && ShootPointIsValid())
+        if (ShouldShoot())
         {
             InitShooting();
-            Move(_shootPoint, false);
+            Move(_shootPoint);
         }
 
-        if (_movingForward && (ReachGoal(_shootPoint) || AtFullRopeLength()))
+        if (ShouldRetract())
         {
-            _caughtSomething = true;
-            _movingForward = false;
+            _animator.SetBool("isShooting", false);
         }
     }
 
-    private void Retract()
+    private void RetractionController()
     {
-        if (_caughtSomething || AtFullRopeLength())
+        if (ShouldRetract())
         {
-            _movingBackward = true;
+            _animator.SetBool("notCatch", true);
+            _pcStatus = PickupClawStatus.MOVING_BACKWARD;
         }
 
-        if (_movingBackward)
+        if (_pcStatus == PickupClawStatus.MOVING_BACKWARD)
         {
             if (ReachGoal(_halalitCurrentPosition))
             {
                 FinalizeRetraction();
             }
-            else if (_movingBackward)
+            else
             {
-                Move(_halalitCurrentPosition, true);
+                Move(_halalitCurrentPosition);
             }
         }
     }
 
     private void InitShooting()
     {
+        _animator.SetBool("isShooting", true);
         _shootPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         _rigidBody.bodyType = RigidbodyType2D.Dynamic;
-        _movingForward = true;
+        _pcStatus = PickupClawStatus.MOVING_FORWARD;
         gameObject.transform.parent = null;
+        transform.position = new Vector3(transform.position.x, transform.position.y, 1);
+        _perfectRotationToHalalit = false;
     }
 
     private void FinalizeRetraction()
     {
-        
-        transform.position = _halalitCurrentPosition;
+        _animator.SetBool("notCatch", false);
+        gameObject.transform.SetParent(Halalit.transform);
         _rigidBody.bodyType = RigidbodyType2D.Kinematic;
         _rigidBody.velocity = Vector2.zero;
-        _caughtSomething = false;
-        _movingBackward = false;
-        gameObject.transform.SetParent(Halalit.transform);
+        transform.position = new Vector3(_halalitCurrentPosition.x, _halalitCurrentPosition.y, 1);
+        _pcStatus = PickupClawStatus.IN_HALALIT;
+
+        if (_item != null)
+        {
+            // TODO: Load the Item (Each item should implement an interface with a function LoadItem - OOP)
+            Destroy(_item);
+        }
     }
 
     #endregion
 
     #region Moving
 
-    private void Move(Vector2 goal, bool isBackward)
+    private void Move(Vector2 goal)
     {
         UpdatePcDirection(goal);
 
-        if (isBackward)
+        if (_pcStatus == PickupClawStatus.MOVING_BACKWARD)
         {
             MoveRelativeToHalalit();
         }
 
-        RotateInPcDirectionRelativeToHalalit(isBackward);
+        if (_pcStatus == PickupClawStatus.MOVING_FORWARD || _perfectRotationToHalalit)
+        {
+            RotateToDirectionInstantly();
+        }
+        else if (!_perfectRotationToHalalit)
+        {
+            RotateOpositeToPcDirectionSlowly();
+        }
+        
         UpdateVelocityByPcDirection();
     }
 
@@ -138,20 +157,41 @@ public class PickupClawController : MonoBehaviour
         float relativeDeltaX = relativeMultiplier * (_halalitCurrentPosition.x - _halalitLastFramePosition.x);
         float relativeDeltaY = relativeMultiplier * (_halalitCurrentPosition.y - _halalitLastFramePosition.y);
 
-        transform.position = new Vector2(transform.position.x + relativeDeltaX, transform.position.y + relativeDeltaY);
+        transform.position = new Vector3(transform.position.x + relativeDeltaX, transform.position.y + relativeDeltaY, 1);
     }
 
-    private void RotateInPcDirectionRelativeToHalalit(bool isBackward)
+    private void RotateToDirectionInstantly()
     {
         float pcDirectionAngle = Utils.Vector2ToDegree(_pcDirection.x, _pcDirection.y);
         float pcRotation = transform.rotation.eulerAngles.z - _initialRotation; ;
 
-        if (isBackward)
+        if (_pcStatus == PickupClawStatus.MOVING_BACKWARD)
         {
             pcRotation += 180;
         }
         
         transform.Rotate(new Vector3(0, 0, pcDirectionAngle - pcRotation));
+    }
+
+    private void RotateOpositeToPcDirectionSlowly()
+    {
+        float opositePcRotation = Utils.AngleNormalizationBy360(transform.rotation.eulerAngles.z - _initialRotation + 180);
+        float pcDirectionRotation = Utils.AngleNormalizationBy360(Utils.Vector2ToDegree(_pcDirection.x, _pcDirection.y));
+        float rotationAntiClockwiseDeference = Utils.AngleNormalizationBy360(pcDirectionRotation - opositePcRotation);
+        float rotationClockwiseDeference = 360 - rotationAntiClockwiseDeference;
+
+        if (rotationAntiClockwiseDeference < ROTATION_MIN_PROXIMITY || rotationClockwiseDeference < ROTATION_MIN_PROXIMITY)
+        {
+            _perfectRotationToHalalit = true;
+        }
+        else if (rotationAntiClockwiseDeference <= rotationClockwiseDeference)
+        {
+            transform.Rotate(0, 0, 0.5f);
+        }
+        else
+        {
+            transform.Rotate(0, 0, -0.5f);
+        }
     }
 
     private void UpdateVelocityByPcDirection()
@@ -164,7 +204,31 @@ public class PickupClawController : MonoBehaviour
 
     #endregion
 
+    #region Catching
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Item") && _pcStatus == PickupClawStatus.MOVING_FORWARD)
+        {
+            _rigidBody.velocity = Vector2.zero;
+            other.gameObject.transform.SetParent(transform);
+            _item = other.gameObject;
+        }
+    }
+
+    #endregion
+
     #region Predicates
+
+    private bool ShouldShoot()
+    {
+        return Input.GetMouseButtonDown(0) && _pcStatus == PickupClawStatus.IN_HALALIT && ShootPointIsValid();
+    }
+
+    private bool ShouldRetract()
+    {
+        return _pcStatus == PickupClawStatus.MOVING_FORWARD && (ReachGoal(_shootPoint) || AtFullRopeLength() || _item != null);
+    }
 
     private bool AtFullRopeLength()
     {
@@ -176,14 +240,9 @@ public class PickupClawController : MonoBehaviour
         return !EventSystem.current.IsPointerOverGameObject();
     }
 
-    private bool PcBeforeShoot()
-    {
-        return !_movingForward && !_movingBackward;
-    }
-
     private bool ReachGoal(Vector2 goal)
     {
-        return Utils.GetDistanceBetweenTwoPoints(transform.position, goal) <= MIN_PROXIMITY;
+        return Utils.GetDistanceBetweenTwoPoints(transform.position, goal) <= POSITION_MIN_PROXIMITY;
     }
 
     #endregion
