@@ -4,6 +4,7 @@
     {
         IN_HALALIT,
         MOVING_FORWARD,
+        GRABBING,
         MOVING_BACKWARD
     }
 }

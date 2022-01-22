@@ -22,6 +22,7 @@ public class PickupClawController : MonoBehaviour
     private Vector2 _halalitLastFramePosition;
     private Vector2 _shootPoint;
     private float _initialRotation;
+    private float _grabDelayTimer;
     private bool _perfectRotationToHalalit;
 
     void Start()
@@ -29,6 +30,7 @@ public class PickupClawController : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
         _initialRotation = transform.rotation.eulerAngles.z;
+        _grabDelayTimer = 0;
         _pcStatus = PickupClawStatus.IN_HALALIT;
         _item = null;
         _halalitLastFramePosition = Halalit.transform.position;
@@ -41,6 +43,7 @@ public class PickupClawController : MonoBehaviour
         _halalitCurrentPosition = Halalit.transform.position;
 
         ShootingController();
+        GrabbingController();
         RetractionController();
 
         _halalitLastFramePosition = Halalit.transform.position;
@@ -59,6 +62,25 @@ public class PickupClawController : MonoBehaviour
         if (ShouldRetract())
         {
             _animator.SetBool("isShooting", false);
+            _animator.SetBool("isGrabbing", false);
+        }
+    }
+
+    private void GrabbingController()
+    {
+        if (_pcStatus == PickupClawStatus.GRABBING)
+        {
+            _grabDelayTimer += Time.deltaTime;
+            _animator.SetBool("isGrabbing", true);
+            //TODO: move a little towards item
+            //TODO: rotate towards item
+            //TODO: do a grab animation
+
+            if (_grabDelayTimer >= 0.4)
+            {
+                _item.transform.SetParent(transform);
+                _pcStatus = PickupClawStatus.MOVING_BACKWARD;
+            }
         }
     }
 
@@ -66,7 +88,11 @@ public class PickupClawController : MonoBehaviour
     {
         if (ShouldRetract())
         {
-            _animator.SetBool("notCatch", true);
+            if (_pcStatus == PickupClawStatus.MOVING_FORWARD)
+            {
+                _animator.SetBool("isNotGrabbing", true);
+            }
+
             _pcStatus = PickupClawStatus.MOVING_BACKWARD;
         }
 
@@ -96,7 +122,7 @@ public class PickupClawController : MonoBehaviour
 
     private void FinalizeRetraction()
     {
-        _animator.SetBool("notCatch", false);
+        _animator.SetBool("isNotGrabbing", false);
         gameObject.transform.SetParent(Halalit.transform);
         _rigidBody.bodyType = RigidbodyType2D.Kinematic;
         _rigidBody.velocity = Vector2.zero;
@@ -131,7 +157,7 @@ public class PickupClawController : MonoBehaviour
         {
             RotateOpositeToPcDirectionSlowly();
         }
-        
+
         UpdateVelocityByPcDirection();
     }
 
@@ -169,7 +195,7 @@ public class PickupClawController : MonoBehaviour
         {
             pcRotation += 180;
         }
-        
+
         transform.Rotate(new Vector3(0, 0, pcDirectionAngle - pcRotation));
     }
 
@@ -204,14 +230,15 @@ public class PickupClawController : MonoBehaviour
 
     #endregion
 
-    #region Catching
+    #region Grabbing init
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Item") && _pcStatus == PickupClawStatus.MOVING_FORWARD)
         {
+            _pcStatus = PickupClawStatus.GRABBING;
+            _grabDelayTimer = 0;
             _rigidBody.velocity = Vector2.zero;
-            other.gameObject.transform.SetParent(transform);
             _item = other.gameObject;
         }
     }
@@ -227,7 +254,8 @@ public class PickupClawController : MonoBehaviour
 
     private bool ShouldRetract()
     {
-        return _pcStatus == PickupClawStatus.MOVING_FORWARD && (ReachGoal(_shootPoint) || AtFullRopeLength() || _item != null);
+        return _pcStatus == PickupClawStatus.MOVING_FORWARD && (ReachGoal(_shootPoint) || AtFullRopeLength()) ||
+               _pcStatus == PickupClawStatus.MOVING_BACKWARD;
     }
 
     private bool AtFullRopeLength()
