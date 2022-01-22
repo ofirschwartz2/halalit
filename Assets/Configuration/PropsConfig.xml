@@ -21,10 +21,10 @@
     <NumberOfEnemies>20</NumberOfEnemies>
   </EnemyFactory>
   <EnemyMovementController>
-    <MinXSpeed>-5</MinXSpeed>
-    <MaxXSpeed>5</MaxXSpeed>
-    <MinYSpeed>-5</MinYSpeed>
-    <MaxYSpeed>5</MaxYSpeed>
+    <MinXForce>-5</MinXForce>
+    <MaxXForce>5</MaxXForce>
+    <MinYForce>-5</MinYForce>
+    <MaxYForce>5</MaxYForce>
     <XofEndOfMap>68</XofEndOfMap>
     <YofEndOfMap>38</YofEndOfMap>
     <EnemyThrust>0.5</EnemyThrust>
