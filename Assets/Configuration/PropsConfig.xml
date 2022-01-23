@@ -42,4 +42,12 @@
   <gunController>
     <CooldownTime>0</CooldownTime>
   </gunController>
+  <PickupClawController>
+    <VelocityMultiplier>2</VelocityMultiplier>
+    <RotationToItemMultiplier>3</RotationToItemMultiplier>
+    <RotationToHalalitMultiplier>0.5</RotationToHalalitMultiplier>
+    <MoveToItemMultiplier>0.5</MoveToItemMultiplier>
+    <GrabDelay>0.5</GrabDelay>
+    <RopeLength>10</RopeLength>
+  </PickupClawController>
 </scripts>

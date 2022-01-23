@@ -1,6 +1,7 @@
 using Assets.Common;
 using Assets.Enums;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,7 +10,12 @@ public class PickupClawController : MonoBehaviour
     private const float POSITION_MIN_PROXIMITY = 0.2f;
     private const float ROTATION_MIN_PROXIMITY = 1;
 
+    public bool UseConfigFile;
     public float VelocityMultiplier;
+    public float RotationToItemMultiplier;
+    public float RotationToHalalitMultiplier;
+    public float MoveToItemMultiplier;
+    public float GrabDelay;
     public float RopeLength;
     public GameObject Halalit;
 
@@ -36,6 +42,19 @@ public class PickupClawController : MonoBehaviour
         _halalitLastFramePosition = Halalit.transform.position;
         _rigidBody.bodyType = RigidbodyType2D.Kinematic;
         _perfectRotationToHalalit = false;
+
+        if (UseConfigFile)
+        {
+            string[] props = { "VelocityMultiplier", "RotationToItemMultiplier", "RotationToHalalitMultiplier", "MoveToItemMultiplier", "GrabDelay", "RopeLength" };
+            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
+
+            VelocityMultiplier = propsFromConfig["VelocityMultiplier"];
+            RotationToItemMultiplier = propsFromConfig["RotationToItemMultiplier"];
+            RotationToHalalitMultiplier = propsFromConfig["RotationToHalalitMultiplier"];
+            MoveToItemMultiplier = propsFromConfig["MoveToItemMultiplier"];
+            GrabDelay = propsFromConfig["GrabDelay"];
+            RopeLength = propsFromConfig["RopeLength"];
+        }
     }
 
     void Update()
@@ -49,7 +68,7 @@ public class PickupClawController : MonoBehaviour
         _halalitLastFramePosition = Halalit.transform.position;
     }
 
-    #region Shooting & Retraction controllers
+    #region Controllers
 
     private void ShootingController()
     {
@@ -72,11 +91,11 @@ public class PickupClawController : MonoBehaviour
         {
             _grabDelayTimer += Time.deltaTime;
             _animator.SetBool("isGrabbing", true);
-            //TODO: move a little towards item
-            //TODO: rotate towards item
-            //TODO: do a grab animation
+            _animator.SetBool("isShooting", false);
 
-            if (_grabDelayTimer >= 0.4)
+            MoveToItem();
+
+            if (_grabDelayTimer >= GrabDelay)
             {
                 _item.transform.SetParent(transform);
                 _pcStatus = PickupClawStatus.MOVING_BACKWARD;
@@ -109,6 +128,10 @@ public class PickupClawController : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Initializes & finalizes 
+
     private void InitShooting()
     {
         _animator.SetBool("isShooting", true);
@@ -136,6 +159,17 @@ public class PickupClawController : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Item") && _pcStatus == PickupClawStatus.MOVING_FORWARD)
+        {
+            _pcStatus = PickupClawStatus.GRABBING;
+            _grabDelayTimer = 0;
+            _rigidBody.velocity = Vector2.zero;
+            _item = other.gameObject;
+        }
+    }
+
     #endregion
 
     #region Moving
@@ -151,11 +185,11 @@ public class PickupClawController : MonoBehaviour
 
         if (_pcStatus == PickupClawStatus.MOVING_FORWARD || _perfectRotationToHalalit)
         {
-            RotateToDirectionInstantly();
+            RotateToPcDirectionInstantly();
         }
         else if (!_perfectRotationToHalalit)
         {
-            RotateOpositeToPcDirectionSlowly();
+            RotateToDirectionSlowly(_pcDirection, RotationToHalalitMultiplier, true);
         }
 
         UpdateVelocityByPcDirection();
@@ -186,7 +220,7 @@ public class PickupClawController : MonoBehaviour
         transform.position = new Vector3(transform.position.x + relativeDeltaX, transform.position.y + relativeDeltaY, 1);
     }
 
-    private void RotateToDirectionInstantly()
+    private void RotateToPcDirectionInstantly()
     {
         float pcDirectionAngle = Utils.Vector2ToDegree(_pcDirection.x, _pcDirection.y);
         float pcRotation = transform.rotation.eulerAngles.z - _initialRotation; ;
@@ -199,24 +233,26 @@ public class PickupClawController : MonoBehaviour
         transform.Rotate(new Vector3(0, 0, pcDirectionAngle - pcRotation));
     }
 
-    private void RotateOpositeToPcDirectionSlowly()
+    private void RotateToDirectionSlowly(Vector2 goal, float rotationMultiplier, bool oposite = false)
     {
-        float opositePcRotation = Utils.AngleNormalizationBy360(transform.rotation.eulerAngles.z - _initialRotation + 180);
-        float pcDirectionRotation = Utils.AngleNormalizationBy360(Utils.Vector2ToDegree(_pcDirection.x, _pcDirection.y));
-        float rotationAntiClockwiseDeference = Utils.AngleNormalizationBy360(pcDirectionRotation - opositePcRotation);
+        float pcRotation = !oposite ? 
+            Utils.AngleNormalizationBy360(transform.rotation.eulerAngles.z - _initialRotation) :
+            Utils.AngleNormalizationBy360(transform.rotation.eulerAngles.z - _initialRotation + 180);
+        float directionRotation = Utils.AngleNormalizationBy360(Utils.Vector2ToDegree(goal.x, goal.y));
+        float rotationAntiClockwiseDeference = Utils.AngleNormalizationBy360(directionRotation - pcRotation);
         float rotationClockwiseDeference = 360 - rotationAntiClockwiseDeference;
-
+        
         if (rotationAntiClockwiseDeference < ROTATION_MIN_PROXIMITY || rotationClockwiseDeference < ROTATION_MIN_PROXIMITY)
         {
             _perfectRotationToHalalit = true;
         }
         else if (rotationAntiClockwiseDeference <= rotationClockwiseDeference)
         {
-            transform.Rotate(0, 0, 0.5f);
+            transform.Rotate(0, 0, rotationMultiplier);
         }
         else
         {
-            transform.Rotate(0, 0, -0.5f);
+            transform.Rotate(0, 0, -rotationMultiplier);
         }
     }
 
@@ -228,19 +264,18 @@ public class PickupClawController : MonoBehaviour
         _rigidBody.velocity = new Vector2(horizontalVelocity, verticalVelocity);
     }
 
-    #endregion
-
-    #region Grabbing init
-
-    private void OnTriggerEnter2D(Collider2D other)
+    private void MoveToItem()
     {
-        if (other.gameObject.CompareTag("Item") && _pcStatus == PickupClawStatus.MOVING_FORWARD)
-        {
-            _pcStatus = PickupClawStatus.GRABBING;
-            _grabDelayTimer = 0;
-            _rigidBody.velocity = Vector2.zero;
-            _item = other.gameObject;
-        }
+        Vector2 directionToItem = Utils.GetDirectionVector(transform.position, _item.transform.position);
+
+        MoveCloserToItem();
+        RotateToDirectionSlowly(directionToItem, RotationToItemMultiplier);
+    }
+
+    private void MoveCloserToItem()
+    {
+        Vector3 directionToItem = Utils.GetDirectionVector(transform.position, _item.transform.position);
+        transform.position += directionToItem * Time.deltaTime * MoveToItemMultiplier;
     }
 
     #endregion

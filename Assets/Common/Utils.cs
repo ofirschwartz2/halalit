@@ -77,5 +77,10 @@ namespace Assets.Common
             else
                 return angle;
         }
+
+        public static Vector3 GetDirectionVector(Vector3 from, Vector3 to)
+        {
+            return new Vector3(to.x - from.x, to.y - from.y, 0).normalized;
+        }
     }
 }

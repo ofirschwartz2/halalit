@@ -240,8 +240,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e95d7a1eb1b955439a37d3aef2cbe84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VelocityMultiplier: 2
-  RopeLength: 10
+  UseConfigFile: 1
+  VelocityMultiplier: 0
+  RotationToItemMultiplier: 0
+  RotationToHalalitMultiplier: 0
+  MoveToItemMultiplier: 0
+  GrabDelay: 0
+  RopeLength: 0
   Halalit: {fileID: 2130719621}
 --- !u!60 &36141986
 PolygonCollider2D:
@@ -1461,6 +1466,7 @@ MonoBehaviour:
   firePoint: {fileID: 718669209}
   shotsPrefab:
   - {fileID: 4043514594342984741, guid: 40e6ef62799c1484bba66721899628fb, type: 3}
+  - {fileID: 6558306382352585984, guid: ae74fd8d47af4e248be60d56b60caec7, type: 3}
   halalit: {fileID: 2130719621}
   gunJoystick: {fileID: 1115015985}
   weaponSwitchJoystick: {fileID: 1458613490}
