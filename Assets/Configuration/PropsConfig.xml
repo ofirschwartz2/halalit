@@ -44,4 +44,12 @@
     <MinRotation>0.1</MinRotation>
     <MaxRotation>1</MaxRotation>
   </AstroidtMovementController>
+  <PickupClawController>
+    <VelocityMultiplier>2</VelocityMultiplier>
+    <RotationToItemMultiplier>3</RotationToItemMultiplier>
+    <RotationToHalalitMultiplier>0.5</RotationToHalalitMultiplier>
+    <MoveToItemMultiplier>0.5</MoveToItemMultiplier>
+    <GrabDelay>0.5</GrabDelay>
+    <RopeLength>10</RopeLength>
+  </PickupClawController>
 </scripts>

@@ -29,17 +29,28 @@ namespace Assets.Common
             return degree * Mathf.PI/180;
         }
 
-        public static float VectorToAbsoluteValue(Vector2 vector2)
+        public static float GetVectorMagnitude(Vector2 vector2)
         {
             return GetLengthOfLine(vector2.x, vector2.y);
         }
 
         public static float AngleNormalizationBy360(float angle)
         {
-            if (angle < 0)
+            while (angle < 0)
                 angle += 360;
 
+            while (angle > 360)
+                angle -= 360;
+
             return angle;
+        }
+
+        public static float GetDistanceBetweenTwoPoints(Vector2 point1, Vector2 point2)
+        {
+            float deltaX = Math.Abs(point1.x - point2.x);
+            float deltaY = Math.Abs(point1.y - point2.y);
+
+            return GetLengthOfLine(deltaX, deltaY);
         }
 
         public static float GetLengthOfLine(float x, float y)
@@ -49,12 +60,27 @@ namespace Assets.Common
 
         public static float GetNormalizedSpeed(Rigidbody2D myRigidBody2D, Rigidbody2D otherRigidBody2D, float thrust)
         {
-            return (Utils.VectorToAbsoluteValue(myRigidBody2D.velocity) + Utils.VectorToAbsoluteValue(otherRigidBody2D.velocity)) * thrust;
+            return (Utils.GetVectorMagnitude(myRigidBody2D.velocity) + Utils.GetVectorMagnitude(otherRigidBody2D.velocity)) * thrust;
         }
 
         public static Vector2 GetRandomVector(int minX, int maxX, int minY, int maxY)
         {
             return new Vector2(UnityEngine.Random.Range(minX, maxX), UnityEngine.Random.Range(minY, maxY));
+        }
+
+        public static float GetShorterSpin(float angle)
+        {
+            if (angle > 180)
+                return angle - 360;
+            else if (angle < -180)
+                return angle + 360;
+            else
+                return angle;
+        }
+
+        public static Vector3 GetDirectionVector(Vector3 from, Vector3 to)
+        {
+            return new Vector3(to.x - from.x, to.y - from.y, 0).normalized;
         }
     }
 }

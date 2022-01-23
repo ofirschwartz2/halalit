@@ -82,6 +82,6 @@ public class EnemyMovementController : MonoBehaviour
 
     private bool IsUnderSpeedLimit()
     {
-        return Utils.VectorToAbsoluteValue(_rigidBody.velocity) < SpeedLimit;
+        return Utils.GetVectorMagnitude(_rigidBody.velocity) < SpeedLimit;
     }
 }
