@@ -1,10 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <scripts>
   <CameraScript>
-    <UpperEdge>5.918</UpperEdge>
-    <LowerEdge>-5.687</LowerEdge>
-    <RightEdge>7.985</RightEdge>
-    <LeftEdge>-7.917</LeftEdge>
+    <CameraXSize>21</CameraXSize>
+    <CameraYSize>12</CameraYSize>
   </CameraScript>
   <HalalitMovementController>
     <ForceMultiplier>10</ForceMultiplier>
@@ -15,18 +13,14 @@
     <CoolDownInterval>0.1</CoolDownInterval>
   </HalalitMovementController>
   <EnemyFactory>
-    <XGreedSpacing>4</XGreedSpacing>
-    <YGreedSpacing>2.5</YGreedSpacing>
-    <XScreenBottomLeft>-20</XScreenBottomLeft>
-    <YScreenBottomLeft>-12</YScreenBottomLeft>
-    <MaxNumberOfEnemies>10</MaxNumberOfEnemies>
-    <NumberOfEnemies>5</NumberOfEnemies>
+    <MaxNumberOfEnemies>30</MaxNumberOfEnemies>
+    <NumberOfEnemies>20</NumberOfEnemies>
   </EnemyFactory>
   <EnemyMovementController>
-    <MinXSpeed>-5</MinXSpeed>
-    <MaxXSpeed>5</MaxXSpeed>
-    <MinYSpeed>-5</MinYSpeed>
-    <MaxYSpeed>5</MaxYSpeed>
+    <MinXForce>-5</MinXForce>
+    <MaxXForce>5</MaxXForce>
+    <MinYForce>-5</MinYForce>
+    <MaxYForce>5</MaxYForce>
     <XofEndOfMap>68</XofEndOfMap>
     <YofEndOfMap>38</YofEndOfMap>
     <EnemyThrust>0.5</EnemyThrust>
