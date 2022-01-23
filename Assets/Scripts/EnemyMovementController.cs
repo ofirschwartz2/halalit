@@ -51,11 +51,9 @@ public class EnemyMovementController : MonoBehaviour
 
     private void GoInAnotherDirection()
     {
-        Debug.Log("ANOTHER DIRECTION");      
         _xForce = GoInAnotherXDirection();
         _yForce = GoInAnotherYDirection();
         _rigidBody.velocity = new Vector2(0f, 0f);  
-        Debug.Log("ANOTHER X DIRECTION" + _xForce + "ANOTHER Y DIRECTION" + _yForce);      
     }
 
     private float GoInAnotherXDirection() 

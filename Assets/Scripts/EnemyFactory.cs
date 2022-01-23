@@ -11,7 +11,7 @@ public class EnemyFactory : MonoBehaviour
     public bool[,] enemiesOnGameGreed = new bool[10,10];
     public bool UseConfigFile;
     public GameObject Background;
-    private float _leftGreedEdge, _bottomGreedEdge, _xGreedSpacing, _yGreedSpacing;
+    private float _xGreedSpacing, _yGreedSpacing;
     private Vector3 _bottomLeftPoint; 
 
 
@@ -76,9 +76,7 @@ public class EnemyFactory : MonoBehaviour
     {
         var bgSize = Background.GetComponent<Renderer>().bounds.size;
 
-        _leftGreedEdge = bgSize.x / 2 * (-1);
-        _bottomGreedEdge = bgSize.y / 2 * (-1);
-        _bottomLeftPoint = new Vector3(_leftGreedEdge, _bottomGreedEdge);
+        _bottomLeftPoint = new Vector3( bgSize.x / 2 * (-1) , bgSize.y / 2 * (-1));
         _xGreedSpacing = bgSize.x / 10;
         _yGreedSpacing = bgSize.y / 10;
     }
