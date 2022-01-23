@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class SceneFactory : MonoBehaviour
 {
-    public GameObject EnemyPrefab;
+    public GameObject EnemyPrefab, AstroidsPrefab;
     public int MaxNumberAllowed, MaxNumberOfEnemiesAllowed, NumberOfEnemies, MaxNumberOfAstroidsAllowed, NumberOfAstroids, MaxNumberOfItemsAllowed, NumberOfItems;
-    public bool[,] enemiesOnGameGreed = new bool[10,10];
+    public bool[,] GameObjectsOnGameGreed = new bool[10,10]; //enemiesOnGameGreed
     public bool UseConfigFile;
     public GameObject Background;
     private float _leftGreedEdge, _bottomGreedEdge, _xGreedSpacing, _yGreedSpacing;
@@ -39,6 +39,8 @@ public class SceneFactory : MonoBehaviour
         
         SetGreedSizes();
         InstantiateAllEnemies();
+        InstantiateAllAstroids();
+        InstantiateAllItems();
     }
 
     private bool IsTooMany()
@@ -53,37 +55,48 @@ public class SceneFactory : MonoBehaviour
     {
         for (int i = 0; i < NumberOfEnemies; i++)
         {
-            Vector2 entryPointOnGreed = GetNewEnemyEntryPointOnGreed();
+            Vector2 entryPointOnGreed = GetNewEntryPointOnGreed();
             Instantiate(EnemyPrefab,  GetPointOnGreed(entryPointOnGreed.x,entryPointOnGreed.y), Quaternion.AngleAxis(0, Vector3.forward));
         }
     }
 
+    private void InstantiateAllAstroids()
+    {
+        for (int i = 0; i < NumberOfAstroids; i++)
+        {
+            Vector2 entryPointOnGreed = GetNewEntryPointOnGreed();
+            Instantiate(AstroidsPrefab,  GetPointOnGreed(entryPointOnGreed.x,entryPointOnGreed.y), Quaternion.AngleAxis(0, Vector3.forward));
+        }
+    }
+    private void InstantiateAllItems(){} // TODO: ITEMS
+    
     private Vector3 GetPointOnGreed(float xInGameGrid, float yInGameGrid)
     {
         return _bottomLeftPoint + new Vector3(_xGreedSpacing * xInGameGrid + (_xGreedSpacing / 2), _yGreedSpacing * yInGameGrid + (_yGreedSpacing / 2));
     }
 
-    public Vector2 GetNewEnemyEntryPointOnGreed()
+    public Vector2 GetNewEntryPointOnGreed()
     {
         Vector2 rand = GetRandomPointOnOneOfTheEdges();
-        while (enemiesOnGameGreed[(int)rand.x, (int)rand.y])
+        while (GameObjectsOnGameGreed[(int)rand.x, (int)rand.y])
             rand = GetRandomPointOnOneOfTheEdges();
-        enemiesOnGameGreed[(int)rand.x, (int)rand.y] = true;
+        GameObjectsOnGameGreed[(int)rand.x, (int)rand.y] = true;
         return rand;
     }
+
 
     public Vector2 GetRandomPointOnOneOfTheEdges()
     {
     switch(Random.Range(0,4))
         {
             case 0:
-                return Utils.GetRandomVector(0, 1, 0, enemiesOnGameGreed.GetLength(0));
+                return Utils.GetRandomVector(0, 1, 0, GameObjectsOnGameGreed.GetLength(0));
             case 1:
-                return Utils.GetRandomVector(enemiesOnGameGreed.GetLength(0) - 1, enemiesOnGameGreed.GetLength(0), 0, enemiesOnGameGreed.GetLength(0));
+                return Utils.GetRandomVector(GameObjectsOnGameGreed.GetLength(0) - 1, GameObjectsOnGameGreed.GetLength(0), 0, GameObjectsOnGameGreed.GetLength(0));
             case 2:
-                return Utils.GetRandomVector(0, enemiesOnGameGreed.GetLength(0), 0, 1);
+                return Utils.GetRandomVector(0, GameObjectsOnGameGreed.GetLength(0), 0, 1);
             case 3:
-                return Utils.GetRandomVector(0, enemiesOnGameGreed.GetLength(0), enemiesOnGameGreed.GetLength(0) - 1, enemiesOnGameGreed.GetLength(0));
+                return Utils.GetRandomVector(0, GameObjectsOnGameGreed.GetLength(0), GameObjectsOnGameGreed.GetLength(0) - 1, GameObjectsOnGameGreed.GetLength(0));
         }
         throw new System.Exception("Not a random between 0 to 3, abort");   
     }
