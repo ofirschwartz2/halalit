@@ -1,36 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <scripts>
   <CameraScript>
-    <UpperEdge>5.918</UpperEdge>
-    <LowerEdge>-5.687</LowerEdge>
-    <RightEdge>7.985</RightEdge>
-    <LeftEdge>-7.917</LeftEdge>
+    <CameraXSize>21</CameraXSize>
+    <CameraYSize>12</CameraYSize>
   </CameraScript>
   <HalalitMovementController>
     <ForceMultiplier>10</ForceMultiplier>
     <SpinSpeed>10</SpinSpeed>
     <_rigidBody.drag>2</_rigidBody.drag>
-    <halalitThrust>0.5</halalitThrust>
+    <HalalitThrust>0.5</HalalitThrust>
     <SpeedLimit>15</SpeedLimit>
-    <coolDownInterval>0.1</coolDownInterval>
+    <CoolDownInterval>0.1</CoolDownInterval>
   </HalalitMovementController>
   <EnemyFactory>
-    <XGreedSpacing>4</XGreedSpacing>
-    <YGreedSpacing>2.5</YGreedSpacing>
-    <XScreenBottomLeft>-20</XScreenBottomLeft>
-    <YScreenBottomLeft>-12</YScreenBottomLeft>
-    <MaxNumberOfEnemies>10</MaxNumberOfEnemies>
-    <NumberOfEnemies>5</NumberOfEnemies>
+    <MaxNumberOfEnemies>30</MaxNumberOfEnemies>
+    <NumberOfEnemies>20</NumberOfEnemies>
   </EnemyFactory>
   <EnemyMovementController>
-    <MinXSpeed>-5</MinXSpeed>
-    <MaxXSpeed>5</MaxXSpeed>
-    <MinYSpeed>-5</MinYSpeed>
-    <MaxYSpeed>5</MaxYSpeed>
+    <MinXForce>-5</MinXForce>
+    <MaxXForce>5</MaxXForce>
+    <MinYForce>-5</MinYForce>
+    <MaxYForce>5</MaxYForce>
     <XofEndOfMap>68</XofEndOfMap>
     <YofEndOfMap>38</YofEndOfMap>
     <EnemyThrust>0.5</EnemyThrust>
-    <speedLimit>2</speedLimit>
+    <SpeedLimit>2</SpeedLimit>
     <_rigidBody.drag>2</_rigidBody.drag>
   </EnemyMovementController>
   <Shot1Script>
@@ -42,6 +36,14 @@
   <gunController>
     <CooldownTime>0</CooldownTime>
   </gunController>
+  <AstroidtMovementController>
+    <MinXSpeed>-3</MinXSpeed>
+    <MaxXSpeed>0</MaxXSpeed>
+    <MinYSpeed>-3</MinYSpeed>
+    <MaxYSpeed>0</MaxYSpeed>
+    <MinRotation>0.1</MinRotation>
+    <MaxRotation>1</MaxRotation>
+  </AstroidtMovementController>
   <PickupClawController>
     <VelocityMultiplier>2</VelocityMultiplier>
     <RotationToItemMultiplier>3</RotationToItemMultiplier>

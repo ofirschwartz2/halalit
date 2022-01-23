@@ -5,51 +5,31 @@ using UnityEngine;
 
 public class EnemyMovementController : MonoBehaviour
 {
-    public float MinXSpeed;
-    public float MaxXSpeed;
-    public float MinYSpeed;
-    public float MaxYSpeed;
-    public float XofEndOfMap;
-    public float YofEndOfMap;
+    public float MinXForce, MaxXForce, MinYForce, MaxYForce;
     public float EnemyThrust;
     public bool UseConfigFile;
+    public float SpeedLimit;
     private Rigidbody2D _rigidBody;
-    private float _xSpeed;
-    private float _ySpeed;
     private float _xForce;
     private float _yForce;
-    public float speedLimit;
     
     void Start()
     {
-        if (UseConfigFile)
-        {
-            Debug.Log("BB");
-            string[] props = { "MinXSpeed", "MaxXSpeed", "MinYSpeed", "MaxYSpeed", "XofEndOfMap", "YofEndOfMap", "EnemyThrust"};
-            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
-            MinXSpeed = propsFromConfig["MinXSpeed"];
-            MaxXSpeed = propsFromConfig["MaxXSpeed"];
-            MinYSpeed = propsFromConfig["MinYSpeed"];
-            MaxYSpeed = propsFromConfig["MaxYSpeed"];
-            XofEndOfMap = propsFromConfig["XofEndOfMap"];
-            YofEndOfMap = propsFromConfig["YofEndOfMap"];
-            EnemyThrust = propsFromConfig["EnemyThrust"];
-        }
         _rigidBody = GetComponent<Rigidbody2D>(); 
         if (UseConfigFile)
         {
-            string[] props = { "MinXSpeed", "MaxXSpeed", "MinYSpeed", "MaxYSpeed", "EnemyThrust", "speedLimit", "_rigidBody.drag"};
+            string[] props = { "MinXForce", "MaxXForce", "MinYForce", "MaxYForce", "EnemyThrust", "SpeedLimit", "_rigidBody.drag"};
             Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
-            MinXSpeed = propsFromConfig["MinXSpeed"];
-            MaxXSpeed = propsFromConfig["MaxXSpeed"];
-            MinYSpeed = propsFromConfig["MinYSpeed"];
-            MaxYSpeed = propsFromConfig["MaxYSpeed"];
+            MinXForce = propsFromConfig["MinXForce"];
+            MaxXForce = propsFromConfig["MaxXForce"];
+            MinYForce = propsFromConfig["MinYForce"];
+            MaxYForce = propsFromConfig["MaxYForce"];
             EnemyThrust = propsFromConfig["EnemyThrust"];
-            speedLimit = propsFromConfig["speedLimit"];
+            SpeedLimit = propsFromConfig["SpeedLimit"];
             _rigidBody.drag = propsFromConfig["_rigidBody.drag"];
         }
-        _xForce = Random.Range(MinXSpeed, MaxXSpeed);
-        _yForce = Random.Range(MinYSpeed, MaxYSpeed);
+        _xForce = Random.Range(MinXForce, MaxXForce);
+        _yForce = Random.Range(MinYForce, MaxYForce);
         tag = "Enemy";
     }
 
@@ -73,30 +53,31 @@ public class EnemyMovementController : MonoBehaviour
     {
         _xForce = GoInAnotherXDirection();
         _yForce = GoInAnotherYDirection();
-        _rigidBody.velocity = new Vector2(0f, 0f);        
+        _rigidBody.velocity = new Vector2(0f, 0f);  
     }
 
     private float GoInAnotherXDirection() 
     {
         if (_rigidBody.transform.position.x > 0)
-            return Random.Range(MinXSpeed, 0f);
+            return Random.Range(MinXForce, 0f);
         else if (_rigidBody.transform.position.x < 0)
-            return Random.Range(0f, MaxXSpeed);
-        return Random.Range(MinXSpeed, MaxXSpeed);
+            return Random.Range(0f, MaxXForce);
+        return Random.Range(MinXForce, MaxXForce);
     }
 
     private float GoInAnotherYDirection() 
     {
         if (_rigidBody.transform.position.y > 0)
-            return Random.Range(MinYSpeed, 0f);
+            return Random.Range(MinYForce, 0f);
         else if (_rigidBody.transform.position.y < 0)
-            return Random.Range(0f, MaxYSpeed);
-        return Random.Range(MinYSpeed, MaxYSpeed);
+            return Random.Range(0f, MaxYForce);
+        return Random.Range(MinYForce, MaxYForce);
     }
-    private void KnockBack(Collider2D otherCollider2D)
+
+    private void KnockBack(Collider2D other)
     {
-        Vector2 normalizedDifference = (_rigidBody.transform.position - otherCollider2D.transform.position).normalized;
-        _rigidBody.AddForce(normalizedDifference * Utils.GetNormalizedSpeed(_rigidBody, otherCollider2D.GetComponent<Rigidbody2D>(), EnemyThrust), ForceMode2D.Impulse);
+        Vector2 normalizedDifference = (_rigidBody.transform.position - other.transform.position).normalized;
+        _rigidBody.AddForce(normalizedDifference * Utils.GetNormalizedSpeed(_rigidBody, other.GetComponent<Rigidbody2D>(), EnemyThrust), ForceMode2D.Impulse);
     }
 
     private bool IsUnderSpeedLimit()
