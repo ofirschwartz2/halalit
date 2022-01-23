@@ -206,7 +206,7 @@ SpriteRenderer:
   m_Size: {x: 5, y: 5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &36141984
@@ -366,15 +366,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9403f12e486ac734cb824a5efda66c05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MinXSpeed: 0
-  MaxXSpeed: 0
-  MinYSpeed: 0
-  MaxYSpeed: 0
-  XofEndOfMap: 0
-  YofEndOfMap: 0
+  MinXForce: 0
+  MaxXForce: 0
+  MinYForce: 0
+  MaxYForce: 0
   EnemyThrust: 0
   UseConfigFile: 0
-  speedLimit: 0
+  SpeedLimit: 0
 --- !u!61 &130499573
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -519,15 +517,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9403f12e486ac734cb824a5efda66c05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MinXSpeed: 0
-  MaxXSpeed: 0
-  MinYSpeed: 0
-  MaxYSpeed: 0
-  XofEndOfMap: 0
-  YofEndOfMap: 0
+  MinXForce: 0
+  MaxXForce: 0
+  MinYForce: 0
+  MaxYForce: 0
   EnemyThrust: 0
   UseConfigFile: 0
-  speedLimit: 0
+  SpeedLimit: 0
 --- !u!61 &303387477
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -944,15 +940,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9403f12e486ac734cb824a5efda66c05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MinXSpeed: 0
-  MaxXSpeed: 0
-  MinYSpeed: 0
-  MaxYSpeed: 0
-  XofEndOfMap: 0
-  YofEndOfMap: 0
+  MinXForce: 0
+  MaxXForce: 0
+  MinYForce: 0
+  MaxYForce: 0
   EnemyThrust: 0
   UseConfigFile: 0
-  speedLimit: 0
+  SpeedLimit: 0
 --- !u!61 &479953977
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1090,13 +1084,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9091b575b4349942bbffed41fcc7b82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UseConfigFile: 0
+  UseConfigFile: 1
   MainCam: {fileID: 519420031}
-  halalit: {fileID: 2130719621}
-  UpperEdge: 5.918
-  LowerEdge: -5.687
-  RightEdge: 7.985
-  LeftEdge: -7.917
+  Halalit: {fileID: 2130719621}
+  Background: {fileID: 814139006}
+  CameraXSize: 0
+  CameraYSize: 0
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -1463,13 +1456,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UseConfigFile: 1
   CooldownTime: 0
-  firePoint: {fileID: 718669209}
-  shotsPrefab:
-  - {fileID: 4043514594342984741, guid: 40e6ef62799c1484bba66721899628fb, type: 3}
-  - {fileID: 6558306382352585984, guid: ae74fd8d47af4e248be60d56b60caec7, type: 3}
-  halalit: {fileID: 2130719621}
-  gunJoystick: {fileID: 1115015985}
-  weaponSwitchJoystick: {fileID: 1458613490}
+  FirePoint: {fileID: 718669209}
+  ShotsPrefab:
+  - {fileID: 4043514594342984741, guid: c1409429b528d8a4996de605d78d7765, type: 3}
+  - {fileID: 6558306382352585984, guid: 3409763264191a445a0ed022051e3225, type: 3}
+  Halalit: {fileID: 2130719621}
+  GunJoystick: {fileID: 1115015985}
+  WeaponSwitchJoystick: {fileID: 1458613490}
 --- !u!1 &814139006
 GameObject:
   m_ObjectHideFlags: 0
@@ -1685,7 +1678,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1693,7 +1686,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchorMin.y
@@ -1701,7 +1694,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 70.2714
+      value: 70.27136
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_SizeDelta.y
@@ -1737,11 +1730,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1536
+      value: -128
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 313
+      value: 348.04
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1947,15 +1940,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9403f12e486ac734cb824a5efda66c05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MinXSpeed: 0
-  MaxXSpeed: 0
-  MinYSpeed: 0
-  MaxYSpeed: 0
-  XofEndOfMap: 0
-  YofEndOfMap: 0
+  MinXForce: 0
+  MaxXForce: 0
+  MinYForce: 0
+  MaxYForce: 0
   EnemyThrust: 0
   UseConfigFile: 0
-  speedLimit: 0
+  SpeedLimit: 0
 --- !u!61 &1306784769
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2095,7 +2086,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2103,7 +2094,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchorMin.y
@@ -2155,11 +2146,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1536
+      value: -128
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 98.995
+      value: 106
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2309,15 +2300,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9403f12e486ac734cb824a5efda66c05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MinXSpeed: 0
-  MaxXSpeed: 0
-  MinYSpeed: 0
-  MaxYSpeed: 0
-  XofEndOfMap: 0
-  YofEndOfMap: 0
+  MinXForce: 0
+  MaxXForce: 0
+  MinYForce: 0
+  MaxYForce: 0
   EnemyThrust: 0
   UseConfigFile: 0
-  speedLimit: 0
+  SpeedLimit: 0
 --- !u!61 &1396818978
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2717,10 +2706,9 @@ MonoBehaviour:
   ForceMultiplier: 0
   SpinSpeed: 10
   Joystick: {fileID: 1331181818}
-  halalitThrust: 0
+  HalalitThrust: 0
   SpeedLimit: 0
-  coolDownInterval: 0
-  cooldownTime: 0
+  CoolDownInterval: 0
 --- !u!58 &2130719626
 CircleCollider2D:
   m_ObjectHideFlags: 0
