@@ -19,10 +19,10 @@
   <SceneFactory>
     <MaxNumberOfGameObjectsAllowed>30</MaxNumberOfGameObjectsAllowed>
     <MaxNumberOfEnemiesAllowed>20</MaxNumberOfEnemiesAllowed>
-    <MaxNumberOfAstroidsAllowed>5</MaxNumberOfAstroidsAllowed>
+    <MaxNumberOfAstroidsAllowed>20</MaxNumberOfAstroidsAllowed>
     <MaxNumberOfItemsAllowed>5</MaxNumberOfItemsAllowed>
-    <NumberOfEnemies>15</NumberOfEnemies>
-    <NumberOfAstroids>5</NumberOfAstroids>
+    <NumberOfEnemies>0</NumberOfEnemies>
+    <NumberOfAstroids>20</NumberOfAstroids>
     <NumberOfItems>3</NumberOfItems>
     <GameObjectsOnGameGreedX>10</GameObjectsOnGameGreedX>
     <GameObjectsOnGameGreedY>10</GameObjectsOnGameGreedY>
@@ -48,15 +48,13 @@
     <CooldownTime>0</CooldownTime>
   </gunController>
   <AstroidtMovementController>
-    <MinXSpeed>-3</MinXSpeed>
-    <MaxXSpeed>0</MaxXSpeed>
-    <MinYSpeed>-3</MinYSpeed>
-    <MaxYSpeed>0</MaxYSpeed>
+    <MaxXSpeed>3</MaxXSpeed>
+    <MaxYSpeed>3</MaxYSpeed>
     <MinRotation>0.1</MinRotation>
     <MaxRotation>1</MaxRotation>
   </AstroidtMovementController>
   <PickupClawController>
-    <VelocityMultiplier>2</VelocityMultiplier>
+    <VelocityMultiplier>10</VelocityMultiplier>
     <RotationToItemMultiplier>3</RotationToItemMultiplier>
     <RotationToHalalitMultiplier>0.5</RotationToHalalitMultiplier>
     <MoveToItemMultiplier>0.5</MoveToItemMultiplier>

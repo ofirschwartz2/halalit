@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class AstroidtMovementController : MonoBehaviour
 {
 
@@ -19,18 +20,16 @@ public class AstroidtMovementController : MonoBehaviour
     {
         if (UseConfigFile)
         {
-            string[] props = {"MinXSpeed", "MaxXSpeed", "MinYSpeed", "MaxYSpeed", "MinRotation", "MaxRotation"};
+            string[] props = {"MaxXSpeed", "MaxYSpeed", "MinRotation", "MaxRotation"};
             Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
-            MinXSpeed = propsFromConfig["MinXSpeed"];
             MaxXSpeed = propsFromConfig["MaxXSpeed"];
-            MinYSpeed = propsFromConfig["MinYSpeed"];
             MaxYSpeed = propsFromConfig["MaxYSpeed"];
             MinRotation = propsFromConfig["MinRotation"];
             MaxRotation = propsFromConfig["MaxRotation"];
         }
 
-        GetComponent<Rigidbody2D>().velocity = GetVelocity(MinXSpeed, MaxXSpeed, MinYSpeed, MaxYSpeed);
-        _rotationSpeed = GetRotationSpeed(MinRotation, MaxRotation);
+        GetComponent<Rigidbody2D>().velocity = GetVelocity(MaxXSpeed, MaxYSpeed);
+        _rotationSpeed = GetRotationSpeed(MaxRotation* (-1), MaxRotation);
     }
 
     void Update()
@@ -43,11 +42,6 @@ public class AstroidtMovementController : MonoBehaviour
         transform.Rotate(0, 0, _rotationSpeed, Space.Self);
     }   
 
-    Vector2 GetVelocity(float minXSpeed, float maxXSpeed, float minYSpeed, float maxYSpeed)
-    {
-        return new Vector2(UnityEngine.Random.Range(MinXSpeed, MaxXSpeed), UnityEngine.Random.Range(MinYSpeed, MaxYSpeed));
-    }
-
     private float GetRotationSpeed(float minRotation, float maxRotation)
     {
         return UnityEngine.Random.Range(minRotation, maxRotation);
@@ -57,5 +51,28 @@ public class AstroidtMovementController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Shot") || other.gameObject.CompareTag("Background"))
             Destroy(gameObject);
+    }
+
+    Vector2 GetVelocity(float maxXSpeed, float maxYSpeed)
+    {
+        return new Vector2(GetXVelocity(maxXSpeed), GetYVelocity(maxYSpeed) );
+    }
+
+    private float GetXVelocity(float maxXSpeed) 
+    {
+        if (transform.position.x > 0)
+            return UnityEngine.Random.Range(maxXSpeed * (-1), 0f);
+        else if (transform.position.x < 0)
+            return UnityEngine.Random.Range(0f, maxXSpeed);
+        return UnityEngine.Random.Range(maxXSpeed * (-1), maxXSpeed);
+    }
+
+    private float GetYVelocity(float maxYSpeed) 
+    {
+        if (transform.position.y > 0)
+            return UnityEngine.Random.Range(maxYSpeed * (-1), 0f);
+        else if (transform.position.y < 0)
+            return UnityEngine.Random.Range(0f, maxYSpeed);
+        return UnityEngine.Random.Range(maxYSpeed * (-1), maxYSpeed);
     }
 }
