@@ -289,7 +289,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 22ecbe5c83e16d842a6d166b2709de19, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1324,8 +1324,8 @@ MonoBehaviour:
   NumberOfAstroids: 0
   MaxNumberOfItemsAllowed: 0
   NumberOfItems: 0
-  GameObjectsOnGameGreedX: 0
-  GameObjectsOnGameGreedY: 0
+  SlotsOnGameGreedX: 0
+  SlotsOnGameGreedY: 0
 --- !u!4 &1994644017
 Transform:
   m_ObjectHideFlags: 0
@@ -1408,8 +1408,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1226254537
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 4e182e74ca3b59e478f5d95f59723931, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

@@ -15,7 +15,7 @@ public class SceneFactory : MonoBehaviour
     private float _xGreedSpacing, _yGreedSpacing;
     private Vector3 _bottomLeftPoint; 
     private bool[,] _gameObjectsOnGameGreed; //enemiesOnGameGreed
-    //private NewGameObject _newGameObject;
+    private Dictionary<NewGameObject,GameObject> _gameObjectToPrefab;
 
     void Start()
     {
@@ -41,9 +41,10 @@ public class SceneFactory : MonoBehaviour
             throw new System.Exception("Number Of Enemies is wayyy too big, abort");
         
         SetGreedSizes();
-        InstantiateAllEnemies();
-        InstantiateAllAstroids();
-        InstantiateAllItems();
+        _gameObjectToPrefab = GetGameObjectToPrefabDictionary();
+        InstantiateNewGameObject(NewGameObject.ENEMY, NumberOfEnemies);
+        InstantiateNewGameObject(NewGameObject.ASTROID, NumberOfAstroids);
+        InstantiateNewGameObject(NewGameObject.ITEM, NumberOfItems);
     }
 
     private bool TooManyGameObjects()
@@ -55,29 +56,12 @@ public class SceneFactory : MonoBehaviour
             (NumberOfEnemies + NumberOfAstroids + NumberOfItems) > MaxNumberOfGameObjectsAllowed;
     }
 
-    private void InstantiateAllEnemies()
+    private void InstantiateNewGameObject(NewGameObject ngo, int amount)
     {
-        for (int i = 0; i < NumberOfEnemies; i++)
+        for (int i = 0; i < amount; i++)
         {
-            Vector2 entryPointOnGreed = GetNewEntryPointOnGreed(NewGameObject.ENEMY);
-            Instantiate(EnemyPrefab,  GetPointOnGreed(entryPointOnGreed.x,entryPointOnGreed.y), Quaternion.AngleAxis(0, Vector3.forward));
-        }
-    }
-
-    private void InstantiateAllAstroids()
-    {
-        for (int i = 0; i < NumberOfAstroids; i++)
-        {
-            Vector2 entryPointOnGreed = GetNewEntryPointOnGreed(NewGameObject.ASTROID);
-            Instantiate(AstroidPrefab,  GetPointOnGreed(entryPointOnGreed.x,entryPointOnGreed.y), Quaternion.AngleAxis(0, Vector3.forward));
-        }
-    }
-    private void InstantiateAllItems()
-    {
-        for (int i = 0; i < NumberOfItems; i++)
-        {
-            Vector2 entryPointOnGreed = GetNewEntryPointOnGreed(NewGameObject.ITEM);
-            Instantiate(ItemPrefab,  GetPointOnGreed(entryPointOnGreed.x,entryPointOnGreed.y), Quaternion.AngleAxis(0, Vector3.forward));
+            Vector2 entryPointOnGreed = GetNewEntryPointOnGreed(ngo);
+            Instantiate(_gameObjectToPrefab[ngo],  GetPointOnGreed(entryPointOnGreed.x,entryPointOnGreed.y), Quaternion.AngleAxis(0, Vector3.forward));
         }
     }
     
@@ -88,32 +72,17 @@ public class SceneFactory : MonoBehaviour
 
     public Vector2 GetNewEntryPointOnGreed(NewGameObject ngo)
     {
-        int edgesWidth;
+        int edgesWidth = GetEdgesWidthByNGO(ngo);
         Vector2 randPointOnGreed;
-
-        switch (ngo)
-        {
-            case NewGameObject.ENEMY:
-                edgesWidth = 2;
-            break;
-            case NewGameObject.ASTROID:
-                edgesWidth = 1;
-            break;
-            case NewGameObject.ITEM:
-                edgesWidth = SlotsOnGameGreedY / 2 - 2;
-            break;
-            default:
-               throw new System.Exception("GameObject not supported"); 
-        } 
-
-        do
-        {
+        
+        do{
             randPointOnGreed = GetRandomPointOnOneOfTheEdges(edgesWidth);
         } while (_gameObjectsOnGameGreed[(int)randPointOnGreed.x, (int)randPointOnGreed.y]);
+    
         _gameObjectsOnGameGreed[(int)randPointOnGreed.x, (int)randPointOnGreed.y] = true;
+
         return randPointOnGreed;
     }
-
 
     public Vector2 GetRandomPointOnOneOfTheEdges(int edgesWidth)
     {
@@ -140,5 +109,30 @@ public class SceneFactory : MonoBehaviour
         _yGreedSpacing = bgSize.y / SlotsOnGameGreedY;
 
         _gameObjectsOnGameGreed  = new bool[SlotsOnGameGreedX,SlotsOnGameGreedY];
+    }
+
+    private Dictionary<NewGameObject, GameObject> GetGameObjectToPrefabDictionary()
+    {
+        return new Dictionary<NewGameObject, GameObject>()
+        {
+            {NewGameObject.ENEMY, EnemyPrefab},
+            {NewGameObject.ASTROID, AstroidPrefab},
+            {NewGameObject.ITEM, ItemPrefab}
+        };
+    }
+
+    private int GetEdgesWidthByNGO(NewGameObject ngo)
+    {
+        switch (ngo)
+        {
+            case NewGameObject.ENEMY:
+                return 2;
+            case NewGameObject.ASTROID:
+                return 1;
+            case NewGameObject.ITEM:
+                return ((SlotsOnGameGreedY / 2) - 2);
+            default:
+               throw new System.Exception("GameObject not supported"); 
+        } 
     }
 }
