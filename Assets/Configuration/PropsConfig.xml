@@ -17,15 +17,15 @@
     <NumberOfEnemies>20</NumberOfEnemies>
   </EnemyFactory>
   <SceneFactory>
-    <MaxNumberOfGameObjectsAllowed>30</MaxNumberOfGameObjectsAllowed>
+    <MaxNumberOfGameObjectsAllowed>60</MaxNumberOfGameObjectsAllowed>
     <MaxNumberOfEnemiesAllowed>20</MaxNumberOfEnemiesAllowed>
     <MaxNumberOfAstroidsAllowed>20</MaxNumberOfAstroidsAllowed>
-    <MaxNumberOfItemsAllowed>5</MaxNumberOfItemsAllowed>
-    <NumberOfEnemies>0</NumberOfEnemies>
+    <MaxNumberOfItemsAllowed>10</MaxNumberOfItemsAllowed>
+    <NumberOfEnemies>20</NumberOfEnemies>
     <NumberOfAstroids>20</NumberOfAstroids>
-    <NumberOfItems>3</NumberOfItems>
-    <GameObjectsOnGameGreedX>10</GameObjectsOnGameGreedX>
-    <GameObjectsOnGameGreedY>10</GameObjectsOnGameGreedY>
+    <NumberOfItems>10</NumberOfItems>
+    <SlotsOnGameGreedX>10</SlotsOnGameGreedX>
+    <SlotsOnGameGreedY>10</SlotsOnGameGreedY>
   </SceneFactory>
   <EnemyMovementController>
     <MinXForce>-5</MinXForce>
