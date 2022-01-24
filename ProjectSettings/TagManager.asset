@@ -12,6 +12,7 @@ TagManager:
   - Background
   - Shot2
   - Item
+  - PickupClaw
   layers:
   - Default
   - TransparentFX
