@@ -102,3 +102,6 @@ ProjectSettings.asset
 
 # metas
 *.meta
+
+# Photoshop
+*.psd

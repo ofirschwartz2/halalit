@@ -11,6 +11,7 @@ TagManager:
   - Engine
   - Background
   - Shot2
+  - Item
   layers:
   - Default
   - TransparentFX
