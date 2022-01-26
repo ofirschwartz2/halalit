@@ -107,11 +107,11 @@ public class HalalitMovementController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Enemy"))
-            KnockBack(other);
+        if (other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("Astroid"))
+            KnockMeBack(other);
     }
 
-    private void KnockBack(Collider2D otherCollider2D)
+    private void KnockMeBack(Collider2D otherCollider2D)
     {
         Vector2 normalizedDifference = (_rigidBody.transform.position - otherCollider2D.transform.position).normalized;
         _rigidBody.AddForce(normalizedDifference * Utils.GetNormalizedSpeed(_rigidBody, otherCollider2D.GetComponent<Rigidbody2D>(), HalalitThrust), ForceMode2D.Impulse);

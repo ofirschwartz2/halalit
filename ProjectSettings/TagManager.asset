@@ -13,6 +13,7 @@ TagManager:
   - Shot2
   - Item
   - PickupClaw
+  - Astroid
   layers:
   - Default
   - TransparentFX

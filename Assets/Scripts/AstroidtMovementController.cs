@@ -8,13 +8,9 @@ public class AstroidtMovementController : MonoBehaviour
 {
 
     public bool UseConfigFile;
-    public float MinXSpeed;
-    public float MaxXSpeed;
-    public float MinYSpeed;
-    public float MaxYSpeed;
-    public float MinRotation;
-    public float MaxRotation;
+    public float MaxXSpeed, MaxYSpeed, MinRotation, MaxRotation;
     private float _rotationSpeed;
+
 
     void Start()
     {
@@ -49,7 +45,13 @@ public class AstroidtMovementController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Shot") || other.gameObject.CompareTag("Background"))
+        if (other.gameObject.CompareTag("Shot"))
+            Destroy(gameObject);
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Background"))
             Destroy(gameObject);
     }
 
@@ -75,4 +77,5 @@ public class AstroidtMovementController : MonoBehaviour
             return UnityEngine.Random.Range(0f, maxYSpeed);
         return UnityEngine.Random.Range(maxYSpeed * (-1), maxYSpeed);
     }
+
 }
