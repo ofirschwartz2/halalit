@@ -20,40 +20,18 @@ public class SceneFactory : MonoBehaviour
     void Start()
     {
         if (UseConfigFile)
-        {
-            string[] props = {"MaxNumberOfGameObjectsAllowed", "MaxNumberOfEnemiesAllowed", "NumberOfEnemies", "MaxNumberOfAstroidsAllowed", "NumberOfAstroids", "MaxNumberOfItemsAllowed", "NumberOfItems", "SlotsOnGameGreedX", "SlotsOnGameGreedY"};
-            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
+            ConfigureFromFile();
 
-            MaxNumberOfGameObjectsAllowed = (int)propsFromConfig["MaxNumberOfGameObjectsAllowed"];
-            MaxNumberOfEnemiesAllowed = (int)propsFromConfig["MaxNumberOfEnemiesAllowed"];
-            MaxNumberOfAstroidsAllowed = (int)propsFromConfig["MaxNumberOfAstroidsAllowed"];
-            MaxNumberOfItemsAllowed = (int)propsFromConfig["MaxNumberOfItemsAllowed"];
-            
-            NumberOfEnemies = (int)propsFromConfig["NumberOfEnemies"];
-            NumberOfAstroids = (int)propsFromConfig["NumberOfAstroids"];
-            NumberOfItems = (int)propsFromConfig["NumberOfItems"];
-
-            SlotsOnGameGreedX = (int)propsFromConfig["SlotsOnGameGreedX"];
-            SlotsOnGameGreedY = (int)propsFromConfig["SlotsOnGameGreedY"];
-        }
-
-        if (TooManyGameObjects()) 
-            throw new System.Exception("Number Of Enemies is wayyy too big, abort");
-        
         SetGreedSizes();
-        _gameObjectToPrefab = GetGameObjectToPrefabDictionary();
+        SetGameObjectToPrefabDictionary();
+        InstantiateAllGameObjects();
+    }
+
+    private void InstantiateAllGameObjects()
+    {
         InstantiateNewGameObject(NewGameObject.ENEMY, NumberOfEnemies);
         InstantiateNewGameObject(NewGameObject.ASTROID, NumberOfAstroids);
         InstantiateNewGameObject(NewGameObject.ITEM, NumberOfItems);
-    }
-
-    private bool TooManyGameObjects()
-    {
-        return 
-            NumberOfEnemies > MaxNumberOfEnemiesAllowed || 
-            NumberOfAstroids > MaxNumberOfAstroidsAllowed || 
-            NumberOfItems > MaxNumberOfItemsAllowed ||
-            (NumberOfEnemies + NumberOfAstroids + NumberOfItems) > MaxNumberOfGameObjectsAllowed;
     }
 
     private void InstantiateNewGameObject(NewGameObject ngo, int amount)
@@ -72,7 +50,7 @@ public class SceneFactory : MonoBehaviour
 
     public Vector2 GetNewEntryPointOnGreed(NewGameObject ngo)
     {
-        int edgesWidth = GetEdgesWidthByNGO(ngo);
+        int edgesWidth = GetEdgesWidthByNewGameObject(ngo);
         Vector2 randPointOnGreed;
         
         do{
@@ -100,28 +78,7 @@ public class SceneFactory : MonoBehaviour
         throw new System.Exception("Not a random between 0 to 3, abort");   
     }
 
-    private void SetGreedSizes()
-    {
-        var bgSize = Background.GetComponent<Renderer>().bounds.size;
-        _bottomLeftPoint = new Vector3(bgSize.x / 2 * (-1), bgSize.y / 2 * (-1));
-
-        _xGreedSpacing = bgSize.x / SlotsOnGameGreedX;
-        _yGreedSpacing = bgSize.y / SlotsOnGameGreedY;
-
-        _gameObjectsOnGameGreed  = new bool[SlotsOnGameGreedX,SlotsOnGameGreedY];
-    }
-
-    private Dictionary<NewGameObject, GameObject> GetGameObjectToPrefabDictionary()
-    {
-        return new Dictionary<NewGameObject, GameObject>()
-        {
-            {NewGameObject.ENEMY, EnemyPrefab},
-            {NewGameObject.ASTROID, AstroidPrefab},
-            {NewGameObject.ITEM, ItemPrefab}
-        };
-    }
-
-    private int GetEdgesWidthByNGO(NewGameObject ngo)
+    private int GetEdgesWidthByNewGameObject(NewGameObject ngo)
     {
         switch (ngo)
         {
@@ -134,5 +91,56 @@ public class SceneFactory : MonoBehaviour
             default:
                throw new System.Exception("GameObject not supported"); 
         } 
+    }
+
+    private void ConfigureFromFile()
+    {
+            string[] props = {"MaxNumberOfGameObjectsAllowed", "MaxNumberOfEnemiesAllowed", "NumberOfEnemies", "MaxNumberOfAstroidsAllowed", "NumberOfAstroids", "MaxNumberOfItemsAllowed", "NumberOfItems", "SlotsOnGameGreedX", "SlotsOnGameGreedY"};
+            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
+
+            MaxNumberOfGameObjectsAllowed = (int)propsFromConfig["MaxNumberOfGameObjectsAllowed"];
+            MaxNumberOfEnemiesAllowed = (int)propsFromConfig["MaxNumberOfEnemiesAllowed"];
+            MaxNumberOfAstroidsAllowed = (int)propsFromConfig["MaxNumberOfAstroidsAllowed"];
+            MaxNumberOfItemsAllowed = (int)propsFromConfig["MaxNumberOfItemsAllowed"];
+            
+            NumberOfEnemies = (int)propsFromConfig["NumberOfEnemies"];
+            NumberOfAstroids = (int)propsFromConfig["NumberOfAstroids"];
+            NumberOfItems = (int)propsFromConfig["NumberOfItems"];
+
+            SlotsOnGameGreedX = (int)propsFromConfig["SlotsOnGameGreedX"];
+            SlotsOnGameGreedY = (int)propsFromConfig["SlotsOnGameGreedY"];
+            
+            if (TooManyGameObjects()) 
+                throw new System.Exception("Number Of Enemies is wayyy too big, abort");
+    }
+
+    private bool TooManyGameObjects()
+    {
+        return 
+            NumberOfEnemies > MaxNumberOfEnemiesAllowed || 
+            NumberOfAstroids > MaxNumberOfAstroidsAllowed || 
+            NumberOfItems > MaxNumberOfItemsAllowed ||
+            (NumberOfEnemies + NumberOfAstroids + NumberOfItems) > MaxNumberOfGameObjectsAllowed;
+    }
+
+    private void SetGreedSizes()
+    {
+        var bgSize = Background.GetComponent<Renderer>().bounds.size;
+        _bottomLeftPoint = new Vector3(bgSize.x / 2 * (-1), bgSize.y / 2 * (-1));
+
+        _xGreedSpacing = bgSize.x / SlotsOnGameGreedX;
+        _yGreedSpacing = bgSize.y / SlotsOnGameGreedY;
+
+        _gameObjectsOnGameGreed  = new bool[SlotsOnGameGreedX,SlotsOnGameGreedY];
+    }
+
+    private void SetGameObjectToPrefabDictionary()
+    {
+        _gameObjectToPrefab = new Dictionary<NewGameObject, GameObject>()
+        {
+            {NewGameObject.ENEMY, EnemyPrefab},
+            {NewGameObject.ASTROID, AstroidPrefab},
+            {NewGameObject.ITEM, ItemPrefab}
+        };
     }
 }
