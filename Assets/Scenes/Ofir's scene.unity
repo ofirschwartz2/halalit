@@ -806,7 +806,7 @@ MonoBehaviour:
   UseConfigFile: 1
   CooldownTime: 0
   ShotsPrefab:
-  - {fileID: 4043514594342984741, guid: c1409429b528d8a4996de605d78d7765, type: 3}
+  - {fileID: 4043514594342984741, guid: 40e6ef62799c1484bba66721899628fb, type: 3}
   - {fileID: 6558306382352585984, guid: ed85493b62cdf144c97493a61934fcb0, type: 3}
   Halalit: {fileID: 2130719621}
   GunJoystick: {fileID: 1115015985}
