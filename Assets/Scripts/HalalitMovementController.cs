@@ -107,6 +107,7 @@ public class HalalitMovementController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log("FUCKME");
         if (other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("Astroid"))
             KnockMeBack(other);
     }
