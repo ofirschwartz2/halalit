@@ -65,4 +65,5 @@ public class CameraScript : MonoBehaviour
         _topSceneEdge = bgSize.y / 2;
         _bottomSceneEdge = _topSceneEdge * (-1);
     }
+
 }
