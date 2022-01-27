@@ -51,7 +51,7 @@ public class AstroidtMovementController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Background"))
+        if (other.gameObject.CompareTag("OutOfScreen"))
             Destroy(gameObject);
     }
 

@@ -14,7 +14,7 @@ public class SceneFactory : MonoBehaviour
     
     private float _xGreedSpacing, _yGreedSpacing;
     private Vector3 _bottomLeftPoint; 
-    private bool[,] _gameObjectsOnGameGreed; //enemiesOnGameGreed
+    private bool[,] _gameObjectsOnGameGreed;
     private Dictionary<NewGameObject,GameObject> _gameObjectToPrefab;
 
     void Start()
@@ -39,6 +39,7 @@ public class SceneFactory : MonoBehaviour
         for (int i = 0; i < amount; i++)
         {
             Vector2 entryPointOnGreed = GetNewEntryPointOnGreed(ngo);
+            _gameObjectsOnGameGreed[(int)entryPointOnGreed.x, (int)entryPointOnGreed.y] = true;
             Instantiate(_gameObjectToPrefab[ngo],  GetPointOnGreed(entryPointOnGreed.x,entryPointOnGreed.y), Quaternion.AngleAxis(0, Vector3.forward));
         }
     }
@@ -50,30 +51,78 @@ public class SceneFactory : MonoBehaviour
 
     public Vector2 GetNewEntryPointOnGreed(NewGameObject ngo)
     {
-        int edgesWidth = GetEdgesWidthByNewGameObject(ngo);
         Vector2 randPointOnGreed;
-        
-        do{
-            randPointOnGreed = GetRandomPointOnOneOfTheEdges(edgesWidth);
-        } while (_gameObjectsOnGameGreed[(int)randPointOnGreed.x, (int)randPointOnGreed.y]);
-    
-        _gameObjectsOnGameGreed[(int)randPointOnGreed.x, (int)randPointOnGreed.y] = true;
+        if(ngo == NewGameObject.ASTROID)
+        {
+            do{
+                randPointOnGreed = GetRandomPointOnTheOuterEdge();
+            } while (_gameObjectsOnGameGreed[(int)randPointOnGreed.x, (int)randPointOnGreed.y]);
+        } else
+        {
+            int edgesWidth = GetEdgesWidthByNewGameObject(ngo);
+            do{
+                randPointOnGreed = GetNewRandomPointOnOneOfTheEdges(edgesWidth);
+            } while (_gameObjectsOnGameGreed[(int)randPointOnGreed.x, (int)randPointOnGreed.y]);
+        }
 
         return randPointOnGreed;
     }
 
-    public Vector2 GetRandomPointOnOneOfTheEdges(int edgesWidth)
+    public Vector2 GetNewRandomPointOnOneOfTheEdges(int edgesWidth)
     {
-    switch(Random.Range(0,4))
+        Vector2 randPointOnGreed;
+
+        do{
+            switch(Random.Range(0,4))
+            {
+                case 0:
+                    randPointOnGreed = Utils.GetRandomVector(
+                        1, 1 + edgesWidth, 
+                        1, SlotsOnGameGreedY);
+                    break;
+                case 1:
+                    randPointOnGreed = Utils.GetRandomVector(
+                        1, SlotsOnGameGreedX,
+                        SlotsOnGameGreedY + 1 - edgesWidth, SlotsOnGameGreedY + 1);
+                    break;
+                case 2:
+                    randPointOnGreed = Utils.GetRandomVector(
+                        SlotsOnGameGreedX + 1 - edgesWidth, SlotsOnGameGreedX + 1, 
+                        2, SlotsOnGameGreedY + 1);
+                    break;
+                case 3:
+                    randPointOnGreed = Utils.GetRandomVector(
+                        2, SlotsOnGameGreedX + 1, 
+                        1, 1 + edgesWidth);
+                    break;
+                default:
+                    throw new System.Exception("Not a random between 0 to 3, abort");   
+            }
+        } while (_gameObjectsOnGameGreed[(int)randPointOnGreed.x, (int)randPointOnGreed.y]);
+        
+        return randPointOnGreed;
+    }
+
+    public Vector2 GetRandomPointOnTheOuterEdge()
+    {
+        switch(Random.Range(0,4))
         {
             case 0:
-                return Utils.GetRandomVector(0, edgesWidth, 0, _gameObjectsOnGameGreed.GetLength(0));
+                return Utils.GetRandomVector(
+                    0, 1, 
+                    0, SlotsOnGameGreedY + 2);
             case 1:
-                return Utils.GetRandomVector(_gameObjectsOnGameGreed.GetLength(0) - edgesWidth, _gameObjectsOnGameGreed.GetLength(0), 0, _gameObjectsOnGameGreed.GetLength(0));
+                return Utils.GetRandomVector(
+                    0, SlotsOnGameGreedX + 2, 
+                    SlotsOnGameGreedY + 1, SlotsOnGameGreedY + 2);
             case 2:
-                return Utils.GetRandomVector(0, _gameObjectsOnGameGreed.GetLength(0), 0, edgesWidth);
+                return Utils.GetRandomVector(
+                    SlotsOnGameGreedX + 1, SlotsOnGameGreedX + 2, 
+                    1, SlotsOnGameGreedY + 2);
             case 3:
-                return Utils.GetRandomVector(0, _gameObjectsOnGameGreed.GetLength(0), _gameObjectsOnGameGreed.GetLength(0) - edgesWidth, _gameObjectsOnGameGreed.GetLength(0));
+                return Utils.GetRandomVector(
+                    1, SlotsOnGameGreedX + 2, 
+                    0, 1);
         }
         throw new System.Exception("Not a random between 0 to 3, abort");   
     }
@@ -83,11 +132,11 @@ public class SceneFactory : MonoBehaviour
         switch (ngo)
         {
             case NewGameObject.ENEMY:
-                return 2;
-            case NewGameObject.ASTROID:
-                return 1;
+                return 2; 
             case NewGameObject.ITEM:
                 return ((SlotsOnGameGreedY / 2) - 2);
+            case NewGameObject.ASTROID:
+                throw new System.Exception("ASTROID is on the outer edge");
             default:
                throw new System.Exception("GameObject not supported"); 
         } 
@@ -126,12 +175,11 @@ public class SceneFactory : MonoBehaviour
     private void SetGreedSizes()
     {
         var bgSize = Background.GetComponent<Renderer>().bounds.size;
-        _bottomLeftPoint = new Vector3(bgSize.x / 2 * (-1), bgSize.y / 2 * (-1));
-
         _xGreedSpacing = bgSize.x / SlotsOnGameGreedX;
         _yGreedSpacing = bgSize.y / SlotsOnGameGreedY;
 
-        _gameObjectsOnGameGreed  = new bool[SlotsOnGameGreedX,SlotsOnGameGreedY];
+        _bottomLeftPoint = new Vector3(bgSize.x / 2 * (-1) - _xGreedSpacing, bgSize.y / 2 * (-1) - _yGreedSpacing);
+        _gameObjectsOnGameGreed  = new bool[SlotsOnGameGreedX + 2, SlotsOnGameGreedY + 2];
     }
 
     private void SetGameObjectToPrefabDictionary()
