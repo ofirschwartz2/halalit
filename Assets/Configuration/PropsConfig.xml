@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <scripts>
   <CameraScript>
-    <CameraXSize>26.25</CameraXSize>
+    <CameraXSize>26.6</CameraXSize>
     <CameraYSize>12</CameraYSize>
   </CameraScript>
   <HalalitMovementController>
