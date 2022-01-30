@@ -2,6 +2,7 @@
 {
     public enum NewGameObject
     {
+        INNERASTROID,
         ENEMY,
         ASTROID,
         ITEM

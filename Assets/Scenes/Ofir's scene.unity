@@ -175,7 +175,7 @@ Transform:
   m_GameObject: {fileID: 33815809}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 22, y: 14, z: 0}
+  m_LocalScale: {x: 29.425, y: 20.300001, z: 0}
   m_Children: []
   m_Father: {fileID: 814139008}
   m_RootOrder: 0
@@ -562,7 +562,6 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
-  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -653,32 +652,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &519420033
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519420028}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.00081399083, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.1058149, y: 1}
-  m_EdgeRadius: 0
 --- !u!1001 &709582700
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1402,6 +1375,8 @@ MonoBehaviour:
   EnemyPrefab: {fileID: 7855985066294020760, guid: 683f4e40c756cf94d98f1149b623c6ff, type: 3}
   AstroidPrefab: {fileID: 6741412782414407016, guid: 8af36d7f841126749ad69cb041292d64, type: 3}
   ItemPrefab: {fileID: 9195436676840446505, guid: 13c92eecc74a940419bf69c7ec12c94d, type: 3}
+  MaxNumberOfInnerAstroidsAllowed: 0
+  NumberOfInnerAstroids: 0
   MaxNumberOfGameObjectsAllowed: 0
   MaxNumberOfEnemiesAllowed: 0
   NumberOfEnemies: 0

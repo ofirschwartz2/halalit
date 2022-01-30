@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <scripts>
   <CameraScript>
-    <CameraXSize>26.6</CameraXSize>
+    <CameraXSize>21.5</CameraXSize>
     <CameraYSize>12</CameraYSize>
   </CameraScript>
   <HalalitMovementController>
@@ -18,12 +18,14 @@
   </EnemyFactory>
   <SceneFactory>
     <MaxNumberOfGameObjectsAllowed>60</MaxNumberOfGameObjectsAllowed>
+    <MaxNumberOfInnerAstroidsAllowed>3</MaxNumberOfInnerAstroidsAllowed>
     <MaxNumberOfEnemiesAllowed>20</MaxNumberOfEnemiesAllowed>
     <MaxNumberOfAstroidsAllowed>20</MaxNumberOfAstroidsAllowed>
     <MaxNumberOfItemsAllowed>10</MaxNumberOfItemsAllowed>
-    <NumberOfEnemies>20</NumberOfEnemies>
-    <NumberOfAstroids>20</NumberOfAstroids>
-    <NumberOfItems>10</NumberOfItems>
+    <NumberOfInnerAstroids>6</NumberOfInnerAstroids>
+    <NumberOfEnemies>0</NumberOfEnemies>
+    <NumberOfAstroids>0</NumberOfAstroids>
+    <NumberOfItems>0</NumberOfItems>
     <SlotsOnGameGreedX>10</SlotsOnGameGreedX>
     <SlotsOnGameGreedY>10</SlotsOnGameGreedY>
   </SceneFactory>
