@@ -28,14 +28,11 @@ public class AstroidtMovementController : MonoBehaviour
         _rotationSpeed = GetRotationSpeed(MaxRotation* (-1), MaxRotation);
     }
 
-    void TheStart (int scale) {   // you can't use start. But this is just as good.
- 
-     Debug.Log("scale:" + scale);
-     Debug.Log("LOCAL scale:" + transform.localScale);
-     Debug.Log("LOSSY scale:" + transform.lossyScale);
-     transform.localScale = new Vector3(scale, scale, scale);
- 
+    void TheStart (int scale) 
+    {
+        transform.localScale = new Vector3(scale, scale, 1);
     }
+
     void Update()
     {
         UpdateRotation();
