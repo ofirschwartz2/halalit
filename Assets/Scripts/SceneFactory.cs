@@ -64,15 +64,16 @@ public class SceneFactory : MonoBehaviour
     
     private void LockGreedByPointAndRadius(Vector2 entryPointOnGreed, float radius)
     {
-        float numerOfSlotsToLockFromEveryDirection = radius / _yGreedSpacing;
+        float numerOfSlotsToLockFromEveryDirection = Mathf.Ceil(radius / _yGreedSpacing);
         Debug.Log("LOCKING - entryPointOnGreed:" + entryPointOnGreed + ", R:" + radius + ", _yGreedSpacing:" + _yGreedSpacing + ", numerOfSlotsToLockFromEveryDirection:" + numerOfSlotsToLockFromEveryDirection);
         
-        for(int x = (int)Mathf.Max(0, Mathf.Round(entryPointOnGreed.x - numerOfSlotsToLockFromEveryDirection)); (x < SlotsOnGameGreedX + 2) && (x < entryPointOnGreed.x - numerOfSlotsToLockFromEveryDirection); x++)
-            for(int y = (int)Mathf.Max(0, Mathf.Round(entryPointOnGreed.y - numerOfSlotsToLockFromEveryDirection)); (y < SlotsOnGameGreedX + 2) && (y < entryPointOnGreed.y - numerOfSlotsToLockFromEveryDirection); y++)
+        for(int x = (int)Mathf.Max(0, entryPointOnGreed.x - numerOfSlotsToLockFromEveryDirection); (x < SlotsOnGameGreedX + 2) && (x <= entryPointOnGreed.x + numerOfSlotsToLockFromEveryDirection); x++)
+            for(int y = (int)Mathf.Max(0, entryPointOnGreed.y - numerOfSlotsToLockFromEveryDirection); (y < SlotsOnGameGreedX + 2) && (y <= entryPointOnGreed.y + numerOfSlotsToLockFromEveryDirection); y++)
             {
                 _gameObjectsOnGameGreed[x,y] = true;
-                Debug.Log("POINT TO LOCK: " + x + ", " + y);
+                //Debug.Log("POINT TO LOCK: " + x + ", " + y);
             }    
+        
     }
 
     private Vector3 GetPointOnGreed(float xInGameGrid, float yInGameGrid)
@@ -112,21 +113,18 @@ public class SceneFactory : MonoBehaviour
         return randPointOnGreed;
     }
 
-    private bool IsThisPlaceFreeForTheInnerAstroid(Vector2 centerOfAstroid, int scaleOfAstroid)
+    private bool IsThisPlaceFreeForTheInnerAstroid(Vector2 centerOfAstroidOnGreed, int scaleOfAstroid)
     {
-        for(int x = Mathf.Max(0, (int)centerOfAstroid.x - (scaleOfAstroid / 2)); (x < SlotsOnGameGreedX + 2) && (x < (int)centerOfAstroid.x + (scaleOfAstroid / 2)); x++)
-            for(int y = Mathf.Max(0, (int)centerOfAstroid.y - (scaleOfAstroid / 2)); (y < SlotsOnGameGreedY + 2) && (y < (int)centerOfAstroid.y + (scaleOfAstroid / 2)); y++)
+        Debug.Log("BZZZ");
+        float numerOfSlotsToLockFromEveryDirection = Mathf.Ceil(scaleOfAstroid / 2 / _yGreedSpacing);
+        for(int x = (int)Mathf.Max(0, centerOfAstroidOnGreed.x - numerOfSlotsToLockFromEveryDirection); (x < SlotsOnGameGreedX + 2) && (x <= centerOfAstroidOnGreed.x + numerOfSlotsToLockFromEveryDirection); x++)
+            for(int y = (int)Mathf.Max(0, centerOfAstroidOnGreed.y - numerOfSlotsToLockFromEveryDirection); (y < SlotsOnGameGreedY + 2) && (y <= centerOfAstroidOnGreed.y + numerOfSlotsToLockFromEveryDirection); y++)
             {
+                Debug.Log("CHECKING POINT:" + x + "," + y + ". scaleOfAstroid:" + scaleOfAstroid +", centerOfAstroid: " + centerOfAstroidOnGreed);
                 if(_gameObjectsOnGameGreed[x, y])
                     return false;
-            }
-
-        for(int x = Mathf.Max(0, (int)centerOfAstroid.x - (scaleOfAstroid / 2)); (x < SlotsOnGameGreedX + 2) && (x < (int)centerOfAstroid.x + (scaleOfAstroid / 2)); x++)
-            for(int y = Mathf.Max(0, (int)centerOfAstroid.y - (scaleOfAstroid / 2)); (y < SlotsOnGameGreedY + 2) && (y < (int)centerOfAstroid.y + (scaleOfAstroid / 2)); y++)
-            {
-                //Debug.Log("TAKEN - X:" + x + ", Y:" + y);
-                _gameObjectsOnGameGreed[x, y] = true;
-            }
+            }    
+        Debug.Log("FOUND PLACE");
         return true;
     }
 
@@ -141,7 +139,7 @@ public class SceneFactory : MonoBehaviour
 
     private int GetInnerAstroidScale()
     {
-        return Random.Range(1, 10);
+        return Random.Range(1, 20);
     }
 
     public Vector2 GetNewRandomPointOnOneOfTheEdges(int edgesWidth)
