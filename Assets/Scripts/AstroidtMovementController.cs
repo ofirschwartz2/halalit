@@ -7,6 +7,7 @@ using UnityEngine;
 public class AstroidtMovementController : MonoBehaviour
 {
 
+    public GameObject AstroidPrefab;
     public bool UseConfigFile;
     public float MaxXSpeed, MaxYSpeed, MinRotation, MaxRotation;
     private float _rotationSpeed;
@@ -45,13 +46,28 @@ public class AstroidtMovementController : MonoBehaviour
 
     private float GetRotationSpeed(float minRotation, float maxRotation)
     {
-        return UnityEngine.Random.Range(minRotation, maxRotation);
+        return UnityEngine.Random.Range(minRotation / transform.localScale.x, maxRotation / transform.localScale.x);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Shot"))
-            Destroy(gameObject);
+            AstroidExplotion();
+    }
+
+    private void AstroidExplotion()
+    {
+        if(transform.localScale.x > 1.5)
+            ExplodeToSmallerAstroids();
+        Destroy(gameObject);   
+    }
+
+    private void ExplodeToSmallerAstroids()
+    {
+        GameObject smallerAstroid1 = Instantiate(AstroidPrefab,  new Vector3(transform.position.x, transform.position.y, 0), Quaternion.AngleAxis(0, Vector3.forward));
+        GameObject smallerAstroid2 = Instantiate(AstroidPrefab,  new Vector3(transform.position.x, transform.position.y, 0), Quaternion.AngleAxis(0, Vector3.forward));
+        smallerAstroid1.SendMessage("TheStart", transform.localScale.x/2);
+        smallerAstroid2.SendMessage("TheStart", transform.localScale.x/2);
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -68,19 +84,17 @@ public class AstroidtMovementController : MonoBehaviour
     private float GetXVelocity(float maxXSpeed) 
     {
         if (transform.position.x > 0)
-            return UnityEngine.Random.Range(maxXSpeed * (-1), 0f);
-        else if (transform.position.x < 0)
-            return UnityEngine.Random.Range(0f, maxXSpeed);
-        return UnityEngine.Random.Range(maxXSpeed * (-1), maxXSpeed);
+            return UnityEngine.Random.Range(maxXSpeed / transform.localScale.x * (-1), 0f);
+        else 
+            return UnityEngine.Random.Range(0f, maxXSpeed / transform.localScale.x);
     }
 
     private float GetYVelocity(float maxYSpeed) 
     {
         if (transform.position.y > 0)
-            return UnityEngine.Random.Range(maxYSpeed * (-1), 0f);
-        else if (transform.position.y < 0)
-            return UnityEngine.Random.Range(0f, maxYSpeed);
-        return UnityEngine.Random.Range(maxYSpeed * (-1), maxYSpeed);
+            return UnityEngine.Random.Range(maxYSpeed / transform.localScale.x * (-1), 0f);
+        else
+            return UnityEngine.Random.Range(0f, maxYSpeed / transform.localScale.x);
     }
 
 }

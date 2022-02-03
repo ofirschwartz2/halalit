@@ -88,7 +88,6 @@ public class SceneFactory : MonoBehaviour
         if (ngo == NewGameObject.INNERASTROID)
         {
             int infiniteLoop = 0;
-            //int innerAstroidScale = GetInnerAstroidScale();
             do{
                 if(++infiniteLoop > 400)
                 {
@@ -115,16 +114,13 @@ public class SceneFactory : MonoBehaviour
 
     private bool IsThisPlaceFreeForTheInnerAstroid(Vector2 centerOfAstroidOnGreed, int scaleOfAstroid)
     {
-        Debug.Log("BZZZ");
         float numerOfSlotsToLockFromEveryDirection = Mathf.Ceil(scaleOfAstroid / 2 / _yGreedSpacing);
         for(int x = (int)Mathf.Max(0, centerOfAstroidOnGreed.x - numerOfSlotsToLockFromEveryDirection); (x < SlotsOnGameGreedX + 2) && (x <= centerOfAstroidOnGreed.x + numerOfSlotsToLockFromEveryDirection); x++)
             for(int y = (int)Mathf.Max(0, centerOfAstroidOnGreed.y - numerOfSlotsToLockFromEveryDirection); (y < SlotsOnGameGreedY + 2) && (y <= centerOfAstroidOnGreed.y + numerOfSlotsToLockFromEveryDirection); y++)
             {
-                Debug.Log("CHECKING POINT:" + x + "," + y + ". scaleOfAstroid:" + scaleOfAstroid +", centerOfAstroid: " + centerOfAstroidOnGreed);
                 if(_gameObjectsOnGameGreed[x, y])
                     return false;
             }    
-        Debug.Log("FOUND PLACE");
         return true;
     }
 
@@ -139,7 +135,7 @@ public class SceneFactory : MonoBehaviour
 
     private int GetInnerAstroidScale()
     {
-        return Random.Range(1, 20);
+        return Random.Range(5, 15);
     }
 
     public Vector2 GetNewRandomPointOnOneOfTheEdges(int edgesWidth)
@@ -206,7 +202,7 @@ public class SceneFactory : MonoBehaviour
         switch (ngo)
         {
             case NewGameObject.INNERASTROID:
-                return ((SlotsOnGameGreedY / 2) - 3);
+                return (SlotsOnGameGreedY / 2);
             case NewGameObject.ENEMY:
                 return 2; 
             case NewGameObject.ITEM:
@@ -258,6 +254,9 @@ public class SceneFactory : MonoBehaviour
 
         _bottomLeftPoint = new Vector3(bgSize.x / 2 * (-1) - _xGreedSpacing, bgSize.y / 2 * (-1) - _yGreedSpacing);
         _gameObjectsOnGameGreed  = new bool[SlotsOnGameGreedX + 2, SlotsOnGameGreedY + 2];
+        for (int i = 5; i < 7; i++)
+            for(int j = 5; j < 7; j++)
+                _gameObjectsOnGameGreed[i,j] = true;
     }
 
     private void SetGameObjectToPrefabDictionary()
