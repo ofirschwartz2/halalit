@@ -28,6 +28,9 @@
     <NumberOfItems>0</NumberOfItems>
     <SlotsOnGameGreedX>10</SlotsOnGameGreedX>
     <SlotsOnGameGreedY>10</SlotsOnGameGreedY>
+    <InnerAstroidInfiniteLoopTH>400</InnerAstroidInfiniteLoopTH>
+    <InnerAstroidMinScale>5</InnerAstroidMinScale>
+    <InnerAstroidMaxScale>15</InnerAstroidMaxScale>
   </SceneFactory>
   <EnemyMovementController>
     <MinXForce>-5</MinXForce>
