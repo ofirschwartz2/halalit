@@ -17,13 +17,22 @@ public class AstroidtMovementController : MonoBehaviour
         if (UseConfigFile)
             ConfigureFromFile();
 
-        GetComponent<Rigidbody2D>().velocity = GetVelocity(MaxXSpeed, MaxYSpeed);
+        GetComponent<Rigidbody2D>().velocity = GetVelocityByQuarters();
         _rotationSpeed = GetRotationSpeed(MaxRotation* (-1), MaxRotation);
     }
 
-    void SetScale (int scale) 
+    void SetScale(int scale) 
     {
         transform.localScale = new Vector3(scale, scale, 1);
+    }
+
+    void SetVelocity(bool get360VelocityFlag) 
+    {
+        if (get360VelocityFlag)
+            GetComponent<Rigidbody2D>().velocity = Get360Velocity();
+        else
+            GetComponent<Rigidbody2D>().velocity = GetVelocityByQuarters();
+
     }
 
     void Update()
@@ -61,6 +70,7 @@ public class AstroidtMovementController : MonoBehaviour
         {
             smallerAstroid = Instantiate(AstroidPrefab,  new Vector3(transform.position.x, transform.position.y, 0), Quaternion.AngleAxis(0, Vector3.forward));
             smallerAstroid.SendMessage("SetScale", transform.localScale.x/2);
+            smallerAstroid.SendMessage("SetVelocity", true);
         }
     }
 
@@ -70,25 +80,40 @@ public class AstroidtMovementController : MonoBehaviour
             Destroy(gameObject);
     }
 
-    Vector2 GetVelocity(float maxXSpeed, float maxYSpeed)
+    Vector2 Get360Velocity()
     {
-        return new Vector2(GetXVelocity(maxXSpeed), GetYVelocity(maxYSpeed) );
+        return new Vector2(GetX360Velocity(), GetY360Velocity());
     }
 
-    private float GetXVelocity(float maxXSpeed) 
+    Vector2 GetVelocityByQuarters()
+    {
+        return new Vector2(GetXVelocityByQuarters(), GetYVelocityByQuarters());
+    }
+
+    private float GetX360Velocity()
+    {
+        return UnityEngine.Random.Range(MaxXSpeed / transform.localScale.x * (-1), MaxXSpeed / transform.localScale.x);
+    }
+
+    private float GetY360Velocity()
+    {
+        return UnityEngine.Random.Range(MaxYSpeed / transform.localScale.x * (-1), MaxYSpeed / transform.localScale.x);
+    }
+
+    private float GetXVelocityByQuarters() 
     {
         if (transform.position.x > 0)
-            return UnityEngine.Random.Range(maxXSpeed / transform.localScale.x * (-1), 0f);
+            return UnityEngine.Random.Range(MaxXSpeed / transform.localScale.x * (-1), 0f);
         else 
-            return UnityEngine.Random.Range(0f, maxXSpeed / transform.localScale.x);
+            return UnityEngine.Random.Range(0f, MaxXSpeed / transform.localScale.x);
     }
 
-    private float GetYVelocity(float maxYSpeed) 
+    private float GetYVelocityByQuarters() 
     {
         if (transform.position.y > 0)
-            return UnityEngine.Random.Range(maxYSpeed / transform.localScale.x * (-1), 0f);
+            return UnityEngine.Random.Range(MaxYSpeed / transform.localScale.x * (-1), 0f);
         else
-            return UnityEngine.Random.Range(0f, maxYSpeed / transform.localScale.x);
+            return UnityEngine.Random.Range(0f, MaxYSpeed / transform.localScale.x);
     }
 
     private void ConfigureFromFile()
