@@ -51,7 +51,7 @@ public class SceneFactory : MonoBehaviour
             if (ngo == NewGameObject.INNERASTROID)
             {
                 GameObject innerAstroid = Instantiate(_gameObjectToPrefab[ngo], GetPointOnGreed(entryPointOnGreed.x,entryPointOnGreed.y), Quaternion.AngleAxis(0, Vector3.forward)) as GameObject;
-                innerAstroid.SendMessage("TheStart", innerAstroidScale);
+                innerAstroid.SendMessage("SetScale", innerAstroidScale);
                 Debug.Log("SIZE: " + innerAstroid.GetComponent<PolygonCollider2D>().bounds.size + ", EntryPointOnGreed: " + GetPointOnGreed(entryPointOnGreed.x,entryPointOnGreed.y) + ", Scale:" + innerAstroidScale);
                 LockGreedByPointAndRadius(entryPointOnGreed, innerAstroidScale * innerAstroid.GetComponent<PolygonCollider2D>().bounds.size.x / 2);
             }

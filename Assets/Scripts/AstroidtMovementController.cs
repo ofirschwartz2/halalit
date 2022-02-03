@@ -1,5 +1,4 @@
 using Assets.Common;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,7 +28,7 @@ public class AstroidtMovementController : MonoBehaviour
         _rotationSpeed = GetRotationSpeed(MaxRotation* (-1), MaxRotation);
     }
 
-    void TheStart (int scale) 
+    void SetScale (int scale) 
     {
         transform.localScale = new Vector3(scale, scale, 1);
     }
@@ -64,10 +63,12 @@ public class AstroidtMovementController : MonoBehaviour
 
     private void ExplodeToSmallerAstroids()
     {
-        GameObject smallerAstroid1 = Instantiate(AstroidPrefab,  new Vector3(transform.position.x, transform.position.y, 0), Quaternion.AngleAxis(0, Vector3.forward));
-        GameObject smallerAstroid2 = Instantiate(AstroidPrefab,  new Vector3(transform.position.x, transform.position.y, 0), Quaternion.AngleAxis(0, Vector3.forward));
-        smallerAstroid1.SendMessage("TheStart", transform.localScale.x/2);
-        smallerAstroid2.SendMessage("TheStart", transform.localScale.x/2);
+        GameObject smallerAstroid;
+        for(int i=0; i<Random.Range(2,4); i++)
+        {
+            smallerAstroid = Instantiate(AstroidPrefab,  new Vector3(transform.position.x, transform.position.y, 0), Quaternion.AngleAxis(0, Vector3.forward));
+            smallerAstroid.SendMessage("SetScale", transform.localScale.x/2);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
