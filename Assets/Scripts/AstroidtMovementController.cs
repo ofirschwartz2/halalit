@@ -8,21 +8,14 @@ public class AstroidtMovementController : MonoBehaviour
 
     public GameObject AstroidPrefab;
     public bool UseConfigFile;
-    public float MaxXSpeed, MaxYSpeed, MinRotation, MaxRotation;
+    public float MaxXSpeed, MaxYSpeed, MinRotation, MaxRotation, ExplodeToSmallerAstroidsScaleTH;
     private float _rotationSpeed;
 
 
     void Start()
     {
         if (UseConfigFile)
-        {
-            string[] props = {"MaxXSpeed", "MaxYSpeed", "MinRotation", "MaxRotation"};
-            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
-            MaxXSpeed = propsFromConfig["MaxXSpeed"];
-            MaxYSpeed = propsFromConfig["MaxYSpeed"];
-            MinRotation = propsFromConfig["MinRotation"];
-            MaxRotation = propsFromConfig["MaxRotation"];
-        }
+            ConfigureFromFile();
 
         GetComponent<Rigidbody2D>().velocity = GetVelocity(MaxXSpeed, MaxYSpeed);
         _rotationSpeed = GetRotationSpeed(MaxRotation* (-1), MaxRotation);
@@ -56,7 +49,7 @@ public class AstroidtMovementController : MonoBehaviour
 
     private void AstroidExplotion()
     {
-        if(transform.localScale.x > 1.5)
+        if(transform.localScale.x > ExplodeToSmallerAstroidsScaleTH)
             ExplodeToSmallerAstroids();
         Destroy(gameObject);   
     }
@@ -96,6 +89,17 @@ public class AstroidtMovementController : MonoBehaviour
             return UnityEngine.Random.Range(maxYSpeed / transform.localScale.x * (-1), 0f);
         else
             return UnityEngine.Random.Range(0f, maxYSpeed / transform.localScale.x);
+    }
+
+    private void ConfigureFromFile()
+    {
+        string[] props = {"MaxXSpeed", "MaxYSpeed", "MinRotation", "MaxRotation", "ExplodeToSmallerAstroidsScaleTH"};
+        Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
+        MaxXSpeed = propsFromConfig["MaxXSpeed"];
+        MaxYSpeed = propsFromConfig["MaxYSpeed"];
+        MinRotation = propsFromConfig["MinRotation"];
+        MaxRotation = propsFromConfig["MaxRotation"];
+        ExplodeToSmallerAstroidsScaleTH =  propsFromConfig["ExplodeToSmallerAstroidsScaleTH"];
     }
 
 }

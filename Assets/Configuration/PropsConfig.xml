@@ -57,6 +57,7 @@
     <MaxYSpeed>3</MaxYSpeed>
     <MinRotation>0.1</MinRotation>
     <MaxRotation>1</MaxRotation>
+    <ExplodeToSmallerAstroidsScaleTH>1.5</ExplodeToSmallerAstroidsScaleTH>
   </AstroidtMovementController>
   <PickupClawController>
     <VelocityMultiplier>10</VelocityMultiplier>

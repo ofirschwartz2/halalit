@@ -72,7 +72,7 @@ public class SceneFactory : MonoBehaviour
                 _gameObjectsOnGameGreed[x,y] = true;
     }
 
-    private Vector3 GetAbsolutePointOnGreed(Vector2 pointOnGreed) //(float xInGameGrid, float yInGameGrid)
+    private Vector3 GetAbsolutePointOnGreed(Vector2 pointOnGreed)
     {
         return _bottomLeftPoint + new Vector3(_xGreedSpacing * pointOnGreed.x + (_xGreedSpacing / 2), _yGreedSpacing * pointOnGreed.y + (_yGreedSpacing / 2));
     }
