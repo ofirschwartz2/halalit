@@ -10,7 +10,7 @@ public class SceneFactory : MonoBehaviour
 
     public bool UseConfigFile;
     public GameObject Background, EnemyPrefab, AstroidPrefab, ItemPrefab;
-    public int MaxNumberOfInnerAstroidsAllowed, NumberOfInnerAstroids, MaxNumberOfGameObjectsAllowed, MaxNumberOfEnemiesAllowed, NumberOfEnemies, MaxNumberOfAstroidsAllowed, NumberOfAstroids, MaxNumberOfItemsAllowed, NumberOfItems, SlotsOnGameGreedX, SlotsOnGameGreedY, InnerAstroidInfiniteLoopTH, InnerAstroidMinScale, InnerAstroidMaxScale;
+    public int NumberOfInnerAstroids, MaxNumberOfGameObjectsAllowed, MaxNumberOfEnemiesAllowed, NumberOfEnemies, MaxNumberOfAstroidsAllowed, NumberOfAstroids, MaxNumberOfItemsAllowed, NumberOfItems, SlotsOnGameGreedX, SlotsOnGameGreedY, InnerAstroidInfiniteLoopTH, InnerAstroidMinScale, InnerAstroidMaxScale;
     
     private float _xGreedSpacing, _yGreedSpacing;
     private Vector3 _bottomLeftPoint; 
@@ -33,7 +33,7 @@ public class SceneFactory : MonoBehaviour
         InstantiateNewGameObject(NewGameObject.INNERASTROID, NumberOfInnerAstroids);
         InstantiateNewGameObject(NewGameObject.ENEMY, NumberOfEnemies);
         InstantiateNewGameObject(NewGameObject.ASTROID, NumberOfAstroids);
-        //InstantiateNewGameObject(NewGameObject.ITEM, NumberOfItems);
+        InstantiateNewGameObject(NewGameObject.ITEM, NumberOfItems);
     }
 
     private void InstantiateNewGameObject(NewGameObject ngo, int amount)
@@ -233,10 +233,9 @@ public class SceneFactory : MonoBehaviour
 
     private void ConfigureFromFile()
     {
-            string[] props = {"MaxNumberOfInnerAstroidsAllowed", "MaxNumberOfGameObjectsAllowed", "MaxNumberOfEnemiesAllowed", "NumberOfInnerAstroids", "NumberOfEnemies", "MaxNumberOfAstroidsAllowed", "NumberOfAstroids", "MaxNumberOfItemsAllowed", "NumberOfItems", "SlotsOnGameGreedX", "SlotsOnGameGreedY", "InnerAstroidInfiniteLoopTH", "InnerAstroidMinScale", "InnerAstroidMaxScale"};
+            string[] props = {"MaxNumberOfGameObjectsAllowed", "MaxNumberOfEnemiesAllowed", "NumberOfInnerAstroids", "NumberOfEnemies", "MaxNumberOfAstroidsAllowed", "NumberOfAstroids", "MaxNumberOfItemsAllowed", "NumberOfItems", "SlotsOnGameGreedX", "SlotsOnGameGreedY", "InnerAstroidInfiniteLoopTH", "InnerAstroidMinScale", "InnerAstroidMaxScale"};
             Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
 
-            MaxNumberOfInnerAstroidsAllowed = (int)propsFromConfig["MaxNumberOfInnerAstroidsAllowed"];
             MaxNumberOfGameObjectsAllowed = (int)propsFromConfig["MaxNumberOfGameObjectsAllowed"];
             MaxNumberOfEnemiesAllowed = (int)propsFromConfig["MaxNumberOfEnemiesAllowed"];
             MaxNumberOfAstroidsAllowed = (int)propsFromConfig["MaxNumberOfAstroidsAllowed"];
