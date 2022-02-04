@@ -127,9 +127,9 @@ public class gunController : MonoBehaviour
 
     #region Items
 
-    public void FasterCooldownInterval()
+    public void FasterCooldownInterval(float cooldownMutiplier)
     {
-        CoolDownInterval *= 0.9f;
+        CoolDownInterval *= cooldownMutiplier;
     }
 
     #endregion

@@ -112,4 +112,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dbefb8350b3d404b840cea4947a45da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Halalit: {fileID: 0}
+  UseConfigFile: 1
+  CooldownMultiplier: 0
