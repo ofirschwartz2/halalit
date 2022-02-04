@@ -80,6 +80,7 @@ public class SceneFactory : MonoBehaviour
 
     public Vector2 GetNewEntryPointOnGreed(NewGameObject ngo, int innerAstroidScale = 0)
     {
+        int infiniteLoopBreak = 0;
         Vector2 randPointOnGreed;
         if (ngo == NewGameObject.INNERASTROID)
         {
@@ -89,11 +90,15 @@ public class SceneFactory : MonoBehaviour
         {
 
             do{
+                if(++infiniteLoopBreak > 400)
+                    throw new System.Exception("400 time trying to find a place without success");  
                 randPointOnGreed = GetRandomPointOnTheOuterEdge();
             } while (!IsThisPlaceFree(randPointOnGreed));
         } else
         {
             do{
+                if(++infiniteLoopBreak > 400)
+                    throw new System.Exception("400 time trying to find a place without success");  
                 randPointOnGreed = GetNewRandomPointOnOneOfTheEdges(GetEdgesWidthByNewGameObject(ngo));
             } while (!IsThisPlaceFree(randPointOnGreed));
         }

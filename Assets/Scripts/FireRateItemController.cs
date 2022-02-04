@@ -8,7 +8,7 @@ public class FireRateItemController : MonoBehaviour
     public bool UseConfigFile;
     public float CooldownMultiplier;
 
-    void start()
+    void Start()
     {
         if (UseConfigFile)
             ConfigureFromFile();

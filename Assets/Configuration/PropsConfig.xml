@@ -26,8 +26,8 @@
     <MaxNumberOfAstroidsAllowed>20</MaxNumberOfAstroidsAllowed>
     <MaxNumberOfItemsAllowed>10</MaxNumberOfItemsAllowed>
     <NumberOfInnerAstroids>10</NumberOfInnerAstroids>
-    <NumberOfEnemies>3</NumberOfEnemies>
-    <NumberOfAstroids>3</NumberOfAstroids>
+    <NumberOfEnemies>0</NumberOfEnemies>
+    <NumberOfAstroids>0</NumberOfAstroids>
     <NumberOfItems>3</NumberOfItems>
     <SlotsOnGameGreedX>10</SlotsOnGameGreedX>
     <SlotsOnGameGreedY>10</SlotsOnGameGreedY>
@@ -78,7 +78,7 @@
   </PickupClawController>
 
   <FireRateItemController>
-    <CooldownMultiplier>0.5</CooldownMultiplier>
+    <CooldownMultiplier>0.9</CooldownMultiplier>
   </FireRateItemController>
 
 </scripts>

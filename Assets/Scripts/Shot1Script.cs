@@ -23,8 +23,8 @@ public class Shot1Script : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other){
-        if (other.tag != "PickupClaw" && other.tag != "OutOfScreen")
-            Destroy(gameObject);
+        if (other.tag != "PickupClaw" && other.tag != "OutOfScreen" && other.tag != "Shot")
+                Destroy(gameObject);
     }
 
 }
