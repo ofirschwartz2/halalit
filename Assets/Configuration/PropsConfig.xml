@@ -49,7 +49,7 @@
     <Lifetime>0.2</Lifetime>
   </Shot2Script>
   <gunController>
-    <CooldownTime>0</CooldownTime>
+  <CoolDownInterval>0.5</CoolDownInterval>
   </gunController>
   <AstroidtMovementController>
     <MaxXSpeed>3</MaxXSpeed>
