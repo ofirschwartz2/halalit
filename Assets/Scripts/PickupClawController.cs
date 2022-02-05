@@ -179,9 +179,9 @@ public class PickupClawController : MonoBehaviour
     {
         UpdatePcDirection(goal);
 
-        if (_pcStatus == PickupClawStatus.MOVING_BACKWARD)
+        if (_pcStatus == PickupClawStatus.MOVING_BACKWARD && AtFullRopeLength())
         {
-            DragAtFullRopeLength();
+            Drag();
         }
 
         if (_pcStatus == PickupClawStatus.MOVING_FORWARD || _perfectRotationToHalalit)
@@ -209,16 +209,13 @@ public class PickupClawController : MonoBehaviour
         _pcDirection = new Vector2(relativeDeltaX / shootDirectionMagnitude, relativeDeltaY / shootDirectionMagnitude);
     }
 
-    private void DragAtFullRopeLength()
+    private void Drag()
     {
-        if (AtFullRopeLength())
-        {
-            float halalitDeltaX = (_halalitCurrentPosition.x - _halalitLastFramePosition.x);
-            float halalitDeltaY = (_halalitCurrentPosition.y - _halalitLastFramePosition.y);
-            Vector3 newPosition = new Vector3(transform.position.x + halalitDeltaX, transform.position.y + halalitDeltaY, transform.position.z);
+        float halalitDeltaX = (_halalitCurrentPosition.x - _halalitLastFramePosition.x);
+        float halalitDeltaY = (_halalitCurrentPosition.y - _halalitLastFramePosition.y);
+        Vector3 newPosition = new Vector3(transform.position.x + halalitDeltaX, transform.position.y + halalitDeltaY, transform.position.z);
 
-            transform.position = Vector3.MoveTowards(transform.position, newPosition, DRAG_AT_FULL_ROPE_SPEED);
-        }
+        transform.position = Vector3.MoveTowards(transform.position, newPosition, DRAG_AT_FULL_ROPE_SPEED);
     }
 
     private void RotateToPcDirectionInstantly()
