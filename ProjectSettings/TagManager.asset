@@ -12,6 +12,9 @@ TagManager:
   - Background
   - Shot2
   - Item
+  - PickupClaw
+  - Astroid
+  - OutOfScreen
   layers:
   - Default
   - TransparentFX

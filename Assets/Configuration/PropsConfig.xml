@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <scripts>
   <CameraScript>
-    <CameraXSize>21</CameraXSize>
+    <CameraXSize>26.6</CameraXSize>
     <CameraYSize>12</CameraYSize>
   </CameraScript>
   <HalalitMovementController>
     <ForceMultiplier>10</ForceMultiplier>
     <SpinSpeed>10</SpinSpeed>
     <_rigidBody.drag>2</_rigidBody.drag>
-    <HalalitThrust>0.5</HalalitThrust>
+    <HalalitThrust>1.1</HalalitThrust>
     <SpeedLimit>15</SpeedLimit>
     <CoolDownInterval>0.1</CoolDownInterval>
   </HalalitMovementController>
@@ -16,6 +16,17 @@
     <MaxNumberOfEnemies>30</MaxNumberOfEnemies>
     <NumberOfEnemies>20</NumberOfEnemies>
   </EnemyFactory>
+  <SceneFactory>
+    <MaxNumberOfGameObjectsAllowed>60</MaxNumberOfGameObjectsAllowed>
+    <MaxNumberOfEnemiesAllowed>20</MaxNumberOfEnemiesAllowed>
+    <MaxNumberOfAstroidsAllowed>20</MaxNumberOfAstroidsAllowed>
+    <MaxNumberOfItemsAllowed>10</MaxNumberOfItemsAllowed>
+    <NumberOfEnemies>20</NumberOfEnemies>
+    <NumberOfAstroids>20</NumberOfAstroids>
+    <NumberOfItems>10</NumberOfItems>
+    <SlotsOnGameGreedX>10</SlotsOnGameGreedX>
+    <SlotsOnGameGreedY>10</SlotsOnGameGreedY>
+  </SceneFactory>
   <EnemyMovementController>
     <MinXForce>-5</MinXForce>
     <MaxXForce>5</MaxXForce>
@@ -23,7 +34,7 @@
     <MaxYForce>5</MaxYForce>
     <XofEndOfMap>68</XofEndOfMap>
     <YofEndOfMap>38</YofEndOfMap>
-    <EnemyThrust>0.5</EnemyThrust>
+    <EnemyThrust>1.2</EnemyThrust>
     <SpeedLimit>2</SpeedLimit>
     <_rigidBody.drag>2</_rigidBody.drag>
   </EnemyMovementController>
@@ -37,15 +48,13 @@
     <CooldownTime>0</CooldownTime>
   </gunController>
   <AstroidtMovementController>
-    <MinXSpeed>-3</MinXSpeed>
-    <MaxXSpeed>0</MaxXSpeed>
-    <MinYSpeed>-3</MinYSpeed>
-    <MaxYSpeed>0</MaxYSpeed>
+    <MaxXSpeed>3</MaxXSpeed>
+    <MaxYSpeed>3</MaxYSpeed>
     <MinRotation>0.1</MinRotation>
     <MaxRotation>1</MaxRotation>
   </AstroidtMovementController>
   <PickupClawController>
-    <VelocityMultiplier>2</VelocityMultiplier>
+    <VelocityMultiplier>10</VelocityMultiplier>
     <RotationToItemMultiplier>3</RotationToItemMultiplier>
     <RotationToHalalitMultiplier>0.5</RotationToHalalitMultiplier>
     <MoveToItemMultiplier>0.5</MoveToItemMultiplier>

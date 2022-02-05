@@ -43,8 +43,8 @@ public class EnemyMovementController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Shot"))
             Destroy(gameObject);
-        else if (other.gameObject.CompareTag("Halalit"))
-            KnockBack(other);
+        else if (other.gameObject.CompareTag("Halalit") || other.gameObject.CompareTag("Astroid") || other.gameObject.CompareTag("Enemy"))
+            KnockMeBack(other);
         else if (other.gameObject.CompareTag("Background"))
             GoInAnotherDirection();
     }
@@ -74,7 +74,7 @@ public class EnemyMovementController : MonoBehaviour
         return Random.Range(MinYForce, MaxYForce);
     }
 
-    private void KnockBack(Collider2D other)
+    private void KnockMeBack(Collider2D other)
     {
         Vector2 normalizedDifference = (_rigidBody.transform.position - other.transform.position).normalized;
         _rigidBody.AddForce(normalizedDifference * Utils.GetNormalizedSpeed(_rigidBody, other.GetComponent<Rigidbody2D>(), EnemyThrust), ForceMode2D.Impulse);
