@@ -26,9 +26,9 @@
     <MaxNumberOfAstroidsAllowed>20</MaxNumberOfAstroidsAllowed>
     <MaxNumberOfItemsAllowed>10</MaxNumberOfItemsAllowed>
     <NumberOfInnerAstroids>10</NumberOfInnerAstroids>
-    <NumberOfEnemies>5</NumberOfEnemies>
-    <NumberOfAstroids>5</NumberOfAstroids>
-    <NumberOfItems>5</NumberOfItems>
+    <NumberOfEnemies>10</NumberOfEnemies>
+    <NumberOfAstroids>10</NumberOfAstroids>
+    <NumberOfItems>10</NumberOfItems>
     <SlotsOnGameGreedX>10</SlotsOnGameGreedX>
     <SlotsOnGameGreedY>10</SlotsOnGameGreedY>
     <InnerAstroidInfiniteLoopTH>400</InnerAstroidInfiniteLoopTH>
