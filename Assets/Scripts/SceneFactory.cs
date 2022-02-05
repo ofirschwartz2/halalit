@@ -60,14 +60,13 @@ public class SceneFactory : MonoBehaviour
         innerAstroid.SendMessage("SetScale", innerAstroidScale);
         innerAstroid.SendMessage("SetVelocity", false);
 
-        LockGreedByPointAndRadius(entryPointOnGreed, innerAstroidScale * innerAstroid.GetComponent<PolygonCollider2D>().bounds.size.x / 2);
+        LockGreedByPointAndRadius(entryPointOnGreed, innerAstroidScale);
         //Debug.Log("SIZE: " + innerAstroid.GetComponent<PolygonCollider2D>().bounds.size + ", EntryPointOnGreed: " + GetAbsolutePointOnGreed(entryPointOnGreed.x,entryPointOnGreed.y) + ", Scale:" + innerAstroidScale);
     }
 
-    private void LockGreedByPointAndRadius(Vector2 entryPointOnGreed, float radius)
+    private void LockGreedByPointAndRadius(Vector2 entryPointOnGreed, int scale)
     {
-        float numerOfSlotsToLockFromEveryDirection = Mathf.Ceil(radius / _yGreedSpacing);
-        
+        float numerOfSlotsToLockFromEveryDirection = Mathf.Ceil(scale / 2 / _yGreedSpacing) + 1;
         for(int x = (int)Mathf.Max(0, entryPointOnGreed.x - numerOfSlotsToLockFromEveryDirection); (x < SlotsOnGameGreedX + 2) && (x <= entryPointOnGreed.x + numerOfSlotsToLockFromEveryDirection); x++)
             for(int y = (int)Mathf.Max(0, entryPointOnGreed.y - numerOfSlotsToLockFromEveryDirection); (y < SlotsOnGameGreedX + 2) && (y <= entryPointOnGreed.y + numerOfSlotsToLockFromEveryDirection); y++)
                 _gameObjectsOnGameGreed[x,y] = true;
@@ -123,7 +122,7 @@ public class SceneFactory : MonoBehaviour
 
     private bool IsThisPlaceFreeForTheInnerAstroid(Vector2 centerOfAstroidOnGreed, int scaleOfAstroid)
     {
-        float numerOfSlotsToLockFromEveryDirection = Mathf.Ceil(scaleOfAstroid / 2 / _yGreedSpacing);
+        float numerOfSlotsToLockFromEveryDirection = Mathf.Ceil(scaleOfAstroid / 2 / _yGreedSpacing) + 1;
         for(int x = (int)Mathf.Max(0, centerOfAstroidOnGreed.x - numerOfSlotsToLockFromEveryDirection); (x < SlotsOnGameGreedX + 2) && (x <= centerOfAstroidOnGreed.x + numerOfSlotsToLockFromEveryDirection); x++)
             for(int y = (int)Mathf.Max(0, centerOfAstroidOnGreed.y - numerOfSlotsToLockFromEveryDirection); (y < SlotsOnGameGreedY + 2) && (y <= centerOfAstroidOnGreed.y + numerOfSlotsToLockFromEveryDirection); y++)
             {
