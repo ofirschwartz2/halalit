@@ -4,10 +4,8 @@ using Assets.Common;
 using UnityEngine;
 using Assets.Enums;
 
-
 public class SceneFactory : MonoBehaviour
 {
-
     public bool UseConfigFile;
     public GameObject Background, EnemyPrefab, AstroidPrefab, ItemPrefab;
     public int NumberOfInnerAstroids, MaxNumberOfGameObjectsAllowed, MaxNumberOfEnemiesAllowed, NumberOfEnemies, MaxNumberOfAstroidsAllowed, NumberOfAstroids, MaxNumberOfItemsAllowed, NumberOfItems, SlotsOnGameGreedX, SlotsOnGameGreedY, InnerAstroidInfiniteLoopTH, InnerAstroidMinScale, InnerAstroidMaxScale;
@@ -15,8 +13,8 @@ public class SceneFactory : MonoBehaviour
     private float _xGreedSpacing, _yGreedSpacing;
     private Vector3 _bottomLeftPoint; 
     private bool[,] _gameObjectsOnGameGreed;
-    private Dictionary<NewGameObject,GameObject> _gameObjectToPrefab;
     private bool _stopCreatingInnerAstroids;
+    private Dictionary<GameObjectType,GameObject> _gameObjectToPrefab;
 
     void Start()
     {
@@ -30,23 +28,23 @@ public class SceneFactory : MonoBehaviour
 
     private void InstantiateAllGameObjects()
     {
-        InstantiateNewGameObject(NewGameObject.INNERASTROID, NumberOfInnerAstroids);
-        InstantiateNewGameObject(NewGameObject.ENEMY, NumberOfEnemies);
-        InstantiateNewGameObject(NewGameObject.ASTROID, NumberOfAstroids);
-        InstantiateNewGameObject(NewGameObject.ITEM, NumberOfItems);
+        InstantiateNewGameObject(GameObjectType.INNERASTROID, NumberOfInnerAstroids);
+        InstantiateNewGameObject(GameObjectType.ENEMY, NumberOfEnemies);
+        InstantiateNewGameObject(GameObjectType.ASTROID, NumberOfAstroids);
+        InstantiateNewGameObject(GameObjectType.ITEM, NumberOfItems);
     }
 
-    private void InstantiateNewGameObject(NewGameObject ngo, int amount)
+    private void InstantiateNewGameObject(GameObjectType gameObjectType, int amount)
     {
         for (int i = 0; i < amount; i++)
         {
-            if (ngo == NewGameObject.INNERASTROID)
+            if (gameObjectType == GameObjectType.INNERASTROID)
                 if(_stopCreatingInnerAstroids)
                     return;
                 else
                     InstantiateInnerAstroid();
             else
-                Instantiate(_gameObjectToPrefab[ngo],  GetAbsolutePointOnGreed(GetNewEntryPointOnGreed(ngo)), Quaternion.AngleAxis(0, Vector3.forward));
+                Instantiate(_gameObjectToPrefab[gameObjectType],  GetAbsolutePointOnGreed(GetNewEntryPointOnGreed(gameObjectType)), Quaternion.AngleAxis(0, Vector3.forward));
         }
     }
     
@@ -78,16 +76,15 @@ public class SceneFactory : MonoBehaviour
         return _bottomLeftPoint + new Vector3(_xGreedSpacing * pointOnGreed.x + (_xGreedSpacing / 2), _yGreedSpacing * pointOnGreed.y + (_yGreedSpacing / 2));
     }
 
-    public Vector2 GetNewEntryPointOnGreed(NewGameObject ngo, int innerAstroidScale = 0)
+    public Vector2 GetNewEntryPointOnGreed(GameObjectType ngo, int innerAstroidScale = 0)
     {
         Vector2 randPointOnGreed;
-        if (ngo == NewGameObject.INNERASTROID)
+        if (ngo == GameObjectType.INNERASTROID)
         {
             return GetNewInnerAstroidEntryPointOnGreed(innerAstroidScale);
         }
-        else if(ngo == NewGameObject.ASTROID)
+        else if(ngo == GameObjectType.ASTROID)
         {
-
             do{
                 randPointOnGreed = GetRandomPointOnTheOuterEdge();
             } while (!IsThisPlaceFree(randPointOnGreed));
@@ -163,24 +160,16 @@ public class SceneFactory : MonoBehaviour
             switch(Random.Range(0,4))
             {
                 case 0:
-                    randPointOnGreed = Utils.GetRandomVector(
-                        1, 1 + edgesWidth, 
-                        1, SlotsOnGameGreedY);
+                    randPointOnGreed = Utils.GetRandomVector(1, 1 + edgesWidth, 1, SlotsOnGameGreedY);
                     break;
                 case 1:
-                    randPointOnGreed = Utils.GetRandomVector(
-                        1, SlotsOnGameGreedX,
-                        SlotsOnGameGreedY + 1 - edgesWidth, SlotsOnGameGreedY + 1);
+                    randPointOnGreed = Utils.GetRandomVector(1, SlotsOnGameGreedX,SlotsOnGameGreedY + 1 - edgesWidth, SlotsOnGameGreedY + 1);
                     break;
                 case 2:
-                    randPointOnGreed = Utils.GetRandomVector(
-                        SlotsOnGameGreedX + 1 - edgesWidth, SlotsOnGameGreedX + 1, 
-                        2, SlotsOnGameGreedY + 1);
+                    randPointOnGreed = Utils.GetRandomVector(SlotsOnGameGreedX + 1 - edgesWidth, SlotsOnGameGreedX + 1, 2, SlotsOnGameGreedY + 1);
                     break;
                 case 3:
-                    randPointOnGreed = Utils.GetRandomVector(
-                        2, SlotsOnGameGreedX + 1, 
-                        1, 1 + edgesWidth);
+                    randPointOnGreed = Utils.GetRandomVector(2, SlotsOnGameGreedX + 1, 1, 1 + edgesWidth);
                     break;
                 default:
                     throw new System.Exception("Not a random between 0 to 3, abort");   
@@ -195,36 +184,29 @@ public class SceneFactory : MonoBehaviour
         switch(Random.Range(0,4))
         {
             case 0:
-                return Utils.GetRandomVector(
-                    0, 1, 
-                    0, SlotsOnGameGreedY + 2);
+                return Utils.GetRandomVector(0, 1, 0, SlotsOnGameGreedY + 2);
             case 1:
-                return Utils.GetRandomVector(
-                    0, SlotsOnGameGreedX + 2, 
-                    SlotsOnGameGreedY + 1, SlotsOnGameGreedY + 2);
+                return Utils.GetRandomVector(0, SlotsOnGameGreedX + 2, SlotsOnGameGreedY + 1, SlotsOnGameGreedY + 2);
             case 2:
-                return Utils.GetRandomVector(
-                    SlotsOnGameGreedX + 1, SlotsOnGameGreedX + 2, 
-                    1, SlotsOnGameGreedY + 2);
+                return Utils.GetRandomVector(SlotsOnGameGreedX + 1, SlotsOnGameGreedX + 2, 1, SlotsOnGameGreedY + 2);
             case 3:
-                return Utils.GetRandomVector(
-                    1, SlotsOnGameGreedX + 2, 
-                    0, 1);
+                return Utils.GetRandomVector(1, SlotsOnGameGreedX + 2, 0, 1);
+            default:
+                throw new System.Exception("Not a random between 0 to 3, abort");
         }
-        throw new System.Exception("Not a random between 0 to 3, abort");   
     }
 
-    private int GetEdgesWidthByNewGameObject(NewGameObject ngo)
+    private int GetEdgesWidthByNewGameObject(GameObjectType gameObjectType)
     {
-        switch (ngo)
+        switch (gameObjectType)
         {
-            case NewGameObject.INNERASTROID:
+            case GameObjectType.INNERASTROID:
                 throw new System.Exception("INNERASTROID - GameObject not supported");
-            case NewGameObject.ENEMY:
+            case GameObjectType.ENEMY:
                 return 2; 
-            case NewGameObject.ITEM:
+            case GameObjectType.ITEM:
                 return ((SlotsOnGameGreedY / 2) - 2);
-            case NewGameObject.ASTROID:
+            case GameObjectType.ASTROID:
                 return -1;
             default:
                throw new System.Exception("GameObject not supported"); 
@@ -287,12 +269,13 @@ public class SceneFactory : MonoBehaviour
 
     private void SetGameObjectToPrefabDictionary()
     {
-        _gameObjectToPrefab = new Dictionary<NewGameObject, GameObject>()
+        _gameObjectToPrefab = new Dictionary<GameObjectType, GameObject>()
         {
-            {NewGameObject.INNERASTROID, AstroidPrefab},
-            {NewGameObject.ENEMY, EnemyPrefab},
-            {NewGameObject.ASTROID, AstroidPrefab},
-            {NewGameObject.ITEM, ItemPrefab}
+            {GameObjectType.INNERASTROID, AstroidPrefab},
+            {GameObjectType.ENEMY, EnemyPrefab},
+            {GameObjectType.ASTROID, AstroidPrefab},
+            {GameObjectType.ITEM, ItemPrefab}
+
         };
     }
 }
