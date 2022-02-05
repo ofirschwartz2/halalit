@@ -15,7 +15,7 @@ public class SceneFactory : MonoBehaviour
     private float _xGreedSpacing, _yGreedSpacing;
     private Vector3 _bottomLeftPoint; 
     private bool[,] _gameObjectsOnGameGreed;
-    private Dictionary<NewGameObject,GameObject> _gameObjectToPrefab;
+    private Dictionary<GameObjectType,GameObject> _gameObjectToPrefab;
 
     void Start()
     {
@@ -29,12 +29,12 @@ public class SceneFactory : MonoBehaviour
 
     private void InstantiateAllGameObjects()
     {
-        InstantiateNewGameObject(NewGameObject.ENEMY, NumberOfEnemies);
-        InstantiateNewGameObject(NewGameObject.ASTROID, NumberOfAstroids);
-        InstantiateNewGameObject(NewGameObject.ITEM, NumberOfItems);
+        InstantiateNewGameObject(GameObjectType.ENEMY, NumberOfEnemies);
+        InstantiateNewGameObject(GameObjectType.ASTROID, NumberOfAstroids);
+        InstantiateNewGameObject(GameObjectType.ITEM, NumberOfItems);
     }
 
-    private void InstantiateNewGameObject(NewGameObject ngo, int amount)
+    private void InstantiateNewGameObject(GameObjectType ngo, int amount)
     {
         for (int i = 0; i < amount; i++)
         {
@@ -49,10 +49,10 @@ public class SceneFactory : MonoBehaviour
         return _bottomLeftPoint + new Vector3(_xGreedSpacing * xInGameGrid + (_xGreedSpacing / 2), _yGreedSpacing * yInGameGrid + (_yGreedSpacing / 2));
     }
 
-    public Vector2 GetNewEntryPointOnGreed(NewGameObject ngo)
+    public Vector2 GetNewEntryPointOnGreed(GameObjectType ngo)
     {
         Vector2 randPointOnGreed;
-        if(ngo == NewGameObject.ASTROID)
+        if(ngo == GameObjectType.ASTROID)
         {
             do{
                 randPointOnGreed = GetRandomPointOnTheOuterEdge();
@@ -127,15 +127,15 @@ public class SceneFactory : MonoBehaviour
         throw new System.Exception("Not a random between 0 to 3, abort");   
     }
 
-    private int GetEdgesWidthByNewGameObject(NewGameObject ngo)
+    private int GetEdgesWidthByNewGameObject(GameObjectType ngo)
     {
         switch (ngo)
         {
-            case NewGameObject.ENEMY:
+            case GameObjectType.ENEMY:
                 return 2; 
-            case NewGameObject.ITEM:
+            case GameObjectType.ITEM:
                 return ((SlotsOnGameGreedY / 2) - 2);
-            case NewGameObject.ASTROID:
+            case GameObjectType.ASTROID:
                 throw new System.Exception("ASTROID is on the outer edge");
             default:
                throw new System.Exception("GameObject not supported"); 
@@ -184,11 +184,11 @@ public class SceneFactory : MonoBehaviour
 
     private void SetGameObjectToPrefabDictionary()
     {
-        _gameObjectToPrefab = new Dictionary<NewGameObject, GameObject>()
+        _gameObjectToPrefab = new Dictionary<GameObjectType, GameObject>()
         {
-            {NewGameObject.ENEMY, EnemyPrefab},
-            {NewGameObject.ASTROID, AstroidPrefab},
-            {NewGameObject.ITEM, ItemPrefab}
+            {GameObjectType.ENEMY, EnemyPrefab},
+            {GameObjectType.ASTROID, AstroidPrefab},
+            {GameObjectType.ITEM, ItemPrefab}
         };
     }
 }

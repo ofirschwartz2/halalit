@@ -1,6 +1,6 @@
 ﻿namespace Assets.Enums
 {
-    public enum NewGameObject
+    public enum GameObjectType
     {
         ENEMY,
         ASTROID,
