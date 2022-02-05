@@ -67,7 +67,6 @@ public class EnemyMovementController : MonoBehaviour
 
     private void KnockMeBack(Collider2D other)
     {
-        Debug.Log("knockback");
         Vector2 normalizedDifference = (_rigidBody.transform.position - other.transform.position).normalized;
         _rigidBody.AddForce(normalizedDifference * Utils.GetNormalizedSpeed(_rigidBody, other.GetComponent<Rigidbody2D>(), EnemyThrust), ForceMode2D.Impulse);
     }

@@ -14,7 +14,6 @@ public class EnemyColliderController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("EnemyColliderController, other.tag:" + other.tag);
         Enemy.SendMessage("InnerOnTriggerEnter2D", other);
     }
 

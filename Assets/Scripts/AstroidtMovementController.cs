@@ -50,12 +50,6 @@ public class AstroidtMovementController : MonoBehaviour
         return UnityEngine.Random.Range(minRotation / transform.localScale.x, maxRotation / transform.localScale.x);
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Shot"))
-            AstroidExplotion();
-    }
-
     private void AstroidExplotion()
     {
         if(transform.localScale.x > ExplodeToSmallerAstroidsScaleTH)
@@ -74,8 +68,16 @@ public class AstroidtMovementController : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+    void InnerOnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log("InnerOnTriggerEnter2D, OTHER: " + other.tag);
+        if (other.gameObject.CompareTag("Shot"))
+            AstroidExplotion();
+    }
+
+    void InnerOnTriggerExit2D(Collider2D other)
+    {
+        Debug.Log("InnerOnTriggerExit2D, OTHER: " + other.tag);
         if (other.gameObject.CompareTag("OutOfScreen"))
             Destroy(gameObject);
     }
