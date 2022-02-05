@@ -206,7 +206,7 @@ SpriteRenderer:
   m_Size: {x: 5, y: 5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &36141984
@@ -240,13 +240,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e95d7a1eb1b955439a37d3aef2cbe84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UseConfigFile: 1
-  VelocityMultiplier: 0
-  RotationToItemMultiplier: 0
-  RotationToHalalitMultiplier: 0
-  MoveToItemMultiplier: 0
-  GrabDelay: 0
-  RopeLength: 0
+  UseConfigFile: 0
+  VelocityMultiplier: 2
+  RotationToItemMultiplier: 3
+  RotationToHalalitMultiplier: 0.5
+  MoveToItemMultiplier: 0.5
+  GrabDelay: 0.5
+  RopeLength: 5
   Halalit: {fileID: 2130719621}
 --- !u!60 &36141986
 PolygonCollider2D:
