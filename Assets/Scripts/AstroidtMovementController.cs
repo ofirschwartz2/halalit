@@ -3,14 +3,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class AstroidtMovementController : MonoBehaviour
 {
 
     public bool UseConfigFile;
     public float MaxXSpeed, MaxYSpeed, MinRotation, MaxRotation;
     private float _rotationSpeed;
-
 
     void Start()
     {
@@ -25,7 +23,7 @@ public class AstroidtMovementController : MonoBehaviour
         }
 
         GetComponent<Rigidbody2D>().velocity = GetVelocity(MaxXSpeed, MaxYSpeed);
-        _rotationSpeed = GetRotationSpeed(MaxRotation* (-1), MaxRotation);
+        _rotationSpeed = GetRotationSpeed(-MaxRotation, MaxRotation);
     }
 
     void Update()
@@ -63,19 +61,19 @@ public class AstroidtMovementController : MonoBehaviour
     private float GetXVelocity(float maxXSpeed) 
     {
         if (transform.position.x > 0)
-            return UnityEngine.Random.Range(maxXSpeed * (-1), 0f);
+            return UnityEngine.Random.Range(-maxXSpeed, 0f);
         else if (transform.position.x < 0)
             return UnityEngine.Random.Range(0f, maxXSpeed);
-        return UnityEngine.Random.Range(maxXSpeed * (-1), maxXSpeed);
+        return UnityEngine.Random.Range(-maxXSpeed, maxXSpeed);
     }
 
     private float GetYVelocity(float maxYSpeed) 
     {
         if (transform.position.y > 0)
-            return UnityEngine.Random.Range(maxYSpeed * (-1), 0f);
+            return UnityEngine.Random.Range(-maxYSpeed, 0f);
         else if (transform.position.y < 0)
             return UnityEngine.Random.Range(0f, maxYSpeed);
-        return UnityEngine.Random.Range(maxYSpeed * (-1), maxYSpeed);
+        return UnityEngine.Random.Range(-maxYSpeed, maxYSpeed);
     }
 
 }
