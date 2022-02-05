@@ -24,14 +24,10 @@ public class gunController : MonoBehaviour
 
     void Start()
     {
-        ShotPrefab = ShotsPrefab[_currentWeapon];
         if (UseConfigFile)
-        {
-            string[] props = {"CoolDownInterval"};
-            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
+            ConfigureFromFile();
 
-            CoolDownInterval = propsFromConfig["CoolDownInterval"];
-        }
+        ShotPrefab = ShotsPrefab[_currentWeapon];
         _firePoint = transform;
     }
 
@@ -133,4 +129,12 @@ public class gunController : MonoBehaviour
     }
 
     #endregion
+
+    private void ConfigureFromFile()
+    {
+        string[] props = {"CoolDownInterval"};
+        Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
+
+        CoolDownInterval = propsFromConfig["CoolDownInterval"];
+    }
 }

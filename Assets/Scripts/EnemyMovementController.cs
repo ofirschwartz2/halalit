@@ -5,29 +5,19 @@ using UnityEngine;
 
 public class EnemyMovementController : MonoBehaviour
 {
-    public float MinXForce, MaxXForce, MinYForce, MaxYForce;
-    public float EnemyThrust;
+    public float MinXForce, MaxXForce, MinYForce, MaxYForce, EnemyThrust, SpeedLimit;
     public bool UseConfigFile;
-    public float SpeedLimit;
+
     private Rigidbody2D _rigidBody;
-    private float _xForce;
-    private float _yForce;
+    private float _xForce, _yForce;
+
     
     void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>(); 
         if (UseConfigFile)
-        {
-            string[] props = { "MinXForce", "MaxXForce", "MinYForce", "MaxYForce", "EnemyThrust", "SpeedLimit", "_rigidBody.drag"};
-            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
-            MinXForce = propsFromConfig["MinXForce"];
-            MaxXForce = propsFromConfig["MaxXForce"];
-            MinYForce = propsFromConfig["MinYForce"];
-            MaxYForce = propsFromConfig["MaxYForce"];
-            EnemyThrust = propsFromConfig["EnemyThrust"];
-            SpeedLimit = propsFromConfig["SpeedLimit"];
-            _rigidBody.drag = propsFromConfig["_rigidBody.drag"];
-        }
+            ConfigureFromFile();
+        
         _xForce = Random.Range(MinXForce, MaxXForce);
         _yForce = Random.Range(MinYForce, MaxYForce);
         tag = "Enemy";
@@ -39,8 +29,9 @@ public class EnemyMovementController : MonoBehaviour
             _rigidBody.AddForce(new Vector2(_xForce, _yForce));
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    void InnerOnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log("InnerOnTriggerEnter2D, other.tag:" + other.tag);
         if (other.gameObject.CompareTag("Shot"))
             Destroy(gameObject);
         else if (other.gameObject.CompareTag("Halalit") || other.gameObject.CompareTag("Astroid") || other.gameObject.CompareTag("Enemy"))
@@ -76,6 +67,7 @@ public class EnemyMovementController : MonoBehaviour
 
     private void KnockMeBack(Collider2D other)
     {
+        Debug.Log("knockback");
         Vector2 normalizedDifference = (_rigidBody.transform.position - other.transform.position).normalized;
         _rigidBody.AddForce(normalizedDifference * Utils.GetNormalizedSpeed(_rigidBody, other.GetComponent<Rigidbody2D>(), EnemyThrust), ForceMode2D.Impulse);
     }
@@ -83,5 +75,18 @@ public class EnemyMovementController : MonoBehaviour
     private bool IsUnderSpeedLimit()
     {
         return Utils.GetVectorMagnitude(_rigidBody.velocity) < SpeedLimit;
+    }
+
+    private void ConfigureFromFile()
+    {
+        string[] props = { "MinXForce", "MaxXForce", "MinYForce", "MaxYForce", "EnemyThrust", "SpeedLimit", "_rigidBody.drag"};
+        Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
+        MinXForce = propsFromConfig["MinXForce"];
+        MaxXForce = propsFromConfig["MaxXForce"];
+        MinYForce = propsFromConfig["MinYForce"];
+        MaxYForce = propsFromConfig["MaxYForce"];
+        EnemyThrust = propsFromConfig["EnemyThrust"];
+        SpeedLimit = propsFromConfig["SpeedLimit"];
+        _rigidBody.drag = propsFromConfig["_rigidBody.drag"];
     }
 }

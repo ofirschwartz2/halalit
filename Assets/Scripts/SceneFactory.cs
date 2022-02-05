@@ -91,14 +91,14 @@ public class SceneFactory : MonoBehaviour
 
             do{
                 if(++infiniteLoopBreak > 400)
-                    throw new System.Exception("400 time trying to find a place without success");  
+                    throw new System.Exception("400 time trying to find a place without success: GetNewEntryPointOnGreed");  
                 randPointOnGreed = GetRandomPointOnTheOuterEdge();
             } while (!IsThisPlaceFree(randPointOnGreed));
         } else
         {
             do{
                 if(++infiniteLoopBreak > 400)
-                    throw new System.Exception("400 time trying to find a place without success");  
+                    throw new System.Exception("400 time trying to find a place without success: GetNewEntryPointOnGreed");  
                 randPointOnGreed = GetNewRandomPointOnOneOfTheEdges(GetEdgesWidthByNewGameObject(ngo));
             } while (!IsThisPlaceFree(randPointOnGreed));
         }
@@ -149,9 +149,13 @@ public class SceneFactory : MonoBehaviour
 
     public Vector2 GetNewRandomPointOnScene()
     {
+        int infiniteLoopBreak = 0;
         Vector2 randPointOnGreed;
         
         do{
+            if(++infiniteLoopBreak > 400)
+                    throw new System.Exception("400 time trying to find a place without success: GetNewRandomPointOnScene"); 
+
             randPointOnGreed = Utils.GetRandomVector(
                 1, SlotsOnGameGreedX + 1, 
                 1, SlotsOnGameGreedY + 1);
@@ -162,9 +166,12 @@ public class SceneFactory : MonoBehaviour
 
     public Vector2 GetNewRandomPointOnOneOfTheEdges(int edgesWidth)
     {
+        int infiniteLoopBreak = 0;
         Vector2 randPointOnGreed;
 
         do{
+            if(++infiniteLoopBreak > 400)
+                throw new System.Exception("400 time trying to find a place without success: GetNewRandomPointOnOneOfTheEdges"); 
             switch(Random.Range(0,4))
             {
                 case 0:
