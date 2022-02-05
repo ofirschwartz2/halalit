@@ -70,14 +70,12 @@ public class AstroidtMovementController : MonoBehaviour
 
     void InnerOnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("InnerOnTriggerEnter2D, OTHER: " + other.tag);
         if (other.gameObject.CompareTag("Shot"))
             AstroidExplotion();
     }
 
     void InnerOnTriggerExit2D(Collider2D other)
     {
-        Debug.Log("InnerOnTriggerExit2D, OTHER: " + other.tag);
         if (other.gameObject.CompareTag("OutOfScreen"))
             Destroy(gameObject);
     }

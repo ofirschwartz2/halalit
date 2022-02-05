@@ -31,7 +31,6 @@ public class EnemyMovementController : MonoBehaviour
 
     void InnerOnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("InnerOnTriggerEnter2D, other.tag:" + other.tag);
         if (other.gameObject.CompareTag("Shot"))
             Destroy(gameObject);
         else if (other.gameObject.CompareTag("Halalit") || other.gameObject.CompareTag("Astroid") || other.gameObject.CompareTag("Enemy"))
