@@ -51,10 +51,10 @@ public class SceneFactory : MonoBehaviour
     private void InstantiateInnerAstroid()
     {
         int innerAstroidScale = GetInnerAstroidScale();
-        Vector2 entryPointOnGreed = GetNewEntryPointOnGreed(NewGameObject.INNERASTROID, innerAstroidScale);
+        Vector2 entryPointOnGreed = GetNewEntryPointOnGreed(GameObjectType.INNERASTROID, innerAstroidScale);
         if(_stopCreatingInnerAstroids)
             return;
-        GameObject innerAstroid = Instantiate(_gameObjectToPrefab[NewGameObject.INNERASTROID], GetAbsolutePointOnGreed(entryPointOnGreed), Quaternion.AngleAxis(0, Vector3.forward)) as GameObject;
+        GameObject innerAstroid = Instantiate(_gameObjectToPrefab[GameObjectType.INNERASTROID], GetAbsolutePointOnGreed(entryPointOnGreed), Quaternion.AngleAxis(0, Vector3.forward)) as GameObject;
         innerAstroid.SendMessage("SetScale", innerAstroidScale);
         innerAstroid.SendMessage("SetVelocity", false);
 
