@@ -19,9 +19,4 @@ class NewAstroid : MonoBehaviour, INewGameObject
     {
         return Prefab;
     }
-
-    public GameObjectType GetGameObjectType()
-    {
-        return GameObjectType.ASTROID;
-    }
 }

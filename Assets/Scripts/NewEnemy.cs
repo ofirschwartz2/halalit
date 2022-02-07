@@ -19,9 +19,4 @@ class NewEnemy : MonoBehaviour, INewGameObject
     {
         return Prefab;
     }
-
-    public GameObjectType GetGameObjectType()
-    {
-        return GameObjectType.ENEMY;
-    }
 }

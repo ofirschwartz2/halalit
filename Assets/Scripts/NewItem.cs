@@ -19,9 +19,4 @@ class NewItem : MonoBehaviour, INewGameObject
     {
         return Prefab;
     }
-
-    public GameObjectType GetGameObjectType()
-    {
-        return GameObjectType.ITEM;
-    }
 }
