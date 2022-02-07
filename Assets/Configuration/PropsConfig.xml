@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <scripts>
   <CameraScript>
-    <CameraXSize>26.6</CameraXSize>
+    <CameraXSize>21.5</CameraXSize>
     <CameraYSize>12</CameraYSize>
   </CameraScript>
   <HalalitMovementController>
@@ -21,11 +21,15 @@
     <MaxNumberOfEnemiesAllowed>20</MaxNumberOfEnemiesAllowed>
     <MaxNumberOfAstroidsAllowed>20</MaxNumberOfAstroidsAllowed>
     <MaxNumberOfItemsAllowed>10</MaxNumberOfItemsAllowed>
-    <NumberOfEnemies>20</NumberOfEnemies>
-    <NumberOfAstroids>20</NumberOfAstroids>
-    <NumberOfItems>10</NumberOfItems>
+    <NumberOfInnerAstroids>10</NumberOfInnerAstroids>
+    <NumberOfEnemies>3</NumberOfEnemies>
+    <NumberOfAstroids>3</NumberOfAstroids>
+    <NumberOfItems>3</NumberOfItems>
     <SlotsOnGameGreedX>10</SlotsOnGameGreedX>
     <SlotsOnGameGreedY>10</SlotsOnGameGreedY>
+    <InnerAstroidInfiniteLoopTH>400</InnerAstroidInfiniteLoopTH>
+    <InnerAstroidMinScale>5</InnerAstroidMinScale>
+    <InnerAstroidMaxScale>15</InnerAstroidMaxScale>
   </SceneFactory>
   <EnemyMovementController>
     <MinXForce>-5</MinXForce>
@@ -52,6 +56,7 @@
     <MaxYSpeed>3</MaxYSpeed>
     <MinRotation>0.1</MinRotation>
     <MaxRotation>1</MaxRotation>
+    <ExplodeToSmallerAstroidsScaleTH>1.5</ExplodeToSmallerAstroidsScaleTH>
   </AstroidtMovementController>
   <PickupClawController>
     <VelocityMultiplier>10</VelocityMultiplier>
