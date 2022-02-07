@@ -2,7 +2,6 @@ using Assets.Common;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class AstroidtMovementController : MonoBehaviour
 {
 
@@ -11,14 +10,13 @@ public class AstroidtMovementController : MonoBehaviour
     public float MaxXSpeed, MaxYSpeed, MinRotation, MaxRotation, ExplodeToSmallerAstroidsScaleTH;
     private float _rotationSpeed;
 
-
     void Start()
     {
         if (UseConfigFile)
             ConfigureFromFile();
 
         GetComponent<Rigidbody2D>().velocity = GetVelocityByQuarters();
-        _rotationSpeed = GetRotationSpeed(MaxRotation* (-1), MaxRotation);
+        _rotationSpeed = GetRotationSpeed(-MaxRotation, MaxRotation);
     }
 
     void SetScale(int scale) 
@@ -66,10 +64,10 @@ public class AstroidtMovementController : MonoBehaviour
     private void ExplodeToSmallerAstroids()
     {
         GameObject smallerAstroid;
-        for(int i=0; i<Random.Range(2,4); i++)
+        for(int i = 0; i < Random.Range(2,4); i++)
         {
             smallerAstroid = Instantiate(AstroidPrefab,  new Vector3(transform.position.x, transform.position.y, 0), Quaternion.AngleAxis(0, Vector3.forward));
-            smallerAstroid.SendMessage("SetScale", transform.localScale.x/2);
+            smallerAstroid.SendMessage("SetScale", transform.localScale.x / 2);
             smallerAstroid.SendMessage("SetVelocity", true);
         }
     }
@@ -92,18 +90,18 @@ public class AstroidtMovementController : MonoBehaviour
 
     private float GetX360Velocity()
     {
-        return UnityEngine.Random.Range(MaxXSpeed / transform.localScale.x * (-1), MaxXSpeed / transform.localScale.x);
+        return UnityEngine.Random.Range(-MaxXSpeed / transform.localScale.x, MaxXSpeed / transform.localScale.x);
     }
 
     private float GetY360Velocity()
     {
-        return UnityEngine.Random.Range(MaxYSpeed / transform.localScale.x * (-1), MaxYSpeed / transform.localScale.x);
+        return UnityEngine.Random.Range(-MaxYSpeed / transform.localScale.x, MaxYSpeed / transform.localScale.x);
     }
 
     private float GetXVelocityByQuarters() 
     {
         if (transform.position.x > 0)
-            return UnityEngine.Random.Range(MaxXSpeed / transform.localScale.x * (-1), 0f);
+            return UnityEngine.Random.Range(-MaxXSpeed / transform.localScale.x, 0f);
         else 
             return UnityEngine.Random.Range(0f, MaxXSpeed / transform.localScale.x);
     }
@@ -111,7 +109,7 @@ public class AstroidtMovementController : MonoBehaviour
     private float GetYVelocityByQuarters() 
     {
         if (transform.position.y > 0)
-            return UnityEngine.Random.Range(MaxYSpeed / transform.localScale.x * (-1), 0f);
+            return UnityEngine.Random.Range(-MaxYSpeed / transform.localScale.x, 0f);
         else
             return UnityEngine.Random.Range(0f, MaxYSpeed / transform.localScale.x);
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Assets.Common;
 using UnityEngine;
 
-public class EnemyMovementController : MonoBehaviour
+public class EnemyMovementController : MonoBehaviour 
 {
     public float MinXForce, MaxXForce, MinYForce, MaxYForce;
     public float EnemyThrust;

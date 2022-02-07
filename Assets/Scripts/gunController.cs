@@ -16,7 +16,6 @@ public class gunController : MonoBehaviour
     private int _currentWeapon = 0;
     private float CooldownTime = 0;
     private bool _canSwitch = true;
-    private Transform _firePoint;
     private GameObject ShotPrefab;
     private const float RADIUS = 0.65f;
     private const float SHOOTING_TH = 0.8f;
@@ -32,7 +31,6 @@ public class gunController : MonoBehaviour
 
             CoolDownInterval = propsFromConfig["CoolDownInterval"];
         }
-        _firePoint = transform;
     }
 
     void Update()
@@ -58,8 +56,8 @@ public class gunController : MonoBehaviour
     private void ChangeGunPosition()
     {
         float angle = GetAngle();
-        _firePoint.position = Utils.AngleAndRadiusToPointOnCircle(angle, RADIUS) + Halalit.transform.position;  //new Vector2(x, y);
-        _firePoint.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.position = Utils.AngleAndRadiusToPointOnCircle(angle, RADIUS) + Halalit.transform.position;  //new Vector2(x, y);
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
     private float GetAngle()
@@ -100,8 +98,7 @@ public class gunController : MonoBehaviour
 
     private void Shoot() 
     {
-        // Debug.Log("FirePoint.position " + _firePoint.position + ", _firePoint.rotation " + _firePoint.rotation);
-        Instantiate(ShotPrefab, _firePoint.position, _firePoint.rotation);
+        Instantiate(ShotPrefab, transform.position, transform.rotation);
         CooldownTime = Time.time + CoolDownInterval;
     }
 
