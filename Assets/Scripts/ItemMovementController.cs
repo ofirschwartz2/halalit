@@ -9,11 +9,11 @@ public class ItemMovementController : MonoBehaviour
     public float MaxSpeed;
     public bool UseConfigFile;
 
-    void Start(Vector2 hitDirectionNormalized) 
+    void StartFromInstantiation(Vector2 hitDirectionNormalized) 
     {
         if (UseConfigFile)
             ConfigureFromFile();
-            
+
         float velocityMultiplier = Random.Range(0f, MaxSpeed);
         GetComponent<Rigidbody2D>().velocity = Utils.Get180RandomNormalizedVector(hitDirectionNormalized) * velocityMultiplier;
     }
