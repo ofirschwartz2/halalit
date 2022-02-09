@@ -83,7 +83,7 @@
   </FireRateItem>
 
   <ItemMovementController>
-    <MaxSpeed>1</MaxSpeed>
+    <MaxSpeed>2</MaxSpeed>
   </ItemMovementController>
 
 </scripts>

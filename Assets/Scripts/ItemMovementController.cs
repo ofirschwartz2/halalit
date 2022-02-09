@@ -9,15 +9,13 @@ public class ItemMovementController : MonoBehaviour
     public float MaxSpeed;
     public bool UseConfigFile;
 
-    void Start()
+    void Start(Vector2 hitDirectionNormalized) 
     {
         if (UseConfigFile)
             ConfigureFromFile();
-    }
-
-    void SetVelocity(Vector2 hitDirectionNormalized) 
-    {
-        GetComponent<Rigidbody2D>().velocity = Utils.Get180RandomNormalizedVector(hitDirectionNormalized);
+            
+        float velocityMultiplier = Random.Range(0f, MaxSpeed);
+        GetComponent<Rigidbody2D>().velocity = Utils.Get180RandomNormalizedVector(hitDirectionNormalized) * velocityMultiplier;
     }
 
     private void OnTriggerExit2D(Collider2D other)

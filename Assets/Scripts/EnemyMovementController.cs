@@ -48,7 +48,7 @@ public class EnemyMovementController : MonoBehaviour
             Vector2 normalizedDifference = (_rigidBody.transform.position - other.transform.position).normalized;
 
             GameObject item = Instantiate(ItemPrefab,  _rigidBody.transform.position, Quaternion.AngleAxis(0, Vector3.forward));
-            item.SendMessage("SetVelocity", normalizedDifference);
+            item.SendMessage("Start", normalizedDifference);
         }
 
         Destroy(gameObject);
