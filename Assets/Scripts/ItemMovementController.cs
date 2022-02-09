@@ -15,9 +15,9 @@ public class ItemMovementController : MonoBehaviour
             ConfigureFromFile();
     }
 
-    void SetVelocity(Vector2 normalized180Direction) 
+    void SetVelocity(Vector2 hitDirectionNormalized) 
     {
-        GetComponent<Rigidbody2D>().velocity = normalized180Direction;
+        GetComponent<Rigidbody2D>().velocity = Utils.Get180RandomNormalizedVector(hitDirectionNormalized);
     }
 
     private void OnTriggerExit2D(Collider2D other)

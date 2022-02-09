@@ -46,7 +46,7 @@
     <EnemyThrust>1.2</EnemyThrust>
     <SpeedLimit>2</SpeedLimit>
     <_rigidBody.drag>2</_rigidBody.drag>
-    <ItemDropRate>30</ItemDropRate>
+    <ItemDropRate>50</ItemDropRate>
   </EnemyMovementController>
 
   <Shot1Script>
