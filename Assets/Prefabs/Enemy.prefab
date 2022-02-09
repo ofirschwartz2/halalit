@@ -144,12 +144,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9403f12e486ac734cb824a5efda66c05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MinXSpeed: 0
-  MaxXSpeed: 0
-  MinYSpeed: 0
-  MaxYSpeed: 0
-  XofEndOfMap: 0
-  YofEndOfMap: 0
+  MinXForce: 0
+  MaxXForce: 0
+  MinYForce: 0
+  MaxYForce: 0
   EnemyThrust: 0
-  UseConfigFile: 1
   SpeedLimit: 0
+  UseConfigFile: 1
+  ItemDropRate: 0
+  ItemPrefab: {fileID: 9195436676840446505, guid: 13c92eecc74a940419bf69c7ec12c94d, type: 3}

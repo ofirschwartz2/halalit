@@ -25,10 +25,10 @@
     <MaxNumberOfEnemiesAllowed>20</MaxNumberOfEnemiesAllowed>
     <MaxNumberOfAstroidsAllowed>20</MaxNumberOfAstroidsAllowed>
     <MaxNumberOfItemsAllowed>10</MaxNumberOfItemsAllowed>
-    <NumberOfInnerAstroids>10</NumberOfInnerAstroids>
-    <NumberOfEnemies>0</NumberOfEnemies>
+    <NumberOfInnerAstroids>0</NumberOfInnerAstroids>
+    <NumberOfEnemies>20</NumberOfEnemies>
     <NumberOfAstroids>0</NumberOfAstroids>
-    <NumberOfItems>3</NumberOfItems>
+    <NumberOfItems>0</NumberOfItems>
     <SlotsOnGameGreedX>10</SlotsOnGameGreedX>
     <SlotsOnGameGreedY>10</SlotsOnGameGreedY>
     <InnerAstroidInfiniteLoopTH>400</InnerAstroidInfiniteLoopTH>
@@ -46,6 +46,7 @@
     <EnemyThrust>1.2</EnemyThrust>
     <SpeedLimit>2</SpeedLimit>
     <_rigidBody.drag>2</_rigidBody.drag>
+    <ItemDropRate>30</ItemDropRate>
   </EnemyMovementController>
 
   <Shot1Script>
@@ -56,9 +57,9 @@
     <Lifetime>0.2</Lifetime>
   </Shot2Script>
 
-  <gunController>
+  <GunController>
   <CoolDownInterval>0.5</CoolDownInterval>
-  </gunController>
+  </GunController>
 
   <AstroidtMovementController>
     <MaxXSpeed>3</MaxXSpeed>
@@ -77,8 +78,12 @@
     <RopeLength>10</RopeLength>
   </PickupClawController>
 
-  <FireRateItemController>
+  <FireRateItem>
     <CooldownMultiplier>0.9</CooldownMultiplier>
-  </FireRateItemController>
+  </FireRateItem>
+
+  <ItemMovementController>
+    <MaxSpeed>1</MaxSpeed>
+  </ItemMovementController>
 
 </scripts>

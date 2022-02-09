@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class gunController : MonoBehaviour
+public class GunController : MonoBehaviour
 {
 
     public bool UseConfigFile;
