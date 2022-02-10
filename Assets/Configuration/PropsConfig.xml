@@ -24,16 +24,14 @@
     <MaxNumberOfGameObjectsAllowed>60</MaxNumberOfGameObjectsAllowed>
     <MaxNumberOfEnemiesAllowed>20</MaxNumberOfEnemiesAllowed>
     <MaxNumberOfAstroidsAllowed>20</MaxNumberOfAstroidsAllowed>
-    <MaxNumberOfItemsAllowed>10</MaxNumberOfItemsAllowed>
-    <NumberOfInnerAstroids>10</NumberOfInnerAstroids>
-    <NumberOfEnemies>10</NumberOfEnemies>
+    <NumberOfInnerAstroids>5</NumberOfInnerAstroids>
+    <NumberOfEnemies>5</NumberOfEnemies>
     <NumberOfAstroids>0</NumberOfAstroids>
-    <NumberOfItems>0</NumberOfItems>
     <SlotsOnGameGreedX>10</SlotsOnGameGreedX>
     <SlotsOnGameGreedY>10</SlotsOnGameGreedY>
-    <InnerAstroidInfiniteLoopTH>400</InnerAstroidInfiniteLoopTH>
-    <InnerAstroidMinScale>5</InnerAstroidMinScale>
-    <InnerAstroidMaxScale>15</InnerAstroidMaxScale>
+    <InfiniteLoopTH>400</InfiniteLoopTH>
+    <InnerAstroidMinScale>1</InnerAstroidMinScale>
+    <InnerAstroidMaxScale>10</InnerAstroidMaxScale>
   </SceneFactory>
 
   <EnemyMovementController>
@@ -46,6 +44,7 @@
     <EnemyThrust>1.2</EnemyThrust>
     <SpeedLimit>2</SpeedLimit>
     <_rigidBody.drag>2</_rigidBody.drag>
+    <ItemDropRate>50</ItemDropRate>
   </EnemyMovementController>
 
   <Shot1Script>
@@ -56,9 +55,9 @@
     <Lifetime>0.2</Lifetime>
   </Shot2Script>
 
-  <gunController>
+  <GunController>
   <CoolDownInterval>0.5</CoolDownInterval>
-  </gunController>
+  </GunController>
 
   <AstroidtMovementController>
     <MaxXSpeed>3</MaxXSpeed>
@@ -66,6 +65,7 @@
     <MinRotation>0.1</MinRotation>
     <MaxRotation>1</MaxRotation>
     <ExplodeToSmallerAstroidsScaleTH>1.5</ExplodeToSmallerAstroidsScaleTH>
+    <ItemDropRate>50</ItemDropRate>
   </AstroidtMovementController>
 
   <PickupClawController>
@@ -77,8 +77,12 @@
     <RopeLength>10</RopeLength>
   </PickupClawController>
 
-  <FireRateItemController>
+  <FireRateItem>
     <CooldownMultiplier>0.9</CooldownMultiplier>
-  </FireRateItemController>
+  </FireRateItem>
+
+  <ItemMovementController>
+    <MaxSpeed>2</MaxSpeed>
+  </ItemMovementController>
 
 </scripts>

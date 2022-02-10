@@ -9,6 +9,7 @@ public class PickupClawController : MonoBehaviour
 {
     private const float POSITION_MIN_PROXIMITY = 0.2f;
     private const float ROTATION_MIN_PROXIMITY = 1;
+    private const float DRAG_AT_FULL_ROPE_SPEED = 0.1f;
 
     public bool UseConfigFile;
     public float VelocityMultiplier;
@@ -18,7 +19,6 @@ public class PickupClawController : MonoBehaviour
     public float GrabDelay;
     public float RopeLength;
     public GameObject Halalit;
-    public GameObject Gun;
 
     private PickupClawStatus _pcStatus;
     private Rigidbody2D _rigidBody;
@@ -155,7 +155,7 @@ public class PickupClawController : MonoBehaviour
 
         if (_item != null)
         {
-            _item.SendMessage("LoadItem", Gun);
+            _item.SendMessage("LoadItem");
             Destroy(_item);
         }
     }
@@ -179,9 +179,9 @@ public class PickupClawController : MonoBehaviour
     {
         UpdatePcDirection(goal);
 
-        if (_pcStatus == PickupClawStatus.MOVING_BACKWARD)
+        if (_pcStatus == PickupClawStatus.MOVING_BACKWARD && AtFullRopeLength())
         {
-            MoveRelativeToHalalit();
+            Drag();
         }
 
         if (_pcStatus == PickupClawStatus.MOVING_FORWARD || _perfectRotationToHalalit)
@@ -209,16 +209,13 @@ public class PickupClawController : MonoBehaviour
         _pcDirection = new Vector2(relativeDeltaX / shootDirectionMagnitude, relativeDeltaY / shootDirectionMagnitude);
     }
 
-    private void MoveRelativeToHalalit()
+    private void Drag()
     {
-        float halalitToShootPointDistance = Utils.GetDistanceBetweenTwoPoints(_halalitCurrentPosition, _shootPoint);
-        float clawToShootPointDistance = Utils.GetDistanceBetweenTwoPoints(transform.position, _shootPoint);
-        float relativeMultiplier = clawToShootPointDistance / halalitToShootPointDistance;
+        float halalitDeltaX = (_halalitCurrentPosition.x - _halalitLastFramePosition.x);
+        float halalitDeltaY = (_halalitCurrentPosition.y - _halalitLastFramePosition.y);
+        Vector3 newPosition = new Vector3(transform.position.x + halalitDeltaX, transform.position.y + halalitDeltaY, transform.position.z);
 
-        float relativeDeltaX = relativeMultiplier * (_halalitCurrentPosition.x - _halalitLastFramePosition.x);
-        float relativeDeltaY = relativeMultiplier * (_halalitCurrentPosition.y - _halalitLastFramePosition.y);
-
-        transform.position = new Vector3(transform.position.x + relativeDeltaX, transform.position.y + relativeDeltaY, 1);
+        transform.position = Vector3.MoveTowards(transform.position, newPosition, DRAG_AT_FULL_ROPE_SPEED);
     }
 
     private void RotateToPcDirectionInstantly()
