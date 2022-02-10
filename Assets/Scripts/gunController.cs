@@ -3,33 +3,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class gunController : MonoBehaviour
+public class GunController : MonoBehaviour
 {
 
     public bool UseConfigFile;
-    public float CooldownTime = 0;
+    public float CoolDownInterval;
     public List<GameObject> ShotsPrefab;
     public GameObject Halalit;
     public Joystick GunJoystick;
     public Joystick WeaponSwitchJoystick;
 
     private int _currentWeapon = 0;
+    private float CooldownTime = 0;
     private bool _canSwitch = true;
     private GameObject ShotPrefab;
     private const float RADIUS = 0.65f;
     private const float SHOOTING_TH = 0.8f;
     private const float SWITCH_GUN_TH = 0.8f;
-    private const float COOL_DOWN_INTERVAL = 0.5f;
 
     void Start()
     {
         ShotPrefab = ShotsPrefab[_currentWeapon];
         if (UseConfigFile)
         {
-            string[] props = { "CooldownTime" };
+            string[] props = {"CoolDownInterval"};
             Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
 
-            CooldownTime = propsFromConfig["CooldownTime"];
+            CoolDownInterval = propsFromConfig["CoolDownInterval"];
         }
     }
 
@@ -98,9 +98,8 @@ public class gunController : MonoBehaviour
 
     private void Shoot() 
     {
-        // Debug.Log("FirePoint.position " + transform.position + ", transform.rotation " + transform.rotation);
         Instantiate(ShotPrefab, transform.position, transform.rotation);
-        CooldownTime = Time.time + COOL_DOWN_INTERVAL;
+        CooldownTime = Time.time + CoolDownInterval;
     }
 
     private void SwitchGunUp()
@@ -122,4 +121,13 @@ public class gunController : MonoBehaviour
         ShotPrefab = ShotsPrefab[_currentWeapon];    
         _canSwitch = false;
     }
+
+    #region Items
+
+    void FasterCooldownInterval(float cooldownMutiplier)
+    {
+        CoolDownInterval *= cooldownMutiplier;
+    }
+
+    #endregion
 }

@@ -173,8 +173,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AstroidPrefab: {fileID: 6741412782414407016}
+  ItemPrefab: {fileID: 9195436676840446505, guid: 13c92eecc74a940419bf69c7ec12c94d, type: 3}
   UseConfigFile: 1
   MaxXSpeed: 0
   MaxYSpeed: 0
   MinRotation: 0
   MaxRotation: 0
+  ExplodeToSmallerAstroidsScaleTH: 0
+  ItemDropRate: 0

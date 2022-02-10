@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <scripts>
+
   <CameraScript>
     <CameraXSize>21.5</CameraXSize>
     <CameraYSize>12</CameraYSize>
   </CameraScript>
+
   <HalalitMovementController>
     <ForceMultiplier>10</ForceMultiplier>
     <SpinSpeed>10</SpinSpeed>
@@ -12,25 +14,26 @@
     <SpeedLimit>15</SpeedLimit>
     <CoolDownInterval>0.1</CoolDownInterval>
   </HalalitMovementController>
+
   <EnemyFactory>
     <MaxNumberOfEnemies>30</MaxNumberOfEnemies>
     <NumberOfEnemies>20</NumberOfEnemies>
   </EnemyFactory>
+
   <SceneFactory>
     <MaxNumberOfGameObjectsAllowed>60</MaxNumberOfGameObjectsAllowed>
     <MaxNumberOfEnemiesAllowed>20</MaxNumberOfEnemiesAllowed>
     <MaxNumberOfAstroidsAllowed>20</MaxNumberOfAstroidsAllowed>
-    <MaxNumberOfItemsAllowed>10</MaxNumberOfItemsAllowed>
-    <NumberOfInnerAstroids>10</NumberOfInnerAstroids>
-    <NumberOfEnemies>3</NumberOfEnemies>
-    <NumberOfAstroids>3</NumberOfAstroids>
-    <NumberOfItems>3</NumberOfItems>
+    <NumberOfInnerAstroids>5</NumberOfInnerAstroids>
+    <NumberOfEnemies>5</NumberOfEnemies>
+    <NumberOfAstroids>0</NumberOfAstroids>
     <SlotsOnGameGreedX>10</SlotsOnGameGreedX>
     <SlotsOnGameGreedY>10</SlotsOnGameGreedY>
-    <InnerAstroidInfiniteLoopTH>400</InnerAstroidInfiniteLoopTH>
-    <InnerAstroidMinScale>5</InnerAstroidMinScale>
-    <InnerAstroidMaxScale>15</InnerAstroidMaxScale>
+    <InfiniteLoopTH>400</InfiniteLoopTH>
+    <InnerAstroidMinScale>1</InnerAstroidMinScale>
+    <InnerAstroidMaxScale>10</InnerAstroidMaxScale>
   </SceneFactory>
+
   <EnemyMovementController>
     <MinXForce>-5</MinXForce>
     <MaxXForce>5</MaxXForce>
@@ -41,23 +44,30 @@
     <EnemyThrust>1.2</EnemyThrust>
     <SpeedLimit>2</SpeedLimit>
     <_rigidBody.drag>2</_rigidBody.drag>
+    <ItemDropRate>50</ItemDropRate>
   </EnemyMovementController>
+
   <Shot1Script>
     <Speed>10</Speed>
   </Shot1Script>
+
   <Shot2Script>
     <Lifetime>0.2</Lifetime>
   </Shot2Script>
-  <gunController>
-    <CooldownTime>0</CooldownTime>
-  </gunController>
+
+  <GunController>
+  <CoolDownInterval>0.5</CoolDownInterval>
+  </GunController>
+
   <AstroidtMovementController>
     <MaxXSpeed>3</MaxXSpeed>
     <MaxYSpeed>3</MaxYSpeed>
     <MinRotation>0.1</MinRotation>
     <MaxRotation>1</MaxRotation>
     <ExplodeToSmallerAstroidsScaleTH>1.5</ExplodeToSmallerAstroidsScaleTH>
+    <ItemDropRate>50</ItemDropRate>
   </AstroidtMovementController>
+
   <PickupClawController>
     <VelocityMultiplier>10</VelocityMultiplier>
     <RotationToItemMultiplier>3</RotationToItemMultiplier>
@@ -66,4 +76,13 @@
     <GrabDelay>0.5</GrabDelay>
     <RopeLength>10</RopeLength>
   </PickupClawController>
+
+  <FireRateItem>
+    <CooldownMultiplier>0.9</CooldownMultiplier>
+  </FireRateItem>
+
+  <ItemMovementController>
+    <MaxSpeed>2</MaxSpeed>
+  </ItemMovementController>
+
 </scripts>

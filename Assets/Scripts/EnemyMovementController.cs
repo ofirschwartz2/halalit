@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class EnemyMovementController : MonoBehaviour 
 {
-    public float MinXForce, MaxXForce, MinYForce, MaxYForce;
-    public float EnemyThrust;
+    public float MinXForce, MaxXForce, MinYForce, MaxYForce, EnemyThrust, SpeedLimit;
     public bool UseConfigFile;
-    public float SpeedLimit;
+    public int ItemDropRate;
+    public GameObject ItemPrefab;
+
     private Rigidbody2D _rigidBody;
     private float _xForce;
     private float _yForce;
@@ -17,17 +18,8 @@ public class EnemyMovementController : MonoBehaviour
     {
         _rigidBody = GetComponent<Rigidbody2D>(); 
         if (UseConfigFile)
-        {
-            string[] props = { "MinXForce", "MaxXForce", "MinYForce", "MaxYForce", "EnemyThrust", "SpeedLimit", "_rigidBody.drag"};
-            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
-            MinXForce = propsFromConfig["MinXForce"];
-            MaxXForce = propsFromConfig["MaxXForce"];
-            MinYForce = propsFromConfig["MinYForce"];
-            MaxYForce = propsFromConfig["MaxYForce"];
-            EnemyThrust = propsFromConfig["EnemyThrust"];
-            SpeedLimit = propsFromConfig["SpeedLimit"];
-            _rigidBody.drag = propsFromConfig["_rigidBody.drag"];
-        }
+            ConfigureFromFile();
+
         _xForce = Random.Range(MinXForce, MaxXForce);
         _yForce = Random.Range(MinYForce, MaxYForce);
         tag = "Enemy";
@@ -42,13 +34,31 @@ public class EnemyMovementController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Shot"))
-            Destroy(gameObject);
+            KillMe(other);
         else if (other.gameObject.CompareTag("Halalit") || other.gameObject.CompareTag("Astroid") || other.gameObject.CompareTag("Enemy"))
             KnockMeBack(other);
         else if (other.gameObject.CompareTag("Background"))
             GoInAnotherDirection();
     }
 
+    private void KillMe(Collider2D other)
+    {
+        if(ShouldDropItem())
+        {
+            Vector2 normalizedDifference = (_rigidBody.transform.position - other.transform.position).normalized;
+
+            GameObject item = Instantiate(ItemPrefab,  _rigidBody.transform.position, Quaternion.AngleAxis(0, Vector3.forward));
+            item.SendMessage("StartFromInstantiation", normalizedDifference);
+        }
+
+        Destroy(gameObject);
+    }
+    
+    private bool ShouldDropItem()
+    {
+        return Random.Range(0,100) < ItemDropRate ;
+    }
+    
     private void GoInAnotherDirection()
     {
         _xForce = GoInAnotherXDirection();
@@ -84,4 +94,18 @@ public class EnemyMovementController : MonoBehaviour
     {
         return Utils.GetVectorMagnitude(_rigidBody.velocity) < SpeedLimit;
     }
+
+    private void ConfigureFromFile()
+    {
+            string[] props = { "MinXForce", "MaxXForce", "MinYForce", "MaxYForce", "EnemyThrust", "SpeedLimit", "_rigidBody.drag", "ItemDropRate"};
+            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
+            MinXForce = propsFromConfig["MinXForce"];
+            MaxXForce = propsFromConfig["MaxXForce"];
+            MinYForce = propsFromConfig["MinYForce"];
+            MaxYForce = propsFromConfig["MaxYForce"];
+            EnemyThrust = propsFromConfig["EnemyThrust"];
+            SpeedLimit = propsFromConfig["SpeedLimit"];
+            _rigidBody.drag = propsFromConfig["_rigidBody.drag"];
+            ItemDropRate = (int)propsFromConfig["ItemDropRate"];
+        }
 }

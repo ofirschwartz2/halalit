@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class HalalitMovementController : MonoBehaviour
 {
+    
     public bool UseConfigFile;
     public float ForceMultiplier;
     public float SpinSpeed;
@@ -12,8 +13,8 @@ public class HalalitMovementController : MonoBehaviour
     public float HalalitThrust;
     public float SpeedLimit;
     public float CoolDownInterval;
-    private float _cooldownTime = 0;
 
+    private float _cooldownTime = 0;
     private Rigidbody2D _rigidBody;
 
     void Start()

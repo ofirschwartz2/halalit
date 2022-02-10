@@ -5,31 +5,37 @@ using UnityEngine;
 public class AstroidtMovementController : MonoBehaviour
 {
 
-    public GameObject AstroidPrefab;
+    public GameObject AstroidPrefab, ItemPrefab;
     public bool UseConfigFile;
     public float MaxXSpeed, MaxYSpeed, MinRotation, MaxRotation, ExplodeToSmallerAstroidsScaleTH;
+    public int ItemDropRate;
+
     private float _rotationSpeed;
+    private Rigidbody2D _rigidBody;
 
     void Start()
     {
         if (UseConfigFile)
             ConfigureFromFile();
-
-        GetComponent<Rigidbody2D>().velocity = GetVelocityByQuarters();
+        _rigidBody = GetComponent<Rigidbody2D>();
+        _rigidBody.velocity = GetVelocityByQuarters();
         _rotationSpeed = GetRotationSpeed(-MaxRotation, MaxRotation);
+        Debug.Log("ItemDropRate: " + ItemDropRate);
     }
 
     void SetScale(int scale) 
     {
         transform.localScale = new Vector3(scale, scale, 1);
+        ItemDropRate = ItemDropRate / scale;
+        Debug.Log("ItemDropRate: " + ItemDropRate);
     }
 
     void SetVelocity(bool get360VelocityFlag) 
     {
         if (get360VelocityFlag)
-            GetComponent<Rigidbody2D>().velocity = Get360Velocity();
+            _rigidBody.velocity = Get360Velocity();
         else
-            GetComponent<Rigidbody2D>().velocity = GetVelocityByQuarters();
+            _rigidBody.velocity = GetVelocityByQuarters();
 
     }
 
@@ -51,14 +57,27 @@ public class AstroidtMovementController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Shot"))
-            AstroidExplotion();
+            AstroidExplotion(other);
     }
 
-    private void AstroidExplotion()
+    private void AstroidExplotion(Collider2D other)
     {
+        if (ShouldDropItem())
+        {
+            Vector2 normalizedDifference = (_rigidBody.transform.position - other.transform.position).normalized;
+
+            GameObject item = Instantiate(ItemPrefab,  _rigidBody.transform.position, Quaternion.AngleAxis(0, Vector3.forward));
+            item.SendMessage("StartFromInstantiation", normalizedDifference);
+        }
+            
         if(transform.localScale.x > ExplodeToSmallerAstroidsScaleTH)
             ExplodeToSmallerAstroids();
         Destroy(gameObject);   
+    }
+
+    private bool ShouldDropItem()
+    {
+        return Random.Range(0,100) < ItemDropRate ;
     }
 
     private void ExplodeToSmallerAstroids()
@@ -116,13 +135,14 @@ public class AstroidtMovementController : MonoBehaviour
 
     private void ConfigureFromFile()
     {
-        string[] props = {"MaxXSpeed", "MaxYSpeed", "MinRotation", "MaxRotation", "ExplodeToSmallerAstroidsScaleTH"};
+        string[] props = {"MaxXSpeed", "MaxYSpeed", "MinRotation", "MaxRotation", "ExplodeToSmallerAstroidsScaleTH", "ItemDropRate"};
         Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
         MaxXSpeed = propsFromConfig["MaxXSpeed"];
         MaxYSpeed = propsFromConfig["MaxYSpeed"];
         MinRotation = propsFromConfig["MinRotation"];
         MaxRotation = propsFromConfig["MaxRotation"];
         ExplodeToSmallerAstroidsScaleTH =  propsFromConfig["ExplodeToSmallerAstroidsScaleTH"];
+        ItemDropRate = (int)propsFromConfig["ItemDropRate"];
     }
 
 }

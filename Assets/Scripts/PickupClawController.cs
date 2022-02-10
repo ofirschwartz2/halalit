@@ -155,7 +155,7 @@ public class PickupClawController : MonoBehaviour
 
         if (_item != null)
         {
-            // TODO: Load the Item (Each item should implement an interface with a function LoadItem - OOP)
+            _item.SendMessage("LoadItem");
             Destroy(_item);
         }
     }
