@@ -20,23 +20,27 @@ public class AstroidtMovementController : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody2D>();
         _rigidBody.velocity = GetVelocityByQuarters();
         _rotationSpeed = GetRotationSpeed(-MaxRotation, MaxRotation);
-        Debug.Log("ItemDropRate: " + ItemDropRate);
+        ItemDropRate = (int)Mathf.Ceil(ItemDropRate / transform.localScale.x);
     }
 
-    void SetScale(int scale) 
+    void SetScaleAndVelocity(float[] scaleAndVelocity) 
+    {
+        SetScale(scaleAndVelocity[0]);
+        //SetVelocity(scaleAndVelocity[1]);
+    }
+
+    private void SetScale(float scale) 
     {
         transform.localScale = new Vector3(scale, scale, 1);
-        ItemDropRate = ItemDropRate / scale;
-        Debug.Log("ItemDropRate: " + ItemDropRate);
+        ItemDropRate = (int)Mathf.Ceil(ItemDropRate / scale);
     }
 
-    void SetVelocity(bool get360VelocityFlag) 
+    private void SetVelocity(float get360VelocityFlag) 
     {
-        if (get360VelocityFlag)
+        if (get360VelocityFlag == 1)
             _rigidBody.velocity = Get360Velocity();
         else
             _rigidBody.velocity = GetVelocityByQuarters();
-
     }
 
     void Update()
@@ -87,12 +91,13 @@ public class AstroidtMovementController : MonoBehaviour
         for(int i = 0; i < Random.Range(2,4); i++)
         {
             smallerAstroid = Instantiate(AstroidPrefab,  new Vector3(transform.position.x, transform.position.y, 0), Quaternion.AngleAxis(0, Vector3.forward));
-            smallerAstroid.SendMessage("SetScale", transform.localScale.x / 2);
-            smallerAstroid.SendMessage("SetVelocity", true);
+            
+            float[] argumentsArray = new float[] { transform.localScale.x / 2, 1f };
+            smallerAstroid.SendMessage("SetScaleAndVelocity", argumentsArray);
         }
     }
 
-    void InnerOnTriggerEnter2D(Collider2D other) // DELETE?
+    public void InnerOnTriggerEnter2D(Collider2D other) // DELETE?
     {
         if (other.gameObject.CompareTag("Shot"))
             AstroidExplotion(other);
