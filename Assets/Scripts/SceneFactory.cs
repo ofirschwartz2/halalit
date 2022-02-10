@@ -7,8 +7,8 @@ using Assets.Enums;
 public class SceneFactory : MonoBehaviour
 {
     public bool UseConfigFile;
-    public GameObject Background, EnemyPrefab, AstroidPrefab, ItemPrefab;
-    public int NumberOfInnerAstroids, MaxNumberOfGameObjectsAllowed, MaxNumberOfEnemiesAllowed, NumberOfEnemies, MaxNumberOfAstroidsAllowed, NumberOfAstroids, MaxNumberOfItemsAllowed, NumberOfItems, SlotsOnGameGreedX, SlotsOnGameGreedY, InnerAstroidInfiniteLoopTH, InnerAstroidMinScale, InnerAstroidMaxScale;
+    public GameObject Background, EnemyPrefab, AstroidPrefab;
+    public int NumberOfInnerAstroids, MaxNumberOfGameObjectsAllowed, MaxNumberOfEnemiesAllowed, NumberOfEnemies, MaxNumberOfAstroidsAllowed, NumberOfAstroids, SlotsOnGameGreedX, SlotsOnGameGreedY, InfiniteLoopTH, InnerAstroidMinScale, InnerAstroidMaxScale;
     
     private float _xGreedSpacing, _yGreedSpacing;
     private Vector3 _bottomLeftPoint; 
@@ -29,7 +29,6 @@ public class SceneFactory : MonoBehaviour
         InstantiateNewGameObject(new NewInnerAstroid(AstroidPrefab), NumberOfInnerAstroids);
         InstantiateNewGameObject(new NewEnemy(EnemyPrefab), NumberOfEnemies);
         InstantiateNewGameObject(new NewAstroid(AstroidPrefab), NumberOfAstroids);
-        InstantiateNewGameObject(new NewItem(ItemPrefab), NumberOfItems);
     }
 
     private void InstantiateNewGameObject(INewGameObject newGameObject, int amount)
@@ -91,14 +90,14 @@ public class SceneFactory : MonoBehaviour
         else if(newGameObject is NewAstroid)
         {
             do{
-                if(++infiniteLoopBreak > 400)
+                if(++infiniteLoopBreak > InfiniteLoopTH)
                     throw new System.Exception("400 time trying to find a place without success");  
                 randPointOnGreed = GetRandomPointOnTheOuterEdge();
             } while (!IsThisPlaceFree(randPointOnGreed));
         } else
         {
             do{
-                if(++infiniteLoopBreak > 400)
+                if(++infiniteLoopBreak > InfiniteLoopTH)
                     throw new System.Exception("400 time trying to find a place without success");  
                 
                 int? width = newGameObject.GetEdgeWidthForInstantiation();
@@ -117,7 +116,7 @@ public class SceneFactory : MonoBehaviour
         Vector2 randPointOnGreed;
         int infiniteLoop = 0;
         do{
-            if(++infiniteLoop > InnerAstroidInfiniteLoopTH)
+            if(++infiniteLoop > InfiniteLoopTH)
             {
                 _stopCreatingInnerAstroids = true;
                 return Vector2.zero;
@@ -220,8 +219,7 @@ public class SceneFactory : MonoBehaviour
         return 
             NumberOfEnemies > MaxNumberOfEnemiesAllowed || 
             NumberOfAstroids > MaxNumberOfAstroidsAllowed || 
-            NumberOfItems > MaxNumberOfItemsAllowed ||
-            (NumberOfEnemies + NumberOfAstroids + NumberOfItems) > MaxNumberOfGameObjectsAllowed;
+            (NumberOfEnemies + NumberOfAstroids) > MaxNumberOfGameObjectsAllowed;
     }
 
     private void SetGreedVariables()
@@ -245,23 +243,21 @@ public class SceneFactory : MonoBehaviour
 
     private void ConfigureFromFile()
     {
-            string[] props = {"MaxNumberOfGameObjectsAllowed", "MaxNumberOfEnemiesAllowed", "NumberOfInnerAstroids", "NumberOfEnemies", "MaxNumberOfAstroidsAllowed", "NumberOfAstroids", "MaxNumberOfItemsAllowed", "NumberOfItems", "SlotsOnGameGreedX", "SlotsOnGameGreedY", "InnerAstroidInfiniteLoopTH", "InnerAstroidMinScale", "InnerAstroidMaxScale"};
+            string[] props = {"MaxNumberOfGameObjectsAllowed", "MaxNumberOfEnemiesAllowed", "NumberOfInnerAstroids", "NumberOfEnemies", "MaxNumberOfAstroidsAllowed", "NumberOfAstroids", "SlotsOnGameGreedX", "SlotsOnGameGreedY", "InfiniteLoopTH", "InnerAstroidMinScale", "InnerAstroidMaxScale"};
             Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
 
             MaxNumberOfGameObjectsAllowed = (int)propsFromConfig["MaxNumberOfGameObjectsAllowed"];
             MaxNumberOfEnemiesAllowed = (int)propsFromConfig["MaxNumberOfEnemiesAllowed"];
             MaxNumberOfAstroidsAllowed = (int)propsFromConfig["MaxNumberOfAstroidsAllowed"];
-            MaxNumberOfItemsAllowed = (int)propsFromConfig["MaxNumberOfItemsAllowed"];
             
             NumberOfInnerAstroids = (int)propsFromConfig["NumberOfInnerAstroids"];
             NumberOfEnemies = (int)propsFromConfig["NumberOfEnemies"];
             NumberOfAstroids = (int)propsFromConfig["NumberOfAstroids"];
-            NumberOfItems = (int)propsFromConfig["NumberOfItems"];
 
             SlotsOnGameGreedX = (int)propsFromConfig["SlotsOnGameGreedX"];
             SlotsOnGameGreedY = (int)propsFromConfig["SlotsOnGameGreedY"];
             
-            InnerAstroidInfiniteLoopTH = (int)propsFromConfig["InnerAstroidInfiniteLoopTH"];
+            InfiniteLoopTH = (int)propsFromConfig["InfiniteLoopTH"];
             InnerAstroidMinScale = (int)propsFromConfig["InnerAstroidMinScale"]; 
             InnerAstroidMaxScale = (int)propsFromConfig["InnerAstroidMaxScale"];
 

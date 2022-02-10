@@ -7,7 +7,7 @@ public class GunController : MonoBehaviour
 {
 
     public bool UseConfigFile;
-    public float CoolDownInterval = 0.5f;
+    public float CoolDownInterval;
     public List<GameObject> ShotsPrefab;
     public GameObject Halalit;
     public Joystick GunJoystick;

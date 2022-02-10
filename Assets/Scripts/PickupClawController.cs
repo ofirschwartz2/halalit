@@ -19,7 +19,6 @@ public class PickupClawController : MonoBehaviour
     public float GrabDelay;
     public float RopeLength;
     public GameObject Halalit;
-    public GameObject Gun;
 
     private PickupClawStatus _pcStatus;
     private Rigidbody2D _rigidBody;
@@ -156,7 +155,7 @@ public class PickupClawController : MonoBehaviour
 
         if (_item != null)
         {
-            _item.SendMessage("LoadItem", Gun);
+            _item.SendMessage("LoadItem");
             Destroy(_item);
         }
     }
