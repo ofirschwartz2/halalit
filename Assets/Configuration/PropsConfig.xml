@@ -24,14 +24,14 @@
     <MaxNumberOfGameObjectsAllowed>60</MaxNumberOfGameObjectsAllowed>
     <MaxNumberOfEnemiesAllowed>20</MaxNumberOfEnemiesAllowed>
     <MaxNumberOfAstroidsAllowed>20</MaxNumberOfAstroidsAllowed>
-    <NumberOfInnerAstroids>0</NumberOfInnerAstroids>
-    <NumberOfEnemies>20</NumberOfEnemies>
+    <NumberOfInnerAstroids>5</NumberOfInnerAstroids>
+    <NumberOfEnemies>5</NumberOfEnemies>
     <NumberOfAstroids>0</NumberOfAstroids>
     <SlotsOnGameGreedX>10</SlotsOnGameGreedX>
     <SlotsOnGameGreedY>10</SlotsOnGameGreedY>
     <InfiniteLoopTH>400</InfiniteLoopTH>
-    <InnerAstroidMinScale>5</InnerAstroidMinScale>
-    <InnerAstroidMaxScale>15</InnerAstroidMaxScale>
+    <InnerAstroidMinScale>1</InnerAstroidMinScale>
+    <InnerAstroidMaxScale>10</InnerAstroidMaxScale>
   </SceneFactory>
 
   <EnemyMovementController>
@@ -65,6 +65,7 @@
     <MinRotation>0.1</MinRotation>
     <MaxRotation>1</MaxRotation>
     <ExplodeToSmallerAstroidsScaleTH>1.5</ExplodeToSmallerAstroidsScaleTH>
+    <ItemDropRate>50</ItemDropRate>
   </AstroidtMovementController>
 
   <PickupClawController>
