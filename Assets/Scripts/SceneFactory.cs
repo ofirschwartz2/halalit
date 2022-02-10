@@ -164,7 +164,7 @@ public class SceneFactory : MonoBehaviour
         Vector2 randPointOnGreed;
         
         do{
-            if(++infiniteLoopBreak > 400)
+            if(++infiniteLoopBreak > InfiniteLoopTH)
                     throw new System.Exception("400 time trying to find a place without success: GetNewRandomPointOnScene"); 
 
             randPointOnGreed = Utils.GetRandomVector(
@@ -181,7 +181,7 @@ public class SceneFactory : MonoBehaviour
         Vector2 randPointOnGreed;
 
         do{
-            if(++infiniteLoopBreak > 400)
+            if(++infiniteLoopBreak > InfiniteLoopTH)
                 throw new System.Exception("400 time trying to find a place without success: GetNewRandomPointOnOneOfTheEdges"); 
             switch(Random.Range(0,4))
             {

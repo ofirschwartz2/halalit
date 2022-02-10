@@ -1,109 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6311263423113609271
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8479222379948220423}
-  - component: {fileID: 6975174135434299415}
-  - component: {fileID: 5163641903351684337}
-  - component: {fileID: 100103157235387883}
-  m_Layer: 0
-  m_Name: AstroidCollider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8479222379948220423
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6311263423113609271}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 6741412782414407020}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6975174135434299415
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6311263423113609271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8dbedc887b1251544b4179303343cc57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Astroid: {fileID: 6741412782414407016}
---- !u!60 &5163641903351684337
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6311263423113609271}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.55508614, y: 0.6787605}
-      - {x: 0.38733864, y: 0.8574171}
-      - {x: 0.064024925, y: 0.9857569}
-      - {x: -0.35154247, y: 0.8795748}
-      - {x: -0.8211871, y: 0.6593187}
-      - {x: -0.9141464, y: -0.067601204}
-      - {x: -0.6109347, y: -0.7235521}
-      - {x: -0.06802082, y: -0.8978329}
-      - {x: 0.3578564, y: -0.8658464}
-      - {x: 0.7340946, y: -0.62098026}
-      - {x: 0.909564, y: -0.29356432}
-      - {x: 0.8988333, y: -0.079239905}
---- !u!50 &100103157235387883
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6311263423113609271}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!1 &6741412782414407016
 GameObject:
   m_ObjectHideFlags: 0
@@ -115,8 +11,8 @@ GameObject:
   - component: {fileID: 6741412782414407020}
   - component: {fileID: 6741412782414407021}
   - component: {fileID: 6741412782414407018}
+  - component: {fileID: 6741412782414407019}
   - component: {fileID: 6741412782414407023}
-  - component: {fileID: 2119468975576618989}
   m_Layer: 0
   m_Name: Astroid
   m_TagString: Astroid
@@ -134,8 +30,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 9.94, y: 8.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 8479222379948220423}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -211,26 +106,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &6741412782414407023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6741412782414407016}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ab757a6af71b2e4f9aef3501b4aa3b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AstroidPrefab: {fileID: 6741412782414407016}
-  UseConfigFile: 1
-  MaxXSpeed: 0
-  MaxYSpeed: 0
-  MinRotation: 0
-  MaxRotation: 0
-  ExplodeToSmallerAstroidsScaleTH: 0
---- !u!60 &2119468975576618989
+--- !u!60 &6741412782414407019
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -240,7 +116,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -255,37 +131,6 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-<<<<<<< HEAD
-    - - {x: 0.8727362, y: -0.32273576}
-      - {x: 0.8905847, y: -0.28564137}
-      - {x: 0.8664043, y: -0.091276355}
-      - {x: 0.8526797, y: -0.021276359}
-      - {x: 0.61570215, y: 0.4764043}
-      - {x: 0.538958, y: 0.65942484}
-      - {x: 0.385, y: 0.8393581}
-      - {x: 0.20358928, y: 0.91076785}
-      - {x: 0.05506298, y: 0.9593261}
-      - {x: -0.36158073, y: 0.8537782}
-      - {x: -0.38879126, y: 0.8423365}
-      - {x: -0.70725363, y: 0.68534684}
-      - {x: -0.79863334, y: 0.64252543}
-      - {x: -0.8116437, y: 0.5982303}
-      - {x: -0.894906, y: -0.06383389}
-      - {x: -0.8935973, y: -0.0582304}
-      - {x: -0.89358735, y: -0.056719214}
-      - {x: -0.8919807, y: -0.06284946}
-      - {x: -0.8323055, y: -0.21192664}
-      - {x: -0.8027362, y: -0.27564183}
-      - {x: -0.7499434, y: -0.38907605}
-      - {x: -0.71650916, y: -0.46152925}
-      - {x: -0.6666224, y: -0.56571805}
-      - {x: -0.5971875, y: -0.7074532}
-      - {x: -0.5976755, y: -0.7085109}
-      - {x: -0.0630348, y: -0.87854743}
-      - {x: 0.36024603, y: -0.84726375}
-      - {x: 0.61262304, y: -0.682849}
-      - {x: 0.72273624, y: -0.60703826}
-=======
     - - {x: 0.905, y: -0.355}
       - {x: 0.92499995, y: -0.305}
       - {x: 0.92499995, y: -0.074999996}
@@ -336,4 +181,3 @@ MonoBehaviour:
   MaxRotation: 0
   ExplodeToSmallerAstroidsScaleTH: 0
   ItemDropRate: 0
->>>>>>> main
