@@ -3,20 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using Assets.Common;
 
-public class FireRateItemController : MonoBehaviour
+public class FireRateItem : MonoBehaviour, ILoadableItem
 {
     public bool UseConfigFile;
     public float CooldownMultiplier;
 
+    private GameObject _gun;
+
     void Start()
     {
+        _gun = GameObject.Find("Gun");
+        if(_gun == null)
+            throw new System.Exception("FireRateItem - Start: can't find the gun");
+
         if (UseConfigFile)
             ConfigureFromFile();
     }
 
-    public void LoadItem(GameObject gun)
+    public void LoadItem()
     {
-        gun.SendMessage("FasterCooldownInterval", CooldownMultiplier);
+        _gun.SendMessage("FasterCooldownInterval", CooldownMultiplier);
     }
 
     private void ConfigureFromFile()

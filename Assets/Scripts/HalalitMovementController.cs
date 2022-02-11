@@ -125,7 +125,4 @@ public class HalalitMovementController : MonoBehaviour
     }
     
     #endregion
-
-    #region Items
-    #endregion
 }

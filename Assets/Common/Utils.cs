@@ -45,6 +45,17 @@ namespace Assets.Common
             return angle;
         }
 
+        public static float AngleNormalizationBy1(float angle)
+        {
+            while (angle < -1)
+                angle += 1;
+
+            while (angle > 1)
+                angle -= 1;
+
+            return angle;
+        }
+
         public static float GetDistanceBetweenTwoPoints(Vector2 point1, Vector2 point2)
         {
             float deltaX = Math.Abs(point1.x - point2.x);
@@ -81,6 +92,14 @@ namespace Assets.Common
         public static Vector3 GetDirectionVector(Vector3 from, Vector3 to)
         {
             return new Vector3(to.x - from.x, to.y - from.y, 0).normalized;
+        }
+
+        public static Vector3 Get180RandomNormalizedVector(Vector3 generalDirection)
+        {
+            float newX = AngleNormalizationBy1(generalDirection.x + UnityEngine.Random.Range(-1f, 1f));
+            float newY = AngleNormalizationBy1(generalDirection.y + UnityEngine.Random.Range(-1f, 1f));
+            
+            return new Vector3(newX, newY);
         }
     }
 }

@@ -2,37 +2,37 @@ using Assets.Common;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class AstroidtMovementController : MonoBehaviour
 {
 
-    public GameObject AstroidPrefab;
+    public GameObject AstroidPrefab, ItemPrefab;
     public bool UseConfigFile;
     public float MaxXSpeed, MaxYSpeed, MinRotation, MaxRotation, ExplodeToSmallerAstroidsScaleTH;
-    private float _rotationSpeed;
+    public int ItemDropRate;
 
+    private float _rotationSpeed;
+    private Rigidbody2D _rigidBody;
 
     void Start()
     {
         if (UseConfigFile)
             ConfigureFromFile();
-
-        GetComponent<Rigidbody2D>().velocity = GetVelocityByQuarters();
-        _rotationSpeed = GetRotationSpeed(MaxRotation* (-1), MaxRotation);
+        _rigidBody = GetComponent<Rigidbody2D>();
+        if(_rigidBody.velocity == Vector2.zero)
+            _rigidBody.velocity = GetVelocityByQuarters();
+        _rotationSpeed = GetRotationSpeed(-MaxRotation, MaxRotation);
+        ItemDropRate = (int)Mathf.Ceil(ItemDropRate / transform.localScale.x);
     }
 
-    void SetScale(int scale) 
+    void SetScale(float scale) 
     {
         transform.localScale = new Vector3(scale, scale, 1);
+        ItemDropRate = (int)Mathf.Ceil(ItemDropRate / scale);
     }
 
-    void SetVelocity(bool get360VelocityFlag) 
+    void Set360Velocity() 
     {
-        if (get360VelocityFlag)
-            GetComponent<Rigidbody2D>().velocity = Get360Velocity();
-        else
-            GetComponent<Rigidbody2D>().velocity = GetVelocityByQuarters();
-
+        GetComponent<Rigidbody2D>().velocity = Get360Velocity();
     }
 
     void Update()
@@ -50,28 +50,44 @@ public class AstroidtMovementController : MonoBehaviour
         return UnityEngine.Random.Range(minRotation / transform.localScale.x, maxRotation / transform.localScale.x);
     }
 
-    private void AstroidExplotion()
+    private void AstroidExplotion(Collider2D other)
     {
+        if (ShouldDropItem())
+        {
+            Vector2 normalizedDifference = (_rigidBody.transform.position - other.transform.position).normalized;
+
+            GameObject item = Instantiate(ItemPrefab,  _rigidBody.transform.position, Quaternion.AngleAxis(0, Vector3.forward));
+            item.SendMessage("StartFromInstantiation", normalizedDifference);
+        }
+            
         if(transform.localScale.x > ExplodeToSmallerAstroidsScaleTH)
             ExplodeToSmallerAstroids();
         Destroy(gameObject);   
     }
 
+    private bool ShouldDropItem()
+    {
+        return Random.Range(0,100) < ItemDropRate ;
+    }
+
     private void ExplodeToSmallerAstroids()
     {
         GameObject smallerAstroid;
-        for(int i=0; i<Random.Range(2,4); i++)
+        int numOfSmallerAstroids = Random.Range(2,4);
+        
+        for(int i = 0; i < numOfSmallerAstroids; i++)
         {
-            smallerAstroid = Instantiate(AstroidPrefab,  new Vector3(transform.position.x, transform.position.y, 0), Quaternion.AngleAxis(0, Vector3.forward));
-            smallerAstroid.SendMessage("SetScale", transform.localScale.x/2);
-            smallerAstroid.SendMessage("SetVelocity", true);
+            smallerAstroid = Instantiate(AstroidPrefab,  new Vector3(transform.position.x + Random.Range(-0.1f,0.1f), transform.position.y + Random.Range(-0.1f,0.1f), 0), Quaternion.AngleAxis(0, Vector3.forward));
+            
+            smallerAstroid.SendMessage("SetScale", transform.localScale.x / 2);
+            smallerAstroid.SendMessage("Set360Velocity");
         }
     }
 
-    void InnerOnTriggerEnter2D(Collider2D other)
+    public void InnerOnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Shot"))
-            AstroidExplotion();
+            AstroidExplotion(other);
     }
 
     void InnerOnTriggerExit2D(Collider2D other)
@@ -92,18 +108,18 @@ public class AstroidtMovementController : MonoBehaviour
 
     private float GetX360Velocity()
     {
-        return UnityEngine.Random.Range(MaxXSpeed / transform.localScale.x * (-1), MaxXSpeed / transform.localScale.x);
+        return UnityEngine.Random.Range(-MaxXSpeed / transform.localScale.x, MaxXSpeed / transform.localScale.x);
     }
 
     private float GetY360Velocity()
     {
-        return UnityEngine.Random.Range(MaxYSpeed / transform.localScale.x * (-1), MaxYSpeed / transform.localScale.x);
+        return UnityEngine.Random.Range(-MaxYSpeed / transform.localScale.x, MaxYSpeed / transform.localScale.x);
     }
 
     private float GetXVelocityByQuarters() 
     {
         if (transform.position.x > 0)
-            return UnityEngine.Random.Range(MaxXSpeed / transform.localScale.x * (-1), 0f);
+            return UnityEngine.Random.Range(-MaxXSpeed / transform.localScale.x, 0f);
         else 
             return UnityEngine.Random.Range(0f, MaxXSpeed / transform.localScale.x);
     }
@@ -111,20 +127,21 @@ public class AstroidtMovementController : MonoBehaviour
     private float GetYVelocityByQuarters() 
     {
         if (transform.position.y > 0)
-            return UnityEngine.Random.Range(MaxYSpeed / transform.localScale.x * (-1), 0f);
+            return UnityEngine.Random.Range(-MaxYSpeed / transform.localScale.x, 0f);
         else
             return UnityEngine.Random.Range(0f, MaxYSpeed / transform.localScale.x);
     }
 
     private void ConfigureFromFile()
     {
-        string[] props = {"MaxXSpeed", "MaxYSpeed", "MinRotation", "MaxRotation", "ExplodeToSmallerAstroidsScaleTH"};
+        string[] props = {"MaxXSpeed", "MaxYSpeed", "MinRotation", "MaxRotation", "ExplodeToSmallerAstroidsScaleTH", "ItemDropRate"};
         Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
         MaxXSpeed = propsFromConfig["MaxXSpeed"];
         MaxYSpeed = propsFromConfig["MaxYSpeed"];
         MinRotation = propsFromConfig["MinRotation"];
         MaxRotation = propsFromConfig["MaxRotation"];
         ExplodeToSmallerAstroidsScaleTH =  propsFromConfig["ExplodeToSmallerAstroidsScaleTH"];
+        ItemDropRate = (int)propsFromConfig["ItemDropRate"];
     }
 
 }

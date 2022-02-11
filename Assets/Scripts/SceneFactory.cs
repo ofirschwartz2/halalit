@@ -4,18 +4,15 @@ using Assets.Common;
 using UnityEngine;
 using Assets.Enums;
 
-
 public class SceneFactory : MonoBehaviour
 {
-
     public bool UseConfigFile;
-    public GameObject Background, EnemyPrefab, AstroidPrefab, ItemPrefab;
-    public int NumberOfInnerAstroids, MaxNumberOfGameObjectsAllowed, MaxNumberOfEnemiesAllowed, NumberOfEnemies, MaxNumberOfAstroidsAllowed, NumberOfAstroids, MaxNumberOfItemsAllowed, NumberOfItems, SlotsOnGameGreedX, SlotsOnGameGreedY, InnerAstroidInfiniteLoopTH, InnerAstroidMinScale, InnerAstroidMaxScale;
+    public GameObject Background, EnemyPrefab, AstroidPrefab;
+    public int NumberOfInnerAstroids, MaxNumberOfGameObjectsAllowed, MaxNumberOfEnemiesAllowed, NumberOfEnemies, MaxNumberOfAstroidsAllowed, NumberOfAstroids, SlotsOnGameGreedX, SlotsOnGameGreedY, InfiniteLoopTH, InnerAstroidMinScale, InnerAstroidMaxScale;
     
     private float _xGreedSpacing, _yGreedSpacing;
     private Vector3 _bottomLeftPoint; 
     private bool[,] _gameObjectsOnGameGreed;
-    private Dictionary<NewGameObject,GameObject> _gameObjectToPrefab;
     private bool _stopCreatingInnerAstroids;
 
     void Start()
@@ -24,81 +21,91 @@ public class SceneFactory : MonoBehaviour
             ConfigureFromFile();
 
         SetGreedVariables();
-        SetGameObjectToPrefabDictionary();
         InstantiateAllGameObjects();
     }
 
     private void InstantiateAllGameObjects()
     {
-        InstantiateNewGameObject(NewGameObject.INNERASTROID, NumberOfInnerAstroids);
-        InstantiateNewGameObject(NewGameObject.ENEMY, NumberOfEnemies);
-        InstantiateNewGameObject(NewGameObject.ASTROID, NumberOfAstroids);
-        InstantiateNewGameObject(NewGameObject.ITEM, NumberOfItems);
+        InstantiateNewGameObject(new NewInnerAstroid(AstroidPrefab), NumberOfInnerAstroids);
+        InstantiateNewGameObject(new NewEnemy(EnemyPrefab), NumberOfEnemies);
+        InstantiateNewGameObject(new NewAstroid(AstroidPrefab), NumberOfAstroids);
     }
 
-    private void InstantiateNewGameObject(NewGameObject ngo, int amount)
+    private void InstantiateNewGameObject(INewGameObject newGameObject, int amount)
     {
         for (int i = 0; i < amount; i++)
         {
-            if (ngo == NewGameObject.INNERASTROID)
+            if (newGameObject is NewInnerAstroid)
                 if(_stopCreatingInnerAstroids)
                     return;
                 else
-                    InstantiateInnerAstroid();
+                    InstantiateInnerAstroid((NewInnerAstroid)newGameObject);
             else
-                Instantiate(_gameObjectToPrefab[ngo],  GetAbsolutePointOnGreed(GetNewEntryPointOnGreed(ngo)), Quaternion.AngleAxis(0, Vector3.forward));
+                Instantiate(newGameObject.GetPrefab(),  GetAbsolutePointOnGreed(GetNewEntryPointOnGreed(newGameObject)), Quaternion.AngleAxis(0, Vector3.forward));
         }
     }
     
-    private void InstantiateInnerAstroid()
+    private void InstantiateInnerAstroid(NewInnerAstroid newInnerAstroid)
     {
         int innerAstroidScale = GetInnerAstroidScale();
-        Vector2 entryPointOnGreed = GetNewEntryPointOnGreed(NewGameObject.INNERASTROID, innerAstroidScale);
+        Vector2 entryPointOnGreed = GetNewEntryPointOnGreed(newInnerAstroid, innerAstroidScale);
         if(_stopCreatingInnerAstroids)
             return;
-        GameObject innerAstroid = Instantiate(_gameObjectToPrefab[NewGameObject.INNERASTROID], GetAbsolutePointOnGreed(entryPointOnGreed), Quaternion.AngleAxis(0, Vector3.forward)) as GameObject;
+        
+        GameObject innerAstroid = Instantiate(newInnerAstroid.GetPrefab(), GetAbsolutePointOnGreed(entryPointOnGreed), Quaternion.AngleAxis(0, Vector3.forward)) as GameObject;
         innerAstroid.SendMessage("SetScale", innerAstroidScale);
-        innerAstroid.SendMessage("SetVelocity", false);
 
-        LockGreedByPointAndRadius(entryPointOnGreed, innerAstroidScale);
-        //Debug.Log("SIZE: " + innerAstroid.GetComponent<PolygonCollider2D>().bounds.size + ", EntryPointOnGreed: " + GetAbsolutePointOnGreed(entryPointOnGreed.x,entryPointOnGreed.y) + ", Scale:" + innerAstroidScale);
+        LockGreedByPointAndRadius(entryPointOnGreed, innerAstroidScale); // WAS innerAstroidScale * innerAstroid.GetComponent<PolygonCollider2D>().bounds.size.x / 2
     }
 
     private void LockGreedByPointAndRadius(Vector2 entryPointOnGreed, int scale)
     {
+
         float numerOfSlotsToLockFromEveryDirection = Mathf.Ceil(scale / 2 / _yGreedSpacing) + 1;
-        for(int x = (int)Mathf.Max(0, entryPointOnGreed.x - numerOfSlotsToLockFromEveryDirection); (x < SlotsOnGameGreedX + 2) && (x <= entryPointOnGreed.x + numerOfSlotsToLockFromEveryDirection); x++)
-            for(int y = (int)Mathf.Max(0, entryPointOnGreed.y - numerOfSlotsToLockFromEveryDirection); (y < SlotsOnGameGreedX + 2) && (y <= entryPointOnGreed.y + numerOfSlotsToLockFromEveryDirection); y++)
+        
+        int fromXPoint = (int)Mathf.Max(0, entryPointOnGreed.x - numerOfSlotsToLockFromEveryDirection);
+        int toXPoint = (int)Mathf.Min(SlotsOnGameGreedX + 2, entryPointOnGreed.x + numerOfSlotsToLockFromEveryDirection + 1);
+
+        int fromYPoint = (int)Mathf.Max(0, entryPointOnGreed.y - numerOfSlotsToLockFromEveryDirection);
+        int toYPoint = (int)Mathf.Min(SlotsOnGameGreedY + 2, entryPointOnGreed.y + numerOfSlotsToLockFromEveryDirection + 1); 
+
+        for(int x = fromXPoint; x < toXPoint; x++)
+            for(int y = fromYPoint; y < toYPoint; y++)
                 _gameObjectsOnGameGreed[x,y] = true;
-    }
+    } 
 
     private Vector3 GetAbsolutePointOnGreed(Vector2 pointOnGreed)
     {
         return _bottomLeftPoint + new Vector3(_xGreedSpacing * pointOnGreed.x + (_xGreedSpacing / 2), _yGreedSpacing * pointOnGreed.y + (_yGreedSpacing / 2));
     }
 
-    public Vector2 GetNewEntryPointOnGreed(NewGameObject ngo, int innerAstroidScale = 0)
+    private Vector2 GetNewEntryPointOnGreed(INewGameObject newGameObject, int innerAstroidScale = 0)
     {
         int infiniteLoopBreak = 0;
         Vector2 randPointOnGreed;
-        if (ngo == NewGameObject.INNERASTROID)
+        if (newGameObject is NewInnerAstroid)
         {
             return GetNewInnerAstroidEntryPointOnGreed(innerAstroidScale);
         }
-        else if(ngo == NewGameObject.ASTROID)
+        else if(newGameObject is NewAstroid)
         {
-
             do{
-                if(++infiniteLoopBreak > 400)
-                    throw new System.Exception("400 time trying to find a place without success: GetNewEntryPointOnGreed");  
+                if(++infiniteLoopBreak > InfiniteLoopTH)
+                    throw new System.Exception("400 time trying to find a place without success");
+
                 randPointOnGreed = GetRandomPointOnTheOuterEdge();
             } while (!IsThisPlaceFree(randPointOnGreed));
         } else
         {
             do{
-                if(++infiniteLoopBreak > 400)
-                    throw new System.Exception("400 time trying to find a place without success: GetNewEntryPointOnGreed");  
-                randPointOnGreed = GetNewRandomPointOnOneOfTheEdges(GetEdgesWidthByNewGameObject(ngo));
+                if(++infiniteLoopBreak > InfiniteLoopTH)
+                    throw new System.Exception("400 time trying to find a place without success");  
+                
+                int? width = newGameObject.GetEdgeWidthForInstantiation();
+                if(width == null)
+                    throw new System.Exception("GetNewEntryPointOnGreed: NULL EXCEPTION");
+
+                randPointOnGreed = GetNewRandomPointOnOneOfTheEdges((int)width);
             } while (!IsThisPlaceFree(randPointOnGreed));
         }
 
@@ -110,7 +117,7 @@ public class SceneFactory : MonoBehaviour
         Vector2 randPointOnGreed;
         int infiniteLoop = 0;
         do{
-            if(++infiniteLoop > InnerAstroidInfiniteLoopTH)
+            if(++infiniteLoop > InfiniteLoopTH)
             {
                 _stopCreatingInnerAstroids = true;
                 return Vector2.zero;
@@ -122,13 +129,18 @@ public class SceneFactory : MonoBehaviour
 
     private bool IsThisPlaceFreeForTheInnerAstroid(Vector2 centerOfAstroidOnGreed, int scaleOfAstroid)
     {
-        float numerOfSlotsToLockFromEveryDirection = Mathf.Ceil(scaleOfAstroid / 2 / _yGreedSpacing) + 1;
-        for(int x = (int)Mathf.Max(0, centerOfAstroidOnGreed.x - numerOfSlotsToLockFromEveryDirection); (x < SlotsOnGameGreedX + 2) && (x <= centerOfAstroidOnGreed.x + numerOfSlotsToLockFromEveryDirection); x++)
-            for(int y = (int)Mathf.Max(0, centerOfAstroidOnGreed.y - numerOfSlotsToLockFromEveryDirection); (y < SlotsOnGameGreedY + 2) && (y <= centerOfAstroidOnGreed.y + numerOfSlotsToLockFromEveryDirection); y++)
-            {
+        float numerOfSlotsToLockFromEveryDirection = Mathf.Ceil(scaleOfAstroid / 2 / _yGreedSpacing); // + 1 ?
+
+        int fromX = (int)Mathf.Max(0, centerOfAstroidOnGreed.x - numerOfSlotsToLockFromEveryDirection);
+        int toX = (int)Mathf.Min(SlotsOnGameGreedX + 2, centerOfAstroidOnGreed.x + numerOfSlotsToLockFromEveryDirection + 1);
+
+        int fromY = (int)Mathf.Max(0, centerOfAstroidOnGreed.y - numerOfSlotsToLockFromEveryDirection);
+        int toY = (int)Mathf.Min(SlotsOnGameGreedY + 2, centerOfAstroidOnGreed.y + numerOfSlotsToLockFromEveryDirection + 1);
+
+        for(int x = fromX; x < toX; x++)
+            for(int y = fromY; y < toY; y++)
                 if(_gameObjectsOnGameGreed[x, y])
-                    return false;
-            }    
+                    return false;   
         return true;
     }
 
@@ -152,7 +164,7 @@ public class SceneFactory : MonoBehaviour
         Vector2 randPointOnGreed;
         
         do{
-            if(++infiniteLoopBreak > 400)
+            if(++infiniteLoopBreak > InfiniteLoopTH)
                     throw new System.Exception("400 time trying to find a place without success: GetNewRandomPointOnScene"); 
 
             randPointOnGreed = Utils.GetRandomVector(
@@ -169,29 +181,21 @@ public class SceneFactory : MonoBehaviour
         Vector2 randPointOnGreed;
 
         do{
-            if(++infiniteLoopBreak > 400)
+            if(++infiniteLoopBreak > InfiniteLoopTH)
                 throw new System.Exception("400 time trying to find a place without success: GetNewRandomPointOnOneOfTheEdges"); 
             switch(Random.Range(0,4))
             {
                 case 0:
-                    randPointOnGreed = Utils.GetRandomVector(
-                        1, 1 + edgesWidth, 
-                        1, SlotsOnGameGreedY);
+                    randPointOnGreed = Utils.GetRandomVector(1, 1 + edgesWidth, 1, SlotsOnGameGreedY);
                     break;
                 case 1:
-                    randPointOnGreed = Utils.GetRandomVector(
-                        1, SlotsOnGameGreedX,
-                        SlotsOnGameGreedY + 1 - edgesWidth, SlotsOnGameGreedY + 1);
+                    randPointOnGreed = Utils.GetRandomVector(1, SlotsOnGameGreedX,SlotsOnGameGreedY + 1 - edgesWidth, SlotsOnGameGreedY + 1);
                     break;
                 case 2:
-                    randPointOnGreed = Utils.GetRandomVector(
-                        SlotsOnGameGreedX + 1 - edgesWidth, SlotsOnGameGreedX + 1, 
-                        2, SlotsOnGameGreedY + 1);
+                    randPointOnGreed = Utils.GetRandomVector(SlotsOnGameGreedX + 1 - edgesWidth, SlotsOnGameGreedX + 1, 2, SlotsOnGameGreedY + 1);
                     break;
                 case 3:
-                    randPointOnGreed = Utils.GetRandomVector(
-                        2, SlotsOnGameGreedX + 1, 
-                        1, 1 + edgesWidth);
+                    randPointOnGreed = Utils.GetRandomVector(2, SlotsOnGameGreedX + 1, 1, 1 + edgesWidth);
                     break;
                 default:
                     throw new System.Exception("Not a random between 0 to 3, abort");   
@@ -206,66 +210,16 @@ public class SceneFactory : MonoBehaviour
         switch(Random.Range(0,4))
         {
             case 0:
-                return Utils.GetRandomVector(
-                    0, 1, 
-                    0, SlotsOnGameGreedY + 2);
+                return Utils.GetRandomVector(0, 1, 0, SlotsOnGameGreedY + 2);
             case 1:
-                return Utils.GetRandomVector(
-                    0, SlotsOnGameGreedX + 2, 
-                    SlotsOnGameGreedY + 1, SlotsOnGameGreedY + 2);
+                return Utils.GetRandomVector(0, SlotsOnGameGreedX + 2, SlotsOnGameGreedY + 1, SlotsOnGameGreedY + 2);
             case 2:
-                return Utils.GetRandomVector(
-                    SlotsOnGameGreedX + 1, SlotsOnGameGreedX + 2, 
-                    1, SlotsOnGameGreedY + 2);
+                return Utils.GetRandomVector(SlotsOnGameGreedX + 1, SlotsOnGameGreedX + 2, 1, SlotsOnGameGreedY + 2);
             case 3:
-                return Utils.GetRandomVector(
-                    1, SlotsOnGameGreedX + 2, 
-                    0, 1);
-        }
-        throw new System.Exception("Not a random between 0 to 3, abort");   
-    }
-
-    private int GetEdgesWidthByNewGameObject(NewGameObject ngo)
-    {
-        switch (ngo)
-        {
-            case NewGameObject.INNERASTROID:
-                throw new System.Exception("INNERASTROID - GameObject not supported");
-            case NewGameObject.ENEMY:
-                return 2; 
-            case NewGameObject.ITEM:
-                return ((SlotsOnGameGreedY / 2) - 2);
-            case NewGameObject.ASTROID:
-                return -1;
+                return Utils.GetRandomVector(1, SlotsOnGameGreedX + 2, 0, 1);
             default:
-               throw new System.Exception("GameObject not supported"); 
-        } 
-    }
-
-    private void ConfigureFromFile()
-    {
-            string[] props = {"MaxNumberOfGameObjectsAllowed", "MaxNumberOfEnemiesAllowed", "NumberOfInnerAstroids", "NumberOfEnemies", "MaxNumberOfAstroidsAllowed", "NumberOfAstroids", "MaxNumberOfItemsAllowed", "NumberOfItems", "SlotsOnGameGreedX", "SlotsOnGameGreedY", "InnerAstroidInfiniteLoopTH", "InnerAstroidMinScale", "InnerAstroidMaxScale"};
-            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
-
-            MaxNumberOfGameObjectsAllowed = (int)propsFromConfig["MaxNumberOfGameObjectsAllowed"];
-            MaxNumberOfEnemiesAllowed = (int)propsFromConfig["MaxNumberOfEnemiesAllowed"];
-            MaxNumberOfAstroidsAllowed = (int)propsFromConfig["MaxNumberOfAstroidsAllowed"];
-            MaxNumberOfItemsAllowed = (int)propsFromConfig["MaxNumberOfItemsAllowed"];
-            
-            NumberOfInnerAstroids = (int)propsFromConfig["NumberOfInnerAstroids"];
-            NumberOfEnemies = (int)propsFromConfig["NumberOfEnemies"];
-            NumberOfAstroids = (int)propsFromConfig["NumberOfAstroids"];
-            NumberOfItems = (int)propsFromConfig["NumberOfItems"];
-
-            SlotsOnGameGreedX = (int)propsFromConfig["SlotsOnGameGreedX"];
-            SlotsOnGameGreedY = (int)propsFromConfig["SlotsOnGameGreedY"];
-            
-            InnerAstroidInfiniteLoopTH = (int)propsFromConfig["InnerAstroidInfiniteLoopTH"];
-            InnerAstroidMinScale = (int)propsFromConfig["InnerAstroidMinScale"]; 
-            InnerAstroidMaxScale = (int)propsFromConfig["InnerAstroidMaxScale"];
-
-            if (TooManyGameObjects()) 
-                throw new System.Exception("Number Of Enemies is wayyy too big, abort");
+                throw new System.Exception("Not a random between 0 to 3, abort");
+        }
     }
 
     private bool TooManyGameObjects()
@@ -273,8 +227,7 @@ public class SceneFactory : MonoBehaviour
         return 
             NumberOfEnemies > MaxNumberOfEnemiesAllowed || 
             NumberOfAstroids > MaxNumberOfAstroidsAllowed || 
-            NumberOfItems > MaxNumberOfItemsAllowed ||
-            (NumberOfEnemies + NumberOfAstroids + NumberOfItems) > MaxNumberOfGameObjectsAllowed;
+            (NumberOfEnemies + NumberOfAstroids) > MaxNumberOfGameObjectsAllowed;
     }
 
     private void SetGreedVariables()
@@ -291,19 +244,32 @@ public class SceneFactory : MonoBehaviour
 
     private void LockGreedCenter()
     {
-        for (int i = 5; i < 7; i++)
-            for(int j = 5; j < 7; j++)
-                _gameObjectsOnGameGreed[i,j] = true;
+        for (int x = SlotsOnGameGreedX / 2; x < SlotsOnGameGreedX / 2 + 2; x++)
+            for(int y = SlotsOnGameGreedY / 2; y < SlotsOnGameGreedY / 2 + 2; y++)
+                _gameObjectsOnGameGreed[x,y] = true;
     }
 
-    private void SetGameObjectToPrefabDictionary()
+    private void ConfigureFromFile()
     {
-        _gameObjectToPrefab = new Dictionary<NewGameObject, GameObject>()
-        {
-            {NewGameObject.INNERASTROID, AstroidPrefab},
-            {NewGameObject.ENEMY, EnemyPrefab},
-            {NewGameObject.ASTROID, AstroidPrefab},
-            {NewGameObject.ITEM, ItemPrefab}
-        };
+            string[] props = {"MaxNumberOfGameObjectsAllowed", "MaxNumberOfEnemiesAllowed", "NumberOfInnerAstroids", "NumberOfEnemies", "MaxNumberOfAstroidsAllowed", "NumberOfAstroids", "SlotsOnGameGreedX", "SlotsOnGameGreedY", "InfiniteLoopTH", "InnerAstroidMinScale", "InnerAstroidMaxScale"};
+            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
+
+            MaxNumberOfGameObjectsAllowed = (int)propsFromConfig["MaxNumberOfGameObjectsAllowed"];
+            MaxNumberOfEnemiesAllowed = (int)propsFromConfig["MaxNumberOfEnemiesAllowed"];
+            MaxNumberOfAstroidsAllowed = (int)propsFromConfig["MaxNumberOfAstroidsAllowed"];
+            
+            NumberOfInnerAstroids = (int)propsFromConfig["NumberOfInnerAstroids"];
+            NumberOfEnemies = (int)propsFromConfig["NumberOfEnemies"];
+            NumberOfAstroids = (int)propsFromConfig["NumberOfAstroids"];
+
+            SlotsOnGameGreedX = (int)propsFromConfig["SlotsOnGameGreedX"];
+            SlotsOnGameGreedY = (int)propsFromConfig["SlotsOnGameGreedY"];
+            
+            InfiniteLoopTH = (int)propsFromConfig["InfiniteLoopTH"];
+            InnerAstroidMinScale = (int)propsFromConfig["InnerAstroidMinScale"]; 
+            InnerAstroidMaxScale = (int)propsFromConfig["InnerAstroidMaxScale"];
+
+            if (TooManyGameObjects()) 
+                throw new System.Exception("Number Of Enemies is wayyy too big, abort");
     }
 }
