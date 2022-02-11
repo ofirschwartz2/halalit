@@ -55,12 +55,13 @@ public class SceneFactory : MonoBehaviour
         GameObject innerAstroid = Instantiate(newInnerAstroid.GetPrefab(), GetAbsolutePointOnGreed(entryPointOnGreed), Quaternion.AngleAxis(0, Vector3.forward)) as GameObject;
         innerAstroid.SendMessage("SetScale", innerAstroidScale);
 
-        LockGreedByPointAndRadius(entryPointOnGreed, innerAstroidScale * innerAstroid.GetComponent<PolygonCollider2D>().bounds.size.x / 2);
+        LockGreedByPointAndRadius(entryPointOnGreed, innerAstroidScale);
     }
 
-    private void LockGreedByPointAndRadius(Vector2 entryPointOnGreed, float radius)
+    private void LockGreedByPointAndRadius(Vector2 entryPointOnGreed, int scale)
     {
-        float numerOfSlotsToLockFromEveryDirection = Mathf.Ceil(radius / _yGreedSpacing);
+
+        float numerOfSlotsToLockFromEveryDirection = Mathf.Ceil(scale / 2 / _yGreedSpacing) + 1;
         
         int fromXPoint = (int)Mathf.Max(0, entryPointOnGreed.x - numerOfSlotsToLockFromEveryDirection);
         int toXPoint = (int)Mathf.Min(SlotsOnGameGreedX + 2, entryPointOnGreed.x + numerOfSlotsToLockFromEveryDirection + 1);

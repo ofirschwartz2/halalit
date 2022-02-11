@@ -1,7 +1,7 @@
 using Assets.Enums;
 using UnityEngine;
 
-class NewInnerAstroid : MonoBehaviour, INewGameObject
+class NewInnerAstroid : INewGameObject
 {
     public GameObject Prefab;
 
