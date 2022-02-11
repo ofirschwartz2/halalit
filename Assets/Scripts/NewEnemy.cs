@@ -1,7 +1,7 @@
 using Assets.Enums;
 using UnityEngine;
 
-class NewEnemy : MonoBehaviour, INewGameObject
+class NewEnemy : INewGameObject
 {
     public GameObject Prefab;
 
