@@ -13,7 +13,6 @@ public class EnemyMovementController : MonoBehaviour
     private Rigidbody2D _rigidBody;
     private float _xForce, _yForce;
 
-    
     void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>(); 
