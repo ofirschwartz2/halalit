@@ -9,6 +9,7 @@ public class OuterColliderController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         other = ParentIfOuterCollider(other);
+        Debug.Log(other.tag);
         transform.parent.gameObject.SendMessage("InnerOnTriggerEnter2D", other);
     }
 
