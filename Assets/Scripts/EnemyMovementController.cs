@@ -41,6 +41,12 @@ public class EnemyMovementController : MonoBehaviour
             GoInAnotherDirection();
     }
 
+    void InnerOnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("OutOfScreen"))
+            Destroy(gameObject);
+    }
+
     private void KillMe(Collider2D other)
     {
         if(ShouldDropItem())

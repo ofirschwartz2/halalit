@@ -58,13 +58,6 @@ public class AstroidtMovementController : MonoBehaviour
         return UnityEngine.Random.Range(minRotation / transform.localScale.x, maxRotation / transform.localScale.x);
     }
 
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Shot"))
-            AstroidExplotion(other);
-    }
-
     private void AstroidExplotion(Collider2D other)
     {
         if (ShouldDropItem())
@@ -88,16 +81,15 @@ public class AstroidtMovementController : MonoBehaviour
     private void ExplodeToSmallerAstroids()
     {
         GameObject smallerAstroid;
-        for(int i = 0; i < Random.Range(2,4); i++)
+        for(int i = 0; i < Random.Range(2,3); i++)
         {
-            smallerAstroid = Instantiate(AstroidPrefab,  new Vector3(transform.position.x, transform.position.y, 0), Quaternion.AngleAxis(0, Vector3.forward));
-            
+            smallerAstroid = Instantiate(AstroidPrefab,  new Vector3(transform.position.x + Random.Range(-0.1f,0.1f), transform.position.y + Random.Range(-0.1f,0.1f), 0), Quaternion.AngleAxis(0, Vector3.forward));
             float[] argumentsArray = new float[] { transform.localScale.x / 2, 1f };
             smallerAstroid.SendMessage("SetScaleAndVelocity", argumentsArray);
         }
     }
 
-    public void InnerOnTriggerEnter2D(Collider2D other) // DELETE?
+    public void InnerOnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Shot"))
             AstroidExplotion(other);

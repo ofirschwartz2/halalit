@@ -5,21 +5,24 @@ using UnityEngine;
 
 public class OuterColliderController : MonoBehaviour
 {
-    public GameObject Parent;
-
-    void Start()
-    {
-        tag = Parent.tag;
-    }
-
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Parent.SendMessage("InnerOnTriggerEnter2D", other);
+        other = ParentIfOuterCollider(other);
+        transform.parent.gameObject.SendMessage("InnerOnTriggerEnter2D", other);
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        Parent.SendMessage("InnerOnTriggerExit2D", other);
+        other = ParentIfOuterCollider(other);
+        transform.parent.gameObject.SendMessage("InnerOnTriggerExit2D", other);
+    }
+
+    private Collider2D ParentIfOuterCollider(Collider2D other)
+    {
+        if(other.gameObject.CompareTag("AstroidOuterCollider") || other.gameObject.CompareTag("EnemyOuterCollider"))
+            return other.transform.parent.gameObject.GetComponent<Collider2D>();
+        return other;
     }
 
 }
