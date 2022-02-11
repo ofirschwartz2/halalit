@@ -11,15 +11,14 @@ public class EnemyMovementController : MonoBehaviour
     public GameObject ItemPrefab;
 
     private Rigidbody2D _rigidBody;
-    private float _xForce;
-    private float _yForce;
-    
+    private float _xForce, _yForce;
+
     void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>(); 
         if (UseConfigFile)
             ConfigureFromFile();
-
+            
         _xForce = Random.Range(MinXForce, MaxXForce);
         _yForce = Random.Range(MinYForce, MaxYForce);
         tag = "Enemy";
@@ -31,7 +30,7 @@ public class EnemyMovementController : MonoBehaviour
             _rigidBody.AddForce(new Vector2(_xForce, _yForce));
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    void InnerOnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Shot"))
             KillMe(other);
@@ -39,6 +38,12 @@ public class EnemyMovementController : MonoBehaviour
             KnockMeBack(other);
         else if (other.gameObject.CompareTag("Background"))
             GoInAnotherDirection();
+    }
+
+    void InnerOnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("OutOfScreen"))
+            Destroy(gameObject);
     }
 
     private void KillMe(Collider2D other)
@@ -97,15 +102,16 @@ public class EnemyMovementController : MonoBehaviour
 
     private void ConfigureFromFile()
     {
-            string[] props = { "MinXForce", "MaxXForce", "MinYForce", "MaxYForce", "EnemyThrust", "SpeedLimit", "_rigidBody.drag", "ItemDropRate"};
-            Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
-            MinXForce = propsFromConfig["MinXForce"];
-            MaxXForce = propsFromConfig["MaxXForce"];
-            MinYForce = propsFromConfig["MinYForce"];
-            MaxYForce = propsFromConfig["MaxYForce"];
-            EnemyThrust = propsFromConfig["EnemyThrust"];
-            SpeedLimit = propsFromConfig["SpeedLimit"];
-            _rigidBody.drag = propsFromConfig["_rigidBody.drag"];
-            ItemDropRate = (int)propsFromConfig["ItemDropRate"];
-        }
+        string[] props = { "MinXForce", "MaxXForce", "MinYForce", "MaxYForce", "EnemyThrust", "SpeedLimit", "_rigidBody.drag", "ItemDropRate"};
+        Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
+        
+        MinXForce = propsFromConfig["MinXForce"];
+        MaxXForce = propsFromConfig["MaxXForce"];
+        MinYForce = propsFromConfig["MinYForce"];
+        MaxYForce = propsFromConfig["MaxYForce"];
+        EnemyThrust = propsFromConfig["EnemyThrust"];
+        SpeedLimit = propsFromConfig["SpeedLimit"];
+        _rigidBody.drag = propsFromConfig["_rigidBody.drag"];
+        ItemDropRate = (int)propsFromConfig["ItemDropRate"];
+    }
 }

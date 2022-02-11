@@ -18,25 +18,21 @@ public class AstroidtMovementController : MonoBehaviour
         if (UseConfigFile)
             ConfigureFromFile();
         _rigidBody = GetComponent<Rigidbody2D>();
-        _rigidBody.velocity = GetVelocityByQuarters();
+        if(_rigidBody.velocity == Vector2.zero)
+            _rigidBody.velocity = GetVelocityByQuarters();
         _rotationSpeed = GetRotationSpeed(-MaxRotation, MaxRotation);
-        Debug.Log("ItemDropRate: " + ItemDropRate);
+        ItemDropRate = (int)Mathf.Ceil(ItemDropRate / transform.localScale.x);
     }
 
-    void SetScale(int scale) 
+    void SetScale(float scale) 
     {
         transform.localScale = new Vector3(scale, scale, 1);
-        ItemDropRate = ItemDropRate / scale;
-        Debug.Log("ItemDropRate: " + ItemDropRate);
+        ItemDropRate = (int)Mathf.Ceil(ItemDropRate / scale);
     }
 
-    void SetVelocity(bool get360VelocityFlag) 
+    void Set360Velocity() 
     {
-        if (get360VelocityFlag)
-            _rigidBody.velocity = Get360Velocity();
-        else
-            _rigidBody.velocity = GetVelocityByQuarters();
-
+        GetComponent<Rigidbody2D>().velocity = Get360Velocity();
     }
 
     void Update()
@@ -52,12 +48,6 @@ public class AstroidtMovementController : MonoBehaviour
     private float GetRotationSpeed(float minRotation, float maxRotation)
     {
         return UnityEngine.Random.Range(minRotation / transform.localScale.x, maxRotation / transform.localScale.x);
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Shot"))
-            AstroidExplotion(other);
     }
 
     private void AstroidExplotion(Collider2D other)
@@ -83,15 +73,24 @@ public class AstroidtMovementController : MonoBehaviour
     private void ExplodeToSmallerAstroids()
     {
         GameObject smallerAstroid;
-        for(int i = 0; i < Random.Range(2,4); i++)
+        int numOfSmallerAstroids = Random.Range(2,4);
+        
+        for(int i = 0; i < numOfSmallerAstroids; i++)
         {
-            smallerAstroid = Instantiate(AstroidPrefab,  new Vector3(transform.position.x, transform.position.y, 0), Quaternion.AngleAxis(0, Vector3.forward));
+            smallerAstroid = Instantiate(AstroidPrefab,  new Vector3(transform.position.x + Random.Range(-0.1f,0.1f), transform.position.y + Random.Range(-0.1f,0.1f), 0), Quaternion.AngleAxis(0, Vector3.forward));
+            
             smallerAstroid.SendMessage("SetScale", transform.localScale.x / 2);
-            smallerAstroid.SendMessage("SetVelocity", true);
+            smallerAstroid.SendMessage("Set360Velocity");
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+    public void InnerOnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Shot"))
+            AstroidExplotion(other);
+    }
+
+    void InnerOnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("OutOfScreen"))
             Destroy(gameObject);

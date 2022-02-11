@@ -54,7 +54,6 @@ public class SceneFactory : MonoBehaviour
         
         GameObject innerAstroid = Instantiate(newInnerAstroid.GetPrefab(), GetAbsolutePointOnGreed(entryPointOnGreed), Quaternion.AngleAxis(0, Vector3.forward)) as GameObject;
         innerAstroid.SendMessage("SetScale", innerAstroidScale);
-        innerAstroid.SendMessage("SetVelocity", false);
 
         LockGreedByPointAndRadius(entryPointOnGreed, innerAstroidScale * innerAstroid.GetComponent<PolygonCollider2D>().bounds.size.x / 2);
     }
@@ -91,7 +90,8 @@ public class SceneFactory : MonoBehaviour
         {
             do{
                 if(++infiniteLoopBreak > InfiniteLoopTH)
-                    throw new System.Exception("400 time trying to find a place without success");  
+                    throw new System.Exception("400 time trying to find a place without success");
+
                 randPointOnGreed = GetRandomPointOnTheOuterEdge();
             } while (!IsThisPlaceFree(randPointOnGreed));
         } else
@@ -159,9 +159,13 @@ public class SceneFactory : MonoBehaviour
 
     public Vector2 GetNewRandomPointOnScene()
     {
+        int infiniteLoopBreak = 0;
         Vector2 randPointOnGreed;
         
         do{
+            if(++infiniteLoopBreak > InfiniteLoopTH)
+                    throw new System.Exception("400 time trying to find a place without success: GetNewRandomPointOnScene"); 
+
             randPointOnGreed = Utils.GetRandomVector(
                 1, SlotsOnGameGreedX + 1, 
                 1, SlotsOnGameGreedY + 1);
@@ -172,9 +176,12 @@ public class SceneFactory : MonoBehaviour
 
     public Vector2 GetNewRandomPointOnOneOfTheEdges(int edgesWidth)
     {
+        int infiniteLoopBreak = 0;
         Vector2 randPointOnGreed;
 
         do{
+            if(++infiniteLoopBreak > InfiniteLoopTH)
+                throw new System.Exception("400 time trying to find a place without success: GetNewRandomPointOnOneOfTheEdges"); 
             switch(Random.Range(0,4))
             {
                 case 0:

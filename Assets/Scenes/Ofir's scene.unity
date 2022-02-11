@@ -307,7 +307,6 @@ MonoBehaviour:
   GrabDelay: 0
   RopeLength: 0
   Halalit: {fileID: 2130719621}
-  Gun: {fileID: 718669208}
 --- !u!212 &125512006
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -862,7 +861,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UseConfigFile: 1
-  CoolDownInterval: 0.5
+  CoolDownInterval: 0
   ShotsPrefab:
   - {fileID: 4043514594342984741, guid: 40e6ef62799c1484bba66721899628fb, type: 3}
   - {fileID: 6558306382352585984, guid: ed85493b62cdf144c97493a61934fcb0, type: 3}
@@ -1375,18 +1374,15 @@ MonoBehaviour:
   Background: {fileID: 814139006}
   EnemyPrefab: {fileID: 7855985066294020760, guid: 683f4e40c756cf94d98f1149b623c6ff, type: 3}
   AstroidPrefab: {fileID: 6741412782414407016, guid: 8af36d7f841126749ad69cb041292d64, type: 3}
-  ItemPrefab: {fileID: 9195436676840446505, guid: 13c92eecc74a940419bf69c7ec12c94d, type: 3}
   NumberOfInnerAstroids: 0
   MaxNumberOfGameObjectsAllowed: 0
   MaxNumberOfEnemiesAllowed: 0
   NumberOfEnemies: 0
   MaxNumberOfAstroidsAllowed: 0
   NumberOfAstroids: 0
-  MaxNumberOfItemsAllowed: 0
-  NumberOfItems: 0
   SlotsOnGameGreedX: 0
   SlotsOnGameGreedY: 0
-  InnerAstroidInfiniteLoopTH: 0
+  InfiniteLoopTH: 0
   InnerAstroidMinScale: 0
   InnerAstroidMaxScale: 0
 --- !u!4 &1994644017
