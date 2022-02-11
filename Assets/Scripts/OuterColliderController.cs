@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class OuterColliderController : MonoBehaviour
 {
-    
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         other = ParentIfOuterCollider(other);

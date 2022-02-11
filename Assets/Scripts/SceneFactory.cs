@@ -53,8 +53,7 @@ public class SceneFactory : MonoBehaviour
             return;
         
         GameObject innerAstroid = Instantiate(newInnerAstroid.GetPrefab(), GetAbsolutePointOnGreed(entryPointOnGreed), Quaternion.AngleAxis(0, Vector3.forward)) as GameObject;
-        float[] argumentsArray = new float[] {innerAstroidScale, 0f};
-        innerAstroid.SendMessage("SetScaleAndVelocity", argumentsArray);
+        innerAstroid.SendMessage("SetScale", innerAstroidScale);
 
         LockGreedByPointAndRadius(entryPointOnGreed, innerAstroidScale * innerAstroid.GetComponent<PolygonCollider2D>().bounds.size.x / 2);
     }

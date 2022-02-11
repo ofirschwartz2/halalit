@@ -18,29 +18,21 @@ public class AstroidtMovementController : MonoBehaviour
         if (UseConfigFile)
             ConfigureFromFile();
         _rigidBody = GetComponent<Rigidbody2D>();
-        _rigidBody.velocity = GetVelocityByQuarters();
+        if(_rigidBody.velocity == Vector2.zero)
+            _rigidBody.velocity = GetVelocityByQuarters();
         _rotationSpeed = GetRotationSpeed(-MaxRotation, MaxRotation);
         ItemDropRate = (int)Mathf.Ceil(ItemDropRate / transform.localScale.x);
     }
 
-    void SetScaleAndVelocity(float[] scaleAndVelocity) 
-    {
-        SetScale(scaleAndVelocity[0]);
-        //SetVelocity(scaleAndVelocity[1]);
-    }
-
-    private void SetScale(float scale) 
+    void SetScale(float scale) 
     {
         transform.localScale = new Vector3(scale, scale, 1);
         ItemDropRate = (int)Mathf.Ceil(ItemDropRate / scale);
     }
 
-    private void SetVelocity(float get360VelocityFlag) 
+    void Set360Velocity() 
     {
-        if (get360VelocityFlag == 1)
-            _rigidBody.velocity = Get360Velocity();
-        else
-            _rigidBody.velocity = GetVelocityByQuarters();
+        GetComponent<Rigidbody2D>().velocity = Get360Velocity();
     }
 
     void Update()
@@ -81,11 +73,14 @@ public class AstroidtMovementController : MonoBehaviour
     private void ExplodeToSmallerAstroids()
     {
         GameObject smallerAstroid;
-        for(int i = 0; i < Random.Range(2,3); i++)
+        int numOfSmallerAstroids = Random.Range(2,4);
+        
+        for(int i = 0; i < numOfSmallerAstroids; i++)
         {
             smallerAstroid = Instantiate(AstroidPrefab,  new Vector3(transform.position.x + Random.Range(-0.1f,0.1f), transform.position.y + Random.Range(-0.1f,0.1f), 0), Quaternion.AngleAxis(0, Vector3.forward));
-            float[] argumentsArray = new float[] { transform.localScale.x / 2, 1f };
-            smallerAstroid.SendMessage("SetScaleAndVelocity", argumentsArray);
+            
+            smallerAstroid.SendMessage("SetScale", transform.localScale.x / 2);
+            smallerAstroid.SendMessage("Set360Velocity");
         }
     }
 
