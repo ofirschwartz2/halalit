@@ -61,7 +61,7 @@
   </KnockbackShotScript>
 
   <GunController>
-  <CoolDownInterval>0.5</CoolDownInterval>
+  <CoolDownInterval>2</CoolDownInterval>
   </GunController>
 
   <AstroidtMovementController>

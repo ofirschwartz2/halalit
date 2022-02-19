@@ -34,8 +34,10 @@ public class EnemyMovementController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Shot"))
             KillMe(other);
-        else if (other.gameObject.CompareTag("Halalit") || other.gameObject.CompareTag("Astroid") || other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("KnockbackShot"))
+        else if (other.gameObject.CompareTag("Halalit") || other.gameObject.CompareTag("Astroid") || other.gameObject.CompareTag("Enemy"))
             KnockMeBack(other);
+        else if (other.gameObject.CompareTag("KnockbackShot"))
+            KnockMeBack(other, 2);
         else if (other.gameObject.CompareTag("Background"))
             GoInAnotherDirection();
     }
@@ -89,12 +91,13 @@ public class EnemyMovementController : MonoBehaviour
         return Random.Range(MinYForce, MaxYForce);
     }
 
-    private void KnockMeBack(Collider2D other)
+    private void KnockMeBack(Collider2D other, float otherThrust = 1f)
     {
         Vector2 normalizedDifference = (_rigidBody.transform.position - other.transform.position).normalized;
-        _rigidBody.AddForce(normalizedDifference * Utils.GetNormalizedSpeed(_rigidBody, other.GetComponent<Rigidbody2D>(), EnemyThrust), ForceMode2D.Impulse);
-    }
 
+        _rigidBody.AddForce(normalizedDifference * Utils.GetNormalizedSpeed(_rigidBody, other.GetComponent<Rigidbody2D>(), EnemyThrust * otherThrust), ForceMode2D.Impulse);
+    }
+    
     private bool IsUnderSpeedLimit()
     {
         return Utils.GetVectorMagnitude(_rigidBody.velocity) < SpeedLimit;

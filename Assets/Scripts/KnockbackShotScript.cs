@@ -36,7 +36,7 @@ public class KnockbackShotScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other){
         // if (_tagsAffected.Contains(other.tag))
-    }
+    }  
 
     void ConfigureFromFile()
     {
