@@ -63,7 +63,7 @@ public class EnemyMovementController : MonoBehaviour
     
     private bool ShouldDropItem()
     {
-        return Random.Range(0,100) < ItemDropRate ;
+        return Random.Range(0,100) < ItemDropRate;
     }
     
     private void GoInAnotherDirection()

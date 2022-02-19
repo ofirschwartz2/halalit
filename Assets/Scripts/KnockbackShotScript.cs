@@ -34,10 +34,6 @@ public class KnockbackShotScript : MonoBehaviour
         return Time.time >= _endOfLiveTime;
     }
 
-    void OnTriggerEnter2D(Collider2D other){
-        // if (_tagsAffected.Contains(other.tag))
-    }  
-
     void ConfigureFromFile()
     {
         string[] props = { "Speed", "Lifetime" };

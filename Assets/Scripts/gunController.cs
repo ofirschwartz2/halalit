@@ -52,7 +52,7 @@ public class GunController : MonoBehaviour
     private void ChangeGunPosition()
     {
         float angle = GetAngle();
-        transform.position = Utils.AngleAndRadiusToPointOnCircle(angle, RADIUS) + Halalit.transform.position;  //new Vector2(x, y);
+        transform.position = Utils.AngleAndRadiusToPointOnCircle(angle, RADIUS) + Halalit.transform.position;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
