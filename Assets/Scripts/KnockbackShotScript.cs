@@ -8,7 +8,6 @@ public class KnockbackShotScript : MonoBehaviour
     public bool UseConfigFile;
     public float Speed, Lifetime;
     
-    private List<string> _tagsAffected;
     private Rigidbody2D _rigidBody;
     private float _endOfLiveTime = 0;
 
@@ -18,7 +17,6 @@ public class KnockbackShotScript : MonoBehaviour
         if (UseConfigFile)
             ConfigureFromFile();
         
-        _tagsAffected = new List<string>{"Enemy"};
         _endOfLiveTime = Time.time + Lifetime;
     }
 
