@@ -34,7 +34,7 @@ public class EnemyMovementController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Shot"))
             KillMe(other);
-        else if (other.gameObject.CompareTag("Halalit") || other.gameObject.CompareTag("Astroid") || other.gameObject.CompareTag("Enemy"))
+        else if (other.gameObject.CompareTag("Halalit") || other.gameObject.CompareTag("Astroid") || other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("KnockbackShot"))
             KnockMeBack(other);
         else if (other.gameObject.CompareTag("Background"))
             GoInAnotherDirection();
