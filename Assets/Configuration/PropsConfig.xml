@@ -45,6 +45,7 @@
     <SpeedLimit>2</SpeedLimit>
     <_rigidBody.drag>2</_rigidBody.drag>
     <ItemDropRate>50</ItemDropRate>
+    <KnockbackGunMultiplier>2</KnockbackGunMultiplier>
   </EnemyMovementController>
 
   <Shot1Script>

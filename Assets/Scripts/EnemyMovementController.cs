@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EnemyMovementController : MonoBehaviour 
 {
-    public float MinXForce, MaxXForce, MinYForce, MaxYForce, EnemyThrust, SpeedLimit;
+    public float MinXForce, MaxXForce, MinYForce, MaxYForce, EnemyThrust, SpeedLimit, KnockbackGunMultiplier;
     public bool UseConfigFile;
     public int ItemDropRate;
     public GameObject ItemPrefab;
@@ -37,7 +37,7 @@ public class EnemyMovementController : MonoBehaviour
         else if (other.gameObject.CompareTag("Halalit") || other.gameObject.CompareTag("Astroid") || other.gameObject.CompareTag("Enemy"))
             KnockMeBack(other);
         else if (other.gameObject.CompareTag("KnockbackShot"))
-            KnockMeBack(other, 2);
+            KnockMeBack(other, KnockbackGunMultiplier);
         else if (other.gameObject.CompareTag("Background"))
             GoInAnotherDirection();
     }
@@ -105,7 +105,7 @@ public class EnemyMovementController : MonoBehaviour
 
     private void ConfigureFromFile()
     {
-        string[] props = { "MinXForce", "MaxXForce", "MinYForce", "MaxYForce", "EnemyThrust", "SpeedLimit", "_rigidBody.drag", "ItemDropRate"};
+        string[] props = { "MinXForce", "MaxXForce", "MinYForce", "MaxYForce", "EnemyThrust", "SpeedLimit", "_rigidBody.drag", "ItemDropRate", "KnockbackGunMultiplier"};
         Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
         
         MinXForce = propsFromConfig["MinXForce"];
@@ -116,5 +116,6 @@ public class EnemyMovementController : MonoBehaviour
         SpeedLimit = propsFromConfig["SpeedLimit"];
         _rigidBody.drag = propsFromConfig["_rigidBody.drag"];
         ItemDropRate = (int)propsFromConfig["ItemDropRate"];
+        KnockbackGunMultiplier = propsFromConfig["KnockbackGunMultiplier"];
     }
 }
