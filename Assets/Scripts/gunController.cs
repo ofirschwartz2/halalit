@@ -52,7 +52,7 @@ public class GunController : MonoBehaviour
     private void ChangeGunPosition()
     {
         float angle = GetAngle();
-        transform.position = Utils.AngleAndRadiusToPointOnCircle(angle, RADIUS) + Halalit.transform.position;  //new Vector2(x, y);
+        transform.position = Utils.AngleAndRadiusToPointOnCircle(angle, RADIUS) + Halalit.transform.position;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
@@ -94,7 +94,8 @@ public class GunController : MonoBehaviour
 
     private void Shoot() 
     {
-        Instantiate(ShotPrefab, transform.position, transform.rotation);
+        Vector3 position = ShotPrefab.tag == "KnockbackShot" ? Halalit.transform.position : transform.position;
+        Instantiate(ShotPrefab, position, transform.rotation);
         CooldownTime = Time.time + CoolDownInterval;
     }
 

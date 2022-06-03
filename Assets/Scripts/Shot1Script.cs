@@ -7,6 +7,7 @@ public class Shot1Script : MonoBehaviour
 {
     public bool UseConfigFile;
     public float Speed;
+    
     private Rigidbody2D _rigidBody;
 
     void Start()
@@ -26,5 +27,4 @@ public class Shot1Script : MonoBehaviour
         if (other.tag != "PickupClaw" && other.tag != "OutOfScreen" && other.tag != "Shot")
             Destroy(gameObject);
     }
-
 }

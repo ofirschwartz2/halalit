@@ -45,6 +45,7 @@
     <SpeedLimit>2</SpeedLimit>
     <_rigidBody.drag>2</_rigidBody.drag>
     <ItemDropRate>50</ItemDropRate>
+    <KnockbackGunMultiplier>2</KnockbackGunMultiplier>
   </EnemyMovementController>
 
   <Shot1Script>
@@ -55,8 +56,13 @@
     <Lifetime>0.2</Lifetime>
   </Shot2Script>
 
+  <KnockbackShotScript>
+    <Speed>1.01</Speed>
+    <Lifetime>0.5</Lifetime>
+  </KnockbackShotScript>
+
   <GunController>
-  <CoolDownInterval>0.5</CoolDownInterval>
+  <CoolDownInterval>2</CoolDownInterval>
   </GunController>
 
   <AstroidtMovementController>
