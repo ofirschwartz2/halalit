@@ -19,6 +19,10 @@ namespace Assets.Common
             return new Vector2(Mathf.Cos(radian), Mathf.Sin(radian));
         }
 
+        public static Vector3 QuaterionToVector(Quaternion quaternion)
+        {
+            return quaternion * Vector3.forward;
+        }
         public static Vector3 AngleAndRadiusToPointOnCircle(float degreeAngle, float radius)
         {
             return new Vector3(radius * Mathf.Cos(DegreeToRadian(degreeAngle)), radius * Mathf.Sin(DegreeToRadian(degreeAngle)));

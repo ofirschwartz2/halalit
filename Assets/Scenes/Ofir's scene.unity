@@ -194,7 +194,7 @@ GameObject:
   - component: {fileID: 125512005}
   - component: {fileID: 125512004}
   - component: {fileID: 125512003}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Pickup claw
   m_TagString: PickupClaw
   m_Icon: {fileID: 0}
@@ -776,7 +776,7 @@ GameObject:
   - component: {fileID: 718669209}
   - component: {fileID: 718669210}
   - component: {fileID: 718669211}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Gun
   m_TagString: Gun
   m_Icon: {fileID: 0}
@@ -1440,7 +1440,7 @@ GameObject:
   - component: {fileID: 2130719625}
   - component: {fileID: 2130719624}
   - component: {fileID: 2130719626}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Halalit
   m_TagString: Halalit
   m_Icon: {fileID: 0}
@@ -1581,7 +1581,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2135516713}
   - component: {fileID: 2135516714}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Engine
   m_TagString: Engine
   m_Icon: {fileID: 0}

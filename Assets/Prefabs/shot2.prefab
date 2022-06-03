@@ -98,6 +98,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UseConfigFile: 1
   Lifetime: 0
+  IgnoreMe:
+    serializedVersion: 2
+    m_Bits: 40
 --- !u!61 &3492722169557713557
 BoxCollider2D:
   m_ObjectHideFlags: 0
