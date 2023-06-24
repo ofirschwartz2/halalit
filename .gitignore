@@ -97,8 +97,8 @@ $RECYCLE.BIN/
 /Assets/Joystick Pack
 
 # projectSettings
-EditorSettings.asset
-ProjectSettings.asset
+#EditorSettings.asset
+#ProjectSettings.asset
 
 # metas
 *.meta
