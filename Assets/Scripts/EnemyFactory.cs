@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Assets.Common;
 using UnityEngine;
@@ -13,8 +12,6 @@ public class EnemyFactory : MonoBehaviour
     public GameObject Background;
     private float _xGreedSpacing, _yGreedSpacing;
     private Vector3 _bottomLeftPoint; 
-
-
     void Start()
     {
         if (UseConfigFile)
