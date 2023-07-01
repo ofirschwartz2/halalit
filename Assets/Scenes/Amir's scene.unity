@@ -2932,6 +2932,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ZigZagEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 4031665267667881402, guid: 1f327b7885ed05c46bf74cd0e552ce7f, type: 3}
+      propertyPath: m_TagString
+      value: ZigZagEnemy
+      objectReference: {fileID: 0}
     - target: {fileID: 5574465411994061092, guid: 1f327b7885ed05c46bf74cd0e552ce7f, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -2990,6 +2994,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4031665267667881402, guid: 1f327b7885ed05c46bf74cd0e552ce7f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1715921554}
+    - targetCorrespondingSourceObject: {fileID: 4031665267667881402, guid: 1f327b7885ed05c46bf74cd0e552ce7f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1715921556}
   m_SourcePrefab: {fileID: 100100000, guid: 1f327b7885ed05c46bf74cd0e552ce7f, type: 3}
 --- !u!1 &1649817416
 GameObject:
@@ -3115,7 +3122,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 1715921551}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 3c53247d23349b147ae11b06cbd41869, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3136,11 +3143,29 @@ CapsuleCollider2D:
     serializedVersion: 2
     m_Bits: 4294967295
   m_IsTrigger: 0
-  m_UsedByEffector: 0
+  m_UsedByEffector: 1
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.5, y: 1}
   m_Direction: 0
+--- !u!114 &1715921556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715921551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6608236bdb9c55a48a3780221b1451d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnemyThrust: 0
+  SpeedLimit: 0
+  KnockbackGunMultiplier: 0
+  UseConfigFile: 1
+  ItemDropRate: 0
+  ItemPrefab: {fileID: 9195436676840446505, guid: 91582487c5087644288e4ddc0bf8eba8, type: 3}
 --- !u!1 &1751165543
 GameObject:
   m_ObjectHideFlags: 0

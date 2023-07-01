@@ -48,6 +48,19 @@
     <KnockbackGunMultiplier>2</KnockbackGunMultiplier>
   </EnemyMovementController>
 
+	<ZigZagEnemyMovementController>
+		<EnemyThrust>1.2</EnemyThrust>
+		<SpeedLimit>2</SpeedLimit>
+		<ItemDropRate>50</ItemDropRate>
+		<KnockbackGunMultiplier>2</KnockbackGunMultiplier>
+	</ZigZagEnemyMovementController>
+	
+	<AstroidMovementController>
+		<SpeedLimit>15</SpeedLimit>
+		<EnemyThrust>1.2</EnemyThrust>
+		<KnockbackGunMultiplier>2</KnockbackGunMultiplier>
+	</AstroidMovementController>
+	
   <Shot1Script>
     <Speed>10</Speed>
   </Shot1Script>
