@@ -25,12 +25,11 @@ public class ZigZagEnemyMovementController : MonoBehaviour
             ConfigureFromFile();
 
         _directionZigzag = 1;
-        _changeDirectionInterval = 1;
+        _changeDirectionInterval = 2;
         _velocity = 2;
-
+        
         _direction = GetRandomVector2OnCircle(1);
         _changeDirectionTime = Time.time + _changeDirectionInterval;
-
         tag = "ZigZagEnemy";
 
     }
@@ -134,7 +133,6 @@ public class ZigZagEnemyMovementController : MonoBehaviour
     private void KnockMeBack(Collider2D other, float otherThrust = 1f)
     {
         Vector2 normalizedDifference = (_rigidBody.transform.position - other.transform.position).normalized;
-
         _rigidBody.AddForce(normalizedDifference * Utils.GetNormalizedSpeed(_rigidBody, other.GetComponent<Rigidbody2D>(), EnemyThrust * otherThrust), ForceMode2D.Impulse);
     }
 
