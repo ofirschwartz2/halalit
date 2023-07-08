@@ -1,16 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Common;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ZigZagEnemyMovementController : MonoBehaviour
 {
 
     public float EnemyThrust, SpeedLimit, KnockbackGunMultiplier;
     public bool UseConfigFile;
-    public int ItemDropRate;
+    public int ItemDropRate, _directionZigzag;
     private Rigidbody2D _rigidBody;
-    private float _xForce, _yForce;
+    private float _changeDirectionInterval, 
+        _changeDirectionTime, _velocity;
+    private Vector2 _direction;
     public GameObject ItemPrefab;
 
 
@@ -20,23 +24,69 @@ public class ZigZagEnemyMovementController : MonoBehaviour
         if (UseConfigFile)
             ConfigureFromFile();
 
-        _xForce = 1;
-        _yForce = 1;
+        _directionZigzag = 1;
+        _changeDirectionInterval = 1;
+        _velocity = 2;
+
+        _direction = GetRandomVector2OnCircle(1);
+        _changeDirectionTime = Time.time + _changeDirectionInterval;
+
         tag = "ZigZagEnemy";
+
     }
 
     void Update()
     {
-        if (IsUnderSpeedLimit())
-            _rigidBody.AddForce(new Vector2(_xForce, _yForce));
+        if (DidZigZagTimePass()) 
+            ChangeDirection();
+
+        _rigidBody.velocity = _direction * _velocity;
     }
 
-    private bool IsUnderSpeedLimit()
+    private Vector2 GetRandomVector2OnCircle(float radius) 
     {
-        return Utils.GetVectorMagnitude(_rigidBody.velocity) < SpeedLimit;
+        float angle = Random.Range(0, 2 * Mathf.PI);
+        float x = radius * Mathf.Cos(angle);
+        float y = radius * Mathf.Sin(angle);
+        return new Vector2(x, y);
     }
 
-    void InnerOnTriggerEnter2D(Collider2D other)
+    private Vector2 GetPlus90Degrees(Vector2 vector)
+    {
+        return new Vector2(-vector.y, vector.x);
+    }
+
+    private Vector2 GetMinus90Degrees(Vector2 vector)
+    {
+        return new Vector2(vector.y, -vector.x);
+    }
+
+    private void ChangeDirection()
+    {
+        if (_directionZigzag == 1)
+        {
+            _direction = GetPlus90Degrees(_direction);
+            _directionZigzag--;
+        }
+        else 
+        {
+            _direction = GetMinus90Degrees(_direction);
+            _directionZigzag++;
+        }
+        UpdateChangeDirectionTime();
+    }
+
+    private bool DidZigZagTimePass()
+    {
+        return Time.time > _changeDirectionTime;
+    }
+
+    private void UpdateChangeDirectionTime()
+    {
+        _changeDirectionTime = Time.time + _changeDirectionInterval;
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Shot"))
             KillMe(other);
@@ -69,6 +119,16 @@ public class ZigZagEnemyMovementController : MonoBehaviour
 
     private void GoInAnotherDirection()
     {
+        if (_directionZigzag == 1)
+        {
+            GetMinus90Degrees(_direction);
+            GetMinus90Degrees(_direction);
+        }
+        else
+        {
+            GetPlus90Degrees(_direction);
+            GetPlus90Degrees(_direction);
+        }
     }
 
     private void KnockMeBack(Collider2D other, float otherThrust = 1f)

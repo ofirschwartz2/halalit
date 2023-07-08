@@ -50,7 +50,7 @@
 
 	<ZigZagEnemyMovementController>
 		<EnemyThrust>1.2</EnemyThrust>
-		<SpeedLimit>2</SpeedLimit>
+		<SpeedLimit>20</SpeedLimit>
 		<ItemDropRate>50</ItemDropRate>
 		<KnockbackGunMultiplier>2</KnockbackGunMultiplier>
 	</ZigZagEnemyMovementController>
@@ -75,7 +75,7 @@
   </KnockbackShotScript>
 
   <GunController>
-  <CoolDownInterval>2</CoolDownInterval>
+  <CoolDownInterval>0.1</CoolDownInterval>
   </GunController>
 
   <AstroidtMovementController>
