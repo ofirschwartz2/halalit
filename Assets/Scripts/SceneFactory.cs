@@ -7,7 +7,7 @@ using Assets.Enums;
 public class SceneFactory : MonoBehaviour
 {
     public bool UseConfigFile;
-    public GameObject Background, EnemyPrefab, AstroidPrefab;
+    public GameObject ZigZagEnemyPrefab; // Background, EnemyPrefab, AstroidPrefab;
     public int NumberOfInnerAstroids, MaxNumberOfGameObjectsAllowed, MaxNumberOfEnemiesAllowed, NumberOfEnemies, MaxNumberOfAstroidsAllowed, NumberOfAstroids, SlotsOnGameGreedX, SlotsOnGameGreedY, InfiniteLoopTH, InnerAstroidMinScale, InnerAstroidMaxScale;
     
     private float _xGreedSpacing, _yGreedSpacing;
@@ -17,18 +17,21 @@ public class SceneFactory : MonoBehaviour
 
     void Start()
     {
-        if (UseConfigFile)
-            ConfigureFromFile();
+        // if (UseConfigFile)
+        //    ConfigureFromFile();
 
-        SetGreedVariables();
-        InstantiateAllGameObjects();
+        // SetGreedVariables();
+        // InstantiateAllGameObjects();
+        Instantiate(
+            new NewZigZagEnemy(ZigZagEnemyPrefab).GetPrefab(),
+            new Vector3(-4, 0, 0), new Quaternion(0, 0, 0, 0));
     }
 
     private void InstantiateAllGameObjects()
     {
-        InstantiateNewGameObject(new NewInnerAstroid(AstroidPrefab), NumberOfInnerAstroids);
-        InstantiateNewGameObject(new NewEnemy(EnemyPrefab), NumberOfEnemies);
-        InstantiateNewGameObject(new NewAstroid(AstroidPrefab), NumberOfAstroids);
+        // InstantiateNewGameObject(new NewInnerAstroid(AstroidPrefab), NumberOfInnerAstroids);
+        // InstantiateNewGameObject(new NewEnemy(EnemyPrefab), NumberOfEnemies);
+        // InstantiateNewGameObject(new NewAstroid(AstroidPrefab), NumberOfAstroids);
     }
 
     private void InstantiateNewGameObject(INewGameObject newGameObject, int amount)
@@ -230,6 +233,7 @@ public class SceneFactory : MonoBehaviour
             (NumberOfEnemies + NumberOfAstroids) > MaxNumberOfGameObjectsAllowed;
     }
 
+    /*
     private void SetGreedVariables()
     {
         var bgSize = Background.GetComponent<Renderer>().bounds.size;
@@ -241,6 +245,7 @@ public class SceneFactory : MonoBehaviour
         _stopCreatingInnerAstroids = false;
         LockGreedCenter();
     }
+    */
 
     private void LockGreedCenter()
     {
