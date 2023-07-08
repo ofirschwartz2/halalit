@@ -8,15 +8,16 @@ using Random = UnityEngine.Random;
 public class ZigZagEnemyMovementController : MonoBehaviour
 {
 
-    public float EnemyThrust, SpeedLimit, KnockbackGunMultiplier;
+    public float EnemyThrust, SpeedLimit, KnockbackGunMultiplier, Velocity;
     public bool UseConfigFile;
-    public int ItemDropRate, _directionZigzag;
-    private Rigidbody2D _rigidBody;
-    private float _changeDirectionInterval, 
-        _changeDirectionTime, _velocity;
-    private Vector2 _direction;
+    public int ItemDropRate;
     public GameObject ItemPrefab;
 
+    private Rigidbody2D _rigidBody;
+    private float _changeDirectionInterval, _changeDirectionTime;
+    private Vector2 _direction;
+    private float _zigZagAngle;
+    private int _directionZigzagFlag;
 
     void Start()
     {
@@ -24,11 +25,11 @@ public class ZigZagEnemyMovementController : MonoBehaviour
         if (UseConfigFile)
             ConfigureFromFile();
 
-        _directionZigzag = 1;
-        _changeDirectionInterval = 2;
-        _velocity = 2;
-        
+        _directionZigzagFlag = 1;
+        _changeDirectionInterval = 1.5f;
+        _zigZagAngle = 60;
         _direction = GetRandomVector2OnCircle(1);
+
         _changeDirectionTime = Time.time + _changeDirectionInterval;
         tag = "ZigZagEnemy";
 
@@ -39,7 +40,7 @@ public class ZigZagEnemyMovementController : MonoBehaviour
         if (DidZigZagTimePass()) 
             ChangeDirection();
 
-        _rigidBody.velocity = _direction * _velocity;
+        _rigidBody.velocity = _direction * Velocity;
     }
 
     private Vector2 GetRandomVector2OnCircle(float radius) 
@@ -50,27 +51,28 @@ public class ZigZagEnemyMovementController : MonoBehaviour
         return new Vector2(x, y);
     }
 
-    private Vector2 GetPlus90Degrees(Vector2 vector)
+    // TODO: move to a utility class
+    Vector2 AddAngleToVector2(Vector2 vector, float angleInDegrees)
     {
-        return new Vector2(-vector.y, vector.x);
-    }
-
-    private Vector2 GetMinus90Degrees(Vector2 vector)
-    {
-        return new Vector2(vector.y, -vector.x);
+        float angleInRadians = angleInDegrees * Mathf.Deg2Rad;
+        float currentAngle = Mathf.Atan2(vector.y, vector.x);
+        float newAngle = currentAngle + angleInRadians;
+        float x = Mathf.Cos(newAngle);
+        float y = Mathf.Sin(newAngle);
+        return new Vector2(x, y);
     }
 
     private void ChangeDirection()
     {
-        if (_directionZigzag == 1)
+        if (_directionZigzagFlag == 1)
         {
-            _direction = GetPlus90Degrees(_direction);
-            _directionZigzag--;
+            _direction = AddAngleToVector2(_direction, _zigZagAngle);
+            _directionZigzagFlag--;
         }
         else 
         {
-            _direction = GetMinus90Degrees(_direction);
-            _directionZigzag++;
+            _direction = AddAngleToVector2(_direction, _zigZagAngle * (-1));
+            _directionZigzagFlag++;
         }
         UpdateChangeDirectionTime();
     }
@@ -97,7 +99,6 @@ public class ZigZagEnemyMovementController : MonoBehaviour
             GoInAnotherDirection();
     }
 
-
     private void KillMe(Collider2D other)
     {
         if (ShouldDropItem())
@@ -118,16 +119,7 @@ public class ZigZagEnemyMovementController : MonoBehaviour
 
     private void GoInAnotherDirection()
     {
-        if (_directionZigzag == 1)
-        {
-            GetMinus90Degrees(_direction);
-            GetMinus90Degrees(_direction);
-        }
-        else
-        {
-            GetPlus90Degrees(_direction);
-            GetPlus90Degrees(_direction);
-        }
+        AddAngleToVector2(_direction, 180);
     }
 
     private void KnockMeBack(Collider2D other, float otherThrust = 1f)
@@ -138,11 +130,12 @@ public class ZigZagEnemyMovementController : MonoBehaviour
 
     private void ConfigureFromFile()
     {
-        string[] props = { "SpeedLimit", "EnemyThrust", "KnockbackGunMultiplier", "ItemDropRate" };
+        string[] props = { "SpeedLimit", "EnemyThrust", "KnockbackGunMultiplier", "ItemDropRate", "Velocity" };
         Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
         SpeedLimit = propsFromConfig["SpeedLimit"];
         EnemyThrust = propsFromConfig["EnemyThrust"];
         KnockbackGunMultiplier = propsFromConfig["KnockbackGunMultiplier"];
         ItemDropRate = (int)propsFromConfig["ItemDropRate"];
+        Velocity = propsFromConfig["Velocity"];
     }
 }
