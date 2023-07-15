@@ -165,7 +165,7 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     public virtual void OnPointerUp(PointerEventData eventData)
     {
         input = Vector2.zero;
-        // TODO: make a smooth returning to Vector2.zero
+        // TODO (dev): make a smooth returning to Vector2.zero
         //handle.anchoredPosition = Vector2.zero;
         _handleShouldReturnToCenter = true;
     }
