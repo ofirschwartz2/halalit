@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Common;
+using Assets.Enums;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -16,8 +17,8 @@ public class ZigZagEnemyMovementController : MonoBehaviour
     private Rigidbody2D _rigidBody;
     private float _changeDirectionInterval, _changeDirectionTime;
     private Vector2 _direction;
-    private float _zigZagAngle;
-    private int _directionZigzagFlag;
+    private float _changeFromDirectionAngle;
+    private ZigZagDirection _zigZagDirectionFlag;
 
     void Start()
     {
@@ -25,10 +26,10 @@ public class ZigZagEnemyMovementController : MonoBehaviour
         if (UseConfigFile)
             ConfigureFromFile();
 
-        _directionZigzagFlag = 1;
-        _changeDirectionInterval = 1.5f;
-        _zigZagAngle = 60;
-        _direction = GetRandomVector2OnCircle(1);
+        _zigZagDirectionFlag = ZigZagDirection.ZAG;
+        _changeDirectionInterval = 2;
+        _changeFromDirectionAngle = 60;
+        _direction = GetRandomVector2OnCircle();
 
         _changeDirectionTime = Time.time + _changeDirectionInterval;
         tag = "ZigZagEnemy";
@@ -38,12 +39,27 @@ public class ZigZagEnemyMovementController : MonoBehaviour
     void Update()
     {
         if (DidZigZagTimePass()) 
-            ChangeDirection();
+        {
+            ChangeZigZagDirection();
+        }
 
-        _rigidBody.velocity = _direction * Velocity;
+        Move();
     }
 
-    private Vector2 GetRandomVector2OnCircle(float radius) 
+    private void Move()
+    {
+        if (IsUnderSpeedLimit()) 
+        {
+            _rigidBody.AddForce(_direction * Velocity);
+        }
+    }
+
+    private bool IsUnderSpeedLimit()
+    {
+        return _rigidBody.velocity.magnitude < SpeedLimit;
+    }
+
+    private Vector2 GetRandomVector2OnCircle(float radius = 1) 
     {
         float angle = Random.Range(0, 2 * Mathf.PI);
         float x = radius * Mathf.Cos(angle);
@@ -51,8 +67,7 @@ public class ZigZagEnemyMovementController : MonoBehaviour
         return new Vector2(x, y);
     }
 
-    // TODO: move to a utility class
-    Vector2 AddAngleToVector2(Vector2 vector, float angleInDegrees)
+    Vector2 AddAngleZigZagVector(Vector2 vector, float angleInDegrees)
     {
         float angleInRadians = angleInDegrees * Mathf.Deg2Rad;
         float currentAngle = Mathf.Atan2(vector.y, vector.x);
@@ -62,17 +77,17 @@ public class ZigZagEnemyMovementController : MonoBehaviour
         return new Vector2(x, y);
     }
 
-    private void ChangeDirection()
+    private void ChangeZigZagDirection()
     {
-        if (_directionZigzagFlag == 1)
+        if (_zigZagDirectionFlag == ZigZagDirection.ZIG)
         {
-            _direction = AddAngleToVector2(_direction, _zigZagAngle);
-            _directionZigzagFlag--;
+            _direction = AddAngleZigZagVector(_direction, _changeFromDirectionAngle);
+            _zigZagDirectionFlag = ZigZagDirection.ZAG;
         }
-        else 
+        else
         {
-            _direction = AddAngleToVector2(_direction, _zigZagAngle * (-1));
-            _directionZigzagFlag++;
+            _direction = AddAngleZigZagVector(_direction, _changeFromDirectionAngle * (-1));
+            _zigZagDirectionFlag = ZigZagDirection.ZIG;
         }
         UpdateChangeDirectionTime();
     }
@@ -119,7 +134,7 @@ public class ZigZagEnemyMovementController : MonoBehaviour
 
     private void GoInAnotherDirection()
     {
-        AddAngleToVector2(_direction, 180);
+        AddAngleZigZagVector(_direction, 180);
     }
 
     private void KnockMeBack(Collider2D other, float otherThrust = 1f)
