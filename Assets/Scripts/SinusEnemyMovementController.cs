@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SinusEnemyMovementController : MonoBehaviour
 {
-    public float XVelocity, YVelocity, XSpeedLimit, YSpeedLimit;
+    public float XForce, YForce, YSpeedLimit;
     public bool UseConfigFile;
 
     private Rigidbody2D _rigidBody;          // Reference to the Rigidbody2D component
@@ -19,7 +19,7 @@ public class SinusEnemyMovementController : MonoBehaviour
     {
         _rigidBody = GetComponent<Rigidbody2D>();  // Get the reference to the Rigidbody2D component
         _direction = RIGHT;
-        _changeXForceDirectionInterval = 1;
+        _changeXForceDirectionInterval = 2;
         UpdateChangeXForceDirectionTime();
         if (UseConfigFile)
             ConfigureFromFile();
@@ -39,7 +39,7 @@ public class SinusEnemyMovementController : MonoBehaviour
             UpdateChangeXForceDirectionTime();
             XChangeDirection();
         }
-        _rigidBody.AddForce(_direction * XVelocity);
+        _rigidBody.AddForce(_direction * XForce);
     }
 
     private void XChangeDirection()
@@ -57,9 +57,8 @@ public class SinusEnemyMovementController : MonoBehaviour
     {
         if (YIsUnderSpeedLimit())
         {
-            _rigidBody.AddForce(UP * YVelocity);
+            _rigidBody.AddForce(UP * YForce);
         }
-
     }
     private bool YIsUnderSpeedLimit()
     {
@@ -73,11 +72,10 @@ public class SinusEnemyMovementController : MonoBehaviour
 
     private void ConfigureFromFile()
     {
-        string[] props = { "XVelocity", "YVelocity", "XSpeedLimit", "YSpeedLimit"};
+        string[] props = { "XForce", "YForce", "YSpeedLimit"};
         Dictionary<string, float> propsFromConfig = ConfigFileReader.GetPropsFromConfig(GetType().Name, props);
-        XVelocity = propsFromConfig["XVelocity"];
-        YVelocity = propsFromConfig["YVelocity"];
-        XSpeedLimit = propsFromConfig["XSpeedLimit"];
+        XForce = propsFromConfig["XForce"];
+        YForce = propsFromConfig["YForce"];
         YSpeedLimit = propsFromConfig["YSpeedLimit"];
     }
 }
