@@ -49,7 +49,7 @@
   </EnemyMovementController>
 
 	<ZigZagEnemyMovementController>
-		<Velocity>2</Velocity>
+		<Velocity>3</Velocity>
 		<EnemyThrust>1.2</EnemyThrust>
 		<SpeedLimit>2</SpeedLimit>
 		<ItemDropRate>50</ItemDropRate>

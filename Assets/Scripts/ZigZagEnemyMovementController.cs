@@ -15,9 +15,8 @@ public class ZigZagEnemyMovementController : MonoBehaviour
     public GameObject ItemPrefab;
 
     private Rigidbody2D _rigidBody;
-    private float _changeDirectionInterval, _changeDirectionTime;
+    private float _changeZigZagDirectionInterval, _changeZigZagDirectionTime, _changeFromDirectionAngle;
     private Vector2 _direction;
-    private float _changeFromDirectionAngle;
     private ZigZagDirection _zigZagDirectionFlag;
 
     void Start()
@@ -27,11 +26,11 @@ public class ZigZagEnemyMovementController : MonoBehaviour
             ConfigureFromFile();
 
         _zigZagDirectionFlag = ZigZagDirection.ZAG;
-        _changeDirectionInterval = 2;
+        _changeZigZagDirectionInterval = 2;
         _changeFromDirectionAngle = 60;
         _direction = GetRandomVector2OnCircle();
+        UpdateChangeZigZagDirectionTime();
 
-        _changeDirectionTime = Time.time + _changeDirectionInterval;
         tag = "ZigZagEnemy";
 
     }
@@ -89,17 +88,17 @@ public class ZigZagEnemyMovementController : MonoBehaviour
             _direction = AddAngleZigZagVector(_direction, _changeFromDirectionAngle * (-1));
             _zigZagDirectionFlag = ZigZagDirection.ZIG;
         }
-        UpdateChangeDirectionTime();
+        UpdateChangeZigZagDirectionTime();
     }
 
     private bool DidZigZagTimePass()
     {
-        return Time.time > _changeDirectionTime;
+        return Time.time > _changeZigZagDirectionTime;
     }
 
-    private void UpdateChangeDirectionTime()
+    private void UpdateChangeZigZagDirectionTime()
     {
-        _changeDirectionTime = Time.time + _changeDirectionInterval;
+        _changeZigZagDirectionTime = Time.time + _changeZigZagDirectionInterval;
     }
 
     void OnTriggerEnter2D(Collider2D other)
