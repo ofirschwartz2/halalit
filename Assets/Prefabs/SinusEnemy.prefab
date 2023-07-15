@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5574465411994061092}
-  - component: {fileID: -2193607300677196352}
   - component: {fileID: 2344746301380082662}
   - component: {fileID: 3715633571040811642}
+  - component: {fileID: -4605245482289385925}
   m_Layer: 0
-  m_Name: ZigZagEnemy
+  m_Name: SinusEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,25 +35,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-2193607300677196352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4031665267667881402}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6608236bdb9c55a48a3780221b1451d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnemyThrust: 0
-  SpeedLimit: 0
-  KnockbackGunMultiplier: 0
-  Velocity: 0
-  UseConfigFile: 1
-  ItemDropRate: 0
-  ItemPrefab: {fileID: 0}
 --- !u!50 &2344746301380082662
 Rigidbody2D:
   serializedVersion: 4
@@ -116,6 +97,21 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
+--- !u!114 &-4605245482289385925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4031665267667881402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2868312333e08544f9e32253e884bc6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Velocity: 0
+  XSpeedLimit: 0
+  YSpeedLimit: 0
 --- !u!1 &6943194438606105347
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,7 +186,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -9095717837082945937, guid: dc5d7cd8263c9d24ea9f17b2af8ec8fd, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.21150768, g: 0.46226418, b: 0.3483911, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

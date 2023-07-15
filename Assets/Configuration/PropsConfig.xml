@@ -55,6 +55,14 @@
 		<ItemDropRate>50</ItemDropRate>
 		<KnockbackGunMultiplier>2</KnockbackGunMultiplier>
 	</ZigZagEnemyMovementController>
+
+	<SinusEnemyMovementController>
+		<Velocity>3</Velocity>
+		<EnemyThrust>1.2</EnemyThrust>
+		<SpeedLimit>2</SpeedLimit>
+		<ItemDropRate>50</ItemDropRate>
+		<KnockbackGunMultiplier>2</KnockbackGunMultiplier>
+	</SinusEnemyMovementController>
 	
 	<AstroidMovementController>
 		<SpeedLimit>15</SpeedLimit>

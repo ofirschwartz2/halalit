@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Assets.Common;
 using Assets.Enums;
@@ -26,7 +25,7 @@ public class ZigZagEnemyMovementController : MonoBehaviour
             ConfigureFromFile();
 
         _zigZagDirectionFlag = ZigZagDirection.ZAG;
-        _changeZigZagDirectionInterval = 2;
+        _changeZigZagDirectionInterval = 4;
         _changeFromDirectionAngle = 60;
         _direction = GetRandomVector2OnCircle();
         UpdateChangeZigZagDirectionTime();
