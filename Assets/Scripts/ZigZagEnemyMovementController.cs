@@ -21,11 +21,12 @@ public class ZigZagEnemyMovementController : MonoBehaviour
     void Start()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
+
         if (UseConfigFile)
             ConfigureFromFile();
 
         _zigZagDirectionFlag = ZigZagDirection.ZAG;
-        _changeZigZagDirectionInterval = 4;
+        _changeZigZagDirectionInterval = 2;
         _changeFromDirectionAngle = 60;
         _direction = GetRandomVector2OnCircle();
         UpdateChangeZigZagDirectionTime();

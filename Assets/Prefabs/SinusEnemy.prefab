@@ -112,6 +112,7 @@ MonoBehaviour:
   Velocity: 0
   XSpeedLimit: 0
   YSpeedLimit: 0
+  UseConfigFile: 1
 --- !u!1 &6943194438606105347
 GameObject:
   m_ObjectHideFlags: 0

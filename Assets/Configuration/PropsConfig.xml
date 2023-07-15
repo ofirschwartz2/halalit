@@ -57,9 +57,11 @@
 	</ZigZagEnemyMovementController>
 
 	<SinusEnemyMovementController>
-		<Velocity>3</Velocity>
+		<XVelocity>3</XVelocity>
+		<YVelocity>2</YVelocity>
+		<XSpeedLimit>2</XSpeedLimit>
+		<YSpeedLimit>2</YSpeedLimit>
 		<EnemyThrust>1.2</EnemyThrust>
-		<SpeedLimit>2</SpeedLimit>
 		<ItemDropRate>50</ItemDropRate>
 		<KnockbackGunMultiplier>2</KnockbackGunMultiplier>
 	</SinusEnemyMovementController>
