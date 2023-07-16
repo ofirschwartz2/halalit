@@ -7,7 +7,7 @@ using Assets.Enums;
 public class SceneFactory : MonoBehaviour
 {
     public bool UseConfigFile;
-    public GameObject ZigZagEnemyPrefab, SinusEnemyPrefab; // Background, EnemyPrefab, AstroidPrefab;
+    public GameObject ZigZagEnemyPrefab, SinusEnemyPrefab, GreekEnemyPrefab; // Background, EnemyPrefab, AstroidPrefab;
     public int NumberOfInnerAstroids, MaxNumberOfGameObjectsAllowed, MaxNumberOfEnemiesAllowed, NumberOfEnemies, MaxNumberOfAstroidsAllowed, NumberOfAstroids, SlotsOnGameGreedX, SlotsOnGameGreedY, InfiniteLoopTH, InnerAstroidMinScale, InnerAstroidMaxScale;
     
     private float _xGreedSpacing, _yGreedSpacing;
@@ -26,11 +26,15 @@ public class SceneFactory : MonoBehaviour
         
         Instantiate(
             new NewZigZagEnemy(ZigZagEnemyPrefab).GetPrefab(),
-            new Vector3(-8, -4, 0), new Quaternion(0, 0, 0, 0));
+            new Vector3(4, 4, 0), new Quaternion(0, 0, 0, 0));
         
         Instantiate(
             new NewSinusEnemy(SinusEnemyPrefab).GetPrefab(),
             new Vector3(-4, 0, 0), new Quaternion(0, 0, 0, 0));
+
+        Instantiate(
+            new NewGreekEnemy(GreekEnemyPrefab).GetPrefab(),
+            new Vector3(-4, -8, 0), new Quaternion(0, 0, 0, 0));
     }
 
     private void InstantiateAllGameObjects()

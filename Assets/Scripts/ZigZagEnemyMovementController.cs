@@ -16,7 +16,7 @@ public class ZigZagEnemyMovementController : MonoBehaviour
     private Rigidbody2D _rigidBody;
     private float _changeZigZagDirectionInterval, _changeZigZagDirectionTime, _changeFromDirectionAngle;
     private Vector2 _direction;
-    private ZigZagDirection _zigZagDirectionFlag;
+    private ZigZagEnemyDirection _zigZagDirectionFlag;
 
     void Start()
     {
@@ -25,7 +25,7 @@ public class ZigZagEnemyMovementController : MonoBehaviour
         if (UseConfigFile)
             ConfigureFromFile();
 
-        _zigZagDirectionFlag = ZigZagDirection.ZAG;
+        _zigZagDirectionFlag = ZigZagEnemyDirection.ZAG;
         _changeZigZagDirectionInterval = 2;
         _changeFromDirectionAngle = 60;
         _direction = GetRandomVector2OnCircle();
@@ -78,15 +78,15 @@ public class ZigZagEnemyMovementController : MonoBehaviour
 
     private void ChangeZigZagDirection()
     {
-        if (_zigZagDirectionFlag == ZigZagDirection.ZIG)
+        if (_zigZagDirectionFlag == ZigZagEnemyDirection.ZIG)
         {
             _direction = AddAngleZigZagVector(_direction, _changeFromDirectionAngle);
-            _zigZagDirectionFlag = ZigZagDirection.ZAG;
+            _zigZagDirectionFlag = ZigZagEnemyDirection.ZAG;
         }
         else
         {
             _direction = AddAngleZigZagVector(_direction, _changeFromDirectionAngle * (-1));
-            _zigZagDirectionFlag = ZigZagDirection.ZIG;
+            _zigZagDirectionFlag = ZigZagEnemyDirection.ZIG;
         }
         UpdateChangeZigZagDirectionTime();
     }

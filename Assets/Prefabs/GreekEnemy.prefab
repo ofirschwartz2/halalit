@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 5574465411994061092}
   - component: {fileID: 2344746301380082662}
   - component: {fileID: 3715633571040811642}
-  - component: {fileID: -4605245482289385925}
+  - component: {fileID: 6314906732211206059}
   m_Layer: 0
-  m_Name: SinusEnemy
+  m_Name: GreekEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -97,7 +97,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
---- !u!114 &-4605245482289385925
+--- !u!114 &6314906732211206059
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -106,12 +106,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4031665267667881402}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2868312333e08544f9e32253e884bc6d, type: 3}
+  m_Script: {fileID: 11500000, guid: 16863766dce12b94b80d7021ca149db5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  XForce: 0
-  YForce: 0
-  YSpeedLimit: 0
+  Force: 0
   UseConfigFile: 1
 --- !u!1 &6943194438606105347
 GameObject:
@@ -187,7 +185,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -9095717837082945937, guid: dc5d7cd8263c9d24ea9f17b2af8ec8fd, type: 3}
-  m_Color: {r: 0.4627451, g: 0.21176474, b: 0.42062318, a: 1}
+  m_Color: {r: 0.21150768, g: 0.46226418, b: 0.3483911, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
