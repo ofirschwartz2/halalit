@@ -21,6 +21,7 @@ TagManager:
   - ZigZagEnemy
   - SinusEnemy
   - GreekEnemy
+  - FollowingEnemy
   layers:
   - Default
   - TransparentFX
