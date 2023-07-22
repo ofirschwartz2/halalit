@@ -20,7 +20,7 @@ public class Shot1Script : MonoBehaviour
 
             Speed = propsFromConfig["Speed"];
         }
-        _rigidBody.velocity = transform.right * Speed;
+        _rigidBody.velocity = transform.up * Speed; // WILL CREATE A BUG IN GUN
     }
 
     void OnTriggerEnter2D(Collider2D other){

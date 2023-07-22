@@ -22,6 +22,7 @@ TagManager:
   - SinusEnemy
   - GreekEnemy
   - FollowingEnemy
+  - ShootingInRangeEnemy
   layers:
   - Default
   - TransparentFX

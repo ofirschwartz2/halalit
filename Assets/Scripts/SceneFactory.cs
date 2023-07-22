@@ -7,7 +7,13 @@ using Assets.Enums;
 public class SceneFactory : MonoBehaviour
 {
     public bool UseConfigFile;
-    public GameObject ZigZagEnemyPrefab, SinusEnemyPrefab, GreekEnemyPrefab, FollowingEnemyPrefab; // Background, EnemyPrefab, AstroidPrefab;
+    public GameObject 
+        ZigZagEnemyPrefab, 
+        SinusEnemyPrefab, 
+        GreekEnemyPrefab, 
+        FollowingEnemyPrefab,
+        ShootingInRangeEnemyPrefab; // Background, EnemyPrefab, AstroidPrefab;
+    
     public int NumberOfInnerAstroids, MaxNumberOfGameObjectsAllowed, MaxNumberOfEnemiesAllowed, NumberOfEnemies, MaxNumberOfAstroidsAllowed, NumberOfAstroids, SlotsOnGameGreedX, SlotsOnGameGreedY, InfiniteLoopTH, InnerAstroidMinScale, InnerAstroidMaxScale;
     
     private float _xGreedSpacing, _yGreedSpacing;
@@ -23,7 +29,7 @@ public class SceneFactory : MonoBehaviour
         // SetGreedVariables();
         // InstantiateAllGameObjects();
         
-        
+        /*
         Instantiate(
             new NewZigZagEnemy(ZigZagEnemyPrefab).GetPrefab(),
             new Vector3(4, 4, 0), new Quaternion(0, 0, 0, 0));
@@ -39,6 +45,11 @@ public class SceneFactory : MonoBehaviour
         Instantiate(
             new NewFollowingEnemy(FollowingEnemyPrefab).GetPrefab(),
             new Vector3(-4, 2, 0), new Quaternion(0, 0, 0, 0));
+        */
+
+        Instantiate(
+            new NewShootingInRangeEnemy(ShootingInRangeEnemyPrefab).GetPrefab(),
+            new Vector3(-2, 2, 0), new Quaternion(0, 0, 0, 0));
     }
 
     private void InstantiateAllGameObjects()

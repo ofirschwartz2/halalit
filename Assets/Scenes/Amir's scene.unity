@@ -2041,6 +2041,7 @@ MonoBehaviour:
   ZigZagEnemyPrefab: {fileID: 4031665267667881402, guid: 1f327b7885ed05c46bf74cd0e552ce7f, type: 3}
   SinusEnemyPrefab: {fileID: 4031665267667881402, guid: 53f4c1d8bd6e9e942be2b7e887b83aca, type: 3}
   GreekEnemyPrefab: {fileID: 4031665267667881402, guid: 4ef1b54adc337d645bdff155ccd8c89f, type: 3}
+  FollowingEnemyPrefab: {fileID: 4031665267667881402, guid: 0b8279e4cdfb9c54fa988a9396324c8a, type: 3}
   NumberOfInnerAstroids: 0
   MaxNumberOfGameObjectsAllowed: 0
   MaxNumberOfEnemiesAllowed: 0

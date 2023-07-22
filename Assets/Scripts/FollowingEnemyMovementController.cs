@@ -58,7 +58,6 @@ public class FollowingEnemyMovementController : MonoBehaviour
     {
         if (DidWaitingTimePass())
         {
-            Debug.Log("Waiting time passed");
             _followingEnemyState = FollowingEnemyState.SET_ATTACKING;
         }
     }
@@ -88,7 +87,6 @@ public class FollowingEnemyMovementController : MonoBehaviour
 
         if (DidAttackTimePass())
         {
-            Debug.Log("Attacking time passed");
             _followingEnemyState = FollowingEnemyState.SET_WAITING;
         }
         else

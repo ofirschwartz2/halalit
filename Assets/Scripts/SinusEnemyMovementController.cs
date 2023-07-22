@@ -45,7 +45,6 @@ public class SinusEnemyMovementController : MonoBehaviour
     private void XChangeDirection()
     {
         _direction = _direction == RIGHT ? LEFT : RIGHT;
-        Debug.Log(_direction);
     }
 
     private bool DidXTimePass()

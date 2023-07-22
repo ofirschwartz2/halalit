@@ -1,131 +1,136 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <scripts>
 
-  <CameraScript>
-    <CameraXSize>21.5</CameraXSize>
-    <CameraYSize>12</CameraYSize>
-  </CameraScript>
+      <CameraScript>
+        <CameraXSize>21.5</CameraXSize>
+        <CameraYSize>12</CameraYSize>
+      </CameraScript>
 
-  <HalalitMovementController>
-    <ForceMultiplier>10</ForceMultiplier>
-    <SpinSpeed>10</SpinSpeed>
-    <_rigidBody.drag>2</_rigidBody.drag>
-    <HalalitThrust>1.1</HalalitThrust>
-    <SpeedLimit>15</SpeedLimit>
-    <CoolDownInterval>0.1</CoolDownInterval>
-  </HalalitMovementController>
+      <HalalitMovementController>
+        <ForceMultiplier>10</ForceMultiplier>
+        <SpinSpeed>10</SpinSpeed>
+        <_rigidBody.drag>2</_rigidBody.drag>
+        <HalalitThrust>1.1</HalalitThrust>
+        <SpeedLimit>15</SpeedLimit>
+        <CoolDownInterval>0.1</CoolDownInterval>
+      </HalalitMovementController>
 
-  <EnemyFactory>
-    <MaxNumberOfEnemies>30</MaxNumberOfEnemies>
-    <NumberOfEnemies>20</NumberOfEnemies>
-  </EnemyFactory>
+      <EnemyFactory>
+        <MaxNumberOfEnemies>30</MaxNumberOfEnemies>
+        <NumberOfEnemies>20</NumberOfEnemies>
+      </EnemyFactory>
 
-  <SceneFactory>
-    <MaxNumberOfGameObjectsAllowed>60</MaxNumberOfGameObjectsAllowed>
-    <MaxNumberOfEnemiesAllowed>20</MaxNumberOfEnemiesAllowed>
-    <MaxNumberOfAstroidsAllowed>20</MaxNumberOfAstroidsAllowed>
-    <NumberOfInnerAstroids>5</NumberOfInnerAstroids>
-    <NumberOfEnemies>5</NumberOfEnemies>
-    <NumberOfAstroids>0</NumberOfAstroids>
-    <SlotsOnGameGreedX>10</SlotsOnGameGreedX>
-    <SlotsOnGameGreedY>10</SlotsOnGameGreedY>
-    <InfiniteLoopTH>400</InfiniteLoopTH>
-    <InnerAstroidMinScale>1</InnerAstroidMinScale>
-    <InnerAstroidMaxScale>10</InnerAstroidMaxScale>
-  </SceneFactory>
+      <SceneFactory>
+        <MaxNumberOfGameObjectsAllowed>60</MaxNumberOfGameObjectsAllowed>
+        <MaxNumberOfEnemiesAllowed>20</MaxNumberOfEnemiesAllowed>
+        <MaxNumberOfAstroidsAllowed>20</MaxNumberOfAstroidsAllowed>
+        <NumberOfInnerAstroids>5</NumberOfInnerAstroids>
+        <NumberOfEnemies>5</NumberOfEnemies>
+        <NumberOfAstroids>0</NumberOfAstroids>
+        <SlotsOnGameGreedX>10</SlotsOnGameGreedX>
+        <SlotsOnGameGreedY>10</SlotsOnGameGreedY>
+        <InfiniteLoopTH>400</InfiniteLoopTH>
+        <InnerAstroidMinScale>1</InnerAstroidMinScale>
+        <InnerAstroidMaxScale>10</InnerAstroidMaxScale>
+      </SceneFactory>
 
-  <EnemyMovementController>
-    <MinXForce>-5</MinXForce>
-    <MaxXForce>5</MaxXForce>
-    <MinYForce>-5</MinYForce>
-    <MaxYForce>5</MaxYForce>
-    <XofEndOfMap>68</XofEndOfMap>
-    <YofEndOfMap>38</YofEndOfMap>
-    <EnemyThrust>1.2</EnemyThrust>
-    <SpeedLimit>2</SpeedLimit>
-    <_rigidBody.drag>2</_rigidBody.drag>
-    <ItemDropRate>50</ItemDropRate>
-    <KnockbackGunMultiplier>2</KnockbackGunMultiplier>
-  </EnemyMovementController>
+      <EnemyMovementController>
+        <MinXForce>-5</MinXForce>
+        <MaxXForce>5</MaxXForce>
+        <MinYForce>-5</MinYForce>
+        <MaxYForce>5</MaxYForce>
+        <XofEndOfMap>68</XofEndOfMap>
+        <YofEndOfMap>38</YofEndOfMap>
+        <EnemyThrust>1.2</EnemyThrust>
+        <SpeedLimit>2</SpeedLimit>
+        <_rigidBody.drag>2</_rigidBody.drag>
+        <ItemDropRate>50</ItemDropRate>
+        <KnockbackGunMultiplier>2</KnockbackGunMultiplier>
+      </EnemyMovementController>
 
-	<ZigZagEnemyMovementController>
-		<Velocity>3</Velocity>
-		<EnemyThrust>1.2</EnemyThrust>
+    <ZigZagEnemyMovementController>
+	    <Velocity>3</Velocity>
+	    <EnemyThrust>1.2</EnemyThrust>
+	    <SpeedLimit>2</SpeedLimit>
+	    <ItemDropRate>50</ItemDropRate>
+	    <KnockbackGunMultiplier>2</KnockbackGunMultiplier>
+    </ZigZagEnemyMovementController>
+
+    <SinusEnemyMovementController>
+	    <XForce>2</XForce>
+	    <YForce>3</YForce>
+	    <YSpeedLimit>3</YSpeedLimit>
+	    <EnemyThrust>1.2</EnemyThrust>
+	    <ItemDropRate>50</ItemDropRate>
+	    <KnockbackGunMultiplier>2</KnockbackGunMultiplier>
+    </SinusEnemyMovementController>
+
+    <GreekEnemyMovementController>
+	    <Force>1</Force>
+	    <EnemyThrust>1.2</EnemyThrust>
+	    <ItemDropRate>50</ItemDropRate>
+	    <KnockbackGunMultiplier>2</KnockbackGunMultiplier>
+    </GreekEnemyMovementController>
+
+    <FollowingEnemyMovementController>
+	    <Force>10</Force>
+	    <EnemyThrust>1.2</EnemyThrust>
+	    <ItemDropRate>50</ItemDropRate>
+	    <KnockbackGunMultiplier>2</KnockbackGunMultiplier>
+    </FollowingEnemyMovementController>
+	
+    <AstroidMovementController>
+	    <SpeedLimit>15</SpeedLimit>
+	    <EnemyThrust>1.2</EnemyThrust>
+	    <KnockbackGunMultiplier>2</KnockbackGunMultiplier>
+    </AstroidMovementController>
+
+	<ShootingInRangeEnemyMovementController>
+		<Force>3</Force>
 		<SpeedLimit>2</SpeedLimit>
-		<ItemDropRate>50</ItemDropRate>
-		<KnockbackGunMultiplier>2</KnockbackGunMultiplier>
-	</ZigZagEnemyMovementController>
-
-	<SinusEnemyMovementController>
-		<XForce>2</XForce>
-		<YForce>3</YForce>
-		<YSpeedLimit>3</YSpeedLimit>
-		<EnemyThrust>1.2</EnemyThrust>
-		<ItemDropRate>50</ItemDropRate>
-		<KnockbackGunMultiplier>2</KnockbackGunMultiplier>
-	</SinusEnemyMovementController>
-
-	<GreekEnemyMovementController>
-		<Force>1</Force>
-		<EnemyThrust>1.2</EnemyThrust>
-		<ItemDropRate>50</ItemDropRate>
-		<KnockbackGunMultiplier>2</KnockbackGunMultiplier>
-	</GreekEnemyMovementController>
-
-	<FollowingEnemyMovementController>
-		<Force>10</Force>
-		<EnemyThrust>1.2</EnemyThrust>
-		<ItemDropRate>50</ItemDropRate>
-		<KnockbackGunMultiplier>2</KnockbackGunMultiplier>
-	</FollowingEnemyMovementController>
+	</ShootingInRangeEnemyMovementController>
 	
-	<AstroidMovementController>
-		<SpeedLimit>15</SpeedLimit>
-		<EnemyThrust>1.2</EnemyThrust>
-		<KnockbackGunMultiplier>2</KnockbackGunMultiplier>
-	</AstroidMovementController>
-	
-  <Shot1Script>
-    <Speed>10</Speed>
-  </Shot1Script>
+    <Shot1Script>
+        <Speed>10</Speed>
+    </Shot1Script>
 
-  <Shot2Script>
-    <Lifetime>0.2</Lifetime>
-  </Shot2Script>
+      <Shot2Script>
+        <Lifetime>0.2</Lifetime>
+      </Shot2Script>
 
-  <KnockbackShotScript>
-    <Speed>1.01</Speed>
-    <Lifetime>0.5</Lifetime>
-  </KnockbackShotScript>
+      <KnockbackShotScript>
+        <Speed>1.01</Speed>
+        <Lifetime>0.5</Lifetime>
+      </KnockbackShotScript>
 
-  <GunController>
-  <CoolDownInterval>0.1</CoolDownInterval>
-  </GunController>
+      <GunController>
+      <CoolDownInterval>0.1</CoolDownInterval>
+      </GunController>
 
-  <AstroidtMovementController>
-    <MaxXSpeed>3</MaxXSpeed>
-    <MaxYSpeed>3</MaxYSpeed>
-    <MinRotation>0.1</MinRotation>
-    <MaxRotation>1</MaxRotation>
-    <ExplodeToSmallerAstroidsScaleTH>1.5</ExplodeToSmallerAstroidsScaleTH>
-    <ItemDropRate>50</ItemDropRate>
-  </AstroidtMovementController>
+      <AstroidtMovementController>
+        <MaxXSpeed>3</MaxXSpeed>
+        <MaxYSpeed>3</MaxYSpeed>
+        <MinRotation>0.1</MinRotation>
+        <MaxRotation>1</MaxRotation>
+        <ExplodeToSmallerAstroidsScaleTH>1.5</ExplodeToSmallerAstroidsScaleTH>
+        <ItemDropRate>50</ItemDropRate>
+      </AstroidtMovementController>
 
-  <PickupClawController>
-    <VelocityMultiplier>10</VelocityMultiplier>
-    <RotationToItemMultiplier>3</RotationToItemMultiplier>
-    <RotationToHalalitMultiplier>0.5</RotationToHalalitMultiplier>
-    <MoveToItemMultiplier>0.5</MoveToItemMultiplier>
-    <GrabDelay>0.5</GrabDelay>
-    <RopeLength>10</RopeLength>
-  </PickupClawController>
+      <PickupClawController>
+        <VelocityMultiplier>10</VelocityMultiplier>
+        <RotationToItemMultiplier>3</RotationToItemMultiplier>
+        <RotationToHalalitMultiplier>0.5</RotationToHalalitMultiplier>
+        <MoveToItemMultiplier>0.5</MoveToItemMultiplier>
+        <GrabDelay>0.5</GrabDelay>
+        <RopeLength>10</RopeLength>
+      </PickupClawController>
 
-  <FireRateItem>
-    <CooldownMultiplier>0.9</CooldownMultiplier>
-  </FireRateItem>
+      <FireRateItem>
+        <CooldownMultiplier>0.9</CooldownMultiplier>
+      </FireRateItem>
 
-  <ItemMovementController>
-    <MaxSpeed>2</MaxSpeed>
-  </ItemMovementController>
+      <ItemMovementController>
+        <MaxSpeed>2</MaxSpeed>
+      </ItemMovementController>
 
 </scripts>

@@ -60,7 +60,6 @@ public class GreekEnemyMovementController : MonoBehaviour
     private void ChangeDirection()
     {
         _direction = GetNextDirection<VerticalGreekEnemyDirection>();
-        Debug.Log(_direction);
         _isSpeedingUp = true;
         UpdateChangeDirectionTime();
     }
