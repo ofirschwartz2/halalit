@@ -89,6 +89,11 @@
 		<Force>3</Force>
 		<SpeedLimit>2</SpeedLimit>
 	</ShootingInRangeEnemyMovementController>
+
+	<ShootingLazerRangeEnemyMovementController>
+		<Force>3</Force>
+		<SpeedLimit>2</SpeedLimit>
+	</ShootingLazerRangeEnemyMovementController>
 	
     <Shot1Script>
         <Speed>10</Speed>

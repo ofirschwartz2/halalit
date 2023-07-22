@@ -23,6 +23,7 @@ TagManager:
   - GreekEnemy
   - FollowingEnemy
   - ShootingInRangeEnemy
+  - ShootingLazerRangeEnemy
   layers:
   - Default
   - TransparentFX
