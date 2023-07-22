@@ -1,11 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <scripts>
 
-  <CameraScript>
-    <CameraXSize>21.5</CameraXSize>
-    <CameraYSize>12</CameraYSize>
-  </CameraScript>
-
   <HalalitMovement>
     <_forceMultiplier>10</_forceMultiplier>
     <_spinSpeed>10</_spinSpeed>

@@ -1107,7 +1107,7 @@ RectTransform:
   - {fileID: 1331181817}
   - {fileID: 451967906}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1308,7 +1308,7 @@ GameObject:
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1334,12 +1334,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9091b575b4349942bbffed41fcc7b82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UseConfigFile: 1
-  MainCam: {fileID: 519420031}
-  Halalit: {fileID: 2130719621}
-  Background: {fileID: 814139006}
-  CameraXSize: 0
-  CameraYSize: 0
+  _camera: {fileID: 519420031}
+  _halalit: {fileID: 2130719621}
+  _background: {fileID: 814139006}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -1375,7 +1372,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 4.4991846
+  orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1404,7 +1401,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &545514304
 GameObject:
@@ -3144,7 +3141,7 @@ Transform:
   - {fileID: 36141982}
   - {fileID: 759986608}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &2130719624
 Rigidbody2D:
