@@ -4,6 +4,8 @@ using UnityEngine;
 
 class AmmoToggle : MonoBehaviour
 {
+    // TODO (dev): make the toggle a slider
+
     [SerializeField]
     private bool _useConfigFile;
     [SerializeField]
@@ -94,12 +96,10 @@ class AmmoToggle : MonoBehaviour
     private void LoadNewAmmo()
     {
         _loadingNewAmmo = true;
-        // TODO (dev): make handle untouchable but still returning to the center
     }
 
     private void FinishLoadingNewAmmo()
     {
         _loadingNewAmmo = false;
-        // TODO (dev): make handle touchable again
     }
 }

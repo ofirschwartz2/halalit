@@ -54,8 +54,7 @@ public class PickupClawGrabber : MonoBehaviour
 
         if (other.gameObject.CompareTag(Tag.HALALIT.GetDescription()) && _item != null)
         {
-            _item.SendMessage("LoadItem");
-            Destroy(_item);
+            _item = null;
         }
     }
 }

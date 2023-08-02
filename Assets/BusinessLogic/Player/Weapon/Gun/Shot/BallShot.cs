@@ -2,7 +2,7 @@ using Assets.Enums;
 using Assets.Utils;
 using UnityEngine;
 
-public class BallShot : MonoBehaviour // TODO (refactor): the stats of a shot (when it collide with enemy) needs to be on the shot script
+public class BallShot : MonoBehaviour // TODO (refactor): the stats (damage) of a shot (when it's collide with enemy) needs to be on the shot script
 {
     [SerializeField]
     private bool _useConfigFile;
@@ -21,11 +21,9 @@ public class BallShot : MonoBehaviour // TODO (refactor): the stats of a shot (w
         _rigidBody.velocity = transform.right * _speed;
     }
 
-    void OnTriggerEnter2D(Collider2D other) 
+    private void OnTriggerExit2D(Collider2D other)
     {
-        if (!other.CompareTag(Tag.SCREEN_EDGE.GetDescription()) && !other.CompareTag(Tag.SHOT.GetDescription()))
-        {
+        if (other.gameObject.CompareTag(Tag.BACKGROUND.GetDescription()))
             Destroy(gameObject);
-        }
     }
 }
