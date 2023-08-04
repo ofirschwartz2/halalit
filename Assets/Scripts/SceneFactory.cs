@@ -13,7 +13,8 @@ public class SceneFactory : MonoBehaviour
         GreekEnemyPrefab, 
         FollowingEnemyPrefab,
         ShootingInRangeEnemyPrefab,
-        ShootingLazerRangeEnemyPrefab; // Background, EnemyPrefab, AstroidPrefab;
+        ShootingLazerRangeEnemyPrefab,
+        ShootingLazerAsteriskEnemyPrefab; // Background, EnemyPrefab, AstroidPrefab;
     
     public int NumberOfInnerAstroids, MaxNumberOfGameObjectsAllowed, MaxNumberOfEnemiesAllowed, NumberOfEnemies, MaxNumberOfAstroidsAllowed, NumberOfAstroids, SlotsOnGameGreedX, SlotsOnGameGreedY, InfiniteLoopTH, InnerAstroidMinScale, InnerAstroidMaxScale;
     
@@ -54,7 +55,7 @@ public class SceneFactory : MonoBehaviour
         */
 
         Instantiate(
-            new NewShootingLazerRangeEnemy(ShootingLazerRangeEnemyPrefab).GetPrefab(),
+            new NewShootingLazerAsteriskEnemy(ShootingLazerAsteriskEnemyPrefab).GetPrefab(),
             new Vector3(-2, 2, 0), new Quaternion(0, 0, 0, 0));
     }
 

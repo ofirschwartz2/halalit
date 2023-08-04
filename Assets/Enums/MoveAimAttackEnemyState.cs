@@ -1,6 +1,6 @@
 ﻿namespace Assets.Enums
 {
-    public enum ShootingInRangeEnemyState
+    public enum MoveAimAttackEnemyState
     {
         MOVING,
         AIMING,

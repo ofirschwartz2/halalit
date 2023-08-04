@@ -16,7 +16,7 @@ public class ShootingInRangeEnemyMovementController : MonoBehaviour
 
     private Rigidbody2D _rigidBody;          // Reference to the Rigidbody2D component
     private Vector3 _direction, _halalitDirection;
-    private ShootingInRangeEnemyState _ShootingInRangeEnemyState;
+    private MoveAimAttackEnemyState _ShootingInRangeEnemyState;
     private float 
         _movingTime, _movingInterval,
         _aimingTime, _aimingInterval,
@@ -32,7 +32,7 @@ public class ShootingInRangeEnemyMovementController : MonoBehaviour
         _aimingInterval = 1;
         _shootingRange = 15;
         _didShoot = false;
-        _ShootingInRangeEnemyState = ShootingInRangeEnemyState.MOVING;
+        _ShootingInRangeEnemyState = MoveAimAttackEnemyState.MOVING;
         _direction = GetMovingDirection();
         _movingTime = GetMovingTime();
         if (UseConfigFile)
@@ -48,13 +48,13 @@ public class ShootingInRangeEnemyMovementController : MonoBehaviour
 
         switch (_ShootingInRangeEnemyState)
         {
-            case ShootingInRangeEnemyState.MOVING:
+            case MoveAimAttackEnemyState.MOVING:
                 MovingState();
                 break;
-            case ShootingInRangeEnemyState.AIMING:
+            case MoveAimAttackEnemyState.AIMING:
                 AimingState();
                 break;
-            case ShootingInRangeEnemyState.ATTACKING:
+            case MoveAimAttackEnemyState.ATTACKING:
                 AttackingState();
                 break;
             default:
@@ -73,7 +73,7 @@ public class ShootingInRangeEnemyMovementController : MonoBehaviour
         {
             _didShoot = false;
             _movingTime = GetMovingTime();
-            _ShootingInRangeEnemyState = ShootingInRangeEnemyState.MOVING;
+            _ShootingInRangeEnemyState = MoveAimAttackEnemyState.MOVING;
         }
     }
 
@@ -119,7 +119,7 @@ public class ShootingInRangeEnemyMovementController : MonoBehaviour
         if (DidAimingTimePass()) 
         {
             _attackingTime = GetAttackingTime();
-            _ShootingInRangeEnemyState = ShootingInRangeEnemyState.ATTACKING;
+            _ShootingInRangeEnemyState = MoveAimAttackEnemyState.ATTACKING;
         }
 
     }
@@ -150,7 +150,7 @@ public class ShootingInRangeEnemyMovementController : MonoBehaviour
         if (DidMovingTimePass()) 
         {
             _aimingTime = GetAimingTime();
-            _ShootingInRangeEnemyState = ShootingInRangeEnemyState.AIMING;
+            _ShootingInRangeEnemyState = MoveAimAttackEnemyState.AIMING;
         }
     }
 

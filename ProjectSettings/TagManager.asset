@@ -24,6 +24,7 @@ TagManager:
   - FollowingEnemy
   - ShootingInRangeEnemy
   - ShootingLazerRangeEnemy
+  - ShootingLazerAsteriskEnemy
   layers:
   - Default
   - TransparentFX

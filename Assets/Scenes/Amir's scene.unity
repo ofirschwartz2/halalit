@@ -730,7 +730,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 4.42
+  orthographic size: 13.56
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2042,6 +2042,9 @@ MonoBehaviour:
   SinusEnemyPrefab: {fileID: 4031665267667881402, guid: 53f4c1d8bd6e9e942be2b7e887b83aca, type: 3}
   GreekEnemyPrefab: {fileID: 4031665267667881402, guid: 4ef1b54adc337d645bdff155ccd8c89f, type: 3}
   FollowingEnemyPrefab: {fileID: 4031665267667881402, guid: 0b8279e4cdfb9c54fa988a9396324c8a, type: 3}
+  ShootingInRangeEnemyPrefab: {fileID: 4031665267667881402, guid: cc6280c55cd0f2046aba89c2c8585741, type: 3}
+  ShootingLazerRangeEnemyPrefab: {fileID: 4031665267667881402, guid: 3cc089326f6e26e44813ecb2aa675a06, type: 3}
+  ShootingLazerAsteriskEnemyPrefab: {fileID: 4031665267667881402, guid: f8dffa84db678af47a81f4b548e9623e, type: 3}
   NumberOfInnerAstroids: 0
   MaxNumberOfGameObjectsAllowed: 0
   MaxNumberOfEnemiesAllowed: 0

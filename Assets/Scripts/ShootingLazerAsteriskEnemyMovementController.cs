@@ -2,23 +2,24 @@ using Assets.Common;
 using Assets.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Windows;
 using static UnityEngine.GraphicsBuffer;
 
-public class ShootingLazerRangeEnemyMovementController : MonoBehaviour
+public class ShootingLazerAsteriskEnemyMovementController : MonoBehaviour
 {
     public float Force, SpeedLimit;
     public bool UseConfigFile;
-    public GameObject 
-        ShotPrefab,
-        AimingFromPrefab,
-        AimingToPrefab;
+    public GameObject
+        AimingPrefab,
+        ShotPrefab;
 
 
     private Rigidbody2D _rigidBody;          // Reference to the Rigidbody2D component
-    private Vector3 _direction, _halalitDirection;
+    private Vector3 _movingDirection;
     private MoveAimAttackEnemyState _ShootingInRangeEnemyState;
     private float 
         _movingTime, _movingInterval, _speedUpSlowDownInterval,
@@ -34,24 +35,19 @@ public class ShootingLazerRangeEnemyMovementController : MonoBehaviour
         _speedUpSlowDownInterval = (5 / 10) * _movingInterval;
         _attackingInterval = 1;
         _aimingInterval = 2;
-        _shootingRange = 15;
         _didShoot = false;
         _didShootAiming = false;
         _isSpeedingUp = true;
         _ShootingInRangeEnemyState = MoveAimAttackEnemyState.MOVING;
-        _direction = GetMovingDirection();
+        _movingDirection = GetMovingDirection();
         _movingTime = GetMovingTime();
         if (UseConfigFile)
             ConfigureFromFile();
-        tag = "ShootingLazerRangeEnemy"; // TODO: should this always be "Enemy" on the Enemy level?
+        tag = "ShootingLazerAsteriskEnemy"; // TODO: should this always be "Enemy" on the Enemy level?
     }
 
     void Update()
     {
-
-        _halalitDirection = GetHalalitDirection();
-        transform.rotation = Quaternion.LookRotation(Vector3.forward, _halalitDirection);
-
         switch (_ShootingInRangeEnemyState)
         {
             case MoveAimAttackEnemyState.MOVING:
@@ -117,29 +113,60 @@ public class ShootingLazerRangeEnemyMovementController : MonoBehaviour
 
     private void Shoot()
     {
-        Vector3 shootingStartPosition = GetShootingStartPosition();
-        Quaternion fromRotation = GetFromRotation(transform.rotation, -_shootingRange);
-        Instantiate(ShotPrefab, shootingStartPosition, fromRotation);
+        
+        //shoot in all 8 directions: up, up-right, right, right-down, down, left-down, left, left-up
+        // every shot is shot from the edge of the enemy: up from the top edge, right from the right edge, etc.
+        var rotations = GetAllRotations(transform.rotation);
+        var shootingStartPositions = GetShootingStartPositions();
+        for (var i = 0; i < shootingStartPositions.Count; i++)
+        {
+            Instantiate(ShotPrefab, shootingStartPositions[i], rotations[i]);
+            //shot.GetComponent<Rigidbody2D>().AddForce(shot.transform.up * Force);
+        }
         _didShoot = true;
     }
 
-    private Quaternion GetFromRotation(Quaternion rotation, float shootingRange)
+    // return all the rotations for the 8 directions. the enemy is always moving so the shooting direction is always changing
+    private List<Quaternion> GetAllRotations(Quaternion rotation)
     {
-        float fromAngle = -shootingRange;
-        return rotation * Quaternion.AngleAxis(fromAngle, Vector3.forward);
-    }
-    private Quaternion GetToRotation(Quaternion rotation, float shootingRange)
-    {
-        float fromAngle = shootingRange;
-        return rotation * Quaternion.AngleAxis(fromAngle, Vector3.forward);
+        return new List<Quaternion>()
+        {
+            rotation * Quaternion.identity,
+            rotation * Quaternion.Euler(0, 0, 45),
+            rotation * Quaternion.Euler(0, 0, 90),
+            rotation * Quaternion.Euler(0, 0, 135),
+            rotation * Quaternion.Euler(0, 0, 180),
+            rotation * Quaternion.Euler(0, 0, 225),
+            rotation * Quaternion.Euler(0, 0, 270),
+            rotation * Quaternion.Euler(0, 0, 315)
+        };
     }
 
-    private Vector3 GetShootingStartPosition()
+    // return the shooting start position for each of the 8 directions, based on the enemy's current position
+    private List<Vector3> GetShootingStartPositions()
     {
-        Vector3 halfExtents = GetComponent<CapsuleCollider2D>().bounds.extents;
-        Vector3 offset = _halalitDirection.normalized * halfExtents.magnitude;
-        return transform.position + offset;
+        return new List<Vector3>()
+        {
+            new Vector3(transform.position.x, transform.position.y + 1.1f, transform.position.z),
+            new Vector3(transform.position.x - 1.1f, transform.position.y + 1.1f, transform.position.z),
+            new Vector3(transform.position.x - 1.1f, transform.position.y, transform.position.z),
+            new Vector3(transform.position.x - 1.1f, transform.position.y - 1.1f, transform.position.z),
+            new Vector3(transform.position.x, transform.position.y - 1.1f, transform.position.z),
+            new Vector3(transform.position.x + 1.1f, transform.position.y - 1.1f, transform.position.z),
+            new Vector3(transform.position.x + 1.1f, transform.position.y, transform.position.z),
+            new Vector3(transform.position.x + 1.1f, transform.position.y + 1.1f, transform.position.z)
+            /*
+            new Vector3(transform.position.x + 1.1f, transform.position.y + 1.1f, transform.position.z),
+            new Vector3(transform.position.x + 1.1f, transform.position.y, transform.position.z),
+            new Vector3(transform.position.x + 1.1f, transform.position.y - 1.1f, transform.position.z),
+            new Vector3(transform.position.x, transform.position.y - 1.1f, transform.position.z),
+            
+            
+            
+            */        
+            };
     }
+
     private Vector2 GetMovingDirection()
     {
         return new Vector2(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f));
@@ -163,11 +190,10 @@ public class ShootingLazerRangeEnemyMovementController : MonoBehaviour
 
     private void ShootAimingRays()
     {
-        Vector3 shootingStartPosition = GetShootingStartPosition();
-        Quaternion fromRotation = GetFromRotation(transform.rotation, -_shootingRange);
-        Quaternion toRotation = GetFromRotation(transform.rotation, _shootingRange);
-        Instantiate(AimingFromPrefab, shootingStartPosition, fromRotation);
-        Instantiate(AimingToPrefab, shootingStartPosition, toRotation);
+        //Vector3 shootingStartPosition = GetShootingStartPositions();
+        //Quaternion upRotation = GetFromRotation(transform.rotation, -_shootingRange);
+        //Quaternion toRotation = GetFromRotation(transform.rotation, _shootingRange);
+        //Instantiate(AimingPrefab, shootingStartPosition, fromRotation);
     }
     private bool DidAimingTimePass()
     {
@@ -193,7 +219,7 @@ public class ShootingLazerRangeEnemyMovementController : MonoBehaviour
 
         if (IsUnderSpeedLimit()) 
         {
-            _rigidBody.AddForce(_direction * Force * GetSpeedUpDlowDownNumber());
+            _rigidBody.AddForce(_movingDirection * Force * GetSpeedUpDlowDownNumber());
         }
 
         if (DidMovingTimePass()) 

@@ -94,6 +94,11 @@
 		<Force>3</Force>
 		<SpeedLimit>2</SpeedLimit>
 	</ShootingLazerRangeEnemyMovementController>
+
+	<ShootingLazerAsteriskEnemyMovementController>
+		<Force>3</Force>
+		<SpeedLimit>2</SpeedLimit>
+	</ShootingLazerAsteriskEnemyMovementController>
 	
     <Shot1Script>
         <Speed>10</Speed>
