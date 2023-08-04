@@ -76,7 +76,7 @@ namespace Assets.Utils
             return (Utils.GetVectorMagnitude(myRigidBody2D.velocity) + Utils.GetVectorMagnitude(otherRigidBody2D.velocity)) * thrust;
         }
 
-        public static Vector2 GetRandomVector(int minX, int maxX, int minY, int maxY)
+        public static Vector2 GetRandomVector(float minX, float maxX, float minY, float maxY)
         {
             return new Vector2(UnityEngine.Random.Range(minX, maxX), UnityEngine.Random.Range(minY, maxY));
         }

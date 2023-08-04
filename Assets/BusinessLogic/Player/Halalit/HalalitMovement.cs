@@ -26,7 +26,7 @@ public class HalalitMovement : MonoBehaviour
     private float _knockBackCooldownTime;
 
     void Start()
-    {        
+    {
         if (_useConfigFile)
         {
             ConfigFileReader.LoadMembersFromConfigFile(this);

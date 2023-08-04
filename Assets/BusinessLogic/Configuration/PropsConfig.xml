@@ -1,11 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <scripts>
 
-  <CameraScript>
-    <CameraXSize>21.5</CameraXSize>
-    <CameraYSize>12</CameraYSize>
-  </CameraScript>
-
   <HalalitMovement>
     <_forceMultiplier>10</_forceMultiplier>
     <_spinSpeed>10</_spinSpeed>
@@ -70,18 +65,15 @@
   </AmmoToggle>
   
   <Gun>
-    <_coolDownInterval>0.5</_coolDownInterval>
+    <_cooldownInterval>0.5</_cooldownInterval>
     <_attackJoystickEdge>0.8</_attackJoystickEdge>
   </Gun>
 
-  <AstroidtMovementController>
-    <MaxXSpeed>3</MaxXSpeed>
-    <MaxYSpeed>3</MaxYSpeed>
-    <MinRotation>0.1</MinRotation>
-    <MaxRotation>1</MaxRotation>
-    <ExplodeToSmallerAstroidsScaleTH>1.5</ExplodeToSmallerAstroidsScaleTH>
-    <ItemDropRate>50</ItemDropRate>
-  </AstroidtMovementController>
+  <AsteroidMovement>
+    <_maxVelocity>3</_maxVelocity>
+    <_maxRotation>30</_maxRotation>
+    <_explodeToSmallerAstroidsScaleTH>1.5</_explodeToSmallerAstroidsScaleTH>
+  </AsteroidMovement>
 
   <PickupClawController>
     <_velocityMultiplier>2.5</_velocityMultiplier>
@@ -109,12 +101,13 @@
     <_moveToItemMultiplier>0.5</_moveToItemMultiplier>
   </PickupClawGrabber>
 
-  <FireRateItem>
-    <CooldownMultiplier>0.9</CooldownMultiplier>
-  </FireRateItem>
+  <FireRateUpgrade>
+    <_cooldownMultiplier>0.9</_cooldownMultiplier>
+  </FireRateUpgrade>
 
-  <ItemMovementController>
-    <MaxSpeed>2</MaxSpeed>
-  </ItemMovementController>
+  <ItemMovement>
+    <_maxVelocity>0.1</_maxVelocity>
+    <_maxRotation>10</_maxRotation>
+  </ItemMovement>
 
 </scripts>

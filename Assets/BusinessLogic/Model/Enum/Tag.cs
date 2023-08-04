@@ -18,7 +18,7 @@ namespace Assets.Enums
         PICKUP_CLAW,
         [Description("Asteroid")] 
         ASTEROID,
-        [Description("ScreenEdge")]
-        SCREEN_EDGE
+        [Description("Background")]
+        BACKGROUND
     }
 }
