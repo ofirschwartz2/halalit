@@ -14,11 +14,14 @@ public class AsteroidInstantiator : MonoBehaviour
     private float _asteroidInstantiationInterval;
     [SerializeField]
     private float _asteroidInstantiationDistanceFromCenter;
+    [SerializeField]
+    private float _asteroidMaxScale;
 
-    private float _time;
+    private List<RangeAttribute> _forbiddenInstantiationZone;
     private Vector2 _instantiationLineCenterPoint;
-    private float _instantiationLineSlope;
     private Vector2 _asteroidsDirection;
+    private float _instantiationLineSlope;
+    private float _time;
 
     void Start()
     {
@@ -28,6 +31,7 @@ public class AsteroidInstantiator : MonoBehaviour
         }
 
         _time = 0;
+        _forbiddenInstantiationZone = new();
         _instantiationLineCenterPoint = GetRandomInstantiationLineCenterPoint();
         _instantiationLineSlope = GetAsteroidInstantiationLineSlope();
         _asteroidsDirection = GetAsteroidDirection();
@@ -59,26 +63,7 @@ public class AsteroidInstantiator : MonoBehaviour
         }
     }
 
-    private void InstantiateAsteroidsFromStartLine()
-    {
-        List<Vector2> asteroidInstantiationPositions = GetAsteroidInstantiationPositions(1);
-
-        foreach (Vector2 position in asteroidInstantiationPositions)
-        {
-            InstantiateDirectionalAsteroids(position);
-        }
-    }
-
-    private void InstantiateDirectionalAsteroids(Vector2 position)
-    {
-        GameObject asteroid = Instantiate(_asteroidPrefab, position, Quaternion.identity);
-
-        AsteroidMovement asteroidInstanceMovement = asteroid.GetComponent<AsteroidMovement>();
-        asteroidInstanceMovement.SetDirection(_asteroidsDirection);
-
-        asteroid.transform.SetParent(transform.parent);
-    }
-
+    #region Determine instantiation position
     private List<Vector2> GetAsteroidInstantiationPositions(int positionCount)
     {
         List<Vector2> asteroidInstantiationPositions = new();
@@ -119,4 +104,45 @@ public class AsteroidInstantiator : MonoBehaviour
 
         return a + b + c;
     }
+    #endregion
+
+    #region Instantiation process
+    private void InstantiateAsteroidsFromStartLine()
+    {
+        List<Vector2> asteroidInstantiationPositions = GetAsteroidInstantiationPositions(1);
+
+        foreach (Vector2 position in asteroidInstantiationPositions)
+        {
+            InstantiateDirectionalAsteroids(position);
+        }
+    }
+
+    private void InstantiateDirectionalAsteroids(Vector2 position)
+    {
+        GameObject asteroid = Instantiate(_asteroidPrefab, position, Quaternion.identity);
+        InitNewAsteroid(asteroid);
+        UpdateForbiddenInstantiationZone(asteroid);
+    }
+
+    private void InitNewAsteroid(GameObject asteroid)
+    {
+        AsteroidMovement asteroidInstanceMovement = asteroid.GetComponent<AsteroidMovement>();
+        asteroidInstanceMovement.SetDirection(_asteroidsDirection);
+
+        float randomAsteroidScale = GetRandomAsteroidScale();
+        asteroid.transform.localScale = new Vector3(randomAsteroidScale, randomAsteroidScale, 0);
+
+        asteroid.transform.SetParent(transform.parent);
+    }
+
+    private void UpdateForbiddenInstantiationZone(GameObject asteroid)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    private float GetRandomAsteroidScale()
+    {
+        return Random.Range(0, _asteroidMaxScale + 1);
+    }
+    #endregion
 }
