@@ -9,8 +9,6 @@ public class AsteroidInstantiator : MonoBehaviour
     [SerializeField]
     private GameObject _asteroidPrefab;
     [SerializeField]
-    private GameObject _asteroidDistanceLine;
-    [SerializeField]
     private float _asteroidInstantiationLineLength;
     [SerializeField]
     private float _asteroidInstantiationInterval;

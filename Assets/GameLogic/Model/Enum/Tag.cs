@@ -18,7 +18,9 @@ namespace Assets.Enums
         PICKUP_CLAW,
         [Description("Asteroid")] 
         ASTEROID,
-        [Description("Background")]
-        BACKGROUND
+        [Description("InternalWorld")]
+        INTERNAL_WORLD,
+        [Description("ExternalWorld")]
+        EXTERNAL_WORLD
     }
 }

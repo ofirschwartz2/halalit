@@ -9,15 +9,15 @@ TagManager:
   - Shot
   - Gun
   - Engine
-  - Background
   - Shot2
   - Item
   - PickupClaw
   - Astroid
-  - OutOfScreen
   - EnemyOuterCollider
   - AstroidOuterCollider
   - KnockbackShot
+  - ExternalWorld
+  - InternalWorld
   layers:
   - Default
   - TransparentFX

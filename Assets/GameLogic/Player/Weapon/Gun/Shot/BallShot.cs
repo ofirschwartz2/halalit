@@ -23,7 +23,7 @@ public class BallShot : MonoBehaviour // TODO (refactor): the stats (damage) of 
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag(Tag.BACKGROUND.GetDescription()))
+        if (other.gameObject.CompareTag(Tag.EXTERNAL_WORLD.GetDescription()))
             Destroy(gameObject);
     }
 }

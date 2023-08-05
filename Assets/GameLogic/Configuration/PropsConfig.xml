@@ -87,9 +87,9 @@
     <_asteroidInstantiationInterval>0.5</_asteroidInstantiationInterval>
   </AsteroidInstantiator>
 
-  <AsteroidDestractor>
-    <_singleAxisDestractionDistance>50</_singleAxisDestractionDistance>
-  </AsteroidDestractor>
+  <AsteroidDestructor>
+    <_singleAxisDestructionDistance>50</_singleAxisDestructionDistance>
+  </AsteroidDestructor>
 
   <AsteroidMovement>
     <_velocityMagnitude>3</_velocityMagnitude>

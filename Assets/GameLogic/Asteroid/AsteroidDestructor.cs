@@ -7,7 +7,7 @@ public class AsteroidDestructor : MonoBehaviour
     [SerializeField]
     private bool _useConfigFile;
     [SerializeField]
-    private float _singleAxisDestractionDistance;
+    private float _singleAxisDestructionDistance;
 
     private Vector2 _creationPosition;
 
@@ -28,12 +28,12 @@ public class AsteroidDestructor : MonoBehaviour
 
     private void DestroyRogureAsteroids()
     {
-        if (Mathf.Abs(transform.position.x - _creationPosition.x) > _singleAxisDestractionDistance)
+        if (Mathf.Abs(transform.position.x - _creationPosition.x) > _singleAxisDestructionDistance)
         {
             Destroy(gameObject);
         }
 
-        if (Mathf.Abs(transform.position.y - _creationPosition.y) > _singleAxisDestractionDistance)
+        if (Mathf.Abs(transform.position.y - _creationPosition.y) > _singleAxisDestructionDistance)
         {
             Destroy(gameObject);
         }
@@ -41,7 +41,7 @@ public class AsteroidDestructor : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag(Tag.BACKGROUND.GetDescription()))
+        if (other.gameObject.CompareTag(Tag.INTERNAL_WORLD.GetDescription()))
         {
             Destroy(gameObject);
         }
