@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6741412782414407018}
   - component: {fileID: 6741412782414407019}
   - component: {fileID: 6741412782414407023}
+  - component: {fileID: 5132515222275469269}
   m_Layer: 0
   m_Name: Astroid
   m_TagString: Astroid
@@ -202,8 +203,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _useConfigFile: 1
   _rigidBody: {fileID: 6741412782414407018}
-  _astroidPrefab: {fileID: 6741412782414407016}
-  _maxXSpeed: 0
-  _maxYSpeed: 0
+  _velocityMagnitude: 0
   _maxRotation: 0
-  _explodeToSmallerAstroidsScaleTH: 0
+--- !u!114 &5132515222275469269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6741412782414407016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f986e6e15218b6543b9e20df2cae8017, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useConfigFile: 1

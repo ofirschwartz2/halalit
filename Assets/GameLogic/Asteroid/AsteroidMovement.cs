@@ -9,12 +9,13 @@ public class AsteroidMovement : MonoBehaviour
     [SerializeField]
     private Rigidbody2D _rigidBody;
     [SerializeField]
-    private float _maxVelocity;
+    private float _velocityMagnitude;
     [SerializeField]
     private float _maxRotation;
 
     private float _constantRotation;
-    
+    private Vector2 _direction;
+
     void Start()
     {
         if (_useConfigFile)
@@ -24,6 +25,11 @@ public class AsteroidMovement : MonoBehaviour
 
         SetRandomRotationByScale();
         SetVelocity();
+    }
+
+    private void SetVelocity()
+    {
+        _rigidBody.velocity = _direction * _velocityMagnitude;
     }
 
     private void SetRandomRotationByScale()
@@ -36,9 +42,9 @@ public class AsteroidMovement : MonoBehaviour
         transform.Rotate(0, 0, _constantRotation * Time.deltaTime);
     }
 
-    private void SetVelocity()
+    public void SetDirection(Vector2 direction)
     {
-        _rigidBody.velocity = Utils.GetRandomVector(-_maxVelocity, _maxVelocity, -_maxVelocity, _maxVelocity);
+        _direction = direction;
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -48,6 +54,9 @@ public class AsteroidMovement : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    // TODO (dev): Add knockback from other asteroids
+
 
 
 
@@ -73,11 +82,5 @@ public class AsteroidMovement : MonoBehaviour
     //        smallerAstroid.SendMessage("SetScale", transform.localScale.x / 2);
     //        smallerAstroid.SendMessage("Set360Velocity");
     //    }
-    //}
-
-    //public void InnerOnTriggerEnter2D(Collider2D other)
-    //{
-    //    if (other.gameObject.CompareTag("Shot"))
-    //        AstroidExplotion(other);
     //}
 }

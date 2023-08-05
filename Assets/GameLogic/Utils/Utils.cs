@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 namespace Assets.Utils
 {
     static class Utils
@@ -108,6 +110,12 @@ namespace Assets.Utils
 
             return new Vector3(newX, newY);
         }
+
+        public static bool IsTrueIn50Precent()
+        {
+            return Random.Range(0, 2) == 0;
+        }
+
         #endregion
 
         #region Enum Extentions

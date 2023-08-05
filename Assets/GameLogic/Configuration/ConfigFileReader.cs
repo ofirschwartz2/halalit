@@ -9,7 +9,7 @@ namespace Assets.Utils
         public static Dictionary<string, float> GetPropsFromConfig(string scriptName, string[] props) // TODO (refactor): remove this when no one use it any more
         {
             Dictionary<string, float> propsFromConfig = new Dictionary<string, float>();
-            XPathDocument docNav = new(@"Assets/BusinessLogic/Configuration/PropsConfig.xml");
+            XPathDocument docNav = new(@"Assets/GameLogic/Configuration/PropsConfig.xml");
             XPathNavigator nav = docNav.CreateNavigator();
 
             foreach (string prop in props)
@@ -43,7 +43,7 @@ namespace Assets.Utils
                 return null;
             }
 
-            XPathDocument documentPath = new(@"Assets/BusinessLogic/Configuration/PropsConfig.xml");
+            XPathDocument documentPath = new(@"Assets/GameLogic/Configuration/PropsConfig.xml");
             XPathNavigator pathNavigator = documentPath.CreateNavigator();
             string xPath = "/scripts/" + scriptName + "/" + propertyName;
 

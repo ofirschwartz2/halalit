@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<scripts>
+
+  <HalalitMovement>
+    <_forceMultiplier>10</_forceMultiplier>
+    <_spinSpeed>10</_spinSpeed>
+    <_rigidBodyDrag>2</_rigidBodyDrag>
+    <_halalitThrust>1.1</_halalitThrust>
+    <_speedLimit>15</_speedLimit>
+    <_knockBackCooldownInterval>0.1</_knockBackCooldownInterval>
+  </HalalitMovement>
+
+  <WeaponMovement>
+    <_weaponSpinRadius>0.2</_weaponSpinRadius>
+  </WeaponMovement>
+
+  <AmmoToggle>
+    <_ammoToggleJoysticEdge>0.8</_ammoToggleJoysticEdge>
+  </AmmoToggle>
+
+  <Gun>
+    <_cooldownInterval>0.5</_cooldownInterval>
+    <_attackJoystickEdge>0.8</_attackJoystickEdge>
+  </Gun>
+
+  <BallShot>
+    <_speed>10</_speed>
+  </BallShot>
+
+  <LaserBeam>
+    <_lifetime>0.2</_lifetime>
+  </LaserBeam>
+
+  <KnockbackWave>
+    <_speed>1.01</_speed>
+    <_lifetime>0.5</_lifetime>
+  </KnockbackWave>
+
+  <PickupClawController>
+    <_velocityMultiplier>2.5</_velocityMultiplier>
+    <_rotationToItemMultiplier>3</_rotationToItemMultiplier>
+    <_rotationToHalalitMultiplier>0.5</_rotationToHalalitMultiplier>
+    <_moveToItemMultiplier>0.5</_moveToItemMultiplier>
+    <_grabDelay>0.5</_grabDelay>
+    <_ropeLength>10</_ropeLength>
+  </PickupClawController>
+
+  <PickupClawMovement>
+    <_velocityMultiplier>2.5</_velocityMultiplier>
+    <_rotationToItemMultiplier>3</_rotationToItemMultiplier>
+    <_rotationToHalalitMultiplier>0.5</_rotationToHalalitMultiplier>
+    <_moveToItemMultiplier>0.5</_moveToItemMultiplier>
+    <_ropeLength>10</_ropeLength>
+    <_rotationMinProximity>1</_rotationMinProximity>
+    <_positionMinProximity>0.2</_positionMinProximity>
+    <_dragAtFullRopeSpeed>0.1</_dragAtFullRopeSpeed>
+  </PickupClawMovement>
+
+  <PickupClawGrabber>
+    <_grabDelay>0.5</_grabDelay>
+    <_rotationToItemMultiplier>3</_rotationToItemMultiplier>
+    <_moveToItemMultiplier>0.5</_moveToItemMultiplier>
+  </PickupClawGrabber>
+
+  <EnemyFactory>
+    <MaxNumberOfEnemies>30</MaxNumberOfEnemies>
+    <NumberOfEnemies>20</NumberOfEnemies>
+  </EnemyFactory>
+
+  <EnemyMovementController>
+    <MinXForce>-5</MinXForce>
+    <MaxXForce>5</MaxXForce>
+    <MinYForce>-5</MinYForce>
+    <MaxYForce>5</MaxYForce>
+    <XofEndOfMap>68</XofEndOfMap>
+    <YofEndOfMap>38</YofEndOfMap>
+    <EnemyThrust>1.2</EnemyThrust>
+    <SpeedLimit>2</SpeedLimit>
+    <_rigidBody.drag>2</_rigidBody.drag>
+    <ItemDropRate>50</ItemDropRate>
+    <KnockbackGunMultiplier>2</KnockbackGunMultiplier>
+  </EnemyMovementController>
+
+  <AsteroidInstantiator>
+    <_asteroidInstantiationDistanceFromCenter>25</_asteroidInstantiationDistanceFromCenter>
+    <_asteroidInstantiationLineLength>30</_asteroidInstantiationLineLength>
+    <_asteroidInstantiationInterval>0.5</_asteroidInstantiationInterval>
+  </AsteroidInstantiator>
+
+  <AsteroidDestractor>
+    <_singleAxisDestractionDistance>50</_singleAxisDestractionDistance>
+  </AsteroidDestractor>
+
+  <AsteroidMovement>
+    <_velocityMagnitude>3</_velocityMagnitude>
+    <_maxRotation>30</_maxRotation>
+    <_explodeToSmallerAstroidsScaleTH>1.5</_explodeToSmallerAstroidsScaleTH>
+  </AsteroidMovement>
+  
+  <ItemMovement>
+    <_maxVelocity>0.1</_maxVelocity>
+    <_maxRotation>10</_maxRotation>
+  </ItemMovement>
+
+  <FireRateUpgrade>
+    <_cooldownMultiplier>0.9</_cooldownMultiplier>
+  </FireRateUpgrade>
+ 
+  <SceneFactory>
+    <MaxNumberOfGameObjectsAllowed>60</MaxNumberOfGameObjectsAllowed>
+    <MaxNumberOfEnemiesAllowed>20</MaxNumberOfEnemiesAllowed>
+    <MaxNumberOfAstroidsAllowed>20</MaxNumberOfAstroidsAllowed>
+    <NumberOfInnerAstroids>5</NumberOfInnerAstroids>
+    <NumberOfEnemies>5</NumberOfEnemies>
+    <NumberOfAstroids>0</NumberOfAstroids>
+    <SlotsOnGameGreedX>10</SlotsOnGameGreedX>
+    <SlotsOnGameGreedY>10</SlotsOnGameGreedY>
+    <InfiniteLoopTH>400</InfiniteLoopTH>
+    <InnerAstroidMinScale>1</InnerAstroidMinScale>
+    <InnerAstroidMaxScale>10</InnerAstroidMaxScale>
+  </SceneFactory>
+
+</scripts>
