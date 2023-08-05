@@ -13,7 +13,7 @@ public class ItemInstantiator : MonoBehaviour
     {
         InitItemDictionaries();
 
-        InstantiateUpgrade(UpgradeName.FIRE_RATE, new Vector3(4, 4, 0)); // TODO: remove usage example
+        // InstantiateUpgrade(UpgradeName.FIRE_RATE, new Vector3(4, 4, 0)); // TODO: remove usage example
     }
 
     private void InitItemDictionaries()

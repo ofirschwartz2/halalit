@@ -18,6 +18,10 @@ TagManager:
   - EnemyOuterCollider
   - AstroidOuterCollider
   - KnockbackShot
+  - LameEnemy
+  - LazerShot
+  - ZigZagEnemy
+  - SinusEnemy
   layers:
   - Default
   - TransparentFX

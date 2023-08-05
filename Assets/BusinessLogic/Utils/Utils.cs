@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 namespace Assets.Utils
 {
     static class Utils
@@ -108,6 +110,29 @@ namespace Assets.Utils
 
             return new Vector3(newX, newY);
         }
+        #endregion
+
+        #region Vectors
+        public static Vector2 GetRandomVector2OnCircle()
+        {
+            float angle = Random.Range(0, 2 * Mathf.PI);
+            return RadianToVector2(angle);
+        }
+
+        public static Vector2 GetRandomVector2OnOtherHalfOfCircle(Vector2 previousDirection) 
+        {
+            var newDirection = GetRandomVector2OnCircle();
+            return Vector2.Dot(previousDirection, newDirection) > 0 ? newDirection * (-1) : newDirection;
+        }
+
+        public static Vector2 AddAngleToVector(Vector2 vector, float angleInDegrees)
+        {
+            float angleInRadians = angleInDegrees * Mathf.Deg2Rad;
+            float currentAngle = Mathf.Atan2(vector.y, vector.x);
+            float newAngle = currentAngle + angleInRadians;
+            return RadianToVector2(newAngle);
+        }
+
         #endregion
 
         #region Enum Extentions

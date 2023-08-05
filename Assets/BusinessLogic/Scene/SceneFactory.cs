@@ -6,15 +6,35 @@ using Assets.Enums;
 
 public class SceneFactory : MonoBehaviour
 {
+
+    public GameObject LameEnemyPrefab, ZigZagEnemyPrefab, SinusEnemyPrefab;
+
+    /*
     public bool UseConfigFile;
-    public GameObject Background, EnemyPrefab, AstroidPrefab;
     public int NumberOfInnerAstroids, MaxNumberOfGameObjectsAllowed, MaxNumberOfEnemiesAllowed, NumberOfEnemies, MaxNumberOfAstroidsAllowed, NumberOfAstroids, SlotsOnGameGreedX, SlotsOnGameGreedY, InfiniteLoopTH, InnerAstroidMinScale, InnerAstroidMaxScale;
     
     private float _xGreedSpacing, _yGreedSpacing;
     private Vector3 _bottomLeftPoint; 
     private bool[,] _gameObjectsOnGameGreed;
     private bool _stopCreatingInnerAstroids;
+    */
 
+    void Start()
+    {
+        Instantiate(
+            new NewEnemy(LameEnemyPrefab).GetPrefab(),
+            new Vector3(-2, -2, 0), new Quaternion(0, 0, 0, 0));
+
+        Instantiate(
+            new NewEnemy(ZigZagEnemyPrefab).GetPrefab(),
+            new Vector3(-4, -4, 0), new Quaternion(0, 0, 0, 0));
+
+        Instantiate(
+            new NewEnemy(SinusEnemyPrefab).GetPrefab(),
+            new Vector3(2, 2, 0), new Quaternion(0, 0, 0, 0));
+    }
+
+    /*
     void Start()
     {
         if (UseConfigFile)
@@ -272,4 +292,5 @@ public class SceneFactory : MonoBehaviour
             if (TooManyGameObjects()) 
                 throw new System.Exception("Number Of Enemies is wayyy too big, abort");
     }
+    */
 }
