@@ -84,7 +84,8 @@
   <AsteroidInstantiator>
     <_asteroidInstantiationDistanceFromCenter>25</_asteroidInstantiationDistanceFromCenter>
     <_asteroidInstantiationLineLength>30</_asteroidInstantiationLineLength>
-    <_asteroidInstantiationInterval>0.5</_asteroidInstantiationInterval>
+    <_asteroidInstantiationInterval>2</_asteroidInstantiationInterval>
+    <_asteroidMaxScale>4</_asteroidMaxScale>
   </AsteroidInstantiator>
 
   <AsteroidDestructor>
@@ -92,8 +93,8 @@
   </AsteroidDestructor>
 
   <AsteroidMovement>
-    <_velocityMagnitude>3</_velocityMagnitude>
-    <_maxRotation>30</_maxRotation>
+    <_velocityMagnitude>2</_velocityMagnitude>
+    <_maxRotation>50</_maxRotation>
     <_explodeToSmallerAstroidsScaleTH>1.5</_explodeToSmallerAstroidsScaleTH>
   </AsteroidMovement>
   
