@@ -28,6 +28,8 @@ public class ItemInstantiator : MonoBehaviour
 
     public void InstantiateUpgrade(UpgradeName upgradeName, Vector3 position)
     {
-        Instantiate(_upgradesDictionary[upgradeName], position, Quaternion.identity);
+        GameObject upgrade = Instantiate(_upgradesDictionary[upgradeName], position, Quaternion.identity);
+
+        upgrade.transform.SetParent(transform.parent);
     }
 }
