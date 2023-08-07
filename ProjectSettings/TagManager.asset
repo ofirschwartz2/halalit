@@ -18,6 +18,13 @@ TagManager:
   - KnockbackShot
   - ExternalWorld
   - InternalWorld
+  - LameEnemy
+  - ZigZagEnemy
+  - SinusEnemy
+  - TopEdge
+  - RightEdge
+  - BottomEdge
+  - LeftEdge
   layers:
   - Default
   - TransparentFX

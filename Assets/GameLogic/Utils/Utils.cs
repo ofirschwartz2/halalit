@@ -118,6 +118,35 @@ namespace Assets.Utils
 
         #endregion
 
+        #region Vectors
+        public static Vector2 GetRandomVector2OnCircle()
+        {
+            float angle = Random.Range(0, 2 * Mathf.PI);
+            return RadianToVector2(angle);
+        }
+
+        public static Vector2 GetRandomVector2OnHalfOfCircle(Vector2 halfCircleDirection)
+        {
+            var randomVector = GetRandomVector2OnCircle();
+            if (Vector2.Dot(randomVector, halfCircleDirection) < 0)
+                randomVector *= -1;
+            return randomVector;
+        }
+
+        public static Vector2 AddAngleToVector(Vector2 vector, float angleInDegrees)
+        {
+            float angleInRadians = angleInDegrees * Mathf.Deg2Rad;
+            float currentAngle = Mathf.Atan2(vector.y, vector.x);
+            float newAngle = currentAngle + angleInRadians;
+            return RadianToVector2(newAngle);
+        }
+        public static Vector2 NormalizeVector2(Vector2 vector)
+        {
+            var magnitude = (float)Math.Sqrt(Math.Pow(vector.x, 2) + Math.Pow(vector.y, 2));
+            return new Vector2(vector.x / magnitude, vector.y / magnitude);
+        }
+        #endregion
+
         #region Enum Extentions
         public static string GetDescription(this Enum val)
     {
