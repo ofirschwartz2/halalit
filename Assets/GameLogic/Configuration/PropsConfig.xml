@@ -85,7 +85,10 @@
     <_asteroidInstantiationDistanceFromCenter>25</_asteroidInstantiationDistanceFromCenter>
     <_asteroidInstantiationLineLength>30</_asteroidInstantiationLineLength>
     <_asteroidInstantiationInterval>2</_asteroidInstantiationInterval>
+    <_asteroidInstantiationLoad>1</_asteroidInstantiationLoad>
     <_asteroidMaxScale>4</_asteroidMaxScale>
+    <_maxInstantiationsRetry>5</_maxInstantiationsRetry>
+    <_asteroidTakeOffTime>5</_asteroidTakeOffTime>
   </AsteroidInstantiator>
 
   <AsteroidDestructor>

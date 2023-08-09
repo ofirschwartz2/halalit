@@ -22,7 +22,7 @@ public class ItemInstantiator : MonoBehaviour
 
         foreach (KeyValuePair<UpgradeName, GameObject> upgrade in _upgrades)
         {
-            _upgradesDictionary.Add(upgrade.key, upgrade.value);
+            _upgradesDictionary.Add(upgrade.Key, upgrade.Value);
         }
     }
 

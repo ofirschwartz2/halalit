@@ -1,6 +1,8 @@
 ﻿using Assets.Utils;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class AsteroidInstantiator : MonoBehaviour
 {
@@ -13,15 +15,21 @@ public class AsteroidInstantiator : MonoBehaviour
     [SerializeField]
     private float _asteroidInstantiationInterval;
     [SerializeField]
+    private float _asteroidInstantiationLoad;
+    [SerializeField]
     private float _asteroidInstantiationDistanceFromCenter;
     [SerializeField]
     private float _asteroidMaxScale;
+    [SerializeField]
+    private float _maxInstantiationsRetry;
+    [SerializeField]
+    private float _asteroidTakeOffTime;
 
-    private List<RangeAttribute> _forbiddenInstantiationZone;
+    private List<KeyValuePair<float, RangeAttribute>> _forbiddenInstantiationZones;
     private Vector2 _instantiationLineCenterPoint;
     private Vector2 _asteroidsDirection;
     private float _instantiationLineSlope;
-    private float _time;
+    private float _timeToInstantiation;
 
     void Start()
     {
@@ -30,8 +38,8 @@ public class AsteroidInstantiator : MonoBehaviour
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
 
-        _time = 0;
-        _forbiddenInstantiationZone = new();
+        _timeToInstantiation = 0;
+        _forbiddenInstantiationZones = new();
         _instantiationLineCenterPoint = GetRandomInstantiationLineCenterPoint();
         _instantiationLineSlope = GetAsteroidInstantiationLineSlope();
         _asteroidsDirection = GetAsteroidDirection();
@@ -54,29 +62,63 @@ public class AsteroidInstantiator : MonoBehaviour
 
     void Update()
     {
-        _time += Time.deltaTime;
-
-        if (_time >= _asteroidInstantiationInterval)
-        {
-            _time = 0;
-            InstantiateAsteroidsFromStartLine();
-        }
+        InstantiateAsteroidsFromStartLinePeriodicaly();
+        RemoveOldForbiddenInstantiationZones();
     }
 
     #region Determine instantiation position
-    private List<Vector2> GetAsteroidInstantiationPositions(int positionCount)
+    private List<Vector2> GetAsteroidInstantiationPositions()
     {
         List<Vector2> asteroidInstantiationPositions = new();
 
-        for (int i = 0; i < positionCount; i++)
+        for (int i = 0; i < _asteroidInstantiationLoad; i++)
         {
-            float asteroidInstantiationPointX = GetRandomAsteroidInstantiationPointX();
-            float asteroidInstantiationPointY = GetAsteroidInstantiationPointY(asteroidInstantiationPointX);
+            for (int j = 0; j < _maxInstantiationsRetry; j++)
+            {
+                float asteroidInstantiationPointX = GetRandomAsteroidInstantiationPointX();
 
-            asteroidInstantiationPositions.Add(new Vector2(asteroidInstantiationPointX, asteroidInstantiationPointY));
+                if (IsValidAsteroidInstantiationPointX(asteroidInstantiationPointX))
+                {
+                    float asteroidInstantiationPointY = GetAsteroidInstantiationPointY(asteroidInstantiationPointX);
+                    asteroidInstantiationPositions.Add(new Vector2(asteroidInstantiationPointX, asteroidInstantiationPointY));
+                    break;
+                }
+            }
         }
 
         return asteroidInstantiationPositions;
+    }
+
+    private bool IsValidAsteroidInstantiationPointX(float asteroidInstantiationPointX)
+    {
+        float asteroidLocalScaleX = _asteroidPrefab.transform.localScale.x;
+
+        List<float> xPointsToCheck = new()
+        {
+            asteroidInstantiationPointX - asteroidLocalScaleX,
+            asteroidInstantiationPointX - asteroidLocalScaleX * 2,
+            asteroidInstantiationPointX,
+            asteroidInstantiationPointX + asteroidLocalScaleX,
+            asteroidInstantiationPointX + asteroidLocalScaleX * 2,
+        };
+
+        foreach (KeyValuePair<float, RangeAttribute> timedForbiddenInstantiationZone in _forbiddenInstantiationZones)
+        {
+            foreach (float xPointToCheck in xPointsToCheck) 
+            {
+                if (IsXPointInForbiddenRange(timedForbiddenInstantiationZone.Value, xPointToCheck))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private bool IsXPointInForbiddenRange(RangeAttribute forbiddenInstantiationZone, float xPoint)
+    {
+        return forbiddenInstantiationZone.min <= xPoint && forbiddenInstantiationZone.max >= xPoint;
     }
 
     private float GetRandomAsteroidInstantiationPointX()
@@ -104,12 +146,36 @@ public class AsteroidInstantiator : MonoBehaviour
 
         return a + b + c;
     }
+
+    private void RemoveOldForbiddenInstantiationZones()
+    {
+        for (int i = 0; i < _forbiddenInstantiationZones.Count; i++)
+        {
+            _forbiddenInstantiationZones[i].Key -= Time.deltaTime;
+
+            if (_forbiddenInstantiationZones[i].Key <= 0)
+            {
+                _forbiddenInstantiationZones.RemoveAt(i);
+            }
+        }
+    }
     #endregion
 
     #region Instantiation process
+    private void InstantiateAsteroidsFromStartLinePeriodicaly()
+    {
+        _timeToInstantiation += Time.deltaTime;
+
+        if (_timeToInstantiation >= _asteroidInstantiationInterval)
+        {
+            _timeToInstantiation = 0;
+            InstantiateAsteroidsFromStartLine();
+        }
+    }
+
     private void InstantiateAsteroidsFromStartLine()
     {
-        List<Vector2> asteroidInstantiationPositions = GetAsteroidInstantiationPositions(1);
+        List<Vector2> asteroidInstantiationPositions = GetAsteroidInstantiationPositions();
 
         foreach (Vector2 position in asteroidInstantiationPositions)
         {
@@ -121,7 +187,7 @@ public class AsteroidInstantiator : MonoBehaviour
     {
         GameObject asteroid = Instantiate(_asteroidPrefab, position, Quaternion.identity);
         InitNewAsteroid(asteroid);
-        UpdateForbiddenInstantiationZone(asteroid);
+        AddToForbiddenInstantiationZone(asteroid);
     }
 
     private void InitNewAsteroid(GameObject asteroid)
@@ -135,9 +201,14 @@ public class AsteroidInstantiator : MonoBehaviour
         asteroid.transform.SetParent(transform.parent);
     }
 
-    private void UpdateForbiddenInstantiationZone(GameObject asteroid)
+    private void AddToForbiddenInstantiationZone(GameObject asteroid)
     {
-        throw new System.NotImplementedException();
+        float asteroidInstantiationCenterX = asteroid.transform.position.x;
+        float halfAsteroidXScale = asteroid.transform.localScale.x / 2;
+
+        RangeAttribute newForbiddenInstantiationZone = new(asteroidInstantiationCenterX - halfAsteroidXScale, asteroidInstantiationCenterX + halfAsteroidXScale);
+
+        _forbiddenInstantiationZones.Add(new KeyValuePair<float, RangeAttribute>(_asteroidTakeOffTime, newForbiddenInstantiationZone));
     }
 
     private float GetRandomAsteroidScale()
