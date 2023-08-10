@@ -79,14 +79,14 @@
 	</ZigZagEnemyMovement>
 
 	<SinusEnemyMovement>
-		<_xMovementAmplitude>0.5</_xMovementAmplitude>
-		<_changeXDirectionInterval>2</_changeXDirectionInterval>
-		<_yMovementAmplitude>2</_yMovementAmplitude>
-		<_ySpeedLimit>2</_ySpeedLimit>
+		<_sinAxisMovementAmplitude>0.5</_sinAxisMovementAmplitude>
+		<_otherAxisMovementAmplitude>2</_otherAxisMovementAmplitude>
+		<_changeSinForceInterval>2</_changeSinForceInterval>
+		<_otherAxisSpeedLimit>2</_otherAxisSpeedLimit>
 	</SinusEnemyMovement>
 	
 	<GreekEnemyMovement>
-		<_movementAmplitude>3</_movementAmplitude>
+		<_movementAmplitude>2</_movementAmplitude>
 		<_changeGreekDirectionInterval>1</_changeGreekDirectionInterval>
 	</GreekEnemyMovement>
 

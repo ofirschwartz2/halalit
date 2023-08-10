@@ -8,18 +8,19 @@ public class SinusEnemyMovement : MonoBehaviour
     [SerializeField]
     private bool _useConfigFile;
     [SerializeField]
-    private float _xMovementAmplitude;
+    private float _sinAxisMovementAmplitude;
     [SerializeField]
-    private float _changeXDirectionInterval;
+    private float _changeSinForceInterval;
     [SerializeField]
-    private float _yMovementAmplitude;
+    private float _otherAxisMovementAmplitude;
     [SerializeField]
-    private float _ySpeedLimit;
+    private float _otherAxisSpeedLimit;
     [SerializeField]
     private Rigidbody2D _rigidBody;
 
-    private float _changeXForceDirectionTime;
-    private Vector2 _xDirection, _yDirection;
+    private Direction _sinDirection;
+    private float _changeSinForceDirectionTime;
+    private Vector2 _sinAxisDirection, _otherAxisDirection;
 
     void Start()
     {
@@ -27,54 +28,76 @@ public class SinusEnemyMovement : MonoBehaviour
         {
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
-
-        _xDirection = Vector2.right;
-        _yDirection = Vector2.up;
-        SetChangeXForceDirectionTime(_changeXDirectionInterval / 2);
+        _sinDirection = Utils.GetRandomDirection();
+        SetSinDirections(_sinDirection);
+        SetChangeSinForceDirectionTime(_changeSinForceInterval / 2);
     }
 
     void Update()
     {
-        YMovement();
-        XMovement();
+        otherAxisMovement(_otherAxisDirection);
+        SinAxisMovement();
     }
 
-    private void XMovement()
+    private void SetSinDirections(Direction sinDirection) 
     {
-        if (DidXTimePass())
+        switch (sinDirection)
         {
-            SetChangeXForceDirectionTime(_changeXDirectionInterval);
-            XChangeDirection();
-        }
-        _rigidBody.AddForce(_xDirection * _xMovementAmplitude);
-    }
-
-    private void XChangeDirection()
-    {
-        _xDirection = _xDirection == Vector2.right ? Vector2.left : Vector2.right;
-    }
-
-    private bool DidXTimePass()
-    {
-        return Time.time > _changeXForceDirectionTime;
-    }
-
-    private void YMovement()
-    {
-        if (YIsUnderSpeedLimit())
-        {
-            _rigidBody.AddForce(_yDirection * _yMovementAmplitude);
+            case Direction.UP:
+                _otherAxisDirection = Vector2.up;
+                _sinAxisDirection = Vector2.right;
+                break;
+            case Direction.RIGHT:
+                _otherAxisDirection = Vector2.right;
+                _sinAxisDirection = Vector2.up;
+                break;
+            case Direction.LEFT:
+                _otherAxisDirection = Vector2.left;
+                _sinAxisDirection = Vector2.up;
+                break;
+            case Direction.DOWN:
+                _otherAxisDirection = Vector2.down;
+                _sinAxisDirection = Vector2.right;
+                break;
         }
     }
-
-    private bool YIsUnderSpeedLimit()
+    private void SinAxisMovement()
     {
-        return Math.Abs(_rigidBody.velocity.y) < _ySpeedLimit;
+        if (DidSinForceDirectionTimePass())
+        {
+            SetChangeSinForceDirectionTime(_changeSinForceInterval);
+            SinForceChangeDirection();
+        }
+        _rigidBody.AddForce(_sinAxisDirection * _sinAxisMovementAmplitude);
     }
 
-    private void SetChangeXForceDirectionTime(float interval)
+    private void SinForceChangeDirection()
     {
-        _changeXForceDirectionTime = Time.time + interval;
+        _sinAxisDirection = _sinAxisDirection * (-1);
+    }
+
+    private bool DidSinForceDirectionTimePass()
+    {
+        return Time.time > _changeSinForceDirectionTime;
+    }
+
+    private void otherAxisMovement(Vector2 otherAxisDirection)
+    {
+        if (otherAxisIsUnderSpeedLimit(otherAxisDirection))
+        {
+            _rigidBody.AddForce(otherAxisDirection * _otherAxisMovementAmplitude);
+        }
+    }
+
+    private bool otherAxisIsUnderSpeedLimit(Vector2 otherAxisDirection)
+    {
+        var otherAxisVelocity = Utils.GetVelocityInDirection(_rigidBody.velocity, otherAxisDirection);
+        return Math.Abs(otherAxisVelocity) < _otherAxisSpeedLimit;
+    }
+
+    private void SetChangeSinForceDirectionTime(float interval)
+    {
+        _changeSinForceDirectionTime = Time.time + interval;
     }
 
     private void Die()
@@ -82,11 +105,12 @@ public class SinusEnemyMovement : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void GoInAnotherDirection()
+    private void ChangeSinDirection(Direction newDirection) 
     {
-        _yDirection = _yDirection == Vector2.up ? Vector2.down : Vector2.up;
+        _sinDirection = newDirection;
+        SetSinDirections(_sinDirection);
         _rigidBody.velocity = Vector2.zero;
-        SetChangeXForceDirectionTime(_changeXDirectionInterval / 2);
+        SetChangeSinForceDirectionTime(_changeSinForceInterval / 2);
     }
 
     private void KnockMeBack(Collider2D other, float otherThrust = 1f)
@@ -109,11 +133,24 @@ public class SinusEnemyMovement : MonoBehaviour
         {
             KnockMeBack(other);
         }
-        else if (other.gameObject.CompareTag("ExternalWorld"))
+        else if (other.gameObject.CompareTag("TopEdge") || other.gameObject.CompareTag("RightEdge") || other.gameObject.CompareTag("BottomEdge") || other.gameObject.CompareTag("LeftEdge"))
         {
-            GoInAnotherDirection();
+            switch (other.gameObject.tag)
+            {
+                case "TopEdge":
+                    ChangeSinDirection(Direction.DOWN);
+                    break;
+                case "RightEdge":
+                    ChangeSinDirection(Direction.LEFT);
+                    break;
+                case "BottomEdge":
+                    ChangeSinDirection(Direction.UP);
+                    break;
+                case "LeftEdge":
+                    ChangeSinDirection(Direction.RIGHT);
+                    break;
+            }
         }
     }
-
     #endregion
 }

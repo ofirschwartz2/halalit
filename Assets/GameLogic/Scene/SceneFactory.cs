@@ -18,7 +18,7 @@ public class SceneFactory : MonoBehaviour
 
     void Start()
     {
-        
+        /*
         Instantiate(
             new NewEnemy(LameEnemyPrefab).GetPrefab(),
             new Vector3(-2, -2, 0), new Quaternion(0, 0, 0, 0));
@@ -26,7 +26,6 @@ public class SceneFactory : MonoBehaviour
         Instantiate(
             new NewEnemy(ZigZagEnemyPrefab).GetPrefab(),
             new Vector3(-4, -4, 0), new Quaternion(0, 0, 0, 0));
-        /*
         Instantiate(
             new NewEnemy(SinusEnemyPrefab).GetPrefab(),
             new Vector3(2, 2, 0), new Quaternion(0, 0, 0, 0));
@@ -34,11 +33,11 @@ public class SceneFactory : MonoBehaviour
         Instantiate(
             new NewEnemy(FollowingEnemyPrefab).GetPrefab(),
             new Vector3(-3, 4, 0), new Quaternion(0, 0, 0, 0));
+        */
 
         Instantiate(
             new NewEnemy(GreekEnemyPrefab).GetPrefab(),
             new Vector3(0, -4, 0), new Quaternion(0, 0, 0, 0));
-        */
     }
 
     /*

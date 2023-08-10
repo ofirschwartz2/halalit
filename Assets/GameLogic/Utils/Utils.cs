@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Assets.Enums;
 
 namespace Assets.Utils
 {
@@ -145,17 +146,27 @@ namespace Assets.Utils
             var magnitude = (float)Math.Sqrt(Math.Pow(vector.x, 2) + Math.Pow(vector.y, 2));
             return new Vector2(vector.x / magnitude, vector.y / magnitude);
         }
+
+        public static float GetVelocityInDirection(Vector2 velocity, Vector2 direction)
+        {
+            return Vector2.Dot(velocity, direction);
+        }
         #endregion
 
         #region Enum Extentions
         public static string GetDescription(this Enum val)
-    {
-        DescriptionAttribute[] attributes = (DescriptionAttribute[])val
-           .GetType()
-           .GetField(val.ToString())
-           .GetCustomAttributes(typeof(DescriptionAttribute), false);
-        return attributes.Length > 0 ? attributes[0].Description : string.Empty;
-    }
+        {
+            DescriptionAttribute[] attributes = (DescriptionAttribute[])val
+               .GetType()
+               .GetField(val.ToString())
+               .GetCustomAttributes(typeof(DescriptionAttribute), false);
+            return attributes.Length > 0 ? attributes[0].Description : string.Empty;
+        }
+
+        public static Direction GetRandomDirection()
+        {
+            return (Direction)UnityEngine.Random.Range(0, Enum.GetValues(typeof(Direction)).Length);
+        }
         #endregion
     }
 }

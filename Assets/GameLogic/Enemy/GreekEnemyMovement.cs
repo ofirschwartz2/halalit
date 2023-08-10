@@ -2,6 +2,7 @@ using Assets.Enums;
 using Assets.Utils;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,8 +17,11 @@ public class GreekEnemyMovement : MonoBehaviour
     [SerializeField]
     private Rigidbody2D _rigidBody;
 
-    private VerticalGreekEnemyDirection _direction;
+    private GreekEnemyMovementStage _movementStage;
+    private Direction _greekDirection;
     private float _changeDirectionTime, _startMovementTime;
+    private Vector2 _currentMovementDirection;
+    private bool _waitForNextStage;
 
     void Start()
     {
@@ -26,7 +30,10 @@ public class GreekEnemyMovement : MonoBehaviour
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
 
-        _direction = VerticalGreekEnemyDirection.UP1;
+        _waitForNextStage = false;
+        _greekDirection = Utils.GetRandomDirection();
+        _movementStage = GreekEnemyMovementStage.ONE;
+        _currentMovementDirection = GetStageDirectionVector(_movementStage, _greekDirection);
         SetChangeDirectionTime();
     }
 
@@ -34,68 +41,96 @@ public class GreekEnemyMovement : MonoBehaviour
     {
         if (DidChangeDirectionTimePass())
         {
-            ChangeDirection();
+            ChangeGreekStage();
         }
 
-        Move();
+        if (!_waitForNextStage) 
+        {
+            EnemyUtils.MoveInStraightLine(
+                _rigidBody,
+                _currentMovementDirection,
+                _movementAmplitude,
+                _changeGreekDirectionInterval,
+                _startMovementTime);
+        }
     }
 
-    private void ChangeDirection()
+    private void ChangeGreekStage()
     {
-        _direction = GetNextDirection<VerticalGreekEnemyDirection>();
+        _movementStage = GetNextStage<GreekEnemyMovementStage>();
         _startMovementTime = _changeDirectionTime;
         SetChangeDirectionTime();
+        _currentMovementDirection = GetStageDirectionVector(_movementStage, _greekDirection);
+        _waitForNextStage = false;
+    }
+    private void ChangeGreekDirection(Direction newDirection)
+    {
+        _greekDirection = newDirection;
+        _movementStage = GreekEnemyMovementStage.FOUR;
+        _startMovementTime = _changeDirectionTime;
+        _currentMovementDirection = GetStageDirectionVector(_movementStage, _greekDirection);
+        _rigidBody.velocity = Vector2.zero;
+        _waitForNextStage = true;
     }
 
-    private void Move()
+    private Vector2 GetStageDirectionVector(GreekEnemyMovementStage stage, Direction direction) 
     {
-        GreekMove(_direction);
-    }
-
-    private void GreekMove(VerticalGreekEnemyDirection direction)
-    {
-        Vector2 directionVector;
-
         switch (direction)
         {
-            case VerticalGreekEnemyDirection.UP1:
-            case VerticalGreekEnemyDirection.UP2:
-                directionVector = Vector2.up;
-                break;
-            case VerticalGreekEnemyDirection.RIGHT:
-                directionVector = Vector2.right;
-                break;
-            case VerticalGreekEnemyDirection.LEFT:
-                directionVector = Vector2.left;
-                break;
+            case Direction.UP:
+                switch (stage)
+                {
+                    case GreekEnemyMovementStage.ONE:
+                    case GreekEnemyMovementStage.THREE:
+                        return Vector2.up;
+                    case GreekEnemyMovementStage.TWO:
+                        return Vector2.right;
+                    case GreekEnemyMovementStage.FOUR:
+                        return Vector2.left;
+                    default:
+                        throw new Exception("GreekEnemyMovement Stage not supported");
+                }
+            case Direction.RIGHT:
+                switch (stage)
+                {
+                    case GreekEnemyMovementStage.ONE:
+                    case GreekEnemyMovementStage.THREE:
+                        return Vector2.right;
+                    case GreekEnemyMovementStage.TWO:
+                        return Vector2.down;
+                    case GreekEnemyMovementStage.FOUR:
+                        return Vector2.up;
+                    default:
+                        throw new Exception("GreekEnemyMovementStage not supported");
+                }
+            case Direction.LEFT:
+                switch (stage)
+                {
+                    case GreekEnemyMovementStage.ONE:
+                    case GreekEnemyMovementStage.THREE:
+                        return Vector2.left;
+                    case GreekEnemyMovementStage.TWO:
+                        return Vector2.up;
+                    case GreekEnemyMovementStage.FOUR:
+                        return Vector2.down;
+                    default:
+                        throw new Exception("GreekEnemyMovementStage not supported");
+                }
+            case Direction.DOWN:
+                switch (stage)
+                {
+                    case GreekEnemyMovementStage.ONE:
+                    case GreekEnemyMovementStage.THREE:
+                        return Vector2.down;
+                    case GreekEnemyMovementStage.TWO:
+                        return Vector2.left;
+                    case GreekEnemyMovementStage.FOUR:
+                        return Vector2.right;
+                    default:
+                        throw new Exception("GreekEnemyMovementStage not supported");
+                }
             default:
-                throw new ArgumentException("Invalid direction");
-        }
-        Debug.Log(Time.deltaTime);
-        EnemyUtils.MoveInStraightLine(
-            _rigidBody,
-            directionVector,
-            _movementAmplitude,
-            _changeGreekDirectionInterval,
-            _startMovementTime);
-    }
-
-    private void GreekMove(HorizontalGreekEnemyDirection direction, bool isSpeedingUp)
-    {
-        var speedUpDlowDownNumber = isSpeedingUp ? 1 : -1;
-
-        switch (direction)
-        {
-            case HorizontalGreekEnemyDirection.RIGHT1:
-            case HorizontalGreekEnemyDirection.RIGHT2:
-                _rigidBody.AddForce(Vector2.right * _movementAmplitude * speedUpDlowDownNumber);
-                break;
-            case HorizontalGreekEnemyDirection.UP:
-                _rigidBody.AddForce(Vector2.up * _movementAmplitude * speedUpDlowDownNumber);
-                break;
-            case HorizontalGreekEnemyDirection.DOWN:
-                _rigidBody.AddForce(Vector2.down * _movementAmplitude * speedUpDlowDownNumber);
-                break;
+                throw new InvalidEnumArgumentException();
         }
     }
 
@@ -104,10 +139,10 @@ public class GreekEnemyMovement : MonoBehaviour
         return Time.time > _changeDirectionTime;
     }
 
-    private TGreekDirection GetNextDirection<TGreekDirection>()
+    private TGreekDirection GetNextStage<TGreekDirection>()
     {
         TGreekDirection[] enumValues = (TGreekDirection[])Enum.GetValues(typeof(TGreekDirection));
-        int currentIndex = Array.IndexOf(enumValues, _direction);
+        int currentIndex = Array.IndexOf(enumValues, _movementStage);
         int nextIndex = (currentIndex + 1) % enumValues.Length;
 
         return enumValues[nextIndex];
@@ -116,8 +151,40 @@ public class GreekEnemyMovement : MonoBehaviour
     private void SetChangeDirectionTime()
     {
         _changeDirectionTime = _changeDirectionTime + _changeGreekDirectionInterval;
-        Debug.Log(_changeDirectionTime);
-        Debug.Log(_changeGreekDirectionInterval);
+    }
+    private void Die()
+    {
+        Destroy(gameObject);
     }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        //TODO: refactor this. should this be in the EventHandler?
+        if (EnemyUtils.ShouldKillMe(other))
+        {
+            Die();
+        }
+        else if (EnemyUtils.ShouldKnockMeBack(other))
+        {
+            //KnockMeBack(other);
+        }
+        else if (other.gameObject.CompareTag("TopEdge") || other.gameObject.CompareTag("RightEdge") || other.gameObject.CompareTag("BottomEdge") || other.gameObject.CompareTag("LeftEdge"))
+        {
+            switch (other.gameObject.tag)
+            {
+                case "TopEdge":
+                    ChangeGreekDirection(Direction.DOWN);
+                    break;
+                case "RightEdge":
+                    ChangeGreekDirection(Direction.LEFT);
+                    break;
+                case "BottomEdge":
+                    ChangeGreekDirection(Direction.UP);
+                    break;
+                case "LeftEdge":
+                    ChangeGreekDirection(Direction.RIGHT);
+                    break;
+            }
+        }
+    }
 }

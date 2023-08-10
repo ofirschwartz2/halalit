@@ -5,6 +5,10 @@ using UnityEngine;
 
 static class EnemyUtils
 {
+    private static float _deltaTimeMultiplier = 300f;
+    private static float _speedUpOutOfStraightLine = 5f/10f;
+    private static float _slowDownOutOfStraightLine = 9f/10f;
+
     public static void MoveInStraightLine(
         Rigidbody2D rigidbody, 
         Vector2 direction, 
@@ -27,25 +31,26 @@ static class EnemyUtils
 
     public static void StraightLineSpeedUp(Rigidbody2D rigidbody, Vector2 direction, float amplitude)
     {
-        rigidbody.AddForce(direction * amplitude * (Time.deltaTime * 300));
+        rigidbody.AddForce(direction * amplitude * (Time.deltaTime * _deltaTimeMultiplier));
     }
 
     public static void StraightLineSlowDown(Rigidbody2D rigidbody, Vector2 direction, float amplitude)
     {
         if (!IsAboutToStop(rigidbody.velocity.magnitude))
         {
-            rigidbody.AddForce(direction * amplitude * -1 * (Time.deltaTime * 300));
+            rigidbody.AddForce(direction * amplitude * -1 * (Time.deltaTime * _deltaTimeMultiplier));
         }
     }
 
     private static StraightLineMovementStage GetStageOfStraightLineMovement(float movementInterval, float movementStartTime)
     {
         var timePassed = Time.time - movementStartTime;
-        if (timePassed < movementInterval * 5 / 10)
+
+        if (timePassed < movementInterval * _speedUpOutOfStraightLine)
         {
             return StraightLineMovementStage.SPEED_UP;
         }
-        else if (timePassed < movementInterval * 9 / 10)
+        else if (timePassed < movementInterval * _slowDownOutOfStraightLine)
         {
             return StraightLineMovementStage.SLOW_DOWN;
         }
