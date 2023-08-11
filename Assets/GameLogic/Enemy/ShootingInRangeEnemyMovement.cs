@@ -68,11 +68,7 @@ public class ShootingInRangeEnemyMovement : MonoBehaviour
     private void MovingState()
     {
         RotateTowardsHalalit();
-        if (Utils.IsUnderSpeedLimit(_rigidBody.velocity, _speedLimit))
-        {
-            _rigidBody.AddForce(_direction * _movementAmplitude * (Time.deltaTime * 300));
-        }
-
+        EnemyUtils.MoveUnderSpeedLimit(_rigidBody, _direction, _movementAmplitude, _speedLimit);
         if (DidMovingTimePass())
         {
             SetAiming();

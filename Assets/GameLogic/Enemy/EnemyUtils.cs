@@ -92,6 +92,14 @@ static class EnemyUtils
         myRigidbody.AddForce(knockBackDirection * _knockbackMultiplier);
     }
 
+    public static void MoveUnderSpeedLimit(Rigidbody2D rigidbody, Vector2 direction, float movementAmplitude, float speedLimit)
+    {
+        if (Utils.IsUnderSpeedLimit(rigidbody.velocity, speedLimit))
+        {
+            rigidbody.AddForce(direction * movementAmplitude * (Time.deltaTime * _deltaTimeMultiplier));
+        }
+    }
+
     #region Predicates
     private static bool IsAboutToStop(float speed)
     {

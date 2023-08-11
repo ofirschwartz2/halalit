@@ -27,20 +27,12 @@ public class LameEnemyMovement : MonoBehaviour
 
     void Update()
     {
-        if (isUnderSpeedLimit()) 
-        {
-            _rigidBody.AddForce(_direction * _movementAmplitude * (Time.deltaTime * 300));
-        }
+        EnemyUtils.MoveUnderSpeedLimit(_rigidBody, _direction, _movementAmplitude, _speedLimit);
     }
 
     private void SetDirection() 
     {
         _direction = Utils.GetRandomVector2OnCircle();
-    }
-
-    private bool isUnderSpeedLimit()
-    {
-        return _rigidBody.velocity.magnitude < _speedLimit;
     }
 
     private void Die()
