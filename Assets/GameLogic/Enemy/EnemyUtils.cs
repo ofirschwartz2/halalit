@@ -20,13 +20,13 @@ static class EnemyUtils
     {
         switch (GetStageOfStraightLineMovement(movementInterval, movementStartTime)) 
         {
-            case StraightLineMovementStage.SPEED_UP:
+            case StraightLineMovementState.SPEED_UP:
                 StraightLineSpeedUp(rigidbody, direction, amplitude);
                 break;
-            case StraightLineMovementStage.SLOW_DOWN:
+            case StraightLineMovementState.SLOW_DOWN:
                 StraightLineSlowDown(rigidbody, direction, amplitude);
                 break;
-            case StraightLineMovementStage.DONE:
+            case StraightLineMovementState.DONE:
                 break;
         }
     }
@@ -44,21 +44,21 @@ static class EnemyUtils
         }
     }
 
-    private static StraightLineMovementStage GetStageOfStraightLineMovement(float movementInterval, float movementStartTime)
+    private static StraightLineMovementState GetStageOfStraightLineMovement(float movementInterval, float movementStartTime)
     {
         var timePassed = Time.time - movementStartTime;
 
         if (timePassed < movementInterval * _speedUpOutOfStraightLine)
         {
-            return StraightLineMovementStage.SPEED_UP;
+            return StraightLineMovementState.SPEED_UP;
         }
         else if (timePassed < movementInterval * _slowDownOutOfStraightLine)
         {
-            return StraightLineMovementStage.SLOW_DOWN;
+            return StraightLineMovementState.SLOW_DOWN;
         }
         else
         {
-            return StraightLineMovementStage.DONE;
+            return StraightLineMovementState.DONE;
         }
     }
 
@@ -95,6 +95,7 @@ static class EnemyUtils
     #region Predicates
     private static bool IsAboutToStop(float speed)
     {
+        // TODO: consider doing this predicate as a function of the force applied.
         return Math.Abs(speed) < _isAboutToStopTH;
     }
 
@@ -107,5 +108,6 @@ static class EnemyUtils
     {
         return other.gameObject.CompareTag("Halalit") || other.gameObject.CompareTag("Astroid") || other.gameObject.CompareTag("Enemy");
     }
+
     #endregion
 }

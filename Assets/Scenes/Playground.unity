@@ -1981,7 +1981,8 @@ MonoBehaviour:
   ZigZagEnemyPrefab: {fileID: 8916735576456593937, guid: 984c972b2cb56ff43aa9d4bbfa3c7cea, type: 3}
   SinusEnemyPrefab: {fileID: 8916735576456593937, guid: 579cbc15fc18a03479690f498b158cca, type: 3}
   GreekEnemyPrefab: {fileID: 8916735576456593937, guid: b1e50489bd6aa014c9faaaeabb0cee8f, type: 3}
-  FollowingEnemyPrefab: {fileID: 0}
+  FollowingEnemyPrefab: {fileID: 8916735576456593937, guid: 90d10dbf8c493b643b63c46fa45079d4, type: 3}
+  ShootingInRangeEnemyPrefab: {fileID: 8916735576456593937, guid: 7637ffb4ec979d54da17db01a4506ab6, type: 3}
 --- !u!4 &1787798377
 Transform:
   m_ObjectHideFlags: 0

@@ -4,11 +4,10 @@ using System.ComponentModel;
 namespace Assets.Enums
 {
     [Serializable]
-    public enum GreekEnemyMovementStage
+    public enum StraightLineMovementState
     {
-        ONE,
-        TWO,
-        THREE,
-        FOUR
+        SPEED_UP,
+        SLOW_DOWN,
+        DONE
     }
 }

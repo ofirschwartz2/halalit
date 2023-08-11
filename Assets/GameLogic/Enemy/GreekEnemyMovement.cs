@@ -17,7 +17,7 @@ public class GreekEnemyMovement : MonoBehaviour
     [SerializeField]
     private Rigidbody2D _rigidBody;
 
-    private GreekEnemyMovementStage _movementStage;
+    private GreekEnemyMovementState _movementStage;
     private Direction _greekDirection;
     private float _changeDirectionTime, _startMovementTime;
     private Vector2 _currentMovementDirection;
@@ -32,7 +32,7 @@ public class GreekEnemyMovement : MonoBehaviour
 
         _waitForNextStage = false;
         _greekDirection = Utils.GetRandomDirection();
-        _movementStage = GreekEnemyMovementStage.ONE;
+        _movementStage = GreekEnemyMovementState.ONE;
         _currentMovementDirection = GetStageDirectionVector(_movementStage, _greekDirection);
         SetChangeDirectionTime();
     }
@@ -57,7 +57,7 @@ public class GreekEnemyMovement : MonoBehaviour
 
     private void ChangeGreekStage()
     {
-        _movementStage = GetNextStage<GreekEnemyMovementStage>();
+        _movementStage = GetNextStage<GreekEnemyMovementState>();
         _startMovementTime = _changeDirectionTime;
         SetChangeDirectionTime();
         _currentMovementDirection = GetStageDirectionVector(_movementStage, _greekDirection);
@@ -67,26 +67,26 @@ public class GreekEnemyMovement : MonoBehaviour
     private void ChangeGreekDirection(Direction newDirection)
     {
         _greekDirection = newDirection;
-        _movementStage = GreekEnemyMovementStage.FOUR;
+        _movementStage = GreekEnemyMovementState.FOUR;
         _startMovementTime = _changeDirectionTime;
         _currentMovementDirection = GetStageDirectionVector(_movementStage, _greekDirection);
         _rigidBody.velocity = Vector2.zero;
         _waitForNextStage = true;
     }
 
-    private Vector2 GetStageDirectionVector(GreekEnemyMovementStage stage, Direction direction) 
+    private Vector2 GetStageDirectionVector(GreekEnemyMovementState stage, Direction direction) 
     {
         switch (direction)
         {
             case Direction.UP:
                 switch (stage)
                 {
-                    case GreekEnemyMovementStage.ONE:
-                    case GreekEnemyMovementStage.THREE:
+                    case GreekEnemyMovementState.ONE:
+                    case GreekEnemyMovementState.THREE:
                         return Vector2.up;
-                    case GreekEnemyMovementStage.TWO:
+                    case GreekEnemyMovementState.TWO:
                         return Vector2.right;
-                    case GreekEnemyMovementStage.FOUR:
+                    case GreekEnemyMovementState.FOUR:
                         return Vector2.left;
                     default:
                         throw new Exception("GreekEnemyMovement Stage not supported");
@@ -94,12 +94,12 @@ public class GreekEnemyMovement : MonoBehaviour
             case Direction.RIGHT:
                 switch (stage)
                 {
-                    case GreekEnemyMovementStage.ONE:
-                    case GreekEnemyMovementStage.THREE:
+                    case GreekEnemyMovementState.ONE:
+                    case GreekEnemyMovementState.THREE:
                         return Vector2.right;
-                    case GreekEnemyMovementStage.TWO:
+                    case GreekEnemyMovementState.TWO:
                         return Vector2.down;
-                    case GreekEnemyMovementStage.FOUR:
+                    case GreekEnemyMovementState.FOUR:
                         return Vector2.up;
                     default:
                         throw new Exception("GreekEnemyMovementStage not supported");
@@ -107,12 +107,12 @@ public class GreekEnemyMovement : MonoBehaviour
             case Direction.LEFT:
                 switch (stage)
                 {
-                    case GreekEnemyMovementStage.ONE:
-                    case GreekEnemyMovementStage.THREE:
+                    case GreekEnemyMovementState.ONE:
+                    case GreekEnemyMovementState.THREE:
                         return Vector2.left;
-                    case GreekEnemyMovementStage.TWO:
+                    case GreekEnemyMovementState.TWO:
                         return Vector2.up;
-                    case GreekEnemyMovementStage.FOUR:
+                    case GreekEnemyMovementState.FOUR:
                         return Vector2.down;
                     default:
                         throw new Exception("GreekEnemyMovementStage not supported");
@@ -120,12 +120,12 @@ public class GreekEnemyMovement : MonoBehaviour
             case Direction.DOWN:
                 switch (stage)
                 {
-                    case GreekEnemyMovementStage.ONE:
-                    case GreekEnemyMovementStage.THREE:
+                    case GreekEnemyMovementState.ONE:
+                    case GreekEnemyMovementState.THREE:
                         return Vector2.down;
-                    case GreekEnemyMovementStage.TWO:
+                    case GreekEnemyMovementState.TWO:
                         return Vector2.left;
-                    case GreekEnemyMovementStage.FOUR:
+                    case GreekEnemyMovementState.FOUR:
                         return Vector2.right;
                     default:
                         throw new Exception("GreekEnemyMovementStage not supported");

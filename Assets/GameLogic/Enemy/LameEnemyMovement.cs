@@ -22,7 +22,7 @@ public class LameEnemyMovement : MonoBehaviour
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
 
-        _direction = Utils.GetRandomVector2OnCircle();
+        SetDirection();
     }
 
     void Update()
@@ -33,6 +33,11 @@ public class LameEnemyMovement : MonoBehaviour
         }
     }
 
+    private void SetDirection() 
+    {
+        _direction = Utils.GetRandomVector2OnCircle();
+    }
+
     private bool isUnderSpeedLimit()
     {
         return _rigidBody.velocity.magnitude < _speedLimit;
@@ -41,6 +46,11 @@ public class LameEnemyMovement : MonoBehaviour
     private void Die()
     {
         Destroy(gameObject);
+    }
+
+    private void SetNewDirection(string edgeTag)
+    {
+        _direction = EnemyUtils.GetAnotherDirectionFromEdge(_rigidBody, edgeTag);
     }
 
     #region Triggers
@@ -58,7 +68,7 @@ public class LameEnemyMovement : MonoBehaviour
         }
         else if (Utils.DidHitEdge(other.gameObject.tag))
         {
-            _direction = EnemyUtils.GetAnotherDirectionFromEdge(_rigidBody, other.gameObject.tag);
+            SetNewDirection(other.gameObject.tag);
         }
     }
 

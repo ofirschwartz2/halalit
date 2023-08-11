@@ -3,7 +3,7 @@ using UnityEngine;
 public class SceneFactory : MonoBehaviour
 {
 
-    public GameObject LameEnemyPrefab, ZigZagEnemyPrefab, SinusEnemyPrefab, GreekEnemyPrefab, FollowingEnemyPrefab;
+    public GameObject LameEnemyPrefab, ZigZagEnemyPrefab, SinusEnemyPrefab, GreekEnemyPrefab, FollowingEnemyPrefab, ShootingInRangeEnemyPrefab;
 
     /*
     public bool UseConfigFile;
@@ -33,44 +33,8 @@ public class SceneFactory : MonoBehaviour
         */
 
         Instantiate(
-            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
+            new NewEnemy(ShootingInRangeEnemyPrefab).GetPrefab(),
             new Vector3(1, -1, 0), new Quaternion(0, 0, 0, 0));
-
-        Instantiate(
-            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
-            new Vector3(2, -2, 0), new Quaternion(0, 0, 0, 0));
-                
-        Instantiate(
-            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
-            new Vector3(3, 0, 0), new Quaternion(0, 0, 0, 0));
-        
-        Instantiate(
-            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
-            new Vector3(8, -4, 0), new Quaternion(0, 0, 0, 0));
-
-        Instantiate(
-            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
-            new Vector3(5, -8, 0), new Quaternion(0, 0, 0, 0));
-
-        Instantiate(
-            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
-            new Vector3(-8, 1, 0), new Quaternion(0, 0, 0, 0));
-
-        Instantiate(
-            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
-            new Vector3(-2, 6, 0), new Quaternion(0, 0, 0, 0));
-
-        Instantiate(
-            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
-            new Vector3(-5, 3, 0), new Quaternion(0, 0, 0, 0));
-
-        Instantiate(
-            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
-            new Vector3(-2, 4, 0), new Quaternion(0, 0, 0, 0));
-        
-        Instantiate(
-            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
-            new Vector3(-5, -5, 0), new Quaternion(0, 0, 0, 0));
     }
 
     /*

@@ -1,13 +1,23 @@
 ﻿using System;
 using System.ComponentModel;
 using UnityEngine;
-using Random = UnityEngine.Random;
 using Assets.Enums;
 
 namespace Assets.Utils
 {
     static class Utils
     {
+
+        public static float GetRandomAngleAround(float range)
+        {
+            return UnityEngine.Random.Range(-range, range);
+        }
+
+        public static Quaternion GetRotation(Quaternion rotation, float angle)
+        {
+            return rotation * Quaternion.AngleAxis(angle, Vector3.forward);
+        }
+
         #region Math 
         public static float Vector2ToDegree(float x, float y)
         {
@@ -34,7 +44,7 @@ namespace Assets.Utils
             return degree * Mathf.PI / 180;
         }
 
-        public static float GetVectorMagnitude(Vector2 vector2)
+        public static float GetVectorMagnitude(Vector2 vector2) // we can use Vector2.magnitude
         {
             return GetLengthOfLine(vector2.x, vector2.y);
         }
@@ -69,7 +79,7 @@ namespace Assets.Utils
             return GetLengthOfLine(deltaX, deltaY);
         }
 
-        public static float GetLengthOfLine(float x, float y)
+        public static float GetLengthOfLine(float x, float y) // we can use Vector2.magnitude
         {
             return Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(y, 2));
         }
@@ -114,7 +124,7 @@ namespace Assets.Utils
 
         public static bool IsTrueIn50Precent()
         {
-            return Random.Range(0, 2) == 0;
+            return UnityEngine.Random.Range(0, 2) == 0;
         }
 
         #endregion
@@ -122,7 +132,7 @@ namespace Assets.Utils
         #region Vectors
         public static Vector2 GetRandomVector2OnCircle()
         {
-            float angle = Random.Range(0, 2 * Mathf.PI);
+            float angle = UnityEngine.Random.Range(0, 2 * Mathf.PI);
             return RadianToVector2(angle);
         }
 
@@ -159,6 +169,13 @@ namespace Assets.Utils
             return direction;
         }
 
+        public static Vector2 GetHalalitDirection(Vector2 myPosition)
+        {
+            var halalit = GameObject.FindGameObjectWithTag("Halalit");
+            var halalitPosition = halalit.transform.position;
+            return new Vector2(halalitPosition.x, halalitPosition.y) - myPosition;
+        }
+
         #endregion
 
         #region Enum Extentions
@@ -177,9 +194,16 @@ namespace Assets.Utils
         }
         #endregion
 
+        #region Predicates
         public static bool DidHitEdge(string tag) 
         {
             return tag == "TopEdge" || tag == "RightEdge" || tag == "BottomEdge" || tag == "LeftEdge";
         }
+
+        public static bool IsUnderSpeedLimit(Vector2 myVelocity, float speedLimit)
+        {
+            return myVelocity.magnitude < speedLimit;
+        }
+        #endregion
     }
 }
