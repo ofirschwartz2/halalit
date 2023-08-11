@@ -63,6 +63,7 @@ public class GreekEnemyMovement : MonoBehaviour
         _currentMovementDirection = GetStageDirectionVector(_movementStage, _greekDirection);
         _waitForNextStage = false;
     }
+
     private void ChangeGreekDirection(Direction newDirection)
     {
         _greekDirection = newDirection;
@@ -169,7 +170,7 @@ public class GreekEnemyMovement : MonoBehaviour
         {
             EnemyUtils.KnockMeBack(_rigidBody, other);
         }
-        else if (other.gameObject.CompareTag("TopEdge") || other.gameObject.CompareTag("RightEdge") || other.gameObject.CompareTag("BottomEdge") || other.gameObject.CompareTag("LeftEdge"))
+        else if (Utils.DidHitEdge(other.gameObject.tag))
         {
             switch (other.gameObject.tag)
             {

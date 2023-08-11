@@ -176,5 +176,10 @@ namespace Assets.Utils
             return (Direction)UnityEngine.Random.Range(0, Enum.GetValues(typeof(Direction)).Length);
         }
         #endregion
+
+        public static bool DidHitEdge(string tag) 
+        {
+            return tag == "TopEdge" || tag == "RightEdge" || tag == "BottomEdge" || tag == "LeftEdge";
+        }
     }
 }

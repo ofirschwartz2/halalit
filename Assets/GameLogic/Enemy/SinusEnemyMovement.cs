@@ -125,7 +125,7 @@ public class SinusEnemyMovement : MonoBehaviour
         {
             EnemyUtils.KnockMeBack(_rigidBody, other);
         }
-        else if (other.gameObject.CompareTag("TopEdge") || other.gameObject.CompareTag("RightEdge") || other.gameObject.CompareTag("BottomEdge") || other.gameObject.CompareTag("LeftEdge"))
+        else if (Utils.DidHitEdge(other.gameObject.tag))
         {
             switch (other.gameObject.tag)
             {
