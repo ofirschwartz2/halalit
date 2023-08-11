@@ -157,9 +157,9 @@ namespace Assets.Utils
             return new Vector2(vector.x / magnitude, vector.y / magnitude);
         }
 
-        public static float GetVelocityInDirection(Vector2 velocity, Vector2 direction)
+        public static Vector2 GetVelocityInDirection(Vector2 velocity, Vector2 direction)
         {
-            return Vector2.Dot(velocity, direction);
+            return Vector2.Dot(velocity, direction) * direction;
         }
 
         public static Vector2 GetDirectionFromCollision(Vector2 myPosition, Vector2 colliderPosition) 

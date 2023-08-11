@@ -92,7 +92,7 @@ public class SinusEnemyMovement : MonoBehaviour
     private bool otherAxisIsUnderSpeedLimit(Vector2 otherAxisDirection)
     {
         var otherAxisVelocity = Utils.GetVelocityInDirection(_rigidBody.velocity, otherAxisDirection);
-        return Math.Abs(otherAxisVelocity) < _otherAxisSpeedLimit;
+        return Utils.IsUnderSpeedLimit(otherAxisVelocity, _otherAxisSpeedLimit);
     }
 
     private void SetChangeSinForceDirectionTime(float interval)
