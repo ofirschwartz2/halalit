@@ -151,6 +151,14 @@ namespace Assets.Utils
         {
             return Vector2.Dot(velocity, direction);
         }
+
+        public static Vector2 GetDirectionFromCollision(Vector2 myPosition, Vector2 colliderPosition) 
+        {
+            var direction = myPosition - colliderPosition;
+            direction.Normalize();
+            return direction;
+        }
+
         #endregion
 
         #region Enum Extentions

@@ -152,6 +152,7 @@ public class GreekEnemyMovement : MonoBehaviour
     {
         _changeDirectionTime = _changeDirectionTime + _changeGreekDirectionInterval;
     }
+
     private void Die()
     {
         Destroy(gameObject);
@@ -166,7 +167,7 @@ public class GreekEnemyMovement : MonoBehaviour
         }
         else if (EnemyUtils.ShouldKnockMeBack(other))
         {
-            //KnockMeBack(other);
+            EnemyUtils.KnockMeBack(_rigidBody, other);
         }
         else if (other.gameObject.CompareTag("TopEdge") || other.gameObject.CompareTag("RightEdge") || other.gameObject.CompareTag("BottomEdge") || other.gameObject.CompareTag("LeftEdge"))
         {

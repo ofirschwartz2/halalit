@@ -69,20 +69,6 @@ public class ZigZagEnemyMovement : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void GoInAnotherDirection()
-    {
-        _direction = Utils.GetRandomVector2OnHalfOfCircle(_direction);
-        _rigidBody.velocity = new Vector2(0f, 0f);
-    }
-
-    private void KnockMeBack(Collider2D other, float otherThrust = 1f)
-    {
-        /*
-        Vector2 normalizedDifference = (_rigidBody.transform.position - other.transform.position).normalized;
-        _rigidBody.AddForce(normalizedDifference * Utils.GetNormalizedSpeed(_rigidBody, other.GetComponent<Rigidbody2D>(), EnemyThrust * otherThrust), ForceMode2D.Impulse);
-        */
-    }
-
     #region Triggers
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -93,7 +79,7 @@ public class ZigZagEnemyMovement : MonoBehaviour
         }
         else if (EnemyUtils.ShouldKnockMeBack(other))
         {
-            KnockMeBack(other);
+            EnemyUtils.KnockMeBack(_rigidBody, other);
         }
         else if (other.gameObject.CompareTag("TopEdge") || other.gameObject.CompareTag("RightEdge") || other.gameObject.CompareTag("BottomEdge") || other.gameObject.CompareTag("LeftEdge"))
         {

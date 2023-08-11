@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3159731203665802145}
   m_Layer: 0
   m_Name: SinusEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,8 +100,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 1
-  m_AngularDrag: 1
+  m_LinearDrag: 5
+  m_AngularDrag: 5
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -162,8 +162,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _useConfigFile: 1
-  _xMovementAmplitude: 0
-  _changeXDirectionInterval: 0
-  _yMovementAmplitude: 0
-  _ySpeedLimit: 0
+  _sinAxisMovementAmplitude: 0
+  _changeSinForceInterval: 0
+  _otherAxisMovementAmplitude: 0
+  _otherAxisSpeedLimit: 0
   _rigidBody: {fileID: 1185372985846441720}

@@ -8,6 +8,8 @@ static class EnemyUtils
     private static float _deltaTimeMultiplier = 300f;
     private static float _speedUpOutOfStraightLine = 5f/10f;
     private static float _slowDownOutOfStraightLine = 9f/10f;
+    private static float _isAboutToStopTH = 0.35f; // TODO: should be a function of the force applied? 
+    private static float _knockbackMultiplier = 300f;
 
     public static void MoveInStraightLine(
         Rigidbody2D rigidbody, 
@@ -84,26 +86,25 @@ static class EnemyUtils
         return Utils.GetRandomVector2OnHalfOfCircle(direction);
     }
 
+    public static void KnockMeBack(Rigidbody2D myRigidbody, Collider2D other)
+    {
+        var knockBackDirection = Utils.GetDirectionFromCollision(myRigidbody.transform.position, other.transform.position);
+        myRigidbody.AddForce(knockBackDirection * _knockbackMultiplier);
+    }
+
     #region Predicates
     private static bool IsAboutToStop(float speed)
     {
-        return Math.Abs(speed) < 0.3f;
-    }
-
-    private static bool IsUnderSpeedLimit(float speed, float speedLimit)
-    {
-        return speed < speedLimit;
+        return Math.Abs(speed) < _isAboutToStopTH;
     }
 
     public static bool ShouldKillMe(Collider2D other)
     {
-        //TODO: refactor this. should be in a centralizes place.
         return other.gameObject.CompareTag("Shot");
     }
 
     public static bool ShouldKnockMeBack(Collider2D other)
     {
-        //TODO: refactor this. should be in a centralizes place, and get both colliders to decide.
         return other.gameObject.CompareTag("Halalit") || other.gameObject.CompareTag("Astroid") || other.gameObject.CompareTag("Enemy");
     }
     #endregion

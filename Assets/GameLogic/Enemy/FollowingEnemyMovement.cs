@@ -71,6 +71,10 @@ public class FollowingEnemyMovement : MonoBehaviour
             EnemyUtils.MoveInStraightLine(_rigidBody, _halalitDirection, _movementAmplitude, _oneAttackInterval, _stratAttackingTime);
         }
     }
+    private void Die()
+    {
+        Destroy(gameObject);
+    }
 
     #region Setters
     private void SetWaiting()
@@ -114,6 +118,21 @@ public class FollowingEnemyMovement : MonoBehaviour
     private bool DidWaitingTimePass()
     {
         return Time.time > _waitingTime;
+    }
+    #endregion
+
+    #region Triggers
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        //TODO: refactor this. should this be in the EventHandler?
+        if (EnemyUtils.ShouldKillMe(other))
+        {
+            Die();
+        }
+        else if (EnemyUtils.ShouldKnockMeBack(other))
+        {
+            EnemyUtils.KnockMeBack(_rigidBody, other);
+        }
     }
     #endregion
 }

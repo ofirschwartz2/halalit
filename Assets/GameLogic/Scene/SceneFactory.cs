@@ -26,9 +26,6 @@ public class SceneFactory : MonoBehaviour
         Instantiate(
             new NewEnemy(ZigZagEnemyPrefab).GetPrefab(),
             new Vector3(-4, -4, 0), new Quaternion(0, 0, 0, 0));
-        Instantiate(
-            new NewEnemy(SinusEnemyPrefab).GetPrefab(),
-            new Vector3(2, 2, 0), new Quaternion(0, 0, 0, 0));
 
         Instantiate(
             new NewEnemy(FollowingEnemyPrefab).GetPrefab(),
@@ -37,7 +34,43 @@ public class SceneFactory : MonoBehaviour
 
         Instantiate(
             new NewEnemy(GreekEnemyPrefab).GetPrefab(),
-            new Vector3(0, -4, 0), new Quaternion(0, 0, 0, 0));
+            new Vector3(1, -1, 0), new Quaternion(0, 0, 0, 0));
+
+        Instantiate(
+            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
+            new Vector3(2, -2, 0), new Quaternion(0, 0, 0, 0));
+                
+        Instantiate(
+            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
+            new Vector3(3, 0, 0), new Quaternion(0, 0, 0, 0));
+        
+        Instantiate(
+            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
+            new Vector3(8, -4, 0), new Quaternion(0, 0, 0, 0));
+
+        Instantiate(
+            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
+            new Vector3(5, -8, 0), new Quaternion(0, 0, 0, 0));
+
+        Instantiate(
+            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
+            new Vector3(-8, 1, 0), new Quaternion(0, 0, 0, 0));
+
+        Instantiate(
+            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
+            new Vector3(-2, 6, 0), new Quaternion(0, 0, 0, 0));
+
+        Instantiate(
+            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
+            new Vector3(-5, 3, 0), new Quaternion(0, 0, 0, 0));
+
+        Instantiate(
+            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
+            new Vector3(-2, 4, 0), new Quaternion(0, 0, 0, 0));
+        
+        Instantiate(
+            new NewEnemy(GreekEnemyPrefab).GetPrefab(),
+            new Vector3(-5, -5, 0), new Quaternion(0, 0, 0, 0));
     }
 
     /*
