@@ -63,7 +63,8 @@ public class Gun : MonoBehaviour
     private void Fire()
     {
         GameObject shotPrefab = _ammoToggle.GetAmmoPrefab();
-        Instantiate(shotPrefab, transform.position, transform.rotation);
+        Quaternion shootingRotation = transform.rotation * Quaternion.Euler(0f, 0f, -90f);
+        Instantiate(shotPrefab, transform.position, shootingRotation);
         _cooldownTime = Time.time + _cooldownInterval;
     }
     #endregion
