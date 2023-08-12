@@ -3,7 +3,7 @@ using Assets.Utils;
 using System;
 using UnityEngine;
 
-public class ZigZagEnemyMovement : MonoBehaviour
+public class ZigZagEnemy : MonoBehaviour
 {
     [SerializeField]
     private bool _useConfigFile;

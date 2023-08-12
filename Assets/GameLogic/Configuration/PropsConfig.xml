@@ -95,7 +95,7 @@
         <_attackLoadingInterval>1</_attackLoadingInterval>
         <_oneAttackInterval>3</_oneAttackInterval>
     </FollowingEnemyMovement>
-    
+
     <ShootingInRangeEnemyMovement>
         <_movementAmplitude>1</_movementAmplitude>
         <_speedLimit>1</_speedLimit>
@@ -105,6 +105,16 @@
         <_shootingRange>5</_shootingRange>
         <_rotationSpeed>0.03</_rotationSpeed>
     </ShootingInRangeEnemyMovement>
+
+    <ShootingLazerRangeEnemy>
+        <_movementAmplitude>1</_movementAmplitude>
+        <_speedLimit>1</_speedLimit>
+        <_movingInterval>3</_movingInterval>
+        <_aimingInterval>2</_aimingInterval>
+        <_attackingInterval>2</_attackingInterval>
+        <_shootingRange>10</_shootingRange>
+        <_shotRotationSpeed>0.03</_shotRotationSpeed>
+    </ShootingLazerRangeEnemy>
     
     <AsteroidInstantiator>
         <_asteroidInstantiationDistanceFromCenter>25</_asteroidInstantiationDistanceFromCenter>

@@ -63,7 +63,7 @@ public class Gun : MonoBehaviour
     private void Fire()
     {
         GameObject shotPrefab = _ammoToggle.GetAmmoPrefab();
-        Quaternion shootingRotation = transform.rotation * Quaternion.Euler(0f, 0f, -90f);
+        Quaternion shootingRotation = transform.rotation * Quaternion.Euler(0f, 0f, -90f); // TODO: BUG with lazer....... either Gun rotation is 90 degrees off / Lazer is off
         Instantiate(shotPrefab, transform.position, shootingRotation);
         _cooldownTime = Time.time + _cooldownInterval;
     }

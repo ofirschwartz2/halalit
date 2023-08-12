@@ -3,7 +3,7 @@ using Assets.Utils;
 using System;
 using UnityEngine;
 
-public class SinusEnemyMovement : MonoBehaviour
+public class SinusEnemy : MonoBehaviour
 {
     [SerializeField]
     private bool _useConfigFile;

@@ -3,7 +3,7 @@ using Assets.Utils;
 using System;
 using UnityEngine;
 
-public class ShootingInRangeEnemyMovement : MonoBehaviour
+public class ShootingInRangeEnemy : MonoBehaviour
 {
     [SerializeField]
     private bool _useConfigFile;
@@ -27,7 +27,7 @@ public class ShootingInRangeEnemyMovement : MonoBehaviour
     private Rigidbody2D _rigidBody;
 
     private Vector2 _direction, _halalitDirection;
-    private ShootingInRangeEnemyState _ShootingInRangeEnemyState;
+    private MoveAimAttackEnemyState _ShootingInRangeEnemyState;
     private float _movingTime, _aimingTime, _attackingTime, _shootAngle;
     private bool _didShoot, _didAim;
 
@@ -46,13 +46,13 @@ public class ShootingInRangeEnemyMovement : MonoBehaviour
     {
         switch (_ShootingInRangeEnemyState)
         {
-            case ShootingInRangeEnemyState.MOVING:
+            case MoveAimAttackEnemyState.MOVING:
                 MovingState();
                 break;
-            case ShootingInRangeEnemyState.AIMING:
+            case MoveAimAttackEnemyState.AIMING:
                 AimingState();
                 break;
-            case ShootingInRangeEnemyState.ATTACKING:
+            case MoveAimAttackEnemyState.ATTACKING:
                 AttackingState();
                 break;
             default:
@@ -117,7 +117,7 @@ public class ShootingInRangeEnemyMovement : MonoBehaviour
     {
         _didShoot = false;
         SetMovingTime();
-        _ShootingInRangeEnemyState = ShootingInRangeEnemyState.MOVING;
+        _ShootingInRangeEnemyState = MoveAimAttackEnemyState.MOVING;
     }
 
     private void SetMovingTime()
@@ -148,7 +148,7 @@ public class ShootingInRangeEnemyMovement : MonoBehaviour
     private void SetAttacking()
     {
         _attackingTime = Time.time + _attackingInterval;
-        _ShootingInRangeEnemyState = ShootingInRangeEnemyState.ATTACKING;
+        _ShootingInRangeEnemyState = MoveAimAttackEnemyState.ATTACKING;
     }
 
     private bool DidAimingTimePass()
@@ -160,7 +160,7 @@ public class ShootingInRangeEnemyMovement : MonoBehaviour
     {
         _aimingTime = Time.time + _aimingInterval;
         _didAim = false;
-        _ShootingInRangeEnemyState = ShootingInRangeEnemyState.AIMING;
+        _ShootingInRangeEnemyState = MoveAimAttackEnemyState.AIMING;
     }
 
     private bool DidMovingTimePass()

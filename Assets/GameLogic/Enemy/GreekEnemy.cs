@@ -6,7 +6,7 @@ using System.ComponentModel;
 using UnityEditor;
 using UnityEngine;
 
-public class GreekEnemyMovement : MonoBehaviour
+public class GreekEnemy : MonoBehaviour
 {
     [SerializeField]
     private bool _useConfigFile;

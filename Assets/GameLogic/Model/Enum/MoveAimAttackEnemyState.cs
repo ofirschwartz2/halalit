@@ -4,7 +4,7 @@ using System.ComponentModel;
 namespace Assets.Enums
 {
     [Serializable]
-    public enum ShootingInRangeEnemyState
+    public enum MoveAimAttackEnemyState
     {
         MOVING,
         AIMING,

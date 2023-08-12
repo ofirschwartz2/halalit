@@ -3,7 +3,14 @@ using UnityEngine;
 public class SceneFactory : MonoBehaviour
 {
 
-    public GameObject LameEnemyPrefab, ZigZagEnemyPrefab, SinusEnemyPrefab, GreekEnemyPrefab, FollowingEnemyPrefab, ShootingInRangeEnemyPrefab;
+    public GameObject 
+        LameEnemyPrefab, 
+        ZigZagEnemyPrefab, 
+        SinusEnemyPrefab, 
+        GreekEnemyPrefab, 
+        FollowingEnemyPrefab, 
+        ShootingInRangeEnemyPrefab,
+        ShootingLazerRangeEnemyPrefab;
 
     /*
     public bool UseConfigFile;
@@ -30,10 +37,13 @@ public class SceneFactory : MonoBehaviour
         Instantiate(
             new NewEnemy(FollowingEnemyPrefab).GetPrefab(),
             new Vector3(-3, 4, 0), new Quaternion(0, 0, 0, 0));
-        */
 
         Instantiate(
             new NewEnemy(ShootingInRangeEnemyPrefab).GetPrefab(),
+            new Vector3(1, -1, 0), new Quaternion(0, 0, 0, 0));
+        */
+        Instantiate(
+            new NewEnemy(ShootingLazerRangeEnemyPrefab).GetPrefab(),
             new Vector3(1, -1, 0), new Quaternion(0, 0, 0, 0));
     }
 

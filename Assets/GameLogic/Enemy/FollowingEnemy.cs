@@ -3,7 +3,7 @@ using Assets.Utils;
 using System;
 using UnityEngine;
 
-public class FollowingEnemyMovement : MonoBehaviour
+public class FollowingEnemy : MonoBehaviour
 {
     [SerializeField]
     private bool _useConfigFile;

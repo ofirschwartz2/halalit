@@ -25,6 +25,7 @@ TagManager:
   - RightEdge
   - BottomEdge
   - LeftEdge
+  - AimShot
   layers:
   - Default
   - TransparentFX

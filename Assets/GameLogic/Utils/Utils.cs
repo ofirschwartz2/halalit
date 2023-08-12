@@ -176,6 +176,13 @@ namespace Assets.Utils
             return new Vector2(halalitPosition.x, halalitPosition.y) - myPosition;
         }
 
+        public static Vector2 GetRotationAsVector2(Quaternion rotation)
+        {
+            rotation = rotation * Quaternion.Euler(0f, 0f, 90f); //TODO: talk w Amir
+            float angle = rotation.eulerAngles.z;
+            float angleRadians = angle * Mathf.Deg2Rad;
+            return RadianToVector2(angleRadians);
+        }
         #endregion
 
         #region Enum Extentions

@@ -2,7 +2,7 @@ using Assets.Utils;
 using System;
 using UnityEngine;
 
-public class LameEnemyMovement : MonoBehaviour
+public class LameEnemy : MonoBehaviour
 {
     [SerializeField]
     private bool _useConfigFile;
