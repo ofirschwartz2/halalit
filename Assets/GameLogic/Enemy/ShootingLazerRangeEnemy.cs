@@ -233,8 +233,6 @@ public class ShootingLazerRangeEnemy : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         //TODO: refactor this. should this be in the EventHandler?
-        Debug.Log(other.gameObject.tag);
-
         if (EnemyUtils.ShouldKillMe(other))
         {
             Die();

@@ -38,15 +38,12 @@ public class FollowingEnemy : MonoBehaviour
                 SetWaiting();
                 break;
             case FollowingEnemyState.WAITING:
-                Debug.Log("WAITING");
                 Waiting();
                 break;
             case FollowingEnemyState.SET_ATTACKING:
-                Debug.Log("SET_ATTACKING");
                 SetAttacking();
                 break;
             case FollowingEnemyState.ATTACKING:
-                Debug.Log("ATTACKING");
                 Attacking();
                 break;
         }
