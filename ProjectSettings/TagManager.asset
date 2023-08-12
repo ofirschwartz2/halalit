@@ -12,12 +12,13 @@ TagManager:
   - Shot2
   - Item
   - PickupClaw
-  - Astroid
   - EnemyOuterCollider
   - AstroidOuterCollider
   - KnockbackShot
   - ExternalWorld
   - InternalWorld
+  - Undefined
+  - Asteroid
   layers:
   - Default
   - TransparentFX

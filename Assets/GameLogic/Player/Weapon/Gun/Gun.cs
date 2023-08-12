@@ -19,7 +19,7 @@ public class Gun : MonoBehaviour
 
     private float _cooldownTime;
     private AmmoToggle _ammoToggle;
-    private Dictionary<UpgradeName, Action<Dictionary<EventProperty, float>>> _upgradeActions;
+    private Dictionary<ItemName, Action<Dictionary<EventProperty, float>>> _upgradeActions;
 
     private void Awake()
     {
@@ -36,7 +36,7 @@ public class Gun : MonoBehaviour
     {
         _upgradeActions = new()
         {
-            { UpgradeName.FIRE_RATE, UpgradeCooldownInterval }
+            { ItemName.FIRE_RATE, UpgradeCooldownInterval }
         };
     }
 

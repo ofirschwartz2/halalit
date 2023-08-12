@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class AsteroidInstantiator : MonoBehaviour
+public class AsteroidExternalInstantiator : MonoBehaviour
 {
     [SerializeField]
     private bool _useConfigFile;
     [SerializeField]
     private GameObject _asteroidPrefab;
+    [SerializeField]
+    private AsteroidInitiator _asteroidInitiator;
     [SerializeField]
     private float _asteroidInstantiationLineLength;
     [SerializeField]
@@ -90,15 +92,15 @@ public class AsteroidInstantiator : MonoBehaviour
 
     private bool IsValidAsteroidInstantiationPointX(float asteroidInstantiationPointX)
     {
-        float asteroidLocalScaleX = _asteroidPrefab.transform.localScale.x;
+        float asteroidLocalScale = _asteroidPrefab.transform.localScale.x;
 
         List<float> xPointsToCheck = new()
         {
-            asteroidInstantiationPointX - asteroidLocalScaleX,
-            asteroidInstantiationPointX - asteroidLocalScaleX * 2,
+            asteroidInstantiationPointX - asteroidLocalScale,
+            asteroidInstantiationPointX - asteroidLocalScale * 2,
             asteroidInstantiationPointX,
-            asteroidInstantiationPointX + asteroidLocalScaleX,
-            asteroidInstantiationPointX + asteroidLocalScaleX * 2,
+            asteroidInstantiationPointX + asteroidLocalScale,
+            asteroidInstantiationPointX + asteroidLocalScale * 2,
         };
 
         foreach (KeyValuePair<float, RangeAttribute> timedForbiddenInstantiationZone in _forbiddenInstantiationZones)
@@ -185,19 +187,8 @@ public class AsteroidInstantiator : MonoBehaviour
     private void InstantiateDirectionalAsteroids(Vector2 position)
     {
         GameObject asteroid = Instantiate(_asteroidPrefab, position, Quaternion.identity);
-        InitNewAsteroid(asteroid);
+        _asteroidInitiator.InitAsteroid(asteroid, _asteroidsDirection, GetRandomAsteroidScale());
         AddToForbiddenInstantiationZone(asteroid);
-    }
-
-    private void InitNewAsteroid(GameObject asteroid)
-    {
-        AsteroidMovement asteroidInstanceMovement = asteroid.GetComponent<AsteroidMovement>();
-        asteroidInstanceMovement.SetDirection(_asteroidsDirection);
-
-        float randomAsteroidScale = GetRandomAsteroidScale();
-        asteroid.transform.localScale = new Vector3(randomAsteroidScale, randomAsteroidScale, 0);
-
-        asteroid.transform.SetParent(transform.parent);
     }
 
     private void AddToForbiddenInstantiationZone(GameObject asteroid)
