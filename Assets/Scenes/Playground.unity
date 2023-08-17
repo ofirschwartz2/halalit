@@ -1984,6 +1984,7 @@ MonoBehaviour:
   FollowingEnemyPrefab: {fileID: 8916735576456593937, guid: 90d10dbf8c493b643b63c46fa45079d4, type: 3}
   ShootingInRangeEnemyPrefab: {fileID: 8916735576456593937, guid: 7637ffb4ec979d54da17db01a4506ab6, type: 3}
   ShootingLazerRangeEnemyPrefab: {fileID: 8916735576456593937, guid: 71b1060aee20e1645b7b9442c8ba3673, type: 3}
+  ShootingLazerAsteriskEnemyPrefab: {fileID: 8916735576456593937, guid: 2c5e781cbf51fd447b2e5b556cefc9d9, type: 3}
 --- !u!4 &1787798377
 Transform:
   m_ObjectHideFlags: 0

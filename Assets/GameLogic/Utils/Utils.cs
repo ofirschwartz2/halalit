@@ -185,6 +185,13 @@ namespace Assets.Utils
         }
         #endregion
 
+        public static Quaternion GetRorationOutwards(Vector2 from, Vector2 to)
+        {
+            Vector2 direction = to - from;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            return Quaternion.Euler(0f, 0f, angle);
+        }
+
         #region Enum Extentions
         public static string GetDescription(this Enum val)
         {

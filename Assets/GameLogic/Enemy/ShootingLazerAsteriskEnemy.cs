@@ -1,9 +1,10 @@
 using Assets.Enums;
 using Assets.Utils;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class ShootingInRangeEnemy : MonoBehaviour
+public class ShootingLazerAsteriskEnemy : MonoBehaviour
 {
     [SerializeField]
     private bool _useConfigFile;
@@ -18,18 +19,21 @@ public class ShootingInRangeEnemy : MonoBehaviour
     [SerializeField] 
     private float _attackingInterval;
     [SerializeField]
-    private float _shootingRange;
-    [SerializeField]
     private float _rotationSpeed;
+    [SerializeField]
+    private float _numberOfShots; // TODO: INT
+    [SerializeField]
+    public GameObject AimShotPrefab;
     [SerializeField]
     public GameObject ShotPrefab;
     [SerializeField]
     private Rigidbody2D _rigidBody;
 
     private Vector2 _direction, _halalitDirection;
-    private MoveAimAttackEnemyState _ShootingInRangeEnemyState;
-    private float _movingTime, _aimingTime, _attackingTime, _shootAngle;
-    private bool _didShoot, _didAim;
+    private MoveAimAttackEnemyState _shootingLazerAsteriskEnemyState;
+    private float _movingTime, _aimingTime, _attackingTime;
+    private bool _didAim, _didShoot;
+    private List<GameObject> _aimingShots, _shots;
 
     void Start()
     {
@@ -38,13 +42,16 @@ public class ShootingInRangeEnemy : MonoBehaviour
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
 
+        _aimingShots = new List<GameObject>();
+        _shots = new List<GameObject>();
+
         SetDirection();
         SetMoving();
     }
 
     void Update()
     {
-        switch (_ShootingInRangeEnemyState)
+        switch (_shootingLazerAsteriskEnemyState)
         {
             case MoveAimAttackEnemyState.MOVING:
                 MovingState();
@@ -67,19 +74,12 @@ public class ShootingInRangeEnemy : MonoBehaviour
 
     private void MovingState()
     {
-        RotateTowardsHalalit();
         EnemyUtils.MoveUnderSpeedLimit(_rigidBody, _direction, _movementAmplitude, _speedLimit);
+
         if (DidMovingTimePass())
         {
             SetAiming();
         }
-    }
-
-    private void RotateTowardsHalalit() 
-    {
-        _halalitDirection = Utils.GetHalalitDirection(transform.position);
-        var targetRotation = Quaternion.LookRotation(Vector3.forward, _halalitDirection);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed);
     }
 
     private void AimingState()
@@ -88,16 +88,41 @@ public class ShootingInRangeEnemy : MonoBehaviour
         {
             Aim();
         }
-        if (DidAimingTimePass())
+        else if (DidAimingTimePass())
         {
+            EndAiming();
             SetAttacking();
         }
     }
 
     private void Aim()
     {
-        _shootAngle = Utils.GetRandomAngleAround(_shootingRange);
+        ShootRays(AimShotPrefab, _aimingShots);
         _didAim = true;
+    }
+
+    private void EndAiming()
+    {
+        _didAim = false;
+        DestroyShots(_aimingShots);
+
+    }
+
+    private void SetAttacking()
+    {
+        _attackingTime = Time.time + _attackingInterval;
+        _shootingLazerAsteriskEnemyState = MoveAimAttackEnemyState.ATTACKING;
+    }
+
+    private void ShootRays(GameObject shotPrefab, List<GameObject> shotsList)
+    {
+        var aimingStartPositions = GetShootingStartPositions((int)_numberOfShots, GetComponent<CircleCollider2D>().radius);
+        foreach (var aimingStartPosition in aimingStartPositions)
+        {
+            var shot = Instantiate(shotPrefab, aimingStartPosition, Utils.GetRorationOutwards(transform.position, aimingStartPosition));
+            shot.transform.SetParent(gameObject.transform);
+            shotsList.Add(shot);
+        }
     }
 
     private void AttackingState()
@@ -108,15 +133,35 @@ public class ShootingInRangeEnemy : MonoBehaviour
         }
         else if (DidAttackingTimePass())
         {
+            EndAttack();
             SetMoving();
         }
     }
 
+    private void Shoot()
+    {
+        ShootRays(ShotPrefab, _shots);
+        _didShoot = true;
+    }
+
+    private void DestroyShots(List<GameObject> shots)
+    {
+        foreach (var shot in shots)
+        {
+            Destroy(shot);
+        }
+    }
+
+    private void EndAttack()
+    {
+        DestroyShots(_shots);
+        _didShoot = false;
+    }
+
     private void SetMoving()
     {
-        _didShoot = false;
         SetMovingTime();
-        _ShootingInRangeEnemyState = MoveAimAttackEnemyState.MOVING;
+        _shootingLazerAsteriskEnemyState = MoveAimAttackEnemyState.MOVING;
     }
 
     private void SetMovingTime()
@@ -129,25 +174,16 @@ public class ShootingInRangeEnemy : MonoBehaviour
         return Time.time > _attackingTime;
     }
 
-    private void Shoot()
+    private List<Vector2> GetShootingStartPositions(int numberOfPositions, float radius)
     {
-        Vector3 shootingStartPosition = GetShootingStartPosition();
-        var shootRotation = Utils.GetRotation(transform.rotation, _shootAngle);
-        Instantiate(ShotPrefab, shootingStartPosition, shootRotation);
-        _didShoot = true;
-    }
-
-    private Vector3 GetShootingStartPosition()
-    {
-        Vector3 halfExtents = GetComponent<CapsuleCollider2D>().bounds.extents;
-        Vector3 offset = _halalitDirection.normalized * halfExtents.magnitude;
-        return transform.position + offset;
-    }
-
-    private void SetAttacking()
-    {
-        _attackingTime = Time.time + _attackingInterval;
-        _ShootingInRangeEnemyState = MoveAimAttackEnemyState.ATTACKING;
+        radius = 0.9f; // TODO: BUG - why is this 0.9 and not 0.5?
+        var angle = 360 / numberOfPositions;
+        var shootingStartPositions = new List<Vector2>();
+        for (var i = 0; i < numberOfPositions; i++)
+        {
+            shootingStartPositions.Add(transform.position + Utils.AngleAndRadiusToPointOnCircle(angle * i, radius));
+        }
+        return shootingStartPositions;
     }
 
     private bool DidAimingTimePass()
@@ -159,7 +195,7 @@ public class ShootingInRangeEnemy : MonoBehaviour
     {
         _aimingTime = Time.time + _aimingInterval;
         _didAim = false;
-        _ShootingInRangeEnemyState = MoveAimAttackEnemyState.AIMING;
+        _shootingLazerAsteriskEnemyState = MoveAimAttackEnemyState.AIMING;
     }
 
     private bool DidMovingTimePass()

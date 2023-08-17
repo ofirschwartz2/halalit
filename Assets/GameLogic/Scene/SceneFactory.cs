@@ -10,7 +10,8 @@ public class SceneFactory : MonoBehaviour
         GreekEnemyPrefab, 
         FollowingEnemyPrefab, 
         ShootingInRangeEnemyPrefab,
-        ShootingLazerRangeEnemyPrefab;
+        ShootingLazerRangeEnemyPrefab,
+        ShootingLazerAsteriskEnemyPrefab;
 
     /*
     public bool UseConfigFile;
@@ -41,9 +42,13 @@ public class SceneFactory : MonoBehaviour
         Instantiate(
             new NewEnemy(ShootingInRangeEnemyPrefab).GetPrefab(),
             new Vector3(1, -1, 0), new Quaternion(0, 0, 0, 0));
-        */
+        
         Instantiate(
             new NewEnemy(ShootingLazerRangeEnemyPrefab).GetPrefab(),
+            new Vector3(1, -1, 0), new Quaternion(0, 0, 0, 0));
+        */
+        Instantiate(
+            new NewEnemy(ShootingLazerAsteriskEnemyPrefab).GetPrefab(),
             new Vector3(1, -1, 0), new Quaternion(0, 0, 0, 0));
     }
 

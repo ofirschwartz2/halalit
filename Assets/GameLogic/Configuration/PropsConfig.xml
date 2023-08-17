@@ -113,8 +113,19 @@
         <_aimingInterval>2</_aimingInterval>
         <_attackingInterval>2</_attackingInterval>
         <_shootingRange>10</_shootingRange>
+        <_rotationSpeed>0.03</_rotationSpeed>
         <_shotRotationSpeed>0.03</_shotRotationSpeed>
     </ShootingLazerRangeEnemy>
+
+    <ShootingLazerAsteriskEnemy>
+        <_movementAmplitude>1</_movementAmplitude>
+        <_speedLimit>1</_speedLimit>
+        <_movingInterval>3</_movingInterval>
+        <_aimingInterval>3</_aimingInterval>
+        <_attackingInterval>2</_attackingInterval>
+        <_rotationSpeed>0.03</_rotationSpeed>
+        <_numberOfShots>8</_numberOfShots>
+    </ShootingLazerAsteriskEnemy>
     
     <AsteroidInstantiator>
         <_asteroidInstantiationDistanceFromCenter>25</_asteroidInstantiationDistanceFromCenter>

@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 494178464205558006}
   - component: {fileID: 5439432440802590956}
   - component: {fileID: 1185372985846441720}
-  - component: {fileID: 1499001080999598308}
-  - component: {fileID: -4124636518163725631}
+  - component: {fileID: -288482943716392269}
+  - component: {fileID: 3429338643178047009}
   m_Layer: 0
-  m_Name: ShootingLazerRangeEnemy
+  m_Name: ShootingLazerAsteriskEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,8 +76,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -9095717837082945937, guid: acccf99f37bb8f24f83c7b935b6128f3, type: 3}
-  m_Color: {r: 1, g: 0.5703674, b: 0, a: 1}
+  m_Sprite: {fileID: -2413806693520163455, guid: 36a58ef0f52a17e4a93613edf7d86198, type: 3}
+  m_Color: {r: 0, g: 0.97121596, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -114,8 +114,30 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!70 &1499001080999598308
-CapsuleCollider2D:
+--- !u!114 &-288482943716392269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8916735576456593937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8229423f06484e42813e4ed6084ba21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useConfigFile: 1
+  _movementAmplitude: 0
+  _speedLimit: 0
+  _movingInterval: 0
+  _aimingInterval: 0
+  _attackingInterval: 0
+  _rotationSpeed: 0
+  AimShotPrefab: {fileID: 6558306382352585984, guid: 93508bcb9fc5ea44f9ef8b4c56100d16, type: 3}
+  ShotPrefab: {fileID: 6558306382352585984, guid: 1b692fbae1e17ad42a7c60c2c5644a37, type: 3}
+  _rigidBody: {fileID: 1185372985846441720}
+--- !u!58 &3429338643178047009
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -147,29 +169,5 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
-  m_Direction: 0
---- !u!114 &-4124636518163725631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8916735576456593937}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6bc63fcad3126b438e4cc9f2d5e1b89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _useConfigFile: 1
-  _movementAmplitude: 0
-  _speedLimit: 0
-  _movingInterval: 0
-  _aimingInterval: 0
-  _attackingInterval: 0
-  _shootingRange: 0
-  _rotationSpeed: 0
-  _shotRotationSpeed: 0
-  AimShotPrefab: {fileID: 6558306382352585984, guid: 93508bcb9fc5ea44f9ef8b4c56100d16, type: 3}
-  ShotPrefab: {fileID: 6558306382352585984, guid: 1b692fbae1e17ad42a7c60c2c5644a37, type: 3}
-  _rigidBody: {fileID: 1185372985846441720}
+  serializedVersion: 2
+  m_Radius: 0.5

@@ -20,16 +20,18 @@ public class ShootingLazerRangeEnemy : MonoBehaviour
     [SerializeField]
     private float _shootingRange;
     [SerializeField]
+    private float _rotationSpeed;
+    [SerializeField]
     private float _shotRotationSpeed;
     [SerializeField]
-    public GameObject AimingLazerPrefab;
+    public GameObject AimShotPrefab;
     [SerializeField]
     public GameObject ShotPrefab;
     [SerializeField]
     private Rigidbody2D _rigidBody;
 
     private Vector2 _direction, _halalitDirection;
-    private MoveAimAttackEnemyState _ShootingInRangeEnemyState;
+    private MoveAimAttackEnemyState _shootingLazerRangeEnemyState;
     private float _movingTime, _aimingTime, _attackingTime;
     private bool _didAim, _didShoot, _didEndShoot;
     private GameObject _aimingShotFrom, _aimingShotTo, _shot;
@@ -47,7 +49,7 @@ public class ShootingLazerRangeEnemy : MonoBehaviour
 
     void Update()
     {
-        switch (_ShootingInRangeEnemyState)
+        switch (_shootingLazerRangeEnemyState)
         {
             case MoveAimAttackEnemyState.MOVING:
                 MovingState();
@@ -82,7 +84,7 @@ public class ShootingLazerRangeEnemy : MonoBehaviour
     {
         _halalitDirection = Utils.GetHalalitDirection(transform.position);
         var targetRotation = Quaternion.LookRotation(Vector3.forward, _halalitDirection);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _shotRotationSpeed);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed);
     }
 
     private void AimingState()
@@ -113,14 +115,14 @@ public class ShootingLazerRangeEnemy : MonoBehaviour
     private void ShootAimingShotFrom(Vector3 shootingStartPosition)
     {
         Quaternion fromRotation = Utils.GetRotation(transform.rotation, -_shootingRange);
-        _aimingShotFrom = Instantiate(AimingLazerPrefab, shootingStartPosition, fromRotation * shootUpRotationMultiplier); // shootUpRotationMultiplier BUG
+        _aimingShotFrom = Instantiate(AimShotPrefab, shootingStartPosition, fromRotation * shootUpRotationMultiplier); // shootUpRotationMultiplier BUG
         _aimingShotFrom.transform.SetParent(gameObject.transform);
     }
 
     private void ShootAimingShotTo(Vector3 shootingStartPosition)
     {
         Quaternion toRotation = Utils.GetRotation(transform.rotation, _shootingRange);
-        _aimingShotTo = Instantiate(AimingLazerPrefab, shootingStartPosition, toRotation * shootUpRotationMultiplier); // shootUpRotationMultiplier BUG
+        _aimingShotTo = Instantiate(AimShotPrefab, shootingStartPosition, toRotation * shootUpRotationMultiplier); // shootUpRotationMultiplier BUG
         _aimingShotTo.transform.SetParent(gameObject.transform);
     }
 
@@ -166,7 +168,7 @@ public class ShootingLazerRangeEnemy : MonoBehaviour
     private void SetMoving()
     {
         SetMovingTime();
-        _ShootingInRangeEnemyState = MoveAimAttackEnemyState.MOVING;
+        _shootingLazerRangeEnemyState = MoveAimAttackEnemyState.MOVING;
     }
 
     private void SetMovingTime()
@@ -199,7 +201,7 @@ public class ShootingLazerRangeEnemy : MonoBehaviour
     private void SetAttacking()
     {
         _attackingTime = Time.time + _attackingInterval;
-        _ShootingInRangeEnemyState = MoveAimAttackEnemyState.ATTACKING;
+        _shootingLazerRangeEnemyState = MoveAimAttackEnemyState.ATTACKING;
     }
 
     private bool DidAimingTimePass()
@@ -211,7 +213,7 @@ public class ShootingLazerRangeEnemy : MonoBehaviour
     {
         _aimingTime = Time.time + _aimingInterval;
         _didAim = false;
-        _ShootingInRangeEnemyState = MoveAimAttackEnemyState.AIMING;
+        _shootingLazerRangeEnemyState = MoveAimAttackEnemyState.AIMING;
     }
 
     private bool DidMovingTimePass()
