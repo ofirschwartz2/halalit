@@ -73,7 +73,7 @@ public class AsteroidDestructor : MonoBehaviour
 
     private void InvokeItemDropEvent()
     {
-        RangeAttribute itemDropLuck = new(0, 100); // TODO (dev): make the luck random and multiplie by asteroid scale
+        RangeAttribute itemDropLuck = new(20, 40); // TODO (dev): make the luck random and multiplie by asteroid scale
         DropEventArguments dropEventArguments = new(DropType.ITEM_DROP, transform.position, Vector2.zero, itemDropLuck); 
         DropEvent.Invoke(EventName.ITEM_DROP, this, dropEventArguments);
     }
