@@ -12,7 +12,10 @@ GameObject:
   - component: {fileID: 5439432440802590956}
   - component: {fileID: 1185372985846441720}
   - component: {fileID: 1499001080999598308}
-  - component: {fileID: -4124636518163725631}
+  - component: {fileID: 2097005395428364949}
+  - component: {fileID: 375044078847111140}
+  - component: {fileID: 3973686711570898292}
+  - component: {fileID: 3160877956245687377}
   m_Layer: 0
   m_Name: ShootingLazerRangeEnemy
   m_TagString: Enemy
@@ -149,7 +152,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
---- !u!114 &-4124636518163725631
+--- !u!114 &2097005395428364949
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,18 +161,62 @@ MonoBehaviour:
   m_GameObject: {fileID: 8916735576456593937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6bc63fcad3126b438e4cc9f2d5e1b89, type: 3}
+  m_Script: {fileID: 11500000, guid: 442e200ed6aca4e41aa20361b28d9f1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useConfigFile: 1
-  _movementAmplitude: 0
-  _speedLimit: 0
-  _movingInterval: 0
-  _aimingInterval: 0
-  _attackingInterval: 0
-  _shootingRange: 0
-  _rotationSpeed: 0
-  _shotRotationSpeed: 0
-  AimShotPrefab: {fileID: 6558306382352585984, guid: 93508bcb9fc5ea44f9ef8b4c56100d16, type: 3}
-  ShotPrefab: {fileID: 6558306382352585984, guid: 1b692fbae1e17ad42a7c60c2c5644a37, type: 3}
+  _useConfigFile: 0
+  _moveAimAttackEnemyState: 0
+  _moveAimAttackMove: {fileID: 375044078847111140}
+  _moveAimAttackAim: {fileID: 3973686711570898292}
+  _moveAimAttackAttack: {fileID: 3160877956245687377}
   _rigidBody: {fileID: 1185372985846441720}
+--- !u!114 &375044078847111140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8916735576456593937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02c67afd1ec28b345b25fa222225de7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useConfigFile: 0
+  _movementAmplitude: 1
+  _speedLimit: 1
+  _movingInterval: 1
+  _rotationSpeed: 1
+  _rigidBody: {fileID: 1185372985846441720}
+--- !u!114 &3973686711570898292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8916735576456593937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29be43aeff228e5419b78f18a518c9db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _aimingInterval: 1
+  _useConfigFile: 0
+  _shootingRange: 20
+  AimShotPrefab: {fileID: 6558306382352585984, guid: 93508bcb9fc5ea44f9ef8b4c56100d16, type: 3}
+--- !u!114 &3160877956245687377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8916735576456593937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7be8325a2148cda4f99c113fc2b3a3e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _attackingInterval: 1
+  _useConfigFile: 0
+  _shotRotationSpeed: 0.01
+  ShotPrefab: {fileID: 6558306382352585984, guid: 1b692fbae1e17ad42a7c60c2c5644a37, type: 3}
