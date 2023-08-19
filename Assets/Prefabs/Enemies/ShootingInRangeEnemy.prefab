@@ -12,7 +12,10 @@ GameObject:
   - component: {fileID: 5439432440802590956}
   - component: {fileID: 1185372985846441720}
   - component: {fileID: 1499001080999598308}
-  - component: {fileID: 9113220737260210531}
+  - component: {fileID: 4580159622140114057}
+  - component: {fileID: 1772665250451816090}
+  - component: {fileID: 4482642461016555098}
+  - component: {fileID: 7468409740689513257}
   m_Layer: 0
   m_Name: ShootingInRangeEnemy
   m_TagString: Enemy
@@ -149,7 +152,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
---- !u!114 &9113220737260210531
+--- !u!114 &4580159622140114057
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,15 +161,61 @@ MonoBehaviour:
   m_GameObject: {fileID: 8916735576456593937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70d3af78dea9b534f92c82f3da47ec80, type: 3}
+  m_Script: {fileID: 11500000, guid: 1fa84701b6b50a54f89c9bd5588d0e30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useConfigFile: 1
-  _movementAmplitude: 0
-  _speedLimit: 0
-  _movingInterval: 0
-  _aimingInterval: 0
-  _attackingInterval: 0
-  _shootingRange: 0
-  ShotPrefab: {fileID: 4043514594342984741, guid: 40e6ef62799c1484bba66721899628fb, type: 3}
+  _useConfigFile: 0
+  _moveAimAttackEnemyState: 0
+  _moveAimAttackMovement: {fileID: 1772665250451816090}
+  _shootingInRangeAim: {fileID: 4482642461016555098}
+  _shootingInRangeAttack: {fileID: 7468409740689513257}
   _rigidBody: {fileID: 1185372985846441720}
+--- !u!114 &1772665250451816090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8916735576456593937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02c67afd1ec28b345b25fa222225de7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useConfigFile: 0
+  _movementAmplitude: 1
+  _speedLimit: 1
+  _movingInterval: 1
+  _rotationSpeed: 0.01
+  _rigidBody: {fileID: 1185372985846441720}
+--- !u!114 &4482642461016555098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8916735576456593937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8df48d8a9469db2408e2e8569ff927ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useConfigFile: 0
+  _aimingInterval: 1
+  _shootingRange: 1
+--- !u!114 &7468409740689513257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8916735576456593937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73728b95c3c92ff43aa926a4bb3710ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useConfigFile: 0
+  _shootingInRangeAim: {fileID: 4482642461016555098}
+  _attackingInterval: 1
+  ShotPrefab: {fileID: 4043514594342984741, guid: 40e6ef62799c1484bba66721899628fb, type: 3}
