@@ -3,7 +3,7 @@ using Assets.Utils;
 using System;
 using UnityEngine;
 
-public class MoveAimAttackMovement : MonoBehaviour
+public class MoveAimAttackMove : MonoBehaviour
 {
     [SerializeField]
     private bool _useConfigFile;

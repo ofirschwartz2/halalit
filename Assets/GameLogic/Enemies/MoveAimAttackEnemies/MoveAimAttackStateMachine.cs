@@ -1,4 +1,3 @@
-using Assets.Animators;
 using Assets.Enums;
 using Assets.Utils;
 using System;
@@ -7,33 +6,15 @@ using UnityEngine;
 public class MoveAimAttackStateMachine : MonoBehaviour
 {
     [SerializeField]
-    private MoveAimAttackEnemyState _moveAimAttackEnemyState;
-
-    [SerializeField]
-    private MoveAimAttackMovement _moveAimAttackMovement;
-    [SerializeField]
-    private IMoveAimAttackAim _moveAimAttackAim;
-    [SerializeField]
-    private IMoveAimAttackAttack _moveAimAttackAttack;
-
-    [SerializeField]
     private bool _useConfigFile;
     [SerializeField]
-    private float _movementAmplitude;
+    private MoveAimAttackEnemyState _moveAimAttackEnemyState;
     [SerializeField]
-    private float _speedLimit;
+    private MoveAimAttackMove _moveAimAttackMove;
     [SerializeField]
-    private float _movingInterval;
+    private MoveAimAttackAim _moveAimAttackAim;
     [SerializeField]
-    private float _aimingInterval;
-    [SerializeField] 
-    private float _attackingInterval;
-    [SerializeField]
-    private float _shootingRange;
-    [SerializeField]
-    private float _rotationSpeed;
-    [SerializeField]
-    public GameObject ShotPrefab;
+    private MoveAimAttackAttack _moveAimAttackAttack;
     [SerializeField]
     private Rigidbody2D _rigidBody;
 
@@ -44,8 +25,8 @@ public class MoveAimAttackStateMachine : MonoBehaviour
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
 
-        _moveAimAttackMovement.SetDirection();
-        _moveAimAttackMovement.SetMoving();
+        _moveAimAttackMove.SetDirection();
+        _moveAimAttackMove.SetMoving();
     }
 
     void Update()
@@ -68,16 +49,17 @@ public class MoveAimAttackStateMachine : MonoBehaviour
 
     private void Moving()
     {
-        if (_moveAimAttackMovement.DidMovingTimePass())
+        if (_moveAimAttackMove.DidMovingTimePass())
         {
             _moveAimAttackAim.SetAiming();
             _moveAimAttackEnemyState = MoveAimAttackEnemyState.AIMING;
         }
         else 
         {
-            _moveAimAttackMovement.MovingState();
+            _moveAimAttackMove.MovingState();
         }
     }
+
     private void Aiming()
     {
         if (_moveAimAttackAim.DidAimingTimePass())
@@ -87,19 +69,19 @@ public class MoveAimAttackStateMachine : MonoBehaviour
         } 
         else
         {
-            _moveAimAttackAim.AimingState();
+            _moveAimAttackAim.AimingState(transform);
         }
     }
     private void Attacking() 
     {
         if (_moveAimAttackAttack.DidAttackingTimePass()) // ELSE IF?
         {
-            _moveAimAttackMovement.SetMoving();
+            _moveAimAttackMove.SetMoving();
             _moveAimAttackEnemyState = MoveAimAttackEnemyState.MOVING;
         }
         else
         {
-            _moveAimAttackAttack.AttackingState();
+            _moveAimAttackAttack.AttackingState(transform);
         }
     }
 
@@ -122,7 +104,7 @@ public class MoveAimAttackStateMachine : MonoBehaviour
         }
         else if (Utils.DidHitEdge(other.gameObject.tag))
         {
-            _moveAimAttackMovement.SetNewDirection(other.gameObject.tag);
+            _moveAimAttackMove.SetNewDirection(other.gameObject.tag);
         }
     }
     #endregion
