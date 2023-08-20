@@ -12,9 +12,11 @@ public class ShootingLazerRangeAttack : MoveAimAttackAttack
     private float _shotRotationSpeed;
     [SerializeField]
     public GameObject ShotPrefab;
+    [SerializeField]
+    private ShootingLazerRangeAim _shootingLazerRangeAim;
 
     private bool _shotInitiated;
-    private GameObject _aimingShotFrom, _aimingShotTo, _shot;
+    private GameObject _shot;
     private Quaternion shootUpRotationMultiplier = Quaternion.Euler(0f, 0f, 90f); // TODO: fix this BUG
     
     void Start()
@@ -23,6 +25,12 @@ public class ShootingLazerRangeAttack : MoveAimAttackAttack
         {
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
+        _shotInitiated = false;
+    }
+
+    public override void AttackingState(Transform transform)
+    {
+        Shoot(transform);
     }
 
     public override void Shoot(Transform transform)
@@ -42,14 +50,18 @@ public class ShootingLazerRangeAttack : MoveAimAttackAttack
     private void InitiateShot() 
     {
         Vector3 shootingStartPosition = GetShootingStartPosition();
-        var shootRotation = _aimingShotFrom.transform.rotation;
+        var shootRotation = _shootingLazerRangeAim.GetAimingShotFrom().transform.rotation;
         _shot = Instantiate(ShotPrefab, shootingStartPosition, shootRotation);
         _shot.transform.SetParent(gameObject.transform);
     }
 
     private void RotateShot()
     {
-        _shot.transform.rotation = Quaternion.Slerp(_shot.transform.rotation, _aimingShotTo.transform.rotation, _shotRotationSpeed);   
+        Debug.Log("hi");
+        var a = _shot.transform.rotation;
+        var b = _shootingLazerRangeAim.GetAimingShotTo().transform.rotation;
+        var c = _shotRotationSpeed;
+        _shot.transform.rotation = Quaternion.Slerp(_shot.transform.rotation, _shootingLazerRangeAim.GetAimingShotTo().transform.rotation, _shotRotationSpeed);   
     }
 
     private void TryDestroyShot() 
@@ -62,14 +74,15 @@ public class ShootingLazerRangeAttack : MoveAimAttackAttack
 
     private bool DidShotGetToEndOfAimRange()
     {
-        return _shot.transform.rotation == _aimingShotTo.transform.rotation;
+        return _shot.transform.rotation == _shootingLazerRangeAim.GetAimingShotTo().transform.rotation;
     }
 
     private void DestroyShot()
     {
+        Debug.Log("DestroyShot");
+        _shootingLazerRangeAim.DestroyAimingRays();
         Destroy(_shot);
-        Destroy(_aimingShotFrom);
-        Destroy(_aimingShotTo);
+        _shotInitiated = false;
     }
 
     private Vector2 GetShootingStartPosition()

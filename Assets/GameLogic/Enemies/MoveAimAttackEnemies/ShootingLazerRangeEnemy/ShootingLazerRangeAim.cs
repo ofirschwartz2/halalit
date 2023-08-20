@@ -52,4 +52,22 @@ public class ShootingLazerRangeAim : MoveAimAttackAim
         Vector3 offset = Utils.GetRotationAsVector2(transform.rotation) * halfExtents.magnitude;
         return transform.position + offset;
     }
+
+    public GameObject GetAimingShotFrom() 
+    {
+        return _aimingShotFrom;
+    }
+
+    public GameObject GetAimingShotTo()
+    {
+        return _aimingShotTo;
+    }
+
+    public void DestroyAimingRays()
+    {
+        Debug.Log("DestroyAimingRays");
+        Destroy(_aimingShotFrom);
+        Destroy(_aimingShotTo);
+    }
+
 }

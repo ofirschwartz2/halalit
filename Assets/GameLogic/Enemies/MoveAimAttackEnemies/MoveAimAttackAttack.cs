@@ -20,7 +20,7 @@ public abstract class MoveAimAttackAttack : MonoBehaviour
         return Time.time > _attackingTime;
     }
 
-    public void AttackingState(Transform transform)
+    public virtual void AttackingState(Transform transform)
     {
         if (!_didShoot)
         {

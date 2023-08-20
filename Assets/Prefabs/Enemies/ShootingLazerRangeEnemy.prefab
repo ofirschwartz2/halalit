@@ -218,5 +218,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _attackingInterval: 1
   _useConfigFile: 0
-  _shotRotationSpeed: 0.01
+  _shotRotationSpeed: 0.05
   ShotPrefab: {fileID: 6558306382352585984, guid: 1b692fbae1e17ad42a7c60c2c5644a37, type: 3}
+  _shootingLazerRangeAim: {fileID: 3973686711570898292}
