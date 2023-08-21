@@ -72,6 +72,7 @@ public class MoveAimAttackStateMachine : MonoBehaviour
             _moveAimAttackAim.AimingState(transform);
         }
     }
+
     private void Attacking() 
     {
         if (_moveAimAttackAttack.DidAttackingTimePass()) // ELSE IF?

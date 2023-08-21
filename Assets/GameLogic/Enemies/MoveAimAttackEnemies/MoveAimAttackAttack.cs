@@ -6,8 +6,8 @@ public abstract class MoveAimAttackAttack : MonoBehaviour
     [SerializeField]
     private float _attackingInterval;
 
-    private float _attackingTime;
-    private bool _didShoot;
+    protected float _attackingTime;
+    protected bool _didShoot;
 
     public void SetAttacking()
     {

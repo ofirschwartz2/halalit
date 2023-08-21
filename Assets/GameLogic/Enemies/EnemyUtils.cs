@@ -1,6 +1,7 @@
 using Assets.Enums;
 using Assets.Utils;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 static class EnemyUtils
@@ -98,6 +99,18 @@ static class EnemyUtils
         {
             rigidbody.AddForce(direction * movementAmplitude * (Time.deltaTime * _deltaTimeMultiplier));
         }
+    }
+
+    public static List<Vector2> GetEvenPositionsAroundCircle(Transform transform, int numberOfPositions, float radius)
+    {
+        radius = 0.9f; // TODO: BUG - why is this 0.9 and not 0.5?
+        var angle = 360 / numberOfPositions;
+        var shootingStartPositions = new List<Vector2>();
+        for (var i = 0; i < numberOfPositions; i++)
+        {
+            shootingStartPositions.Add(transform.position + Utils.AngleAndRadiusToPointOnCircle(angle * i, radius));
+        }
+        return shootingStartPositions;
     }
 
     #region Predicates

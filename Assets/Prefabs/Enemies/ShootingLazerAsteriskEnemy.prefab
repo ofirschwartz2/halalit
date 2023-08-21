@@ -11,8 +11,11 @@ GameObject:
   - component: {fileID: 494178464205558006}
   - component: {fileID: 5439432440802590956}
   - component: {fileID: 1185372985846441720}
-  - component: {fileID: -288482943716392269}
   - component: {fileID: 3429338643178047009}
+  - component: {fileID: 713016459469602189}
+  - component: {fileID: 5676241805971437555}
+  - component: {fileID: 2669928082631877482}
+  - component: {fileID: 4590634385176654268}
   m_Layer: 0
   m_Name: ShootingLazerAsteriskEnemy
   m_TagString: Enemy
@@ -114,28 +117,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &-288482943716392269
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8916735576456593937}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8229423f06484e42813e4ed6084ba21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _useConfigFile: 1
-  _movementAmplitude: 0
-  _speedLimit: 0
-  _movingInterval: 0
-  _aimingInterval: 0
-  _attackingInterval: 0
-  _rotationSpeed: 0
-  AimShotPrefab: {fileID: 6558306382352585984, guid: 93508bcb9fc5ea44f9ef8b4c56100d16, type: 3}
-  ShotPrefab: {fileID: 6558306382352585984, guid: 1b692fbae1e17ad42a7c60c2c5644a37, type: 3}
-  _rigidBody: {fileID: 1185372985846441720}
 --- !u!58 &3429338643178047009
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -171,3 +152,73 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &713016459469602189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8916735576456593937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 442e200ed6aca4e41aa20361b28d9f1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useConfigFile: 0
+  _moveAimAttackEnemyState: 0
+  _moveAimAttackMove: {fileID: 5676241805971437555}
+  _moveAimAttackAim: {fileID: 2669928082631877482}
+  _moveAimAttackAttack: {fileID: 4590634385176654268}
+  _rigidBody: {fileID: 1185372985846441720}
+--- !u!114 &5676241805971437555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8916735576456593937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02c67afd1ec28b345b25fa222225de7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useConfigFile: 0
+  _movementAmplitude: 1
+  _speedLimit: 1
+  _movingInterval: 1
+  _rotationSpeed: 0.1
+  _rigidBody: {fileID: 1185372985846441720}
+--- !u!114 &2669928082631877482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8916735576456593937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c42f3f60832f014cb1062ce13ddcd18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _aimingInterval: 1
+  _useConfigFile: 0
+  _numberOfShots: 8
+  AimShotPrefab: {fileID: 6558306382352585984, guid: 93508bcb9fc5ea44f9ef8b4c56100d16, type: 3}
+--- !u!114 &4590634385176654268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8916735576456593937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d72ee02523d979b41904a09faacf089f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _attackingInterval: 1
+  _useConfigFile: 0
+  _shootingLazerAsteriskAim: {fileID: 2669928082631877482}
+  _endShootingBeforeFinishAttack: 0.1
+  _numberOfShots: 8
+  ShotPrefab: {fileID: 6558306382352585984, guid: 1b692fbae1e17ad42a7c60c2c5644a37, type: 3}

@@ -65,7 +65,6 @@ public class ShootingLazerRangeAim : MoveAimAttackAim
 
     public void DestroyAimingRays()
     {
-        Debug.Log("DestroyAimingRays");
         Destroy(_aimingShotFrom);
         Destroy(_aimingShotTo);
     }

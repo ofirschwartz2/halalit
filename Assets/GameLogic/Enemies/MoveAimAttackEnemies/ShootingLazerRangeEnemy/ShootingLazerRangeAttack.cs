@@ -57,10 +57,6 @@ public class ShootingLazerRangeAttack : MoveAimAttackAttack
 
     private void RotateShot()
     {
-        Debug.Log("hi");
-        var a = _shot.transform.rotation;
-        var b = _shootingLazerRangeAim.GetAimingShotTo().transform.rotation;
-        var c = _shotRotationSpeed;
         _shot.transform.rotation = Quaternion.Slerp(_shot.transform.rotation, _shootingLazerRangeAim.GetAimingShotTo().transform.rotation, _shotRotationSpeed);   
     }
 
