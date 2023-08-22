@@ -1,9 +1,10 @@
 using Assets.Enums;
 using Assets.Utils;
 using System;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class FollowingEnemy : MonoBehaviour
+public class WaitAttackStateMachine : MonoBehaviour
 {
     [SerializeField]
     private bool _useConfigFile;
@@ -17,7 +18,7 @@ public class FollowingEnemy : MonoBehaviour
     private Rigidbody2D _rigidBody;
 
     private float _waitingTime, _stratAttackingTime, _finishAttackingTime;
-    private FollowingEnemyState _followingEnemyState;
+    private WaitAttackEnemyState _followingEnemyState;
     private Vector2 _halalitDirection;
 
     void Start()
@@ -26,24 +27,18 @@ public class FollowingEnemy : MonoBehaviour
         {
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
-        _followingEnemyState = FollowingEnemyState.SET_WAITING;
-        SetWaitingTime();
+        SetWaiting();
+        _followingEnemyState = WaitAttackEnemyState.WAITING;
     }
 
     void Update()
     {
         switch (_followingEnemyState)
         {
-            case FollowingEnemyState.SET_WAITING:
-                SetWaiting();
-                break;
-            case FollowingEnemyState.WAITING:
+            case WaitAttackEnemyState.WAITING:
                 Waiting();
                 break;
-            case FollowingEnemyState.SET_ATTACKING:
-                SetAttacking();
-                break;
-            case FollowingEnemyState.ATTACKING:
+            case WaitAttackEnemyState.ATTACKING:
                 Attacking();
                 break;
         }
@@ -51,23 +46,39 @@ public class FollowingEnemy : MonoBehaviour
 
     private void Waiting()
     {
-        if (DidWaitingTimePass())
+        if (!ShouldStopWaiting())
         {
-            _followingEnemyState = FollowingEnemyState.SET_ATTACKING;
+            Wait();
+        }
+        else 
+        {
+            SetAttacking();
+            _followingEnemyState = WaitAttackEnemyState.ATTACKING;
         }
     }
 
     private void Attacking()
     {
-        if (DidAttackTimePass())
+        if (!ShouldStopAttacking())
         {
-            _followingEnemyState = FollowingEnemyState.SET_WAITING;
+            Attack();
         }
         else
         {
-            EnemyUtils.MoveInStraightLine(_rigidBody, _halalitDirection, _movementAmplitude, _oneAttackInterval, _stratAttackingTime);
+            SetWaiting();
+            _followingEnemyState = WaitAttackEnemyState.WAITING;
         }
     }
+
+    private void Wait() 
+    {
+    }
+
+    private void Attack() 
+    {
+        EnemyUtils.MoveInStraightLine(_rigidBody, _halalitDirection, _movementAmplitude, _oneAttackInterval, _stratAttackingTime);
+    }
+
     private void Die()
     {
         Destroy(gameObject);
@@ -77,7 +88,6 @@ public class FollowingEnemy : MonoBehaviour
     private void SetWaiting()
     {
         SetWaitingTime();
-        _followingEnemyState = FollowingEnemyState.WAITING;
     }
 
     private void SetAttackingTimes()
@@ -95,7 +105,7 @@ public class FollowingEnemy : MonoBehaviour
     {
         SetHalalitDirection();
         SetAttackingTimes();
-        _followingEnemyState = FollowingEnemyState.ATTACKING;
+        _followingEnemyState = WaitAttackEnemyState.ATTACKING;
     }
 
     private void SetHalalitDirection()
@@ -107,12 +117,12 @@ public class FollowingEnemy : MonoBehaviour
     #endregion
 
     #region Predicates
-    private bool DidAttackTimePass()
+    private bool ShouldStopAttacking()
     {
         return Time.time > _finishAttackingTime;
     }
 
-    private bool DidWaitingTimePass()
+    private bool ShouldStopWaiting()
     {
         return Time.time > _waitingTime;
     }

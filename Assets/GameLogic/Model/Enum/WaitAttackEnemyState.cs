@@ -4,11 +4,9 @@ using System.ComponentModel;
 namespace Assets.Enums
 {
     [Serializable]
-    public enum FollowingEnemyState
+    public enum WaitAttackEnemyState
     {
-        SET_WAITING,
         WAITING,
-        SET_ATTACKING,
         ATTACKING
     }
 }
