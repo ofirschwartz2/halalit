@@ -186,7 +186,7 @@ MonoBehaviour:
   _movementAmplitude: 1
   _speedLimit: 1
   _movingInterval: 1
-  _rotationSpeed: 0.01
+  _rotationSpeed: 1
   _rigidBody: {fileID: 1185372985846441720}
 --- !u!114 &7468409740689513257
 MonoBehaviour:

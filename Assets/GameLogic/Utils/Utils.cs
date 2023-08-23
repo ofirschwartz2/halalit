@@ -170,10 +170,15 @@ namespace Assets.Utils
         }
 
         public static Vector2 GetHalalitDirection(Vector2 myPosition)
+        {;
+            var halalitPosition = GetHalalitPosition();
+            return new Vector2(halalitPosition.x, halalitPosition.y) - myPosition;
+        }
+
+        public static Vector2 GetHalalitPosition()
         {
             var halalit = GameObject.FindGameObjectWithTag("Halalit");
-            var halalitPosition = halalit.transform.position;
-            return new Vector2(halalitPosition.x, halalitPosition.y) - myPosition;
+            return halalit.transform.position;
         }
 
         public static Vector2 GetRotationAsVector2(Quaternion rotation)

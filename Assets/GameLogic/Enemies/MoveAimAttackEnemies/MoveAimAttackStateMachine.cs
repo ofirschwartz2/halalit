@@ -75,7 +75,7 @@ public class MoveAimAttackStateMachine : MonoBehaviour
 
     private void Attacking() 
     {
-        if (_moveAimAttackAttack.DidAttackingTimePass()) // ELSE IF?
+        if (_moveAimAttackAttack.DidAttackingTimePass())
         {
             _moveAimAttackMove.SetMoving();
             _moveAimAttackEnemyState = MoveAimAttackEnemyState.MOVING;

@@ -52,7 +52,7 @@ public class MoveAimAttackMove : MonoBehaviour
     {
         var halalitDirection = Utils.GetHalalitDirection(transform.position);
         var targetRotation = Quaternion.LookRotation(Vector3.forward, halalitDirection);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
     }
 
     public void SetMoving()

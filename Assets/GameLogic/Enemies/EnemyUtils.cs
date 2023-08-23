@@ -9,7 +9,7 @@ static class EnemyUtils
     private static float _deltaTimeMultiplier = 300f;
     private static float _speedUpOutOfStraightLine = 5f/10f;
     private static float _slowDownOutOfStraightLine = 9f/10f;
-    private static float _isAboutToStopTH = 0.35f; // TODO: should be a function of the force applied? 
+    private static float _isAboutToStopTH = 0.5f; // TODO: should be a function of the force applied? 
     private static float _knockbackMultiplier = 300f;
 
     public static void MoveInStraightLine(

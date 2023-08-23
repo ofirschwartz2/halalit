@@ -1,7 +1,5 @@
 using Assets.Enums;
 using Assets.Utils;
-using System;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class WaitAttackStateMachine : MonoBehaviour
@@ -9,17 +7,13 @@ public class WaitAttackStateMachine : MonoBehaviour
     [SerializeField]
     private bool _useConfigFile;
     [SerializeField]
-    private float _movementAmplitude;
-    [SerializeField]
-    private float _attackLoadingInterval;
-    [SerializeField]
-    private float _oneAttackInterval;
-    [SerializeField]
     private Rigidbody2D _rigidBody;
+    [SerializeField]
+    private WaitAttackWait _waitAttackWait;
+    [SerializeField]
+    private WaitAttackAttack _waitAttackAttack;
 
-    private float _waitingTime, _stratAttackingTime, _finishAttackingTime;
     private WaitAttackEnemyState _followingEnemyState;
-    private Vector2 _halalitDirection;
 
     void Start()
     {
@@ -27,7 +21,7 @@ public class WaitAttackStateMachine : MonoBehaviour
         {
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
-        SetWaiting();
+        _waitAttackWait.SetWaiting();
         _followingEnemyState = WaitAttackEnemyState.WAITING;
     }
 
@@ -46,87 +40,34 @@ public class WaitAttackStateMachine : MonoBehaviour
 
     private void Waiting()
     {
-        if (!ShouldStopWaiting())
+        if (!_waitAttackWait.ShouldStopWaiting())
         {
-            Wait();
+            _waitAttackWait.Wait();
         }
         else 
         {
-            SetAttacking();
+            _waitAttackAttack.SetAttacking();
             _followingEnemyState = WaitAttackEnemyState.ATTACKING;
         }
     }
 
     private void Attacking()
     {
-        if (!ShouldStopAttacking())
+        if (!_waitAttackAttack.ShouldStopAttacking())
         {
-            Attack();
+            _waitAttackAttack.Attack();
         }
         else
         {
-            SetWaiting();
+            _waitAttackWait.SetWaiting();
             _followingEnemyState = WaitAttackEnemyState.WAITING;
         }
-    }
-
-    private void Wait() 
-    {
-    }
-
-    private void Attack() 
-    {
-        EnemyUtils.MoveInStraightLine(_rigidBody, _halalitDirection, _movementAmplitude, _oneAttackInterval, _stratAttackingTime);
     }
 
     private void Die()
     {
         Destroy(gameObject);
     }
-
-    #region Setters
-    private void SetWaiting()
-    {
-        SetWaitingTime();
-    }
-
-    private void SetAttackingTimes()
-    {
-        _finishAttackingTime = Time.time + _oneAttackInterval;
-        _stratAttackingTime = Time.time;
-    }
-
-    private void SetWaitingTime()
-    {
-        _waitingTime = Time.time + _attackLoadingInterval;
-    }
-
-    private void SetAttacking()
-    {
-        SetHalalitDirection();
-        SetAttackingTimes();
-        _followingEnemyState = WaitAttackEnemyState.ATTACKING;
-    }
-
-    private void SetHalalitDirection()
-    {
-        var halalit = GameObject.FindGameObjectWithTag("Halalit");
-        var halalitPosition = halalit.transform.position;
-        _halalitDirection = Utils.NormalizeVector2(halalitPosition - transform.position);
-    }
-    #endregion
-
-    #region Predicates
-    private bool ShouldStopAttacking()
-    {
-        return Time.time > _finishAttackingTime;
-    }
-
-    private bool ShouldStopWaiting()
-    {
-        return Time.time > _waitingTime;
-    }
-    #endregion
 
     #region Triggers
     void OnTriggerEnter2D(Collider2D other)

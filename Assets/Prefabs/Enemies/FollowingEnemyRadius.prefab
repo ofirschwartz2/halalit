@@ -11,13 +11,12 @@ GameObject:
   - component: {fileID: 494178464205558006}
   - component: {fileID: 5439432440802590956}
   - component: {fileID: 1185372985846441720}
-  - component: {fileID: 3429338643178047009}
-  - component: {fileID: 713016459469602189}
-  - component: {fileID: 5676241805971437555}
-  - component: {fileID: 2669928082631877482}
-  - component: {fileID: 4590634385176654268}
+  - component: {fileID: 1499001080999598308}
+  - component: {fileID: 7968873299450201335}
+  - component: {fileID: 6952156465895575477}
+  - component: {fileID: 229026362142940734}
   m_Layer: 0
-  m_Name: ShootingLazerAsteriskEnemy
+  m_Name: FollowingEnemyRadius
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,8 +78,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: 36a58ef0f52a17e4a93613edf7d86198, type: 3}
-  m_Color: {r: 0, g: 0.97121596, b: 1, a: 1}
+  m_Sprite: {fileID: -9095717837082945937, guid: acccf99f37bb8f24f83c7b935b6128f3, type: 3}
+  m_Color: {r: 0.18382876, g: 0.764151, b: 0.20431069, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -117,8 +116,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &3429338643178047009
-CircleCollider2D:
+--- !u!70 &1499001080999598308
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -150,9 +149,9 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
---- !u!114 &713016459469602189
+  m_Size: {x: 1, y: 2}
+  m_Direction: 0
+--- !u!114 &7968873299450201335
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -161,16 +160,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8916735576456593937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 442e200ed6aca4e41aa20361b28d9f1a, type: 3}
+  m_Script: {fileID: 11500000, guid: 7e389d92f80834e4da9205c4a81d99bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _useConfigFile: 0
-  _moveAimAttackEnemyState: 0
-  _moveAimAttackMove: {fileID: 5676241805971437555}
-  _moveAimAttackAim: {fileID: 2669928082631877482}
-  _moveAimAttackAttack: {fileID: 4590634385176654268}
   _rigidBody: {fileID: 1185372985846441720}
---- !u!114 &5676241805971437555
+  _waitAttackWait: {fileID: 229026362142940734}
+  _waitAttackAttack: {fileID: 6952156465895575477}
+--- !u!114 &6952156465895575477
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,46 +176,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 8916735576456593937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02c67afd1ec28b345b25fa222225de7a, type: 3}
+  m_Script: {fileID: 11500000, guid: 0fac4012392c0d74eba41a0e039b3ce7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useConfigFile: 0
-  _movementAmplitude: 1
-  _speedLimit: 1
-  _movingInterval: 1
+  _movementAmplitude: 8
+  _oneAttackInterval: 3
+  _rotationSpeed: 5
+  _rigidBody: {fileID: 1185372985846441720}
+--- !u!114 &229026362142940734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8916735576456593937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 516cb7b931e41d545ac2592c986f49a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _waitingRadius: 5
+  _waitingInterval: 1
   _rotationSpeed: 1
-  _rigidBody: {fileID: 1185372985846441720}
---- !u!114 &2669928082631877482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8916735576456593937}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c42f3f60832f014cb1062ce13ddcd18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _aimingInterval: 1
-  _useConfigFile: 0
-  _numberOfShots: 8
-  AimShotPrefab: {fileID: 6558306382352585984, guid: 93508bcb9fc5ea44f9ef8b4c56100d16, type: 3}
---- !u!114 &4590634385176654268
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8916735576456593937}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d72ee02523d979b41904a09faacf089f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _attackingInterval: 1
-  _useConfigFile: 0
-  _shootingLazerAsteriskAim: {fileID: 2669928082631877482}
-  _endShootingBeforeFinishAttack: 0.1
-  _numberOfShots: 8
-  ShotPrefab: {fileID: 6558306382352585984, guid: 1b692fbae1e17ad42a7c60c2c5644a37, type: 3}
