@@ -49,7 +49,7 @@ public class SceneFactory : MonoBehaviour
             new Vector3(1, -1, 0), new Quaternion(0, 0, 0, 0));
         */
         Instantiate(
-            new NewEnemy(FollowingEnemyRadiusPrefab).GetPrefab(),
+            new NewEnemy(FollowingEnemyIntervalPrefab).GetPrefab(),
             new Vector3(2, -2, 0), new Quaternion(0, 0, 0, 0));
     }
 
