@@ -1,10 +1,10 @@
 ﻿using Assets.Enums;
 using UnityEngine;
 
-public abstract class Upgrade: MonoBehaviour
+public abstract class Upgrade : MonoBehaviour
 {
-    protected virtual void OnPlayerUpgradePickedUp(object initiator, UpgradeEventArguments arguments)
+    protected virtual void OnPlayerUpgradePickedUp(object initiator, ItemEventArguments arguments)
     {
-        UpgradeEvent.Invoke(EventName.PLAYER_UPGRADE_PICKUP, initiator, arguments);
+        ItemEvent.Invoke(EventName.PLAYER_UPGRADE_PICKUP, initiator, arguments);
     }
 }

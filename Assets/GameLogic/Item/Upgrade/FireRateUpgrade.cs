@@ -31,7 +31,7 @@ public class FireRateUpgrade : Upgrade
     {
         if (other.gameObject.CompareTag(Tag.HALALIT.GetDescription()))
         {
-            base.OnPlayerUpgradePickedUp(this, new(UpgradeName.FIRE_RATE, _pickupEventProperties));
+            OnPlayerUpgradePickedUp(this, new(ItemName.FIRE_RATE, _pickupEventProperties));
             Destroy(gameObject);
         }
     }

@@ -12,7 +12,6 @@ TagManager:
   - Shot2
   - Item
   - PickupClaw
-  - Astroid
   - EnemyOuterCollider
   - AstroidOuterCollider
   - KnockbackShot
@@ -26,6 +25,8 @@ TagManager:
   - BottomEdge
   - LeftEdge
   - AimShot
+  - Undefined
+  - Asteroid
   layers:
   - Default
   - TransparentFX

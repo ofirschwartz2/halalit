@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 157309795357672138}
   - component: {fileID: 5898111106586121520}
   - component: {fileID: 8216639238992552598}
-  - component: {fileID: 5006428386273627857}
+  - component: {fileID: 6715530131001872679}
   m_Layer: 0
   m_Name: LaserBeamInner
-  m_TagString: Untagged
+  m_TagString: Shot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -131,7 +131,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.55, y: 2.5}
   m_EdgeRadius: 0
---- !u!114 &5006428386273627857
+--- !u!114 &6715530131001872679
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
