@@ -1081,7 +1081,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 759986607}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 153236cd0daffd74ca0067e5de824a39, type: 3}
+  m_Script: {fileID: 11500000, guid: b8cf3fcad437a594981813a3a249d82e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _useConfigFile: 1
@@ -1097,7 +1097,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 759986607}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 849acf983cad1cf4a9c5ba801009b2c2, type: 3}
+  m_Script: {fileID: 11500000, guid: 598f702cafdb35546a8d64f5a3b1259f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _useConfigFile: 1
@@ -1105,7 +1105,6 @@ MonoBehaviour:
   _ammoToggleJoysticEdge: 0
   _ammoPrefabs:
   - {fileID: 4043514594342984741, guid: 40e6ef62799c1484bba66721899628fb, type: 3}
-  - {fileID: 6558306382352585984, guid: 3cdaa99166165ef4490349aabd320112, type: 3}
 --- !u!1 &814139006
 GameObject:
   m_ObjectHideFlags: 0
@@ -1937,6 +1936,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1751165544}
+  - component: {fileID: 1751165545}
   m_Layer: 0
   m_Name: Items
   m_TagString: Untagged
@@ -1960,6 +1960,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1751165545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751165543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06f4a4d463a3bb947928c257daf45c31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _minimumLuckPerRank:
+  - Key: 0
+    Value: 0
+  - Key: 1
+    Value: 20
+  - Key: 2
+    Value: 40
+  - Key: 3
+    Value: 60
+  - Key: 4
+    Value: 80
+  - Key: 5
+    Value: 95
+  _attacks: []
+  _upgrades:
+  - ItemName: 2
+    ItemRank: 1
+    GameObject: {fileID: 7933660983960735595, guid: d41c2486d92753b42ab6a6384a02c52c, type: 3}
+  _utilities: []
 --- !u!1 &1845532576
 GameObject:
   m_ObjectHideFlags: 0
@@ -1969,7 +2000,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1845532577}
-  - component: {fileID: 1845532579}
   - component: {fileID: 1845532578}
   m_Layer: 0
   m_Name: ItemDropper
@@ -2005,29 +2035,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cbc161356bc8b043bf8eab7c6963f29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemRanker: {fileID: 1845532579}
-  _weapons: []
-  _upgrades:
-  - Key: 0
-    Value: {fileID: 7933660983960735595, guid: d41c2486d92753b42ab6a6384a02c52c, type: 3}
-  _utilities: []
---- !u!114 &1845532579
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1845532576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8100cd98f2d8a804783d0483ba10895f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _useConfigFile: 1
-  _ballShotRank: 0
-  _laserBeamRank: 0
-  _fireRateRank: 0
-  _nitroFuelRank: 0
 --- !u!1 &2130719621
 GameObject:
   m_ObjectHideFlags: 0
