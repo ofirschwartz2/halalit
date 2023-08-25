@@ -1,8 +1,5 @@
-using Assets.Enums;
 using Assets.Utils;
-using System;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class ShootingLazerRangeAttack : MoveAimAttackAttack
 {

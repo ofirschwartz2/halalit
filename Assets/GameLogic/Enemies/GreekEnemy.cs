@@ -1,9 +1,7 @@
 using Assets.Enums;
 using Assets.Utils;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using UnityEditor;
 using UnityEngine;
 
 public class GreekEnemy : MonoBehaviour
@@ -46,7 +44,7 @@ public class GreekEnemy : MonoBehaviour
 
         if (!_waitForNextStage) 
         {
-            EnemyUtils.MoveInStraightLine(
+            EnemyMovementUtils.MoveInStraightLine(
                 _rigidBody,
                 _currentMovementDirection,
                 _movementAmplitude,

@@ -1,4 +1,3 @@
-using Assets.Utils;
 using UnityEngine;
 
 public class WaitAttackIntervalWait : WaitAttackWait

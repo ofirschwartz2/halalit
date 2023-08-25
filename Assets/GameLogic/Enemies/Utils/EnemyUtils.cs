@@ -1,4 +1,3 @@
-using Assets.Enums;
 using Assets.Utils;
 using System;
 using System.Collections.Generic;
@@ -7,61 +6,7 @@ using UnityEngine;
 static class EnemyUtils
 {
     private static float _deltaTimeMultiplier = 300f;
-    private static float _speedUpOutOfStraightLine = 5f/10f;
-    private static float _slowDownOutOfStraightLine = 9f/10f;
-    private static float _isAboutToStopTH = 0.5f; // TODO: should be a function of the force applied? 
     private static float _knockbackMultiplier = 300f;
-
-    public static void MoveInStraightLine(
-        Rigidbody2D rigidbody, 
-        Vector2 direction, 
-        float amplitude, 
-        float movementInterval,
-        float movementStartTime)
-    {
-        switch (GetStageOfStraightLineMovement(movementInterval, movementStartTime)) 
-        {
-            case StraightLineMovementState.SPEED_UP:
-                StraightLineSpeedUp(rigidbody, direction, amplitude);
-                break;
-            case StraightLineMovementState.SLOW_DOWN:
-                StraightLineSlowDown(rigidbody, direction, amplitude);
-                break;
-            case StraightLineMovementState.DONE:
-                break;
-        }
-    }
-
-    public static void StraightLineSpeedUp(Rigidbody2D rigidbody, Vector2 direction, float amplitude)
-    {
-        rigidbody.AddForce(direction * amplitude * (Time.deltaTime * _deltaTimeMultiplier));
-    }
-
-    public static void StraightLineSlowDown(Rigidbody2D rigidbody, Vector2 direction, float amplitude)
-    {
-        if (!IsAboutToStop(rigidbody.velocity.magnitude))
-        {
-            rigidbody.AddForce(direction * amplitude * -1 * (Time.deltaTime * _deltaTimeMultiplier));
-        }
-    }
-
-    private static StraightLineMovementState GetStageOfStraightLineMovement(float movementInterval, float movementStartTime)
-    {
-        var timePassed = Time.time - movementStartTime;
-
-        if (timePassed < movementInterval * _speedUpOutOfStraightLine)
-        {
-            return StraightLineMovementState.SPEED_UP;
-        }
-        else if (timePassed < movementInterval * _slowDownOutOfStraightLine)
-        {
-            return StraightLineMovementState.SLOW_DOWN;
-        }
-        else
-        {
-            return StraightLineMovementState.DONE;
-        }
-    }
 
     public static Vector2 GetAnotherDirectionFromEdge(Rigidbody2D rigidbody, string edge)
     {
@@ -114,12 +59,6 @@ static class EnemyUtils
     }
 
     #region Predicates
-    private static bool IsAboutToStop(float speed)
-    {
-        // TODO: consider doing this predicate as a function of the force applied.
-        return Math.Abs(speed) < _isAboutToStopTH;
-    }
-
     public static bool ShouldKillMe(Collider2D other)
     {
         return other.gameObject.CompareTag("Shot");

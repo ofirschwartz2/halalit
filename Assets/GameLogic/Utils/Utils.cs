@@ -41,7 +41,7 @@ namespace Assets.Utils
 
         public static float DegreeToRadian(float degree)
         {
-            return degree * Mathf.PI / 180;
+            return degree * Mathf.Deg2Rad;//* Mathf.PI / 180;
         }
 
         public static float GetVectorMagnitude(Vector2 vector2) // we can use Vector2.magnitude

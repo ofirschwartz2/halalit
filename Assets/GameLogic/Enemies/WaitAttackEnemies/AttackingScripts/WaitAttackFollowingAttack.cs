@@ -19,7 +19,7 @@ public class WaitAttackFollowingAttack: WaitAttackAttack
     public override void Attack() 
     {
         RotateTowardsHalalit();
-        EnemyStraightLineMovement.MoveInStraightLine(_rigidBody, _halalitDirection, _movementAmplitude, _oneAttackInterval, _stratAttackingTime);
+        EnemyMovementUtils.MoveInStraightLine(_rigidBody, _halalitDirection, _movementAmplitude, _oneAttackInterval, _stratAttackingTime);
     }
     private void RotateTowardsHalalit()
     {

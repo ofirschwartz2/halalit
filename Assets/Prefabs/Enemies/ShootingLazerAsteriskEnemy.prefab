@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 5439432440802590956}
   - component: {fileID: 1185372985846441720}
   - component: {fileID: 3429338643178047009}
-  - component: {fileID: 713016459469602189}
-  - component: {fileID: 5676241805971437555}
+  - component: {fileID: 938255827857282}
   - component: {fileID: 2669928082631877482}
   - component: {fileID: 4590634385176654268}
+  - component: {fileID: 5690852626836545396}
   m_Layer: 0
   m_Name: ShootingLazerAsteriskEnemy
   m_TagString: Enemy
@@ -152,7 +152,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &713016459469602189
+--- !u!114 &938255827857282
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -161,32 +161,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8916735576456593937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 442e200ed6aca4e41aa20361b28d9f1a, type: 3}
+  m_Script: {fileID: 11500000, guid: fbf37c3adb2fe664e87d3f1b5d98faf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _useConfigFile: 0
   _moveAimAttackEnemyState: 0
-  _moveAimAttackMove: {fileID: 5676241805971437555}
+  _moveAimAttackMove: {fileID: 5690852626836545396}
   _moveAimAttackAim: {fileID: 2669928082631877482}
   _moveAimAttackAttack: {fileID: 4590634385176654268}
-  _rigidBody: {fileID: 1185372985846441720}
---- !u!114 &5676241805971437555
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8916735576456593937}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02c67afd1ec28b345b25fa222225de7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _useConfigFile: 0
-  _movementAmplitude: 1
-  _speedLimit: 1
-  _movingInterval: 1
-  _rotationSpeed: 1
   _rigidBody: {fileID: 1185372985846441720}
 --- !u!114 &2669928082631877482
 MonoBehaviour:
@@ -222,3 +204,21 @@ MonoBehaviour:
   _endShootingBeforeFinishAttack: 0.1
   _numberOfShots: 8
   ShotPrefab: {fileID: 6558306382352585984, guid: 1b692fbae1e17ad42a7c60c2c5644a37, type: 3}
+--- !u!114 &5690852626836545396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8916735576456593937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09f8d2363bd26ab4c8fc9e7e1b8fcffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useConfigFile: 0
+  _movementAmplitude: 1
+  _speedLimit: 1
+  _movingInterval: 1
+  _rotationSpeed: 1
+  _rigidBody: {fileID: 1185372985846441720}

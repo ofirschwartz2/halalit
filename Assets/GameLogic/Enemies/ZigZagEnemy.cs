@@ -1,6 +1,5 @@
 using Assets.Enums;
 using Assets.Utils;
-using System;
 using UnityEngine;
 
 public class ZigZagEnemy : MonoBehaviour
@@ -40,7 +39,7 @@ public class ZigZagEnemy : MonoBehaviour
             ChangeZigZagDirection();
         }
 
-        EnemyUtils.MoveInStraightLine(_rigidBody, _direction, _movementAmplitude, _changeZigZagDirectionInterval, _startMovementTime);
+        EnemyMovementUtils.MoveInStraightLine(_rigidBody, _direction, _movementAmplitude, _changeZigZagDirectionInterval, _startMovementTime);
     }
 
     private void ChangeZigZagDirection()

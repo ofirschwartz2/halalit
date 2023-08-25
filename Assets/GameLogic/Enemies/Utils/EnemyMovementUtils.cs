@@ -1,16 +1,16 @@
 using Assets.Enums;
 using Assets.Utils;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
-static class EnemyStraightLineMovement
+static class EnemyMovementUtils
 {
     private static float _deltaTimeMultiplier = 300f;
     private static float _speedUpOutOfStraightLine = 5f/10f;
     private static float _slowDownOutOfStraightLine = 9f/10f;
     private static float _isAboutToStopTH = 0.35f; // TODO: should be a function of the force applied? 
 
+    #region StraightLineMovement
     public static void MoveInStraightLine(
         Rigidbody2D rigidbody, 
         Vector2 direction, 
@@ -62,14 +62,6 @@ static class EnemyStraightLineMovement
         }
     }
 
-    public static void MoveUnderSpeedLimit(Rigidbody2D rigidbody, Vector2 direction, float movementAmplitude, float speedLimit)
-    {
-        if (Utils.IsUnderSpeedLimit(rigidbody.velocity, speedLimit))
-        {
-            rigidbody.AddForce(direction * movementAmplitude * (Time.deltaTime * _deltaTimeMultiplier));
-        }
-    }
-
     private static bool IsAboutToStop(float speed)
     {
         // TODO: consider doing this predicate as a function of the force applied.
@@ -80,4 +72,15 @@ static class EnemyStraightLineMovement
     {
         return direction.x * oldDirection.x <= 0 || direction.y * oldDirection.y <= 0;
     }
+    #endregion
+
+    #region UnderSpeedLimitMovement
+    public static void MoveUnderSpeedLimit(Rigidbody2D rigidbody, Vector2 direction, float movementAmplitude, float speedLimit)
+    {
+        if (Utils.IsUnderSpeedLimit(rigidbody.velocity, speedLimit))
+        {
+            rigidbody.AddForce(direction * movementAmplitude * (Time.deltaTime * _deltaTimeMultiplier));
+        }
+    }
+    #endregion
 }

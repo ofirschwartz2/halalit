@@ -1,6 +1,5 @@
 using Assets.Enums;
 using Assets.Utils;
-using System;
 using UnityEngine;
 
 public class SinusEnemy : MonoBehaviour
