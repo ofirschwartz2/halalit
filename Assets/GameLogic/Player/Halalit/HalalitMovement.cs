@@ -55,7 +55,7 @@ public class HalalitMovement : MonoBehaviour
             float normalizedRotationZ = Utils.AngleNormalizationBy360(rotationZ);
 
             float deltaAngle = normalizedJoystickAngle - normalizedRotationZ;
-            float shorterDeltaAngle = Utils.GetShorterSpin(deltaAngle);
+            float shorterDeltaAngle = Utils.GetNormalizedAngleBy360(deltaAngle);
 
             transform.Rotate(_spinSpeed * Time.deltaTime * new Vector3(0, 0, shorterDeltaAngle));
         }

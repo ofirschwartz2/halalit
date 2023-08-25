@@ -80,10 +80,10 @@ namespace Assets.Utils
 
         public static Vector2 GetRandomVector(float minX, float maxX, float minY, float maxY)
         {
-            return new Vector2(UnityEngine.Random.Range(minX, maxX), UnityEngine.Random.Range(minY, maxY));
+            return new Vector2(Random.Range(minX, maxX), UnityEngine.Random.Range(minY, maxY));
         }
 
-        public static float GetShorterSpin(float angle)
+        public static float GetNormalizedAngleBy360(float angle)
         {
             if (angle > 180)
                 return angle - 360;
@@ -116,6 +116,18 @@ namespace Assets.Utils
             return Random.Range(0, 2) == 0;
         }
 
+        public static Vector2 ShiftVectorByOffsetDegree(Vector2 vector, float offsetDegrees)
+        {
+            float offsetRadians = DegreeToRadian(offsetDegrees);
+
+            float vectorAngle = Vector2ToDegree(vector.x, vector.y);
+            float newVectorAngle = vectorAngle + offsetRadians;
+
+            float newVectorX = vector.magnitude * Mathf.Cos(newVectorAngle);
+            float newVectorY = vector.magnitude * Mathf.Sin(newVectorAngle);
+
+            return new(newVectorX, newVectorY);
+        }
         #endregion
 
         #region Enum Extentions

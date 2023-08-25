@@ -498,6 +498,8 @@ GameObject:
   - component: {fileID: 430440936}
   - component: {fileID: 430440935}
   - component: {fileID: 430440938}
+  - component: {fileID: 430440939}
+  - component: {fileID: 430440940}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -565,6 +567,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc65c8b2049b5b14c8b69ff85d58ebae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &430440939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 430440934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dc3afc28b711774ea9d1b95ab34fd2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &430440940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 430440934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e36cccb8f4bb37468a3502149f56bfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &451967906 stripped
@@ -1080,7 +1106,6 @@ MonoBehaviour:
   _ammoPrefabs:
   - {fileID: 4043514594342984741, guid: 40e6ef62799c1484bba66721899628fb, type: 3}
   - {fileID: 6558306382352585984, guid: 3cdaa99166165ef4490349aabd320112, type: 3}
-  - {fileID: 2146489080886678340, guid: 5acba2ba1a8e1a64880921461a9d884d, type: 3}
 --- !u!1 &814139006
 GameObject:
   m_ObjectHideFlags: 0
@@ -1532,7 +1557,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1107869173}
+  - component: {fileID: 1107869176}
   - component: {fileID: 1107869174}
+  - component: {fileID: 1107869175}
   m_Layer: 0
   m_Name: Asteroid instantiator
   m_TagString: Untagged
@@ -1569,9 +1596,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _useConfigFile: 1
   _asteroidPrefab: {fileID: 6741412782414407016, guid: d17f6aba06990634e92f5f659cf1bf0d, type: 3}
+  _asteroidInitiator: {fileID: 1107869176}
   _asteroidInstantiationLineLength: 0
   _asteroidInstantiationInterval: 0
+  _asteroidInstantiationLoad: 0
   _asteroidInstantiationDistanceFromCenter: 0
+  _asteroidMaxScale: 0
+  _maxInstantiationsRetry: 0
+  _asteroidTakeOffTime: 0
+--- !u!114 &1107869175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107869172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8dd82f78a553114ea8f702ac53cc0b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useConfigFile: 1
+  _asteroidPrefab: {fileID: 6741412782414407016, guid: d17f6aba06990634e92f5f659cf1bf0d, type: 3}
+  _asteroidInitiator: {fileID: 1107869176}
+  _asteroidMaxScale: 0
+  _asteroidMaxInstantiationCount: 0
+  _asteroidMinInstantiationCount: 0
+  _asteroidScaleMultiplier: 0
+  _asteroidNewDirectionOffsetDegree: 0
+--- !u!114 &1107869176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107869172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfa5208d9ddbaf843b9eac6b66bbf222, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1115015985 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2929252283123773951, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
@@ -1905,6 +1969,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1845532577}
+  - component: {fileID: 1845532579}
   - component: {fileID: 1845532578}
   m_Layer: 0
   m_Name: ItemDropper
@@ -1940,9 +2005,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cbc161356bc8b043bf8eab7c6963f29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemRanker: {fileID: 1845532579}
+  _weapons: []
   _upgrades:
-  - key: 0
-    value: {fileID: 7933660983960735595, guid: d41c2486d92753b42ab6a6384a02c52c, type: 3}
+  - Key: 0
+    Value: {fileID: 7933660983960735595, guid: d41c2486d92753b42ab6a6384a02c52c, type: 3}
+  _utilities: []
+--- !u!114 &1845532579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1845532576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8100cd98f2d8a804783d0483ba10895f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useConfigFile: 1
+  _ballShotRank: 0
+  _laserBeamRank: 0
+  _fireRateRank: 0
+  _nitroFuelRank: 0
 --- !u!1 &2130719621
 GameObject:
   m_ObjectHideFlags: 0

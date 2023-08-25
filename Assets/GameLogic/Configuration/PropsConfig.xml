@@ -81,12 +81,23 @@
     <KnockbackGunMultiplier>2</KnockbackGunMultiplier>
   </EnemyMovementController>
 
-  <AsteroidInstantiator>
+  <AsteroidExternalInstantiator>
     <_asteroidInstantiationDistanceFromCenter>25</_asteroidInstantiationDistanceFromCenter>
     <_asteroidInstantiationLineLength>30</_asteroidInstantiationLineLength>
     <_asteroidInstantiationInterval>2</_asteroidInstantiationInterval>
+    <_asteroidInstantiationLoad>1</_asteroidInstantiationLoad>
     <_asteroidMaxScale>4</_asteroidMaxScale>
-  </AsteroidInstantiator>
+    <_maxInstantiationsRetry>5</_maxInstantiationsRetry>
+    <_asteroidTakeOffTime>5</_asteroidTakeOffTime>
+  </AsteroidExternalInstantiator>
+
+  <AsteroidInternalInstantiator>
+    <_asteroidMaxScale>4</_asteroidMaxScale>
+    <_asteroidMaxInstantiationCount>5</_asteroidMaxInstantiationCount>
+    <_asteroidMinInstantiationCount>2</_asteroidMinInstantiationCount>
+    <_asteroidScaleMultiplier>0.7</_asteroidScaleMultiplier>
+    <_asteroidNewDirectionOffsetDegree>40</_asteroidNewDirectionOffsetDegree>
+  </AsteroidInternalInstantiator>
 
   <AsteroidDestructor>
     <_singleAxisDestructionDistance>50</_singleAxisDestructionDistance>
@@ -95,7 +106,8 @@
   <AsteroidMovement>
     <_velocityMagnitude>2</_velocityMagnitude>
     <_maxRotation>50</_maxRotation>
-    <_explodeToSmallerAstroidsScaleTH>1.5</_explodeToSmallerAstroidsScaleTH>
+    <_collisionSpeedMultiplier>1</_collisionSpeedMultiplier>
+    <_transparencyPeriod>3</_transparencyPeriod>
   </AsteroidMovement>
   
   <ItemMovement>
@@ -106,6 +118,13 @@
   <FireRateUpgrade>
     <_cooldownMultiplier>0.9</_cooldownMultiplier>
   </FireRateUpgrade>
+
+  <ItemRanker>
+    <_ballShotRank>1</_ballShotRank>
+    <_laserBeamRank>15</_laserBeamRank>
+    <_fireRateRank>20</_fireRateRank>
+    <_nitroFuelRank>10</_nitroFuelRank>
+  </ItemRanker>
  
   <SceneFactory>
     <MaxNumberOfGameObjectsAllowed>60</MaxNumberOfGameObjectsAllowed>

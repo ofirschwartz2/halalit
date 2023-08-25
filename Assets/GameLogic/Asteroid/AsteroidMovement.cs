@@ -12,8 +12,13 @@ public class AsteroidMovement : MonoBehaviour
     private float _velocityMagnitude;
     [SerializeField]
     private float _maxRotation;
+    [SerializeField]
+    private float _collisionSpeedMultiplier;
+    [SerializeField]
+    private float _transparencyPeriod;
 
     private float _constantRotation;
+    private float _time;
     private Vector2 _direction;
 
     void Start()
@@ -23,6 +28,7 @@ public class AsteroidMovement : MonoBehaviour
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
 
+        _rigidBody.useFullKinematicContacts = true;
         SetRandomRotationByScale();
         SetVelocity();
     }
@@ -37,50 +43,78 @@ public class AsteroidMovement : MonoBehaviour
         _constantRotation = Random.Range(-_maxRotation / transform.localScale.x, _maxRotation / transform.localScale.x);
     }
 
-    void Update()
-    {
-        transform.Rotate(0, 0, _constantRotation * Time.deltaTime);
-    }
-
     public void SetDirection(Vector2 direction)
     {
         _direction = direction;
     }
 
+    public Vector2 GetDirection()
+    {
+        return _direction;
+    }
+
+    public float GetScale()
+    {
+        return transform.localScale.x;
+    }
+
+    void Update()
+    {
+        transform.Rotate(0, 0, _constantRotation * Time.deltaTime);
+        _direction = _rigidBody.velocity.normalized;
+        _time += Time.deltaTime;
+    }
+
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag(Tag.EXTERNAL_WORLD.GetDescription()))
+        if (other.gameObject.CompareTag(Tag.INTERNAL_WORLD.GetDescription()))
         {
             Destroy(gameObject);
         }
     }
 
-    // TODO (dev): Add knockback from other asteroids
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()) && _time >= _transparencyPeriod)
+        {
+            AsteroidMovement otherAsteroidMovement = other.gameObject.GetComponent<AsteroidMovement>();
+            Vector2 originalVelocity = _rigidBody.velocity;
 
+            SetCollisionVelocity(other.contacts[0].normal, otherAsteroidMovement.GetScale());
+            SetRotationByVelocity(originalVelocity);
+        }
+    }
 
+    private void SetCollisionVelocity(Vector2 contactPointNormal, float otherAsteroidScale)
+    {
+        float relationalScale = otherAsteroidScale / transform.localScale.x;
+        float finalVelocityMultiplier = relationalScale * _collisionSpeedMultiplier;
 
+        _rigidBody.velocity += finalVelocityMultiplier * contactPointNormal;
+    }
 
+    private void SetRotationByVelocity(Vector2 originalVelocity)
+    {
+        float rotationDirectionalMultiplier = GetRotationDirectionalMultiplier(originalVelocity);
 
-    //private void AstroidExplotion(Collider2D other)
-    //{
-    //    if (transform.localScale.x > _explodeToSmallerAstroidsScaleTH)
-    //        ExplodeToSmallerAstroids();
-    //    Destroy(gameObject);
-    //}
+        _constantRotation += rotationDirectionalMultiplier * _rigidBody.velocity.magnitude / originalVelocity.magnitude;
+    }
 
-    //private void ExplodeToSmallerAstroids()
-    //{
-    //    int numOfSmallerAstroids = Random.Range(2, 4);
+    private float GetRotationDirectionalMultiplier(Vector2 originalVelocity)
+    {
+        float originalDirection = Utils.AngleNormalizationBy360(Utils.Vector2ToDegree(originalVelocity.x, originalVelocity.y));
+        float currentDirection = Utils.AngleNormalizationBy360(Utils.Vector2ToDegree(_rigidBody.velocity.x, _rigidBody.velocity.y));
+        float rotationDirectionalMultiplier;
 
-    //    for (int i = 0; i < numOfSmallerAstroids; i++)
-    //    {
-    //        GameObject smallerAstroid = Instantiate(
-    //            _astroidPrefab, 
-    //            new Vector3(transform.position.x + Random.Range(-0.1f, 0.1f), transform.position.y + Random.Range(-0.1f, 0.1f), 0), 
-    //            Quaternion.AngleAxis(0, Vector3.forward));
+        if (currentDirection <= originalDirection)
+        {
+            rotationDirectionalMultiplier = 1;
+        }
+        else
+        {
+            rotationDirectionalMultiplier = -1;
+        }
 
-    //        smallerAstroid.SendMessage("SetScale", transform.localScale.x / 2);
-    //        smallerAstroid.SendMessage("Set360Velocity");
-    //    }
-    //}
+        return rotationDirectionalMultiplier;
+    }
 }
