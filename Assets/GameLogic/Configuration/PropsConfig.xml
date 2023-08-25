@@ -11,17 +11,17 @@
   </HalalitMovement>
 
   <WeaponMovement>
-    <_weaponSpinRadius>0.2</_weaponSpinRadius>
+    <_weaponSpinRadius>0.7</_weaponSpinRadius>
   </WeaponMovement>
 
-  <AmmoToggle>
+  <AttackToggle>
     <_ammoToggleJoysticEdge>0.8</_ammoToggleJoysticEdge>
-  </AmmoToggle>
+  </AttackToggle>
 
-  <Gun>
+  <WeaponAttack>
     <_cooldownInterval>0.5</_cooldownInterval>
     <_attackJoystickEdge>0.8</_attackJoystickEdge>
-  </Gun>
+  </WeaponAttack>
 
   <BallShot>
     <_speed>10</_speed>

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &2391857532861894520
+--- !u!1001 &7915996581423623236
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9195436676840446505, guid: 16345ed1427585c479ebd45411257be7, type: 3}
       propertyPath: m_Name
-      value: LaserBeamItem
+      value: BallShotItem
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -62,22 +62,22 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 9195436676840446505, guid: 16345ed1427585c479ebd45411257be7, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1390311993930615013}
+      addedObject: {fileID: 5538263819309950762}
   m_SourcePrefab: {fileID: 100100000, guid: 16345ed1427585c479ebd45411257be7, type: 3}
---- !u!1 &6822202678441874769 stripped
+--- !u!1 &1317166564773623405 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9195436676840446505, guid: 16345ed1427585c479ebd45411257be7, type: 3}
-  m_PrefabInstance: {fileID: 2391857532861894520}
+  m_PrefabInstance: {fileID: 7915996581423623236}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1390311993930615013
+--- !u!114 &5538263819309950762
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6822202678441874769}
+  m_GameObject: {fileID: 1317166564773623405}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b6b8f6197e0ec44cb8ef56106b631c1, type: 3}
+  m_Script: {fileID: 11500000, guid: a1dda669d2118424485ed9035919e458, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

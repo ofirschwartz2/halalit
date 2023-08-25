@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ItemDropper : MonoBehaviour
 {
-    private ItemsContainer _itemsContainer;
+    private ItemsBank _itemsBank;
 
     #region Init
     private void Awake()
@@ -13,7 +13,7 @@ public class ItemDropper : MonoBehaviour
 
     private void Start()
     {
-        _itemsContainer = GetComponentInParent<ItemsContainer>();
+        _itemsBank = GetComponentInParent<ItemsBank>();
     }
 
     private void SetEventListeners()
@@ -27,7 +27,7 @@ public class ItemDropper : MonoBehaviour
     {
         if (arguments.DropType == DropType.ITEM_DROP)
         {
-            GameObject randomValidByRankItem = _itemsContainer.GetRandomValidItem(arguments.Luck);
+            GameObject randomValidByRankItem = _itemsBank.GetRandomValidItem(arguments.Luck);
             InstantiateItem(randomValidByRankItem, arguments.DropPosition, arguments.DropForce);
         }
     }

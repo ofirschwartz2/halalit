@@ -6,11 +6,11 @@ namespace Assets.Enums
     [Serializable]
     public enum ItemName
     {
-        // Weapons
-        [Description("Ball shot")]
-        BALL_SHOT,
-        [Description("Laser beam")]
-        LASER_BEAM,
+        // Attacks
+        [Description("Ball shot item")]
+        BALL_SHOT = AttackName.BALL_SHOT,
+        [Description("Laser beam item")]
+        LASER_BEAM = AttackName.LASER_BEAM,
 
         // Upgrades
         [Description("Fire rate")]

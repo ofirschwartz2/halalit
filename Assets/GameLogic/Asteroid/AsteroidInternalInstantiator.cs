@@ -79,7 +79,7 @@ class AsteroidInternalInstantiator : MonoBehaviour
 
         for (int i = 0; i < newAsteroidsCount; i++)
         {
-            newAsteroidPositions.Add(originalAsteroidPosition); // TODO fix...
+            newAsteroidPositions.Add(originalAsteroidPosition);
         }
 
         return newAsteroidPositions;
