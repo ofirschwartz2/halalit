@@ -5,10 +5,10 @@ using UnityEngine;
 
 static class EnemyMovementUtils
 {
-    private static float _deltaTimeMultiplier = 300f;
-    private static float _speedUpOutOfStraightLine = 5f/10f;
-    private static float _slowDownOutOfStraightLine = 9f/10f;
-    private static float _isAboutToStopTH = 0.35f; // TODO: should be a function of the force applied? 
+    private const float DELTA_TIME_MULTIPLIER = 300f;
+    private const float SPEED_UP_OUT_OF_STRAIGHT_LINE = 5f/10f;
+    private const float SLOW_DOWN_OUT_OF_STRAIGHT_LINE = 9f/10f;
+    private const float IS_ABOUT_TO_STOP_TH = 0.35f;
 
     #region StraightLineMovement
     public static void MoveInStraightLine(
@@ -33,14 +33,14 @@ static class EnemyMovementUtils
 
     public static void StraightLineSpeedUp(Rigidbody2D rigidbody, Vector2 direction, float amplitude)
     {
-        rigidbody.AddForce(direction * amplitude * (Time.deltaTime * _deltaTimeMultiplier));
+        rigidbody.AddForce(direction * amplitude * (Time.deltaTime * DELTA_TIME_MULTIPLIER));
     }
 
     public static void StraightLineSlowDown(Rigidbody2D rigidbody, Vector2 direction, float amplitude)
     {
         if (!IsAboutToStop(rigidbody.velocity.magnitude) || DidSwitchDirection(rigidbody.velocity.normalized, direction))
         {
-            rigidbody.AddForce(direction * amplitude * -1 * (Time.deltaTime * _deltaTimeMultiplier));
+            rigidbody.AddForce(direction * amplitude * -1 * (Time.deltaTime * DELTA_TIME_MULTIPLIER));
         }
     }
 
@@ -48,11 +48,11 @@ static class EnemyMovementUtils
     {
         var timePassed = Time.time - movementStartTime;
 
-        if (timePassed < movementInterval * _speedUpOutOfStraightLine)
+        if (timePassed < movementInterval * SPEED_UP_OUT_OF_STRAIGHT_LINE)
         {
             return StraightLineMovementState.SPEED_UP;
         }
-        else if (timePassed < movementInterval * _slowDownOutOfStraightLine)
+        else if (timePassed < movementInterval * SLOW_DOWN_OUT_OF_STRAIGHT_LINE)
         {
             return StraightLineMovementState.SLOW_DOWN;
         }
@@ -64,8 +64,7 @@ static class EnemyMovementUtils
 
     private static bool IsAboutToStop(float speed)
     {
-        // TODO: consider doing this predicate as a function of the force applied.
-        return Math.Abs(speed) < _isAboutToStopTH;
+        return Math.Abs(speed) < IS_ABOUT_TO_STOP_TH;
     }
 
     private static bool DidSwitchDirection(Vector2 direction, Vector2 oldDirection)
@@ -79,7 +78,7 @@ static class EnemyMovementUtils
     {
         if (Utils.IsUnderSpeedLimit(rigidbody.velocity, speedLimit))
         {
-            rigidbody.AddForce(direction * movementAmplitude * (Time.deltaTime * _deltaTimeMultiplier));
+            rigidbody.AddForce(direction * movementAmplitude * (Time.deltaTime * DELTA_TIME_MULTIPLIER));
         }
     }
     #endregion

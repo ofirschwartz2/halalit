@@ -5,8 +5,8 @@ using UnityEngine;
 
 static class EnemyUtils
 {
-    private static float _deltaTimeMultiplier = 300f;
-    private static float _knockbackMultiplier = 300f;
+    private const float DELTA_TIME_MULTIPLIER = 300f;
+    private const float KNOCKBACK_MULTIPLIER = 300f;
 
     public static Vector2 GetAnotherDirectionFromEdge(Rigidbody2D rigidbody, string edge)
     {
@@ -35,14 +35,14 @@ static class EnemyUtils
     public static void KnockMeBack(Rigidbody2D myRigidbody, Collider2D other)
     {
         var knockBackDirection = Utils.GetDirectionFromCollision(myRigidbody.transform.position, other.transform.position);
-        myRigidbody.AddForce(knockBackDirection * _knockbackMultiplier);
+        myRigidbody.AddForce(knockBackDirection * KNOCKBACK_MULTIPLIER);
     }
 
     public static void MoveUnderSpeedLimit(Rigidbody2D rigidbody, Vector2 direction, float movementAmplitude, float speedLimit)
     {
         if (Utils.IsUnderSpeedLimit(rigidbody.velocity, speedLimit))
         {
-            rigidbody.AddForce(direction * movementAmplitude * (Time.deltaTime * _deltaTimeMultiplier));
+            rigidbody.AddForce(direction * movementAmplitude * (Time.deltaTime * DELTA_TIME_MULTIPLIER));
         }
     }
 
