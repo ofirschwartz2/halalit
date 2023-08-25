@@ -89,11 +89,12 @@ namespace Assets.Utils
             return (Utils.GetVectorMagnitude(myRigidBody2D.velocity) + Utils.GetVectorMagnitude(otherRigidBody2D.velocity)) * thrust;
         }
 
+        // TODPO: Needs to ne normalized Vector. use GetRandomVector2OnCircle and delete this function?
         public static Vector2 GetRandomVector(float minX, float maxX, float minY, float maxY)
         {
-            return new Vector2(Random.Range(minX, maxX), UnityEngine.Random.Range(minY, maxY));
+            return new Vector2(UnityEngine.Random.Range(minX, maxX), UnityEngine.Random.Range(minY, maxY));
         }
-
+        
         public static float GetNormalizedAngleBy360(float angle)
         {
             if (angle > 180)
