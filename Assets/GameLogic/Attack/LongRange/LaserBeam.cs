@@ -7,8 +7,13 @@ public class LaserBeam : MonoBehaviour
     private bool _useConfigFile;
     [SerializeField]
     private float _lifetime;
-    
+    [SerializeField]
+    private float _enlargeSpeed;
+
+    private float _finalYScale;
+    private float _finalYPosition;
     private float _endOfLifeTime;
+    private bool _die;
 
     void Start()
     {
@@ -17,19 +22,42 @@ public class LaserBeam : MonoBehaviour
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
 
+        _finalYScale = transform.localScale.y + _enlargeSpeed * _lifetime;
+        _finalYPosition = transform.localPosition.y + _enlargeSpeed * _lifetime / 2;
         _endOfLifeTime = Time.time + _lifetime;
+        
     }
 
     void Update()
     {
-        if (IsShotDied())
+        BeamLaser();
+        TryDie();
+    }
+
+    private void BeamLaser()
+    {
+        float newYScale = transform.localScale.y + _enlargeSpeed * Time.deltaTime;
+        float newYPosition = transform.localPosition.y + _enlargeSpeed * Time.deltaTime / 2;
+
+        transform.localScale = new Vector2(transform.localScale.x, newYScale > _finalYScale ? _finalYScale : newYScale);
+        transform.localPosition = new Vector2(transform.localPosition.x, newYScale > _finalYScale ? _finalYPosition : newYPosition);
+
+    }
+
+    private void TryDie()
+    {
+        if (_die)
         {
             Destroy(gameObject);
             Destroy(transform.parent.gameObject);
         }
+        else if (ShouldShotDieNextFrame())
+        {
+            _die = true;
+        }
     }
 
-    private bool IsShotDied()
+    private bool ShouldShotDieNextFrame()
     {
         return Time.time >= _endOfLifeTime;
     }
