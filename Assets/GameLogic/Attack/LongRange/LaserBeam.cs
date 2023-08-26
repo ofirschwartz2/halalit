@@ -10,10 +10,7 @@ public class LaserBeam : MonoBehaviour
     [SerializeField]
     private float _beamingSpeed;
 
-    private float _finalYScale;
-    private float _finalYPosition;
     private float _endOfLifeTime;
-    private bool _die;
 
     void Start()
     {
@@ -22,42 +19,36 @@ public class LaserBeam : MonoBehaviour
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
 
-        _finalYScale = transform.localScale.y + _beamingSpeed * _lifetime;
-        _finalYPosition = transform.localPosition.y + _beamingSpeed * _lifetime / 2;
         _endOfLifeTime = Time.time + _lifetime;
         
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        BeamLaser();
         TryDie();
+        BeamLaser();
     }
 
     private void BeamLaser()
     {
-        float newYScale = transform.localScale.y + _beamingSpeed * Time.deltaTime;
-        float newYPosition = transform.localPosition.y + _beamingSpeed * Time.deltaTime / 2;
+        float newYScale = transform.localScale.y + _beamingSpeed;
+        float newYPosition = transform.localPosition.y + _beamingSpeed / 2;
 
-        transform.localScale = new Vector2(transform.localScale.x, newYScale > _finalYScale ? _finalYScale : newYScale);
-        transform.localPosition = new Vector2(transform.localPosition.x, newYScale > _finalYScale ? _finalYPosition : newYPosition);
+        transform.localScale = new Vector2(transform.localScale.x, newYScale);
+        transform.localPosition = new Vector2(transform.localPosition.x, newYPosition);
 
     }
 
     private void TryDie()
     {
-        if (_die)
+        if (ShouldDie())
         {
             Destroy(gameObject);
             Destroy(transform.parent.gameObject);
         }
-        else if (ShouldShotDieNextFrame())
-        {
-            _die = true;
-        }
     }
 
-    private bool ShouldShotDieNextFrame()
+    private bool ShouldDie()
     {
         return Time.time >= _endOfLifeTime;
     }

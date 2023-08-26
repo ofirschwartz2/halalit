@@ -100,7 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _useConfigFile: 0
   _lifetime: 0.1
-  _enlargeSpeed: 50
+  _beamingSpeed: 1
 --- !u!61 &2551140764409215493
 BoxCollider2D:
   m_ObjectHideFlags: 0
