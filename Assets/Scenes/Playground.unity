@@ -1201,14 +1201,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 759986607}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 2.5, y: 0, z: 0}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2130719623}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!114 &759986609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1221,10 +1221,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8cf3fcad437a594981813a3a249d82e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useConfigFile: 1
+  _useConfigFile: 0
   _halalit: {fileID: 2130719621}
   _attackJoystick: {fileID: 1115015985}
-  _weaponSpinRadius: 0
+  _weaponSpinRadius: 0.6
 --- !u!114 &759986611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1283,12 +1283,12 @@ SpriteRenderer:
   m_SortingLayerID: 1226254537
   m_SortingLayer: 1
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 08c9ba734cf5a7947a57289ad066ce9d, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 7482667652216324306, guid: 4544d3def399fc9498876db7834dd9e4, type: 3}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 9.1, y: 10.24}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1306,7 +1306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b124fbb6d5e0148884d8a70c8e4981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firstAttack: 0
+  _firstAttack: 1
 --- !u!1 &814139006
 GameObject:
   m_ObjectHideFlags: 0

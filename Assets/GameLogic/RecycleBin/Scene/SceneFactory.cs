@@ -47,10 +47,11 @@ public class SceneFactory : MonoBehaviour
         Instantiate(
             new NewEnemy(ShootingLazerRangeEnemyPrefab).GetPrefab(),
             new Vector3(1, -1, 0), new Quaternion(0, 0, 0, 0));
-        */
+        
         Instantiate(
             new NewEnemy(ShootingLazerAsteriskEnemyPrefab).GetPrefab(),
             new Vector3(2, -2, 0), new Quaternion(0, 0, 0, 0));
+        */
     }
 
     /*
