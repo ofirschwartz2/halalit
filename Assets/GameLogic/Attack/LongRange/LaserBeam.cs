@@ -8,7 +8,7 @@ public class LaserBeam : MonoBehaviour
     [SerializeField]
     private float _lifetime;
     [SerializeField]
-    private float _enlargeSpeed;
+    private float _beamingSpeed;
 
     private float _finalYScale;
     private float _finalYPosition;
@@ -22,8 +22,8 @@ public class LaserBeam : MonoBehaviour
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
 
-        _finalYScale = transform.localScale.y + _enlargeSpeed * _lifetime;
-        _finalYPosition = transform.localPosition.y + _enlargeSpeed * _lifetime / 2;
+        _finalYScale = transform.localScale.y + _beamingSpeed * _lifetime;
+        _finalYPosition = transform.localPosition.y + _beamingSpeed * _lifetime / 2;
         _endOfLifeTime = Time.time + _lifetime;
         
     }
@@ -36,8 +36,8 @@ public class LaserBeam : MonoBehaviour
 
     private void BeamLaser()
     {
-        float newYScale = transform.localScale.y + _enlargeSpeed * Time.deltaTime;
-        float newYPosition = transform.localPosition.y + _enlargeSpeed * Time.deltaTime / 2;
+        float newYScale = transform.localScale.y + _beamingSpeed * Time.deltaTime;
+        float newYPosition = transform.localPosition.y + _beamingSpeed * Time.deltaTime / 2;
 
         transform.localScale = new Vector2(transform.localScale.x, newYScale > _finalYScale ? _finalYScale : newYScale);
         transform.localPosition = new Vector2(transform.localPosition.x, newYScale > _finalYScale ? _finalYPosition : newYPosition);
