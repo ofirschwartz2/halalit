@@ -16,6 +16,8 @@ public class KnockbackShot : MonoBehaviour
     private float _speed;
     [SerializeField]
     private float _growthRate;
+    [SerializeField]
+    private float _decreaseGrowthRate; // between 0-1
 
     private float _endOfLifeTime;
 
@@ -32,12 +34,18 @@ public class KnockbackShot : MonoBehaviour
     void FixedUpdate()
     {
         Grow();
+        DecreaseGrowthRate();
         TryDie();
     }
 
     private void Grow()
     {
-        transform.localScale *= _growthRate;
+        transform.localScale = new Vector3(transform.localScale.x * _growthRate, transform.localScale.y);
+    }
+
+    private void DecreaseGrowthRate()
+    {
+        _growthRate = 1 + (_growthRate - 1) * _decreaseGrowthRate;
     }
 
     private void TryDie()
