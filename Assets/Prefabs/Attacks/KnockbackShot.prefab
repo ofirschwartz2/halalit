@@ -14,9 +14,10 @@ GameObject:
   - component: {fileID: 8644286765387027647}
   - component: {fileID: 3557996175591849792}
   - component: {fileID: 1021198665915333863}
+  - component: {fileID: 7660383900940441297}
   m_Layer: 0
   m_Name: KnockbackShot
-  m_TagString: Shot
+  m_TagString: KnockbackShot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -256,7 +257,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _useConfigFile: 0
-  _lifetime: 0.4
+  _lifetime: 0.5
   _rigidBody: {fileID: 8644286765387027647}
   _speed: 1
   _growthRate: 1.1
+--- !u!114 &7660383900940441297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 420320056530362796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c742040c054af64f8a0f108ae99a4af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -9,7 +9,7 @@ namespace Assets.Enums
         [Description("Ball shot")]
         BALL_SHOT,
         [Description("Laser beam")]
-        LASER_BEAM,
+        LASER_BEAM_SHOT,
         [Description("Knockback shot")]
         KNOCKBACK_SHOT,
     }

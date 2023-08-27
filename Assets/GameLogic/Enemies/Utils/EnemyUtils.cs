@@ -66,7 +66,7 @@ static class EnemyUtils
 
     public static bool ShouldKnockMeBack(Collider2D other)
     {
-        return other.gameObject.CompareTag("Halalit") || other.gameObject.CompareTag("Astroid") || other.gameObject.CompareTag("Enemy");
+        return other.gameObject.CompareTag("Halalit") || other.gameObject.CompareTag("Astroid") || other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("KnockbackShot");
     }
 
     #endregion

@@ -2,7 +2,7 @@
 using Assets.Utils;
 using Assets.Enums;
 
-public class LaserBeamItem : AttackItem
+public class KnockbackShotItem : AttackItem
 {
     private void OnTriggerEnter2D(Collider2D other)
     {
