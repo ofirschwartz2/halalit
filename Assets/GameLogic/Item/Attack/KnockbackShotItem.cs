@@ -8,7 +8,7 @@ public class KnockbackShotItem : AttackItem
     {
         if (other.gameObject.CompareTag(Tag.HALALIT.GetDescription()))
         {
-            OnPlayerAttackItemPickedUp(this, new(ItemName.LASER_BEAM, new()));
+            OnPlayerAttackItemPickedUp(this, new(ItemName.KNOCKBACK_SHOT, new()));
             Destroy(gameObject);
         }
     }

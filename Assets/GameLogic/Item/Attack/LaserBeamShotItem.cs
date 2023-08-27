@@ -8,7 +8,7 @@ public class LaserBeamShotItem : AttackItem
     {
         if (other.gameObject.CompareTag(Tag.HALALIT.GetDescription()))
         {
-            OnPlayerAttackItemPickedUp(this, new(ItemName.LASER_BEAM, new()));
+            OnPlayerAttackItemPickedUp(this, new(ItemName.LASER_BEAM_SHOT, new()));
             Destroy(gameObject);
         }
     }
