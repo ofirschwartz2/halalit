@@ -156,7 +156,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5591094641515173097}
   m_Layer: 0
-  m_Name: LaserBeamShot
+  m_Name: LaserBeam
   m_TagString: Shot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

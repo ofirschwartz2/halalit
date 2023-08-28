@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using UnityEngine;
 using Assets.Enums;
+using Random = UnityEngine.Random;
 
 namespace Assets.Utils
 {
