@@ -2,13 +2,13 @@
 using Assets.Utils;
 using Assets.Enums;
 
-public class LaserBeamItem : AttackItem
+public class LaserBeamShotItem : AttackItem
 {
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag(Tag.HALALIT.GetDescription()))
         {
-            OnPlayerAttackItemPickedUp(this, new(ItemName.LASER_BEAM, new()));
+            OnPlayerAttackItemPickedUp(this, new(ItemName.LASER_BEAM_SHOT, new()));
             Destroy(gameObject);
         }
     }
