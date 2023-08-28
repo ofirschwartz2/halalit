@@ -28,13 +28,8 @@
     </BallShot>
 
     <LaserBeam>
-        <_lifetime>0.2</_lifetime>
+        <_lifetime>0.1</_lifetime>
     </LaserBeam>
-
-    <KnockbackWave>
-        <_speed>1.01</_speed>
-        <_lifetime>0.5</_lifetime>
-    </KnockbackWave>
 
     <PickupClawController>
         <_velocityMultiplier>2.5</_velocityMultiplier>

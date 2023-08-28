@@ -31,7 +31,7 @@ class WeaponMovement : MonoBehaviour
     {
         float attackJoystickAngle = GetAttackJoystickAngle();
         Vector3 weaponPosition = Utils.AngleAndRadiusToPointOnCircle(attackJoystickAngle, _weaponSpinRadius) + _halalit.transform.position;
-        Quaternion weaponRotation = Quaternion.AngleAxis(attackJoystickAngle, Vector3.forward);
+        Quaternion weaponRotation = Quaternion.AngleAxis(attackJoystickAngle - 90f, Vector3.forward);
 
         transform.SetPositionAndRotation(weaponPosition, weaponRotation);
     }

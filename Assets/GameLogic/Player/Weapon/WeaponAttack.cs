@@ -65,7 +65,7 @@ public class WeaponAttack : MonoBehaviour
     private void Attack()
     {
         GameObject attackPrefab = _attackToggle.GetAttackPrefab();
-        Quaternion attackRotation = transform.rotation * Quaternion.Euler(0f, 0f, -90f); // TODO: BUG with lazer....... either Gun rotation is 90 degrees off / Lazer is off
+        Quaternion attackRotation = transform.rotation;
         Instantiate(attackPrefab, transform.position, attackRotation);
         _cooldownTime = Time.time + _cooldownInterval;
     }

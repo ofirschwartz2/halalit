@@ -7,7 +7,9 @@ public class LaserBeam : MonoBehaviour
     private bool _useConfigFile;
     [SerializeField]
     private float _lifetime;
-    
+    [SerializeField]
+    private float _beamingSpeed;
+
     private float _endOfLifeTime;
 
     void Start()
@@ -18,18 +20,35 @@ public class LaserBeam : MonoBehaviour
         }
 
         _endOfLifeTime = Time.time + _lifetime;
+        
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if (IsShotDied())
+        TryDie();
+        BeamLaser();
+    }
+
+    private void BeamLaser()
+    {
+        float newYScale = transform.localScale.y + _beamingSpeed;
+        float newYPosition = transform.localPosition.y + _beamingSpeed / 2;
+
+        transform.localScale = new Vector2(transform.localScale.x, newYScale);
+        transform.localPosition = new Vector2(transform.localPosition.x, newYPosition);
+
+    }
+
+    private void TryDie()
+    {
+        if (ShouldDie())
         {
             Destroy(gameObject);
             Destroy(transform.parent.gameObject);
         }
     }
 
-    private bool IsShotDied()
+    private bool ShouldDie()
     {
         return Time.time >= _endOfLifeTime;
     }
