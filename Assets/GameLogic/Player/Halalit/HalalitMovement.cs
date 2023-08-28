@@ -63,7 +63,7 @@ public class HalalitMovement : MonoBehaviour
 
     private void MoveInRotateDirection()
     {
-        if (IsMovementInput() && IsUnderSpeedLimit())
+        if (IsMovementInput() && Utils.IsUnderSpeedLimit(_rigidBody.velocity, _speedLimit))
         {
             Vector2 direction = Utils.DegreeToVector2(transform.rotation.eulerAngles.z);
 
@@ -108,11 +108,6 @@ public class HalalitMovement : MonoBehaviour
     private bool IsYInput()
     {
         return _joystick.Vertical != 0;
-    }
-
-    private bool IsUnderSpeedLimit()
-    {
-        return Utils.GetVectorMagnitude(_rigidBody.velocity) < _speedLimit;
     }
 
     private bool IsKnockBackCooledDown()

@@ -65,7 +65,8 @@ public class WeaponAttack : MonoBehaviour
     private void Attack()
     {
         GameObject attackPrefab = _attackToggle.GetAttackPrefab();
-        Instantiate(attackPrefab, transform.position, transform.rotation);
+        Quaternion attackRotation = transform.rotation;
+        Instantiate(attackPrefab, transform.position, attackRotation);
         _cooldownTime = Time.time + _cooldownInterval;
     }
     #endregion
