@@ -1,18 +1,16 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Assets.Utils;
 using Assets.Enums;
 using System.Collections.Generic;
 
-public class FireRateUpgrade : Upgrade
+public class HalalitVigor : Upgrade
 {
     [SerializeField]
     private bool _useConfigFile;
     [SerializeField]
-    private float _cooldownMultiplier;
+    private float _halalitVigorMultiplierSubtruction;
 
     private Dictionary<EventProperty, float> _pickupEventProperties;
-
-    // TODO (dev): Make this upgrade work per shot, not for all shots all together
 
     void Start()
     {
@@ -23,7 +21,7 @@ public class FireRateUpgrade : Upgrade
 
         _pickupEventProperties = new()
         {
-            { EventProperty.COOLDOWN_MULTIPLIER, _cooldownMultiplier }
+            { EventProperty.HALALIT_VIGOR_MULTIPLIER_SUBTRUCTION, _halalitVigorMultiplierSubtruction }
         };
     }
 
@@ -31,8 +29,9 @@ public class FireRateUpgrade : Upgrade
     {
         if (other.gameObject.CompareTag(Tag.HALALIT.GetDescription()))
         {
-            OnPlayerUpgradePickedUp(this, new(ItemName.FIRE_RATE, _pickupEventProperties));
+            OnPlayerUpgradePickedUp(this, new(ItemName.HALALIT_VIGOR, _pickupEventProperties));
             Destroy(gameObject);
         }
     }
 }
+

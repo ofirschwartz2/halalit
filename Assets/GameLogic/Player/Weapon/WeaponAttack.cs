@@ -37,7 +37,7 @@ public class WeaponAttack : MonoBehaviour
     {
         _upgradeActions = new()
         {
-            { ItemName.FIRE_RATE, UpgradeCooldownInterval }
+            { ItemName.WEAPON_STAMINA, UpgradeCooldownInterval }
         };
     }
 
@@ -81,8 +81,8 @@ public class WeaponAttack : MonoBehaviour
 
     private void UpgradeCooldownInterval(Dictionary<EventProperty, float> properties)
     {
-        _cooldownInterval *= properties[EventProperty.COOLDOWN_MULTIPLIER];
-        Debug.Log("Fire rate upgrade loaded");
+        _cooldownInterval -= properties[EventProperty.WEAPON_COOLDOWN_MULTIPLIER_SUBTRUCTION];
+        Debug.Log("Weapon stamina upgraded");
     } 
     #endregion
 

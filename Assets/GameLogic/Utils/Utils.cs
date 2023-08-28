@@ -80,7 +80,7 @@ namespace Assets.Utils
 
         public static Vector2 GetRandomVector(float minX, float maxX, float minY, float maxY)
         {
-            return new Vector2(Random.Range(minX, maxX), UnityEngine.Random.Range(minY, maxY));
+            return new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
         }
 
         public static float GetNormalizedAngleBy360(float angle)

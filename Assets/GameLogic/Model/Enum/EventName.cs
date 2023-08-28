@@ -10,8 +10,10 @@ namespace Assets.Enums
         PLAYER_ATTACK_ITEM_PICKUP,
         [Description("Asteroid destruction")]
         ASTEROID_DESTRUCTION,
-        [Description("Item drop")]
-        ITEM_DROP,
+        [Description("New item drop")]
+        NEW_ITEM_DROP,
+        [Description("No stock")]
+        NO_STOCK,
         [Description("New attack switch")]
         NEW_ATTACK_SWITCH,
     }

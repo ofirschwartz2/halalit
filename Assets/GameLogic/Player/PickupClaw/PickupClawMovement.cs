@@ -1,6 +1,7 @@
 using Assets.Enums;
 using Assets.Utils;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PickupClawMovement : MonoBehaviour
@@ -34,6 +35,28 @@ public class PickupClawMovement : MonoBehaviour
     private Vector2 _halalitLastFramePosition;
     private float _initialRotation;
     private bool _perfectRotationToHalalit;
+    private Dictionary<ItemName, Action<Dictionary<EventProperty, float>>> _upgradeActions;
+
+    #region Init
+    private void Awake()
+    {
+        SetEventListeners();
+        SetUpgradeActions();
+    }
+
+    private void SetEventListeners()
+    {
+        ItemEvent.PlayerUpgradePickUp += UpgradeClaw;
+    }
+
+    private void SetUpgradeActions()
+    {
+        _upgradeActions = new()
+        {
+            { ItemName.CLAW_RANGE, UpgradeClawRange },
+            { ItemName.CLAW_AGILITY, UpgradeClawSpeed },
+        };
+    }
 
     void Start()
     {
@@ -45,7 +68,36 @@ public class PickupClawMovement : MonoBehaviour
         _initialRotation = transform.rotation.eulerAngles.z;
         _halalitLastFramePosition = _halalit.transform.position;
     }
+    #endregion
 
+    #region Events actions
+    private void UpgradeClaw(object initiator, ItemEventArguments arguments)
+    {
+        if (IsRelevantUpgradeEvent(arguments))
+        {
+            _upgradeActions[arguments.Name].Invoke(arguments.Properties);
+        }
+    }
+
+    private bool IsRelevantUpgradeEvent(ItemEventArguments arguments)
+    {
+        return _upgradeActions.ContainsKey(arguments.Name);
+    }
+
+    private void UpgradeClawRange(Dictionary<EventProperty, float> properties)
+    {
+        _ropeLength += properties[EventProperty.CLAW_RANGE_ADDITION];
+        Debug.Log("Claw range upgraded");
+    }
+
+    private void UpgradeClawSpeed(Dictionary<EventProperty, float> properties)
+    {
+        _velocityMultiplier += properties[EventProperty.CLAW_SPEED_MULTIPLIER_ADDITION];
+        Debug.Log("Claw agility upgraded");
+    }
+    #endregion
+
+    #region Public movement by states
     public void Move(Vector2 goal)
     {
         UpdatePickupClawDirection(goal);
@@ -76,6 +128,23 @@ public class PickupClawMovement : MonoBehaviour
         RotateToDirectionSlowly(directionToItem);
     }
 
+    public bool AtFullRopeLength()
+    {
+        return Utils.GetDistanceBetweenTwoPoints(transform.position, _halalit.transform.position) >= _ropeLength;
+    }
+
+    public bool ReachGoal(Vector2 goal)
+    {
+        return Utils.GetDistanceBetweenTwoPoints(transform.position, goal) <= _positionMinProximity;
+    }
+
+    public void SetPerfectRotationToHalalit(bool perfectRotationToHalalit)
+    {
+        _perfectRotationToHalalit = perfectRotationToHalalit;
+    }
+    #endregion
+
+    #region Movement helpers
     private void SaveHalalitLastFramePosition()
     {
         _halalitLastFramePosition = _halalit.transform.position;
@@ -152,19 +221,5 @@ public class PickupClawMovement : MonoBehaviour
         Vector3 directionToItem = Utils.GetDirectionVector(transform.position, itemPosition);
         transform.position += _moveToItemMultiplier * Time.deltaTime * directionToItem;
     }
-
-    public bool AtFullRopeLength()
-    {
-        return Utils.GetDistanceBetweenTwoPoints(transform.position, _halalit.transform.position) >= _ropeLength;
-    }
-
-    public bool ReachGoal(Vector2 goal)
-    {
-        return Utils.GetDistanceBetweenTwoPoints(transform.position, goal) <= _positionMinProximity;
-    }
-
-    public void SetPerfectRotationToHalalit(bool perfectRotationToHalalit) 
-    {
-        _perfectRotationToHalalit = perfectRotationToHalalit;
-    }
+    #endregion
 }

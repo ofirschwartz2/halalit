@@ -9,8 +9,6 @@ public class ItemMovement : MonoBehaviour
     [SerializeField]
     private Rigidbody2D _rigidBody;
     [SerializeField]
-    private float _maxVelocity;
-    [SerializeField]
     private float _maxRotation;
 
     private float _constantRotation;
@@ -23,13 +21,6 @@ public class ItemMovement : MonoBehaviour
         }
 
         _constantRotation = Random.Range(-_maxRotation, _maxRotation);
-
-        SetVelocity();
-    }
-
-    private void SetVelocity()
-    {
-        _rigidBody.velocity = Utils.GetRandomVector(-_maxVelocity, _maxVelocity, -_maxVelocity, _maxVelocity);
     }
 
     void Update()

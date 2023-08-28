@@ -3,16 +3,14 @@ using UnityEngine;
 
 public class DropEventArguments : System.EventArgs
 {
-    public DropType DropType;
+    public Dropper Dropper;
     public Vector2 DropPosition;
     public Vector2 DropForce;
-    public RangeAttribute Luck;
 
-    public DropEventArguments(DropType dropType, Vector2 dropPosition, Vector2 dropForce, RangeAttribute luck)
+    public DropEventArguments(Dropper dropper, Vector2 dropPosition, Vector2 dropForce)
     {
-        DropType = dropType;
+        Dropper = dropper;
         DropPosition = dropPosition;
         DropForce = dropForce;
-        Luck = luck;
     }
 }

@@ -348,17 +348,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 929bb6fb0417a2c43892b9445f9d2962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useConfigFile: 1
+  _useConfigFile: 0
   _rigidBody: {fileID: 36141987}
   _halalit: {fileID: 2130719621}
-  _ropeLength: 0
-  _rotationToHalalitMultiplier: 0
-  _rotationToItemMultiplier: 0
-  _moveToItemMultiplier: 0
-  _velocityMultiplier: 0
-  _rotationMinProximity: 0
-  _positionMinProximity: 0
-  _dragAtFullRopeSpeed: 0
+  _ropeLength: 5
+  _rotationToHalalitMultiplier: 0.5
+  _rotationToItemMultiplier: 3
+  _moveToItemMultiplier: 0.5
+  _velocityMultiplier: 2.5
+  _rotationMinProximity: 1
+  _positionMinProximity: 0.2
+  _dragAtFullRopeSpeed: 0.1
   _pickupClawState: {fileID: 36141993}
 --- !u!114 &36141989
 MonoBehaviour:
@@ -501,6 +501,7 @@ GameObject:
   - component: {fileID: 430440940}
   - component: {fileID: 430440939}
   - component: {fileID: 430440938}
+  - component: {fileID: 430440942}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -604,6 +605,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf1e005e0cd368e4486da2535f83d44a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &430440942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 430440934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e28d197f294b0e40870894dcd50225f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &471757023
@@ -990,10 +1003,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8cf3fcad437a594981813a3a249d82e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useConfigFile: 1
+  _useConfigFile: 0
   _halalit: {fileID: 2130719621}
   _attackJoystick: {fileID: 1115015985}
-  _weaponSpinRadius: 0
+  _weaponSpinRadius: 0.7
 --- !u!114 &759986611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1006,11 +1019,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8d89938645e5b54d8c66a29c370e748, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useConfigFile: 1
+  _useConfigFile: 0
   _halalit: {fileID: 2130719621}
   _attackJoystick: {fileID: 1115015985}
-  _cooldownInterval: 0
-  _attackJoystickEdge: 0
+  _cooldownInterval: 0.5
+  _attackJoystickEdge: 0.8
 --- !u!212 &759986612
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1807,6 +1820,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1751165544}
   - component: {fileID: 1751165545}
+  - component: {fileID: 1751165547}
+  - component: {fileID: 1751165546}
   m_Layer: 0
   m_Name: Items
   m_TagString: Untagged
@@ -1825,8 +1840,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1845532577}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1842,75 +1856,104 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64cd665b8f08f664ba483dbc6fd0d006, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _minimumLuckPerRank:
-  - Key: 0
-    Value: 0
-  - Key: 1
-    Value: 20
-  - Key: 2
-    Value: 40
-  - Key: 3
-    Value: 60
-  - Key: 4
-    Value: 80
-  - Key: 5
-    Value: 95
   _attacks:
   - ItemName: 0
-    ItemRank: 0
-    GameObject: {fileID: 1317166564773623405, guid: f2838e79c24c9744086f1eeb921afa27, type: 3}
+    GameObject: {fileID: 8968850470237194354, guid: 654ded13d581af344a9c0c1d7bf21ca4, type: 3}
+    MaxStock: 20
+    MinimumInitialStock: 0
+    Stock: 0
   - ItemName: 1
-    ItemRank: 1
-    GameObject: {fileID: 6822202678441874769, guid: f481f23939f2bbe45bcfb04415673cfb, type: 3}
+    GameObject: {fileID: 5143544690253330687, guid: 7f2a3d969a4fc6d4ca4f70a8bc42f3f3, type: 3}
+    MaxStock: 20
+    MinimumInitialStock: 0
+    Stock: 0
   _upgrades:
   - ItemName: 2
-    ItemRank: 1
-    GameObject: {fileID: 7933660983960735595, guid: d41c2486d92753b42ab6a6384a02c52c, type: 3}
+    GameObject: {fileID: 2051710102036930527, guid: 40d14c0d11f854046b5a7f50b48782cb, type: 3}
+    MaxStock: 0
+    MinimumInitialStock: 0
+    Stock: 0
+  - ItemName: 3
+    GameObject: {fileID: 29822001511814079, guid: 58133c84bb7526c46ac5ea26534c6156, type: 3}
+    MaxStock: 0
+    MinimumInitialStock: 0
+    Stock: 0
+  - ItemName: 4
+    GameObject: {fileID: 5518962908220498960, guid: 2aca80b7fc601454daf7bb93e45be3e7, type: 3}
+    MaxStock: 0
+    MinimumInitialStock: 0
+    Stock: 0
+  - ItemName: 5
+    GameObject: {fileID: 7096595365006072902, guid: 295a3652a26fcff4fb08e93d52b2cff0, type: 3}
+    MaxStock: 5
+    MinimumInitialStock: 3
+    Stock: 0
+  - ItemName: 6
+    GameObject: {fileID: 6873799321591741943, guid: 95fe9062e850c714ea95836abc0e51a3, type: 3}
+    MaxStock: 7
+    MinimumInitialStock: 3
+    Stock: 0
+  - ItemName: 7
+    GameObject: {fileID: 4157529127717074405, guid: d3a4e9dd08e796a4384dd252e6bf709c, type: 3}
+    MaxStock: 0
+    MinimumInitialStock: 0
+    Stock: 0
+  - ItemName: 9
+    GameObject: {fileID: 8169581468996732993, guid: dbe0641efede0b24383151d668774d13, type: 3}
+    MaxStock: 0
+    MinimumInitialStock: 0
+    Stock: 0
+  - ItemName: 8
+    GameObject: {fileID: 6531215755768581467, guid: 16ebd1bad861a974297f9407b5e67dbe, type: 3}
+    MaxStock: 5
+    MinimumInitialStock: 3
+    Stock: 0
+  - ItemName: 10
+    GameObject: {fileID: 8357193050814363277, guid: 664d35e85a64d114694c3d89869be9f7, type: 3}
+    MaxStock: 0
+    MinimumInitialStock: 0
+    Stock: 0
   _utilities: []
---- !u!1 &1845532576
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1845532577}
-  - component: {fileID: 1845532578}
-  m_Layer: 0
-  m_Name: ItemDropper
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1845532577
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1845532576}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1751165544}
-  m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1845532578
+--- !u!114 &1751165546
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1845532576}
+  m_GameObject: {fileID: 1751165543}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6cbc161356bc8b043bf8eab7c6963f29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _itemsBank: {fileID: 1751165545}
+  _dropsBank: {fileID: 1751165547}
+--- !u!114 &1751165547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751165543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d192d19dc1750fd47bc41b3dcee642f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemsBank: {fileID: 1751165545}
+  _allDefaultDropsList:
+  - Key: 0
+    Value:
+    - ItemName: 0
+      OneOfChance: 5
+    - ItemName: 1
+      OneOfChance: 7
+    - ItemName: 5
+      OneOfChance: 3
+    - ItemName: 6
+      OneOfChance: 4
+    - ItemName: 8
+      OneOfChance: 5
 --- !u!1 &2130719621
 GameObject:
   m_ObjectHideFlags: 0

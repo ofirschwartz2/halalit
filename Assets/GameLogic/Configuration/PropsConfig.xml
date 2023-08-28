@@ -10,6 +10,7 @@
     <_knockBackCooldownInterval>0.1</_knockBackCooldownInterval>
   </HalalitMovement>
 
+  // Not used from - 25/8/23
   <WeaponMovement>
     <_weaponSpinRadius>0.7</_weaponSpinRadius>
   </WeaponMovement>
@@ -18,6 +19,7 @@
     <_ammoToggleJoysticEdge>0.8</_ammoToggleJoysticEdge>
   </AttackToggle>
 
+  // Not used from - 25/8/23
   <WeaponAttack>
     <_cooldownInterval>0.5</_cooldownInterval>
     <_attackJoystickEdge>0.8</_attackJoystickEdge>
@@ -31,11 +33,6 @@
     <_lifetime>0.2</_lifetime>
   </LaserBeam>
 
-  <KnockbackWave>
-    <_speed>1.01</_speed>
-    <_lifetime>0.5</_lifetime>
-  </KnockbackWave>
-
   <PickupClawController>
     <_velocityMultiplier>2.5</_velocityMultiplier>
     <_rotationToItemMultiplier>3</_rotationToItemMultiplier>
@@ -45,6 +42,7 @@
     <_ropeLength>10</_ropeLength>
   </PickupClawController>
 
+  // Not used from - 25/8/23
   <PickupClawMovement>
     <_velocityMultiplier>2.5</_velocityMultiplier>
     <_rotationToItemMultiplier>3</_rotationToItemMultiplier>
@@ -109,15 +107,16 @@
     <_collisionSpeedMultiplier>1</_collisionSpeedMultiplier>
     <_transparencyPeriod>3</_transparencyPeriod>
   </AsteroidMovement>
-  
+
+  // // Not used from - 28/8/23
   <ItemMovement>
     <_maxVelocity>0.1</_maxVelocity>
     <_maxRotation>10</_maxRotation>
   </ItemMovement>
 
-  <FireRateUpgrade>
-    <_cooldownMultiplier>0.9</_cooldownMultiplier>
-  </FireRateUpgrade>
+  <WeaponStamina>
+    <_weaponCooldownMultiplierSubtruction>0.1</_weaponCooldownMultiplierSubtruction>
+  </WeaponStamina>
 
   <ItemRanker>
     <_ballShotRank>1</_ballShotRank>
