@@ -6,13 +6,8 @@ using UnityEngine;
 public class ItemDto
 { 
     public ItemName ItemName;
-    public ItemRank ItemRank;
     public GameObject GameObject;
-
-    public ItemDto(ItemName itemName, ItemRank itemRank, GameObject gameObject)
-    {
-        ItemName = itemName;
-        ItemRank = itemRank;
-        GameObject = gameObject;
-    }
+    public int MaxStock;
+    public int MinimumInitialStock;
+    public int Stock;
 }

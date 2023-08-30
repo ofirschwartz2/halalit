@@ -2,7 +2,7 @@ using Assets.Enums;
 using Assets.Utils;
 using UnityEngine;
 
-public class LaserBeam : MonoBehaviour
+public class LaserBeamShot : MonoBehaviour
 {
     [SerializeField]
     private bool _useConfigFile;
