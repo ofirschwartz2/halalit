@@ -1,5 +1,6 @@
 using Assets.Enums;
 using Assets.Utils;
+using System.Xml.Xsl;
 using UnityEngine;
 
 // TODO (refactor): the stats (damage) of a shot (when it's collide with enemy) needs to be on the shot script
@@ -19,9 +20,8 @@ public class BoomerangShot : MonoBehaviour
     [SerializeField]
     private float _lengthOfShot;
 
-    private Vector3 _startPosition;
-    private Vector3 _firstSlurpPosition;
-    private float _slurpOutOfShot;
+    private Vector2 _startPosition;
+    private Vector3 _rightDirection;
     private float _slurpPassed;
 
     void Start()
@@ -31,11 +31,9 @@ public class BoomerangShot : MonoBehaviour
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
 
+        _rightDirection = transform.right;
         _startPosition = transform.position;
-        _slurpOutOfShot = 2f/3f;
-        _firstSlurpPosition = _startPosition + -transform.right * _widthOfShot / 2 + transform.up * _slurpOutOfShot;
         _slurpPassed = 0;
-
     }
 
     void FixedUpdate()
@@ -54,26 +52,31 @@ public class BoomerangShot : MonoBehaviour
             Destroy(gameObject);
         }
 
-        transform.position = GetPointOnBezierCurve(
-            new Vector2(0,0), 
-            new Vector2(-6, 8) / 4, 
-            new Vector2(-7, 21) / 4, 
-            new Vector2(-1, 27) / 4,
-            new Vector2(1, 27) / 4, 
-            new Vector2(7, 21) / 4,
-            new Vector2(6, 8) / 4,
-            new Vector2(0, 0), 
+        var a = GetPointOnBezierCurve(
+            _startPosition,
+            _startPosition + RotateVector2(new Vector2(-6 * 2f, 8 * 1.5f) / 4, _rightDirection),
+            _startPosition + RotateVector2(new Vector2(-7 * 2f, 21 * 1.5f) / 4, _rightDirection),
+            _startPosition + RotateVector2(new Vector2(-1 * 2f, 27 * 1.5f) / 4, _rightDirection),
+            _startPosition + RotateVector2(new Vector2(1 * 2f, 27 * 1.5f) / 4, _rightDirection),
+            _startPosition + RotateVector2(new Vector2(7 * 2f, 21 * 1.5f) / 4, _rightDirection),
+            _startPosition + RotateVector2(new Vector2(6 * 2f, 8 * 1.5f) / 4, _rightDirection),
+            GameObject.FindGameObjectWithTag("Halalit").transform.position, 
             _slurpPassed);
-        
-        /*
-        if (!Returning()) 
-        {
-            
-        }
-        else
-        {
-        }
-        */
+
+        transform.position = a;
+
+    }
+
+    public Vector2 RotateVector2(Vector2 v, Vector2 rotation)
+    {
+        // Calculate the angle of rotation in radians
+        float angle = Mathf.Atan2(rotation.y, rotation.x);
+
+        // Calculate the new Vector2 using trigonometry
+        float newX = v.x * Mathf.Cos(angle) - v.y * Mathf.Sin(angle);
+        float newY = v.x * Mathf.Sin(angle) + v.y * Mathf.Cos(angle);
+
+        return new Vector2(newX, newY);
     }
 
     public static Vector2 GetPointOnBezierCurve(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4, Vector2 p5, Vector2 p6, Vector2 p7, Vector2 p8, float progress)
@@ -101,32 +104,6 @@ public class BoomerangShot : MonoBehaviour
         Vector2 finalPoint2 = Vector2.Lerp(r3, r4, progress);
 
         return Vector2.Lerp(finalPoint, finalPoint2, progress);
-    }
-
-    public Vector2 GetPointOnBezierCurve2(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4, Vector2 p5, Vector2 p6, Vector2 p7, Vector2 p8, float progress)
-    {
-        // Ensure progress is within the [0, 1] range
-        progress = Mathf.Clamp01(progress);
-
-        // Calculate blending functions
-        float u = 1 - progress;
-        float tt = progress * progress;
-        float uu = u * u;
-        float uuu = uu * u;
-        float ttt = tt * progress;
-
-        // Calculate the point on the curve using the interpolation formula
-        Vector2 point = 
-            uuu * p1 + 
-            3 * uu * progress * p2 + 
-            3 * u * tt * p3 + 
-            ttt * p4 + 
-            3 * uu * progress * p5 + 
-            3 * u * tt * p6 + 
-            ttt * p7 + 
-            progress * progress * progress * p8;
-
-        return point;
     }
 
     private void TryDie()

@@ -27,6 +27,7 @@ TagManager:
   - AimShot
   - Undefined
   - Asteroid
+  - Weapon
   layers:
   - Default
   - TransparentFX
