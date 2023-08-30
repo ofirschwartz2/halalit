@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4043514594342984742}
   - component: {fileID: 4043514594342984743}
   - component: {fileID: 4043514594342984745}
-  - component: {fileID: 4043514594342984744}
   - component: {fileID: 4210393928248232888}
+  - component: {fileID: 7092197243012118284}
   m_Layer: 0
   m_Name: BoomerangShot
   m_TagString: Shot
@@ -114,8 +114,34 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!58 &4043514594342984744
-CircleCollider2D:
+--- !u!114 &4210393928248232888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4043514594342984741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a376fd8f53794849b036b7cd00950c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useConfigFile: 0
+  _rigidBody: {fileID: 4043514594342984745}
+  _speed: 1
+  _rotationSpeed: 8
+  _widthOfShot: 2
+  _lengthOfShot: 2
+  _timeOfShot: 2
+  bezierCurve6InnerPoints:
+  - {x: -3, y: 3}
+  - {x: -3.5, y: 7.875}
+  - {x: -0.5, y: 10.125}
+  - {x: 0.5, y: 10.125}
+  - {x: 3.5, y: 7.875}
+  - {x: 3, y: 3}
+--- !u!60 &7092197243012118284
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -147,23 +173,18 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 10
---- !u!114 &4210393928248232888
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4043514594342984741}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a376fd8f53794849b036b7cd00950c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _useConfigFile: 0
-  _rigidBody: {fileID: 4043514594342984745}
-  _speed: 1
-  _rotationSpeed: 8
-  _widthOfShot: 2
-  _lengthOfShot: 2
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.28866667}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 6.25, y: 1.79}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0, y: 0.5773587}
+      - {x: -0.5, y: -0.28866667}
+      - {x: 0.5, y: -0.28866667}
+  m_UseDelaunayMesh: 0

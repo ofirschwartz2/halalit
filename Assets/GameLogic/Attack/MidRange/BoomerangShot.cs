@@ -7,121 +7,74 @@ using UnityEngine;
 // TODO (refactor): move all shots out of the Gun. Enemies also shoot now.
 public class BoomerangShot : MonoBehaviour 
 {
-    [SerializeField]
-    private bool _useConfigFile;
-    [SerializeField]
-    private Rigidbody2D _rigidBody;
-    [SerializeField]
-    private float _speed; 
+
     [SerializeField]
     private float _rotationSpeed;
     [SerializeField]
-    private float _widthOfShot;
+    private float _timeOfShot;
     [SerializeField]
-    private float _lengthOfShot;
+    Vector2[] bezierCurve6InnerPoints;
 
-    private Vector2 _startPosition;
-    private Vector3 _rightDirection;
-    private float _slurpPassed;
+    private Vector2 _startPosition, _rightDirection;
+    private float _shootingPercentPassed, // Between 0 to 1
+        _creationTime, halalitGraceTime = 0.1f;
+    private GameObject _halalit;
 
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
 
         _rightDirection = transform.right;
         _startPosition = transform.position;
-        _slurpPassed = 0;
+        _halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
+        _creationTime = Time.time;
     }
 
     void FixedUpdate()
     {
+        _shootingPercentPassed += Time.deltaTime / _timeOfShot;
         Shooting();
-        TryDie();
     }
 
     private void Shooting()
     {
         transform.Rotate(0, 0, _rotationSpeed);
 
-        _slurpPassed += Time.deltaTime / 2;
-        if (_slurpPassed > 1) 
-        {
-            Destroy(gameObject);
-        }
-
-        var a = GetPointOnBezierCurve(
+        transform.position = Utils.GetPointOnBezierCurveOf8(
             _startPosition,
-            _startPosition + RotateVector2(new Vector2(-6 * 2f, 8 * 1.5f) / 4, _rightDirection),
-            _startPosition + RotateVector2(new Vector2(-7 * 2f, 21 * 1.5f) / 4, _rightDirection),
-            _startPosition + RotateVector2(new Vector2(-1 * 2f, 27 * 1.5f) / 4, _rightDirection),
-            _startPosition + RotateVector2(new Vector2(1 * 2f, 27 * 1.5f) / 4, _rightDirection),
-            _startPosition + RotateVector2(new Vector2(7 * 2f, 21 * 1.5f) / 4, _rightDirection),
-            _startPosition + RotateVector2(new Vector2(6 * 2f, 8 * 1.5f) / 4, _rightDirection),
-            GameObject.FindGameObjectWithTag("Halalit").transform.position, 
-            _slurpPassed);
-
-        transform.position = a;
-
+            _startPosition + Utils.RotateVector2WithVector2(bezierCurve6InnerPoints[0], _rightDirection),
+            _startPosition + Utils.RotateVector2WithVector2(bezierCurve6InnerPoints[1], _rightDirection),
+            _startPosition + Utils.RotateVector2WithVector2(bezierCurve6InnerPoints[2], _rightDirection),
+            _startPosition + Utils.RotateVector2WithVector2(bezierCurve6InnerPoints[3], _rightDirection),
+            _startPosition + Utils.RotateVector2WithVector2(bezierCurve6InnerPoints[4], _rightDirection),
+            _startPosition + Utils.RotateVector2WithVector2(bezierCurve6InnerPoints[5], _rightDirection),
+            _halalit.transform.position, 
+            _shootingPercentPassed);
     }
 
-    public Vector2 RotateVector2(Vector2 v, Vector2 rotation)
-    {
-        // Calculate the angle of rotation in radians
-        float angle = Mathf.Atan2(rotation.y, rotation.x);
-
-        // Calculate the new Vector2 using trigonometry
-        float newX = v.x * Mathf.Cos(angle) - v.y * Mathf.Sin(angle);
-        float newY = v.x * Mathf.Sin(angle) + v.y * Mathf.Cos(angle);
-
-        return new Vector2(newX, newY);
-    }
-
-    public static Vector2 GetPointOnBezierCurve(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4, Vector2 p5, Vector2 p6, Vector2 p7, Vector2 p8, float progress)
-    {
-        // Use De Casteljau's algorithm to calculate a point on the Bezier curve
-
-        // First, calculate the points on the first set of four cubic Bezier curves
-        Vector2 q1 = Vector2.Lerp(p1, p2, progress);
-        Vector2 q2 = Vector2.Lerp(p2, p3, progress);
-        Vector2 q3 = Vector2.Lerp(p3, p4, progress);
-
-        Vector2 q4 = Vector2.Lerp(p5, p6, progress);
-        Vector2 q5 = Vector2.Lerp(p6, p7, progress);
-        Vector2 q6 = Vector2.Lerp(p7, p8, progress);
-
-        // Next, calculate the points on the second set of four cubic Bezier curves
-        Vector2 r1 = Vector2.Lerp(q1, q2, progress);
-        Vector2 r2 = Vector2.Lerp(q2, q3, progress);
-
-        Vector2 r3 = Vector2.Lerp(q4, q5, progress);
-        Vector2 r4 = Vector2.Lerp(q5, q6, progress);
-
-        // Finally, calculate the point on the final cubic Bezier curve
-        Vector2 finalPoint = Vector2.Lerp(r1, r2, progress);
-        Vector2 finalPoint2 = Vector2.Lerp(r3, r4, progress);
-
-        return Vector2.Lerp(finalPoint, finalPoint2, progress);
-    }
-
-    private void TryDie()
-    {
-        if (ShouldDie())
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    private bool ShouldDie()
-    {
-        return false;
-    }
-
+    
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag(Tag.EXTERNAL_WORLD.GetDescription()))
+        if (other.gameObject.CompareTag(Tag.EXTERNAL_WORLD.GetDescription())) 
+        {
             Destroy(gameObject);
+        }   
     }
+    
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (RealHalalitHit(other)
+            ||
+            other.gameObject.CompareTag(Tag.ENEMY.GetDescription()))
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private bool RealHalalitHit(Collider2D other)
+    {
+        return 
+            other.gameObject.CompareTag(Tag.HALALIT.GetDescription()) && 
+            (Time.time > _creationTime + halalitGraceTime);
+    }
+    
 }
