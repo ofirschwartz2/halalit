@@ -54,15 +54,15 @@ public class AsteroidDestructor : MonoBehaviour
         if (other.gameObject.CompareTag(Tag.SHOT.GetDescription()))
         {
             OnAsteroidDestruction();
-            Destroy(gameObject);
             Destroy(other.gameObject);
+            Destroy(gameObject);
         }
     }
 
     private void OnAsteroidDestruction()
     {
-        InvokeAsteroidDestructionEvent();
         InvokeItemDropEvent();
+        InvokeAsteroidDestructionEvent();
     }
 
     private void InvokeAsteroidDestructionEvent()
@@ -73,9 +73,9 @@ public class AsteroidDestructor : MonoBehaviour
 
     private void InvokeItemDropEvent()
     {
-        RangeAttribute itemDropLuck = new(0, 40); // TODO (dev): make the luck random and multiplie by asteroid scale
-        DropEventArguments dropEventArguments = new(DropType.ITEM_DROP, transform.position, Vector2.zero, itemDropLuck); 
-        DropEvent.Invoke(EventName.ITEM_DROP, this, dropEventArguments);
+        Vector2 dropForce = Random.onUnitSphere * transform.localScale.x;
+        DropEventArguments itemDropEventArguments = new(Dropper.ASTEROID, transform.position, dropForce);
+        DropEvent.Invoke(EventName.NEW_ITEM_DROP, this, itemDropEventArguments);
     }
 }
 

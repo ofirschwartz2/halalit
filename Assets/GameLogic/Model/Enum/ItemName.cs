@@ -15,8 +15,24 @@ namespace Assets.Enums
         KNOCKBACK_SHOT = AttackName.KNOCKBACK_SHOT,
 
         // Upgrades
-        [Description("Fire rate")]
-        FIRE_RATE,
+        [Description("Halalit max HP")]
+        HALALIT_VITALITY,
+        [Description("Halalit defence")]
+        HALALIT_IMMUNITY,
+        [Description("Halalit being affected by knockbacks")]
+        HALALIT_VIGOR,
+        [Description("Claw rope length")]
+        CLAW_RANGE,
+        [Description("Claw speed")]
+        CLAW_AGILITY,
+        [Description("Claw not stamble by collisions")]
+        CLAW_STABILITY,
+        [Description("Weapon fire rate")]
+        WEAPON_STAMINA,
+        [Description("Weapon shakeness")]
+        WEAPON_DEXTERITY,
+        [Description("Weapon movement drag")]
+        WEAPON_STRENGH,
 
         // Utilities
         [Description("Nitro fuel")]
