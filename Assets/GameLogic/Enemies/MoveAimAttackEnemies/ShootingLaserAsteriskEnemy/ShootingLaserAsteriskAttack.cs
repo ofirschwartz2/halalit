@@ -1,13 +1,14 @@
 using Assets.Utils;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShootingLazerAsteriskAttack : MoveAimAttackAttack
+public class ShootingLaserAsteriskAttack : MoveAimAttackAttack
 {
     [SerializeField]
     private bool _useConfigFile;
     [SerializeField]
-    private ShootingLazerAsteriskAim _shootingLazerAsteriskAim;
+    private ShootingLaserAsteriskAim _shootingLazerAsteriskAim;
     [SerializeField]
     private float _endShootingBeforeFinishAttack;
     [SerializeField]
@@ -58,6 +59,7 @@ public class ShootingLazerAsteriskAttack : MoveAimAttackAttack
     {
         var shot = Instantiate(ShotPrefab, startPosition, Utils.GetRorationOutwards(transform.position, startPosition));
         shot.transform.SetParent(gameObject.transform);
+        shot.layer = LayerMask.NameToLayer("EnemyShots");
         _shots.Add(shot);
     }
 

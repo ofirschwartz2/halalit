@@ -36,6 +36,7 @@ public class ShootingLazerRangeAim : MoveAimAttackAim
         Quaternion fromRotation = Utils.GetRotation(transform.rotation, -_shootingRange);
         _aimingShotFrom = Instantiate(AimShotPrefab, shootingStartPosition, fromRotation);
         _aimingShotFrom.transform.SetParent(gameObject.transform);
+        _aimingShotFrom.layer = LayerMask.NameToLayer("EnemyShots");
     }
 
     private void ShootAimingShotTo(Vector3 shootingStartPosition)
@@ -43,6 +44,7 @@ public class ShootingLazerRangeAim : MoveAimAttackAim
         Quaternion toRotation = Utils.GetRotation(transform.rotation, _shootingRange);
         _aimingShotTo = Instantiate(AimShotPrefab, shootingStartPosition, toRotation);
         _aimingShotTo.transform.SetParent(gameObject.transform);
+        _aimingShotTo.layer = LayerMask.NameToLayer("EnemyShots");
     }
 
     private Vector2 GetShootingStartPosition()

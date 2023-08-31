@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4043514594342984745}
   - component: {fileID: 4210393928248232888}
   - component: {fileID: 7092197243012118284}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BoomerangShot
   m_TagString: Shot
   m_Icon: {fileID: 0}
@@ -126,12 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a376fd8f53794849b036b7cd00950c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useConfigFile: 0
-  _rigidBody: {fileID: 4043514594342984745}
-  _speed: 1
   _rotationSpeed: 8
-  _widthOfShot: 2
-  _lengthOfShot: 2
   _timeOfShot: 2
   bezierCurve6InnerPoints:
   - {x: -3, y: 3}

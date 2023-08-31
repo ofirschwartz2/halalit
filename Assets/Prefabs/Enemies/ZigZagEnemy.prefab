@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1185372985846441720}
   - component: {fileID: 1499001080999598308}
   - component: {fileID: 8377359435891305651}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ZigZagEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}

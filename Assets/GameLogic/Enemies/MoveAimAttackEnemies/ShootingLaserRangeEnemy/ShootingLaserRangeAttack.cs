@@ -1,7 +1,7 @@
 using Assets.Utils;
 using UnityEngine;
 
-public class ShootingLazerRangeAttack : MoveAimAttackAttack
+public class ShootingLaserRangeAttack : MoveAimAttackAttack
 {
     [SerializeField]
     private bool _useConfigFile;
@@ -14,7 +14,6 @@ public class ShootingLazerRangeAttack : MoveAimAttackAttack
 
     private bool _shotInitiated;
     private GameObject _shot;
-    private Quaternion shootUpRotationMultiplier = Quaternion.Euler(0f, 0f, 90f); // TODO: fix this BUG
     
     void Start()
     {
@@ -72,7 +71,6 @@ public class ShootingLazerRangeAttack : MoveAimAttackAttack
 
     private void DestroyShot()
     {
-        Debug.Log("DestroyShot");
         _shootingLazerRangeAim.DestroyAimingRays();
         Destroy(_shot);
         _shotInitiated = false;

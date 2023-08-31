@@ -85,28 +85,4 @@ public class MoveAimAttackStateMachine : MonoBehaviour
             _moveAimAttackAttack.AttackingState(transform);
         }
     }
-
-    private void Die()
-    {
-        Destroy(gameObject);
-    }
-
-    #region Triggers
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        //TODO: refactor this. should this be in the EventHandler?
-        if (EnemyUtils.ShouldKillMe(other))
-        {
-            Die();
-        }
-        else if (EnemyUtils.ShouldKnockMeBack(other))
-        {
-            EnemyUtils.KnockMeBack(_rigidBody, other);
-        }
-        else if (Utils.DidHitEdge(other.gameObject.tag))
-        {
-            _moveAimAttackMove.SetNewDirection(other.gameObject.tag);
-        }
-    }
-    #endregion
 }

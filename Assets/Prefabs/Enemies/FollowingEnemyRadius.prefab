@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7618459600572023046}
   - component: {fileID: 6952156465895575477}
   - component: {fileID: 229026362142940734}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FollowingEnemyRadius
   m_TagString: Enemy
   m_Icon: {fileID: 0}

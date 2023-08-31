@@ -2,7 +2,7 @@ using Assets.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShootingLazerAsteriskAim : MoveAimAttackAim
+public class ShootingLaserAsteriskAim : MoveAimAttackAim
 {
     [SerializeField]
     private bool _useConfigFile;
@@ -43,6 +43,7 @@ public class ShootingLazerAsteriskAim : MoveAimAttackAim
         var shootingRotation = Utils.GetRorationOutwards(transform.position, startPosition);
         var shot = Instantiate(AimShotPrefab, startPosition, shootingRotation);
         shot.transform.SetParent(gameObject.transform);
+        shot.layer = LayerMask.NameToLayer("EnemyShots");
         _aimingShots.Add(shot);
     }
 

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5898111106586121520}
   - component: {fileID: 6715530131001872679}
   - component: {fileID: 2551140764409215493}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: LaserBeamInner
   m_TagString: AimShot
   m_Icon: {fileID: 0}
@@ -156,7 +156,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5591094641515173097}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EnemiesAimingLaserBeam
   m_TagString: Shot
   m_Icon: {fileID: 0}

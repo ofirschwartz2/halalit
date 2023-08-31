@@ -16,8 +16,8 @@ GameObject:
   - component: {fileID: 3973686711570898292}
   - component: {fileID: 3160877956245687377}
   - component: {fileID: 4363433207488474617}
-  m_Layer: 0
-  m_Name: ShootingLazerRangeEnemy
+  m_Layer: 8
+  m_Name: ShootingLaserRangeEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

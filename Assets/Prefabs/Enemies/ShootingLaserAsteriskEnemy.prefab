@@ -16,8 +16,8 @@ GameObject:
   - component: {fileID: 2669928082631877482}
   - component: {fileID: 4590634385176654268}
   - component: {fileID: 5690852626836545396}
-  m_Layer: 0
-  m_Name: ShootingLazerAsteriskEnemy
+  m_Layer: 8
+  m_Name: ShootingLaserAsteriskEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
