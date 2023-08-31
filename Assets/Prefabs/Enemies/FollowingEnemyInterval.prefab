@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _useConfigFile: 0
-  _rigidBody: {fileID: 0}
+  _rigidBody: {fileID: 1185372985846441720}
   _waitAttackWait: {fileID: 2792570252680940585}
   _waitAttackAttack: {fileID: 6952156465895575477}
 --- !u!114 &2792570252680940585

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5439432440802590956}
   - component: {fileID: 1185372985846441720}
   - component: {fileID: 1499001080999598308}
-  - component: {fileID: 6614054940352808413}
+  - component: {fileID: 8377359435891305651}
   m_Layer: 0
   m_Name: ZigZagEnemy
   m_TagString: Enemy
@@ -149,7 +149,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
---- !u!114 &6614054940352808413
+--- !u!114 &8377359435891305651
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,11 +158,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8916735576456593937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6aadda58be692a04d811b65165bf3f27, type: 3}
+  m_Script: {fileID: 11500000, guid: c4445157e4a8a1c45812d8b7811123b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useConfigFile: 1
-  _movementAmplitude: 0
-  _changeZigZagDirectionInterval: 0
-  _changeFromDirectionAngle: 0
+  _useConfigFile: 0
+  _movementAmplitude: 1
+  _changeZigZagDirectionInterval: 3
+  _changeFromDirectionAngle: 60
   _rigidBody: {fileID: 1185372985846441720}

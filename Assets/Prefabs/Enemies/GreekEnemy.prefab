@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5439432440802590956}
   - component: {fileID: 1185372985846441720}
   - component: {fileID: 1499001080999598308}
-  - component: {fileID: -3306676400997538811}
+  - component: {fileID: 4687779124771287829}
   m_Layer: 0
   m_Name: GreekEnemy
   m_TagString: Enemy
@@ -149,7 +149,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
---- !u!114 &-3306676400997538811
+--- !u!114 &4687779124771287829
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,10 +158,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8916735576456593937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ffa457d063abf341bf416650091ecfc, type: 3}
+  m_Script: {fileID: 11500000, guid: 2e36033f40a8e454fb79f827d938bdd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useConfigFile: 1
-  _movementAmplitude: 0
-  _changeGreekDirectionInterval: 0
+  _useConfigFile: 0
+  _movementAmplitude: 1
+  _changeGreekDirectionInterval: 3
   _rigidBody: {fileID: 1185372985846441720}

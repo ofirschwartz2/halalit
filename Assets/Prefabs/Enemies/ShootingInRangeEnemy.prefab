@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 5439432440802590956}
   - component: {fileID: 1185372985846441720}
   - component: {fileID: 1499001080999598308}
-  - component: {fileID: 2095219693593235152}
-  - component: {fileID: 1772665250451816090}
+  - component: {fileID: 1400525997864171093}
   - component: {fileID: 7468409740689513257}
   - component: {fileID: 4214067448786763893}
+  - component: {fileID: 7030526004192336666}
   m_Layer: 0
   m_Name: ShootingInRangeEnemy
   m_TagString: Enemy
@@ -152,7 +152,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
---- !u!114 &2095219693593235152
+--- !u!114 &1400525997864171093
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -161,32 +161,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8916735576456593937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 442e200ed6aca4e41aa20361b28d9f1a, type: 3}
+  m_Script: {fileID: 11500000, guid: fbf37c3adb2fe664e87d3f1b5d98faf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _useConfigFile: 0
   _moveAimAttackEnemyState: 0
-  _moveAimAttackMove: {fileID: 1772665250451816090}
+  _moveAimAttackMove: {fileID: 7030526004192336666}
   _moveAimAttackAim: {fileID: 4214067448786763893}
   _moveAimAttackAttack: {fileID: 7468409740689513257}
-  _rigidBody: {fileID: 1185372985846441720}
---- !u!114 &1772665250451816090
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8916735576456593937}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02c67afd1ec28b345b25fa222225de7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _useConfigFile: 0
-  _movementAmplitude: 1
-  _speedLimit: 1
-  _movingInterval: 1
-  _rotationSpeed: 1
   _rigidBody: {fileID: 1185372985846441720}
 --- !u!114 &7468409740689513257
 MonoBehaviour:
@@ -219,3 +201,21 @@ MonoBehaviour:
   _aimingInterval: 1
   _useConfigFile: 0
   _shootingRange: 30
+--- !u!114 &7030526004192336666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8916735576456593937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09f8d2363bd26ab4c8fc9e7e1b8fcffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useConfigFile: 0
+  _movementAmplitude: 1
+  _speedLimit: 1
+  _movingInterval: 3
+  _rotationSpeed: 1
+  _rigidBody: {fileID: 1185372985846441720}
