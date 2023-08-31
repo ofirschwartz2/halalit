@@ -544,7 +544,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8916735576456593937, guid: 71b1060aee20e1645b7b9442c8ba3673, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1113,7 +1113,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8916735576456593937, guid: 2c5e781cbf51fd447b2e5b556cefc9d9, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1788,6 +1788,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GreekEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 8916735576456593937, guid: b1e50489bd6aa014c9faaaeabb0cee8f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1942,6 +1946,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LameEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 8916735576456593937, guid: 68bb873866646fc4cad1d8cd9c83aea1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2007,6 +2015,10 @@ PrefabInstance:
     - target: {fileID: 8916735576456593937, guid: 579cbc15fc18a03479690f498b158cca, type: 3}
       propertyPath: m_Name
       value: SinusEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8916735576456593937, guid: 579cbc15fc18a03479690f498b158cca, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2442,6 +2454,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FollowingEnemyInterval
       objectReference: {fileID: 0}
+    - target: {fileID: 8916735576456593937, guid: 90d10dbf8c493b643b63c46fa45079d4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2746,6 +2762,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ZigZagEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 8916735576456593937, guid: 984c972b2cb56ff43aa9d4bbfa3c7cea, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2852,6 +2872,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShootingInRangeEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 8916735576456593937, guid: 7637ffb4ec979d54da17db01a4506ab6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2917,6 +2941,10 @@ PrefabInstance:
     - target: {fileID: 8916735576456593937, guid: e6735c59b29916748946712ec926a71a, type: 3}
       propertyPath: m_Name
       value: FollowingEnemyRadius
+      objectReference: {fileID: 0}
+    - target: {fileID: 8916735576456593937, guid: e6735c59b29916748946712ec926a71a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

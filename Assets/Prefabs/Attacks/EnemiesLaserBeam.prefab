@@ -99,9 +99,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _useConfigFile: 0
-  _lifetime: 0.1
+  _lifetime: 10
   _beamingSpeed: 1
-  _maxbeamSize: 10
+  _maxbeamSize: 3
 --- !u!61 &2551140764409215493
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -157,7 +157,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5591094641515173097}
   m_Layer: 0
-  m_Name: LaserBeam
+  m_Name: EnemiesLaserBeam
   m_TagString: Shot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -10,6 +10,8 @@ public class LaserBeamShot : MonoBehaviour
     private float _lifetime;
     [SerializeField]
     private float _beamingSpeed;
+    [SerializeField]
+    private float _maxbeamSize;
 
     private float _endOfLifeTime;
 
@@ -31,12 +33,14 @@ public class LaserBeamShot : MonoBehaviour
 
     private void BeamLaser()
     {
-        float newYScale = transform.localScale.y + _beamingSpeed;
-        float newYPosition = transform.localPosition.y + _beamingSpeed / 2;
+        if (transform.localScale.y < _maxbeamSize) 
+        {
+            float newYScale = transform.localScale.y + _beamingSpeed;
+            float newYPosition = transform.localPosition.y + _beamingSpeed / 2;
 
-        transform.localScale = new Vector2(transform.localScale.x, newYScale);
-        transform.localPosition = new Vector2(transform.localPosition.x, newYPosition);
-
+            transform.localScale = new Vector2(transform.localScale.x, newYScale);
+            transform.localPosition = new Vector2(transform.localPosition.x, newYPosition);
+        }
     }
 
     private void TryDie()
@@ -55,7 +59,9 @@ public class LaserBeamShot : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
+        /*
         if (other.gameObject.CompareTag(Tag.EXTERNAL_WORLD.GetDescription()))
             Destroy(gameObject);
+        */
     }
 }

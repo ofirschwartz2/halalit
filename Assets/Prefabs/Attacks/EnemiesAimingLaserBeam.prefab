@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2551140764409215493}
   m_Layer: 0
   m_Name: LaserBeamInner
-  m_TagString: Shot
+  m_TagString: AimShot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 45ed724de6f22424e9847bb3dddcd9ef, type: 3}
-  m_Color: {r: 0.16470589, g: 0.5882353, b: 0.43529415, a: 1}
+  m_Color: {r: 0.33416393, g: 0.8301887, b: 0.6510686, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -99,9 +99,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _useConfigFile: 0
-  _lifetime: 0.1
+  _lifetime: 10
   _beamingSpeed: 1
-  _maxbeamSize: 10
+  _maxbeamSize: 3
 --- !u!61 &2551140764409215493
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -157,7 +157,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5591094641515173097}
   m_Layer: 0
-  m_Name: LaserBeam
+  m_Name: EnemiesAimingLaserBeam
   m_TagString: Shot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

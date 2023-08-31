@@ -185,7 +185,7 @@ MonoBehaviour:
   _aimingInterval: 1
   _useConfigFile: 0
   _numberOfShots: 8
-  AimShotPrefab: {fileID: 6558306382352585984, guid: 93508bcb9fc5ea44f9ef8b4c56100d16, type: 3}
+  AimShotPrefab: {fileID: 6558306382352585984, guid: aa2b5bd32adb2034ca82d6b7b65937f8, type: 3}
 --- !u!114 &4590634385176654268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,7 +203,7 @@ MonoBehaviour:
   _shootingLazerAsteriskAim: {fileID: 2669928082631877482}
   _endShootingBeforeFinishAttack: 0.1
   _numberOfShots: 8
-  ShotPrefab: {fileID: 6558306382352585984, guid: 1b692fbae1e17ad42a7c60c2c5644a37, type: 3}
+  ShotPrefab: {fileID: 6558306382352585984, guid: 079317394ac6c024e956538feb905ec2, type: 3}
 --- !u!114 &5690852626836545396
 MonoBehaviour:
   m_ObjectHideFlags: 0
