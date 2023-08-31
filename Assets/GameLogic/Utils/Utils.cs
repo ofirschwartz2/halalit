@@ -219,8 +219,8 @@ namespace Assets.Utils
         public static Quaternion GetRorationOutwards(Vector2 from, Vector2 to)
         {
             Vector2 direction = to - from;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            return Quaternion.Euler(0f, 0f, angle);
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
+            return GetRotation(Quaternion.identity, angle);
         }
         #endregion
 

@@ -1,4 +1,3 @@
-using Assets.Enums;
 using Assets.Utils;
 using UnityEngine;
 
@@ -55,13 +54,5 @@ public class LaserBeamShot : MonoBehaviour
     private bool ShouldDie()
     {
         return Time.time >= _endOfLifeTime;
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        /*
-        if (other.gameObject.CompareTag(Tag.EXTERNAL_WORLD.GetDescription()))
-            Destroy(gameObject);
-        */
     }
 }

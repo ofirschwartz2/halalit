@@ -35,15 +35,13 @@ public class ShootingLazerAsteriskAim : MoveAimAttackAim
         foreach (var aimingStartPosition in aimingStartPositions)
         {
             ShootOneRay(aimingStartPosition);
-            var shot = Instantiate(shotPrefab, aimingStartPosition, Utils.GetRorationOutwards(transform.position, aimingStartPosition));
-            shot.transform.SetParent(gameObject.transform);
-            shotsList.Add(shot);
         }
     }
 
     private void ShootOneRay(Vector2 startPosition)
     {
-        var shot = Instantiate(AimShotPrefab, startPosition, Utils.GetRorationOutwards(transform.position, startPosition));
+        var shootingRotation = Utils.GetRorationOutwards(transform.position, startPosition);
+        var shot = Instantiate(AimShotPrefab, startPosition, shootingRotation);
         shot.transform.SetParent(gameObject.transform);
         _aimingShots.Add(shot);
     }

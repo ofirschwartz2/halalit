@@ -48,7 +48,7 @@ static class EnemyUtils
 
     public static List<Vector2> GetEvenPositionsAroundCircle(Transform transform, int numberOfPositions, float radius)
     {
-        radius = 0.9f; // TODO: BUG - why is this 0.9 and not 0.5?
+        //radius = 0.9f; // TODO: BUG - why is this 0.9 and not 0.5?
         var angle = 360 / numberOfPositions;
         var shootingStartPositions = new List<Vector2>();
         for (var i = 0; i < numberOfPositions; i++)

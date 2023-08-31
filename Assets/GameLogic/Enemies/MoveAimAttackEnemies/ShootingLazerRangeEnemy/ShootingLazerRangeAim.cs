@@ -11,7 +11,6 @@ public class ShootingLazerRangeAim : MoveAimAttackAim
     public GameObject AimShotPrefab;
 
     private GameObject _aimingShotFrom, _aimingShotTo;
-    private Quaternion shootUpRotationMultiplier = Quaternion.Euler(0f, 0f, 90f); // TODO: fix this BUG
     void Start()
     {
         if (_useConfigFile)
@@ -35,14 +34,14 @@ public class ShootingLazerRangeAim : MoveAimAttackAim
     private void ShootAimingShotFrom(Vector3 shootingStartPosition)
     {
         Quaternion fromRotation = Utils.GetRotation(transform.rotation, -_shootingRange);
-        _aimingShotFrom = Instantiate(AimShotPrefab, shootingStartPosition, fromRotation * shootUpRotationMultiplier); // shootUpRotationMultiplier BUG
+        _aimingShotFrom = Instantiate(AimShotPrefab, shootingStartPosition, fromRotation);
         _aimingShotFrom.transform.SetParent(gameObject.transform);
     }
 
     private void ShootAimingShotTo(Vector3 shootingStartPosition)
     {
         Quaternion toRotation = Utils.GetRotation(transform.rotation, _shootingRange);
-        _aimingShotTo = Instantiate(AimShotPrefab, shootingStartPosition, toRotation * shootUpRotationMultiplier); // shootUpRotationMultiplier BUG
+        _aimingShotTo = Instantiate(AimShotPrefab, shootingStartPosition, toRotation);
         _aimingShotTo.transform.SetParent(gameObject.transform);
     }
 
