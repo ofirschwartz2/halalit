@@ -10,7 +10,9 @@ namespace Assets.Enums
         ENEMY,
         [Description("Shot")] 
         SHOT,
-        [Description("Item")] 
+        [Description("KnockbackShot")]
+        KNOCKBACK_SHOT,
+        [Description("Item")]
         ITEM,
         [Description("PickupClaw")] 
         PICKUP_CLAW,

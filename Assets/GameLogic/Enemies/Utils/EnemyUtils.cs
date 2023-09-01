@@ -1,3 +1,4 @@
+using Assets.Enums;
 using Assets.Utils;
 using System;
 using System.Collections.Generic;
@@ -61,18 +62,24 @@ static class EnemyUtils
     #region Predicates
     public static bool ShouldKillMe(Collider2D other)
     {
-        return other.gameObject.CompareTag("Shot");
+        return other.gameObject.CompareTag(Tag.SHOT.GetDescription());
     }
 
     public static bool ShouldKnockEnemyBack(string myLayer, Collider2D other)
     {
-        return 
-            myLayer == "Enemies" &&
-            (other.gameObject.CompareTag("Halalit") || 
-            other.gameObject.CompareTag("Asteroid") || 
-            other.gameObject.CompareTag("Enemy") || 
-            other.gameObject.CompareTag("KnockbackShot"));
+        return
+            myLayer == Layer.Enemies.GetDescription()
+            &&
+            ColliderShouldKnockback(other);
     }
 
+    public static bool ColliderShouldKnockback(Collider2D other)
+    {
+        return
+            other.gameObject.CompareTag(Tag.HALALIT.GetDescription()) ||
+            other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()) ||
+            other.gameObject.CompareTag(Tag.ENEMY.GetDescription()) ||
+            other.gameObject.CompareTag(Tag.KNOCKBACK_SHOT.GetDescription());
+    }
     #endregion
 }
