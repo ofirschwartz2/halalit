@@ -6,7 +6,7 @@ public class ShootingLaserRangeAttack : MoveAimAttackAttack
     [SerializeField]
     private bool _useConfigFile;
     [SerializeField]
-    private float _shotRotationSpeed;
+    private float _shotRotationSpeed; // If too small - BUG.
     [SerializeField]
     public GameObject ShotPrefab;
     [SerializeField]
