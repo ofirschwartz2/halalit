@@ -27,7 +27,6 @@ public class MirrorBallShot : MonoBehaviour
     {
         var knockBackDirection = Utils.GetDirectionFromCollision(_rigidBody.transform.position, other.transform.position);
         _rigidBody.velocity = knockBackDirection * _speed;
-        var a = 0;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -42,7 +41,7 @@ public class MirrorBallShot : MonoBehaviour
     {
         if (other.gameObject.CompareTag(Tag.EXTERNAL_WORLD.GetDescription())) 
         {
-            //Destroy(gameObject);
+            Destroy(gameObject);
         }
     }
 }

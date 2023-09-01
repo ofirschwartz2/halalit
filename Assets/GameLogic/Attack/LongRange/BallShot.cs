@@ -25,7 +25,7 @@ public class BallShot : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag(Tag.ENEMY.GetDescription()))
+        if (other.gameObject.CompareTag(Tag.ENEMY.GetDescription()) || other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()))
             Destroy(gameObject);
     }
 
