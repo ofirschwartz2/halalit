@@ -201,12 +201,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 097d067270831d74bae023393c42d556, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useConfigFile: 1
+  _useConfigFile: 0
   _rigidBody: {fileID: 6741412782414407018}
-  _velocityMagnitude: 0
-  _maxRotation: 0
-  _collisionSpeedMultiplier: 0
-  _transparencyPeriod: 0
+  _velocityMagnitude: 2
+  _maxRotation: 50
+  _collisionSpeedMultiplier: 1
+  _transparencyPeriod: 3
 --- !u!114 &5132515222275469269
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1937,13 +1937,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1185372985846441720, guid: 68bb873866646fc4cad1d8cd9c83aea1, type: 3}
+      propertyPath: m_Simulated
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1499001080999598308, guid: 68bb873866646fc4cad1d8cd9c83aea1, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1499001080999598308, guid: 68bb873866646fc4cad1d8cd9c83aea1, type: 3}
+      propertyPath: m_UsedByEffector
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8916735576456593937, guid: 68bb873866646fc4cad1d8cd9c83aea1, type: 3}
       propertyPath: m_Name
       value: LameEnemy
       objectReference: {fileID: 0}
     - target: {fileID: 8916735576456593937, guid: 68bb873866646fc4cad1d8cd9c83aea1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2007,13 +2019,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1499001080999598308, guid: 579cbc15fc18a03479690f498b158cca, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1499001080999598308, guid: 579cbc15fc18a03479690f498b158cca, type: 3}
+      propertyPath: m_UsedByEffector
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8916735576456593937, guid: 579cbc15fc18a03479690f498b158cca, type: 3}
       propertyPath: m_Name
       value: SinusEnemy
       objectReference: {fileID: 0}
     - target: {fileID: 8916735576456593937, guid: 579cbc15fc18a03479690f498b158cca, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2767,13 +2787,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1499001080999598308, guid: 984c972b2cb56ff43aa9d4bbfa3c7cea, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1499001080999598308, guid: 984c972b2cb56ff43aa9d4bbfa3c7cea, type: 3}
+      propertyPath: m_UsedByEffector
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8916735576456593937, guid: 984c972b2cb56ff43aa9d4bbfa3c7cea, type: 3}
       propertyPath: m_Name
       value: ZigZagEnemy
       objectReference: {fileID: 0}
     - target: {fileID: 8916735576456593937, guid: 984c972b2cb56ff43aa9d4bbfa3c7cea, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2837,13 +2865,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1499001080999598308, guid: 7637ffb4ec979d54da17db01a4506ab6, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1499001080999598308, guid: 7637ffb4ec979d54da17db01a4506ab6, type: 3}
+      propertyPath: m_UsedByEffector
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8916735576456593937, guid: 7637ffb4ec979d54da17db01a4506ab6, type: 3}
       propertyPath: m_Name
       value: ShootingInRangeEnemy
       objectReference: {fileID: 0}
     - target: {fileID: 8916735576456593937, guid: 7637ffb4ec979d54da17db01a4506ab6, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3091,8 +3127,8 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
+  m_IsTrigger: 0
+  m_UsedByEffector: 1
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2

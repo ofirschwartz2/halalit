@@ -48,7 +48,6 @@ public class LameEnemy : MonoBehaviour
     #region Triggers
     void OnTriggerEnter2D(Collider2D other)
     {
-        Console.WriteLine("Background");
         //TODO: refactor this. should this be in the EventHandler?
         if (EnemyUtils.ShouldKillMe(other))
         {

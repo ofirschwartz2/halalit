@@ -66,9 +66,10 @@ static class EnemyUtils
 
     public static bool ShouldKnockEnemyBack(string myLayer, Collider2D other)
     {
-        return myLayer == "Enemies" &&
+        return 
+            myLayer == "Enemies" &&
             (other.gameObject.CompareTag("Halalit") || 
-            other.gameObject.CompareTag("Astroid") || 
+            other.gameObject.CompareTag("Asteroid") || 
             other.gameObject.CompareTag("Enemy") || 
             other.gameObject.CompareTag("KnockbackShot"));
     }
