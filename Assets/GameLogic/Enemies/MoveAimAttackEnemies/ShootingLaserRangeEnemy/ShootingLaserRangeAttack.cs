@@ -12,7 +12,7 @@ public class ShootingLaserRangeAttack : MoveAimAttackAttack
     [SerializeField]
     private ShootingLazerRangeAim _shootingLazerRangeAim;
 
-    private bool _shotInitiated;
+    private bool _shotInitiated, _shotDestroyed;
     private GameObject _shot;
     
     void Start()
@@ -22,11 +22,15 @@ public class ShootingLaserRangeAttack : MoveAimAttackAttack
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
         _shotInitiated = false;
+        _shotDestroyed = false;
     }
 
     public override void AttackingState(Transform transform)
     {
-        Shoot(transform);
+        if (!_shotDestroyed) 
+        {
+            Shoot(transform);
+        }
     }
 
     public override void Shoot(Transform transform)
@@ -45,7 +49,7 @@ public class ShootingLaserRangeAttack : MoveAimAttackAttack
 
     private void InitiateShot() 
     {
-        Vector3 shootingStartPosition = GetShootingStartPosition();
+        Vector3 shootingStartPosition = _shootingLazerRangeAim.GetShootingStartPosition();
         var shootRotation = _shootingLazerRangeAim.GetAimingShotFrom().transform.rotation;
         _shot = Instantiate(ShotPrefab, shootingStartPosition, shootRotation);
         _shot.transform.SetParent(gameObject.transform);
@@ -74,12 +78,6 @@ public class ShootingLaserRangeAttack : MoveAimAttackAttack
         _shootingLazerRangeAim.DestroyAimingRays();
         Destroy(_shot);
         _shotInitiated = false;
-    }
-
-    private Vector2 GetShootingStartPosition()
-    {
-        Vector2 halfExtents = GetComponent<CapsuleCollider2D>().bounds.extents;
-        Vector3 offset = Utils.GetRotationAsVector2(transform.rotation) * halfExtents.magnitude;
-        return transform.position + offset;
+        _shotDestroyed = true;
     }
 }
