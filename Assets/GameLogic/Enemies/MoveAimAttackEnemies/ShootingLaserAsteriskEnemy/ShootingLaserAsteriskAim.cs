@@ -31,7 +31,7 @@ public class ShootingLaserAsteriskAim : MoveAimAttackAim
 
     private void ShootRays(GameObject shotPrefab, List<GameObject> shotsList)
     {
-        var aimingStartPositions = EnemyUtils.GetEvenPositionsAroundCircle(transform, _numberOfShots, GetComponent<CircleCollider2D>().radius);
+        var aimingStartPositions = EnemyUtils.GetEvenPositionsAroundCircle(transform, _numberOfShots, GetComponent<CircleCollider2D>().radius * 1.1f);
         foreach (var aimingStartPosition in aimingStartPositions)
         {
             ShootOneRay(aimingStartPosition);
