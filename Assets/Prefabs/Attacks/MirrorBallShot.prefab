@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4043514594342984742}
   - component: {fileID: 4043514594342984743}
   - component: {fileID: 4043514594342984745}
-  - component: {fileID: 4043514594342984744}
   - component: {fileID: 731242986486901006}
+  - component: {fileID: 4423633703291208000}
   m_Layer: 7
   m_Name: MirrorBallShot
   m_TagString: Shot
@@ -114,7 +114,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!58 &4043514594342984744
+--- !u!114 &731242986486901006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4043514594342984741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88aaab766007ffc4c95f5e580200ed2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useConfigFile: 0
+  _rigidBody: {fileID: 4043514594342984745}
+  _speed: 5
+--- !u!58 &4423633703291208000
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,24 +158,9 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 10
---- !u!114 &731242986486901006
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4043514594342984741}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88aaab766007ffc4c95f5e580200ed2d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _useConfigFile: 0
-  _rigidBody: {fileID: 4043514594342984745}
-  _speed: 5
+  m_Radius: 0.5
