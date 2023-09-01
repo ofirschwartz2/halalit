@@ -21,6 +21,14 @@ namespace Assets.Enums
         [Description("InternalWorld")]
         INTERNAL_WORLD,
         [Description("ExternalWorld")]
-        EXTERNAL_WORLD
+        EXTERNAL_WORLD,
+        [Description("TopEdge")]
+        TOP_EDGE,
+        [Description("BottomEdge")]
+        BOTTOM_EDGE,
+        [Description("LeftEdge")]
+        LEFT_EDGE,
+        [Description("RightEdge")]
+        RIGHT_EDGE
     }
 }

@@ -54,7 +54,6 @@ public class AsteroidDestructor : MonoBehaviour
         if (other.gameObject.CompareTag(Tag.SHOT.GetDescription()))
         {
             OnAsteroidDestruction();
-            Destroy(other.gameObject);
             Destroy(gameObject);
         }
     }

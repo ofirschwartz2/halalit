@@ -15,6 +15,8 @@ namespace Assets.Enums
         KNOCKBACK_SHOT = AttackName.KNOCKBACK_SHOT,
         [Description("Boomerang item")]
         BOOMERANG_SHOT = AttackName.BOOMERANG_SHOT,
+        [Description("Mirror Ball shot item")]
+        MIRROR_BALL_SHOT = AttackName.MIRROR_BALL_SHOT,
 
         // Upgrades
         [Description("Halalit max HP")]

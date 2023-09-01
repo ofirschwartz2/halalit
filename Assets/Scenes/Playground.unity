@@ -1454,7 +1454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b124fbb6d5e0148884d8a70c8e4981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firstAttack: 3
+  _firstAttack: 4
 --- !u!1 &814139006
 GameObject:
   m_ObjectHideFlags: 0
@@ -1870,6 +1870,8 @@ MonoBehaviour:
     Value: {fileID: 4043514594342984741, guid: 40e6ef62799c1484bba66721899628fb, type: 3}
   - Key: 1
     Value: {fileID: 6558306382352585984, guid: 3cdaa99166165ef4490349aabd320112, type: 3}
+  - Key: 4
+    Value: {fileID: 4043514594342984741, guid: 219cb55fb1f526b45a3f31bdc098129a, type: 3}
 --- !u!4 &983959681
 Transform:
   m_ObjectHideFlags: 0
@@ -1955,7 +1957,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8916735576456593937, guid: 68bb873866646fc4cad1d8cd9c83aea1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2801,7 +2803,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8916735576456593937, guid: 984c972b2cb56ff43aa9d4bbfa3c7cea, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
