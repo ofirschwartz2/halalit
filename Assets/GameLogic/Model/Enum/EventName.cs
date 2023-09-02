@@ -16,5 +16,7 @@ namespace Assets.Enums
         NO_STOCK,
         [Description("New attack switch")]
         NEW_ATTACK_SWITCH,
+        [Description("Halalit death")]
+        HALALIT_DEATH,
     }
 }

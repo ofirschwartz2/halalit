@@ -223,7 +223,7 @@ namespace Assets.Utils
 
         public static Direction GetRandomDirection()
         {
-            return (Direction)UnityEngine.Random.Range(0, Enum.GetValues(typeof(Direction)).Length);
+            return (Direction)Random.Range(0, Enum.GetValues(typeof(Direction)).Length);
         }
         #endregion
 
