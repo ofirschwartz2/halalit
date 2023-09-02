@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1212833922289643395}
   - component: {fileID: 2792570252680940585}
   - component: {fileID: 6952156465895575477}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FollowingEnemyInterval
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _useConfigFile: 0
-  _rigidBody: {fileID: 0}
+  _rigidBody: {fileID: 1185372985846441720}
   _waitAttackWait: {fileID: 2792570252680940585}
   _waitAttackAttack: {fileID: 6952156465895575477}
 --- !u!114 &2792570252680940585

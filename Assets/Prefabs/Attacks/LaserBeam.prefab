@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 5898111106586121520}
   - component: {fileID: 6715530131001872679}
   - component: {fileID: 2551140764409215493}
-  m_Layer: 0
+  - component: {fileID: 1724383316285606743}
+  m_Layer: 7
   m_Name: LaserBeamInner
   m_TagString: Shot
   m_Icon: {fileID: 0}
@@ -101,6 +102,7 @@ MonoBehaviour:
   _useConfigFile: 0
   _lifetime: 0.1
   _beamingSpeed: 1
+  _maxbeamSize: 10
 --- !u!61 &2551140764409215493
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -146,6 +148,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!50 &1724383316285606743
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061615723611638748}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &6558306382352585984
 GameObject:
   m_ObjectHideFlags: 0
@@ -155,7 +184,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5591094641515173097}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LaserBeam
   m_TagString: Shot
   m_Icon: {fileID: 0}

@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 5439432440802590956}
   - component: {fileID: 1185372985846441720}
   - component: {fileID: 1499001080999598308}
-  - component: {fileID: 3159731203665802145}
-  m_Layer: 0
+  - component: {fileID: 3546455761117056851}
+  m_Layer: 8
   m_Name: SinusEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
---- !u!114 &3159731203665802145
+--- !u!114 &3546455761117056851
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,12 +158,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8916735576456593937}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7586b4c5f8877e94087aa3509b258569, type: 3}
+  m_Script: {fileID: 11500000, guid: a0aac6f43f00cbd4d9482213b091e35a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useConfigFile: 1
-  _sinAxisMovementAmplitude: 0
-  _changeSinForceInterval: 0
-  _otherAxisMovementAmplitude: 0
-  _otherAxisSpeedLimit: 0
+  _useConfigFile: 0
+  _sinAxisMovementAmplitude: 1
+  _changeSinForceInterval: 3
+  _otherAxisMovementAmplitude: 1
+  _otherAxisSpeedLimit: 1
   _rigidBody: {fileID: 1185372985846441720}

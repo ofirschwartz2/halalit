@@ -11,7 +11,6 @@ public class ShootingLazerRangeAim : MoveAimAttackAim
     public GameObject AimShotPrefab;
 
     private GameObject _aimingShotFrom, _aimingShotTo;
-    private Quaternion shootUpRotationMultiplier = Quaternion.Euler(0f, 0f, 90f); // TODO: fix this BUG
     void Start()
     {
         if (_useConfigFile)
@@ -28,28 +27,23 @@ public class ShootingLazerRangeAim : MoveAimAttackAim
     private void ShootAimingRays()
     {
         Vector3 shootingStartPosition = GetShootingStartPosition();
-        ShootAimingShotFrom(shootingStartPosition);
-        ShootAimingShotTo(shootingStartPosition);
+        _aimingShotFrom = ShootAimingShot(shootingStartPosition, -_shootingRange);
+        _aimingShotTo = ShootAimingShot(shootingStartPosition, _shootingRange);
     }
 
-    private void ShootAimingShotFrom(Vector3 shootingStartPosition)
+    private GameObject ShootAimingShot(Vector3 shootingStartPosition, float angle)
     {
-        Quaternion fromRotation = Utils.GetRotation(transform.rotation, -_shootingRange);
-        _aimingShotFrom = Instantiate(AimShotPrefab, shootingStartPosition, fromRotation * shootUpRotationMultiplier); // shootUpRotationMultiplier BUG
-        _aimingShotFrom.transform.SetParent(gameObject.transform);
+        Quaternion fromRotation = Utils.GetRotation(transform.rotation, angle);
+        var aimShot = Instantiate(AimShotPrefab, shootingStartPosition, fromRotation);
+        aimShot.transform.SetParent(gameObject.transform);
+        aimShot.layer = LayerMask.NameToLayer("EnemyShots");
+        return aimShot;
     }
 
-    private void ShootAimingShotTo(Vector3 shootingStartPosition)
-    {
-        Quaternion toRotation = Utils.GetRotation(transform.rotation, _shootingRange);
-        _aimingShotTo = Instantiate(AimShotPrefab, shootingStartPosition, toRotation * shootUpRotationMultiplier); // shootUpRotationMultiplier BUG
-        _aimingShotTo.transform.SetParent(gameObject.transform);
-    }
-
-    private Vector2 GetShootingStartPosition()
+    public Vector2 GetShootingStartPosition()
     {
         Vector2 halfExtents = GetComponent<CapsuleCollider2D>().bounds.extents;
-        Vector3 offset = Utils.GetRotationAsVector2(transform.rotation) * halfExtents.magnitude;
+        Vector3 offset = Utils.GetRotationAsVector2(transform.rotation) * halfExtents.magnitude * 0.85f;
         return transform.position + offset;
     }
 

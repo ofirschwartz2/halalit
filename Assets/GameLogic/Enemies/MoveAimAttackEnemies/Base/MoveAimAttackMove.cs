@@ -69,5 +69,4 @@ public class MoveAimAttackMove : MonoBehaviour
     {
         _direction = EnemyUtils.GetAnotherDirectionFromEdge(_rigidBody, edgeTag);
     }
-
 }

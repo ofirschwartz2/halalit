@@ -1,20 +1,19 @@
 using Assets.Utils;
 using UnityEngine;
 
-public class ShootingLazerRangeAttack : MoveAimAttackAttack
+public class ShootingLaserRangeAttack : MoveAimAttackAttack
 {
     [SerializeField]
     private bool _useConfigFile;
     [SerializeField]
-    private float _shotRotationSpeed;
+    private float _shotRotationSpeed; // If too small - BUG.
     [SerializeField]
     public GameObject ShotPrefab;
     [SerializeField]
     private ShootingLazerRangeAim _shootingLazerRangeAim;
 
-    private bool _shotInitiated;
+    private bool _shotInitiated, _shotDestroyed;
     private GameObject _shot;
-    private Quaternion shootUpRotationMultiplier = Quaternion.Euler(0f, 0f, 90f); // TODO: fix this BUG
     
     void Start()
     {
@@ -23,11 +22,15 @@ public class ShootingLazerRangeAttack : MoveAimAttackAttack
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
         _shotInitiated = false;
+        _shotDestroyed = false;
     }
 
     public override void AttackingState(Transform transform)
     {
-        Shoot(transform);
+        if (!_shotDestroyed) 
+        {
+            Shoot(transform);
+        }
     }
 
     public override void Shoot(Transform transform)
@@ -46,7 +49,7 @@ public class ShootingLazerRangeAttack : MoveAimAttackAttack
 
     private void InitiateShot() 
     {
-        Vector3 shootingStartPosition = GetShootingStartPosition();
+        Vector3 shootingStartPosition = _shootingLazerRangeAim.GetShootingStartPosition();
         var shootRotation = _shootingLazerRangeAim.GetAimingShotFrom().transform.rotation;
         _shot = Instantiate(ShotPrefab, shootingStartPosition, shootRotation);
         _shot.transform.SetParent(gameObject.transform);
@@ -72,16 +75,9 @@ public class ShootingLazerRangeAttack : MoveAimAttackAttack
 
     private void DestroyShot()
     {
-        Debug.Log("DestroyShot");
         _shootingLazerRangeAim.DestroyAimingRays();
         Destroy(_shot);
         _shotInitiated = false;
-    }
-
-    private Vector2 GetShootingStartPosition()
-    {
-        Vector2 halfExtents = GetComponent<CapsuleCollider2D>().bounds.extents;
-        Vector3 offset = Utils.GetRotationAsVector2(transform.rotation) * halfExtents.magnitude;
-        return transform.position + offset;
+        _shotDestroyed = true;
     }
 }

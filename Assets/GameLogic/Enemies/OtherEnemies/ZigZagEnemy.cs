@@ -76,7 +76,7 @@ public class ZigZagEnemy : MonoBehaviour
         {
             Die();
         }
-        else if (EnemyUtils.ShouldKnockMeBack(other))
+        else if (EnemyUtils.ShouldKnockEnemyBack(LayerMask.LayerToName(gameObject.layer), other))
         {
             EnemyUtils.KnockMeBack(_rigidBody, other);
         }
