@@ -4,7 +4,7 @@ using UnityEngine;
 
 // TODO (refactor): the stats (damage) of a shot (when it's collide with enemy) needs to be on the shot script
 // TODO (refactor): move all shots out of the Gun. Enemies also shoot now.
-public class BallShot : MonoBehaviour 
+public class MirrorBallShot : MonoBehaviour 
 {
     [SerializeField]
     private bool _useConfigFile;
@@ -23,15 +23,25 @@ public class BallShot : MonoBehaviour
         _rigidBody.velocity = transform.up * _speed;
     }
 
+    private void GoInMirrorDirection(Collider2D other) 
+    {
+        var knockBackDirection = Utils.GetDirectionFromCollision(_rigidBody.transform.position, other.transform.position);
+        _rigidBody.velocity = knockBackDirection * _speed;
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag(Tag.ENEMY.GetDescription()) || other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()))
-            Destroy(gameObject);
+        if (other.gameObject.CompareTag(Tag.ENEMY.GetDescription()) || other.gameObject.CompareTag(Tag.ASTEROID.GetDescription())) 
+        {
+            GoInMirrorDirection(other);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag(Tag.INTERNAL_WORLD.GetDescription()))
+        if (other.gameObject.CompareTag(Tag.INTERNAL_WORLD.GetDescription())) 
+        {
             Destroy(gameObject);
+        }
     }
 }

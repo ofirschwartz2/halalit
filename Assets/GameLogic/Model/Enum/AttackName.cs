@@ -14,5 +14,7 @@ namespace Assets.Enums
         KNOCKBACK_SHOT,
         [Description("Boomerang shot")]
         BOOMERANG_SHOT,
+        [Description("Mirror Ball shot")]
+        MIRROR_BALL_SHOT
     }
 }
