@@ -13,6 +13,10 @@ namespace Assets.Enums
         LASER_BEAM_SHOT = AttackName.LASER_BEAM_SHOT,
         [Description("Knockback item")]
         KNOCKBACK_SHOT = AttackName.KNOCKBACK_SHOT,
+        [Description("Boomerang item")]
+        BOOMERANG_SHOT = AttackName.BOOMERANG_SHOT,
+        [Description("Mirror Ball shot item")]
+        MIRROR_BALL_SHOT = AttackName.MIRROR_BALL_SHOT,
 
         // Upgrades
         [Description("Halalit max HP")]

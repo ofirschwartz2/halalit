@@ -29,7 +29,7 @@ class AsteroidInternalInstantiator : MonoBehaviour
 
     private void SetEventListeners()
     {
-        AsteroidEvent.AsteroidDestruction += InstantiateAsteroidsOnPosition;
+        AsteroidEvent.AsteroidInternalInstantiation += InstantiateAsteroidsOnPosition;
     }
 
     void Start()
@@ -42,10 +42,10 @@ class AsteroidInternalInstantiator : MonoBehaviour
 
     private void InstantiateAsteroidsOnPosition(object initiator, AsteroidEventArguments arguments)
     {
-        int newAsteroidsCount = GetNewAsteroidsCount(arguments.AsteroidScale);
-        float newAsteroidsScale = GetNewAsteroidsScale(newAsteroidsCount, arguments.AsteroidScale);
-        List<Vector2> newAsteroidPositions = GetNewAsteroidPositions(newAsteroidsCount, newAsteroidsScale, arguments.AsteroidPosition);
-        List<Vector2> newAsteroidDirections = GetNewAsteroidDirections(newAsteroidsCount, arguments.AsteroidVelocity.normalized);
+        int newAsteroidsCount = GetNewAsteroidsCount(arguments.Scale);
+        float newAsteroidsScale = GetNewAsteroidsScale(newAsteroidsCount, arguments.Scale);
+        List<Vector2> newAsteroidPositions = GetNewAsteroidPositions(newAsteroidsCount, newAsteroidsScale, arguments.Position);
+        List<Vector2> newAsteroidDirections = GetNewAsteroidDirections(newAsteroidsCount, arguments.Velocity.normalized);
 
         for (int i = 0; i < newAsteroidPositions.Count; i++)
         {

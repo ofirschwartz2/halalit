@@ -64,20 +64,10 @@ public class WaitAttackStateMachine : MonoBehaviour
         }
     }
 
-    private void Die()
-    {
-        Destroy(gameObject);
-    }
-
-    #region Triggers
+   #region Triggers
     void OnTriggerEnter2D(Collider2D other)
     {
-        //TODO: refactor this. should this be in the EventHandler?
-        if (EnemyUtils.ShouldKillMe(other))
-        {
-            Die();
-        }
-        else if (EnemyUtils.ShouldKnockMeBack(other))
+        if (EnemyUtils.ShouldKnockEnemyBack(LayerMask.LayerToName(gameObject.layer), other))
         {
             EnemyUtils.KnockMeBack(_rigidBody, other);
         }

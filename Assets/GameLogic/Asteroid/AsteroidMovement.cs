@@ -36,6 +36,7 @@ public class AsteroidMovement : MonoBehaviour
     private void SetVelocity()
     {
         _rigidBody.velocity = _direction * _velocityMagnitude;
+        //_rigidBody.MovePosition(_rigidBody.position + _direction * _velocityMagnitude * Time.fixedDeltaTime);
     }
 
     private void SetRandomRotationByScale()
@@ -58,11 +59,13 @@ public class AsteroidMovement : MonoBehaviour
         return transform.localScale.x;
     }
 
-    void Update()
+    void FixedUpdate()
     {
+        //_rigidBody.MovePosition(_rigidBody.position + _direction * _velocityMagnitude);
+        //_rigidBody.MoveRotation(_rigidBody.rotation + _constantRotation);
         transform.Rotate(0, 0, _constantRotation * Time.deltaTime);
         _direction = _rigidBody.velocity.normalized;
-        _time += Time.deltaTime;
+        _time += Time.deltaTime; // TODO: can be removed
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -75,11 +78,11 @@ public class AsteroidMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()) && _time >= _transparencyPeriod)
+        if (other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()) && Time.time >= _transparencyPeriod)
         {
             AsteroidMovement otherAsteroidMovement = other.gameObject.GetComponent<AsteroidMovement>();
             Vector2 originalVelocity = _rigidBody.velocity;
-
+            
             SetCollisionVelocity(other.contacts[0].normal, otherAsteroidMovement.GetScale());
             SetRotationByVelocity(originalVelocity);
         }

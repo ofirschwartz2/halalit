@@ -1,3 +1,4 @@
+using Assets.Enums;
 using Assets.Utils;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ static class EnemyUtils
 
     public static List<Vector2> GetEvenPositionsAroundCircle(Transform transform, int numberOfPositions, float radius)
     {
-        radius = 0.9f; // TODO: BUG - why is this 0.9 and not 0.5?
+        //radius = 0.9f; // TODO: BUG - why is this 0.9 and not 0.5?
         var angle = 360 / numberOfPositions;
         var shootingStartPositions = new List<Vector2>();
         for (var i = 0; i < numberOfPositions; i++)
@@ -59,15 +60,21 @@ static class EnemyUtils
     }
 
     #region Predicates
-    public static bool ShouldKillMe(Collider2D other)
+    public static bool ShouldKnockEnemyBack(string myLayer, Collider2D other)
     {
-        return other.gameObject.CompareTag("Shot");
+        return
+            myLayer == Layer.Enemies.GetDescription()
+            &&
+            ColliderShouldKnockback(other);
     }
 
-    public static bool ShouldKnockMeBack(Collider2D other)
+    public static bool ColliderShouldKnockback(Collider2D other)
     {
-        return other.gameObject.CompareTag("Halalit") || other.gameObject.CompareTag("Astroid") || other.gameObject.CompareTag("Enemy") || other.gameObject.CompareTag("KnockbackShot");
+        return
+            other.gameObject.CompareTag(Tag.HALALIT.GetDescription()) ||
+            other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()) ||
+            other.gameObject.CompareTag(Tag.ENEMY.GetDescription()) ||
+            other.gameObject.CompareTag(Tag.KNOCKBACK_SHOT.GetDescription());
     }
-
     #endregion
 }

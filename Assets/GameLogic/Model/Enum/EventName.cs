@@ -1,22 +1,26 @@
-﻿using System.ComponentModel;
-
-namespace Assets.Enums
+﻿namespace Assets.Enums
 {
     public enum EventName
     {
-        [Description("Player upgrade pickup")]
+        #region Items
         PLAYER_UPGRADE_PICKUP,
-        [Description("Player attack item pickup")]
         PLAYER_ATTACK_ITEM_PICKUP,
-        [Description("Asteroid destruction")]
-        ASTEROID_DESTRUCTION,
-        [Description("New item drop")]
         NEW_ITEM_DROP,
-        [Description("No stock")]
         NO_STOCK,
-        [Description("New attack switch")]
+        #endregion
+
+        #region Attacks
         NEW_ATTACK_SWITCH,
-        [Description("Halalit death")]
+        #endregion
+
+        #region Instantiations
+        ASTEROID_INTERNAL_INSTANTIATION,
+        #endregion
+
+        #region Deaths
+        ASTEROID_DEATH,
         HALALIT_DEATH,
+        ENEMY_DEATH
+        #endregion
     }
 }

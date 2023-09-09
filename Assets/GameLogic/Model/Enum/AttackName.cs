@@ -12,5 +12,9 @@ namespace Assets.Enums
         LASER_BEAM_SHOT,
         [Description("Knockback shot")]
         KNOCKBACK_SHOT,
+        [Description("Boomerang shot")]
+        BOOMERANG_SHOT,
+        [Description("Mirror Ball shot")]
+        MIRROR_BALL_SHOT
     }
 }

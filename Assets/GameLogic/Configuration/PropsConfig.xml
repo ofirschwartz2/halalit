@@ -151,6 +151,7 @@
     <_asteroidNewDirectionOffsetDegree>40</_asteroidNewDirectionOffsetDegree>
   </AsteroidInternalInstantiator>
 
+  // Not used from - 08/9/23
   <AsteroidDestructor>
     <_singleAxisDestructionDistance>50</_singleAxisDestructionDistance>
   </AsteroidDestructor>
@@ -178,20 +179,5 @@
     <_fireRateRank>20</_fireRateRank>
     <_nitroFuelRank>10</_nitroFuelRank>
   </ItemRanker>
- 
-  <SceneFactory>
-    <MaxNumberOfGameObjectsAllowed>60</MaxNumberOfGameObjectsAllowed>
-    <MaxNumberOfEnemiesAllowed>20</MaxNumberOfEnemiesAllowed>
-    <MaxNumberOfAstroidsAllowed>20</MaxNumberOfAstroidsAllowed>
-    <NumberOfInnerAstroids>5</NumberOfInnerAstroids>
-    <NumberOfEnemies>5</NumberOfEnemies>
-    <NumberOfAstroids>0</NumberOfAstroids>
-    <SlotsOnGameGreedX>10</SlotsOnGameGreedX>
-    <SlotsOnGameGreedY>10</SlotsOnGameGreedY>
-    <InfiniteLoopTH>400</InfiniteLoopTH>
-    <InnerAstroidMinScale>1</InnerAstroidMinScale>
-    <InnerAstroidMaxScale>10</InnerAstroidMaxScale>
-  </SceneFactory>
-
 
 </scripts>

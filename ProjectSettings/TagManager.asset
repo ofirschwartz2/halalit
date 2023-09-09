@@ -27,6 +27,8 @@ TagManager:
   - Asteroid
   - BarBorder
   - BarFill
+  - Weapon
+  - BarIcon
   layers:
   - Default
   - TransparentFX
@@ -34,12 +36,12 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - EnemyShots
+  - PlayerShots
+  - Enemies
+  - Player
+  - Astroids
+  - Items
   - 
   - 
   - 

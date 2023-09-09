@@ -11,7 +11,7 @@ namespace Assets.Utils
 
         public static float GetRandomAngleAround(float range)
         {
-            return UnityEngine.Random.Range(-range, range);
+            return Random.Range(-range, range);
         }
 
         public static Quaternion GetRotation(Quaternion rotation, float angle)
@@ -165,6 +165,17 @@ namespace Assets.Utils
             float newAngle = currentAngle + angleInRadians;
             return RadianToVector2(newAngle);
         }
+
+        public static Vector2 RotateVector2WithVector2(Vector2 vectorFromZero, Vector2 rotationVector)
+        {
+            float angle = Mathf.Atan2(rotationVector.y, rotationVector.x);
+
+            float newX = vectorFromZero.x * Mathf.Cos(angle) - vectorFromZero.y * Mathf.Sin(angle);
+            float newY = vectorFromZero.x * Mathf.Sin(angle) + vectorFromZero.y * Mathf.Cos(angle);
+
+            return new Vector2(newX, newY);
+        }
+
         public static Vector2 NormalizeVector2(Vector2 vector)
         {
             var magnitude = (float)Math.Sqrt(Math.Pow(vector.x, 2) + Math.Pow(vector.y, 2));
@@ -204,12 +215,40 @@ namespace Assets.Utils
         }
         #endregion
 
+        #region Quaternions
         public static Quaternion GetRorationOutwards(Vector2 from, Vector2 to)
         {
             Vector2 direction = to - from;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            return Quaternion.Euler(0f, 0f, angle);
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
+            return GetRotation(Quaternion.identity, angle);
         }
+        #endregion
+
+        #region BezierCurves
+        public static Vector2 GetPointOnBezierCurveOf8(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4, Vector2 p5, Vector2 p6, Vector2 p7, Vector2 p8, float progress)
+        {
+
+            Vector2 q1 = Vector2.Lerp(p1, p2, progress);
+            Vector2 q2 = Vector2.Lerp(p2, p3, progress);
+            Vector2 q3 = Vector2.Lerp(p3, p4, progress);
+
+            Vector2 q4 = Vector2.Lerp(p5, p6, progress);
+            Vector2 q5 = Vector2.Lerp(p6, p7, progress);
+            Vector2 q6 = Vector2.Lerp(p7, p8, progress);
+
+            Vector2 r1 = Vector2.Lerp(q1, q2, progress);
+            Vector2 r2 = Vector2.Lerp(q2, q3, progress);
+
+            Vector2 r3 = Vector2.Lerp(q4, q5, progress);
+            Vector2 r4 = Vector2.Lerp(q5, q6, progress);
+
+            Vector2 finalPoint = Vector2.Lerp(r1, r2, progress);
+            Vector2 finalPoint2 = Vector2.Lerp(r3, r4, progress);
+
+            return Vector2.Lerp(finalPoint, finalPoint2, progress);
+        }
+
+        #endregion
 
         #region Enum Extentions
         public static string GetDescription(this Enum val)
