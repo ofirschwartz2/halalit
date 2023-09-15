@@ -173,7 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _useConfigFile: 0
   _rigidBody: {fileID: 0}
-  _attackTime: 0.5
+  _attackTime: 0.3
   _swordRotationRange: 60
   accelerationCurve:
     serializedVersion: 2
@@ -181,48 +181,39 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0.03700909
-      outSlope: 0.03700909
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.98463255
+      outWeight: 0
     - serializedVersion: 3
-      time: 0.046121184
+      time: 0.18901119
       value: 0
-      inSlope: 0.16650793
-      outSlope: 0.16650793
+      inSlope: 0.04331126
+      outSlope: 0.04331126
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.05298948
+      inWeight: 0.12087979
+      outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.13651979
-      value: 0.49289107
-      inSlope: 4.9504204
-      outSlope: 4.9504204
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.054624777
-    - serializedVersion: 3
-      time: 0.4197836
-      value: 0.9974776
-      inSlope: -0.0024310995
-      outSlope: -0.0024310995
+      time: 0.66125923
+      value: 0.7408328
+      inSlope: 1.5590224
+      outSlope: 1.5590224
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.6534972
-      value: 0.99556136
-      inSlope: 0.0052765626
-      outSlope: 0.0052765626
+      time: 0.92489237
+      value: 0.9992534
+      inSlope: -0.009569846
+      outSlope: -0.009569846
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.048965726
+      outWeight: 0.040550847
     - serializedVersion: 3
       time: 1
       value: 1

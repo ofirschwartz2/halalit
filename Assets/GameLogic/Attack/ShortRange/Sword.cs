@@ -16,7 +16,6 @@ public class Sword : MonoBehaviour
     [SerializeField]
     private AnimationCurve accelerationCurve;
 
-    private Quaternion _fromRotation, _toRotation;
     private float _attackStartTime;
 
     void Start()
@@ -26,22 +25,35 @@ public class Sword : MonoBehaviour
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
 
-        SetRotations();
+        _attackStartTime = Time.time;
+        SetRotationAndPosition();
     }
 
     void FixedUpdate()
     {
-        var weaponTransform = GameObject.FindGameObjectWithTag(Tag.WEAPON.GetDescription()).transform;
-        _fromRotation = Utils.GetRotation(weaponTransform.rotation, -0.5f * _swordRotationRange);
-        _toRotation = Utils.GetRotation(weaponTransform.rotation, 0.5f * _swordRotationRange);
-        transform.parent.position = weaponTransform.position;
-        transform.parent.rotation = Quaternion.Slerp(_fromRotation, _toRotation, accelerationCurve.Evaluate((Time.time - _attackStartTime) / (_attackTime)));
+        SetRotationAndPosition(); 
         TryDie();
     }
 
-    private void SetRotations()
+    private void SetRotationAndPosition()
     {
-        _attackStartTime = Time.time;
+        var weaponTransform = GetWeaponTransform();
+        SetRotation(weaponTransform);
+        transform.parent.position = weaponTransform.position;
+
+    }
+
+    private void SetRotation(Transform weaponTransform) 
+    {
+        var fromRotation = Utils.GetRotation(weaponTransform.rotation, -0.5f * _swordRotationRange);
+        var toRotation = Utils.GetRotation(weaponTransform.rotation, 0.5f * _swordRotationRange);
+        transform.parent.rotation = Quaternion.Slerp(fromRotation, toRotation, accelerationCurve.Evaluate((Time.time - _attackStartTime) / (_attackTime)));
+
+    }
+
+    private Transform GetWeaponTransform()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.WEAPON.GetDescription()).transform;
     }
 
     private void TryDie()
