@@ -44,15 +44,10 @@ public class LaserBeamShot : MonoBehaviour
 
     private void TryDie()
     {
-        if (ShouldDie())
+        if (Utils.ShouldDie(_endOfLifeTime))
         {
             Destroy(gameObject);
             Destroy(transform.parent.gameObject);
         }
-    }
-
-    private bool ShouldDie()
-    {
-        return Time.time >= _endOfLifeTime;
     }
 }

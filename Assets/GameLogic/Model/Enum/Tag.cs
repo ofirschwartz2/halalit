@@ -6,6 +6,8 @@ namespace Assets.Enums
     {
         [Description("Halalit")] 
         HALALIT,
+        [Description("Weapon")]
+        WEAPON,
         [Description("Enemy")] 
         ENEMY,
         [Description("Shot")] 
