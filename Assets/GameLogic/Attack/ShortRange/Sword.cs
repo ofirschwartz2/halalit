@@ -8,8 +8,6 @@ public class Sword : MonoBehaviour
     [SerializeField]
     private bool _useConfigFile;
     [SerializeField]
-    private Rigidbody2D _rigidBody;
-    [SerializeField]
     private float _attackTime;
     [SerializeField]
     private float _swordRotationRange;
