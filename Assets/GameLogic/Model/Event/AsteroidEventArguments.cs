@@ -3,13 +3,15 @@
 public class AsteroidEventArguments : System.EventArgs
 {
     public Vector2 Position;
-    public Vector2 Velocity;
-    public float Scale;
+    public float Speed;
+    public Vector2 Direction;
+    public int Scale;
 
-    public AsteroidEventArguments(Vector2 position, Vector2 velocity, float scale)
+    public AsteroidEventArguments(Vector2 position, float speed, Vector2 direction, int scale)
     {
         Position = position;
-        Velocity = velocity;
+        Speed = speed;
+        Direction = direction;
         Scale = scale;
     }
 }

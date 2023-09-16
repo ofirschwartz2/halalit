@@ -6,8 +6,6 @@ using Random = UnityEngine.Random;
 class AsteroidInternalInstantiator : MonoBehaviour
 {
     [SerializeField]
-    private bool _useConfigFile;
-    [SerializeField]
     private GameObject _asteroidPrefab;
     [SerializeField]
     private AsteroidInitiator _asteroidInitiator;
@@ -18,10 +16,9 @@ class AsteroidInternalInstantiator : MonoBehaviour
     [SerializeField]
     private float _asteroidMinInstantiationCount;
     [SerializeField]
-    private float _asteroidScaleMultiplier;
-    [SerializeField]
     private float _asteroidNewDirectionOffsetDegree;
 
+    #region Init
     private void Awake()
     {
         SetEventListeners();
@@ -31,21 +28,15 @@ class AsteroidInternalInstantiator : MonoBehaviour
     {
         AsteroidEvent.AsteroidInternalInstantiation += InstantiateAsteroidsOnPosition;
     }
+    #endregion
 
-    void Start()
-    {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-    }
-
+    #region Internal instantiation
     private void InstantiateAsteroidsOnPosition(object initiator, AsteroidEventArguments arguments)
     {
         int newAsteroidsCount = GetNewAsteroidsCount(arguments.Scale);
-        float newAsteroidsScale = GetNewAsteroidsScale(newAsteroidsCount, arguments.Scale);
-        List<Vector2> newAsteroidPositions = GetNewAsteroidPositions(newAsteroidsCount, newAsteroidsScale, arguments.Position);
-        List<Vector2> newAsteroidDirections = GetNewAsteroidDirections(newAsteroidsCount, arguments.Velocity.normalized);
+        int newAsteroidsScale = GetNewAsteroidsScale(arguments.Scale);
+        List<Vector2> newAsteroidPositions = GetNewAsteroidPositions(newAsteroidsCount, arguments.Position);
+        List<Vector2> newAsteroidDirections = GetNewAsteroidDirections(newAsteroidsCount, arguments.Direction);
 
         for (int i = 0; i < newAsteroidPositions.Count; i++)
         {
@@ -54,26 +45,22 @@ class AsteroidInternalInstantiator : MonoBehaviour
         }
     }
 
-    private int GetNewAsteroidsCount(float originalAsteroidScale)
+    private int GetNewAsteroidsCount(int originalAsteroidScale)
     {
-        if (originalAsteroidScale >= _asteroidMaxScale)
+        if (ShouldInstantiateAsteroidsInternaly(originalAsteroidScale))
         {
             return Random.Range((int) _asteroidMinInstantiationCount, (int) _asteroidMaxInstantiationCount + 1);
-        }
-        else if (originalAsteroidScale >= _asteroidMaxScale / 2)
-        {
-            return Random.Range((int) _asteroidMinInstantiationCount, ((int)_asteroidMaxInstantiationCount + 1) / 2);
         }
 
         return 0;
     }
 
-    private float GetNewAsteroidsScale(int newAsteroidsCount, float originalAsteroidScale)
+    private int GetNewAsteroidsScale(int originalAsteroidScale)
     {
-        return (originalAsteroidScale / newAsteroidsCount) * _asteroidScaleMultiplier;
+        return originalAsteroidScale / 2;
     }
 
-    private List<Vector2> GetNewAsteroidPositions(int newAsteroidsCount, float newAsteroidsScale, Vector2 originalAsteroidPosition)
+    private List<Vector2> GetNewAsteroidPositions(int newAsteroidsCount, Vector2 originalAsteroidPosition)
     {
         List<Vector2> newAsteroidPositions = new();
 
@@ -120,4 +107,12 @@ class AsteroidInternalInstantiator : MonoBehaviour
 
         return originalAsteroidDegree - leftestOffsetDegree;
     }
+    #endregion
+
+    #region Predicates
+    private bool ShouldInstantiateAsteroidsInternaly(int originalAsteroidScale)
+    {
+        return originalAsteroidScale > 1 && Utils.IsTrueIn50Precent();
+    }
+    #endregion
 }

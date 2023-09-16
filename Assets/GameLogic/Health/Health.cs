@@ -26,6 +26,7 @@ class Health : MonoBehaviour
     private List<string> _harmersDescriptions;
     private List<string> _contributorsDescriptions;
     private Canvas _privateCanvas;
+    private bool _onTriggerEnter2DCalledThisFrame;
 
     #region Init
     private void Awake()
@@ -97,6 +98,7 @@ class Health : MonoBehaviour
         _healthBarBorder = sliderComponents.Where(sliderComponent => sliderComponent.gameObject.CompareTag(Tag.BAR_BORDEDR.GetDescription())).ToList()[0];
         _healthBarBorder.maxValue = _finalMaxHealth;
         _healthBarBorder.value = _currentMaxHealth;
+        _onTriggerEnter2DCalledThisFrame = false;
 
         _harmersDescriptions = _harmers.Select(tag => Utils.GetDescription(tag)).ToList();
         _contributorsDescriptions = _contributors.Select(tag => Utils.GetDescription(tag)).ToList();
@@ -114,8 +116,17 @@ class Health : MonoBehaviour
     #region Change health
     private void OnTriggerEnter2D(Collider2D other)
     {
-        HandleHarmer(other);
-        HandleContributor(other);
+        if (!_onTriggerEnter2DCalledThisFrame)
+        {
+            HandleHarmer(other);
+            HandleContributor(other);
+            _onTriggerEnter2DCalledThisFrame = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        _onTriggerEnter2DCalledThisFrame = false;
     }
 
     private void HandleHarmer(Collider2D other)
