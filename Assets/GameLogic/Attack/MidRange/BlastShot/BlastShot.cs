@@ -13,7 +13,7 @@ public class BlastShot : MonoBehaviour
     [SerializeField]
     private float _speed;
     [SerializeField]
-    private GameObject blastPrefab;
+    private GameObject blastExplosionPrefab, blastShockWave;
     [SerializeField]
     private float _lifetime;
 
@@ -26,7 +26,7 @@ public class BlastShot : MonoBehaviour
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
 
-        _endOfLifeTime = Time.time + _lifetime;
+        _endOfLifeTime = Utils.GetEndOfLifeTime(_lifetime);
         _rigidBody.velocity = transform.up * _speed;
     }
 
@@ -40,7 +40,8 @@ public class BlastShot : MonoBehaviour
 
     private void InitiateBlast()
     {
-        Instantiate(blastPrefab, transform.position, transform.rotation);
+        Instantiate(blastExplosionPrefab, transform.position, transform.rotation);
+        Instantiate(blastShockWave, transform.position, transform.rotation);
         Destroy(gameObject);
     }
 

@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 4043514594342984742}
   - component: {fileID: 4043514594342984743}
   - component: {fileID: 4043514594342984745}
-  - component: {fileID: 4043514594342984744}
-  - component: {fileID: 2061931484483809159}
+  - component: {fileID: 4423633703291208000}
+  - component: {fileID: 8105415891282319263}
+  - component: {fileID: 5604026767956031673}
   m_Layer: 7
-  m_Name: BallShot
+  m_Name: BlastExplosion
   m_TagString: Shot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,9 +29,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4043514594342984741}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.797, y: 0, z: 0}
-  m_LocalScale: {x: 0.009000541, y: 0.009000541, z: 0.009000541}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -76,8 +77,8 @@ SpriteRenderer:
   m_SortingLayerID: 1226254537
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: be7d6cee2589ca445b7b0e2761000660, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: -2413806693520163455, guid: 36a58ef0f52a17e4a93613edf7d86198, type: 3}
+  m_Color: {r: 0.6320754, g: 0.3965379, b: 0.41141397, a: 0.6313726}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -114,7 +115,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!58 &4043514594342984744
+--- !u!58 &4423633703291208000
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,8 +149,8 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 10
---- !u!114 &2061931484483809159
+  m_Radius: 0.5
+--- !u!114 &8105415891282319263
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,9 +159,74 @@ MonoBehaviour:
   m_GameObject: {fileID: 4043514594342984741}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f576e88b6caa5d0409073d48de213429, type: 3}
+  m_Script: {fileID: 11500000, guid: 5cd0696f8ccf58b4c9b0a17a7d2c922a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _useConfigFile: 0
-  _rigidBody: {fileID: 4043514594342984745}
-  _speed: 10
+  _blastCommon: {fileID: 5604026767956031673}
+--- !u!114 &5604026767956031673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4043514594342984741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2107731fd499a874780829d5b62f9fbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useConfigFile: 0
+  _blastMultiplier: 10
+  _lifetime: 3
+  blastCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.09862174
+      value: 0.40096262
+      inSlope: 1.8027565
+      outSlope: 1.8027565
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.19979739
+      value: 0.16885588
+      inSlope: 0.27919745
+      outSlope: 0.27919745
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.24033423
+    - serializedVersion: 3
+      time: 0.3652349
+      value: 0.55726504
+      inSlope: 1.6976695
+      outSlope: 1.6976695
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.22141735
+      outWeight: 0.05681251
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

@@ -1,25 +1,17 @@
-using Assets.Enums;
 using Assets.Utils;
+using System.Diagnostics.Contracts;
 using UnityEngine;
 
 // TODO (refactor): the stats (damage) of a shot (when it's collide with enemy) needs to be on the shot script
 // TODO (refactor): move all shots out of the Gun. Enemies also shoot now.
-public class Blast : MonoBehaviour 
+public class BlastExplosion : MonoBehaviour 
 {
     [SerializeField]
     private bool _useConfigFile;
     [SerializeField]
-    private float _blastMaxSize;
-    [SerializeField]
-    private float _blastTime;
-    [SerializeField]
-    private GameObject blastPrefab;
-    [SerializeField]
-    private float _lifetime;
-    [SerializeField]
-    private AnimationCurve blastCurve;
+    private BlastCommon _blastCommon;
 
-    private float _endOfLifeTime;
+    private Vector3 originalScale; 
 
     void Start()
     {
@@ -28,29 +20,28 @@ public class Blast : MonoBehaviour
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
 
-        _endOfLifeTime = Time.time + _lifetime;
+        originalScale = transform.localScale;
     }
 
     private void Update()
     {
-        if (Utils.ShouldDie(_endOfLifeTime))
+        if (Utils.ShouldDie(_blastCommon.GetEndOfLifeTime()))
         {
             Die();
         }
         else 
         {
-            Blast();
+            Blasting();
         }
     }
 
-    private void Blast()
+    private void Blasting()
     {
-        transform.localScale = transform.localScale * _blastMaxSize * blastCurv.Evaluate();
+        transform.localScale = originalScale * (1 + _blastCommon.GetBlastCommonMultiplier());
     }
 
     private void Die()
     {
         Destroy(gameObject);
     }
-
 }

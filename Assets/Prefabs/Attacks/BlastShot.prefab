@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4043514594342984743}
   - component: {fileID: 4043514594342984745}
   - component: {fileID: 4423633703291208000}
+  - component: {fileID: 5936866091135545148}
   m_Layer: 7
   m_Name: BlastShot
   m_TagString: Shot
@@ -148,3 +149,21 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &5936866091135545148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4043514594342984741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cc50ec1bcd76904ca975d16369954f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useConfigFile: 0
+  _rigidBody: {fileID: 4043514594342984745}
+  _speed: 5
+  blastExplosionPrefab: {fileID: 4043514594342984741, guid: 0ca056f89c91b6e4cadd392843d226ae, type: 3}
+  blastShockWave: {fileID: 4043514594342984741, guid: 0ece357a4973dfd4d9ac87dfc76e6b91, type: 3}
+  _lifetime: 0.5
