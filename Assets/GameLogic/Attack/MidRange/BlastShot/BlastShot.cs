@@ -13,9 +13,9 @@ public class BlastShot : MonoBehaviour
     [SerializeField]
     private float _speed;
     [SerializeField]
-    private GameObject blastExplosionPrefab, blastShockWave;
-    [SerializeField]
     private float _lifetime;
+    [SerializeField]
+    private GameObject blastPrefab;
 
     private float _endOfLifeTime;
 
@@ -40,8 +40,7 @@ public class BlastShot : MonoBehaviour
 
     private void InitiateBlast()
     {
-        Instantiate(blastExplosionPrefab, transform.position, transform.rotation);
-        Instantiate(blastShockWave, transform.position, transform.rotation);
+        Instantiate(blastPrefab, transform.position, transform.rotation);
         Destroy(gameObject);
     }
 

@@ -164,6 +164,5 @@ MonoBehaviour:
   _useConfigFile: 0
   _rigidBody: {fileID: 4043514594342984745}
   _speed: 5
-  blastExplosionPrefab: {fileID: 4043514594342984741, guid: 0ca056f89c91b6e4cadd392843d226ae, type: 3}
-  blastShockWave: {fileID: 4043514594342984741, guid: 0ece357a4973dfd4d9ac87dfc76e6b91, type: 3}
   _lifetime: 0.5
+  blastPrefab: {fileID: 4043514594342984741, guid: d751c75c8833f31418be2aefe9ec4a69, type: 3}
