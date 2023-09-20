@@ -6,40 +6,23 @@ using UnityEngine;
 public class HalalitMovement : MonoBehaviour
 {
     [SerializeField]
-    private bool _useConfigFile;
-    [SerializeField]
-    private float _forceMultiplier;
-    [SerializeField]
-    private float _spinSpeed;
+    private Rigidbody2D _rigidBody;
     [SerializeField]
     private Joystick _joystick;
     [SerializeField]
-    private float _halalitThrust;
+    private float _forceMultiplier;
+    [SerializeField]
+    private float _rotationSpeed;
+    [SerializeField]
+    private float _knockbackMultiplier;
     [SerializeField]
     private float _speedLimit;
     [SerializeField]
     private float _knockBackCooldownInterval;
-    [SerializeField]
-    private Rigidbody2D _rigidBody;
     
-    private float _rigidBodyDrag;
     private float _knockBackCooldownTime;
 
-    private void OnHalalitDeath(object initiator, DeathEventArguments arguments)
-    {
-        Destroy(gameObject);
-    }
-
-    void Start()
-    {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-            _rigidBody.drag = _rigidBodyDrag;
-        }
-    }
-
-    void Update()
+    void FixedUpdate()
     {
         if (IsKnockBackCooledDown())
         {
@@ -62,7 +45,7 @@ public class HalalitMovement : MonoBehaviour
             float deltaAngle = normalizedJoystickAngle - normalizedRotationZ;
             float shorterDeltaAngle = Utils.GetNormalizedAngleBy360(deltaAngle);
 
-            transform.Rotate(_spinSpeed * Time.deltaTime * new Vector3(0, 0, shorterDeltaAngle));
+            transform.Rotate(_rotationSpeed * Time.deltaTime * new Vector3(0, 0, shorterDeltaAngle));
         }
     }
 
@@ -83,7 +66,6 @@ public class HalalitMovement : MonoBehaviour
     #region Knockback
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // TODO (dev): Add knockback colliding with asteroids 
         if (other.gameObject.CompareTag(Tag.ENEMY.GetDescription()))
         {
             KnockBack(other);
@@ -92,9 +74,10 @@ public class HalalitMovement : MonoBehaviour
 
     private void KnockBack(Collider2D otherCollider2D)
     {
-        Vector2 normalizedDifference = (_rigidBody.transform.position - otherCollider2D.transform.position).normalized;
+        Vector2 knockbackDirection = (_rigidBody.transform.position - otherCollider2D.transform.position).normalized;
+        float knockBackSpeed = otherCollider2D.GetComponent<Rigidbody2D>().velocity.magnitude * _knockbackMultiplier;
+        _rigidBody.AddForce(knockbackDirection * knockBackSpeed, ForceMode2D.Impulse);
         
-        _rigidBody.AddForce(normalizedDifference * Utils.GetNormalizedSpeed(_rigidBody, otherCollider2D.GetComponent<Rigidbody2D>(), _halalitThrust), ForceMode2D.Impulse);
         _knockBackCooldownTime = Time.time + _knockBackCooldownInterval;
     }
     #endregion

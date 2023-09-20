@@ -1,4 +1,5 @@
 ﻿using Assets.Enums;
+using System;
 using UnityEngine;
 
 public class AsteroidGlobalDestructor : MonoBehaviour
@@ -27,14 +28,21 @@ public class AsteroidGlobalDestructor : MonoBehaviour
 
     private void InvokeItemDropEvent(GameObject asteroidToKill)
     {
-        Vector2 dropForce = Random.onUnitSphere * asteroidToKill.transform.localScale.x;
+        Vector2 dropForce = UnityEngine.Random.onUnitSphere * asteroidToKill.transform.localScale.x;
         DropEventArguments itemDropEventArguments = new(Dropper.ASTEROID, asteroidToKill.transform.position, dropForce);
         DropEvent.Invoke(EventName.NEW_ITEM_DROP, this, itemDropEventArguments);
     }
 
     private void InvokeAsteroidInternalInstantiationEvent(GameObject asteroidToKill)
     {
-        AsteroidEventArguments asteroidEventArguments = new(asteroidToKill.transform.position, asteroidToKill.GetComponent<Rigidbody2D>().velocity, asteroidToKill.transform.localScale.x);
+        AsteroidMovement asteroidToKillMovement = asteroidToKill.GetComponent<AsteroidMovement>();
+
+        AsteroidEventArguments asteroidEventArguments = new(
+            asteroidToKill.transform.position,
+            asteroidToKillMovement.GetSpeed(),
+            asteroidToKillMovement.GetDirection(),
+            Convert.ToInt32(asteroidToKill.transform.localScale.x));
+
         AsteroidEvent.Invoke(EventName.ASTEROID_INTERNAL_INSTANTIATION, this, asteroidEventArguments);
     }
     #endregion

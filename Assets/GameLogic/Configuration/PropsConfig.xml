@@ -1,14 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <scripts>
 
-    <HalalitMovement>
-        <_forceMultiplier>10</_forceMultiplier>
-        <_spinSpeed>10</_spinSpeed>
-        <_rigidBodyDrag>2</_rigidBodyDrag>
-        <_halalitThrust>1.1</_halalitThrust>
-        <_speedLimit>15</_speedLimit>
-        <_knockBackCooldownInterval>0.1</_knockBackCooldownInterval>
-    </HalalitMovement>
+  // Not used from - 15/9/23
+  <HalalitMovement>
+      <_forceMultiplier>10</_forceMultiplier>
+      <_spinSpeed>10</_spinSpeed>
+      <_rigidBodyDrag>2</_rigidBodyDrag>
+      <_halalitThrust>1.1</_halalitThrust>
+      <_speedLimit>15</_speedLimit>
+      <_knockBackCooldownInterval>0.1</_knockBackCooldownInterval>
+  </HalalitMovement>
 
   // Not used from - 25/8/23
   <WeaponMovement>
@@ -25,22 +26,22 @@
     <_attackJoystickEdge>0.8</_attackJoystickEdge>
   </WeaponAttack>
 
-    <BallShot>
-        <_speed>10</_speed>
-    </BallShot>
+  <BallShot>
+      <_speed>10</_speed>
+  </BallShot>
 
-    <LaserBeam>
-        <_lifetime>0.1</_lifetime>
-    </LaserBeam>
+  <LaserBeam>
+      <_lifetime>0.1</_lifetime>
+  </LaserBeam>
 
-    <PickupClawController>
-        <_velocityMultiplier>2.5</_velocityMultiplier>
-        <_rotationToItemMultiplier>3</_rotationToItemMultiplier>
-        <_rotationToHalalitMultiplier>0.5</_rotationToHalalitMultiplier>
-        <_moveToItemMultiplier>0.5</_moveToItemMultiplier>
-        <_grabDelay>0.5</_grabDelay>
-        <_ropeLength>10</_ropeLength>
-    </PickupClawController>
+  <PickupClawController>
+      <_velocityMultiplier>2.5</_velocityMultiplier>
+      <_rotationToItemMultiplier>3</_rotationToItemMultiplier>
+      <_rotationToHalalitMultiplier>0.5</_rotationToHalalitMultiplier>
+      <_moveToItemMultiplier>0.5</_moveToItemMultiplier>
+      <_grabDelay>0.5</_grabDelay>
+      <_ropeLength>10</_ropeLength>
+  </PickupClawController>
 
   // Not used from - 25/8/23
   <PickupClawMovement>
@@ -54,130 +55,133 @@
     <_dragAtFullRopeSpeed>0.1</_dragAtFullRopeSpeed>
   </PickupClawMovement>
 
-    <PickupClawGrabber>
-        <_grabDelay>0.5</_grabDelay>
-        <_rotationToItemMultiplier>3</_rotationToItemMultiplier>
-        <_moveToItemMultiplier>0.5</_moveToItemMultiplier>
-    </PickupClawGrabber>
+  <PickupClawGrabber>
+      <_grabDelay>0.5</_grabDelay>
+      <_rotationToItemMultiplier>3</_rotationToItemMultiplier>
+      <_moveToItemMultiplier>0.5</_moveToItemMultiplier>
+  </PickupClawGrabber>
 
-    <EnemyFactory>
-        <MaxNumberOfEnemies>30</MaxNumberOfEnemies>
-        <NumberOfEnemies>20</NumberOfEnemies>
-    </EnemyFactory>
+  <EnemyFactory>
+      <MaxNumberOfEnemies>30</MaxNumberOfEnemies>
+      <NumberOfEnemies>20</NumberOfEnemies>
+  </EnemyFactory>
 
-    <LameEnemyMovement>
-        <_movementAmplitude>1</_movementAmplitude>
-        <_speedLimit>1</_speedLimit>
-    </LameEnemyMovement>
+  <LameEnemyMovement>
+      <_movementAmplitude>1</_movementAmplitude>
+      <_speedLimit>1</_speedLimit>
+  </LameEnemyMovement>
 
-    <ZigZagEnemyMovement>
-        <_movementAmplitude>2</_movementAmplitude>
-        <_changeZigZagDirectionInterval>1</_changeZigZagDirectionInterval>
-        <_changeFromDirectionAngle>90</_changeFromDirectionAngle>
-    </ZigZagEnemyMovement>
+  <ZigZagEnemyMovement>
+      <_movementAmplitude>2</_movementAmplitude>
+      <_changeZigZagDirectionInterval>1</_changeZigZagDirectionInterval>
+      <_changeFromDirectionAngle>90</_changeFromDirectionAngle>
+  </ZigZagEnemyMovement>
 
-    <SinusEnemyMovement>
-        <_sinAxisMovementAmplitude>0.5</_sinAxisMovementAmplitude>
-        <_otherAxisMovementAmplitude>2</_otherAxisMovementAmplitude>
-        <_changeSinForceInterval>2</_changeSinForceInterval>
-        <_otherAxisSpeedLimit>2</_otherAxisSpeedLimit>
-    </SinusEnemyMovement>
+  <SinusEnemyMovement>
+      <_sinAxisMovementAmplitude>0.5</_sinAxisMovementAmplitude>
+      <_otherAxisMovementAmplitude>2</_otherAxisMovementAmplitude>
+      <_changeSinForceInterval>2</_changeSinForceInterval>
+      <_otherAxisSpeedLimit>2</_otherAxisSpeedLimit>
+  </SinusEnemyMovement>
 
-    <GreekEnemyMovement>
-        <_movementAmplitude>2</_movementAmplitude>
-        <_changeGreekDirectionInterval>1</_changeGreekDirectionInterval>
-    </GreekEnemyMovement>
+  <GreekEnemyMovement>
+      <_movementAmplitude>2</_movementAmplitude>
+      <_changeGreekDirectionInterval>1</_changeGreekDirectionInterval>
+  </GreekEnemyMovement>
 
-    <FollowingEnemyMovement>
-        <_movementAmplitude>1</_movementAmplitude>
-        <_attackLoadingInterval>1</_attackLoadingInterval>
-        <_oneAttackInterval>3</_oneAttackInterval>
-    </FollowingEnemyMovement>
+  <FollowingEnemyMovement>
+      <_movementAmplitude>1</_movementAmplitude>
+      <_attackLoadingInterval>1</_attackLoadingInterval>
+      <_oneAttackInterval>3</_oneAttackInterval>
+  </FollowingEnemyMovement>
 
-    <ShootingInRangeEnemyMovement>
-        <_movementAmplitude>1</_movementAmplitude>
-        <_speedLimit>1</_speedLimit>
-        <_movingInterval>3</_movingInterval>
-        <_aimingInterval>1</_aimingInterval>
-        <_attackingInterval>1</_attackingInterval>
-        <_shootingRange>5</_shootingRange>
-        <_rotationSpeed>0.03</_rotationSpeed>
-    </ShootingInRangeEnemyMovement>
+  <ShootingInRangeEnemyMovement>
+      <_movementAmplitude>1</_movementAmplitude>
+      <_speedLimit>1</_speedLimit>
+      <_movingInterval>3</_movingInterval>
+      <_aimingInterval>1</_aimingInterval>
+      <_attackingInterval>1</_attackingInterval>
+      <_shootingRange>5</_shootingRange>
+      <_rotationSpeed>0.03</_rotationSpeed>
+  </ShootingInRangeEnemyMovement>
 
-    <ShootingLazerRangeEnemy>
-        <_movementAmplitude>1</_movementAmplitude>
-        <_speedLimit>1</_speedLimit>
-        <_movingInterval>3</_movingInterval>
-        <_aimingInterval>2</_aimingInterval>
-        <_attackingInterval>2</_attackingInterval>
-        <_shootingRange>10</_shootingRange>
-        <_rotationSpeed>0.03</_rotationSpeed>
-        <_shotRotationSpeed>0.03</_shotRotationSpeed>
-    </ShootingLazerRangeEnemy>
+  <ShootingLazerRangeEnemy>
+      <_movementAmplitude>1</_movementAmplitude>
+      <_speedLimit>1</_speedLimit>
+      <_movingInterval>3</_movingInterval>
+      <_aimingInterval>2</_aimingInterval>
+      <_attackingInterval>2</_attackingInterval>
+      <_shootingRange>10</_shootingRange>
+      <_rotationSpeed>0.03</_rotationSpeed>
+      <_shotRotationSpeed>0.03</_shotRotationSpeed>
+  </ShootingLazerRangeEnemy>
 
-    <ShootingLazerAsteriskEnemy>
-        <_movementAmplitude>1</_movementAmplitude>
-        <_speedLimit>1</_speedLimit>
-        <_movingInterval>3</_movingInterval>
-        <_aimingInterval>3</_aimingInterval>
-        <_attackingInterval>2</_attackingInterval>
-        <_rotationSpeed>0.03</_rotationSpeed>
-        <_numberOfShots>8</_numberOfShots>
-    </ShootingLazerAsteriskEnemy>
-    
-    <AsteroidInstantiator>
-        <_asteroidInstantiationDistanceFromCenter>25</_asteroidInstantiationDistanceFromCenter>
-        <_asteroidInstantiationLineLength>30</_asteroidInstantiationLineLength>
-        <_asteroidInstantiationInterval>2</_asteroidInstantiationInterval>
-        <_asteroidMaxScale>4</_asteroidMaxScale>
-    </AsteroidInstantiator>
+  <ShootingLazerAsteriskEnemy>
+      <_movementAmplitude>1</_movementAmplitude>
+      <_speedLimit>1</_speedLimit>
+      <_movingInterval>3</_movingInterval>
+      <_aimingInterval>3</_aimingInterval>
+      <_attackingInterval>2</_attackingInterval>
+      <_rotationSpeed>0.03</_rotationSpeed>
+      <_numberOfShots>8</_numberOfShots>
+  </ShootingLazerAsteriskEnemy>
 
+  // Not used from - 15/9/23
+  <AsteroidInstantiator>
+      <_asteroidInstantiationDistanceFromCenter>25</_asteroidInstantiationDistanceFromCenter>
+      <_asteroidInstantiationLineLength>30</_asteroidInstantiationLineLength>
+      <_asteroidInstantiationInterval>2</_asteroidInstantiationInterval>
+      <_asteroidMaxScale>4</_asteroidMaxScale>
+  </AsteroidInstantiator>
 
+  // Not used from - 12/9/23
   <AsteroidExternalInstantiator>
-    <_asteroidInstantiationDistanceFromCenter>25</_asteroidInstantiationDistanceFromCenter>
-    <_asteroidInstantiationLineLength>30</_asteroidInstantiationLineLength>
-    <_asteroidInstantiationInterval>2</_asteroidInstantiationInterval>
-    <_asteroidInstantiationLoad>1</_asteroidInstantiationLoad>
-    <_asteroidMaxScale>4</_asteroidMaxScale>
-    <_maxInstantiationsRetry>5</_maxInstantiationsRetry>
-    <_asteroidTakeOffTime>5</_asteroidTakeOffTime>
+  <_asteroidInstantiationDistanceFromCenter>25</_asteroidInstantiationDistanceFromCenter>
+  <_asteroidInstantiationLineLength>30</_asteroidInstantiationLineLength>
+  <_asteroidInstantiationInterval>2</_asteroidInstantiationInterval>
+  <_asteroidInstantiationLoad>1</_asteroidInstantiationLoad>
+  <_asteroidMaxScale>4</_asteroidMaxScale>
+  <_maxInstantiationsRetry>5</_maxInstantiationsRetry>
+  <_asteroidTakeOffTime>5</_asteroidTakeOffTime>
   </AsteroidExternalInstantiator>
 
+  // Not used from - 12/9/23
   <AsteroidInternalInstantiator>
-    <_asteroidMaxScale>4</_asteroidMaxScale>
-    <_asteroidMaxInstantiationCount>5</_asteroidMaxInstantiationCount>
-    <_asteroidMinInstantiationCount>2</_asteroidMinInstantiationCount>
-    <_asteroidScaleMultiplier>0.7</_asteroidScaleMultiplier>
-    <_asteroidNewDirectionOffsetDegree>40</_asteroidNewDirectionOffsetDegree>
+  <_asteroidMaxScale>4</_asteroidMaxScale>
+  <_asteroidMaxInstantiationCount>5</_asteroidMaxInstantiationCount>
+  <_asteroidMinInstantiationCount>2</_asteroidMinInstantiationCount>
+  <_asteroidScaleMultiplier>0.7</_asteroidScaleMultiplier>
+  <_asteroidNewDirectionOffsetDegree>40</_asteroidNewDirectionOffsetDegree>
   </AsteroidInternalInstantiator>
 
   // Not used from - 08/9/23
   <AsteroidDestructor>
-    <_singleAxisDestructionDistance>50</_singleAxisDestructionDistance>
+  <_singleAxisDestructionDistance>50</_singleAxisDestructionDistance>
   </AsteroidDestructor>
 
+  // Not used from - 15/9/23
   <AsteroidMovement>
-    <_velocityMagnitude>2</_velocityMagnitude>
-    <_maxRotation>50</_maxRotation>
-    <_collisionSpeedMultiplier>1</_collisionSpeedMultiplier>
-    <_transparencyPeriod>3</_transparencyPeriod>
+  <_velocityMagnitude>2</_velocityMagnitude>
+  <_maxRotation>50</_maxRotation>
+  <_collisionSpeedMultiplier>1</_collisionSpeedMultiplier>
+  <_transparencyPeriod>3</_transparencyPeriod>
   </AsteroidMovement>
 
   // // Not used from - 28/8/23
   <ItemMovement>
-    <_maxVelocity>0.1</_maxVelocity>
-    <_maxRotation>10</_maxRotation>
+  <_maxVelocity>0.1</_maxVelocity>
+  <_maxRotation>10</_maxRotation>
   </ItemMovement>
 
   <WeaponStamina>
-    <_weaponCooldownMultiplierSubtruction>0.1</_weaponCooldownMultiplierSubtruction>
+  <_weaponCooldownMultiplierSubtruction>0.1</_weaponCooldownMultiplierSubtruction>
   </WeaponStamina>
 
   <ItemRanker>
-    <_ballShotRank>1</_ballShotRank>
-    <_laserBeamRank>15</_laserBeamRank>
-    <_fireRateRank>20</_fireRateRank>
-    <_nitroFuelRank>10</_nitroFuelRank>
+  <_ballShotRank>1</_ballShotRank>
+  <_laserBeamRank>15</_laserBeamRank>
+  <_fireRateRank>20</_fireRateRank>
+  <_nitroFuelRank>10</_nitroFuelRank>
   </ItemRanker>
 
 </scripts>
