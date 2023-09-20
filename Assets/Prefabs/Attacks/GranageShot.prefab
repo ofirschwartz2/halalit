@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 4043514594342984743}
   - component: {fileID: 4043514594342984745}
   - component: {fileID: 4423633703291208000}
-  - component: {fileID: 5936866091135545148}
+  - component: {fileID: 1835879997958551670}
   m_Layer: 7
-  m_Name: BlastShot
-  m_TagString: Shot
+  m_Name: GranageShot
+  m_TagString: Granade
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: 36a58ef0f52a17e4a93613edf7d86198, type: 3}
-  m_Color: {r: 0.6415094, g: 0.26931292, b: 0.29516813, a: 1}
+  m_Color: {r: 0.22116414, g: 0.49997878, b: 0.6603774, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -95,13 +95,13 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4043514594342984741}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_LinearDrag: 5
+  m_AngularDrag: 5
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -113,7 +113,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 0
 --- !u!58 &4423633703291208000
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -143,13 +143,13 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &5936866091135545148
+--- !u!114 &1835879997958551670
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,11 +158,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4043514594342984741}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cc50ec1bcd76904ca975d16369954f6, type: 3}
+  m_Script: {fileID: 11500000, guid: 5fd11a5f50ff0fb4db97ab36e02b343c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _useConfigFile: 0
   _rigidBody: {fileID: 4043514594342984745}
-  _speed: 5
-  _lifetime: 0.5
-  blastPrefab: {fileID: 5631236547325946782, guid: 7929086ba79298145a0c41fca344b2d0, type: 3}
+  _throwForce: 25
+  _lifetime: 3
+  blastPrefab: {fileID: 3234905841513393416, guid: 9249e97c9110a0b42a0d3eaeac33ca9d, type: 3}

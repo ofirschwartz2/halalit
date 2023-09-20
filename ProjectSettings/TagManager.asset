@@ -28,6 +28,7 @@ TagManager:
   - Undefined
   - Asteroid
   - Weapon
+  - Granade
   layers:
   - Default
   - TransparentFX
