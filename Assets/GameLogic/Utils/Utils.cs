@@ -11,7 +11,7 @@ namespace Assets.Utils
 
         public static float GetRandomAngleAround(float range)
         {
-            return UnityEngine.Random.Range(-range, range);
+            return Random.Range(-range, range);
         }
 
         public static Quaternion GetRotation(Quaternion rotation, float angle)
@@ -262,7 +262,7 @@ namespace Assets.Utils
 
         public static Direction GetRandomDirection()
         {
-            return (Direction)UnityEngine.Random.Range(0, Enum.GetValues(typeof(Direction)).Length);
+            return (Direction)Random.Range(0, Enum.GetValues(typeof(Direction)).Length);
         }
         #endregion
 

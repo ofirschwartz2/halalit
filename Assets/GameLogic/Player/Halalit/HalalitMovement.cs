@@ -25,6 +25,11 @@ public class HalalitMovement : MonoBehaviour
     private float _rigidBodyDrag;
     private float _knockBackCooldownTime;
 
+    private void OnHalalitDeath(object initiator, DeathEventArguments arguments)
+    {
+        Destroy(gameObject);
+    }
+
     void Start()
     {
         if (_useConfigFile)

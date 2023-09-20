@@ -151,6 +151,7 @@
     <_asteroidNewDirectionOffsetDegree>40</_asteroidNewDirectionOffsetDegree>
   </AsteroidInternalInstantiator>
 
+  // Not used from - 08/9/23
   <AsteroidDestructor>
     <_singleAxisDestructionDistance>50</_singleAxisDestructionDistance>
   </AsteroidDestructor>

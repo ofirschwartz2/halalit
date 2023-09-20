@@ -1,7 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace Assets.Enums
 {
+    [Serializable]
     public enum Tag
     {
         [Description("Halalit")] 
@@ -29,6 +31,12 @@ namespace Assets.Enums
         [Description("LeftEdge")]
         LEFT_EDGE,
         [Description("RightEdge")]
-        RIGHT_EDGE
+        RIGHT_EDGE,
+        [Description("BarBorder")]
+        BAR_BORDEDR,
+        [Description("BarFill")]
+        BAR_FILL,
+        [Description("BarIcon")]
+        BAR_ICON,
     }
 }

@@ -7,9 +7,7 @@ TagManager:
   - Enemy
   - Halalit
   - Shot
-  - Gun
   - Engine
-  - Shot2
   - Item
   - PickupClaw
   - EnemyOuterCollider
@@ -27,7 +25,10 @@ TagManager:
   - AimShot
   - Undefined
   - Asteroid
+  - BarBorder
+  - BarFill
   - Weapon
+  - BarIcon
   layers:
   - Default
   - TransparentFX

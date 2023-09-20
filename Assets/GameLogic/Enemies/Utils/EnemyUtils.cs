@@ -60,11 +60,6 @@ static class EnemyUtils
     }
 
     #region Predicates
-    public static bool ShouldKillMe(Collider2D other)
-    {
-        return other.gameObject.CompareTag(Tag.SHOT.GetDescription());
-    }
-
     public static bool ShouldKnockEnemyBack(string myLayer, Collider2D other)
     {
         return
