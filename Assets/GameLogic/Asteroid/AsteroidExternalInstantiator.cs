@@ -6,21 +6,19 @@ using Random = UnityEngine.Random;
 public class AsteroidExternalInstantiator : MonoBehaviour
 {
     [SerializeField]
-    private bool _useConfigFile;
-    [SerializeField]
     private GameObject _asteroidPrefab;
     [SerializeField]
     private AsteroidInitiator _asteroidInitiator;
     [SerializeField]
     private float _asteroidInstantiationLineLength;
     [SerializeField]
-    private float _asteroidInstantiationInterval;
+    private float _asteroidInstantiationTimeInterval;
     [SerializeField]
     private float _asteroidInstantiationLoad;
     [SerializeField]
     private float _asteroidInstantiationDistanceFromCenter;
     [SerializeField]
-    private float _asteroidMaxScale;
+    private int _asteroidMaxScale;
     [SerializeField]
     private float _maxInstantiationsRetry;
     [SerializeField]
@@ -34,11 +32,6 @@ public class AsteroidExternalInstantiator : MonoBehaviour
 
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-
         _timeToInstantiation = 0;
         _forbiddenInstantiationZones = new();
         _instantiationLineCenterPoint = GetRandomInstantiationLineCenterPoint();
@@ -167,7 +160,7 @@ public class AsteroidExternalInstantiator : MonoBehaviour
     {
         _timeToInstantiation += Time.deltaTime;
 
-        if (_timeToInstantiation >= _asteroidInstantiationInterval)
+        if (_timeToInstantiation >= _asteroidInstantiationTimeInterval)
         {
             _timeToInstantiation = 0;
             InstantiateAsteroidsFromStartLine();
@@ -203,7 +196,7 @@ public class AsteroidExternalInstantiator : MonoBehaviour
 
     private float GetRandomAsteroidScale()
     {
-        return Random.Range(0, _asteroidMaxScale + 1);
+        return Random.Range(1, _asteroidMaxScale + 1);
     }
     #endregion
 }
