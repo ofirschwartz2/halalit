@@ -43,8 +43,8 @@ public class Sword : MonoBehaviour
 
     private void SetRotation(Transform weaponTransform)
     {
-        var fromRotation = Utils.GetRotation(weaponTransform.rotation, -0.5f * _swordRotationRange);
-        var toRotation = Utils.GetRotation(weaponTransform.rotation, 0.5f * _swordRotationRange);
+        var fromRotation = Utils.GetRotationPlusAngle(weaponTransform.rotation, -0.5f * _swordRotationRange);
+        var toRotation = Utils.GetRotationPlusAngle(weaponTransform.rotation, 0.5f * _swordRotationRange);
 
         transform.parent.rotation = Quaternion.Slerp(
             fromRotation, 

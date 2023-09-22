@@ -44,7 +44,7 @@ public class ShotgunShootingPoint : MonoBehaviour
         for (var i = 0; i < numberOfShots; i++)
         {
             var angle = Utils.GetRandomAngleAround(range);
-            Instantiate(_shotgunShotPrefab, transform.position, Utils.GetRotation(transform.rotation, angle));
+            Instantiate(_shotgunShotPrefab, transform.position, Utils.GetRotationPlusAngle(transform.rotation, angle));
         }
     }
 

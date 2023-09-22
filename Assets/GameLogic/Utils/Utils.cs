@@ -205,15 +205,19 @@ namespace Assets.Utils
         }
 
         public static Vector2 GetHalalitDirection(Vector2 myPosition)
-        {;
+        {
             var halalitPosition = GetHalalitPosition();
             return new Vector2(halalitPosition.x, halalitPosition.y) - myPosition;
         }
 
-        public static Vector2 GetHalalitPosition()
+        public static Transform GetHalalitTransform()
         {
-            var halalit = GameObject.FindGameObjectWithTag("Halalit");
-            return halalit.transform.position;
+            return GameObject.FindGameObjectWithTag("Halalit").transform;
+        }
+
+        public static Vector3 GetHalalitPosition()
+        {
+            return GetHalalitTransform().position;
         }
 
         public static Vector2 GetRotationAsVector2(Quaternion rotation)
@@ -227,7 +231,7 @@ namespace Assets.Utils
 
         #region Quaternions
 
-        public static Quaternion GetRotation(Quaternion rotation, float angle)
+        public static Quaternion GetRotationPlusAngle(Quaternion rotation, float angle)
         {
             return rotation * Quaternion.AngleAxis(angle, Vector3.forward);
         }
@@ -236,7 +240,7 @@ namespace Assets.Utils
         {
             Vector2 direction = to - from;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
-            return GetRotation(Quaternion.identity, angle);
+            return GetRotationPlusAngle(Quaternion.identity, angle);
         }
         #endregion
 
