@@ -12,7 +12,7 @@ public class Sword : MonoBehaviour
     [SerializeField]
     private float _swordRotationRange;
     [SerializeField]
-    private AnimationCurve accelerationCurve;
+    private AnimationCurve accelerationCurve; // TODO: fix to _movementCurve
 
     private float _attackStartTime;
 
