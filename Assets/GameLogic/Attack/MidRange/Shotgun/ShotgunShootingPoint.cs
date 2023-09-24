@@ -31,7 +31,7 @@ public class ShotgunShootingPoint : MonoBehaviour
         _endOfLifeTime = Time.time + 10; // TODO: fix this
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (Utils.ShouldDie(_endOfLifeTime))
         {

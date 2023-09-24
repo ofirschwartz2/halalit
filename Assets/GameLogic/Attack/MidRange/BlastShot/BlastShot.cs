@@ -30,7 +30,7 @@ public class BlastShot : MonoBehaviour
         _rigidBody.velocity = transform.up * _speed;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (Utils.ShouldDie(_endOfLifeTime))
         {
