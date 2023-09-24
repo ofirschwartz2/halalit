@@ -5,7 +5,7 @@ namespace Assets.Enums
     public enum SpikesState
     {
         EXTRACTING,
-        OUT,
+        WAITING_OUT,
         RETRACTING
     }
 }

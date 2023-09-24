@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _useConfigFile: 0
-  _sideSpikesRotaion: 5
+  _sideSpikesRotaion: 15
   _extractionTime: 0.2
   _extractionCurve:
     serializedVersion: 2

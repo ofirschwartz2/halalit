@@ -8,27 +8,6 @@ namespace Assets.Utils
 {
     static class Utils
     {
- 
-        public static float GetRandomAngleAround(float range)
-        {
-            return UnityEngine.Random.Range(-range, range);
-        }
-
-        public static float GetRandomBetween(float bottom, float top)
-        {
-            return UnityEngine.Random.Range(bottom, top);
-        }
-
-        public static float GetEndOfLifeTime(float lifetime)
-        {
-            return Time.time + lifetime;
-        }
-
-        public static float GetPortionPassed(float startTime, float duration)
-        {
-            return (Time.time - startTime) / (duration);
-        }
-
         #region Math 
         public static float Vector2ToDegree(float x, float y)
         {
@@ -151,9 +130,52 @@ namespace Assets.Utils
 
             return new(newVectorX, newVectorY);
         }
+
+        public static float Vector2ToRadians(Vector2 direction)
+        {
+            float radians = Mathf.Atan2(direction.y, direction.x);
+
+            if (radians < 0)
+            {
+                radians += 2 * Mathf.PI;
+            }
+
+            return radians;
+        }
+
+        public static float GetRandomAngleAround(float range)
+        {
+            return UnityEngine.Random.Range(-range, range);
+        }
+
+        public static float GetRandomBetween(float bottom, float top)
+        {
+            return UnityEngine.Random.Range(bottom, top);
+        }
+
+        public static float GetEndOfLifeTime(float lifetime)
+        {
+            return Time.time + lifetime;
+        }
+
+        public static float GetPortionPassed(float startTime, float duration)
+        {
+            return (Time.time - startTime) / (duration);
+        }
         #endregion
 
         #region Vectors
+
+        public static Vector2 GetDestinationPosition(Vector2 startPosition, Vector2 rotation, float distance) // TODO: move to Utils
+        {
+            float angleInRadians = Vector2ToRadians(rotation);
+
+            float x = startPosition.x + Mathf.Cos(angleInRadians) * distance;
+            float y = startPosition.y + Mathf.Sin(angleInRadians) * distance;
+
+            return new Vector2(x, y);
+        }
+
         public static Vector2 GetRandomVector2OnCircle()
         {
             float angle = UnityEngine.Random.Range(0, 2 * Mathf.PI);
