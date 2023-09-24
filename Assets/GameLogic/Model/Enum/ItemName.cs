@@ -25,6 +25,8 @@ namespace Assets.Enums
         GRANADE_SHOT = AttackName.GRANADE_SHOT,
         [Description("Shotgun shot item")]
         SHOTGUN_SHOT = AttackName.SHOTGUN_SHOT,
+        [Description("Spikes item")]
+        SPIKES = AttackName.SPIKES,
 
         // Upgrades
         [Description("Halalit max HP")]

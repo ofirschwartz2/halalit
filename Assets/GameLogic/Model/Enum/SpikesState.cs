@@ -6,6 +6,6 @@ namespace Assets.Enums
     {
         EXTRACTING,
         OUT,
-        DETRACTING
+        RETRACTING
     }
 }

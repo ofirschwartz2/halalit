@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4043514594342984742}
   - component: {fileID: 4043514594342984743}
   - component: {fileID: 4043514594342984745}
-  - component: {fileID: 4210393928248232888}
   - component: {fileID: 7092197243012118284}
   m_Layer: 7
   m_Name: CenterSpike
@@ -73,9 +72,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1226254537
-  m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: 7482667652216324306, guid: 4544d3def399fc9498876db7834dd9e4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -114,27 +113,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &4210393928248232888
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4043514594342984741}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a376fd8f53794849b036b7cd00950c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rotationSpeed: 8
-  _timeOfShot: 2
-  bezierCurve6InnerPoints:
-  - {x: -3, y: 3}
-  - {x: -3.5, y: 7.875}
-  - {x: -0.5, y: 10.125}
-  - {x: 0.5, y: 10.125}
-  - {x: 3.5, y: 7.875}
-  - {x: 3, y: 3}
 --- !u!60 &7092197243012118284
 PolygonCollider2D:
   m_ObjectHideFlags: 0
