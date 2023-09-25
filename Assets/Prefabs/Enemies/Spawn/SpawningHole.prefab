@@ -103,8 +103,6 @@ MonoBehaviour:
   - {fileID: 8916735576456593937, guid: b1e50489bd6aa014c9faaaeabb0cee8f, type: 3}
   - {fileID: 8916735576456593937, guid: 68bb873866646fc4cad1d8cd9c83aea1, type: 3}
   - {fileID: 8916735576456593937, guid: 68bb873866646fc4cad1d8cd9c83aea1, type: 3}
-  - {fileID: 8916735576456593937, guid: 68bb873866646fc4cad1d8cd9c83aea1, type: 3}
-  - {fileID: 8916735576456593937, guid: 68bb873866646fc4cad1d8cd9c83aea1, type: 3}
   _spawningHoleOpeningCurve:
     serializedVersion: 2
     m_Curve:
@@ -144,17 +142,17 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0.33284906
       value: 1.1
-      inSlope: -0.13408437
-      outSlope: -0.13408437
+      inSlope: -0.081216455
+      outSlope: -0.081216455
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 0.667
-      value: 0.91
-      inSlope: -0.14916755
-      outSlope: -0.14916755
+      value: 0.94533175
+      inSlope: -0.14935029
+      outSlope: -0.14935029
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -162,8 +160,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0.2702702
-      outSlope: 0.2702702
+      inSlope: 0.16416891
+      outSlope: 0.16416891
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -231,4 +229,4 @@ MonoBehaviour:
   _openingLifetime: 1
   _openLifetime: 1
   _closingLifetime: 1
-  _spawnHoleMultiplier: 5
+  _spawnHoleMultiplier: 1.5

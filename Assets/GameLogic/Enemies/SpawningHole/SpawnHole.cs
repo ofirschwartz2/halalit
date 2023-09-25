@@ -76,11 +76,16 @@ public class SpawnHole : MonoBehaviour
 
         if (Time.time >= _endOfOpeningLifeTime)
         {
-            _state = SpawnHoleState.OPEN;
-            _startOfOpenLifeTime = Time.time;
-            _endOfOpenLifeTime = _startOfOpenLifeTime + _openLifetime;
-            InstantiateEnemies();
+            EndOpening();
         }
+    }
+
+    private void EndOpening()
+    {
+        _state = SpawnHoleState.OPEN;
+        _startOfOpenLifeTime = Time.time;
+        _endOfOpenLifeTime = _startOfOpenLifeTime + _openLifetime;
+        InstantiateEnemies();
     }
 
     private void OPEN()
@@ -92,7 +97,17 @@ public class SpawnHole : MonoBehaviour
             _spawnHoleMultiplier
             );
 
-        foreach(GameObject enemy in _enemies)
+        SpawningEnemies();
+
+        if (Time.time >= _endOfOpenLifeTime)
+        {
+            EndOpen();
+        }
+    }
+
+    private void SpawningEnemies()
+    {
+        foreach (GameObject enemy in _enemies)
         {
             enemy.transform.localScale = GetNewLocalScale(
                 _enemySizeCurve,
@@ -107,13 +122,13 @@ public class SpawnHole : MonoBehaviour
                 Utils.GetPortionPassed(_startOfOpenLifeTime, _openLifetime)
                 );
         }
+    }
 
-        if (Time.time >= _endOfOpenLifeTime)
-        {
-            _state = SpawnHoleState.CLOSING;
-            _startOfClosingLifeTime = Time.time;
-            _endOfClosingLifeTime = _startOfClosingLifeTime + _closingLifetime;
-        }
+    private void EndOpen()
+    {
+        _state = SpawnHoleState.CLOSING;
+        _startOfClosingLifeTime = Time.time;
+        _endOfClosingLifeTime = _startOfClosingLifeTime + _closingLifetime;
     }
 
     private void CLOSING()
@@ -139,7 +154,7 @@ public class SpawnHole : MonoBehaviour
             _enemies[i].transform.localScale = Vector3.zero;
         }
 
-        _spawnFinalPoints = EnemyUtils.GetEvenPositionsAroundCircle(transform, _enemyPrefabs.Length, transform.localScale.magnitude / 4f).ToArray(); // TODO: fix
+        _spawnFinalPoints = EnemyUtils.GetEvenPositionsAroundCircle(transform, _enemyPrefabs.Length, transform.localScale.magnitude).ToArray();
     }
 
     public Vector3 GetNewLocalScale(AnimationCurve animationCurve, float startOfLifeTime, float lifetime, float sizeMultiplier)
