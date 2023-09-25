@@ -98,7 +98,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _useConfigFile: 0
-  _enemyPrefabs: []
+  _enemyPrefabs:
+  - {fileID: 8916735576456593937, guid: 7637ffb4ec979d54da17db01a4506ab6, type: 3}
+  - {fileID: 8916735576456593937, guid: b1e50489bd6aa014c9faaaeabb0cee8f, type: 3}
+  - {fileID: 8916735576456593937, guid: 68bb873866646fc4cad1d8cd9c83aea1, type: 3}
+  - {fileID: 8916735576456593937, guid: 68bb873866646fc4cad1d8cd9c83aea1, type: 3}
+  - {fileID: 8916735576456593937, guid: 68bb873866646fc4cad1d8cd9c83aea1, type: 3}
+  - {fileID: 8916735576456593937, guid: 68bb873866646fc4cad1d8cd9c83aea1, type: 3}
   _spawningHoleOpeningCurve:
     serializedVersion: 2
     m_Curve:
@@ -198,7 +204,31 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _enemySizeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _openingLifetime: 1
   _openLifetime: 1
   _closingLifetime: 1
-  _spawnHoleMultiplier: 2
+  _spawnHoleMultiplier: 5

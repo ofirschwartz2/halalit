@@ -1,5 +1,6 @@
 using Assets.Enums;
 using Assets.Utils;
+using System;
 using UnityEngine;
 
 public class SpawnHole : MonoBehaviour
@@ -15,6 +16,8 @@ public class SpawnHole : MonoBehaviour
     [SerializeField]
     private AnimationCurve _spawningHoleClosingCurve;
     [SerializeField]
+    private AnimationCurve _enemySizeCurve;
+    [SerializeField]
     private float _openingLifetime;
     [SerializeField]
     private float _openLifetime;
@@ -29,6 +32,8 @@ public class SpawnHole : MonoBehaviour
         _startOfClosingLifeTime, _endOfClosingLifeTime;
     private Vector3 _originalScale;
     private SpawnHoleState _state;
+    private GameObject[] _enemies;
+    private Vector2[] _spawnFinalPoints;
 
     void Start()
     {
@@ -40,6 +45,8 @@ public class SpawnHole : MonoBehaviour
         _startOfOpeningLifeTime = Time.time;
         _endOfOpeningLifeTime = _startOfOpeningLifeTime + _openingLifetime;
         _originalScale = transform.localScale;
+        _enemies = new GameObject[_enemyPrefabs.Length];
+        _spawnFinalPoints = new Vector2[_enemyPrefabs.Length];
     }
 
     void FixedUpdate()
@@ -72,6 +79,7 @@ public class SpawnHole : MonoBehaviour
             _state = SpawnHoleState.OPEN;
             _startOfOpenLifeTime = Time.time;
             _endOfOpenLifeTime = _startOfOpenLifeTime + _openLifetime;
+            InstantiateEnemies();
         }
     }
 
@@ -83,6 +91,22 @@ public class SpawnHole : MonoBehaviour
             _openLifetime,
             _spawnHoleMultiplier
             );
+
+        foreach(GameObject enemy in _enemies)
+        {
+            enemy.transform.localScale = GetNewLocalScale(
+                _enemySizeCurve,
+                _startOfOpenLifeTime,
+                _openLifetime,
+                1f
+                );
+
+            enemy.transform.position = Vector3.Lerp(
+                transform.position,
+                _spawnFinalPoints[Array.IndexOf(_enemies, enemy)],
+                Utils.GetPortionPassed(_startOfOpenLifeTime, _openLifetime)
+                );
+        }
 
         if (Time.time >= _endOfOpenLifeTime)
         {
@@ -107,9 +131,20 @@ public class SpawnHole : MonoBehaviour
         }
     }
 
-    public Vector3 GetNewLocalScale(AnimationCurve animationCurve, float startOfLifeTime, float lifetime, float spawnHoleMultiplier)
+    private void InstantiateEnemies()
     {
-        var blastMultiplier = animationCurve.Evaluate(Utils.GetPortionPassed(startOfLifeTime, lifetime)) * spawnHoleMultiplier;
+        for (int i=0; i<_enemyPrefabs.Length; i++)
+        {
+            _enemies[i] = Instantiate(_enemyPrefabs[i], transform.position, Quaternion.identity);
+            _enemies[i].transform.localScale = Vector3.zero;
+        }
+
+        _spawnFinalPoints = EnemyUtils.GetEvenPositionsAroundCircle(transform, _enemyPrefabs.Length, transform.localScale.magnitude / 4f).ToArray(); // TODO: fix
+    }
+
+    public Vector3 GetNewLocalScale(AnimationCurve animationCurve, float startOfLifeTime, float lifetime, float sizeMultiplier)
+    {
+        var blastMultiplier = animationCurve.Evaluate(Utils.GetPortionPassed(startOfLifeTime, lifetime)) * sizeMultiplier;
         return _originalScale * (blastMultiplier);
     }
 
