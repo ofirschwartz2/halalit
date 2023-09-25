@@ -1,10 +1,7 @@
-using Assets.Utils;
 using UnityEngine;
 
 public class LaserBeamShot : MonoBehaviour
 {
-    [SerializeField]
-    private bool _useConfigFile;
     [SerializeField]
     private float _lifetime;
     [SerializeField]
@@ -16,11 +13,6 @@ public class LaserBeamShot : MonoBehaviour
 
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-
         _endOfLifeTime = Time.time + _lifetime;
     }
 

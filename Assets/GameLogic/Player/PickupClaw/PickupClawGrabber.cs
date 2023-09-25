@@ -5,30 +5,20 @@ using UnityEngine;
 public class PickupClawGrabber : MonoBehaviour
 {
     [SerializeField]
-    private bool _useConfigFile;
-    [SerializeField]
     private Rigidbody2D _rigidBody;
+    [SerializeField]
+    private PickupClawMovement _pickupClawMovement;
+    [SerializeField]
+    private PickupClawState _pickupClawState;
     [SerializeField]
     private float _grabDelay;
     [SerializeField]
     private float _moveToItemMultiplier;
     [SerializeField]
     private float _rotationToItemMultiplier;
-    [SerializeField]
-    private PickupClawMovement _pickupClawMovement;
-    [SerializeField]
-    private PickupClawState _pickupClawState;
-
+    
     private float _grabDelayTimer;
     private GameObject _item;
-
-    void Start()
-    {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-    }
 
     public void Grab()
     {
@@ -50,11 +40,7 @@ public class PickupClawGrabber : MonoBehaviour
             _grabDelayTimer = 0;
             _rigidBody.velocity = Vector2.zero;
             _item = other.gameObject;
-        }
-
-        if (other.gameObject.CompareTag(Tag.HALALIT.GetDescription()) && _item != null)
-        {
-            _item = null;
+            _item.GetComponent<ItemMovement>().Grabbed();
         }
     }
 }

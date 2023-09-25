@@ -85,9 +85,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 234383643535462109}
   m_SourcePrefab: {fileID: 100100000, guid: 57c968e9cf3876545bdaee49816ba18f, type: 3}
---- !u!50 &1938210451083084425 stripped
+--- !u!50 &965314189014534193 stripped
 Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: -6764325976918328105, guid: 57c968e9cf3876545bdaee49816ba18f, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3864331875020387951, guid: 57c968e9cf3876545bdaee49816ba18f, type: 3}
   m_PrefabInstance: {fileID: 4090853399947656798}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &8952326225390038146 stripped
@@ -176,7 +176,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -194,10 +194,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fac4012392c0d74eba41a0e039b3ce7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementAmplitude: 8
+  _rigidBody: {fileID: 965314189014534193}
+  _movementAmplitude: 3
   _oneAttackInterval: 3
   _rotationSpeed: 5
-  _rigidBody: {fileID: 1938210451083084425}
 --- !u!114 &234383643535462109
 MonoBehaviour:
   m_ObjectHideFlags: 0

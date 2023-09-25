@@ -26,7 +26,6 @@ class Health : MonoBehaviour
     private List<string> _harmersDescriptions;
     private List<string> _contributorsDescriptions;
     private Canvas _privateCanvas;
-    private bool _onTriggerEnter2DCalledThisFrame;
 
     #region Init
     private void Awake()
@@ -98,7 +97,6 @@ class Health : MonoBehaviour
         _healthBarBorder = sliderComponents.Where(sliderComponent => sliderComponent.gameObject.CompareTag(Tag.BAR_BORDEDR.GetDescription())).ToList()[0];
         _healthBarBorder.maxValue = _finalMaxHealth;
         _healthBarBorder.value = _currentMaxHealth;
-        _onTriggerEnter2DCalledThisFrame = false;
 
         _harmersDescriptions = _harmers.Select(tag => Utils.GetDescription(tag)).ToList();
         _contributorsDescriptions = _contributors.Select(tag => Utils.GetDescription(tag)).ToList();
@@ -114,52 +112,35 @@ class Health : MonoBehaviour
     #endregion
 
     #region Change health
-    private void OnTriggerEnter2D(Collider2D other)
+    private void HandleHealth(GameObject other, bool physical)
     {
-        if (!_onTriggerEnter2DCalledThisFrame)
+        if (IsHarmer(other))
         {
-            HandleHarmer(other);
-            HandleContributor(other);
-            _onTriggerEnter2DCalledThisFrame = true;
+            if (physical)
+            {
+                HandlePhysicalHarmer(other.GetComponent<CollisionHarmer>());
+            }
+            else
+            {
+                HandleNonPhysicalHarmer(other.GetComponent<TriggerHarmer>());
+            }
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+    private void HandleNonPhysicalHarmer(TriggerHarmer nonPhysicalHarmer)
     {
-        _onTriggerEnter2DCalledThisFrame = false;
+        int harm = nonPhysicalHarmer.GetTriggerHarm();
+        ChangeHealth(-harm);
     }
 
-    private void HandleHarmer(Collider2D other)
+    private void HandlePhysicalHarmer(CollisionHarmer physicalHarmer)
     {
-        if (IsHarmer(other.gameObject))
-        {
-            int healthSubtruction = GetHealthHarm(other.gameObject);
-            ChangeHealth(healthSubtruction);
-        }
+        int harm = physicalHarmer.GetCollisionHarm();
+        ChangeHealth(-harm);
     }
 
-    private int GetHealthHarm(GameObject harmer)
-    {
-        // TODO (dev): Decide by the harmer power attribute
-        return -1;
-    }
 
-    private void HandleContributor(Collider2D other)
-    {
-        if (IsContributor(other.gameObject))
-        {
-            int healthAddition = GetHealthContribution(other.gameObject);
-            ChangeHealth(healthAddition);
-        }
-    }
-
-    private int GetHealthContribution(GameObject contributor)
-    {
-        // TODO (dev): Decide by the contributor HpRaise attribute
-        return 1;
-    }
-
-    private void ChangeHealth(int healthChange)
+    public void ChangeHealth(int healthChange)
     {
         _health += healthChange;
 
@@ -172,23 +153,22 @@ class Health : MonoBehaviour
 
         if (_health <= 0)
         {
-            if (gameObject.CompareTag(Tag.HALALIT.GetDescription()))
-            {
-                DeathEvent.Invoke(EventName.HALALIT_DEATH, this, new(transform.localScale.x));
-            }
-            else if (gameObject.CompareTag(Tag.ENEMY.GetDescription()))
-            {
-                DeathEvent.Invoke(EventName.ENEMY_DEATH, this, new(transform.localScale.x));
-            }
-            else if (gameObject.CompareTag(Tag.ASTEROID.GetDescription()))
-            {
-                DeathEvent.Invoke(EventName.ASTEROID_DEATH, this, new(transform.localScale.x));
-            }
+            InvokeDeathEvent();
         }
     }
     #endregion
 
-    #region Events actions
+    #region Events
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        HandleHealth(other.gameObject, true);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        HandleHealth(other.gameObject, false);
+    }
+
     private void UpgradeCurrentMaxHealth(object initiator, ItemEventArguments arguments)
     {
         if (arguments.Name == ItemName.HALALIT_VITALITY)
@@ -196,6 +176,22 @@ class Health : MonoBehaviour
             _currentMaxHealth++;
             _healthBarBorder.value = _currentMaxHealth;
             Debug.Log("Halalit vitality raised");
+        }
+    }
+
+    private void InvokeDeathEvent()
+    {
+        if (gameObject.CompareTag(Tag.HALALIT.GetDescription()))
+        {
+            DeathEvent.Invoke(EventName.HALALIT_DEATH, this, new(transform.localScale.x));
+        }
+        else if (gameObject.CompareTag(Tag.ENEMY.GetDescription()))
+        {
+            DeathEvent.Invoke(EventName.ENEMY_DEATH, this, new(transform.localScale.x));
+        }
+        else if (gameObject.CompareTag(Tag.ASTEROID.GetDescription()))
+        {
+            DeathEvent.Invoke(EventName.ASTEROID_DEATH, this, new(transform.localScale.x));
         }
     }
     #endregion

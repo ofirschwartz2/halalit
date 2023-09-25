@@ -1,4 +1,3 @@
-using Assets.Enums;
 using Assets.Utils;
 using System;
 using UnityEngine;
@@ -14,21 +13,12 @@ public class HalalitMovement : MonoBehaviour
     [SerializeField]
     private float _rotationSpeed;
     [SerializeField]
-    private float _knockbackMultiplier;
-    [SerializeField]
     private float _speedLimit;
-    [SerializeField]
-    private float _knockBackCooldownInterval;
     
-    private float _knockBackCooldownTime;
-
     void FixedUpdate()
     {
-        if (IsKnockBackCooledDown())
-        {
-            RotateByMovementJoystick();
-            MoveInRotateDirection();
-        }  
+        RotateByMovementJoystick();
+        MoveInRotateDirection();
     }
 
     #region Moving 
@@ -63,25 +53,6 @@ public class HalalitMovement : MonoBehaviour
     }
     #endregion
 
-    #region Knockback
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag(Tag.ENEMY.GetDescription()))
-        {
-            KnockBack(other);
-        }
-    }
-
-    private void KnockBack(Collider2D otherCollider2D)
-    {
-        Vector2 knockbackDirection = (_rigidBody.transform.position - otherCollider2D.transform.position).normalized;
-        float knockBackSpeed = otherCollider2D.GetComponent<Rigidbody2D>().velocity.magnitude * _knockbackMultiplier;
-        _rigidBody.AddForce(knockbackDirection * knockBackSpeed, ForceMode2D.Impulse);
-        
-        _knockBackCooldownTime = Time.time + _knockBackCooldownInterval;
-    }
-    #endregion
-
     #region Predicates
     private bool IsMovementInput()
     {
@@ -96,11 +67,6 @@ public class HalalitMovement : MonoBehaviour
     private bool IsYInput()
     {
         return _joystick.Vertical != 0;
-    }
-
-    private bool IsKnockBackCooledDown()
-    {
-        return Time.time > _knockBackCooldownTime;
     }
     #endregion
 }

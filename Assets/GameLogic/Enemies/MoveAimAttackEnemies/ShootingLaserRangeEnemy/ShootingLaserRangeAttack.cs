@@ -1,26 +1,19 @@
-using Assets.Utils;
 using UnityEngine;
 
 public class ShootingLaserRangeAttack : MoveAimAttackAttack
 {
     [SerializeField]
-    private bool _useConfigFile;
-    [SerializeField]
-    private float _shotRotationSpeed; // If too small - BUG.
-    [SerializeField]
     public GameObject ShotPrefab;
     [SerializeField]
     private ShootingLazerRangeAim _shootingLazerRangeAim;
+    [SerializeField]
+    private float _shotRotationSpeed; // If too small - BUG.
 
     private bool _shotInitiated, _shotDestroyed;
     private GameObject _shot;
     
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
         _shotInitiated = false;
         _shotDestroyed = false;
     }

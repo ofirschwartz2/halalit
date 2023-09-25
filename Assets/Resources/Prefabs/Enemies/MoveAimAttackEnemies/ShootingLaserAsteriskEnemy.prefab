@@ -178,7 +178,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -197,9 +197,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _aimingInterval: 1
-  _useConfigFile: 0
-  _numberOfShots: 8
   AimShotPrefab: {fileID: 6558306382352585984, guid: aa2b5bd32adb2034ca82d6b7b65937f8, type: 3}
+  _numberOfShots: 8
 --- !u!114 &336961175971752282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,11 +212,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attackingInterval: 1
-  _useConfigFile: 0
+  ShotPrefab: {fileID: 6558306382352585984, guid: 079317394ac6c024e956538feb905ec2, type: 3}
   _shootingLazerAsteriskAim: {fileID: 4745574133059015171}
   _endShootingBeforeFinishAttack: 0.1
   _numberOfShots: 8
-  ShotPrefab: {fileID: 6558306382352585984, guid: 079317394ac6c024e956538feb905ec2, type: 3}
 --- !u!114 &2006884750908885733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -230,14 +228,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09f8d2363bd26ab4c8fc9e7e1b8fcffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useConfigFile: 0
+  _rigidBody: {fileID: 7360050084882106372}
   _movementAmplitude: 1
   _speedLimit: 1
   _movingInterval: 1
   _rotationSpeed: 1
-  _rigidBody: {fileID: 2004714417507941060}
---- !u!50 &2004714417507941060 stripped
+--- !u!50 &7360050084882106372 stripped
 Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: 8268421201034673290, guid: 56cf082c9d9101d43abf248d3dda6948, type: 3}
+  m_CorrespondingSourceObject: {fileID: 1101515953741205066, guid: 56cf082c9d9101d43abf248d3dda6948, type: 3}
   m_PrefabInstance: {fileID: 7596860509137192526}
   m_PrefabAsset: {fileID: 0}

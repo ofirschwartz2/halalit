@@ -1,12 +1,10 @@
-using Assets.Enums;
 using Assets.Utils;
-using System;
 using UnityEngine;
 
 public class MoveAimAttackMove : MonoBehaviour
 {
     [SerializeField]
-    private bool _useConfigFile;
+    private Rigidbody2D _rigidBody;
     [SerializeField]
     private float _movementAmplitude;
     [SerializeField]
@@ -15,19 +13,12 @@ public class MoveAimAttackMove : MonoBehaviour
     private float _movingInterval;
     [SerializeField]
     private float _rotationSpeed;
-    [SerializeField]
-    private Rigidbody2D _rigidBody;
 
     private Vector2 _direction;
     private float _movingTime;
     
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-
         SetDirection();
         SetMoving();
     }

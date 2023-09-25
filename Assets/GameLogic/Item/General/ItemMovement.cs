@@ -5,27 +5,26 @@ using Assets.Enums;
 public class ItemMovement : MonoBehaviour
 {
     [SerializeField]
-    private bool _useConfigFile;
-    [SerializeField]
-    private Rigidbody2D _rigidBody;
+    protected Rigidbody2D _rigidBody;
     [SerializeField]
     private float _maxRotation;
 
-    private float _constantRotation;
+    private float _rotationSpeed;
 
     public void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-
-        _constantRotation = Random.Range(-_maxRotation, _maxRotation);
+        _rotationSpeed = Random.Range(-_maxRotation, _maxRotation);
     }
 
-    void Update()
+    public void FixedUpdate()
     {
-        transform.Rotate(0, 0, _constantRotation * Time.deltaTime);
+        _rigidBody.MoveRotation(_rigidBody.rotation + _rotationSpeed * Time.deltaTime);
+    }
+
+    public void Grabbed()
+    {
+        _rigidBody.isKinematic = true;
+        _rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation; 
     }
 
     private void OnTriggerExit2D(Collider2D other)

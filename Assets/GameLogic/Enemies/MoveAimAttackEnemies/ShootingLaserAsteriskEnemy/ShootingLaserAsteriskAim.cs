@@ -5,22 +5,14 @@ using UnityEngine;
 public class ShootingLaserAsteriskAim : MoveAimAttackAim
 {
     [SerializeField]
-    private bool _useConfigFile;
-
+    private GameObject AimShotPrefab;
     [SerializeField]
     private int _numberOfShots;
-
-    [SerializeField]
-    private GameObject AimShotPrefab;
 
     private List<GameObject> _aimingShots;
 
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
         _aimingShots = new List<GameObject>();
     }
     

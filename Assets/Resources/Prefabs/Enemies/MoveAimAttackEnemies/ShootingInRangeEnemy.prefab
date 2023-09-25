@@ -92,6 +92,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8101112890193525553}
   m_SourcePrefab: {fileID: 100100000, guid: 56cf082c9d9101d43abf248d3dda6948, type: 3}
+--- !u!50 &2614708989405956210 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 1101515953741205066, guid: 56cf082c9d9101d43abf248d3dda6948, type: 3}
+  m_PrefabInstance: {fileID: 3098495323270252088}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6129749417454103745 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9084094194011204345, guid: 56cf082c9d9101d43abf248d3dda6948, type: 3}
@@ -178,7 +183,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -197,7 +202,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attackingInterval: 1
-  _useConfigFile: 0
   _shootingInRangeAim: {fileID: 3911195885330229201}
   ShotPrefab: {fileID: 4043514594342984741, guid: 40e6ef62799c1484bba66721899628fb, type: 3}
 --- !u!114 &3911195885330229201
@@ -213,7 +217,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _aimingInterval: 1
-  _useConfigFile: 0
   _shootingRange: 30
 --- !u!114 &8101112890193525553
 MonoBehaviour:
@@ -227,14 +230,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09f8d2363bd26ab4c8fc9e7e1b8fcffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useConfigFile: 0
+  _rigidBody: {fileID: 2614708989405956210}
   _movementAmplitude: 1
   _speedLimit: 1
   _movingInterval: 3
   _rotationSpeed: 1
-  _rigidBody: {fileID: 6466962710067247794}
---- !u!50 &6466962710067247794 stripped
-Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: 8268421201034673290, guid: 56cf082c9d9101d43abf248d3dda6948, type: 3}
-  m_PrefabInstance: {fileID: 3098495323270252088}
-  m_PrefabAsset: {fileID: 0}

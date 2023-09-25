@@ -22,7 +22,7 @@ public class PickupClawStateMachine : MonoBehaviour
         _lastFramePickupClawState = PickupClawStateE.IN_HALALIT;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         _lastFramePickupClawState = _pickupClawState.Value;
 

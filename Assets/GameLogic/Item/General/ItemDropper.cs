@@ -40,7 +40,7 @@ public class ItemDropper : MonoBehaviour
         GameObject item = Instantiate(itemPrefab, dropPosition, Quaternion.identity);
 
         item.transform.SetParent(transform);
-        item.GetComponent<Rigidbody2D>().AddForce(dropForce, ForceMode2D.Impulse);
+        item.GetComponent<Rigidbody2D>().AddForce(dropForce, ForceMode2D.Impulse); 
     }
     #endregion
 

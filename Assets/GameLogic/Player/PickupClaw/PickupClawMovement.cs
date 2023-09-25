@@ -13,6 +13,8 @@ public class PickupClawMovement : MonoBehaviour
     [SerializeField]
     private GameObject _halalit;
     [SerializeField]
+    private PickupClawState _pickupClawState;
+    [SerializeField]
     private float _ropeLength;
     [SerializeField]
     private float _rotationToHalalitMultiplier;
@@ -28,8 +30,6 @@ public class PickupClawMovement : MonoBehaviour
     private float _positionMinProximity;
     [SerializeField]
     private float _dragAtFullRopeSpeed;
-    [SerializeField]
-    private PickupClawState _pickupClawState;
 
     private Vector2 _pickupClawDirection;
     private Vector2 _halalitLastFramePosition;
