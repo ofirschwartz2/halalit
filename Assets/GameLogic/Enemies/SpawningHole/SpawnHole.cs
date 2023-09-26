@@ -65,6 +65,7 @@ public class SpawnHole : MonoBehaviour
         }
     }
 
+    #region OPENING
     private void OPENING()
     {
         transform.localScale = GetNewLocalScale(
@@ -87,7 +88,9 @@ public class SpawnHole : MonoBehaviour
         _endOfOpenLifeTime = _startOfOpenLifeTime + _openLifetime;
         InstantiateEnemies();
     }
+    #endregion
 
+    #region OPEN
     private void OPEN()
     {
         transform.localScale = GetNewLocalScale(
@@ -105,32 +108,15 @@ public class SpawnHole : MonoBehaviour
         }
     }
 
-    private void SpawningEnemies()
-    {
-        foreach (GameObject enemy in _enemies)
-        {
-            enemy.transform.localScale = GetNewLocalScale(
-                _enemySizeCurve,
-                _startOfOpenLifeTime,
-                _openLifetime,
-                1f
-                );
-
-            enemy.transform.position = Vector3.Lerp(
-                transform.position,
-                _spawnFinalPoints[Array.IndexOf(_enemies, enemy)],
-                Utils.GetPortionPassed(_startOfOpenLifeTime, _openLifetime)
-                );
-        }
-    }
-
     private void EndOpen()
     {
         _state = SpawnHoleState.CLOSING;
         _startOfClosingLifeTime = Time.time;
         _endOfClosingLifeTime = _startOfClosingLifeTime + _closingLifetime;
     }
+    #endregion
 
+    #region CLOSING
     private void CLOSING()
     {
         transform.localScale = GetNewLocalScale(
@@ -146,6 +132,13 @@ public class SpawnHole : MonoBehaviour
         }
     }
 
+    private void Die()
+    {
+        Destroy(gameObject);
+    }
+    #endregion
+
+    #region enemies
     private void InstantiateEnemies()
     {
         for (int i=0; i<_enemyPrefabs.Length; i++)
@@ -157,14 +150,29 @@ public class SpawnHole : MonoBehaviour
         _spawnFinalPoints = EnemyUtils.GetEvenPositionsAroundCircle(transform, _enemyPrefabs.Length, transform.localScale.magnitude).ToArray();
     }
 
-    public Vector3 GetNewLocalScale(AnimationCurve animationCurve, float startOfLifeTime, float lifetime, float sizeMultiplier)
+    private void SpawningEnemies()
+    {
+        foreach (GameObject enemy in _enemies)
+        {
+            enemy.transform.localScale = GetNewLocalScale(
+                _enemySizeCurve,
+                _startOfOpenLifeTime,
+                _openLifetime
+                );
+
+            enemy.transform.position = Vector3.Lerp(
+                transform.position,
+                _spawnFinalPoints[Array.IndexOf(_enemies, enemy)],
+                Utils.GetPortionPassed(_startOfOpenLifeTime, _openLifetime)
+                );
+        }
+    }
+    #endregion
+
+    public Vector3 GetNewLocalScale(AnimationCurve animationCurve, float startOfLifeTime, float lifetime, float sizeMultiplier = 1f)
     {
         var blastMultiplier = animationCurve.Evaluate(Utils.GetPortionPassed(startOfLifeTime, lifetime)) * sizeMultiplier;
         return _originalScale * (blastMultiplier);
     }
 
-    private void Die() 
-    {
-        Destroy(gameObject);
-    }
 }
