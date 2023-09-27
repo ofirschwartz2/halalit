@@ -11,7 +11,7 @@ namespace Assets.Utils
  
         public static float GetRandomAngleAround(float range)
         {
-            return UnityEngine.Random.Range(-range, range);
+            return Random.Range(-range, range);
         }
 
         public static float GetEndOfLifeTime(float lifetime)
@@ -50,11 +50,6 @@ namespace Assets.Utils
             return degree * Mathf.Deg2Rad;//* Mathf.PI / 180;
         }
 
-        public static float GetVectorMagnitude(Vector2 vector2) // we can use Vector2.magnitude
-        {
-            return GetLengthOfLine(vector2.x, vector2.y);
-        }
-
         public static float AngleNormalizationBy360(float angle)
         {
             while (angle < 0)
@@ -89,17 +84,6 @@ namespace Assets.Utils
         {
             return Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(y, 2));
         }
-
-        public static float GetNormalizedSpeed(Rigidbody2D myRigidBody2D, Rigidbody2D otherRigidBody2D, float thrust)
-        {
-            return (Utils.GetVectorMagnitude(myRigidBody2D.velocity) + Utils.GetVectorMagnitude(otherRigidBody2D.velocity)) * thrust;
-        }
-
-        // TODPO: Needs to ne normalized Vector. use GetRandomVector2OnCircle and delete this function?
-        public static Vector2 GetRandomVector(float minX, float maxX, float minY, float maxY)
-        {
-            return new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
-        }
         
         public static float GetNormalizedAngleBy360(float angle)
         {
@@ -123,15 +107,15 @@ namespace Assets.Utils
 
         public static Vector3 Get180RandomNormalizedVector(Vector3 generalDirection)
         {
-            float newX = AngleNormalizationBy1(generalDirection.x + UnityEngine.Random.Range(-1f, 1f));
-            float newY = AngleNormalizationBy1(generalDirection.y + UnityEngine.Random.Range(-1f, 1f));
+            float newX = AngleNormalizationBy1(generalDirection.x + Random.Range(-1f, 1f));
+            float newY = AngleNormalizationBy1(generalDirection.y + Random.Range(-1f, 1f));
 
             return new Vector3(newX, newY);
         }
 
         public static bool IsTrueIn50Precent()
         {
-            return UnityEngine.Random.Range(0, 2) == 0;
+            return Random.Range(0, 2) == 0;
         }
 
         public static Vector2 ShiftVectorByOffsetDegree(Vector2 vector, float offsetDegrees)
@@ -273,7 +257,7 @@ namespace Assets.Utils
 
         public static Direction GetRandomDirection()
         {
-            return (Direction)UnityEngine.Random.Range(0, Enum.GetValues(typeof(Direction)).Length);
+            return (Direction)Random.Range(0, Enum.GetValues(typeof(Direction)).Length);
         }
         #endregion
 

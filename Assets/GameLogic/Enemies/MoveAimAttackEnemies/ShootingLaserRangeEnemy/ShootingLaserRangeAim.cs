@@ -62,5 +62,4 @@ public class ShootingLazerRangeAim : MoveAimAttackAim
         Destroy(_aimingShotFrom);
         Destroy(_aimingShotTo);
     }
-
 }

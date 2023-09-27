@@ -5,11 +5,9 @@ using UnityEngine;
 public class AsteroidMovement : MonoBehaviour
 {
     [SerializeField]
-    private bool _useConfigFile;
-    [SerializeField]
     private Rigidbody2D _rigidBody;
     [SerializeField]
-    private float _velocityMagnitude;
+    private float _speed;
     [SerializeField]
     private float _maxRotation;
     [SerializeField]
@@ -18,25 +16,13 @@ public class AsteroidMovement : MonoBehaviour
     private float _transparencyPeriod;
 
     private float _constantRotation;
-    private float _time;
+    private float _asteroidLifeTime;
     private Vector2 _direction;
 
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-
         _rigidBody.useFullKinematicContacts = true;
         SetRandomRotationByScale();
-        SetVelocity();
-    }
-
-    private void SetVelocity()
-    {
-        _rigidBody.velocity = _direction * _velocityMagnitude;
-        //_rigidBody.MovePosition(_rigidBody.position + _direction * _velocityMagnitude * Time.fixedDeltaTime);
     }
 
     private void SetRandomRotationByScale()
@@ -54,18 +40,26 @@ public class AsteroidMovement : MonoBehaviour
         return _direction;
     }
 
+    public float GetSpeed()
+    {
+        return _speed;
+    }
+
     public float GetScale()
     {
         return transform.localScale.x;
     }
 
-    void FixedUpdate()
+    public float GetRotationSpeed()
     {
-        //_rigidBody.MovePosition(_rigidBody.position + _direction * _velocityMagnitude);
-        //_rigidBody.MoveRotation(_rigidBody.rotation + _constantRotation);
-        transform.Rotate(0, 0, _constantRotation * Time.deltaTime);
-        _direction = _rigidBody.velocity.normalized;
-        _time += Time.deltaTime; // TODO: can be removed
+        return Mathf.Abs(_constantRotation);
+    }
+
+    void Update()
+    {
+        _rigidBody.MovePosition(_rigidBody.position + _direction * _speed);
+        _rigidBody.MoveRotation(_rigidBody.rotation + _constantRotation);
+        _asteroidLifeTime += Time.deltaTime;
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -78,38 +72,39 @@ public class AsteroidMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()) && Time.time >= _transparencyPeriod)
+        if (other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()) && _asteroidLifeTime >= _transparencyPeriod)
         {
             AsteroidMovement otherAsteroidMovement = other.gameObject.GetComponent<AsteroidMovement>();
-            Vector2 originalVelocity = _rigidBody.velocity;
-            
+            float originalSpeed = _speed;
+            Vector2 originalDirection = _direction;
+
             SetCollisionVelocity(other.contacts[0].normal, otherAsteroidMovement.GetScale());
-            SetRotationByVelocity(originalVelocity);
+            SetRotationByVelocity(originalSpeed, originalDirection);
         }
     }
 
     private void SetCollisionVelocity(Vector2 contactPointNormal, float otherAsteroidScale)
     {
         float relationalScale = otherAsteroidScale / transform.localScale.x;
-        float finalVelocityMultiplier = relationalScale * _collisionSpeedMultiplier;
-
-        _rigidBody.velocity += finalVelocityMultiplier * contactPointNormal;
+        
+        _speed *= relationalScale * _collisionSpeedMultiplier;
+        _direction = (_speed * contactPointNormal).normalized;
     }
 
-    private void SetRotationByVelocity(Vector2 originalVelocity)
+    private void SetRotationByVelocity(float originalSpeed, Vector2 originalDirection)
     {
-        float rotationDirectionalMultiplier = GetRotationDirectionalMultiplier(originalVelocity);
+        float rotationDirectionalMultiplier = GetRotationDirectionalMultiplier(originalDirection);
 
-        _constantRotation += rotationDirectionalMultiplier * _rigidBody.velocity.magnitude / originalVelocity.magnitude;
+        _constantRotation += rotationDirectionalMultiplier * _speed / originalSpeed;
     }
 
-    private float GetRotationDirectionalMultiplier(Vector2 originalVelocity)
+    private float GetRotationDirectionalMultiplier(Vector2 originalDirection)
     {
-        float originalDirection = Utils.AngleNormalizationBy360(Utils.Vector2ToDegree(originalVelocity.x, originalVelocity.y));
-        float currentDirection = Utils.AngleNormalizationBy360(Utils.Vector2ToDegree(_rigidBody.velocity.x, _rigidBody.velocity.y));
+        float originalDirectionAngle = Utils.AngleNormalizationBy360(Utils.Vector2ToDegree(originalDirection.x, originalDirection.y));
+        float currentDirectionAngle = Utils.AngleNormalizationBy360(Utils.Vector2ToDegree(_rigidBody.velocity.x, _rigidBody.velocity.y));
         float rotationDirectionalMultiplier;
 
-        if (currentDirection <= originalDirection)
+        if (currentDirectionAngle <= originalDirectionAngle)
         {
             rotationDirectionalMultiplier = 1;
         }
