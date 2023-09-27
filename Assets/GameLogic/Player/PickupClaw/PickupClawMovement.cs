@@ -158,7 +158,7 @@ public class PickupClawMovement : MonoBehaviour
         float relativeDeltaX = transform.position.x < goal.x ? deltaX : deltaX * -1;
         float relativeDeltaY = transform.position.y < goal.y ? deltaY : deltaY * -1;
 
-        float shootDirectionMagnitude = Utils.GetVectorMagnitude(new Vector2(relativeDeltaX, relativeDeltaY));
+        float shootDirectionMagnitude = new Vector2(relativeDeltaX, relativeDeltaY).magnitude;
 
         _pickupClawDirection = new Vector2(relativeDeltaX / shootDirectionMagnitude, relativeDeltaY / shootDirectionMagnitude);
     }
