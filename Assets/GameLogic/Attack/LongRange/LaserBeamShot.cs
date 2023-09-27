@@ -21,7 +21,7 @@ public class LaserBeamShot : MonoBehaviour
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
 
-        _endOfLifeTime = Time.time + _lifetime;
+        _endOfLifeTime = Utils.GetEndOfLifeTime(_lifetime);
     }
 
     void FixedUpdate()

@@ -11,10 +11,9 @@ GameObject:
   - component: {fileID: 4043514594342984742}
   - component: {fileID: 4043514594342984743}
   - component: {fileID: 4043514594342984745}
-  - component: {fileID: 4043514594342984744}
-  - component: {fileID: 2061931484483809159}
+  - component: {fileID: 4423633703291208000}
   m_Layer: 7
-  m_Name: BallShot
+  m_Name: BlastShockWave
   m_TagString: Shot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,9 +27,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4043514594342984741}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.797, y: 0, z: 0}
-  m_LocalScale: {x: 0.009000541, y: 0.009000541, z: 0.009000541}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -76,8 +75,8 @@ SpriteRenderer:
   m_SortingLayerID: 1226254537
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: be7d6cee2589ca445b7b0e2761000660, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: -2413806693520163455, guid: 36a58ef0f52a17e4a93613edf7d86198, type: 3}
+  m_Color: {r: 0.59667337, g: 0.6313726, b: 0.39607844, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -114,7 +113,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!58 &4043514594342984744
+--- !u!58 &4423633703291208000
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,19 +147,4 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 10
---- !u!114 &2061931484483809159
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4043514594342984741}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f576e88b6caa5d0409073d48de213429, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _useConfigFile: 0
-  _rigidBody: {fileID: 4043514594342984745}
-  _speed: 10
+  m_Radius: 0.5

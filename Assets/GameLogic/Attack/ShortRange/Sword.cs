@@ -41,12 +41,15 @@ public class Sword : MonoBehaviour
 
     }
 
-    private void SetRotation(Transform weaponTransform) 
+    private void SetRotation(Transform weaponTransform)
     {
         var fromRotation = Utils.GetRotation(weaponTransform.rotation, -0.5f * _swordRotationRange);
         var toRotation = Utils.GetRotation(weaponTransform.rotation, 0.5f * _swordRotationRange);
-        transform.parent.rotation = Quaternion.Slerp(fromRotation, toRotation, accelerationCurve.Evaluate((Time.time - _attackStartTime) / (_attackTime)));
 
+        transform.parent.rotation = Quaternion.Slerp(
+            fromRotation, 
+            toRotation, 
+            accelerationCurve.Evaluate(Utils.GetPortionPassed(_attackStartTime, _attackTime)));
     }
 
     private Transform GetWeaponTransform()

@@ -17,6 +17,8 @@ namespace Assets.Enums
         [Description("Mirror Ball shot")]
         MIRROR_BALL_SHOT,
         [Description("Sword")]
-        SWORD
+        SWORD,
+        [Description("Blast shot")]
+        BLAST_SHOT
     }
 }

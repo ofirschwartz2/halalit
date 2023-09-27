@@ -19,6 +19,8 @@ namespace Assets.Enums
         MIRROR_BALL_SHOT = AttackName.MIRROR_BALL_SHOT,
         [Description("Sword item")]
         SWORD = AttackName.SWORD,
+        [Description("Blast shot item")] 
+        BLAST_SHOT = AttackName.BLAST_SHOT,
 
         // Upgrades
         [Description("Halalit max HP")]
