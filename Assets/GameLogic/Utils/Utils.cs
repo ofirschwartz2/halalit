@@ -8,26 +8,6 @@ namespace Assets.Utils
 {
     static class Utils
     {
- 
-        public static float GetRandomAngleAround(float range)
-        {
-            return Random.Range(-range, range);
-        }
-
-        public static float GetRandomBetween(float bottom, float top)
-        {
-            return UnityEngine.Random.Range(bottom, top);
-        }
-
-        public static float GetEndOfLifeTime(float lifetime)
-        {
-            return Time.time + lifetime;
-        }
-
-        public static float GetPortionPassed(float startTime, float duration)
-        {
-            return (Time.time - startTime) / (duration);
-        }
 
         #region Math 
         public static float Vector2ToDegree(float x, float y)
