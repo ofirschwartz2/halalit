@@ -29,6 +29,7 @@ TagManager:
   - Asteroid
   - Weapon
   - Granade
+  - Spawner
   layers:
   - Default
   - TransparentFX

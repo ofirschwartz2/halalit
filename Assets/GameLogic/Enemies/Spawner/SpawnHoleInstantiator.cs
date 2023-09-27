@@ -1,5 +1,4 @@
 using Assets.Utils;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnHoleInstantiator : MonoBehaviour
@@ -9,8 +8,6 @@ public class SpawnHoleInstantiator : MonoBehaviour
     [SerializeField]
     private float[] _instantiationRate;
     [SerializeField]
-    private List<KeyValuePair<GameObject, int>> _enemyPrefabsBank;
-    [SerializeField]
     private GameObject _spawnHolePrefab;
     [SerializeField]
     private GameObject _internalWorld;
@@ -18,17 +15,11 @@ public class SpawnHoleInstantiator : MonoBehaviour
     private float _instantiationDistanceFree;
     [SerializeField]
     private int _findPositionRetries;
-    [SerializeField]
-    private int _minSpawnEnemyCount;
-    [SerializeField]
-    private int _maxSpawnEnemyCount;
 
     private int _instantiationRatesIndex;
     private float _nextInstantiationTime;
     private float _minX, _maxX, _minY, _maxY;
     private Vector3 _instantiationPosition;
-    private List<GameObject> _enemyPrefabList;
-    private List<int> _spawnHoleSizesList;
 
     void Start()
     {
@@ -40,8 +31,6 @@ public class SpawnHoleInstantiator : MonoBehaviour
         _instantiationRatesIndex = 0;
         _nextInstantiationTime = GetNextInstantiationTime();
         SetInstantiationBounds();
-        SetEnemiesList();
-        SetSpawnHoleSizesList();
     }
 
     void Update()
@@ -53,43 +42,25 @@ public class SpawnHoleInstantiator : MonoBehaviour
         }
     }
 
-    private void SetEnemiesList()
-    {
-        _enemyPrefabList = new List<GameObject>();
-        foreach (var enemyPrefab in _enemyPrefabsBank)
-        {
-            for (int i = 0; i < enemyPrefab.Value; i++)
-            {
-                _enemyPrefabList.Add(enemyPrefab.Key);
-            }
-        }
-
-        Utils.ShuffleList(_enemyPrefabList);
-    }
-
-    private void SetSpawnHoleSizesList()
-    {
-        var numberofEnemies = _enemyPrefabList.Count;
-
-        while (numberofEnemies > 0)
-        {
-            var spawnHoleSize = Random.Range(_minSpawnEnemyCount, _maxSpawnEnemyCount);
-            if (spawnHoleSize > numberofEnemies)
-            {
-                spawnHoleSize = numberofEnemies;
-            }
-            _spawnHoleSizesList.Add(spawnHoleSize);
-            numberofEnemies -= spawnHoleSize;
-        }
-    }
-
     private void InstantiateSpawnHole()
+    {
+        if (FindObjectOfType<EnemyBank>().NoMoreEnemies())
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            TryInstantiatingSpawnHole();
+        }
+    }
+
+    private void TryInstantiatingSpawnHole()
     {
         if (TryGetRandomInstantiationPosition())
         {
             Instantiate(_spawnHolePrefab, _instantiationPosition, Quaternion.identity);
         }
-        else 
+        else
         {
             _nextInstantiationTime = _nextInstantiationTime + 1f;
         }

@@ -1,14 +1,12 @@
 using Assets.Enums;
 using Assets.Utils;
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnHole : MonoBehaviour
 {
     [SerializeField]
     private bool _useConfigFile;
-    [SerializeField]
-    private GameObject[] _enemyPrefabs;
     [SerializeField]
     private AnimationCurve _spawningHoleOpeningCurve;
     [SerializeField]
@@ -32,8 +30,9 @@ public class SpawnHole : MonoBehaviour
         _startOfClosingLifeTime, _endOfClosingLifeTime;
     private Vector3 _originalScale;
     private SpawnHoleState _state;
-    private GameObject[] _enemies;
-    private Vector2[] _spawnFinalPoints;
+    private List<GameObject> _enemyPrefabs;
+    private List<GameObject> _enemies;
+    private List<Vector2> _enemiesSpawnFinalPoints;
 
     void Start()
     {
@@ -42,11 +41,11 @@ public class SpawnHole : MonoBehaviour
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
 
-        _startOfOpeningLifeTime = Time.time;
-        _endOfOpeningLifeTime = _startOfOpeningLifeTime + _openingLifetime;
+        SetOpeningTimes();
+        SetLists();
+
         _originalScale = transform.localScale;
-        _enemies = new GameObject[_enemyPrefabs.Length];
-        _spawnFinalPoints = new Vector2[_enemyPrefabs.Length];
+        _state = SpawnHoleState.OPENING;
     }
 
     void FixedUpdate()
@@ -84,9 +83,20 @@ public class SpawnHole : MonoBehaviour
     private void EndOpening()
     {
         _state = SpawnHoleState.OPEN;
+        SetOpenTimes();
+        InstantiateEnemies();
+    }
+
+    private void SetOpenTimes()
+    {
         _startOfOpenLifeTime = Time.time;
         _endOfOpenLifeTime = _startOfOpenLifeTime + _openLifetime;
-        InstantiateEnemies();
+    }
+
+    private void SetOpeningTimes()
+    {
+        _startOfOpeningLifeTime = Time.time;
+        _endOfOpeningLifeTime = _startOfOpeningLifeTime + _openingLifetime;
     }
     #endregion
 
@@ -111,9 +121,9 @@ public class SpawnHole : MonoBehaviour
     private void EndOpen()
     {
         _state = SpawnHoleState.CLOSING;
-        _startOfClosingLifeTime = Time.time;
-        _endOfClosingLifeTime = _startOfClosingLifeTime + _closingLifetime;
+        SetClosingTimes();
     }
+
     #endregion
 
     #region CLOSING
@@ -132,6 +142,12 @@ public class SpawnHole : MonoBehaviour
         }
     }
 
+    private void SetClosingTimes()
+    {
+        _startOfClosingLifeTime = Time.time;
+        _endOfClosingLifeTime = _startOfClosingLifeTime + _closingLifetime;
+    }
+
     private void Die()
     {
         Destroy(gameObject);
@@ -141,13 +157,19 @@ public class SpawnHole : MonoBehaviour
     #region enemies
     private void InstantiateEnemies()
     {
-        for (int i=0; i<_enemyPrefabs.Length; i++)
+        if (_enemyPrefabs == null) 
         {
-            _enemies[i] = Instantiate(_enemyPrefabs[i], transform.position, Quaternion.identity);
-            _enemies[i].transform.localScale = Vector3.zero;
+            throw new System.Exception("No enemies to spawn");
         }
 
-        _spawnFinalPoints = EnemyUtils.GetEvenPositionsAroundCircle(transform, _enemyPrefabs.Length, transform.localScale.magnitude).ToArray();
+        foreach (GameObject enemyPrefab in _enemyPrefabs)
+        {
+            var newEnemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
+            newEnemy.transform.localScale = Vector3.zero;
+            _enemies.Add(newEnemy);
+        }
+
+        _enemiesSpawnFinalPoints = EnemyUtils.GetEvenPositionsAroundCircle(transform, _enemyPrefabs.Count, transform.localScale.magnitude);
     }
 
     private void SpawningEnemies()
@@ -167,7 +189,7 @@ public class SpawnHole : MonoBehaviour
 
             enemy.transform.position = Vector3.Lerp(
                 transform.position,
-                _spawnFinalPoints[Array.IndexOf(_enemies, enemy)],
+                _enemiesSpawnFinalPoints[_enemies.IndexOf(enemy)],
                 Utils.GetPortionPassed(_startOfOpenLifeTime, _openLifetime)
                 );
         }
@@ -178,6 +200,13 @@ public class SpawnHole : MonoBehaviour
     {
         var blastMultiplier = animationCurve.Evaluate(Utils.GetPortionPassed(startOfLifeTime, lifetime)) * sizeMultiplier;
         return _originalScale * (blastMultiplier);
+    }
+
+    private void SetLists()
+    {
+        _enemyPrefabs = FindObjectOfType<EnemyBank>().GetNextSpawnHoleEnemiesList();
+        _enemies = new List<GameObject>();
+        _enemiesSpawnFinalPoints = new List<Vector2>();
     }
 
 }
