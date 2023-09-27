@@ -71,11 +71,6 @@ namespace Assets.Utils
             return Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(y, 2));
         }
 
-        public static float GetNormalizedSpeed(Rigidbody2D myRigidBody2D, Rigidbody2D otherRigidBody2D, float thrust)
-        {
-            return (Utils.GetVectorMagnitude(myRigidBody2D.velocity) + Utils.GetVectorMagnitude(otherRigidBody2D.velocity)) * thrust;
-        }
-
         public static Vector2 GetRandomVector(float minX, float maxX, float minY, float maxY)
         {
             return new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
