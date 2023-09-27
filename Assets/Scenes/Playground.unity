@@ -3220,7 +3220,15 @@ MonoBehaviour:
   - Key: {fileID: 8916735576456593937, guid: 71b1060aee20e1645b7b9442c8ba3673, type: 3}
     Value: 3
   - Key: {fileID: 8916735576456593937, guid: 984c972b2cb56ff43aa9d4bbfa3c7cea, type: 3}
-    Value: 11
+    Value: 3
+  - Key: {fileID: 8916735576456593937, guid: b1e50489bd6aa014c9faaaeabb0cee8f, type: 3}
+    Value: 4
+  - Key: {fileID: 8916735576456593937, guid: 2c5e781cbf51fd447b2e5b556cefc9d9, type: 3}
+    Value: 8
+  - Key: {fileID: 8916735576456593937, guid: 579cbc15fc18a03479690f498b158cca, type: 3}
+    Value: 3
+  - Key: {fileID: 8916735576456593937, guid: 7637ffb4ec979d54da17db01a4506ab6, type: 3}
+    Value: 2
   _minSpawnEnemyCount: 1
   _maxSpawnEnemyCount: 4
 --- !u!1 &2135516712

@@ -45,6 +45,7 @@ public class SpawnHole : MonoBehaviour
         SetLists();
 
         _originalScale = transform.localScale;
+        transform.localScale = Vector3.zero;
         _state = SpawnHoleState.OPENING;
     }
 
