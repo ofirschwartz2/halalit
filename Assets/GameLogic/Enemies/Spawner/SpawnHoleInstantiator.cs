@@ -1,4 +1,5 @@
 using Assets.Utils;
+using System.Collections;
 using UnityEngine;
 
 public class SpawnHoleInstantiator : MonoBehaviour
@@ -31,14 +32,20 @@ public class SpawnHoleInstantiator : MonoBehaviour
         _instantiationRatesIndex = 0;
         _nextInstantiationTime = GetNextInstantiationTime();
         SetInstantiationBounds();
-    }
 
-    void Update()
+        StartCoroutine(UpdateCoroutine());
+    }
+    private IEnumerator UpdateCoroutine()
     {
-        if (Time.time >= _nextInstantiationTime)
+        while (true) 
         {
-            _nextInstantiationTime = GetNextInstantiationTime();
-            InstantiateSpawnHole();
+            if (Time.time >= _nextInstantiationTime)
+            {
+                _nextInstantiationTime = GetNextInstantiationTime();
+                InstantiateSpawnHole();
+            }
+
+            yield return new WaitForSeconds(1f);
         }
     }
 
