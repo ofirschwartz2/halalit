@@ -672,7 +672,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5072172639208078113, guid: 235a16c82bb99a347b9b60318f79de27, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7899183643063666721, guid: 235a16c82bb99a347b9b60318f79de27, type: 3}
       propertyPath: m_IsTrigger
@@ -2300,10 +2300,10 @@ MonoBehaviour:
   _asteroidPrefab: {fileID: 6741412782414407016, guid: d17f6aba06990634e92f5f659cf1bf0d, type: 3}
   _asteroidInitiator: {fileID: 1107869176}
   _asteroidInstantiationLineLength: 30
-  _asteroidInstantiationTimeInterval: 2
+  _asteroidInstantiationTimeInterval: 0
   _asteroidInstantiationLoad: 1
   _asteroidInstantiationDistanceFromCenter: 25
-  _asteroidMaxScale: 4
+  _asteroidMaxScale: 0
   _maxInstantiationsRetry: 5
   _asteroidTakeOffTime: 5
 --- !u!114 &1107869175
@@ -2441,6 +2441,92 @@ Transform:
   - {fileID: 1037909871}
   m_Father: {fileID: 0}
   m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1277994820
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1277994823}
+  - component: {fileID: 1277994822}
+  - component: {fileID: 1277994821}
+  m_Layer: 0
+  m_Name: Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1277994821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1277994820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b879ad2ef17ea50489c8735bb4af84c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useConfigFile: 0
+  _instantiationRate:
+  - 1
+  _spawnHolePrefab: {fileID: 3634717560851911193, guid: 48e2e8a0c2efa8f4ba028528570feef1, type: 3}
+  _internalWorld: {fileID: 1323639987}
+  _instantiationDistanceFree: 3
+  _findPositionRetries: 10
+--- !u!114 &1277994822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1277994820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edf5a106da3a0674899faa6b6cb4bd9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _useConfigFile: 0
+  _enemyPrefabsBank:
+  - Key: {fileID: 996304911696120768, guid: 4355ed09f91899447974575e85cf5644, type: 3}
+    Value: 3
+  - Key: {fileID: 392433141160692767, guid: b8a4753e3ee47d44e8ba42303dc92738, type: 3}
+    Value: 5
+  - Key: {fileID: 6245285285944762974, guid: 2765640acd2407942b41effe8df456b0, type: 3}
+    Value: 4
+  - Key: {fileID: 6280205760541686921, guid: a17ee868271207645a58f0fd2f5c68fe, type: 3}
+    Value: 6
+  - Key: {fileID: 8952326225390038146, guid: b77eb97050ad93344867b53d638aa440, type: 3}
+    Value: 7
+  - Key: {fileID: 1692324214522588343, guid: 939d79704bc231d499e7a2e72b9ff97d, type: 3}
+    Value: 4
+  - Key: {fileID: 6129749417454103745, guid: 2451ba2c5f1016b439d2717f1ecbb690, type: 3}
+    Value: 2
+  - Key: {fileID: 5072172639208078113, guid: 235a16c82bb99a347b9b60318f79de27, type: 3}
+    Value: 10
+  - Key: {fileID: 5844340177478583602, guid: 78f5376bf1e971542ba8bfa6e19ffa7c, type: 3}
+    Value: 5
+  _minSpawnEnemyCount: 1
+  _maxSpawnEnemyCount: 4
+--- !u!4 &1277994823
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1277994820}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.3736074, y: 0.076900326, z: -0.0032105923}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1323639987
 GameObject:
@@ -3511,8 +3597,8 @@ MonoBehaviour:
   _rigidBody: {fileID: 2130719624}
   _joystick: {fileID: 1331181818}
   _forceMultiplier: 10
-  _rotationSpeed: 10
-  _knockbackMultiplier: 3
+  _rotationSpeed: 0
+  _knockbackMultiplier: 0
   _speedLimit: 15
   _knockBackCooldownInterval: 0.1
 --- !u!58 &2130719626
