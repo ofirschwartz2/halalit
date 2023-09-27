@@ -2,14 +2,16 @@
 
 public class AsteroidEventArguments : System.EventArgs
 {
-    public Vector2 AsteroidPosition;
-    public Vector2 AsteroidVelocity;
-    public float AsteroidScale;
+    public Vector2 Position;
+    public float Speed;
+    public Vector2 Direction;
+    public int Scale;
 
-    public AsteroidEventArguments(Vector2 destructionPosition, Vector2 destroyedAsteroidVelocity, float destroyedAsteroidScale)
+    public AsteroidEventArguments(Vector2 position, float speed, Vector2 direction, int scale)
     {
-        AsteroidPosition = destructionPosition;
-        AsteroidVelocity = destroyedAsteroidVelocity;
-        AsteroidScale = destroyedAsteroidScale;
+        Position = position;
+        Speed = speed;
+        Direction = direction;
+        Scale = scale;
     }
 }

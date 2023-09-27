@@ -1,6 +1,4 @@
-﻿using Assets.Enums;
-using Assets.Utils;
-using UnityEngine;
+﻿using UnityEngine;
 
 class AsteroidInitiator : MonoBehaviour
 {
@@ -10,8 +8,6 @@ class AsteroidInitiator : MonoBehaviour
         asteroidInstanceMovement.SetDirection(direction);
 
         asteroid.transform.localScale = new Vector3(scale, scale, 0);
-
-        asteroid.tag = Tag.ASTEROID.GetDescription();
 
         asteroid.transform.SetParent(transform.parent);
     }

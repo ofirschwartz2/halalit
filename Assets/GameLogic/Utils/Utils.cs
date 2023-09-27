@@ -9,6 +9,7 @@ namespace Assets.Utils
 {
     static class Utils
     {
+
         #region Math 
         public static float Vector2ToDegree(float x, float y)
         {
@@ -33,11 +34,6 @@ namespace Assets.Utils
         public static float DegreeToRadian(float degree)
         {
             return degree * Mathf.Deg2Rad;//* Mathf.PI / 180;
-        }
-
-        public static float GetVectorMagnitude(Vector2 vector2) // we can use Vector2.magnitude
-        {
-            return GetLengthOfLine(vector2.x, vector2.y);
         }
 
         public static float AngleNormalizationBy360(float angle)
@@ -85,6 +81,7 @@ namespace Assets.Utils
             return new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
         }
         
+        
         public static float GetNormalizedAngleBy360(float angle)
         {
             if (angle > 180)
@@ -107,15 +104,15 @@ namespace Assets.Utils
 
         public static Vector3 Get180RandomNormalizedVector(Vector3 generalDirection)
         {
-            float newX = AngleNormalizationBy1(generalDirection.x + UnityEngine.Random.Range(-1f, 1f));
-            float newY = AngleNormalizationBy1(generalDirection.y + UnityEngine.Random.Range(-1f, 1f));
+            float newX = AngleNormalizationBy1(generalDirection.x + Random.Range(-1f, 1f));
+            float newY = AngleNormalizationBy1(generalDirection.y + Random.Range(-1f, 1f));
 
             return new Vector3(newX, newY);
         }
 
         public static bool IsTrueIn50Precent()
         {
-            return UnityEngine.Random.Range(0, 2) == 0;
+            return Random.Range(0, 2) == 0;
         }
 
         public static Vector2 ShiftVectorByOffsetDegree(Vector2 vector, float offsetDegrees)
@@ -304,7 +301,7 @@ namespace Assets.Utils
 
         public static Direction GetRandomDirection()
         {
-            return (Direction)UnityEngine.Random.Range(0, Enum.GetValues(typeof(Direction)).Length);
+            return (Direction)Random.Range(0, Enum.GetValues(typeof(Direction)).Length);
         }
         #endregion
 
