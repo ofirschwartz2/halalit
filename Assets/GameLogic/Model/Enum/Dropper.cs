@@ -1,12 +1,20 @@
 ﻿using System;
-using System.ComponentModel;
 
 namespace Assets.Enums
 {
     [Serializable]
     public enum Dropper
     {
-        [Description("Asteroid")]
-        ASTEROID
+        DEFAULT,
+        ASTEROID,
+        FOLLOWING_ENEMY_INTERVAL,
+        FOLLOWING_ENEMY_RADIUS,
+        GREEK_ENEMY,
+        LAME_ENEMY,
+        SINUS_ENEMY,
+        ZIG_ZAG_ENEMY,
+        SHOOTING_IN_RANGE_ENEMY,
+        SHOOTING_LAZER_ASTERISK_ENEMY,
+        SHOOTING_LAZER_RANGE_ENEMY
     }
 }

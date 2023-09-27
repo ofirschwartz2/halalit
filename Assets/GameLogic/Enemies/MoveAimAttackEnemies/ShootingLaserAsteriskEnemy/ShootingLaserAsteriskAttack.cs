@@ -88,5 +88,4 @@ public class ShootingLaserAsteriskAttack : MoveAimAttackAttack
     {
         return Time.time > _attackingTime - _endShootingBeforeFinishAttack;
     }
-
 }
