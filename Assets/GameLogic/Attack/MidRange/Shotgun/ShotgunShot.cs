@@ -34,7 +34,7 @@ public class ShotgunShot : MonoBehaviour
         SetSpeed();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         _rigidBody.velocity = transform.up * _speed * (1 - _movementCurve.Evaluate((Time.time - _startOfLifeTime) / _lifeTime));
         if (Utils.ShouldDie(_endOfLifeTime))

@@ -31,7 +31,7 @@ public class ShotgunShootingPoint : MonoBehaviour
         _endOfLifeTime = Time.time + 10; // TODO: fix this
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (Utils.ShouldDie(_endOfLifeTime))
         {
@@ -44,7 +44,7 @@ public class ShotgunShootingPoint : MonoBehaviour
         for (var i = 0; i < numberOfShots; i++)
         {
             var angle = Utils.GetRandomAngleAround(range);
-            Instantiate(_shotgunShotPrefab, transform.position, Utils.GetRotation(transform.rotation, angle));
+            Instantiate(_shotgunShotPrefab, transform.position, Utils.GetRotationPlusAngle(transform.rotation, angle));
         }
     }
 

@@ -35,7 +35,7 @@ public class Blast : MonoBehaviour
         InstantiateBlastPrefabs();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         _currentLocalScale = _explosion.transform.localScale;
         _newLocalScale = GetNewLocalScale();

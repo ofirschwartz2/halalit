@@ -30,7 +30,7 @@ public class GranadeShot : MonoBehaviour
         _rigidBody.AddForce(transform.up * _throwForce, ForceMode2D.Impulse);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (Utils.ShouldDie(_endOfLifeTime))
         {
