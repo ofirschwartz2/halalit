@@ -7,12 +7,12 @@ class AsteroidEvent : MonoBehaviour
 {
     private static Dictionary<EventName, EventHandler<AsteroidEventArguments>> _asteroidEvents;
 
-    public static event EventHandler<AsteroidEventArguments> AsteroidDestruction;
+    public static event EventHandler<AsteroidEventArguments> AsteroidInternalInstantiation;
 
     void Start()
     {
         _asteroidEvents = new();
-        _asteroidEvents.Add(EventName.ASTEROID_DESTRUCTION, AsteroidDestruction);
+        _asteroidEvents.Add(EventName.ASTEROID_INTERNAL_INSTANTIATION, AsteroidInternalInstantiation);
     }
 
     public static void Invoke(EventName eventName, object initiator, AsteroidEventArguments asteroidEventArguments)

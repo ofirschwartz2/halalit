@@ -62,9 +62,7 @@ public class BoomerangShot : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (RealHalalitHit(other)
-            ||
-            other.gameObject.CompareTag(Tag.ENEMY.GetDescription()))
+        if (RealHalalitHit(other) || other.gameObject.CompareTag(Tag.ENEMY.GetDescription()) || other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()))
         {
             Destroy(gameObject);
         }
