@@ -154,6 +154,11 @@ public class SpawnHole : MonoBehaviour
     {
         foreach (GameObject enemy in _enemies)
         {
+            if (enemy == null)
+            {
+                continue;
+            }
+
             enemy.transform.localScale = GetNewLocalScale(
                 _enemySizeCurve,
                 _startOfOpenLifeTime,

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using UnityEngine;
 using Assets.Enums;
 using Random = UnityEngine.Random;
+using System.Collections.Generic;
 
 namespace Assets.Utils
 {
@@ -79,7 +80,6 @@ namespace Assets.Utils
             return (Utils.GetVectorMagnitude(myRigidBody2D.velocity) + Utils.GetVectorMagnitude(otherRigidBody2D.velocity)) * thrust;
         }
 
-        // TODPO: Needs to ne normalized Vector. use GetRandomVector2OnCircle and delete this function?
         public static Vector2 GetRandomVector(float minX, float maxX, float minY, float maxY)
         {
             return new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
@@ -325,5 +325,16 @@ namespace Assets.Utils
         }
 
         #endregion
+
+        public static void ShuffleList<T>(List<T> list)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                var temp = list[i];
+                var randomIndex = Random.Range(i, list.Count);
+                list[i] = list[randomIndex];
+                list[randomIndex] = temp;
+            }
+        }
     }
 }
