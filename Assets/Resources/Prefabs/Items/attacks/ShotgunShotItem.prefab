@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6596121276120025859, guid: 9d4c346d5f30ea942be9540d03320eec, type: 3}
       propertyPath: m_Name
-      value: GranadeShotItem
+      value: ShotgunShotItem
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -62,14 +62,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6596121276120025859, guid: 9d4c346d5f30ea942be9540d03320eec, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -6987588839100775562}
+      addedObject: {fileID: 3110423419556679809}
   m_SourcePrefab: {fileID: 100100000, guid: 9d4c346d5f30ea942be9540d03320eec, type: 3}
 --- !u!1 &8968850470237194354 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6596121276120025859, guid: 9d4c346d5f30ea942be9540d03320eec, type: 3}
   m_PrefabInstance: {fileID: 2881706320905536369}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-6987588839100775562
+--- !u!114 &3110423419556679809
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -78,6 +78,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 8968850470237194354}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca55796701a88944c962480fb94b74f6, type: 3}
+  m_Script: {fileID: 11500000, guid: 0e802b7ce6e852b489edd2e37c723fbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

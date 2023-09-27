@@ -14,6 +14,11 @@ namespace Assets.Utils
             return Random.Range(-range, range);
         }
 
+        public static float GetRandomBetween(float bottom, float top)
+        {
+            return UnityEngine.Random.Range(bottom, top);
+        }
+
         public static float GetEndOfLifeTime(float lifetime)
         {
             return Time.time + lifetime;
