@@ -1626,7 +1626,7 @@ GameObject:
   - component: {fileID: 759986613}
   m_Layer: 9
   m_Name: Weapon
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1743,7 +1743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b124fbb6d5e0148884d8a70c8e4981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firstAttack: 0
+  _firstAttack: 5
 --- !u!1 &814139006
 GameObject:
   m_ObjectHideFlags: 0
@@ -2143,7 +2143,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19c22214e91c7f4c9a1e01797a04f6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _shortRangeAttacks: []
+  _shortRangeAttacks:
+  - Key: 5
+    Value: {fileID: 6558306382352585984, guid: 9b52bb8ebe1ca5a4bb3a88d1d84ecd41, type: 3}
   _middleRangeAttacks:
   - Key: 2
     Value: {fileID: 420320056530362796, guid: 9264a816205e28448b9f0f0fc3a7e320, type: 3}

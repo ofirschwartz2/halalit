@@ -14,9 +14,9 @@ namespace Assets.Utils
             return Random.Range(-range, range);
         }
 
-        public static Quaternion GetRotation(Quaternion rotation, float angle)
+        public static float GetEndOfLifeTime(float lifetime)
         {
-            return rotation * Quaternion.AngleAxis(angle, Vector3.forward);
+            return Time.time + lifetime;
         }
 
         #region Math 
@@ -200,6 +200,12 @@ namespace Assets.Utils
         #endregion
 
         #region Quaternions
+
+        public static Quaternion GetRotation(Quaternion rotation, float angle)
+        {
+            return rotation * Quaternion.AngleAxis(angle, Vector3.forward);
+        }
+
         public static Quaternion GetRorationOutwards(Vector2 from, Vector2 to)
         {
             Vector2 direction = to - from;
@@ -260,6 +266,12 @@ namespace Assets.Utils
         {
             return myVelocity.magnitude < speedLimit;
         }
+
+        public static bool ShouldDie(float endOfLifeTime)
+        {
+            return Time.time >= endOfLifeTime;
+        }
+
         #endregion
     }
 }

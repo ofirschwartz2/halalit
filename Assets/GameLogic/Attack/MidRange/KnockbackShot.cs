@@ -27,7 +27,8 @@ public class KnockbackShot : MonoBehaviour
         {
             ConfigFileReader.LoadMembersFromConfigFile(this);
         }
-        _endOfLifeTime = Time.time + _lifetime;
+        
+        _endOfLifeTime = Utils.GetEndOfLifeTime(_lifetime);
         _rigidBody.velocity = transform.up * _speed;
     }
 
@@ -50,15 +51,10 @@ public class KnockbackShot : MonoBehaviour
 
     private void TryDie()
     {
-        if (ShouldDie())
+        if (Utils.ShouldDie(_endOfLifeTime))
         {
             Destroy(gameObject);
         }
-    }
-
-    private bool ShouldDie()
-    {
-        return Time.time >= _endOfLifeTime;
     }
 
     private void OnTriggerExit2D(Collider2D other)
