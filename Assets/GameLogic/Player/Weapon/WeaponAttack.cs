@@ -7,8 +7,6 @@ using UnityEngine;
 public class WeaponAttack : MonoBehaviour
 {
     [SerializeField]
-    private bool _useConfigFile;
-    [SerializeField]
     private GameObject _halalit;
     [SerializeField]
     private Joystick _attackJoystick;
@@ -43,11 +41,6 @@ public class WeaponAttack : MonoBehaviour
 
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-
         _attackToggle = gameObject.GetComponentInParent<AttackToggle>();
         _cooldownTime = 0;
     }

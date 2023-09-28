@@ -1,15 +1,8 @@
-﻿using UnityEngine;
-using Assets.Utils;
-using Assets.Enums;
-
+﻿using Assets.Enums;
 public class LaserBeamShotItem : AttackItem
 {
-    private void OnTriggerEnter2D(Collider2D other)
+    private void Start()
     {
-        if (other.gameObject.CompareTag(Tag.HALALIT.GetDescription()))
-        {
-            OnPlayerAttackItemPickedUp(this, new(ItemName.LASER_BEAM_SHOT, new()));
-            Destroy(gameObject);
-        }
+        _itemName = ItemName.LASER_BEAM_SHOT;
     }
 }

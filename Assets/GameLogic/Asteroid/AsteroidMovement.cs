@@ -2,12 +2,8 @@ using Assets.Enums;
 using Assets.Utils;
 using UnityEngine;
 
-public class AsteroidMovement : MonoBehaviour
+public class AsteroidMovement : KinematicMovement
 {
-    [SerializeField]
-    private Rigidbody2D _rigidBody;
-    [SerializeField]
-    private float _speed;
     [SerializeField]
     private float _maxRotation;
     [SerializeField]
@@ -15,34 +11,11 @@ public class AsteroidMovement : MonoBehaviour
     [SerializeField]
     private float _transparencyPeriod;
 
-    private float _constantRotation;
     private float _asteroidLifeTime;
-    private Vector2 _direction;
 
     void Start()
     {
-        _rigidBody.useFullKinematicContacts = true;
-        SetRandomRotationByScale();
-    }
-
-    private void SetRandomRotationByScale()
-    {
-        _constantRotation = Random.Range(-_maxRotation / transform.localScale.x, _maxRotation / transform.localScale.x);
-    }
-
-    public void SetDirection(Vector2 direction)
-    {
-        _direction = direction;
-    }
-
-    public Vector2 GetDirection()
-    {
-        return _direction;
-    }
-
-    public float GetSpeed()
-    {
-        return _speed;
+        _rotationSpeed = Random.Range(-_maxRotation, _maxRotation);
     }
 
     public float GetScale()
@@ -50,15 +23,9 @@ public class AsteroidMovement : MonoBehaviour
         return transform.localScale.x;
     }
 
-    public float GetRotationSpeed()
+    new void FixedUpdate()
     {
-        return Mathf.Abs(_constantRotation);
-    }
-
-    void Update()
-    {
-        _rigidBody.MovePosition(_rigidBody.position + _direction * _speed);
-        _rigidBody.MoveRotation(_rigidBody.rotation + _constantRotation);
+        base.FixedUpdate();
         _asteroidLifeTime += Time.deltaTime;
     }
 
@@ -86,7 +53,7 @@ public class AsteroidMovement : MonoBehaviour
     private void SetCollisionVelocity(Vector2 contactPointNormal, float otherAsteroidScale)
     {
         float relationalScale = otherAsteroidScale / transform.localScale.x;
-        
+
         _speed *= relationalScale * _collisionSpeedMultiplier;
         _direction = (_speed * contactPointNormal).normalized;
     }
@@ -95,7 +62,7 @@ public class AsteroidMovement : MonoBehaviour
     {
         float rotationDirectionalMultiplier = GetRotationDirectionalMultiplier(originalDirection);
 
-        _constantRotation += rotationDirectionalMultiplier * _speed / originalSpeed;
+        _rotationSpeed += rotationDirectionalMultiplier * _speed / originalSpeed;
     }
 
     private float GetRotationDirectionalMultiplier(Vector2 originalDirection)

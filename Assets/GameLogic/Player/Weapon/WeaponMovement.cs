@@ -4,21 +4,11 @@ using UnityEngine;
 class WeaponMovement : MonoBehaviour
 {
     [SerializeField]
-    private bool _useConfigFile;
-    [SerializeField]
     private GameObject _halalit;
     [SerializeField]
     private Joystick _attackJoystick;
     [SerializeField]
     private float _weaponSpinRadius;
-
-    void Start()
-    {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-    }
 
     void Update()
     {

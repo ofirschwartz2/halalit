@@ -5,7 +5,7 @@ using UnityEngine;
 public class SinusEnemy : MonoBehaviour
 {
     [SerializeField]
-    private bool _useConfigFile;
+    private Rigidbody2D _rigidBody;
     [SerializeField]
     private float _sinAxisMovementAmplitude;
     [SerializeField]
@@ -14,8 +14,6 @@ public class SinusEnemy : MonoBehaviour
     private float _otherAxisMovementAmplitude;
     [SerializeField]
     private float _otherAxisSpeedLimit;
-    [SerializeField]
-    private Rigidbody2D _rigidBody;
 
     private Direction _sinDirection;
     private float _changeSinForceDirectionTime;
@@ -23,16 +21,12 @@ public class SinusEnemy : MonoBehaviour
 
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
         _sinDirection = Utils.GetRandomDirection();
         SetSinDirections(_sinDirection);
         SetChangeSinForceDirectionTime(_changeSinForceInterval / 2);
     }
 
-    void Update()
+    void FixedUpdate()
     {
         otherAxisMovement(_otherAxisDirection);
         SinAxisMovement();
@@ -109,11 +103,7 @@ public class SinusEnemy : MonoBehaviour
     #region Triggers
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (EnemyUtils.ShouldKnockEnemyBack(LayerMask.LayerToName(gameObject.layer), other))
-        {
-            EnemyUtils.KnockMeBack(_rigidBody, other);
-        }
-        else if (Utils.DidHitEdge(other.gameObject.tag))
+        if (Utils.DidHitEdge(other.gameObject.tag))
         {
             switch (other.gameObject.tag)
             {

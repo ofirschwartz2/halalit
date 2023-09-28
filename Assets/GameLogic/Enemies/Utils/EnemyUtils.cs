@@ -1,4 +1,3 @@
-using Assets.Enums;
 using Assets.Utils;
 using System;
 using System.Collections.Generic;
@@ -6,44 +5,27 @@ using UnityEngine;
 
 static class EnemyUtils
 {
-    private const float DELTA_TIME_MULTIPLIER = 300f;
-    private const float KNOCKBACK_MULTIPLIER = 300f;
+    private const float DELTA_TIME_MULTIPLIER = 300f; // TODO (refactor): should be configurable
 
     public static Vector2 GetAnotherDirectionFromEdge(Rigidbody2D rigidbody, string edge)
     {
-        Vector2 direction;
         rigidbody.velocity = new Vector2(0f, 0f);
-        switch (edge)
+        var direction = edge switch
         {
-            case "TopEdge":
-                direction = Vector2.down;
-                break;
-            case "RightEdge":
-                direction = Vector2.left;
-                break;
-            case "BottomEdge":
-                direction = Vector2.up;
-                break;
-            case "LeftEdge":
-                direction = Vector2.right;
-                break;
-            default:
-                throw new Exception("Unknown edge: " + edge);
-        }
+            "TopEdge" => Vector2.down,
+            "RightEdge" => Vector2.left,
+            "BottomEdge" => Vector2.up,
+            "LeftEdge" => Vector2.right,
+            _ => throw new Exception("Unknown edge: " + edge),
+        };
         return Utils.GetRandomVector2OnHalfOfCircle(direction);
-    }
-
-    public static void KnockMeBack(Rigidbody2D myRigidbody, Collider2D other)
-    {
-        var knockBackDirection = Utils.GetDirectionFromCollision(myRigidbody.transform.position, other.transform.position);
-        myRigidbody.AddForce(knockBackDirection * KNOCKBACK_MULTIPLIER);
     }
 
     public static void MoveUnderSpeedLimit(Rigidbody2D rigidbody, Vector2 direction, float movementAmplitude, float speedLimit)
     {
         if (Utils.IsUnderSpeedLimit(rigidbody.velocity, speedLimit))
         {
-            rigidbody.AddForce(direction * movementAmplitude * (Time.deltaTime * DELTA_TIME_MULTIPLIER));
+            rigidbody.AddForce((Time.deltaTime * DELTA_TIME_MULTIPLIER) * movementAmplitude * direction);
         }
     }
 
@@ -58,19 +40,4 @@ static class EnemyUtils
         }
         return shootingStartPositions;
     }
-
-    #region Predicates
-    public static bool ShouldKnockEnemyBack(string myLayer, Collider2D other)
-    {
-        return myLayer == Layer.Enemies.GetDescription() && ColliderShouldKnockback(other);
-    }
-
-    public static bool ColliderShouldKnockback(Collider2D other)
-    {
-        return other.gameObject.CompareTag(Tag.HALALIT.GetDescription()) ||
-            other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()) ||
-            other.gameObject.CompareTag(Tag.ENEMY.GetDescription()) ||
-            other.gameObject.CompareTag(Tag.KNOCKBACK_SHOT.GetDescription());
-    }
-    #endregion
 }

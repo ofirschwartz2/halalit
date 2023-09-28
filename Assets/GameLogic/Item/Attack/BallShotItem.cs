@@ -1,15 +1,9 @@
-﻿using UnityEngine;
-using Assets.Utils;
-using Assets.Enums;
+﻿using Assets.Enums;
 
 public class BallShotItem : AttackItem
 {
-    private void OnTriggerEnter2D(Collider2D other)
+    private void Start()
     {
-        if (other.gameObject.CompareTag(Tag.HALALIT.GetDescription()))
-        {
-            OnPlayerAttackItemPickedUp(this, new(ItemName.BALL_SHOT, new()));
-            Destroy(gameObject);
-        }
+        _itemName = ItemName.BALL_SHOT;
     }
 }

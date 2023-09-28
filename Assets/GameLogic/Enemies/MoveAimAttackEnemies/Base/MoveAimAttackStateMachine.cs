@@ -6,30 +6,23 @@ using UnityEngine;
 public class MoveAimAttackStateMachine : MonoBehaviour
 {
     [SerializeField]
-    private bool _useConfigFile;
-    [SerializeField]
     private MoveAimAttackEnemyState _moveAimAttackEnemyState;
+    [SerializeField]
+    private Rigidbody2D _rigidBody;
     [SerializeField]
     private MoveAimAttackMove _moveAimAttackMove;
     [SerializeField]
     private MoveAimAttackAim _moveAimAttackAim;
     [SerializeField]
     private MoveAimAttackAttack _moveAimAttackAttack;
-    [SerializeField]
-    private Rigidbody2D _rigidBody;
 
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-
         _moveAimAttackMove.SetDirection();
         _moveAimAttackMove.SetMoving();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         switch (_moveAimAttackEnemyState)
         {
@@ -89,11 +82,7 @@ public class MoveAimAttackStateMachine : MonoBehaviour
     #region Triggers
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (EnemyUtils.ShouldKnockEnemyBack(LayerMask.LayerToName(gameObject.layer), other))
-        {
-            EnemyUtils.KnockMeBack(_rigidBody, other);
-        }
-        else if (Utils.DidHitEdge(other.gameObject.tag))
+        if (Utils.DidHitEdge(other.gameObject.tag))
         {
             _moveAimAttackMove.SetNewDirection(other.gameObject.tag);
         }

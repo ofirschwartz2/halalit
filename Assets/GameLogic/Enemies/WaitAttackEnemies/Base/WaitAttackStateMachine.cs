@@ -1,11 +1,8 @@
 using Assets.Enums;
-using Assets.Utils;
 using UnityEngine;
 
 public class WaitAttackStateMachine : MonoBehaviour
 {
-    [SerializeField]
-    private bool _useConfigFile;
     [SerializeField]
     private Rigidbody2D _rigidBody;
     [SerializeField]
@@ -17,15 +14,11 @@ public class WaitAttackStateMachine : MonoBehaviour
 
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
         _waitAttackWait.SetWaiting();
         _followingEnemyState = WaitAttackEnemyState.WAITING;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         switch (_followingEnemyState)
         {
@@ -63,14 +56,4 @@ public class WaitAttackStateMachine : MonoBehaviour
             _followingEnemyState = WaitAttackEnemyState.WAITING;
         }
     }
-
-   #region Triggers
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (EnemyUtils.ShouldKnockEnemyBack(LayerMask.LayerToName(gameObject.layer), other))
-        {
-            EnemyUtils.KnockMeBack(_rigidBody, other);
-        }
-    }
-    #endregion
 }

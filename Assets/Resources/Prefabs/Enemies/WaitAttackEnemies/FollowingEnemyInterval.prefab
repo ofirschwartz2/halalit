@@ -171,7 +171,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -203,12 +203,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fac4012392c0d74eba41a0e039b3ce7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _rigidBody: {fileID: 8370576225896966316}
   _movementAmplitude: 8
   _oneAttackInterval: 3
   _rotationSpeed: 5
-  _rigidBody: {fileID: 7181788655616385556}
---- !u!50 &7181788655616385556 stripped
+--- !u!50 &8370576225896966316 stripped
 Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: -6764325976918328105, guid: 57c968e9cf3876545bdaee49816ba18f, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3864331875020387951, guid: 57c968e9cf3876545bdaee49816ba18f, type: 3}
   m_PrefabInstance: {fileID: 4722762976642473667}
   m_PrefabAsset: {fileID: 0}

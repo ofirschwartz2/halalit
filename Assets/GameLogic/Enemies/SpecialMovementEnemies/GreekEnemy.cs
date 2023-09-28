@@ -7,13 +7,11 @@ using UnityEngine;
 public class GreekEnemy : MonoBehaviour
 {
     [SerializeField]
-    private bool _useConfigFile;
+    private Rigidbody2D _rigidBody;
     [SerializeField]
     private float _movementAmplitude;
     [SerializeField]
     private float _changeGreekDirectionInterval;
-    [SerializeField]
-    private Rigidbody2D _rigidBody;
 
     private GreekEnemyMovementState _movementStage;
     private Direction _greekDirection;
@@ -23,11 +21,6 @@ public class GreekEnemy : MonoBehaviour
 
     void Start()
     {
-        if (_useConfigFile) 
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-
         _waitForNextStage = false;
         _greekDirection = Utils.GetRandomDirection();
         _movementStage = GreekEnemyMovementState.ONE;
@@ -35,7 +28,7 @@ public class GreekEnemy : MonoBehaviour
         SetChangeDirectionTime();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (DidChangeDirectionTimePass())
         {
@@ -74,63 +67,38 @@ public class GreekEnemy : MonoBehaviour
 
     private Vector2 GetStageDirectionVector(GreekEnemyMovementState stage, Direction direction) 
     {
-        switch (direction)
+        return direction switch
         {
-            case Direction.UP:
-                switch (stage)
-                {
-                    case GreekEnemyMovementState.ONE:
-                    case GreekEnemyMovementState.THREE:
-                        return Vector2.up;
-                    case GreekEnemyMovementState.TWO:
-                        return Vector2.right;
-                    case GreekEnemyMovementState.FOUR:
-                        return Vector2.left;
-                    default:
-                        throw new Exception("GreekEnemyMovement Stage not supported");
-                }
-            case Direction.RIGHT:
-                switch (stage)
-                {
-                    case GreekEnemyMovementState.ONE:
-                    case GreekEnemyMovementState.THREE:
-                        return Vector2.right;
-                    case GreekEnemyMovementState.TWO:
-                        return Vector2.down;
-                    case GreekEnemyMovementState.FOUR:
-                        return Vector2.up;
-                    default:
-                        throw new Exception("GreekEnemyMovementStage not supported");
-                }
-            case Direction.LEFT:
-                switch (stage)
-                {
-                    case GreekEnemyMovementState.ONE:
-                    case GreekEnemyMovementState.THREE:
-                        return Vector2.left;
-                    case GreekEnemyMovementState.TWO:
-                        return Vector2.up;
-                    case GreekEnemyMovementState.FOUR:
-                        return Vector2.down;
-                    default:
-                        throw new Exception("GreekEnemyMovementStage not supported");
-                }
-            case Direction.DOWN:
-                switch (stage)
-                {
-                    case GreekEnemyMovementState.ONE:
-                    case GreekEnemyMovementState.THREE:
-                        return Vector2.down;
-                    case GreekEnemyMovementState.TWO:
-                        return Vector2.left;
-                    case GreekEnemyMovementState.FOUR:
-                        return Vector2.right;
-                    default:
-                        throw new Exception("GreekEnemyMovementStage not supported");
-                }
-            default:
-                throw new InvalidEnumArgumentException();
-        }
+            Direction.UP => stage switch
+            {
+                GreekEnemyMovementState.ONE or GreekEnemyMovementState.THREE => Vector2.up,
+                GreekEnemyMovementState.TWO => Vector2.right,
+                GreekEnemyMovementState.FOUR => Vector2.left,
+                _ => throw new Exception("GreekEnemyMovement Stage not supported"),
+            },
+            Direction.RIGHT => stage switch
+            {
+                GreekEnemyMovementState.ONE or GreekEnemyMovementState.THREE => Vector2.right,
+                GreekEnemyMovementState.TWO => Vector2.down,
+                GreekEnemyMovementState.FOUR => Vector2.up,
+                _ => throw new Exception("GreekEnemyMovementStage not supported"),
+            },
+            Direction.LEFT => stage switch
+            {
+                GreekEnemyMovementState.ONE or GreekEnemyMovementState.THREE => Vector2.left,
+                GreekEnemyMovementState.TWO => Vector2.up,
+                GreekEnemyMovementState.FOUR => Vector2.down,
+                _ => throw new Exception("GreekEnemyMovementStage not supported"),
+            },
+            Direction.DOWN => stage switch
+            {
+                GreekEnemyMovementState.ONE or GreekEnemyMovementState.THREE => Vector2.down,
+                GreekEnemyMovementState.TWO => Vector2.left,
+                GreekEnemyMovementState.FOUR => Vector2.right,
+                _ => throw new Exception("GreekEnemyMovementStage not supported"),
+            },
+            _ => throw new InvalidEnumArgumentException(),
+        };
     }
 
     private bool DidChangeDirectionTimePass()
@@ -154,11 +122,7 @@ public class GreekEnemy : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (EnemyUtils.ShouldKnockEnemyBack(LayerMask.LayerToName(gameObject.layer), other))
-        {
-            EnemyUtils.KnockMeBack(_rigidBody, other);
-        }
-        else if (Utils.DidHitEdge(other.gameObject.tag))
+        if (Utils.DidHitEdge(other.gameObject.tag))
         {
             switch (other.gameObject.tag)
             {

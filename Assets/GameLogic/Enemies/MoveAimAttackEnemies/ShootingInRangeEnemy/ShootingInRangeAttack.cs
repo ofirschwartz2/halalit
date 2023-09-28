@@ -4,19 +4,9 @@ using UnityEngine;
 public class ShootingInRangeAttack : MoveAimAttackAttack
 {
     [SerializeField]
-    private bool _useConfigFile;
-    [SerializeField]
     private ShootingInRangeAim _shootingInRangeAim;
     [SerializeField]
     public GameObject ShotPrefab;
-
-    void Start()
-    {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-    }
 
     public override void Shoot(Transform transform)
     {
