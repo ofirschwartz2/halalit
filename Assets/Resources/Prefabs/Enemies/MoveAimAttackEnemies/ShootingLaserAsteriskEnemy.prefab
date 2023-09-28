@@ -197,7 +197,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _aimingInterval: 1
-  AimShotPrefab: {fileID: 6558306382352585984, guid: aa2b5bd32adb2034ca82d6b7b65937f8, type: 3}
+  AimShotPrefab: {fileID: 3594957705694201146, guid: 377ca4f0904b1bc47952a010d4360ba2, type: 3}
   _numberOfShots: 8
 --- !u!114 &336961175971752282
 MonoBehaviour:
@@ -212,7 +212,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attackingInterval: 1
-  ShotPrefab: {fileID: 6558306382352585984, guid: 079317394ac6c024e956538feb905ec2, type: 3}
+  ShotPrefab: {fileID: 6440083680564724757, guid: 8642207aa43628c4794503fcb1d8535f, type: 3}
   _shootingLazerAsteriskAim: {fileID: 4745574133059015171}
   _endShootingBeforeFinishAttack: 0.1
   _numberOfShots: 8

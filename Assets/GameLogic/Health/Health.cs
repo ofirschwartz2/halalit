@@ -118,24 +118,32 @@ class Health : MonoBehaviour
         {
             if (physical)
             {
-                HandlePhysicalHarmer(other.GetComponent<CollisionHarmer>());
+                CollisionHarmer collisionHarmer = other.GetComponent<CollisionHarmer>() != null ?
+                    other.GetComponent<CollisionHarmer>() :
+                    other.GetComponentInParent<CollisionHarmer>();
+
+                HandleCollisionHarmer(collisionHarmer);
             }
             else
             {
-                HandleNonPhysicalHarmer(other.GetComponent<TriggerHarmer>());
+                TriggerHarmer triggerHarmer = other.GetComponent<TriggerHarmer>() != null ?
+                    other.GetComponent<TriggerHarmer>() :
+                    other.GetComponentInParent<TriggerHarmer>();
+
+                HandleTriggerHarmer(triggerHarmer);
             }
         }
     }
 
-    private void HandleNonPhysicalHarmer(TriggerHarmer nonPhysicalHarmer)
+    private void HandleTriggerHarmer(TriggerHarmer triggerHarmer)
     {
-        int harm = nonPhysicalHarmer.GetTriggerHarm();
+        int harm = triggerHarmer.GetTriggerHarm();
         ChangeHealth(-harm);
     }
 
-    private void HandlePhysicalHarmer(CollisionHarmer physicalHarmer)
+    private void HandleCollisionHarmer(CollisionHarmer collisionHarmer)
     {
-        int harm = physicalHarmer.GetCollisionHarm();
+        int harm = collisionHarmer.GetCollisionHarm();
         ChangeHealth(-harm);
     }
 
