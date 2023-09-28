@@ -3,6 +3,10 @@ public class MirrorBallShotItem : AttackItem
 {
     private void Start()
     {
-        _itemName = ItemName.MIRROR_BALL_SHOT;
+        if (other.gameObject.CompareTag(Tag.HALALIT.GetDescription()))
+        {
+            OnPlayerAttackItemPickedUp(this, new(ItemName.MIRROR_BALL_SHOT, new()));
+            Destroy(gameObject);
+        }
     }
 }

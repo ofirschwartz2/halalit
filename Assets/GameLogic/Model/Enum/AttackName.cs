@@ -15,6 +15,16 @@ namespace Assets.Enums
         [Description("Boomerang shot")]
         BOOMERANG_SHOT,
         [Description("Mirror Ball shot")]
-        MIRROR_BALL_SHOT
+        MIRROR_BALL_SHOT,
+        [Description("Sword")]
+        SWORD,
+        [Description("Blast shot")]
+        BLAST_SHOT,
+        [Description("Granade shot")]
+        GRANADE_SHOT,
+        [Description("Shotgun shot")]
+        SHOTGUN_SHOT,
+        [Description("Spikes")]
+        SPIKES
     }
 }

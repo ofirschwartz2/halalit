@@ -11,7 +11,7 @@ public class ShootingInRangeAttack : MoveAimAttackAttack
     public override void Shoot(Transform transform)
     {
         Vector3 shootingStartPosition = GetShootingStartPosition(transform);
-        var shootRotation = Utils.GetRotation(transform.rotation, _shootingInRangeAim.GetShootingAngle());
+        var shootRotation = Utils.GetRotationPlusAngle(transform.rotation, _shootingInRangeAim.GetShootingAngle());
         Instantiate(ShotPrefab, shootingStartPosition, shootRotation);
     }
 

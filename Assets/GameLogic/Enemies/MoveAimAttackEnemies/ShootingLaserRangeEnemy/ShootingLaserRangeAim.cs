@@ -24,7 +24,7 @@ public class ShootingLazerRangeAim : MoveAimAttackAim
 
     private GameObject ShootAimingShot(Vector3 shootingStartPosition, float angle)
     {
-        Quaternion fromRotation = Utils.GetRotation(transform.rotation, angle);
+        Quaternion fromRotation = Utils.GetRotationPlusAngle(transform.rotation, angle);
         var aimShot = Instantiate(AimShotPrefab, shootingStartPosition, fromRotation);
         aimShot.transform.SetParent(gameObject.transform);
         aimShot.layer = LayerMask.NameToLayer("EnemyShots");

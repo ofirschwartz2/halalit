@@ -13,7 +13,12 @@ public class LaserBeamShot : MonoBehaviour
 
     void Start()
     {
-        _endOfLifeTime = Time.time + _lifetime;
+        if (_useConfigFile)
+        {
+            ConfigFileReader.LoadMembersFromConfigFile(this);
+        }
+
+        _endOfLifeTime = Utils.GetEndOfLifeTime(_lifetime);
     }
 
     void FixedUpdate()
@@ -36,15 +41,10 @@ public class LaserBeamShot : MonoBehaviour
 
     private void TryDie()
     {
-        if (ShouldDie())
+        if (Utils.ShouldDie(_endOfLifeTime))
         {
             Destroy(gameObject);
             Destroy(transform.parent.gameObject);
         }
-    }
-
-    private bool ShouldDie()
-    {
-        return Time.time >= _endOfLifeTime;
     }
 }
