@@ -19,10 +19,6 @@ public class KnockbackShot : MonoBehaviour
 
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
         
         _endOfLifeTime = Utils.GetEndOfLifeTime(_lifetime);
         _rigidBody.velocity = transform.up * _speed;

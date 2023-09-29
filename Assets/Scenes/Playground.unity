@@ -669,14 +669,14 @@ PrefabInstance:
     - target: {fileID: 3996195409971791884, guid: 235a16c82bb99a347b9b60318f79de27, type: 3}
       propertyPath: _rigidBody
       value: 
-      objectReference: {fileID: 254971891}
+      objectReference: {fileID: 0}
     - target: {fileID: 5072172639208078113, guid: 235a16c82bb99a347b9b60318f79de27, type: 3}
       propertyPath: m_Name
       value: LameEnemy
       objectReference: {fileID: 0}
     - target: {fileID: 5072172639208078113, guid: 235a16c82bb99a347b9b60318f79de27, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7899183643063666721, guid: 235a16c82bb99a347b9b60318f79de27, type: 3}
       propertyPath: m_IsTrigger
@@ -690,11 +690,6 @@ PrefabInstance:
 --- !u!4 &254971890 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1550774248884840464, guid: 235a16c82bb99a347b9b60318f79de27, type: 3}
-  m_PrefabInstance: {fileID: 254971889}
-  m_PrefabAsset: {fileID: 0}
---- !u!50 &254971891 stripped
-Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: 4934499545044092528, guid: 235a16c82bb99a347b9b60318f79de27, type: 3}
   m_PrefabInstance: {fileID: 254971889}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &376576426
@@ -1745,7 +1740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b124fbb6d5e0148884d8a70c8e4981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firstAttack: 9
+  _firstAttack: 8
 --- !u!1 &814139006
 GameObject:
   m_ObjectHideFlags: 0
@@ -2159,7 +2154,7 @@ MonoBehaviour:
   - Key: 2
     Value: {fileID: 239013753676516010, guid: bf42c0ce455d6074583c3cd963d07757, type: 3}
   - Key: 3
-    Value: {fileID: 4043514594342984741, guid: 19e2dcdba0828ce479d38e982ef79c75, type: 3}
+    Value: {fileID: 8387521740547092234, guid: 591acd2f22495a247a24ec93eb9c810f, type: 3}
   - Key: 6
     Value: {fileID: 4043514594342984741, guid: 94a1ff4874787d748a59e0a50512dca5, type: 3}
   - Key: 7
@@ -2327,10 +2322,10 @@ MonoBehaviour:
   _asteroidPrefab: {fileID: 6741412782414407016, guid: d17f6aba06990634e92f5f659cf1bf0d, type: 3}
   _asteroidInitiator: {fileID: 1107869176}
   _asteroidInstantiationLineLength: 30
-  _asteroidInstantiationTimeInterval: 0
+  _asteroidInstantiationTimeInterval: 1
   _asteroidInstantiationLoad: 1
   _asteroidInstantiationDistanceFromCenter: 25
-  _asteroidMaxScale: 0
+  _asteroidMaxScale: 4
   _maxInstantiationsRetry: 5
   _asteroidTakeOffTime: 5
 --- !u!114 &1107869175
@@ -2466,6 +2461,7 @@ Transform:
   - {fileID: 1601181588}
   - {fileID: 676237483}
   - {fileID: 1037909871}
+  - {fileID: 254971890}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2501,7 +2497,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _useConfigFile: 0
   _instantiationRate:
-  - 1
+  - 5
   _spawnHolePrefab: {fileID: 3634717560851911193, guid: 48e2e8a0c2efa8f4ba028528570feef1, type: 3}
   _internalWorld: {fileID: 1323639987}
   _instantiationDistanceFree: 3
@@ -2860,7 +2856,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5072172639208078113, guid: 235a16c82bb99a347b9b60318f79de27, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3326,29 +3322,54 @@ MonoBehaviour:
     MaxStock: 20
     MinimumInitialStock: 0
     Stock: 0
+  - ItemName: 5
+    GameObject: {fileID: 8968850470237194354, guid: 7bf2d58a40dc2f64db585c6ed9d00bff, type: 3}
+    MaxStock: 20
+    MinimumInitialStock: 0
+    Stock: 0
+  - ItemName: 7
+    GameObject: {fileID: 8968850470237194354, guid: 58ca17c14a1e3494f8a410148732627d, type: 3}
+    MaxStock: 20
+    MinimumInitialStock: 0
+    Stock: 0
+  - ItemName: 8
+    GameObject: {fileID: 8968850470237194354, guid: dec1913d9392a874dbbbc2d4408dcb46, type: 3}
+    MaxStock: 20
+    MinimumInitialStock: 0
+    Stock: 0
+  - ItemName: 9
+    GameObject: {fileID: 8968850470237194354, guid: 3a9f86578fb5fb44ea46b609257096ac, type: 3}
+    MaxStock: 20
+    MinimumInitialStock: 0
+    Stock: 0
+  - ItemName: 6
+    GameObject: {fileID: 8968850470237194354, guid: 5b0c9ab3ea3ecac41b5a439db2f01127, type: 3}
+    MaxStock: 20
+    MinimumInitialStock: 0
+    Stock: 0
   - ItemName: 4
     GameObject: {fileID: 8968850470237194354, guid: 229c4aef31f23d7499fca983cdeb65f2, type: 3}
     MaxStock: 20
     MinimumInitialStock: 0
     Stock: 0
   _upgrades:
-  - ItemName: 5
+  - ItemName: 10
     GameObject: {fileID: 2051710102036930527, guid: 40d14c0d11f854046b5a7f50b48782cb, type: 3}
     MaxStock: 40
     MinimumInitialStock: 30
     Stock: 0
-  - ItemName: 8
+  - ItemName: 13
     GameObject: {fileID: 7096595365006072902, guid: 295a3652a26fcff4fb08e93d52b2cff0, type: 3}
     MaxStock: 7
     MinimumInitialStock: 5
     Stock: 0
-  - ItemName: 9
+  - ItemName: 16
     GameObject: {fileID: 6531215755768581467, guid: 16ebd1bad861a974297f9407b5e67dbe, type: 3}
     MaxStock: 7
     MinimumInitialStock: 5
     Stock: 0
   - ItemName: 11
-    GameObject: {fileID: 6531215755768581467, guid: 16ebd1bad861a974297f9407b5e67dbe, type: 3}
+    GameObject: {fileID: 29822001511814079, guid: 58133c84bb7526c46ac5ea26534c6156, type: 3}
     MaxStock: 5
     MinimumInitialStock: 3
     Stock: 0

@@ -318,6 +318,7 @@ namespace Assets.Utils
 
         #endregion
 
+        #region Lists
         public static void ShuffleList<T>(List<T> list)
         {
             for (int i = 0; i < list.Count; i++)
@@ -328,5 +329,6 @@ namespace Assets.Utils
                 list[randomIndex] = temp;
             }
         }
+        #endregion
     }
 }

@@ -15,7 +15,7 @@ public abstract class AttackItem : MonoBehaviour
         }
     }
 
-    private void OnPlayerAttackItemPickedUp(object initiator, ItemEventArguments arguments)
+    protected void OnPlayerAttackItemPickedUp(object initiator, ItemEventArguments arguments)
     {
         ItemEvent.Invoke(EventName.PLAYER_ATTACK_ITEM_PICKUP, initiator, arguments);
     }
