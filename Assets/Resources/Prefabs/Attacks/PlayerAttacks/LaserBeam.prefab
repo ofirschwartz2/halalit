@@ -75,15 +75,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-<<<<<<< HEAD:Assets/Prefabs/Enemies/FollowingEnemyInterval.prefab
   m_SortingOrder: 1
   m_Sprite: {fileID: -9095717837082945937, guid: acccf99f37bb8f24f83c7b935b6128f3, type: 3}
   m_Color: {r: 0, g: 1, b: 0.034408808, a: 1}
-=======
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 45ed724de6f22424e9847bb3dddcd9ef, type: 3}
-  m_Color: {r: 1, g: 0.58431375, b: 0, a: 1}
->>>>>>> master:Assets/Resources/Prefabs/Attacks/PlayerAttacks/LaserBeam.prefab
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

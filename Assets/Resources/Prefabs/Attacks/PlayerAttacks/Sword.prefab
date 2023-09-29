@@ -75,15 +75,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-<<<<<<< HEAD:Assets/Prefabs/Enemies/ShootingLaserAsteriskEnemy.prefab
   m_SortingOrder: 1
   m_Sprite: {fileID: -2413806693520163455, guid: 36a58ef0f52a17e4a93613edf7d86198, type: 3}
   m_Color: {r: 0, g: 0.97121596, b: 1, a: 1}
-=======
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 0b234ba530a221041a3df0ef88b7aa4f, type: 3}
-  m_Color: {r: 1, g: 0.50620496, b: 0, a: 1}
->>>>>>> master:Assets/Resources/Prefabs/Attacks/PlayerAttacks/Sword.prefab
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

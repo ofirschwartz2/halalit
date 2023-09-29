@@ -73,19 +73,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-<<<<<<< HEAD:Assets/Prefabs/Enemies/GreekEnemy.prefab
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: -9095717837082945937, guid: acccf99f37bb8f24f83c7b935b6128f3, type: 3}
   m_Color: {r: 0, g: 0.12190771, b: 1, a: 1}
-=======
-  m_SortingLayerID: 1226254537
-  m_SortingLayer: 1
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: 36a58ef0f52a17e4a93613edf7d86198, type: 3}
-  m_Color: {r: 1, g: 0, b: 0.7194252, a: 1}
->>>>>>> master:Assets/Resources/Prefabs/Attacks/PlayerAttacks/MirrorBallShot.prefab
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
