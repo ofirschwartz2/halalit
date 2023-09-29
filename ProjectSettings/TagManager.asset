@@ -30,6 +30,7 @@ TagManager:
   - Weapon
   - BarIcon
   - Granade
+  - Spawner
   layers:
   - Default
   - TransparentFX

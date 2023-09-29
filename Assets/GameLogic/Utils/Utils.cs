@@ -3,6 +3,7 @@ using System.ComponentModel;
 using UnityEngine;
 using Assets.Enums;
 using Random = UnityEngine.Random;
+using System.Collections.Generic;
 
 namespace Assets.Utils
 {
@@ -69,6 +70,12 @@ namespace Assets.Utils
         {
             return Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(y, 2));
         }
+
+        public static Vector2 GetRandomVector(float minX, float maxX, float minY, float maxY)
+        {
+            return new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+        }
+        
         
         public static float GetNormalizedAngleBy360(float angle)
         {
@@ -310,5 +317,16 @@ namespace Assets.Utils
         }
 
         #endregion
+
+        public static void ShuffleList<T>(List<T> list)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                var temp = list[i];
+                var randomIndex = Random.Range(i, list.Count);
+                list[i] = list[randomIndex];
+                list[randomIndex] = temp;
+            }
+        }
     }
 }
