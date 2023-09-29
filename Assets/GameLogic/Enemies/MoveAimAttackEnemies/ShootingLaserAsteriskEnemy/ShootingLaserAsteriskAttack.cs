@@ -1,29 +1,22 @@
 using Assets.Utils;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ShootingLaserAsteriskAttack : MoveAimAttackAttack
 {
     [SerializeField]
-    private bool _useConfigFile;
+    private GameObject ShotPrefab;
     [SerializeField]
     private ShootingLaserAsteriskAim _shootingLazerAsteriskAim;
     [SerializeField]
     private float _endShootingBeforeFinishAttack;
     [SerializeField]
     private int _numberOfShots;
-    [SerializeField]
-    private GameObject ShotPrefab;
 
     private List<GameObject> _shots;
 
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
         _shots = new List<GameObject>();
     }
 

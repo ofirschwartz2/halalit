@@ -3,16 +3,15 @@ using UnityEngine;
 
 public class WaitAttackFollowingAttack: WaitAttackAttack
 {
-
+    [SerializeField]
+    private Rigidbody2D _rigidBody;
     [SerializeField]
     private float _movementAmplitude;
     [SerializeField]
     private float _oneAttackInterval;
     [SerializeField]
     private float _rotationSpeed;
-    [SerializeField]
-    private Rigidbody2D _rigidBody;
-
+    
     private float _stratAttackingTime, _finishAttackingTime;
     private Vector2 _halalitDirection;
 

@@ -7,6 +7,7 @@ public class WaitAttackIntervalWait : WaitAttackWait
     private float _waitingInterval;
     [SerializeField]
     private float _rotationSpeed;
+
     private float _waitingTime;
 
     public override void Wait() 

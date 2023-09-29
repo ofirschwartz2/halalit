@@ -1,10 +1,7 @@
-using Assets.Utils;
 using UnityEngine;
 
 public class LaserBeamShot : MonoBehaviour
 {
-    [SerializeField]
-    private bool _useConfigFile;
     [SerializeField]
     private float _lifetime;
     [SerializeField]

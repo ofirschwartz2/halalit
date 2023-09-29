@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class WaitAttackRadiusWait : WaitAttackWait
 {
-
     [SerializeField]
     private float _waitingRadius;
     [SerializeField]
     private float _waitingInterval;
     [SerializeField]
     private float _rotationSpeed;
+
     private float _waitingTime;
 
     public override void Wait() 
@@ -26,10 +26,7 @@ public class WaitAttackRadiusWait : WaitAttackWait
     
     public override bool ShouldStopWaiting()
     {
-        return
-            DidWaitingTimePass()
-            &&
-            IsHalalitInRadius();
+        return DidWaitingTimePass() && IsHalalitInRadius();
     }
 
     private bool DidWaitingTimePass()

@@ -5,15 +5,13 @@ using UnityEngine;
 public class ZigZagEnemy : MonoBehaviour
 {
     [SerializeField]
-    private bool _useConfigFile;
+    private Rigidbody2D _rigidBody;
     [SerializeField]
     private float _movementAmplitude;
     [SerializeField]
     private float _changeZigZagDirectionInterval;
     [SerializeField]
     private float _changeFromDirectionAngle;
-    [SerializeField]
-    private Rigidbody2D _rigidBody;
 
     private Vector2 _direction;
     private ZigZagDirection _zigZagDirectionFlag;
@@ -21,18 +19,12 @@ public class ZigZagEnemy : MonoBehaviour
 
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-
         _zigZagDirectionFlag = ZigZagDirection.ZAG;
         _direction = Utils.GetRandomVector2OnCircle();
         SetChangeZigZagDirectionTime();
-
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (DidZigZagTimePass())
         {
@@ -66,11 +58,7 @@ public class ZigZagEnemy : MonoBehaviour
     #region Triggers
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (EnemyUtils.ShouldKnockEnemyBack(LayerMask.LayerToName(gameObject.layer), other))
-        {
-            EnemyUtils.KnockMeBack(_rigidBody, other);
-        }
-        else if (Utils.DidHitEdge(other.gameObject.tag))
+        if (Utils.DidHitEdge(other.gameObject.tag))
         {
             SetChangeZigZagDirectionTime();
             _direction = EnemyUtils.GetAnotherDirectionFromEdge(_rigidBody, other.gameObject.tag);
@@ -84,5 +72,4 @@ public class ZigZagEnemy : MonoBehaviour
         return Time.time > _changeZigZagDirectionTime;
     }
     #endregion
-
 }

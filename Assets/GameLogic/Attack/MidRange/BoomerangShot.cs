@@ -1,10 +1,7 @@
 using Assets.Enums;
 using Assets.Utils;
-using System.Xml.Xsl;
 using UnityEngine;
 
-// TODO (refactor): the stats (damage) of a shot (when it's collide with enemy) needs to be on the shot script
-// TODO (refactor): move all shots out of the Gun. Enemies also shoot now.
 public class BoomerangShot : MonoBehaviour 
 {
 
@@ -22,7 +19,6 @@ public class BoomerangShot : MonoBehaviour
 
     void Start()
     {
-
         _rightDirection = transform.right;
         _startPosition = transform.position;
         _halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());

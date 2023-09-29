@@ -16,32 +16,21 @@
     <_weaponSpinRadius>0.7</_weaponSpinRadius>
   </WeaponMovement>
 
-  <AttackToggle>
-    <_ammoToggleJoysticEdge>0.8</_ammoToggleJoysticEdge>
-  </AttackToggle>
-
   // Not used from - 25/8/23
   <WeaponAttack>
     <_cooldownInterval>0.5</_cooldownInterval>
     <_attackJoystickEdge>0.8</_attackJoystickEdge>
   </WeaponAttack>
 
+  // Not used from - 17/09/23
   <BallShot>
       <_speed>10</_speed>
   </BallShot>
 
-  <LaserBeam>
+  // Not used from - 17/09/23
+  <LaserBeamShot>
       <_lifetime>0.1</_lifetime>
-  </LaserBeam>
-
-  <PickupClawController>
-      <_velocityMultiplier>2.5</_velocityMultiplier>
-      <_rotationToItemMultiplier>3</_rotationToItemMultiplier>
-      <_rotationToHalalitMultiplier>0.5</_rotationToHalalitMultiplier>
-      <_moveToItemMultiplier>0.5</_moveToItemMultiplier>
-      <_grabDelay>0.5</_grabDelay>
-      <_ropeLength>10</_ropeLength>
-  </PickupClawController>
+  </LaserBeamShot>
 
   // Not used from - 25/8/23
   <PickupClawMovement>
@@ -55,28 +44,27 @@
     <_dragAtFullRopeSpeed>0.1</_dragAtFullRopeSpeed>
   </PickupClawMovement>
 
+  // Not used from - 16/09/23
   <PickupClawGrabber>
       <_grabDelay>0.5</_grabDelay>
       <_rotationToItemMultiplier>3</_rotationToItemMultiplier>
       <_moveToItemMultiplier>0.5</_moveToItemMultiplier>
   </PickupClawGrabber>
 
-  <EnemyFactory>
-      <MaxNumberOfEnemies>30</MaxNumberOfEnemies>
-      <NumberOfEnemies>20</NumberOfEnemies>
-  </EnemyFactory>
-
+  // Not used from - 17/09/23
   <LameEnemyMovement>
       <_movementAmplitude>1</_movementAmplitude>
       <_speedLimit>1</_speedLimit>
   </LameEnemyMovement>
 
+  // Not used from - 17/09/23
   <ZigZagEnemyMovement>
       <_movementAmplitude>2</_movementAmplitude>
       <_changeZigZagDirectionInterval>1</_changeZigZagDirectionInterval>
       <_changeFromDirectionAngle>90</_changeFromDirectionAngle>
   </ZigZagEnemyMovement>
 
+  // Not used from - 17/09/23
   <SinusEnemyMovement>
       <_sinAxisMovementAmplitude>0.5</_sinAxisMovementAmplitude>
       <_otherAxisMovementAmplitude>2</_otherAxisMovementAmplitude>
@@ -84,17 +72,20 @@
       <_otherAxisSpeedLimit>2</_otherAxisSpeedLimit>
   </SinusEnemyMovement>
 
+  // Not used from - 17/09/23
   <GreekEnemyMovement>
       <_movementAmplitude>2</_movementAmplitude>
       <_changeGreekDirectionInterval>1</_changeGreekDirectionInterval>
   </GreekEnemyMovement>
 
+  // Not used from - 17/09/23
   <FollowingEnemyMovement>
       <_movementAmplitude>1</_movementAmplitude>
       <_attackLoadingInterval>1</_attackLoadingInterval>
       <_oneAttackInterval>3</_oneAttackInterval>
   </FollowingEnemyMovement>
 
+  // Not used from - 17/09/23
   <ShootingInRangeEnemyMovement>
       <_movementAmplitude>1</_movementAmplitude>
       <_speedLimit>1</_speedLimit>
@@ -105,6 +96,7 @@
       <_rotationSpeed>0.03</_rotationSpeed>
   </ShootingInRangeEnemyMovement>
 
+  // Not used from - 17/09/23
   <ShootingLazerRangeEnemy>
       <_movementAmplitude>1</_movementAmplitude>
       <_speedLimit>1</_speedLimit>
@@ -116,6 +108,7 @@
       <_shotRotationSpeed>0.03</_shotRotationSpeed>
   </ShootingLazerRangeEnemy>
 
+  // Not used from - 17/09/23
   <ShootingLazerAsteriskEnemy>
       <_movementAmplitude>1</_movementAmplitude>
       <_speedLimit>1</_speedLimit>
@@ -167,21 +160,15 @@
   <_transparencyPeriod>3</_transparencyPeriod>
   </AsteroidMovement>
 
-  // // Not used from - 28/8/23
+  // Not used from - 28/8/23
   <ItemMovement>
   <_maxVelocity>0.1</_maxVelocity>
   <_maxRotation>10</_maxRotation>
   </ItemMovement>
 
+  // Not used from - 16/09/23
   <WeaponStamina>
   <_weaponCooldownMultiplierSubtruction>0.1</_weaponCooldownMultiplierSubtruction>
   </WeaponStamina>
-
-  <ItemRanker>
-  <_ballShotRank>1</_ballShotRank>
-  <_laserBeamRank>15</_laserBeamRank>
-  <_fireRateRank>20</_fireRateRank>
-  <_nitroFuelRank>10</_nitroFuelRank>
-  </ItemRanker>
 
 </scripts>

@@ -22,13 +22,21 @@ class Knockbacker : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D other)
     {
-        if (IsGameObjectToKnockback(other))
+        if (IsGameObjectToKnockback(other.collider))
         {
-            KnockBackOther(other);
+            KnockbackOther(other.collider);
         }
     }
 
-    private bool IsGameObjectToKnockback(Collision2D other)
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        if (IsGameObjectToKnockback(other))
+        {
+            KnockbackOther(other);
+        }
+    }
+
+    private bool IsGameObjectToKnockback(Collider2D other)
     {
         if (_knockbackeesDescriptions.Contains(other.gameObject.tag))
         {
@@ -38,13 +46,13 @@ class Knockbacker : MonoBehaviour
         return false;
     }
 
-    private void KnockBackOther(Collision2D other)
+    private void KnockbackOther(Collider2D other)
     {
-        Rigidbody2D otherRigidBody = other.collider.GetComponent<Rigidbody2D>();
+        Rigidbody2D otherRigidBody = other.GetComponent<Rigidbody2D>();
 
-        Vector2 knockbackDirection = (other.collider.transform.position -_rigidbody2D.transform.position).normalized;
-        float knockBackSpeed = GetMyTotalSpeed() * _knockbackMultiplier;
-        otherRigidBody.AddForce(knockbackDirection * knockBackSpeed, ForceMode2D.Impulse);
+        Vector2 knockbackDirection = (other.transform.position - transform.position).normalized;
+        float knockbackSpeed = GetMyTotalSpeed() * _knockbackMultiplier;
+        otherRigidBody.AddForce(knockbackDirection * knockbackSpeed, ForceMode2D.Impulse);
     }
 
     private float GetMyTotalSpeed()
@@ -54,9 +62,9 @@ class Knockbacker : MonoBehaviour
 
     private float GetMyLinearSpeed()
     {
-        if (gameObject.CompareTag(Tag.ASTEROID.GetDescription()))
+        if (_rigidbody2D.isKinematic)
         {
-            return GetComponent<AsteroidMovement>().GetSpeed() * Constants.ASTEROID_KNOCKBACK_SPEED_NORMALIZER;
+            return GetComponent<KinematicMovement>().GetSpeed();
         }
 
         return _rigidbody2D.velocity.magnitude;
@@ -64,12 +72,11 @@ class Knockbacker : MonoBehaviour
 
     private float GetMyAngularSpeed()
     {
-        if (gameObject.CompareTag(Tag.ASTEROID.GetDescription()))
+        if (_rigidbody2D.isKinematic)
         {
-            return GetComponent<AsteroidMovement>().GetRotationSpeed();
+            return GetComponent<KinematicMovement>().GetRotationSpeed();
         }
 
         return _rigidbody2D.angularVelocity;
     }
 }
-

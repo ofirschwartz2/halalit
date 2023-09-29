@@ -4,20 +4,11 @@ using UnityEngine;
 public class ShootingLazerRangeAim : MoveAimAttackAim
 {
     [SerializeField]
-    private bool _useConfigFile;
+    public GameObject AimShotPrefab;
     [SerializeField]
     private float _shootingRange;
-    [SerializeField]
-    public GameObject AimShotPrefab;
 
     private GameObject _aimingShotFrom, _aimingShotTo;
-    void Start()
-    {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-    }
 
     public override void Aim(Transform transform = null)
     {

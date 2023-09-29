@@ -92,11 +92,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 5663752396182160313}
   m_SourcePrefab: {fileID: 100100000, guid: 56cf082c9d9101d43abf248d3dda6948, type: 3}
---- !u!50 &107502300559105459 stripped
-Rigidbody2D:
-  m_CorrespondingSourceObject: {fileID: 8268421201034673290, guid: 56cf082c9d9101d43abf248d3dda6948, type: 3}
-  m_PrefabInstance: {fileID: 8341433436055413049}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &996304911696120768 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9084094194011204345, guid: 56cf082c9d9101d43abf248d3dda6948, type: 3}
@@ -183,7 +178,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -202,9 +197,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _aimingInterval: 1
-  _useConfigFile: 0
+  AimShotPrefab: {fileID: 3594957705694201146, guid: 377ca4f0904b1bc47952a010d4360ba2, type: 3}
   _shootingRange: 30
-  AimShotPrefab: {fileID: 6558306382352585984, guid: aa2b5bd32adb2034ca82d6b7b65937f8, type: 3}
 --- !u!114 &3268123776465890183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,10 +212,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attackingInterval: 1
-  _useConfigFile: 0
-  _shotRotationSpeed: 3
-  ShotPrefab: {fileID: 6558306382352585984, guid: 079317394ac6c024e956538feb905ec2, type: 3}
+  ShotPrefab: {fileID: 6440083680564724757, guid: 8642207aa43628c4794503fcb1d8535f, type: 3}
   _shootingLazerRangeAim: {fileID: 5603909230849019724}
+  _shotRotationSpeed: 3
 --- !u!114 &5663752396182160313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,9 +227,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09f8d2363bd26ab4c8fc9e7e1b8fcffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _useConfigFile: 0
+  _rigidBody: {fileID: 8974521148147347315}
   _movementAmplitude: 1
   _speedLimit: 1
   _movingInterval: 3
   _rotationSpeed: 1
-  _rigidBody: {fileID: 107502300559105459}
+--- !u!50 &8974521148147347315 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 1101515953741205066, guid: 56cf082c9d9101d43abf248d3dda6948, type: 3}
+  m_PrefabInstance: {fileID: 8341433436055413049}
+  m_PrefabAsset: {fileID: 0}
