@@ -1,6 +1,7 @@
 using Assets.Enums;
 using Assets.Utils;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SpawnHole : MonoBehaviour
@@ -23,6 +24,8 @@ public class SpawnHole : MonoBehaviour
     private float _closingLifetime;
     [SerializeField]
     private float _spawnHoleMultiplier;
+    [SerializeField]
+    private List<string> _alwaysEnabledScripts;
 
     private float 
         _startOfOpeningLifeTime, _endOfOpeningLifeTime,
@@ -123,6 +126,7 @@ public class SpawnHole : MonoBehaviour
     {
         _state = SpawnHoleState.CLOSING;
         SetClosingTimes();
+        EnableEnemyScripts();
     }
 
     #endregion
@@ -167,9 +171,11 @@ public class SpawnHole : MonoBehaviour
         {
             var newEnemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
             newEnemy.transform.localScale = Vector3.zero;
+
+            DisableEnemyScripts(newEnemy);
+            
             _enemies.Add(newEnemy);
         }
-
         _enemiesSpawnFinalPoints = EnemyUtils.GetEvenPositionsAroundCircle(transform, _enemyPrefabs.Count, transform.localScale.magnitude);
     }
 
@@ -193,6 +199,34 @@ public class SpawnHole : MonoBehaviour
                 _enemiesSpawnFinalPoints[_enemies.IndexOf(enemy)],
                 Utils.GetPortionPassed(_startOfOpenLifeTime, _openLifetime)
                 );
+        }
+    }
+
+    private void DisableEnemyScripts(GameObject newEnemy) 
+    {
+        Behaviour[] scripts = newEnemy.GetComponents<Behaviour>();
+        foreach (Behaviour script in scripts)
+        {
+            if (!_alwaysEnabledScripts.Any(alwaysEnabledScript => script.GetType().Name.Contains(alwaysEnabledScript)))
+            {
+                script.enabled = false;
+            }
+        }
+    }
+
+    private void EnableEnemyScripts()
+    {
+        foreach (GameObject enemy in _enemies)
+        {
+            if (enemy == null)
+            {
+                continue;
+            }
+
+            foreach (Behaviour script in enemy.GetComponents<Behaviour>())
+            {
+                script.enabled = true;
+            }
         }
     }
     #endregion

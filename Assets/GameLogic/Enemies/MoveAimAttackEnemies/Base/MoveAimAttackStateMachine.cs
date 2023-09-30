@@ -15,7 +15,7 @@ public class MoveAimAttackStateMachine : MonoBehaviour
     private MoveAimAttackAim _moveAimAttackAim;
     [SerializeField]
     private MoveAimAttackAttack _moveAimAttackAttack;
-
+    
     void Start()
     {
         _moveAimAttackMove.SetDirection();

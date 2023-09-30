@@ -9,6 +9,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -7965311771781998143, guid: 57c968e9cf3876545bdaee49816ba18f, type: 3}
+      propertyPath: _spawningTime
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -7965311771781998143, guid: 57c968e9cf3876545bdaee49816ba18f, type: 3}
       propertyPath: _waitAttackWait
       value: 
       objectReference: {fileID: 9068032201536311902}
