@@ -228,3 +228,4 @@ MonoBehaviour:
   _alwaysEnabledScripts:
   - EnemyDropper
   - EnemySharedBehavior
+  - Health

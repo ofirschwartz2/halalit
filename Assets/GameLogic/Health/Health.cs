@@ -1,5 +1,6 @@
 ﻿using Assets.Enums;
 using Assets.Utils;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -31,6 +32,8 @@ class Health : MonoBehaviour
     private void Awake()
     {
         SetEventListeners();
+        _harmersDescriptions = new List<string>();
+        _contributorsDescriptions = new List<string>();
     }
 
     private void SetEventListeners()
@@ -58,7 +61,21 @@ class Health : MonoBehaviour
     {
         GameObject dynamicBarPrefab = (GameObject)Resources.Load(Constants.RESOURCE_DYNAMIC_BAR_PREFAB);
         _healthBar = Instantiate(dynamicBarPrefab, _privateCanvas.transform, false);
-        
+        SetHealthBarInvisible();
+        StartCoroutine(SetHealthBarVisible(1f));
+    }
+
+    private void SetHealthBarInvisible()
+    {
+        _healthBar.SetActive(false);
+    }
+
+    private IEnumerator SetHealthBarVisible(float delayTime)
+    {
+        yield return new WaitForSeconds(delayTime);
+
+        _healthBar.SetActive(true);
+
         SetHealthBarScale();
         SetHealthBarPosition();
     }
@@ -66,7 +83,6 @@ class Health : MonoBehaviour
     private void SetHealthBarScale()
     {
         _healthBar.transform.localScale = new(Constants.HEALH_BAR_SCALE, Constants.HEALH_BAR_SCALE, Constants.HEALH_BAR_SCALE);
-
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         RectTransform healthBarRect = _healthBar.GetComponent<RectTransform>();
         healthBarRect.sizeDelta = new Vector2(spriteRenderer.sprite.pivot.x, healthBarRect.rect.height);
@@ -91,14 +107,17 @@ class Health : MonoBehaviour
         _health = _currentMaxHealth;
 
         Slider[] sliderComponents = _healthBar.GetComponentsInChildren<Slider>();
+
         _healthBarFill = sliderComponents.Where(sliderComponent => sliderComponent.gameObject.CompareTag(Tag.BAR_FILL.GetDescription())).ToList()[0];
         _healthBarFill.maxValue = _finalMaxHealth;
         _healthBarFill.value = _currentMaxHealth;
+
         _healthBarBorder = sliderComponents.Where(sliderComponent => sliderComponent.gameObject.CompareTag(Tag.BAR_BORDEDR.GetDescription())).ToList()[0];
         _healthBarBorder.maxValue = _finalMaxHealth;
         _healthBarBorder.value = _currentMaxHealth;
 
         _harmersDescriptions = _harmers.Select(tag => Utils.GetDescription(tag)).ToList();
+
         _contributorsDescriptions = _contributors.Select(tag => Utils.GetDescription(tag)).ToList();
     }
 
