@@ -49,7 +49,12 @@ public class DropsBank : MonoBehaviour
     #region Accessors
     public Dictionary<ItemName, float> GetDrops(Dropper dropper)
     {
-        return _allDroppables[dropper];
+        if (_allDroppables.TryGetValue(dropper, out Dictionary<ItemName, float> droppables))
+        {
+            return droppables;
+        }
+
+        return new Dictionary<ItemName, float>();
     }
     #endregion
 

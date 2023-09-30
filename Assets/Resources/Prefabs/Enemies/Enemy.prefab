@@ -80,7 +80,7 @@ MonoBehaviour:
   _healthBarIcon: {fileID: 21300000, guid: 1073bff4cc302fa459afe59b17dc1b0e, type: 3}
   _currentMaxHealth: 4
   _finalMaxHealth: 4
-  _harmers: 02000000
+  _harmers: 0200000003000000
   _contributors: 
 --- !u!114 &2564062923521873166
 MonoBehaviour:
@@ -135,4 +135,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 266bc4aa6610d5746ac5e6478270550c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawningTime: 10
