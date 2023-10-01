@@ -6,10 +6,9 @@ using UnityEngine;
 static class EnemyMovementUtils
 {
     // TODO (refactor): shouldn't these need to be configurable? 
-    private const float DELTA_TIME_MULTIPLIER = 300f;
     private const float SPEED_UP_OUT_OF_STRAIGHT_LINE = 5f/10f;
     private const float SLOW_DOWN_OUT_OF_STRAIGHT_LINE = 9f/10f;
-    private const float IS_ABOUT_TO_STOP_TH = 0.35f;
+    private const float IS_ABOUT_TO_STOP_TH = 0.1f;
 
     #region StraightLineMovement
     public static void MoveInStraightLine(
@@ -34,15 +33,17 @@ static class EnemyMovementUtils
 
     public static void StraightLineSpeedUp(Rigidbody2D rigidbody, Vector2 direction, float amplitude)
     {
-        rigidbody.AddForce((Time.deltaTime * DELTA_TIME_MULTIPLIER) * amplitude * direction);
+        rigidbody.AddForce(amplitude * direction);
     }
 
     public static void StraightLineSlowDown(Rigidbody2D rigidbody, Vector2 direction, float amplitude)
     {
-        if (!IsAboutToStop(rigidbody.velocity.magnitude) || DidSwitchDirection(rigidbody.velocity.normalized, direction))
+        if (IsAboutToStop(rigidbody.velocity.magnitude) || DidSwitchDirection(rigidbody.velocity.normalized, direction))
         {
-            rigidbody.AddForce((Time.deltaTime * DELTA_TIME_MULTIPLIER) * -1 * amplitude * direction);
+            return;
         }
+
+        rigidbody.AddForce(-1 * amplitude * direction);
     }
 
     private static StraightLineMovementState GetStageOfStraightLineMovement(float movementInterval, float movementStartTime)
@@ -79,7 +80,7 @@ static class EnemyMovementUtils
     {
         if (Utils.IsUnderSpeedLimit(rigidbody.velocity, speedLimit))
         {
-            rigidbody.AddForce((Time.deltaTime * DELTA_TIME_MULTIPLIER) * movementAmplitude * direction);
+            rigidbody.AddForce(movementAmplitude * direction);
         }
     }
     #endregion

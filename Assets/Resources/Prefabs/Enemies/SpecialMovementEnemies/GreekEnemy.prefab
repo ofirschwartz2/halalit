@@ -192,5 +192,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidBody: {fileID: 2774134611614144570}
-  _movementAmplitude: 5
-  _changeGreekDirectionInterval: 1
+  _movementAmplitude: 10
+  _changeGreekDirectionInterval: 2
