@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 36141989}
   m_Layer: 9
   m_Name: Pickup claw
-  m_TagString: Untagged
+  m_TagString: PickupClaw
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3792,7 +3792,7 @@ GameObject:
   - component: {fileID: 2135516714}
   m_Layer: 9
   m_Name: Engine
-  m_TagString: Untagged
+  m_TagString: Engine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
