@@ -107,6 +107,10 @@ class Knockbackee : MonoBehaviour
     #region Predicates
     private bool IsGameObjectToKnockbackMe(GameObject other)
     {
+        if (other.tag == null) 
+        {
+            throw new Exception("Tag is null");
+        }
         if (_knockbackersDescriptions.Contains(other.tag))
         {
             return true;

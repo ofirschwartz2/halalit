@@ -1740,7 +1740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b124fbb6d5e0148884d8a70c8e4981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firstAttack: 0
+  _firstAttack: 9
 --- !u!1 &814139006
 GameObject:
   m_ObjectHideFlags: 0
@@ -2149,7 +2149,7 @@ MonoBehaviour:
   - Key: 5
     Value: {fileID: 6558306382352585984, guid: 9b52bb8ebe1ca5a4bb3a88d1d84ecd41, type: 3}
   - Key: 9
-    Value: {fileID: 1104208150579009514, guid: 08751a19497ad50448b8a8cfada75935, type: 3}
+    Value: {fileID: 7560463101630787798, guid: 0d9ccd36c25987740ba4e304d11f39c2, type: 3}
   _middleRangeAttacks:
   - Key: 2
     Value: {fileID: 239013753676516010, guid: bf42c0ce455d6074583c3cd963d07757, type: 3}
@@ -2519,21 +2519,21 @@ MonoBehaviour:
   - Key: {fileID: 996304911696120768, guid: 4355ed09f91899447974575e85cf5644, type: 3}
     Value: 0
   - Key: {fileID: 392433141160692767, guid: b8a4753e3ee47d44e8ba42303dc92738, type: 3}
-    Value: 10
+    Value: 0
   - Key: {fileID: 6245285285944762974, guid: 2765640acd2407942b41effe8df456b0, type: 3}
-    Value: 10
+    Value: 0
   - Key: {fileID: 6280205760541686921, guid: a17ee868271207645a58f0fd2f5c68fe, type: 3}
-    Value: 10
+    Value: 0
   - Key: {fileID: 8952326225390038146, guid: b77eb97050ad93344867b53d638aa440, type: 3}
-    Value: 10
+    Value: 0
   - Key: {fileID: 1692324214522588343, guid: 939d79704bc231d499e7a2e72b9ff97d, type: 3}
-    Value: 10
+    Value: 0
   - Key: {fileID: 6129749417454103745, guid: 2451ba2c5f1016b439d2717f1ecbb690, type: 3}
-    Value: 10
+    Value: 0
   - Key: {fileID: 5072172639208078113, guid: 235a16c82bb99a347b9b60318f79de27, type: 3}
-    Value: 10
+    Value: 100
   - Key: {fileID: 5844340177478583602, guid: 78f5376bf1e971542ba8bfa6e19ffa7c, type: 3}
-    Value: 10
+    Value: 0
   _minSpawnEnemyCount: 1
   _maxSpawnEnemyCount: 4
 --- !u!4 &1277994823
@@ -3391,13 +3391,15 @@ MonoBehaviour:
   - Key: 1
     Value:
     - ItemName: 5
-      OneOfChance: 7
+      OneOfChance: 2
     - ItemName: 9
-      OneOfChance: 5
+      OneOfChance: 2
     - ItemName: 8
-      OneOfChance: 5
-    - ItemName: 11
-      OneOfChance: 5
+      OneOfChance: 2
+    - ItemName: 0
+      OneOfChance: 2
+    - ItemName: 1
+      OneOfChance: 2
   - Key: 4
     Value:
     - ItemName: 2
@@ -3407,9 +3409,25 @@ MonoBehaviour:
   - Key: 5
     Value:
     - ItemName: 1
-      OneOfChance: 3
+      OneOfChance: 2
     - ItemName: 3
-      OneOfChance: 3
+      OneOfChance: 2
+    - ItemName: 0
+      OneOfChance: 2
+    - ItemName: 2
+      OneOfChance: 2
+    - ItemName: 4
+      OneOfChance: 2
+    - ItemName: 6
+      OneOfChance: 2
+    - ItemName: 5
+      OneOfChance: 2
+    - ItemName: 7
+      OneOfChance: 2
+    - ItemName: 8
+      OneOfChance: 2
+    - ItemName: 9
+      OneOfChance: 2
   - Key: 6
     Value:
     - ItemName: 4

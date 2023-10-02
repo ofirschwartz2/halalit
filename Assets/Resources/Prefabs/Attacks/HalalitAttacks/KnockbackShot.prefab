@@ -341,5 +341,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody2D: {fileID: 5413227532942131802}
-  _knockbackees: 01000000
+  _knockbackees: 02000000
   _knockbackMultiplier: 0.5
