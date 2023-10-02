@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8482903043874153345}
-  - component: {fileID: 2861365933445497076}
   - component: {fileID: 3025468088060617226}
   m_Layer: 0
   m_Name: ShotgunShootingPoint
@@ -33,22 +32,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2861365933445497076
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2220377358832583353}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c08315df7f8e01478384090beda3698, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _useConfigFile: 0
-  _numberOfShots: 6
-  _range: 10
-  _shotgunShotPrefab: {fileID: 0}
 --- !u!114 &3025468088060617226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,4 +47,4 @@ MonoBehaviour:
   _useConfigFile: 0
   _numberOfShots: 6
   _range: 10
-  _shotgunShotPrefab: {fileID: 4043514594342984741, guid: 0d38e3f5ad9d87a4c86dc699101b733a, type: 3}
+  _shotgunShotPrefab: {fileID: 7939768775836154138, guid: 75257d4e04d8fbd44883558ad7781922, type: 3}
