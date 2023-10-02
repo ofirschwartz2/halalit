@@ -238,7 +238,12 @@ PrefabInstance:
       propertyPath: m_TagString
       value: AimShot
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8935489876050344998, guid: 8893afcb67d58df4882b735116b2a1f1, type: 3}
+      propertyPath: _triggerHarm
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 8935489876050344998, guid: 8893afcb67d58df4882b735116b2a1f1, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1094652333969513224, guid: 8893afcb67d58df4882b735116b2a1f1, type: 3}
