@@ -264,6 +264,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidBody: {fileID: 6741412782414407018}
   _useLinearSpeed: 1
-  _linearHarmMultiplier: 0.3
+  _linearHarmMultiplier: 0.6
   _useAngularSpeed: 1
-  _angularHarmMultiplier: 0.005
+  _angularHarmMultiplier: 0.01
