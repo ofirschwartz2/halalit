@@ -32,6 +32,8 @@ TagManager:
   - Granade
   - Spawner
   - EnemyShot
+  - HalalitInternalWorld
+  - PlayerInternalWorld
   layers:
   - Default
   - TransparentFX
@@ -46,7 +48,7 @@ TagManager:
   - Astroids
   - Items
   - PlayerWeapon
-  - 
+  - PlayerInternalWorld
   - 
   - 
   - 
