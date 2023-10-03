@@ -9,20 +9,20 @@ public class ShootingLaserRangeAttack : MoveAimAttackAttack
     [SerializeField]
     private float _shotRotationSpeed; // If too small - BUG.
 
-    private bool _shotInitiated, _shotDestroyed;
+    private bool _shotInitiated;
     private GameObject _shot;
     
     void Start()
     {
         _shotInitiated = false;
-        _shotDestroyed = false;
     }
 
-    public override void AttackingState(Transform transform)
+    private void FixedUpdate()
     {
-        if (!_shotDestroyed) 
+        if (_shotInitiated)
         {
-            Shoot(transform);
+            RotateShot();
+            TryDestroyShot();
         }
     }
 
@@ -30,13 +30,9 @@ public class ShootingLaserRangeAttack : MoveAimAttackAttack
     {
         if (!_shotInitiated)
         {
+            Debug.Log("Shot initiated");
             InitiateShot();
             _shotInitiated = true;
-        }
-        else 
-        {
-            RotateShot();
-            TryDestroyShot();
         }
     }
 
@@ -63,14 +59,15 @@ public class ShootingLaserRangeAttack : MoveAimAttackAttack
 
     private bool DidShotGetToEndOfAimRange()
     {
-        return _shot.transform.rotation == _shootingLazerRangeAim.GetAimingShotTo().transform.rotation;
+        return Quaternion.Angle(_shot.transform.rotation, _shootingLazerRangeAim.GetAimingShotTo().transform.rotation) < 2f ;
     }
 
     private void DestroyShot()
     {
+        _shotInitiated = false;
+
         _shootingLazerRangeAim.DestroyAimingRays();
         Destroy(_shot);
-        _shotInitiated = false;
-        _shotDestroyed = true;
     }
+
 }
