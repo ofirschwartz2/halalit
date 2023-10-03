@@ -2433,7 +2433,7 @@ MonoBehaviour:
   _asteroidPrefab: {fileID: 6741412782414407016, guid: d17f6aba06990634e92f5f659cf1bf0d, type: 3}
   _asteroidInitiator: {fileID: 1107869176}
   _asteroidInstantiationLineLength: 30
-  _asteroidInstantiationTimeInterval: 1
+  _asteroidInstantiationTimeInterval: 2
   _asteroidInstantiationLoad: 1
   _asteroidInstantiationDistanceFromCenter: 25
   _asteroidMaxScale: 4
