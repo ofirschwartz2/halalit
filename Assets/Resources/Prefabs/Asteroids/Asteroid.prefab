@@ -248,7 +248,7 @@ MonoBehaviour:
   _healthBarIcon: {fileID: 21300000, guid: d365d1975a0285e4db58a12afeabb7b2, type: 3}
   _currentMaxHealth: 3
   _finalMaxHealth: 3
-  _harmers: 02000000
+  _harmers: 020000000300000004000000
   _contributors: 
 --- !u!114 &3357691562281682229
 MonoBehaviour:
@@ -264,6 +264,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidBody: {fileID: 6741412782414407018}
   _useLinearSpeed: 1
-  _linearHarmMultiplier: 0.3
+  _linearHarmMultiplier: 0.6
   _useAngularSpeed: 1
-  _angularHarmMultiplier: 0.005
+  _angularHarmMultiplier: 0.01

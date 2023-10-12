@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Assets.Enums;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
-using Assets.Enums;
 using Random = UnityEngine.Random;
-using System.Collections.Generic;
 
 namespace Assets.Utils
 {
@@ -318,6 +318,7 @@ namespace Assets.Utils
 
         #endregion
 
+        #region Lists
         public static void ShuffleList<T>(List<T> list)
         {
             for (int i = 0; i < list.Count; i++)
@@ -328,5 +329,6 @@ namespace Assets.Utils
                 list[randomIndex] = temp;
             }
         }
+        #endregion
     }
 }

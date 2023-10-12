@@ -14,19 +14,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.009000541
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.009000541
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.009000541
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.797
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_LocalPosition.y
@@ -63,6 +63,10 @@ PrefabInstance:
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4112790009911488359, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: _triggerHarm
@@ -143,8 +147,8 @@ SpriteRenderer:
   m_SortingLayerID: 1226254537
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: be7d6cee2589ca445b7b0e2761000660, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: -2413806693520163455, guid: 36a58ef0f52a17e4a93613edf7d86198, type: 3}
+  m_Color: {r: 0.990566, g: 0.024919821, b: 0.034486715, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -215,7 +219,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 10
+  m_Radius: 0.1
 --- !u!114 &7546022007123590221
 MonoBehaviour:
   m_ObjectHideFlags: 0

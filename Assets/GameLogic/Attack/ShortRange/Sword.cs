@@ -1,7 +1,6 @@
 using Assets.Enums;
 using Assets.Utils;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Sword : MonoBehaviour 
 {

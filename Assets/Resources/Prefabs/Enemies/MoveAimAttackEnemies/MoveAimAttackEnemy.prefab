@@ -99,3 +99,4 @@ MonoBehaviour:
   _moveAimAttackMove: {fileID: 0}
   _moveAimAttackAim: {fileID: 0}
   _moveAimAttackAttack: {fileID: 0}
+  _spawningTime: 10

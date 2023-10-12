@@ -9,7 +9,7 @@ public class WaitAttackStateMachine : MonoBehaviour
     private WaitAttackWait _waitAttackWait;
     [SerializeField]
     private WaitAttackAttack _waitAttackAttack;
-
+    
     private WaitAttackEnemyState _followingEnemyState;
 
     void Start()

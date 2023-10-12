@@ -1,5 +1,6 @@
 using Assets.Utils;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class ShootingLaserAsteriskAttack : MoveAimAttackAttack
@@ -14,6 +15,7 @@ public class ShootingLaserAsteriskAttack : MoveAimAttackAttack
     private int _numberOfShots;
 
     private List<GameObject> _shots;
+    private float _attackRadiusMultiplier = 1.1f; // So that the shots don't spawn inside the enemy
 
     void Start()
     {
@@ -41,7 +43,7 @@ public class ShootingLaserAsteriskAttack : MoveAimAttackAttack
 
     private void ShootRays()
     {
-        var attackingStartPositions = EnemyUtils.GetEvenPositionsAroundCircle(transform, _numberOfShots, GetComponent<CircleCollider2D>().radius);
+        var attackingStartPositions = EnemyUtils.GetEvenPositionsAroundCircle(transform, _numberOfShots, GetComponent<CircleCollider2D>().radius * _attackRadiusMultiplier);
         foreach (var attackingStartPosition in attackingStartPositions)
         {
             ShootOneRay(attackingStartPosition);

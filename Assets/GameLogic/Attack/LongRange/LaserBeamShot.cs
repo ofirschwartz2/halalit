@@ -1,3 +1,4 @@
+using Assets.Utils;
 using UnityEngine;
 
 public class LaserBeamShot : MonoBehaviour
@@ -13,11 +14,6 @@ public class LaserBeamShot : MonoBehaviour
 
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-
         _endOfLifeTime = Utils.GetEndOfLifeTime(_lifetime);
     }
 

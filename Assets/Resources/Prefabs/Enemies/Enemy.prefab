@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 1043275914167199002}
   - component: {fileID: -6310471066468264510}
   - component: {fileID: 2564062923521873166}
-  - component: {fileID: -7530617438440156031}
   - component: {fileID: 3368652411141193971}
   - component: {fileID: 1399439758609907064}
+  - component: {fileID: 4983835615897027303}
   m_Layer: 8
   m_Name: Enemy
   m_TagString: Enemy
@@ -80,7 +80,7 @@ MonoBehaviour:
   _healthBarIcon: {fileID: 21300000, guid: 1073bff4cc302fa459afe59b17dc1b0e, type: 3}
   _currentMaxHealth: 4
   _finalMaxHealth: 4
-  _harmers: 02000000
+  _harmers: 0200000003000000040000001100000007000000
   _contributors: 
 --- !u!114 &2564062923521873166
 MonoBehaviour:
@@ -95,18 +95,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dropper: 0
---- !u!114 &-7530617438440156031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9160889592167678377}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 266bc4aa6610d5746ac5e6478270550c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3368652411141193971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -120,7 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody2D: {fileID: 1043275914167199002}
-  _knockbackers: 000000000100000006000000
+  _knockbackers: 000000000700000002000000
   _knockbackMultiplier: 1
 --- !u!114 &1399439758609907064
 MonoBehaviour:
@@ -135,3 +123,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _collisionHarm: 0
+--- !u!114 &4983835615897027303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9160889592167678377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 266bc4aa6610d5746ac5e6478270550c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

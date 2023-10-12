@@ -225,3 +225,7 @@ MonoBehaviour:
   _openLifetime: 1
   _closingLifetime: 1
   _spawnHoleMultiplier: 1.5
+  _alwaysEnabledScripts:
+  - EnemyDropper
+  - EnemySharedBehavior
+  - Health

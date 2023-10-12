@@ -165,4 +165,4 @@ MonoBehaviour:
   _rigidBody: {fileID: 4043514594342984745}
   _throwForce: 25
   _lifetime: 3
-  blastPrefab: {fileID: 3234905841513393416, guid: 9249e97c9110a0b42a0d3eaeac33ca9d, type: 3}
+  blastPrefab: {fileID: 4043514594342984741, guid: 1b1ab90d62da0ba428424878f4703995, type: 3}

@@ -9,7 +9,7 @@ public class ShootingLazerRangeAim : MoveAimAttackAim
     private float _shootingRange;
 
     private GameObject _aimingShotFrom, _aimingShotTo;
-
+    private float _aimingOffsetMultiplier = 1.1f;
     public override void Aim(Transform transform = null)
     {
         ShootAimingRays();
@@ -34,7 +34,7 @@ public class ShootingLazerRangeAim : MoveAimAttackAim
     public Vector2 GetShootingStartPosition()
     {
         Vector2 halfExtents = GetComponent<CapsuleCollider2D>().bounds.extents;
-        Vector3 offset = Utils.GetRotationAsVector2(transform.rotation) * halfExtents.magnitude * 0.85f;
+        Vector3 offset = Utils.GetRotationAsVector2(transform.rotation) * halfExtents.magnitude * _aimingOffsetMultiplier;
         return transform.position + offset;
     }
 

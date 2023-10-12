@@ -40,5 +40,7 @@ namespace Assets.Enums
         BAR_FILL,
         [Description("BarIcon")]
         BAR_ICON,
+        [Description("EnemyShot")]
+        ENEMY_SHOT,
     }
 }

@@ -4,12 +4,8 @@ using Assets.Enums;
 
 public class GranadeShotItem : AttackItem
 {
-    private void OnTriggerEnter2D(Collider2D other)
+    private void Start()
     {
-        if (other.gameObject.CompareTag(Tag.HALALIT.GetDescription()))
-        {
-            OnPlayerAttackItemPickedUp(this, new(ItemName.GRANADE_SHOT, new()));
-            Destroy(gameObject);
-        }
+        _itemName = ItemName.GRANADE_SHOT;
     }
 }

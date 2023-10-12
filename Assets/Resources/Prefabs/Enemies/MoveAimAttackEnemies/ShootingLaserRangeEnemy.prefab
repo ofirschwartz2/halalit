@@ -214,7 +214,7 @@ MonoBehaviour:
   _attackingInterval: 1
   ShotPrefab: {fileID: 6440083680564724757, guid: 8642207aa43628c4794503fcb1d8535f, type: 3}
   _shootingLazerRangeAim: {fileID: 5603909230849019724}
-  _shotRotationSpeed: 3
+  _shotRotationSpeed: 5
 --- !u!114 &5663752396182160313
 MonoBehaviour:
   m_ObjectHideFlags: 0

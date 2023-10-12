@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3312293454525020616, guid: 56cf082c9d9101d43abf248d3dda6948, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3312293454525020616, guid: 56cf082c9d9101d43abf248d3dda6948, type: 3}
       propertyPath: m_LocalPosition.x
@@ -203,7 +203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _attackingInterval: 1
   _shootingInRangeAim: {fileID: 3911195885330229201}
-  ShotPrefab: {fileID: 4935326353173912347, guid: 75ab51e3747b9004a931c8cb8409cdb6, type: 3}
+  ShotPrefab: {fileID: 4154335917838311827, guid: e8950531a0f5a5f4da8c47e76aaa5f98, type: 3}
 --- !u!114 &3911195885330229201
 MonoBehaviour:
   m_ObjectHideFlags: 0
