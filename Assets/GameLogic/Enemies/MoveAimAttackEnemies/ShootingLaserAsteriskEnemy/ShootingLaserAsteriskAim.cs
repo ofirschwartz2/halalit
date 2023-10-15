@@ -10,6 +10,7 @@ public class ShootingLaserAsteriskAim : MoveAimAttackAim
     private int _numberOfShots;
 
     private List<GameObject> _aimingShots;
+    private float _attackRadiusMultiplier = 3f; // So that the shots don't spawn inside the enemy
 
     void Start()
     {
@@ -23,7 +24,7 @@ public class ShootingLaserAsteriskAim : MoveAimAttackAim
 
     private void ShootRays(GameObject shotPrefab, List<GameObject> shotsList)
     {
-        var aimingStartPositions = EnemyUtils.GetEvenPositionsAroundCircle(transform, _numberOfShots, GetComponent<CircleCollider2D>().radius);
+        var aimingStartPositions = EnemyUtils.GetEvenPositionsAroundCircle(transform, _numberOfShots, transform.lossyScale.x * _attackRadiusMultiplier);
         foreach (var aimingStartPosition in aimingStartPositions)
         {
             ShootOneRay(aimingStartPosition);

@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: LaserEnemies
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 8792ca0f1ac79274d8d0a50632bb1a39, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - 7d3a5820d1cf2854d9a9595bd23e1137: 21300000
+    - ff4ae8b079a9b6d4e80b3eae007b1ad9: 21300000
+    - 639a1f04b6fed3444a1f4a83ff9f12ce: 21300000
+    - 459faf0591f6a88418ec8c696208282c: 21300000
+    - 6fd98f656d12f5e4b8bb7c29ea78a9f0: 21300000
+    - c066f09537f3d6d4aa9d2b38f0a475fd: 21300000
+    - 9e6c6c3640a53ca40a6bfb548439ec1f: 21300000
+    - 36d0032890b9aae45a7a5447c666b348: 21300000
+    - 511eec6c77024164bb8216c521f66a5d: 21300000
+    - f2c2b47cd2963c04190ac4245418061a: 21300000
+    - e5002cbc4d0a2244c8b6ab47a7494e9b: 21300000
+    - 4c0b3cbc7fc6629479bc5077a276e47f: 21300000
+    - 38f438de832e4004d916519b485353a2: 21300000
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 7d3a5820d1cf2854d9a9595bd23e1137, type: 3}
+  - {fileID: 21300000, guid: ff4ae8b079a9b6d4e80b3eae007b1ad9, type: 3}
+  - {fileID: 21300000, guid: 639a1f04b6fed3444a1f4a83ff9f12ce, type: 3}
+  - {fileID: 21300000, guid: 459faf0591f6a88418ec8c696208282c, type: 3}
+  - {fileID: 21300000, guid: 6fd98f656d12f5e4b8bb7c29ea78a9f0, type: 3}
+  - {fileID: 21300000, guid: c066f09537f3d6d4aa9d2b38f0a475fd, type: 3}
+  - {fileID: 21300000, guid: 9e6c6c3640a53ca40a6bfb548439ec1f, type: 3}
+  - {fileID: 21300000, guid: 36d0032890b9aae45a7a5447c666b348, type: 3}
+  - {fileID: 21300000, guid: 511eec6c77024164bb8216c521f66a5d, type: 3}
+  - {fileID: 21300000, guid: f2c2b47cd2963c04190ac4245418061a, type: 3}
+  - {fileID: 21300000, guid: e5002cbc4d0a2244c8b6ab47a7494e9b, type: 3}
+  - {fileID: 21300000, guid: 4c0b3cbc7fc6629479bc5077a276e47f, type: 3}
+  - {fileID: 21300000, guid: 38f438de832e4004d916519b485353a2, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - 00125-3681790193
+  - 00126-49444663
+  - 00129-49444666
+  - 00132-3186065666
+  - 00122-3681790190
+  - 00131-49444668
+  - 10125-3681790193
+  - 00003-1438304524
+  - 00130-49444667
+  - 00128-49444665
+  - 00133-3186065667
+  - 00127-49444664
+  - 00007-3018227574
+  m_RenderDataMap: {}
+  m_Tag: LaserEnemies
+  m_IsVariant: 0

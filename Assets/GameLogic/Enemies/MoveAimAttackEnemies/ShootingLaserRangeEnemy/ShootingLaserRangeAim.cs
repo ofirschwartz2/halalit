@@ -33,7 +33,7 @@ public class ShootingLazerRangeAim : MoveAimAttackAim
 
     public Vector2 GetShootingStartPosition()
     {
-        Vector2 halfExtents = GetComponent<CapsuleCollider2D>().bounds.extents;
+        Vector2 halfExtents = GetComponent<PolygonCollider2D>().bounds.extents;
         Vector3 offset = Utils.GetRotationAsVector2(transform.rotation) * halfExtents.magnitude * _aimingOffsetMultiplier;
         return transform.position + offset;
     }

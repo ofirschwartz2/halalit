@@ -17,7 +17,7 @@ public class ShootingInRangeAttack : MoveAimAttackAttack
 
     private Vector3 GetShootingStartPosition(Transform transform)
     {
-        Vector3 halfExtents = GetComponent<CapsuleCollider2D>().bounds.extents;
+        Vector3 halfExtents = GetComponent<PolygonCollider2D>().bounds.extents;
         Vector3 offset = _shootingInRangeAim.GetHalalitDirection().normalized * halfExtents.magnitude;
         return transform.position + offset;
     }
