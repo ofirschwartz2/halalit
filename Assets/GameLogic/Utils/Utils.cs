@@ -105,9 +105,9 @@ namespace Assets.Utils
             return new Vector3(newX, newY);
         }
 
-        public static bool IsTrueIn50Precent()
+        public static bool IsTrueOneOf(int oneOf)
         {
-            return Random.Range(0, 2) == 0;
+            return Random.Range(0, oneOf) == 0;
         }
 
         public static Vector2 ShiftVectorByOffsetDegree(Vector2 vector, float offsetDegrees)

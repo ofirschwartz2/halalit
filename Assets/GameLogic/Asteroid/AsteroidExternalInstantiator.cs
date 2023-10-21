@@ -122,7 +122,7 @@ public class AsteroidExternalInstantiator : MonoBehaviour
         float a = _instantiationLineCenterPoint.x;
         float b = centerPointAndInstantiationPointDistance / Mathf.Sqrt(Mathf.Pow(_instantiationLineSlope, 2) + 1);
 
-        if (Utils.IsTrueIn50Precent())
+        if (Utils.IsTrueOneOf(2))
         {
             return a + b;
         }
