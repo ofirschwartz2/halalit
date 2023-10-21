@@ -23,13 +23,18 @@ class EngineBehaviour : MonoBehaviour
 
     private void SetFireSize()
     {
-        if (Utils.IsTrueOneOf(2) && MovementJoystickPressed()) 
+        if (Utils.IsTrueOneOf(2) && MovementJoystickPressed())
         {
             var movementForce = Utils.GetLengthOfLine(Math.Abs(_movementJoystick.Horizontal), Math.Abs(_movementJoystick.Vertical)) * _fireForceMultiplier;
 
             var fire = Instantiate(_engineFirePrefab, transform.position, GetFireAngle());
-            fire.GetComponent<Rigidbody2D>().AddForce(-Utils.AddAngleToVector(transform.right, UnityEngine.Random.Range(-_fireAngle, _fireAngle)) * movementForce);
+            fire.GetComponent<Rigidbody2D>().AddForce(GetRandomFireDirection() * movementForce);
         }
+    }
+
+    private Vector2 GetRandomFireDirection()
+    {
+        return -Utils.AddAngleToVector(transform.right, UnityEngine.Random.Range(-_fireAngle, _fireAngle));
     }
 
     private Quaternion GetFireAngle()
