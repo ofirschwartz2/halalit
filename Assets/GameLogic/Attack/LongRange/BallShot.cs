@@ -8,10 +8,18 @@ public class BallShot : MonoBehaviour
     private Rigidbody2D _rigidBody;
     [SerializeField]
     private float _speed;
+    [SerializeField]
+    private float _spreadingMultiplier;
 
     void Start()
     {
         _rigidBody.velocity = transform.up * _speed;
+    }
+
+    void FixedUpdate()
+    {
+        var newYScale = transform.localScale.y + _speed * _spreadingMultiplier;
+        transform.localScale = new Vector2(transform.localScale.x, newYScale);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

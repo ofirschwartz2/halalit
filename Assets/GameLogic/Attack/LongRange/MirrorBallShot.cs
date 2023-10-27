@@ -8,16 +8,28 @@ public class MirrorBallShot : MonoBehaviour
     private Rigidbody2D _rigidBody;
     [SerializeField]
     private float _speed;
+    [SerializeField]
+    private float _spreadingMultiplier;
+
+    private float _spreadingDirection;
 
     void Start()
     {
+        _spreadingDirection = 1;
         _rigidBody.velocity = transform.up * _speed;
+    }
+
+    void FixedUpdate()
+    {
+        var newYScale = transform.localScale.y + _speed * _spreadingMultiplier * _spreadingDirection;
+        transform.localScale = new Vector2(transform.localScale.x, newYScale);
     }
 
     private void GoInMirrorDirection(Collider2D other) 
     {
-        var mirrorDirection = Utils.GetDirectionFromCollision(_rigidBody.transform.position, other.transform.position);
-        _rigidBody.velocity = mirrorDirection * _speed;
+        transform.rotation = Utils.GetRorationOutwards(other.transform.position, transform.position);
+        _rigidBody.velocity = transform.up * _speed;
+        _spreadingDirection *= -1;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
