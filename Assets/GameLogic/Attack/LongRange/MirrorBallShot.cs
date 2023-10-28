@@ -11,17 +11,17 @@ public class MirrorBallShot : MonoBehaviour
     [SerializeField]
     private float _spreadingMultiplier;
 
-    private float _spreadingDirection;
+    private Vector3 _initialScale;
 
     void Start()
     {
-        _spreadingDirection = 1;
         _rigidBody.velocity = transform.up * _speed;
+        _initialScale = transform.localScale;
     }
 
     void FixedUpdate()
     {
-        var newYScale = transform.localScale.y + _speed * _spreadingMultiplier * _spreadingDirection;
+        var newYScale = transform.localScale.y + _speed * _spreadingMultiplier;
         transform.localScale = new Vector2(transform.localScale.x, newYScale);
     }
 
@@ -29,7 +29,7 @@ public class MirrorBallShot : MonoBehaviour
     {
         transform.rotation = Utils.GetRorationOutwards(other.transform.position, transform.position);
         _rigidBody.velocity = transform.up * _speed;
-        _spreadingDirection *= -1;
+        transform.localScale = _initialScale;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
