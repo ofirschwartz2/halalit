@@ -10,6 +10,8 @@ public class MirrorBallShot : MonoBehaviour
     private float _speed;
     [SerializeField]
     private float _spreadingMultiplier;
+    [SerializeField]
+    private float _maxSpreading;
 
     private Vector3 _initialScale;
 
@@ -21,8 +23,11 @@ public class MirrorBallShot : MonoBehaviour
 
     void FixedUpdate()
     {
-        var newYScale = transform.localScale.y + _speed * _spreadingMultiplier;
-        transform.localScale = new Vector2(transform.localScale.x, newYScale);
+        if (transform.localScale.y < _maxSpreading) 
+        {
+            var newYScale = transform.localScale.y + _speed * _spreadingMultiplier;
+            transform.localScale = new Vector2(transform.localScale.x, newYScale);
+        }
     }
 
     private void GoInMirrorDirection(Collider2D other) 

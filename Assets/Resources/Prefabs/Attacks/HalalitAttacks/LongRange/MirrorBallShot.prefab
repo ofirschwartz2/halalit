@@ -231,3 +231,4 @@ MonoBehaviour:
   _rigidBody: {fileID: 2844242733445854716}
   _speed: 10
   _spreadingMultiplier: 0.0025
+  _maxSpreading: 1
