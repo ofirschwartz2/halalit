@@ -10,6 +10,8 @@ public class BallShot : MonoBehaviour
     private float _speed;
     [SerializeField]
     private float _spreadingMultiplier;
+    [SerializeField]
+    private float _maxSpreading;
 
     void Start()
     {
@@ -18,8 +20,11 @@ public class BallShot : MonoBehaviour
 
     void FixedUpdate()
     {
-        var newYScale = transform.localScale.y + _speed * _spreadingMultiplier;
-        transform.localScale = new Vector2(transform.localScale.x, newYScale);
+        if (transform.localScale.y < _maxSpreading)
+        {
+            var newYScale = transform.localScale.y + _speed * _spreadingMultiplier;
+            transform.localScale = new Vector2(transform.localScale.x, newYScale);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
