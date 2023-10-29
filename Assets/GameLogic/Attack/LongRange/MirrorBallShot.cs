@@ -13,12 +13,9 @@ public class MirrorBallShot : MonoBehaviour
     [SerializeField]
     private float _maxSpreading;
 
-    private Vector3 _initialScale;
-
     void Start()
     {
         _rigidBody.velocity = transform.up * _speed;
-        _initialScale = transform.localScale;
     }
 
     void FixedUpdate()
@@ -34,7 +31,6 @@ public class MirrorBallShot : MonoBehaviour
     {
         transform.rotation = Utils.GetRorationOutwards(other.transform.position, transform.position);
         _rigidBody.velocity = transform.up * _speed;
-        transform.localScale = _initialScale;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
