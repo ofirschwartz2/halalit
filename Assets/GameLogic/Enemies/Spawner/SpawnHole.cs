@@ -188,7 +188,7 @@ public class SpawnHole : MonoBehaviour
                 continue;
             }
 
-            enemy.transform.localScale = GetNewLocalScale(
+            enemy.transform.localScale = 0.5f * GetNewLocalScale(
                 _enemySizeCurve,
                 _startOfOpenLifeTime,
                 _openLifetime

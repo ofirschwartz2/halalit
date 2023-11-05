@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.U2D;
 
 public class EnemySpriteLoader : MonoBehaviour
 {
     [SerializeField]
     private SpriteAtlas spriteAtlas;
-    
+
     private SpriteRenderer spriteRenderer;
     private PolygonCollider2D polygonCollider;
     
