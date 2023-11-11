@@ -1,5 +1,6 @@
 using Assets.Enums;
 using Assets.Utils;
+using System;
 using UnityEngine;
 
 public class AsteroidMovement : KinematicMovement
@@ -12,15 +13,15 @@ public class AsteroidMovement : KinematicMovement
     private float _transparencyPeriod;
 
     private float _asteroidLifeTime;
+    private string _siblingId;
 
     void Start()
     {
-        _rotationSpeed = Random.Range(-_maxRotation, _maxRotation);
-    }
-
-    public float GetScale()
-    {
-        return transform.localScale.x;
+        _rotationSpeed = UnityEngine.Random.Range(-_maxRotation, _maxRotation);
+        if (_siblingId == null)
+        {
+            _siblingId = Guid.NewGuid().ToString();
+        }
     }
 
     new void FixedUpdate()
@@ -39,7 +40,10 @@ public class AsteroidMovement : KinematicMovement
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()) && _asteroidLifeTime >= _transparencyPeriod)
+        if (other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()) &&
+            other.gameObject.GetComponent<AsteroidMovement>().GetSiblingId() != _siblingId &&
+            _asteroidLifeTime >= _transparencyPeriod
+            )
         {
             AsteroidMovement otherAsteroidMovement = other.gameObject.GetComponent<AsteroidMovement>();
             float originalSpeed = _speed;
@@ -48,6 +52,21 @@ public class AsteroidMovement : KinematicMovement
             SetCollisionVelocity(other.contacts[0].normal, otherAsteroidMovement.GetScale());
             SetRotationByVelocity(originalSpeed, originalDirection);
         }
+    }
+
+    public float GetScale()
+    {
+        return transform.localScale.x;
+    }
+
+    public void SetSiblingId(string siblingId)
+    {
+        _siblingId = siblingId;
+    }
+
+    private string GetSiblingId()
+    {
+        return _siblingId;
     }
 
     private void SetCollisionVelocity(Vector2 contactPointNormal, float otherAsteroidScale)

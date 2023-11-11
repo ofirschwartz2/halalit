@@ -12,10 +12,6 @@ public class PickupClawGrabber : MonoBehaviour
     private PickupClawState _pickupClawState;
     [SerializeField]
     private float _grabDelay;
-    [SerializeField]
-    private float _moveToItemMultiplier;
-    [SerializeField]
-    private float _rotationToItemMultiplier;
     
     private float _grabDelayTimer;
     private GameObject _item;
@@ -27,7 +23,7 @@ public class PickupClawGrabber : MonoBehaviour
 
         if (_grabDelayTimer >= _grabDelay)
         {
-            _item.transform.SetParent(transform);
+            _item.GetComponent<ItemMovement>().Grabbed(transform);
             _pickupClawState.Value = PickupClawStateE.MOVING_BACKWARD;
         }
     }
@@ -40,7 +36,6 @@ public class PickupClawGrabber : MonoBehaviour
             _grabDelayTimer = 0;
             _rigidBody.velocity = Vector2.zero;
             _item = other.gameObject;
-            _item.GetComponent<ItemMovement>().Grabbed();
         }
     }
 }

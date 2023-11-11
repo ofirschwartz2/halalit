@@ -99,9 +99,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42e60faf31fd90a4381da84de09aa09a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lifetime: 0.1
+  _lifetime: 0.5
   _beamingSpeed: 1
-  _maxbeamSize: 10
+  _maxbeamSize: 20
 --- !u!61 &8426767577561904176
 BoxCollider2D:
   m_ObjectHideFlags: 0

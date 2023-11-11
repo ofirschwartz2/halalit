@@ -5,8 +5,6 @@ using UnityEngine;
 public class SpawnHoleInstantiator : MonoBehaviour
 {
     [SerializeField]
-    private bool _useConfigFile;
-    [SerializeField]
     private float[] _instantiationRate;
     [SerializeField]
     private GameObject _spawnHolePrefab;
@@ -24,11 +22,6 @@ public class SpawnHoleInstantiator : MonoBehaviour
 
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-
         _instantiationRatesIndex = 0;
         _nextInstantiationTime = GetNextInstantiationTime();
         SetInstantiationBounds();

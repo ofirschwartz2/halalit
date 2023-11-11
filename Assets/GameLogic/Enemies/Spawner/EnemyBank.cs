@@ -6,8 +6,6 @@ using UnityEngine;
 public class EnemyBank : MonoBehaviour
 {
     [SerializeField]
-    private bool _useConfigFile;
-    [SerializeField]
     private List<KeyValuePair<GameObject, int>> _enemyPrefabsBank;
     [SerializeField]
     private int _minSpawnEnemyCount;
@@ -19,11 +17,6 @@ public class EnemyBank : MonoBehaviour
 
     void Awake()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-
         _enemyPrefabList = new List<GameObject>();
         _spawnHoleEnemyAmountsList = new List<int>();
 

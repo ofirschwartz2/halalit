@@ -7,8 +7,6 @@ using UnityEngine;
 public class SpawnHole : MonoBehaviour
 {
     [SerializeField]
-    private bool _useConfigFile;
-    [SerializeField]
     private AnimationCurve _spawningHoleOpeningCurve;
     [SerializeField]
     private AnimationCurve _spawningHoleOpenCurve;
@@ -39,11 +37,6 @@ public class SpawnHole : MonoBehaviour
 
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-
         SetOpeningTimes();
         SetLists();
 
@@ -57,19 +50,19 @@ public class SpawnHole : MonoBehaviour
         switch (_state)
         {
             case SpawnHoleState.OPENING:
-                OPENING();
+                Opening();
                 break;
             case SpawnHoleState.OPEN:
-                OPEN();
+                Open();
                 break;
             case SpawnHoleState.CLOSING:
-                CLOSING();
+                Close();
                 break;
         }
     }
 
     #region OPENING
-    private void OPENING()
+    private void Opening()
     {
         transform.localScale = GetNewLocalScale(
             _spawningHoleOpeningCurve,
@@ -105,7 +98,7 @@ public class SpawnHole : MonoBehaviour
     #endregion
 
     #region OPEN
-    private void OPEN()
+    private void Open()
     {
         transform.localScale = GetNewLocalScale(
             _spawningHoleOpenCurve,
@@ -132,7 +125,7 @@ public class SpawnHole : MonoBehaviour
     #endregion
 
     #region CLOSING
-    private void CLOSING()
+    private void Close()
     {
         transform.localScale = GetNewLocalScale(
             _spawningHoleClosingCurve,
@@ -171,6 +164,7 @@ public class SpawnHole : MonoBehaviour
         {
             var newEnemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
             newEnemy.transform.localScale = Vector3.zero;
+            newEnemy.transform.SetParent(transform.parent);
 
             DisableEnemyScripts(newEnemy);
             

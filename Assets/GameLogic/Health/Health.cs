@@ -156,10 +156,6 @@ class Health : MonoBehaviour
 
     private void HandleTriggerHarmer(TriggerHarmer triggerHarmer)
     {
-        if (triggerHarmer == null)
-        {
-            throw new System.Exception("Trigger harmer is null");
-        }
         int harm = triggerHarmer.GetTriggerHarm();
         ChangeHealth(-harm);
     }

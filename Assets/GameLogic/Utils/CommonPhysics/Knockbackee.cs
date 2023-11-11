@@ -111,7 +111,7 @@ class Knockbackee : MonoBehaviour
         {
             throw new Exception("Tag is null");
         }
-        if (_knockbackersDescriptions.Contains(other.tag))
+        if (_knockbackersDescriptions.Contains(other.tag)) // TODO (refactor): fix this function, there is a duplicate below
         {
             return true;
         }

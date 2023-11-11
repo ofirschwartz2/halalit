@@ -1,4 +1,5 @@
 ﻿using Assets.Utils;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -33,26 +34,25 @@ class AsteroidInternalInstantiator : MonoBehaviour
     #region Internal instantiation
     private void InstantiateAsteroidsOnPosition(object initiator, AsteroidEventArguments arguments)
     {
-        int newAsteroidsCount = GetNewAsteroidsCount(arguments.Scale);
-        int newAsteroidsScale = GetNewAsteroidsScale(arguments.Scale);
-        List<Vector2> newAsteroidPositions = GetNewAsteroidPositions(newAsteroidsCount, arguments.Position);
-        List<Vector2> newAsteroidDirections = GetNewAsteroidDirections(newAsteroidsCount, arguments.Direction);
-
-        for (int i = 0; i < newAsteroidPositions.Count; i++)
+        if (ShouldInstantiateAsteroidsInternaly(arguments.Scale))
         {
-            GameObject asteroid = Instantiate(_asteroidPrefab, newAsteroidPositions[i], Quaternion.identity);
-            _asteroidInitiator.InitAsteroid(asteroid, newAsteroidDirections[i], newAsteroidsScale);
+            int newAsteroidsCount = GetNewAsteroidsCount(arguments.Scale);
+            int newAsteroidsScale = GetNewAsteroidsScale(arguments.Scale);
+            List<Vector2> newAsteroidPositions = GetNewAsteroidPositions(newAsteroidsCount, arguments.Position);
+            List<Vector2> newAsteroidDirections = GetNewAsteroidDirections(newAsteroidsCount, arguments.Direction);
+            string newSiblingAsteroidsId = Guid.NewGuid().ToString();
+
+            for (int i = 0; i < newAsteroidPositions.Count; i++)
+            {
+                GameObject asteroid = Instantiate(_asteroidPrefab, newAsteroidPositions[i], Quaternion.identity);
+                _asteroidInitiator.InitAsteroid(asteroid, newAsteroidDirections[i], newAsteroidsScale, newSiblingAsteroidsId);
+            }
         }
     }
 
     private int GetNewAsteroidsCount(int originalAsteroidScale)
     {
-        if (ShouldInstantiateAsteroidsInternaly(originalAsteroidScale))
-        {
-            return Random.Range((int) _asteroidMinInstantiationCount, (int) _asteroidMaxInstantiationCount + 1);
-        }
-
-        return 0;
+        return Random.Range((int)_asteroidMinInstantiationCount, (int)_asteroidMaxInstantiationCount + 1);
     }
 
     private int GetNewAsteroidsScale(int originalAsteroidScale)

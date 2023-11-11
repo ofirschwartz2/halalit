@@ -12,6 +12,26 @@ PrefabInstance:
       propertyPath: _rigidBody
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: -6310471066468264510, guid: a15140abd887f8143b8a6accac65b90e, type: 3}
+      propertyPath: _harmers.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -6310471066468264510, guid: a15140abd887f8143b8a6accac65b90e, type: 3}
+      propertyPath: _harmers.Array.data[0]
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -6310471066468264510, guid: a15140abd887f8143b8a6accac65b90e, type: 3}
+      propertyPath: _harmers.Array.data[1]
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -6310471066468264510, guid: a15140abd887f8143b8a6accac65b90e, type: 3}
+      propertyPath: _harmers.Array.data[2]
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: -6310471066468264510, guid: a15140abd887f8143b8a6accac65b90e, type: 3}
+      propertyPath: _harmers.Array.data[3]
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 1399439758609907064, guid: a15140abd887f8143b8a6accac65b90e, type: 3}
       propertyPath: _collisionHarm
       value: 1
@@ -99,4 +119,3 @@ MonoBehaviour:
   _moveAimAttackMove: {fileID: 0}
   _moveAimAttackAim: {fileID: 0}
   _moveAimAttackAttack: {fileID: 0}
-  _spawningTime: 10
