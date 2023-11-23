@@ -1,6 +1,7 @@
 using Assets.Enums;
 using Assets.Utils;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 
@@ -18,6 +19,13 @@ public class GreekEnemy : MonoBehaviour
     private float _changeDirectionTime, _startMovementTime;
     private Vector2 _currentMovementDirection;
     private bool _waitForNextStage;
+    private Dictionary<string, Direction> _newDirections = new()
+    {
+        { Tag.TOP_EDGE.GetDescription(), Direction.DOWN },
+        { Tag.RIGHT_EDGE.GetDescription(), Direction.LEFT },
+        { Tag.BOTTOM_EDGE.GetDescription(), Direction.UP },
+        { Tag.LEFT_EDGE.GetDescription(), Direction.RIGHT },
+    };
 
     void Start()
     {
@@ -124,21 +132,7 @@ public class GreekEnemy : MonoBehaviour
     {
         if (Utils.DidHitEdge(other.gameObject.tag))
         {
-            switch (other.gameObject.tag)
-            {
-                case "TopEdge":
-                    ChangeGreekDirection(Direction.DOWN);
-                    break;
-                case "RightEdge":
-                    ChangeGreekDirection(Direction.LEFT);
-                    break;
-                case "BottomEdge":
-                    ChangeGreekDirection(Direction.UP);
-                    break;
-                case "LeftEdge":
-                    ChangeGreekDirection(Direction.RIGHT);
-                    break;
-            }
+            ChangeGreekDirection(_newDirections[other.gameObject.tag]);
         }
     }
 }

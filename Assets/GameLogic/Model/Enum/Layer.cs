@@ -5,18 +5,20 @@ namespace Assets.Enums
     public enum Layer
     {
         [Description("Default")]
-        Default,
+        DEFAULT,
         [Description("EnemyShots")]
-        EnemyShots,
+        ENEMY_SHOTS,
         [Description("PlayerShots")]
-        PlayerShots,
+        PLAYER_SHOTS,
         [Description("Enemies")]
-        Enemies,
+        ENEMIES,
         [Description("Player")]
-        Player,
-        [Description("Astroids")]
-        Astroids,
-        [Description("Items")]
-        Items,
+        PLAYER,
+        [Description("Asteroids")]
+        ASTEROIDS,
+        [Description("ItemTriggers")]
+        ITEM_TRIGGERS,
+        [Description("ItemCollisions")]
+        ITEM_COLLISIONS,
     }
 }

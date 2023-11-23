@@ -1,5 +1,6 @@
 using Assets.Enums;
 using Assets.Utils;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SinusEnemy : MonoBehaviour
@@ -18,6 +19,13 @@ public class SinusEnemy : MonoBehaviour
     private Direction _sinDirection;
     private float _changeSinForceDirectionTime;
     private Vector2 _sinAxisDirection, _otherAxisDirection;
+    private Dictionary<string, Direction> _newDirections = new()
+    {
+        { Tag.TOP_EDGE.GetDescription(), Direction.DOWN },
+        { Tag.RIGHT_EDGE.GetDescription(), Direction.LEFT },
+        { Tag.BOTTOM_EDGE.GetDescription(), Direction.UP },
+        { Tag.LEFT_EDGE.GetDescription(), Direction.RIGHT },
+    };
 
     void Start()
     {
@@ -105,21 +113,7 @@ public class SinusEnemy : MonoBehaviour
     {
         if (Utils.DidHitEdge(other.gameObject.tag))
         {
-            switch (other.gameObject.tag)
-            {
-                case "TopEdge":
-                    ChangeSinDirection(Direction.DOWN);
-                    break;
-                case "RightEdge":
-                    ChangeSinDirection(Direction.LEFT);
-                    break;
-                case "BottomEdge":
-                    ChangeSinDirection(Direction.UP);
-                    break;
-                case "LeftEdge":
-                    ChangeSinDirection(Direction.RIGHT);
-                    break;
-            }
+            ChangeSinDirection(_newDirections[other.gameObject.tag]);
         }
     }
     #endregion

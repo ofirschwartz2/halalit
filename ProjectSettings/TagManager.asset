@@ -45,11 +45,11 @@ TagManager:
   - PlayerShots
   - Enemies
   - Player
-  - Astroids
-  - Items
+  - Asteroids
+  - ItemTriggers
+  - ItemCollisions
   - PlayerWeapon
-  - PlayerInternalWorld
-  - 
+  - World
   - 
   - 
   - 

@@ -1,5 +1,5 @@
+using Assets.Enums;
 using Assets.Utils;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,15 +10,15 @@ static class EnemyUtils
     public static Vector2 GetAnotherDirectionFromEdge(Rigidbody2D rigidbody, string edge)
     {
         rigidbody.velocity = new Vector2(0f, 0f);
-        var direction = edge switch
+        Dictionary<string, Vector2> newDirections = new()
         {
-            "TopEdge" => Vector2.down,
-            "RightEdge" => Vector2.left,
-            "BottomEdge" => Vector2.up,
-            "LeftEdge" => Vector2.right,
-            _ => throw new Exception("Unknown edge: " + edge),
+            { Tag.TOP_EDGE.GetDescription(), Vector2.down },
+            { Tag.RIGHT_EDGE.GetDescription(), Vector2.left },
+            { Tag.BOTTOM_EDGE.GetDescription(), Vector2.up },
+            { Tag.LEFT_EDGE.GetDescription(), Vector2.right },
         };
-        return Utils.GetRandomVector2OnHalfOfCircle(direction);
+        
+        return Utils.GetRandomVector2OnHalfOfCircle(newDirections[edge]);
     }
 
     public static void MoveUnderSpeedLimit(Rigidbody2D rigidbody, Vector2 direction, float movementAmplitude, float speedLimit)

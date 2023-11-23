@@ -7,8 +7,6 @@ using UnityEngine;
 public class PickupClawMovement : MonoBehaviour
 {
     [SerializeField]
-    private bool _useConfigFile;
-    [SerializeField]
     private Rigidbody2D _rigidBody;
     [SerializeField]
     private GameObject _halalit;
@@ -60,11 +58,6 @@ public class PickupClawMovement : MonoBehaviour
 
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-
         _initialRotation = transform.rotation.eulerAngles.z;
         _halalitLastFramePosition = _halalit.transform.position;
     }

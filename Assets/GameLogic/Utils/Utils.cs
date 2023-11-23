@@ -303,7 +303,7 @@ namespace Assets.Utils
         #region Predicates
         public static bool DidHitEdge(string tag) 
         {
-            return tag == "TopEdge" || tag == "RightEdge" || tag == "BottomEdge" || tag == "LeftEdge";
+            return tag == Tag.TOP_EDGE.GetDescription() || tag == Tag.RIGHT_EDGE.GetDescription() || tag == Tag.BOTTOM_EDGE.GetDescription() || tag == Tag.LEFT_EDGE.GetDescription();
         }
 
         public static bool IsUnderSpeedLimit(Vector2 myVelocity, float speedLimit)

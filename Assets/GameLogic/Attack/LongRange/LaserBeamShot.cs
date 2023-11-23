@@ -1,3 +1,4 @@
+using Assets.Enums;
 using Assets.Utils;
 using UnityEngine;
 
@@ -42,5 +43,11 @@ public class LaserBeamShot : MonoBehaviour
             Destroy(gameObject);
             Destroy(transform.parent.gameObject);
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag(Tag.ENEMY.GetDescription()) || other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()))
+            Destroy(gameObject);
     }
 }
