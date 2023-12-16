@@ -15,8 +15,9 @@ public class EngineFire : MonoBehaviour
 
     void FixedUpdate()
     {
-        var mainModule = _engineFireParticleSystem.main;
         var fromSpeed = GetEngineFireForce();
+
+        var mainModule = _engineFireParticleSystem.main;
         mainModule.startSpeed = Random.Range(fromSpeed, fromSpeed * _engineFireToSpeedMultiplier);
     }
 
