@@ -49,8 +49,8 @@ TagManager:
   - ItemTriggers
   - ItemCollisions
   - PlayerWeapon
-  - World
-  - 
+  - InternalWorld
+  - ExternalWorld
   - 
   - 
   - 

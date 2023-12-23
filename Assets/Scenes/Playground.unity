@@ -494,7 +494,7 @@ GameObject:
   - component: {fileID: 228149336}
   - component: {fileID: 228149337}
   - component: {fileID: 228149338}
-  m_Layer: 13
+  m_Layer: 15
   m_Name: ExternalRightEdge
   m_TagString: RightEdge
   m_Icon: {fileID: 0}
@@ -617,7 +617,7 @@ GameObject:
   - component: {fileID: 300181865}
   - component: {fileID: 300181867}
   - component: {fileID: 300181866}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: TopLeftCornerForceField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -945,7 +945,7 @@ RectTransform:
   - {fileID: 1125677065}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -1, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -963,6 +963,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420034}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -1029,7 +1030,7 @@ Camera:
   field of view: 60
   orthographic: 1
   orthographic size: 5
-  m_Depth: -1
+  m_Depth: 0.13
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -1041,7 +1042,7 @@ Camera:
   m_AllowMSAA: 0
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
-  m_OcclusionCulling: 0
+  m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
 --- !u!4 &519420032
@@ -1051,7 +1052,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -100}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1059,6 +1060,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
 --- !u!1 &616236334
 GameObject:
   m_ObjectHideFlags: 0
@@ -1070,7 +1115,7 @@ GameObject:
   - component: {fileID: 616236335}
   - component: {fileID: 616236336}
   - component: {fileID: 616236337}
-  m_Layer: 13
+  m_Layer: 15
   m_Name: ExternalTopEdge
   m_TagString: TopEdge
   m_Icon: {fileID: 0}
@@ -1193,7 +1238,7 @@ GameObject:
   - component: {fileID: 659508486}
   - component: {fileID: 659508487}
   - component: {fileID: 659508488}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: RightEdgeForceField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1373,6 +1418,10 @@ PrefabInstance:
       value: Movement joystick
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773939, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2929252283123773939, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -1391,6 +1440,10 @@ PrefabInstance:
     - target: {fileID: 2929252285020697096, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2929252285020697097, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2929252285020697097, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -1412,7 +1465,7 @@ GameObject:
   - component: {fileID: 737901648}
   - component: {fileID: 737901649}
   - component: {fileID: 737901650}
-  m_Layer: 13
+  m_Layer: 15
   m_Name: ExternalLeftEdge
   m_TagString: LeftEdge
   m_Icon: {fileID: 0}
@@ -1568,6 +1621,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 913671d8b5233784cb2d17e3108f7614, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &752615852
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 752615853}
+  m_Layer: 0
+  m_Name: Projectiles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &752615853
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752615852}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &759986607
 GameObject:
   m_ObjectHideFlags: 0
@@ -1632,6 +1716,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _halalit: {fileID: 2130719621}
   _attackJoystick: {fileID: 1115015985}
+  _projectiles: {fileID: 752615852}
   _cooldownInterval: 0.5
   _attackJoystickEdge: 0.8
 --- !u!212 &759986612
@@ -1698,7 +1783,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b124fbb6d5e0148884d8a70c8e4981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firstAttack: 2
+  _firstAttack: 1
 --- !u!1 &814139006
 GameObject:
   m_ObjectHideFlags: 0
@@ -1713,7 +1798,7 @@ GameObject:
   - component: {fileID: 814139015}
   - component: {fileID: 814139014}
   - component: {fileID: 814139013}
-  m_Layer: 13
+  m_Layer: 15
   m_Name: ExternalWorld
   m_TagString: ExternalWorld
   m_Icon: {fileID: 0}
@@ -1982,7 +2067,7 @@ GameObject:
   - component: {fileID: 868449992}
   - component: {fileID: 868449994}
   - component: {fileID: 868449993}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: BottomRightCornerForceField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2076,7 +2161,7 @@ GameObject:
   - component: {fileID: 922196547}
   - component: {fileID: 922196548}
   - component: {fileID: 922196549}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: TopEdgeForceField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2168,7 +2253,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 930093036}
-  m_Layer: 13
+  m_Layer: 0
   m_Name: World
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2422,7 +2507,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1184314515
 Transform:
   m_ObjectHideFlags: 0
@@ -2457,7 +2542,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1277994821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2534,7 +2619,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1323639988}
   - component: {fileID: 1323639989}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: InternalWorld
   m_TagString: InternalWorld
   m_Icon: {fileID: 0}
@@ -2777,7 +2862,7 @@ GameObject:
   - component: {fileID: 1351303702}
   - component: {fileID: 1351303704}
   - component: {fileID: 1351303703}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: BottomLeftCornerForceField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2876,7 +2961,7 @@ GameObject:
   - component: {fileID: 1681031804}
   - component: {fileID: 1681031805}
   - component: {fileID: 1681031806}
-  m_Layer: 13
+  m_Layer: 15
   m_Name: ExternalBottomEdge
   m_TagString: BottomEdge
   m_Icon: {fileID: 0}
@@ -2996,6 +3081,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 471757027}
     m_Modifications:
+    - target: {fileID: 339575322018961293, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1454651707646333587, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1890053820360906802, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -3011,6 +3104,10 @@ PrefabInstance:
     - target: {fileID: 2871838876378529980, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2910957114234420809, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4845883465056631750, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
       propertyPath: m_Pivot.x
@@ -3099,6 +3196,30 @@ PrefabInstance:
     - target: {fileID: 5212479352641103145, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
       propertyPath: m_Name
       value: HalalitHealthBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 5212479352641103145, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5460845519376436997, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5712128634562356071, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6266767778941137985, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6308907636340826633, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6497302557512184886, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6620003065151935130, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3323,7 +3444,7 @@ GameObject:
   - component: {fileID: 1759617123}
   - component: {fileID: 1759617124}
   - component: {fileID: 1759617125}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: LeftEdgeForceField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3417,7 +3538,7 @@ GameObject:
   - component: {fileID: 1810749532}
   - component: {fileID: 1810749533}
   - component: {fileID: 1810749534}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: BottomEdgeForceField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3511,7 +3632,7 @@ GameObject:
   - component: {fileID: 2068214589}
   - component: {fileID: 2068214591}
   - component: {fileID: 2068214590}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: TopRightCornerForceField
   m_TagString: Untagged
   m_Icon: {fileID: 0}

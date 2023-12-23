@@ -191,7 +191,7 @@ class Health : MonoBehaviour
         HandleHealth(other.gameObject, true);
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
         HandleHealth(other.gameObject, false);
     }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -315,7 +316,6 @@ namespace Assets.Utils
         {
             return Time.time >= endOfLifeTime;
         }
-
         #endregion
 
         #region Lists

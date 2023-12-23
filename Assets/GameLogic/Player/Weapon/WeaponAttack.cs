@@ -11,13 +11,17 @@ public class WeaponAttack : MonoBehaviour
     [SerializeField]
     private Joystick _attackJoystick;
     [SerializeField]
+    private GameObject _projectiles;
+    [SerializeField]
     private float _cooldownInterval;
     [SerializeField]
     private float _attackJoystickEdge;
 
-    private float _cooldownTime;
     private AttackToggle _attackToggle;
     private Dictionary<ItemName, Action<Dictionary<EventProperty, float>>> _upgradeActions;
+    private float _cooldownTime;
+    private ConsecutiveAttack _consecutiveAttack;
+    private bool _shootingConsecutivaly;
 
     #region Init
     private void Awake()
@@ -47,20 +51,101 @@ public class WeaponAttack : MonoBehaviour
     #endregion
 
     #region Logic
-    void Update()
+    void FixedUpdate()
     {
-        if (ShouldAttack() && IsCoolDownPassed())
+        GameObject attackPrefab = _attackToggle.GetAttackPrefab();
+        AttackType attackType = attackPrefab.GetComponent<AttackDto>().Type;
+        TryAttack(attackPrefab, attackType);
+    }
+
+    private void TryAttack(GameObject attackPrefab, AttackType attackType)
+    {
+        if (attackType == AttackType.DESCRETE)
         {
-            Attack();
+            TryDescreteAttack(attackPrefab);
+        }
+        else if (attackType == AttackType.CONSECUTIVE)
+        {
+            TryConsecutiveAttack(attackPrefab);
         }
     }
 
-    private void Attack()
+    private void TryDescreteAttack(GameObject attackPrefab)
     {
-        GameObject attackPrefab = _attackToggle.GetAttackPrefab();
-        Quaternion attackRotation = transform.rotation;
-        Instantiate(attackPrefab, transform.position, attackRotation);
-        _cooldownTime = Time.time + _cooldownInterval;
+        if (ShouldAttack() && IsCoolDownPassed())
+        {
+            if (_consecutiveAttack != null)
+            {
+                RemoveConsecutiveAttack();
+            }
+
+            InstantiateDescreteAttack(attackPrefab);
+        }
+    }
+
+    private void InstantiateDescreteAttack(GameObject attackPrefab)
+    {
+        Instantiate(attackPrefab, transform.position, transform.rotation);
+        _cooldownTime = Time.time + _cooldownInterval; 
+    }
+
+    private void TryConsecutiveAttack(GameObject attackPrefab)
+    {
+        if (ShouldAttack())
+        {
+            if (_consecutiveAttack != null && _consecutiveAttack.gameObject.name.Replace("(Clone)", "") != attackPrefab.name) 
+            {
+                RemoveConsecutiveAttack();
+            }
+
+            if (_consecutiveAttack == null)
+            {
+                CreateConsecutiveAttack(attackPrefab);
+            }
+
+            if (!_shootingConsecutivaly)
+            {
+                StartConsecitiveAttack();
+            }
+            else
+            {
+                UpdateConsecitiveAttack();
+            }
+        }
+
+        if (!ShouldAttack() && _shootingConsecutivaly)
+        {
+            StopConsecutiveAttack();
+            RemoveConsecutiveAttack();
+        }
+    }
+
+    private void RemoveConsecutiveAttack()
+    {
+        _consecutiveAttack = null;
+    }
+
+    private void CreateConsecutiveAttack(GameObject attackPrefab)
+    {
+        _consecutiveAttack = Instantiate(attackPrefab, transform.position, transform.rotation, _projectiles.transform).GetComponent<ConsecutiveAttack>();  
+        _consecutiveAttack.transform.rotation = transform.rotation;
+    }
+
+    private void StartConsecitiveAttack()
+    {
+        _consecutiveAttack.StartConsecitiveAttack(transform.position, transform.rotation);
+        _shootingConsecutivaly = true;
+    }
+
+    private void UpdateConsecitiveAttack()
+    {
+        _consecutiveAttack.UpdateConsecitiveAttack(transform.position, transform.rotation);
+    }
+
+    private void StopConsecutiveAttack()
+    {
+        _consecutiveAttack.StopConsecitiveAttack();
+        _shootingConsecutivaly = false;
     }
     #endregion
 
@@ -88,8 +173,9 @@ public class WeaponAttack : MonoBehaviour
 
     private bool ShouldAttack()
     {
-        return Utils.GetLengthOfLine(_attackJoystick.Horizontal, _attackJoystick.Vertical) > _attackJoystickEdge;
+        return Utils.GetLengthOfLine(_attackJoystick.Horizontal, _attackJoystick.Vertical) >= _attackJoystickEdge;
     }
+
 
     private bool IsRelevantUpgradeEvent(ItemEventArguments arguments)
     {
