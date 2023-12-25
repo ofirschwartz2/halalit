@@ -20,7 +20,11 @@
         #region Deaths
         ASTEROID_DEATH,
         HALALIT_DEATH,
-        ENEMY_DEATH
+        ENEMY_DEATH,
+        #endregion
+
+        #region Explosions
+        ENEMY_EXPLOSION,
         #endregion
     }
 }
