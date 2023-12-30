@@ -1796,7 +1796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b124fbb6d5e0148884d8a70c8e4981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firstAttack: 4
+  _firstAttack: 0
 --- !u!1 &814139006
 GameObject:
   m_ObjectHideFlags: 0
@@ -2337,7 +2337,7 @@ MonoBehaviour:
     Value: {fileID: 2220377358832583353, guid: 8404158c8dd64c34bbd1a310c88a213d, type: 3}
   _longRangeAttacks:
   - Key: 0
-    Value: {fileID: 6058355759500395468, guid: ebb680993022fd746adb82e9deee83e1, type: 3}
+    Value: {fileID: 1830508508936448, guid: 431ab0fcf5785de4fb1538f2b69ff67c, type: 3}
   - Key: 1
     Value: {fileID: 8232562157244517169, guid: f2afd512fd594074692e1cac39a37b29, type: 3}
   - Key: 4
