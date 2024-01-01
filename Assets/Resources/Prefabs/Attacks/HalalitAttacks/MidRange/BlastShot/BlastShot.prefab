@@ -166,7 +166,7 @@ MonoBehaviour:
   _useConfigFile: 0
   _rigidBody: {fileID: 4043514594342984745}
   _speed: 5
-  _lifetime: 0.5
+  _lifetime: 1.3
   blastPrefab: {fileID: 4043514594342984741, guid: 1b1ab90d62da0ba428424878f4703995, type: 3}
 --- !u!114 &-7473840288719577117
 MonoBehaviour:
