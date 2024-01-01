@@ -16,10 +16,38 @@ public class EngineFire : MonoBehaviour
     void FixedUpdate()
     {
         var fromSpeed = GetEngineFireForce();
-
+        var toSpeed = fromSpeed * _engineFireToSpeedMultiplier;
         var mainModule = _engineFireParticleSystem.main;
-        mainModule.startSpeed = Random.Range(fromSpeed, fromSpeed * _engineFireToSpeedMultiplier);
+
+        if (fromSpeed == 0)
+        {
+            TryTurnOffEngineFireParticleSystem();
+        }
+        else
+        {
+            TryTurnOnEngineFireParticleSystem();
+            mainModule.startSpeed = Random.Range(fromSpeed, toSpeed);
+        }
     }
+
+    #region Switching Engine Fire Particle System
+    private void TryTurnOnEngineFireParticleSystem()
+    {
+        if (_engineFireParticleSystem.isStopped)
+        {
+            _engineFireParticleSystem.Clear();
+            _engineFireParticleSystem.Play();
+        }
+    }
+
+    private void TryTurnOffEngineFireParticleSystem()
+    {
+        if (!_engineFireParticleSystem.isStopped)
+        {
+            _engineFireParticleSystem.Stop();
+        }
+    }
+    #endregion
 
     private float GetEngineFireForce()
     {
