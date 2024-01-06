@@ -133,24 +133,21 @@ class Health : MonoBehaviour
     #region Change health
     private void HandleHealth(GameObject other, bool physical)
     {
-        if (IsHarmer(other))
+        if (physical)
         {
-            if (physical)
-            {
-                CollisionHarmer collisionHarmer = other.GetComponent<CollisionHarmer>() != null ?
-                    other.GetComponent<CollisionHarmer>() :
-                    other.GetComponentInParent<CollisionHarmer>();
+            CollisionHarmer collisionHarmer = other.GetComponent<CollisionHarmer>() != null ?
+                other.GetComponent<CollisionHarmer>() :
+                other.GetComponentInParent<CollisionHarmer>();
 
-                HandleCollisionHarmer(collisionHarmer);
-            }
-            else
-            {
-                TriggerHarmer triggerHarmer = other.GetComponent<TriggerHarmer>() != null ?
-                    other.GetComponent<TriggerHarmer>() :
-                    other.GetComponentInParent<TriggerHarmer>();
+            HandleCollisionHarmer(collisionHarmer);
+        }
+        else
+        {
+            TriggerHarmer triggerHarmer = other.GetComponent<TriggerHarmer>() != null ?
+                other.GetComponent<TriggerHarmer>() :
+                other.GetComponentInParent<TriggerHarmer>();
 
-                HandleTriggerHarmer(triggerHarmer);
-            }
+            HandleTriggerHarmer(triggerHarmer);
         }
     }
 
@@ -165,7 +162,6 @@ class Health : MonoBehaviour
         int harm = collisionHarmer.GetCollisionHarm();
         ChangeHealth(-harm);
     }
-
 
     public void ChangeHealth(int healthChange)
     {
@@ -188,12 +184,26 @@ class Health : MonoBehaviour
     #region Events
     private void OnCollisionEnter2D(Collision2D other)
     {
-        HandleHealth(other.gameObject, true);
+        if (IsHarmer(other.gameObject))
+        {
+            HandleHealth(other.gameObject, true);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (IsHarmer(other.gameObject) && other.gameObject.GetComponent<AttackDto>().Type != AttackType.CONSECUTIVE)
+        {
+            HandleHealth(other.gameObject, false);
+        }
     }
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        HandleHealth(other.gameObject, false);
+        if (IsHarmer(other.gameObject))
+        {
+            HandleHealth(other.gameObject, false);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
