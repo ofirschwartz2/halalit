@@ -6,19 +6,64 @@ using Random = UnityEngine.Random;
 class ItemsBank : MonoBehaviour
 {
     [SerializeField]
-    private List<ItemDto> _attacks;
+    private ItemOptions _itemOptions;
     [SerializeField]
-    private List<ItemDto> _upgrades;
+    private ItemRankPicker _itemRankPicker;
     [SerializeField]
-    private List<ItemDto> _utilities;
+    private List<ItemStockDto> _attacks;
+    [SerializeField]
+    private List<ItemStockDto> _upgrades;
+    [SerializeField]
+    private List<ItemStockDto> _utilities;
 
-    private Dictionary<ItemName, ItemDto> _allItems;
+    private Dictionary<ItemName, ItemStockDto> _allItems;
 
     #region Init
-    void Awake()
+    void Start()
     {
-        InitAllItems();
         GenerateStock();
+        InitAllItems();
+    }
+
+    private void GenerateStock()
+    {
+        foreach (ItemStockDto attackItemStockDto in _attacks)
+        {
+            int stock = Random.Range(attackItemStockDto.MinimumInitialStock, attackItemStockDto.MaxStock + 1);
+
+            for (int i = 0; i < stock; i++)
+            {
+                attackItemStockDto.Stock.Insert(0, GenerateAttackDto(attackItemStockDto.ItemName));
+            }
+        }
+
+        foreach (ItemStockDto upgradeItemStockDto in _upgrades)
+        {
+            int stock = Random.Range(upgradeItemStockDto.MinimumInitialStock, upgradeItemStockDto.MaxStock + 1);
+
+            for (int i = 0; i < stock; i++)
+            {
+                upgradeItemStockDto.Stock.Insert(0, new UpgradeStats());
+            }
+        }
+
+        foreach (ItemStockDto utilityItemStockDto in _utilities)
+        {
+            int stock = Random.Range(utilityItemStockDto.MinimumInitialStock, utilityItemStockDto.MaxStock + 1);
+
+            for (int i = 0; i < stock; i++)
+            {
+                utilityItemStockDto.Stock.Insert(0, new UtilityStats());
+            }
+        }
+    }
+
+    private AttackStats GenerateAttackDto(ItemName itemName)
+    {
+        ItemRank itemRank = _itemRankPicker.PickAnItemRank();
+        AttackOptions attackPossibleStats = _itemOptions.GetAttackPossibleStats(itemName);
+        AttackStatsRange attackStatsRange = attackPossibleStats.GetAttackDtoRange(itemRank);
+        return attackStatsRange.GetRandom();
     }
 
     private void InitAllItems()
@@ -30,19 +75,11 @@ class ItemsBank : MonoBehaviour
         AddToAllItemsByName(_utilities);
     }
 
-    private void AddToAllItemsByName(List<ItemDto> items)
+    private void AddToAllItemsByName(List<ItemStockDto> items)
     {
-        foreach (ItemDto item in items)
+        foreach (ItemStockDto item in items)
         {
             _allItems.Add(item.ItemName, item);
-        }
-    }
-
-    private void GenerateStock()
-    {
-        foreach (ItemDto itemDto in _allItems.Values)
-        {
-            itemDto.Stock = Random.Range(itemDto.MinimumInitialStock, itemDto.MaxStock + 1);
         }
     }
     #endregion
@@ -50,21 +87,25 @@ class ItemsBank : MonoBehaviour
     #region Accessors
     public GameObject GetItem(ItemName itemName)
     {
-        ItemDto itemDto = _allItems[itemName];
+        ItemStockDto itemStockDto = _allItems[itemName];
+
+        IItemStats itemDto = itemStockDto.Stock[0];
+        itemStockDto.Stock.RemoveAt(0);
         
-        itemDto.Stock--;
-        
-        if (itemDto.Stock == 0)
+        if (itemStockDto.Stock.Count == 0)
         {
             ItemsBankEvent.Invoke(EventName.NO_STOCK, this, new(itemName));
         }
 
-        return _allItems[itemName].GameObject;
+        GameObject item = Instantiate(itemStockDto.GameObject);
+        item.GetComponent<ItemStats>().itemStats = itemDto;
+
+        return item;
     }
 
     public bool IsAvailable(ItemName itemName)
     {
-        return _allItems[itemName].Stock > 0;
+        return _allItems[itemName].Stock.Count > 0;
     }
     #endregion
 }

@@ -3,7 +3,7 @@ using System;
 namespace Assets.Enums
 {
     [Serializable]
-    public enum AttackType
+    public enum AttackShotType
     {
         DESCRETE,
         CONSECUTIVE

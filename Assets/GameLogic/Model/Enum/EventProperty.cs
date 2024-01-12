@@ -22,6 +22,5 @@ namespace Assets.Enums
         WEAPON_COOLDOWN_MULTIPLIER_SUBTRUCTION,
         [Description("Weapon movement drag multiplier subtruction")]
         WEAPON_MOVEMENT_DRAG_MULTIPLIER_SUBTRUCTION
-
     }
 }

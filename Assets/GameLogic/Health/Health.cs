@@ -192,7 +192,7 @@ class Health : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (IsHarmer(other.gameObject) && other.gameObject.GetComponent<AttackDto>().Type != AttackType.CONSECUTIVE)
+        if (IsHarmer(other.gameObject) && other.gameObject.GetComponent<AttackBehaviour>().ShotType != AttackShotType.CONSECUTIVE)
         {
             HandleHealth(other.gameObject, false);
         }

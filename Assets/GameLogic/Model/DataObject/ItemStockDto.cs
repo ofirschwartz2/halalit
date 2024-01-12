@@ -1,13 +1,15 @@
 ﻿using Assets.Enums;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class ItemDto
+public class ItemStockDto
 { 
     public ItemName ItemName;
     public GameObject GameObject;
     public int MaxStock;
     public int MinimumInitialStock;
-    public int Stock;
+    [SerializeReference]
+    public List<IItemStats> Stock;
 }

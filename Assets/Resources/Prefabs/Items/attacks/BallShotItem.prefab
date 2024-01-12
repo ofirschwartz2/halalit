@@ -8,6 +8,54 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -943618575856044960, guid: 9d4c346d5f30ea942be9540d03320eec, type: 3}
+      propertyPath: EpicStats.Power.max
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: -943618575856044960, guid: 9d4c346d5f30ea942be9540d03320eec, type: 3}
+      propertyPath: EpicStats.Power.min
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -943618575856044960, guid: 9d4c346d5f30ea942be9540d03320eec, type: 3}
+      propertyPath: RareStats.Power.max
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -943618575856044960, guid: 9d4c346d5f30ea942be9540d03320eec, type: 3}
+      propertyPath: RareStats.Power.min
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -943618575856044960, guid: 9d4c346d5f30ea942be9540d03320eec, type: 3}
+      propertyPath: CommonStats.Power.max
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -943618575856044960, guid: 9d4c346d5f30ea942be9540d03320eec, type: 3}
+      propertyPath: CommonStats.Power.min
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -943618575856044960, guid: 9d4c346d5f30ea942be9540d03320eec, type: 3}
+      propertyPath: UncommonStats.Power.max
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -943618575856044960, guid: 9d4c346d5f30ea942be9540d03320eec, type: 3}
+      propertyPath: UncommonStats.Power.min
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -943618575856044960, guid: 9d4c346d5f30ea942be9540d03320eec, type: 3}
+      propertyPath: ExclusiveStats.Power.max
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -943618575856044960, guid: 9d4c346d5f30ea942be9540d03320eec, type: 3}
+      propertyPath: ExclusiveStats.Power.min
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -943618575856044960, guid: 9d4c346d5f30ea942be9540d03320eec, type: 3}
+      propertyPath: LegendaryStats.Power.max
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: -943618575856044960, guid: 9d4c346d5f30ea942be9540d03320eec, type: 3}
+      propertyPath: LegendaryStats.Power.min
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 5027408927136712968, guid: 9d4c346d5f30ea942be9540d03320eec, type: 3}
       propertyPath: m_RootOrder
       value: 0

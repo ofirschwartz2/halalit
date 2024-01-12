@@ -36,9 +36,9 @@ public class ItemDropper : MonoBehaviour
 
     private void DropNewItem(ItemName itemName, Vector2 dropPosition, Vector2 dropForce)
     {
-        GameObject itemPrefab = _itemsBank.GetItem(itemName);
-        GameObject item = Instantiate(itemPrefab, dropPosition, Quaternion.identity);
+        GameObject item = _itemsBank.GetItem(itemName);
 
+        item.transform.SetPositionAndRotation(dropPosition, Quaternion.identity);
         item.transform.SetParent(transform);
         item.GetComponent<Rigidbody2D>().AddForce(dropForce, ForceMode2D.Impulse); 
     }

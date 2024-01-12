@@ -53,18 +53,18 @@ public class WeaponAttack : MonoBehaviour
     #region Logic
     void FixedUpdate()
     {
-        GameObject attackPrefab = _attackToggle.GetAttackPrefab();
-        AttackType attackType = attackPrefab.GetComponent<AttackDto>().Type;
-        TryAttack(attackPrefab, attackType);
+        GameObject attackPrefab = _attackToggle.GetAttackPrefab();                         // TODO (refactor): this should be via event raise, not in update
+        AttackShotType shotType = attackPrefab.GetComponent<AttackBehaviour>().ShotType;
+        TryAttack(attackPrefab, shotType);
     }
 
-    private void TryAttack(GameObject attackPrefab, AttackType attackType)
+    private void TryAttack(GameObject attackPrefab, AttackShotType shotType)
     {
-        if (attackType == AttackType.DESCRETE)
+        if (shotType == AttackShotType.DESCRETE)
         {
             TryDescreteAttack(attackPrefab);
         }
-        else if (attackType == AttackType.CONSECUTIVE)
+        else if (shotType == AttackShotType.CONSECUTIVE)
         {
             TryConsecutiveAttack(attackPrefab);
         }

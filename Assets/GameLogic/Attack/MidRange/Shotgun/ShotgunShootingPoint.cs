@@ -1,12 +1,7 @@
-using Assets.Enums;
 using Assets.Utils;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 // TODO (refactor): the stats (damage) of a shot (when it's collide with enemy) needs to be on the shot script
-// TODO (refactor): move all shots out of the Gun. Enemies also shoot now.
 public class ShotgunShootingPoint : MonoBehaviour 
 {
     [SerializeField]

@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_LocalScale.x
@@ -83,6 +83,70 @@ PrefabInstance:
     - target: {fileID: 7939768775836154138, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_TagString
       value: Shot
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: hello
+      value: 0.707
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: BaseStats.Luck
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: BaseStats.Rate
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: BaseStats.Power
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: BaseStats.Weight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: Stats.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: CommonStats.Luck.max
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: CommonStats.Luck.min
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: CommonStats.Rate.max
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: CommonStats.Rate.min
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: BaseStats.CriticalHit
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: CommonStats.Power.max
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: CommonStats.Power.min
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: Stats.Array.data[1].Key
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: CommonStats.CriticalHit.max
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: CommonStats.CriticalHit.min
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
