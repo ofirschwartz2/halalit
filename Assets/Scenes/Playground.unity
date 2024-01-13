@@ -1719,6 +1719,13 @@ MonoBehaviour:
   _projectiles: {fileID: 752615852}
   _cooldownInterval: 0.5
   _attackJoystickEdge: 0.8
+  _currentAttackStats:
+    _itemRank: 0
+    Power: 0
+    CriticalHit: 0
+    Luck: 0
+    Rate: 0
+    Weight: 0
 --- !u!212 &759986612
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1783,7 +1790,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b124fbb6d5e0148884d8a70c8e4981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firstAttack: 0
+  _firstAttack: 5
+  _firstAttackStats:
+    _itemRank: 0
+    Power: 1
+    CriticalHit: 0
+    Luck: 0
+    Rate: 0
+    Weight: 0
 --- !u!1 &814139006
 GameObject:
   m_ObjectHideFlags: 0
@@ -3287,52 +3301,52 @@ MonoBehaviour:
   _attacks:
   - ItemName: 0
     GameObject: {fileID: 8968850470237194354, guid: 654ded13d581af344a9c0c1d7bf21ca4, type: 3}
-    MaxStock: 20
+    MaxStock: 0
     MinimumInitialStock: 0
     Stock: []
   - ItemName: 1
     GameObject: {fileID: 5143544690253330687, guid: 7f2a3d969a4fc6d4ca4f70a8bc42f3f3, type: 3}
-    MaxStock: 20
+    MaxStock: 0
     MinimumInitialStock: 0
     Stock: []
   - ItemName: 2
     GameObject: {fileID: 8822757115826082601, guid: b8a7204671c2d644982f3c3de14f8691, type: 3}
-    MaxStock: 5
+    MaxStock: 20
     MinimumInitialStock: 0
     Stock: []
   - ItemName: 3
     GameObject: {fileID: 5143544690253330687, guid: 8dd5bd3036a580e4ea1faaa8f34fbc73, type: 3}
-    MaxStock: 5
+    MaxStock: 20
     MinimumInitialStock: 0
     Stock: []
   - ItemName: 5
     GameObject: {fileID: 8968850470237194354, guid: 7bf2d58a40dc2f64db585c6ed9d00bff, type: 3}
-    MaxStock: 5
+    MaxStock: 0
     MinimumInitialStock: 0
     Stock: []
   - ItemName: 7
     GameObject: {fileID: 8968850470237194354, guid: 58ca17c14a1e3494f8a410148732627d, type: 3}
-    MaxStock: 5
+    MaxStock: 0
     MinimumInitialStock: 0
     Stock: []
   - ItemName: 8
     GameObject: {fileID: 8968850470237194354, guid: dec1913d9392a874dbbbc2d4408dcb46, type: 3}
-    MaxStock: 5
+    MaxStock: 0
     MinimumInitialStock: 0
     Stock: []
   - ItemName: 9
     GameObject: {fileID: 8968850470237194354, guid: 3a9f86578fb5fb44ea46b609257096ac, type: 3}
-    MaxStock: 5
+    MaxStock: 0
     MinimumInitialStock: 0
     Stock: []
   - ItemName: 6
     GameObject: {fileID: 8968850470237194354, guid: 5b0c9ab3ea3ecac41b5a439db2f01127, type: 3}
-    MaxStock: 5
+    MaxStock: 0
     MinimumInitialStock: 0
     Stock: []
   - ItemName: 4
     GameObject: {fileID: 8968850470237194354, guid: 229c4aef31f23d7499fca983cdeb65f2, type: 3}
-    MaxStock: 5
+    MaxStock: 20
     MinimumInitialStock: 0
     Stock: []
   _upgrades:
@@ -3376,13 +3390,11 @@ MonoBehaviour:
   _allDefaultDropsList:
   - Key: 1
     Value:
-    - ItemName: 5
+    - ItemName: 2
       OneOfChance: 2
-    - ItemName: 9
+    - ItemName: 4
       OneOfChance: 2
-    - ItemName: 8
-      OneOfChance: 2
-    - ItemName: 0
+    - ItemName: 3
       OneOfChance: 2
     - ItemName: 1
       OneOfChance: 2

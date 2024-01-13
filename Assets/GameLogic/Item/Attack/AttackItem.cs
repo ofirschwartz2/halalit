@@ -4,13 +4,15 @@ using UnityEngine;
 
 public abstract class AttackItem : MonoBehaviour
 {
+    public ItemStats AttackStats;
+
     protected ItemName _itemName;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag(Tag.HALALIT.GetDescription()))
         {
-            OnPlayerAttackItemPickedUp(this, new(_itemName, new()));
+            OnPlayerAttackItemPickedUp(this, new(_itemName, AttackStats.itemStats));
             Destroy(gameObject);
         }
     }

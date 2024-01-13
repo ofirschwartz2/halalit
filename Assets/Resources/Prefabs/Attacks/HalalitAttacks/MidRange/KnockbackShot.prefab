@@ -76,10 +76,17 @@ PrefabInstance:
       propertyPath: m_TagString
       value: KnockbackShot
       objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: AttackStats.Power
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7939768775836154138, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: -8698686209568217880}
     - targetCorrespondingSourceObject: {fileID: 7939768775836154138, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8544668158282122066}
@@ -101,6 +108,25 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7939768775836154138, guid: 68379c5202257be48aaf973610ef6144, type: 3}
   m_PrefabInstance: {fileID: 7889915243791512496}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &-8698686209568217880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 239013753676516010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e39de919ead77d84883ad3dba3b6d053, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _harmer:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1971053207 &8544668158282122066
 SpriteShapeRenderer:
   m_ObjectHideFlags: 0

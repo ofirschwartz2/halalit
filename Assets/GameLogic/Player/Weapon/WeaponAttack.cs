@@ -17,6 +17,9 @@ public class WeaponAttack : MonoBehaviour
     [SerializeField]
     private float _attackJoystickEdge;
 
+    [SerializeField]
+    private AttackStats _currentAttackStats;    // just for view in the inspector
+
     private AttackToggle _attackToggle;
     private Dictionary<ItemName, Action<Dictionary<EventProperty, float>>> _upgradeActions;
     private float _cooldownTime;
@@ -55,6 +58,7 @@ public class WeaponAttack : MonoBehaviour
     {
         GameObject attackPrefab = _attackToggle.GetAttackPrefab();                         // TODO (refactor): this should be via event raise, not in update
         AttackShotType shotType = attackPrefab.GetComponent<AttackBehaviour>().ShotType;
+        _currentAttackStats = attackPrefab.GetComponent<AttackBehaviour>().AttackStats;
         TryAttack(attackPrefab, shotType);
     }
 

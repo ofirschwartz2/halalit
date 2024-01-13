@@ -1,12 +1,35 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 class DescreteTriggerHarmer : TriggerHarmer
 {
-    [SerializeField]
-    private int _triggerHarm;
+    [SerializeReference]
+    private IHarmer _harmer;
+
+    private void Awake()
+    {
+        InitHarmer();
+    }
 
     public override int GetTriggerHarm()
     {
-        return _triggerHarm;
+        try
+        {
+            return _harmer.GetHarm();
+        }
+        catch (NullReferenceException)
+        {
+            Debug.LogError("this _harmer is not yet innitialized but is used anyway");
+            return 0;
+        }
+    }
+
+    private void InitHarmer()
+    {
+        AttackBehaviour harmer = GetComponent<AttackBehaviour>();
+        if (harmer != null)
+        {
+            _harmer = harmer;
+        }
     }
 }

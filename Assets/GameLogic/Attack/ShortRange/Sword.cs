@@ -5,8 +5,6 @@ using UnityEngine;
 public class Sword : MonoBehaviour 
 {
     [SerializeField]
-    private bool _useConfigFile;
-    [SerializeField]
     private float _attackTime;
     [SerializeField]
     private float _swordRotationRange;
@@ -17,11 +15,6 @@ public class Sword : MonoBehaviour
 
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
-
         _attackStartTime = Time.time;
         SetRotationAndPosition();
     }
@@ -36,8 +29,7 @@ public class Sword : MonoBehaviour
     {
         var weaponTransform = GetWeaponTransform();
         SetRotation(weaponTransform);
-        transform.parent.position = weaponTransform.position;
-
+        transform.position = weaponTransform.position;
     }
 
     private void SetRotation(Transform weaponTransform)
@@ -45,7 +37,7 @@ public class Sword : MonoBehaviour
         var fromRotation = Utils.GetRotationPlusAngle(weaponTransform.rotation, -0.5f * _swordRotationRange);
         var toRotation = Utils.GetRotationPlusAngle(weaponTransform.rotation, 0.5f * _swordRotationRange);
 
-        transform.parent.rotation = Quaternion.Slerp(
+        transform.rotation = Quaternion.Slerp(
             fromRotation, 
             toRotation, 
             accelerationCurve.Evaluate(Utils.GetPortionPassed(_attackStartTime, _attackTime)));
@@ -53,7 +45,7 @@ public class Sword : MonoBehaviour
 
     private Transform GetWeaponTransform()
     {
-        return GameObject.FindGameObjectWithTag(Tag.WEAPON.GetDescription()).transform;
+        return GameObject.FindGameObjectWithTag(Tag.WEAPON.GetDescription()).transform; // TODO (refactor): This is a very expensive performance function, change this to something else
     }
 
     private void TryDie()
@@ -61,7 +53,6 @@ public class Sword : MonoBehaviour
         if (ShouldDie())
         {
             Destroy(gameObject);
-            Destroy(transform.parent.gameObject);
         }
     }
 
