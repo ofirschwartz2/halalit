@@ -19454,6 +19454,14 @@ PrefabInstance:
       propertyPath: Type
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: ShotType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: AttackStats.Power
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4112790009911488359, guid: 68379c5202257be48aaf973610ef6144, type: 3}
     m_RemovedGameObjects: []

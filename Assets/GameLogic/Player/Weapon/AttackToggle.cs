@@ -62,13 +62,10 @@ class AttackToggle : MonoBehaviour
 
     private void SetNewAttack(AttackName newAttackName, AttackStats attackStats)
     {
-        if (_currentAttack.Key != newAttackName)
-        {
-            _currentAttack = new(newAttackName, AttacksBank.GetAttackPrefab(newAttackName));
-            AttackBehaviour attackBehaviour = _currentAttack.Value.GetComponent<AttackBehaviour>();
-            attackBehaviour.AttackStats = attackStats;
-            Debug.Log("New attack - " + newAttackName.ToString() + " loaded");
-        }
+        _currentAttack = new(newAttackName, AttacksBank.GetAttackPrefab(newAttackName));
+        AttackBehaviour attackBehaviour = _currentAttack.Value.GetComponent<AttackBehaviour>();
+        attackBehaviour.AttackStats = attackStats;
+        Debug.Log("New attack - " + newAttackName.ToString() + " loaded");
     }
     #endregion
 }

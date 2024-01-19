@@ -16,7 +16,6 @@ public class WeaponAttack : MonoBehaviour
     private float _cooldownInterval;
     [SerializeField]
     private float _attackJoystickEdge;
-
     [SerializeField]
     private AttackStats _currentAttackStats;    // just for view in the inspector
 
@@ -89,7 +88,7 @@ public class WeaponAttack : MonoBehaviour
 
     private void InstantiateDescreteAttack(GameObject attackPrefab)
     {
-        Instantiate(attackPrefab, transform.position, transform.rotation);
+        Instantiate(attackPrefab, transform.position, transform.rotation, _projectiles.transform);
         _cooldownTime = Time.time + _cooldownInterval; 
     }
 

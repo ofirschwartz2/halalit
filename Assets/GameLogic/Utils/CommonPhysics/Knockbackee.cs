@@ -65,7 +65,15 @@ class Knockbackee : MonoBehaviour
             KnockbackMe(other.gameObject);
         }
     }
-     
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        if (IsGameObjectToKnockbackMe(other.gameObject))
+        {
+            KnockbackMe(other.gameObject);
+        }
+    }
+
     private void KnockbackMe(GameObject other)
     {
         Vector2 knockbackDirection = (transform.position - other.transform.position).normalized;

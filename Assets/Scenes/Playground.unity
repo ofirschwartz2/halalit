@@ -1665,7 +1665,7 @@ GameObject:
   - component: {fileID: 759986609}
   - component: {fileID: 759986611}
   - component: {fileID: 759986613}
-  m_Layer: 12
+  m_Layer: 9
   m_Name: Weapon
   m_TagString: Weapon
   m_Icon: {fileID: 0}
@@ -3306,7 +3306,7 @@ MonoBehaviour:
     Stock: []
   - ItemName: 1
     GameObject: {fileID: 5143544690253330687, guid: 7f2a3d969a4fc6d4ca4f70a8bc42f3f3, type: 3}
-    MaxStock: 0
+    MaxStock: 5
     MinimumInitialStock: 0
     Stock: []
   - ItemName: 2

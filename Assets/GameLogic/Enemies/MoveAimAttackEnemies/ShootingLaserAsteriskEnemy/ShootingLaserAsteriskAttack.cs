@@ -1,12 +1,11 @@
 using Assets.Utils;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class ShootingLaserAsteriskAttack : MoveAimAttackAttack
 {
     [SerializeField]
-    private GameObject ShotPrefab;
+    private GameObject _shotPrefab;
     [SerializeField]
     private ShootingLaserAsteriskAim _shootingLazerAsteriskAim;
     [SerializeField]
@@ -14,12 +13,14 @@ public class ShootingLaserAsteriskAttack : MoveAimAttackAttack
     [SerializeField]
     private int _numberOfShots;
 
+    private GameObject _projectiles;
     private List<GameObject> _shots;
-    private float _attackRadiusMultiplier = 1.1f; // So that the shots don't spawn inside the enemy
+    private float _attackRadiusMultiplier = 1.1f; // So that the shots don't spawn inside the enemy // TODO (refactor): this should be configurable 
 
     void Start()
     {
         _shots = new List<GameObject>();
+        _projectiles = GameObject.Find(Constants.PROJECTILES_GAME_OBJECT_NAME);
     }
 
     public override void AttackingState(Transform transform)
@@ -52,8 +53,7 @@ public class ShootingLaserAsteriskAttack : MoveAimAttackAttack
 
     private void ShootOneRay(Vector2 startPosition) 
     {
-        var shot = Instantiate(ShotPrefab, startPosition, Utils.GetRorationOutwards(transform.position, startPosition));
-        shot.transform.SetParent(gameObject.transform);
+        var shot = Instantiate(_shotPrefab, startPosition, Utils.GetRorationOutwards(transform.position, startPosition), _projectiles.transform);
         shot.layer = LayerMask.NameToLayer("EnemyShots");
         _shots.Add(shot);
     }

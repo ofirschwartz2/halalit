@@ -1,5 +1,5 @@
-To Do			1. Attacks attributes + calibration of all other staff in the game to it.
-To Do				1.1. Add Power to each loaded weapons, and set the health of everyone to make sense
+n progress		1. Attacks attributes + calibration of all other staff in the game to it.
+n progress			1.1. Add Power to each loaded weapons, and set the health of everyone to make sense
 To Do				1.2. Add the capability of the fire arm
 To Do				1.3. Add critical hit and the luck to the each attack
 To Do				1.4. Add the rate to each descrete attack
@@ -22,15 +22,36 @@ To Do						2.1.9. Knockback shot
 To Do						2.1.10. Spikes
 In progress			2.2. Booms
 Done				2.3. Engine
-To Do			3. Utilities
-To Do			4. Claw:
-To Do				4.1. Make the pickup claw homing
-To Do				4.2. Make a bat claw
-To Do			5. Designs - New sprites
-To Do				5.1. Halalit
-To Do				5.2. Some of the weapons
-To Do				5.3. Enemies
-To Do				5.4. Asteroids
-To Do			6. Move to phone
-To Do			7. Level design
-To Do			8. Server: daily and leatherboard
+To Do			3. Tests
+To Do			4. Utilities
+To Do			5. Claw:
+To Do				5.1. Make the pickup claw homing
+To Do				5.2. Make a bat claw
+To Do 			6. Small fixes
+To Do				6.1 Booms Knockback
+To Do			7. Designs - New sprites
+To Do				7.1. Halalit
+To Do				7.2. Some of the weapons
+To Do				7.3. Enemies
+To Do				7.4. Asteroids
+To Do			8. Move to phone
+To Do			9. Level design
+To Do			10. Server: daily and leatherboard
+
+
+Current work:
+Issues:
+- Make ALL halalit attacks variants of Halalit attack
+
+In Proggress:
+- Merge
+
+Fixed:
+- The sword is too small - when changed it's not really attacking
+- Cannot load new instance of the same attack
+- All attacks should be instantiated in projectiles
+- Knockback shot doesn't do any knockback
+- Bommerangs are not dying when they come back to the halalit
+- Some weapons (sword or knockback wave) are not really descrete or consecutive harmers, they need something else 
+- Fix laser...
+- Make sword to load the AttackBehaviour

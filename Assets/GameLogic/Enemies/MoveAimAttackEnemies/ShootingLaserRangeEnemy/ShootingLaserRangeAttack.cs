@@ -9,12 +9,14 @@ public class ShootingLaserRangeAttack : MoveAimAttackAttack
     [SerializeField]
     private float _shotRotationSpeed; // If too small - BUG.
 
+    private GameObject _projectiles;
     private bool _shotInitiated;
     private GameObject _shot;
     
     void Start()
     {
         _shotInitiated = false;
+        _projectiles = GameObject.Find(Constants.PROJECTILES_GAME_OBJECT_NAME);
     }
 
     private void FixedUpdate()
@@ -40,8 +42,7 @@ public class ShootingLaserRangeAttack : MoveAimAttackAttack
     {
         Vector3 shootingStartPosition = _shootingLazerRangeAim.GetShootingStartPosition();
         var shootRotation = _shootingLazerRangeAim.GetAimingShotFrom().transform.rotation;
-        _shot = Instantiate(ShotPrefab, shootingStartPosition, shootRotation);
-        _shot.transform.SetParent(gameObject.transform);
+        _shot = Instantiate(ShotPrefab, shootingStartPosition, shootRotation, _projectiles.transform);
     }
 
     private void RotateShot()

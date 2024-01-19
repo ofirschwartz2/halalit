@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BoomerangShot : MonoBehaviour 
 {
-
     [SerializeField]
     private float _rotationSpeed;
     [SerializeField]
@@ -13,8 +12,8 @@ public class BoomerangShot : MonoBehaviour
     Vector2[] bezierCurve6InnerPoints;
 
     private Vector2 _startPosition, _rightDirection;
-    private float _shootingPercentPassed, // Between 0 to 1
-        _creationTime, halalitGraceTime = 0.1f;
+    private float _shootingPercentPassed; // Between 0 to 1
+    private float _creationTime;
     private GameObject _halalit;
 
     void Start()
@@ -47,7 +46,6 @@ public class BoomerangShot : MonoBehaviour
             _shootingPercentPassed);
     }
 
-    
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.CompareTag(Tag.INTERNAL_WORLD.GetDescription())) 
@@ -58,17 +56,14 @@ public class BoomerangShot : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (RealHalalitHit(other) || other.gameObject.CompareTag(Tag.ENEMY.GetDescription()) || other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()))
+        if (HalalitHitOnReturn(other) || other.gameObject.CompareTag(Tag.ENEMY.GetDescription()) || other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()))
         {
             Destroy(gameObject);
         }
     }
 
-    private bool RealHalalitHit(Collider2D other)
+    private bool HalalitHitOnReturn(Collider2D other)
     {
-        return 
-            other.gameObject.CompareTag(Tag.HALALIT.GetDescription()) && 
-            (Time.time > _creationTime + halalitGraceTime);
+        return other.gameObject.CompareTag(Tag.HALALIT.GetDescription()) && (Time.time > _creationTime + Constants.BOOMERANG_OUT_OF_HALALIT_TIME);
     }
-    
 }

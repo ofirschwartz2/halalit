@@ -248,11 +248,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.1
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.5
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_LocalPosition.x
@@ -260,7 +264,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_LocalPosition.z
@@ -272,15 +276,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -312,7 +316,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: AttackStats.Power
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -383,7 +387,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: -2413806693520163455, guid: 36a58ef0f52a17e4a93613edf7d86198, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a6aa88617b4358045a31e49bbf7b430f, type: 3}
   m_Color: {r: 0, g: 0.9725491, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -453,8 +457,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 1}
+  m_Offset: {x: 0, y: 2.6}
+  m_Size: {x: 1, y: 3.41}
   m_Direction: 0
 --- !u!114 &7882197078323367090
 MonoBehaviour:

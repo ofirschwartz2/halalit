@@ -6,13 +6,20 @@ public class ShootingInRangeAttack : MoveAimAttackAttack
     [SerializeField]
     private ShootingInRangeAim _shootingInRangeAim;
     [SerializeField]
-    public GameObject ShotPrefab;
+    public GameObject _shotPrefab;
+    
+    private GameObject _projectiles;
+
+    public void Start()
+    {
+        _projectiles = GameObject.Find(Constants.PROJECTILES_GAME_OBJECT_NAME);
+    }
 
     public override void Shoot(Transform transform)
     {
         Vector3 shootingStartPosition = GetShootingStartPosition(transform);
         var shootRotation = Utils.GetRotationPlusAngle(transform.rotation, _shootingInRangeAim.GetShootingAngle());
-        Instantiate(ShotPrefab, shootingStartPosition, shootRotation);
+        Instantiate(_shotPrefab, shootingStartPosition, shootRotation, _projectiles.transform);
     }
 
     private Vector3 GetShootingStartPosition(Transform transform)
