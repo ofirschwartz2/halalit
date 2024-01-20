@@ -15,12 +15,13 @@ public class EnemiesDestructor : MonoBehaviour
     }
     #endregion
 
-    #region Asteroid destruction
+    #region Enemy destruction
     private void OnEnemyDeath(object initiator, DeathEventArguments arguments)
     {
         GameObject enemyToKill = ((MonoBehaviour)initiator).gameObject;
 
         InvokeItemDropEvent(enemyToKill);
+        InvokeExplosionEvent(enemyToKill);
         Destroy(enemyToKill);
     }
 
@@ -29,6 +30,12 @@ public class EnemiesDestructor : MonoBehaviour
         Vector2 dropForce = Random.onUnitSphere * enemyToKill.transform.localScale.x;
         DropEventArguments itemDropEventArguments = new(enemyToKill.GetComponent<EnemyDropper>().GetDropper(), enemyToKill.transform.position, dropForce);
         DropEvent.Invoke(EventName.NEW_ITEM_DROP, this, itemDropEventArguments);
+    }
+
+    private void InvokeExplosionEvent(GameObject enemyToKill)
+    {
+        EnemyExplosionEventArguments enemyExplosionEventArguments = new(enemyToKill.transform.position);
+        EnemyExplosionEvent.Invoke(EventName.ENEMY_EXPLOSION, this, enemyExplosionEventArguments);
     }
     #endregion
 }

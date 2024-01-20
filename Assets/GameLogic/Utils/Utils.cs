@@ -67,7 +67,7 @@ namespace Assets.Utils
             return GetLengthOfLine(deltaX, deltaY);
         }
 
-        public static float GetLengthOfLine(float x, float y) // we can use Vector2.magnitude
+        public static float GetLengthOfLine(float x, float y)
         {
             return Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(y, 2));
         }

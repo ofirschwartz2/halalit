@@ -17,7 +17,7 @@ public class WeaponAttack : MonoBehaviour
     [SerializeField]
     private float _attackJoystickEdge;
     [SerializeField]
-    private AttackStats _currentAttackStats;    // just for view in the inspector
+    private KeyValuePair<AttackName, AttackStats> _currentAttack;    // just for view in the inspector
 
     private AttackToggle _attackToggle;
     private Dictionary<ItemName, Action<Dictionary<EventProperty, float>>> _upgradeActions;
@@ -55,10 +55,12 @@ public class WeaponAttack : MonoBehaviour
     #region Logic
     void FixedUpdate()
     {
-        GameObject attackPrefab = _attackToggle.GetAttackPrefab();                         // TODO (refactor): this should be via event raise, not in update
-        AttackShotType shotType = attackPrefab.GetComponent<AttackBehaviour>().ShotType;
-        _currentAttackStats = attackPrefab.GetComponent<AttackBehaviour>().AttackStats;
-        TryAttack(attackPrefab, shotType);
+        KeyValuePair<AttackName, GameObject> attackPrefab = _attackToggle.GetCurrentAttack();                         // TODO (refactor): this should be via event raise, not in update
+        _currentAttack.Key = attackPrefab.Key;
+        _currentAttack.Value = attackPrefab.Value.GetComponent<AttackBehaviour>().AttackStats;
+        AttackShotType shotType = attackPrefab.Value.GetComponent<AttackBehaviour>().ShotType;
+        
+        TryAttack(attackPrefab.Value, shotType);
     }
 
     private void TryAttack(GameObject attackPrefab, AttackShotType shotType)

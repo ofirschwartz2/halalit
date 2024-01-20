@@ -1,5 +1,7 @@
-n progress		1. Attacks attributes + calibration of all other staff in the game to it.
-n progress			1.1. Add Power to each loaded weapons, and set the health of everyone to make sense
+-------------------------------------------------- Backlog --------------------------------------------------
+Tasks:
+In progress		1. Attacks attributes + calibration of all other staff in the game to it.
+Done				1.1. Add Power to each loaded weapons
 To Do				1.2. Add the capability of the fire arm
 To Do				1.3. Add critical hit and the luck to the each attack
 To Do				1.4. Add the rate to each descrete attack
@@ -9,16 +11,16 @@ To Do				1.7. Add the dexterity to the fire arm - counter to shakiness
 To Do				1.8. Add the strengh to the fire arm - counter to the moving attack delay
 To Do				1.9. Add special attributes to each attack 
 In progress		2. Shaders / particle systems:
-In progress			2.1. Attacks + fix enemy attacks
-In progress					2.1.1. Laser
-To Do						2.1.2. Ball shot
-To Do						2.1.3. Mirror ball shot
+In progress			2.1. Attacks
+Done						2.1.1. Laser beam
+Done						2.1.2. Ball shot
+Done						2.1.3. Mirror ball shot
 To Do						2.1.4. boomerang
 To Do						2.1.5. Sword
-To Do						2.1.6. Shotgun shot
-To Do						2.1.7. Glast shot
+To Do						2.1.6. Shotgun
+Done						2.1.7. Blast shot
 To Do						2.1.8. Grenade
-To Do						2.1.9. Knockback shot
+In progress					2.1.9. Knockback wave
 To Do						2.1.10. Spikes
 In progress			2.2. Booms
 Done				2.3. Engine
@@ -39,14 +41,24 @@ To Do			9. Level design
 To Do			10. Server: daily and leatherboard
 
 
-Current work:
+-------------------------------------------------- Current work --------------------------------------------------
 Issues:
-- Make ALL halalit attacks variants of Halalit attack
+- Missing script on blast shot
+- Missing script on blast
+
 
 In Proggress:
-- Merge
+- fix enemies
+
 
 Fixed:
+- blast explosion and the actual shader explosion are decoupled
+- Change leaserBeamShot name, it's not a shot, also Bommerang, also knockback (wave), also grenade
+- Reorganize attacks folder
+- Blasts should be under the attacks (children)
+- Blast should do damage
+- Make ALL halalit attacks variants of Halalit attack
+- Merge
 - The sword is too small - when changed it's not really attacking
 - Cannot load new instance of the same attack
 - All attacks should be instantiated in projectiles

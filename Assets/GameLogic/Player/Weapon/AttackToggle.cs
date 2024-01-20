@@ -6,15 +6,15 @@ class AttackToggle : MonoBehaviour
 {
     [SerializeField]
     private AttackName _firstAttack;
-    [SerializeField]
-    private AttackStats _firstAttackStats;
 
+    private AttackStats _firstAttackStats;
     private KeyValuePair<AttackName, GameObject> _currentAttack;
 
     #region Init
     private void Awake()
     {
         SetEventListeners();
+        _firstAttackStats = new(ItemRank.COMMON, 1, 0, 0, 0, 0);
     }
 
     private void SetEventListeners()
@@ -30,9 +30,9 @@ class AttackToggle : MonoBehaviour
     #endregion
 
     #region Accessors
-    public GameObject GetAttackPrefab()
+    public KeyValuePair<AttackName, GameObject> GetCurrentAttack()
     {
-        return _currentAttack.Value;
+        return _currentAttack;
     }
     #endregion
 

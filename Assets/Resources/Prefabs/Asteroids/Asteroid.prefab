@@ -248,7 +248,7 @@ MonoBehaviour:
   _healthBarIcon: {fileID: 21300000, guid: d365d1975a0285e4db58a12afeabb7b2, type: 3}
   _currentMaxHealth: 5
   _finalMaxHealth: 5
-  _harmers: 110000000300000004000000
+  _harmers: 11000000030000000400000012000000
   _contributors: 
 --- !u!114 &3357691562281682229
 MonoBehaviour:

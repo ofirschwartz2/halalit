@@ -14,8 +14,8 @@ namespace Assets.Enums
         ENEMY,
         [Description("Shot")] 
         SHOT,
-        [Description("KnockbackShot")]
-        KNOCKBACK_SHOT,
+        [Description("KnockbackWave")]
+        KNOCKBACK_WAVE,
         [Description("Item")]
         ITEM,
         [Description("PickupClaw")] 
@@ -42,5 +42,7 @@ namespace Assets.Enums
         BAR_ICON,
         [Description("EnemyShot")]
         ENEMY_SHOT,
+        [Description("Explosion")]
+        EXPLOSION,
     }
 }

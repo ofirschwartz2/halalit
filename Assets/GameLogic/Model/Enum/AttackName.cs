@@ -9,21 +9,21 @@ namespace Assets.Enums
         [Description("Ball shot")]
         BALL_SHOT,
         [Description("Laser beam")]
-        LASER_BEAM_SHOT,
-        [Description("Knockback shot")]
-        KNOCKBACK_SHOT,
-        [Description("Boomerang shot")]
-        BOOMERANG_SHOT,
+        LASER_BEAM,
+        [Description("Knockback wave")]
+        KNOCKBACK_WAVE,
+        [Description("Boomerang")]
+        BOOMERANG,
         [Description("Mirror Ball shot")]
         MIRROR_BALL_SHOT,
         [Description("Sword")]
         SWORD,
         [Description("Blast shot")]
         BLAST_SHOT,
-        [Description("Granade shot")]
-        GRANADE_SHOT,
-        [Description("Shotgun shot")]
-        SHOTGUN_SHOT,
+        [Description("Granade")]
+        GRANADE,
+        [Description("Shotgun")]
+        SHOTGUN,
         [Description("Spikes")]
         SPIKES
     }

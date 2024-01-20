@@ -20,7 +20,7 @@ class Knockbackee : MonoBehaviour
     private KinematicMovement _kinematicMovement;
 
     #region Init
-    public void Start()
+    public void Awake()
     {
         _knockbackersDescriptions = _knockbackers.Select(tag => Utils.GetDescription(tag)).ToList();
 
@@ -115,16 +115,12 @@ class Knockbackee : MonoBehaviour
     #region Predicates
     private bool IsGameObjectToKnockbackMe(GameObject other)
     {
-        if (other.tag == null) 
+        if (other.CompareTag(null)) 
         {
             throw new Exception("Tag is null");
         }
-        if (_knockbackersDescriptions.Contains(other.tag)) // TODO (refactor): fix this function, there is a duplicate below
-        {
-            return true;
-        }
 
-        return false;
+        return IsKnockbackeeBy(other.tag);
     }
 
     private bool IsKnockbackee(GameObject other)
