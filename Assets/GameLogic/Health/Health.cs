@@ -206,11 +206,6 @@ class Health : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        HandleHealth(other.gameObject, false);
-    }
-
     private void UpgradeCurrentMaxHealth(object initiator, ItemEventArguments arguments)
     {
         if (arguments.Name == ItemName.HALALIT_VITALITY)
