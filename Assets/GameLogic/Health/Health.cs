@@ -201,9 +201,9 @@ class Health : MonoBehaviour
                 HandleHealth(other.gameObject, false);
             }
         }
-        catch 
+        catch (Exception e)
         {
-            throw new Exception("AttackDto not found");
+            throw e;
         }
         
     }
