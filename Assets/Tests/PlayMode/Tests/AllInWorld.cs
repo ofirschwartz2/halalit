@@ -1,20 +1,65 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Assets.Enums;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
-public class NewTestScript
+public class AllInWorldTest
 {
 
-    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-    // `yield return null;` to skip a frame.
+    [SetUp]
+    public void SetUp()
+    {
+        SceneManager.LoadScene("Playground");
+    }
+
     [UnityTest]
     public IEnumerator AllInWorld()
     {
-        yield return new WaitForSeconds(10f);
-        Assert.AreEqual(1, 1);
+
+        float totalTime = 100f;
+        float checkInterval = 10f;
+        float timeSpeedMultiplier = 20f;
+
+        Time.timeScale = timeSpeedMultiplier;
+
+        float elapsedTime = 0f;
+
+        while (elapsedTime < totalTime)
+        {
+            float deltaTime = Time.deltaTime;
+
+            elapsedTime += deltaTime;
+
+            bool allInWorld = CheckAllInWorld();
+
+            if (!allInWorld)
+            {
+                Assert.Fail("Not all GameObjects are inside InternalWorld at time: " + elapsedTime);
+            }
+
+            yield return new WaitForSeconds(checkInterval);
+        }
+    }
+
+    private bool CheckAllInWorld()
+    {
+        List<GameObject> allGameObjects = GameObject.FindGameObjectsWithTag("Enemy").ToList();
+        allGameObjects.Add(GameObject.Find("Halalit"));
+
+        foreach (GameObject gameObject in allGameObjects)
+        {
+            if (!gameObject.GetComponent<Collider2D>().IsTouching(GameObject.Find("InternalWorld").GetComponent<Collider2D>()))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 

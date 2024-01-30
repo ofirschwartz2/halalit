@@ -53,9 +53,16 @@ public class WeaponAttack : MonoBehaviour
     #region Logic
     void FixedUpdate()
     {
-        GameObject attackPrefab = _attackToggle.GetAttackPrefab();
-        AttackType attackType = attackPrefab.GetComponent<AttackDto>().Type;
-        TryAttack(attackPrefab, attackType);
+        try 
+        {
+            GameObject attackPrefab = _attackToggle.GetAttackPrefab();
+            AttackType attackType = attackPrefab.GetComponent<AttackDto>().Type;
+            TryAttack(attackPrefab, attackType);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     private void TryAttack(GameObject attackPrefab, AttackType attackType)

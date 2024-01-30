@@ -1,8 +1,10 @@
 ﻿using Assets.Enums;
 using Assets.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -192,10 +194,18 @@ class Health : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (IsHarmer(other.gameObject) && other.gameObject.GetComponent<AttackDto>().Type != AttackType.CONSECUTIVE)
+        try
         {
-            HandleHealth(other.gameObject, false);
+            if (IsHarmer(other.gameObject) && other.gameObject.GetComponent<AttackDto>().Type != AttackType.CONSECUTIVE)
+            {
+                HandleHealth(other.gameObject, false);
+            }
         }
+        catch 
+        {
+            throw new Exception("AttackDto not found");
+        }
+        
     }
 
     private void OnTriggerStay2D(Collider2D other)
