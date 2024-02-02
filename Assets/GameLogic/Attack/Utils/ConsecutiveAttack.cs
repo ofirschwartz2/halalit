@@ -1,5 +1,4 @@
-﻿using Assets.Enums;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class ConsecutiveAttack : MonoBehaviour
 {

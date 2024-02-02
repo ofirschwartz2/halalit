@@ -10,7 +10,6 @@ namespace Assets.Utils
 {
     static class Utils
     {
-
         #region Math 
         public static float Vector2ToDegree(float x, float y)
         {
@@ -158,7 +157,6 @@ namespace Assets.Utils
         #endregion
 
         #region Vectors
-
         public static Vector2 GetDestinationPosition(Vector2 startPosition, Vector2 rotation, float distance) // TODO: move to Utils
         {
             float angleInRadians = Vector2ToRadians(rotation);

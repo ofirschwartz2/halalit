@@ -115,12 +115,13 @@ class Knockbackee : MonoBehaviour
     #region Predicates
     private bool IsGameObjectToKnockbackMe(GameObject other)
     {
-        if (other.CompareTag(null)) 
+        if (other.tag != null) 
         {
-            throw new Exception("Tag is null");
+            return IsKnockbackeeBy(other.tag);
         }
 
-        return IsKnockbackeeBy(other.tag);
+        Debug.LogWarning("Missing tag in " + other.name + " game object");
+        return false;
     }
 
     private bool IsKnockbackee(GameObject other)

@@ -9,6 +9,7 @@
     // Resources
     public const string RESOURCE_DYNAMIC_BAR_PREFAB = "Prefabs/UI/DynamicBar";
     public const string PROJECTILES_GAME_OBJECT_NAME = "Projectiles";
+    public const string WEAPON_GAME_OBJECT_NAME = "Weapon";
 
     // Health bar
     public const float HEALH_BAR_SCALE = 0.01f;

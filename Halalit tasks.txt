@@ -1,6 +1,6 @@
 -------------------------------------------------- Backlog --------------------------------------------------
 Tasks:
-In progress		1. Attacks attributes + calibration of all other staff in the game to it.
+In progress		1. Attacks stats + calibration of all other staff in the game to it.
 Done				1.1. Add Power to each loaded weapons
 To Do				1.2. Add the capability of the fire arm
 To Do				1.3. Add critical hit and the luck to the each attack
@@ -9,7 +9,7 @@ To Do				1.5. Add stamina to the fire arm
 To Do				1.6. Add the Weight to each attack - the delay of moving the fire arm and it's shakiness 
 To Do				1.7. Add the dexterity to the fire arm - counter to shakiness
 To Do				1.8. Add the strengh to the fire arm - counter to the moving attack delay
-To Do				1.9. Add special attributes to each attack 
+To Do				1.9. Add special stats to each attack 
 In progress		2. Shaders / particle systems:
 In progress			2.1. Attacks
 Done						2.1.1. Laser beam
@@ -24,7 +24,7 @@ In progress					2.1.9. Knockback wave
 To Do						2.1.10. Spikes
 In progress			2.2. Booms
 Done				2.3. Engine
-To Do			3. Tests
+In progress		3. Tests
 To Do			4. Utilities
 To Do			5. Claw:
 To Do				5.1. Make the pickup claw homing
@@ -43,15 +43,19 @@ To Do			10. Server: daily and leatherboard
 
 -------------------------------------------------- Current work --------------------------------------------------
 Issues:
-- Missing script on blast shot
-- Missing script on blast
-
-
-In Proggress:
 - fix enemies
 
+In Proggress:
+- Laser is not destroyed with the enemy
+	
 
 Fixed:
+- Fix the laser in laserInAsterix enemy
+- Fix the laser in laserInRange enemy
+- it's not always damaging the halalit
+- Laser should be stuck on enemies (need to set a shooting point that is out of the enemy itself)
+- Laser enemies should not be harmed of their own laser (need to set a shooting point that is out of the enemy itself)
+- enemies return from force field and dissapear
 - blast explosion and the actual shader explosion are decoupled
 - Change leaserBeamShot name, it's not a shot, also Bommerang, also knockback (wave), also grenade
 - Reorganize attacks folder

@@ -1,8 +1,7 @@
-using Assets.Utils;
-
+﻿using Assets.Utils;
 using UnityEngine;
 
-public class LaserBeam : ConsecutiveAttack 
+public abstract class LaserBeamBase : ConsecutiveAttack
 {
     [SerializeField]
     private LineRenderer _beamLine;
@@ -13,26 +12,26 @@ public class LaserBeam : ConsecutiveAttack
     [SerializeField]
     private GameObject _startVfxBeamFlash;
     [SerializeField]
-    private GameObject _startVfxParticles;
+    protected GameObject _startVfxParticles;
     [SerializeField]
     private GameObject _endVfxBeamFlash;
     [SerializeField]
-    private GameObject _endVfxParticles;
+    protected GameObject _endVfxParticles;
     [SerializeField]
     private float _beamSize;
     [SerializeField]
-    private float _beamSpeed;
+    protected float _beamSpeed;
 
     private bool _isBeingShoot;
-    private float _distanceFromStartPosition;
-    private Vector2 _target;
-    private Vector2 _startPosition;
+    protected float _distanceFromStartPosition;
+    protected Vector2 _target;
+    protected Vector2 _startPosition;
     private Vector2 _startPositionAtStopShoot;
-    private Quaternion _lastRotation;
+    protected Quaternion _lastRotation;
 
     private const float PENETRATION_COLLIDER_EXTENTION = 0.2f;
 
-    private void Start()
+    protected void Start()
     {
         _isBeingShoot = true;
         _distanceFromStartPosition = 0;
@@ -40,7 +39,7 @@ public class LaserBeam : ConsecutiveAttack
         _beamLine.endWidth = _beamSize;
     }
 
-    private void FixedUpdate()
+    protected void FixedUpdate()
     {
         if (!_isBeingShoot)
         {
@@ -48,32 +47,10 @@ public class LaserBeam : ConsecutiveAttack
         }
     }
 
-    private void FinalizeLaserBeam()
-    {
-        SetNewStartPosition();
-        UpdateConsecitiveAttack(_startPosition, _lastRotation);
-    }
-
-    private void SetNewStartPosition()
-    {
-        Vector2 direction = (_target - _startPosition).normalized;
-        float maxBeamSize = Utils.GetDistanceBetweenTwoPoints(_startPosition, _target);
-
-        if (maxBeamSize - _beamSpeed * Time.deltaTime < 0)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Vector2 startPositionMovement = _beamSpeed * Time.deltaTime * direction;
-            _startPosition += startPositionMovement;
-            _distanceFromStartPosition -= startPositionMovement.magnitude;
-            _startVfxParticles.SetActive(false);
-        }
-    }
+    protected abstract void FinalizeLaserBeam();
 
     public override void StartConsecitiveAttack(Vector2 startPosition, Quaternion rotation)
-    {   
+    {
         _beamLine.enabled = true;
         _boxCollider.enabled = true;
         _startVfxBeamFlash.SetActive(true);
@@ -88,8 +65,8 @@ public class LaserBeam : ConsecutiveAttack
         if (_isBeingShoot)
         {
             transform.SetPositionAndRotation(newStartPosition, newRotation);
-        } 
-        
+        }
+
         _lastRotation = transform.rotation;
         _target = Physics2D.Raycast(newStartPosition, newRotation * Vector2.up, Mathf.Infinity, _beamInteractionLayers).point;
         _startPosition = newStartPosition;
@@ -102,19 +79,23 @@ public class LaserBeam : ConsecutiveAttack
         SetBeamCollider(newEndPosition);
     }
 
-    private void SetNewBeamDistanceFromStartPosition()
+    protected abstract void SetNewBeamDistanceFromStartPosition();
+
+    protected void SetNewStartPosition()
     {
+        Vector2 direction = (_target - _startPosition).normalized;
         float maxBeamSize = Utils.GetDistanceBetweenTwoPoints(_startPosition, _target);
 
-        if (_distanceFromStartPosition + _beamSpeed * Time.deltaTime > maxBeamSize) 
+        if (maxBeamSize - _beamSpeed * Time.deltaTime < 0)
         {
-            _distanceFromStartPosition = maxBeamSize;
-            _endVfxParticles.SetActive(true);
+            Destroy(gameObject);
         }
         else
         {
-            _distanceFromStartPosition += _beamSpeed * Time.deltaTime;
-            _endVfxParticles.SetActive(false);
+            Vector2 startPositionMovement = _beamSpeed * Time.deltaTime * direction;
+            _startPosition += startPositionMovement;
+            _distanceFromStartPosition -= startPositionMovement.magnitude;
+            _startVfxParticles.SetActive(false);
         }
     }
 
@@ -134,7 +115,7 @@ public class LaserBeam : ConsecutiveAttack
         _endVfxBeamFlash.transform.position = endPosition;
         _endVfxParticles.transform.position = endPosition;
     }
-     
+
     private void SetBeamCollider(Vector2 endPosition)
     {
         float beamSize = Utils.GetDistanceBetweenTwoPoints(_startPosition, endPosition);
@@ -150,7 +131,7 @@ public class LaserBeam : ConsecutiveAttack
             _boxCollider.offset = new(0, beamSize / 2 + Utils.GetDistanceBetweenTwoPoints(_startPosition, _startPositionAtStopShoot) + PENETRATION_COLLIDER_EXTENTION / 2);
         }
     }
-     
+
     public override void StopConsecitiveAttack()
     {
         _isBeingShoot = false;

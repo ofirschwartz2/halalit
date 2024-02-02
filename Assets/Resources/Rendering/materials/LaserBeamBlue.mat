@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: litLaser
+  m_Name: LaserBeamBlue
   m_Shader: {fileID: -6465566751694194690, guid: 1ae43e8a329ba424382ae60c9ad303bc, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -56,6 +56,6 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - Color_: {r: 0, g: 10.917642, b: 11.984312, a: 1}
+    - Color_: {r: 0, g: 9.787187, b: 11.984312, a: 1}
     - _LaserSpeed: {r: -1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

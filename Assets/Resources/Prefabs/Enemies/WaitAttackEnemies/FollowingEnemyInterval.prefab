@@ -22,7 +22,7 @@ PrefabInstance:
       objectReference: {fileID: 7657997003028529348}
     - target: {fileID: 1665807299470688749, guid: 57c968e9cf3876545bdaee49816ba18f, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1665807299470688749, guid: 57c968e9cf3876545bdaee49816ba18f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -208,8 +208,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidBody: {fileID: 8370576225896966316}
-  _movementAmplitude: 8
-  _oneAttackInterval: 3
+  _movementAmplitude: 10
+  _oneAttackInterval: 5
   _rotationSpeed: 5
 --- !u!50 &8370576225896966316 stripped
 Rigidbody2D:
