@@ -14,7 +14,9 @@ GameObject:
   - component: {fileID: 613853053819742128}
   - component: {fileID: -5960278488731311344}
   - component: {fileID: -522424533848755890}
-  m_Layer: 0
+  - component: {fileID: 3313924885488973925}
+  - component: {fileID: -3047670332867503285}
+  m_Layer: 7
   m_Name: ShotgunShot
   m_TagString: Shot
   m_Icon: {fileID: 0}
@@ -48,7 +50,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e39de919ead77d84883ad3dba3b6d053, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _triggerHarm: 1
+  _harmer:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!212 &-5564147137368150871
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -91,7 +99,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: be7d6cee2589ca445b7b0e2761000660, type: 3}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.4245283, g: 0.29154354, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -205,3 +213,42 @@ MonoBehaviour:
     m_RotationOrder: 4
   _averageLifeTime: 1
   _lifeTimeVariance: 0.2
+--- !u!114 &3313924885488973925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7939768775836154138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e39de919ead77d84883ad3dba3b6d053, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _harmer:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+--- !u!114 &-3047670332867503285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7939768775836154138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e92ac6754ee3eee4d857bb9dcb96ec76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShotType: 0
+  AttackStats:
+    _itemRank: 0
+    Power: 0
+    CriticalHit: 0
+    Luck: 0
+    Rate: 0
+    Weight: 0

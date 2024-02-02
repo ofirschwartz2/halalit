@@ -66,7 +66,7 @@ public class ProjectileMoveScript : MonoBehaviour {
 		}
 			
 		if (muzzlePrefab != null) {
-			var muzzleVFX = Instantiate (muzzlePrefab, transform.position, Quaternion.identity);
+			var muzzleVFX = Instantiate (muzzlePrefab, transform.position, Quaternion.identity, transform.parent);
 			muzzleVFX.transform.forward = gameObject.transform.forward + offset;
 			var ps = muzzleVFX.GetComponent<ParticleSystem>();
 			if (ps != null)

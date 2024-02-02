@@ -4,7 +4,14 @@ using System.Collections.Generic;
 public class ItemEventArguments : System.EventArgs
 {
     public ItemName Name;
-    public Dictionary<EventProperty, float> Properties;
+    public IItemStats ItemStats;
+    public Dictionary<EventProperty, float> Properties; // TODO (refactor): delete this and use only the itemStats
+
+    public ItemEventArguments(ItemName name, IItemStats itemStats)
+    {
+        Name = name;
+        ItemStats = itemStats;
+    }
 
     public ItemEventArguments(ItemName name, Dictionary<EventProperty, float> properties)
     {

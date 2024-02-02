@@ -203,7 +203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _attackingInterval: 1
   _shootingInRangeAim: {fileID: 3911195885330229201}
-  ShotPrefab: {fileID: 4154335917838311827, guid: e8950531a0f5a5f4da8c47e76aaa5f98, type: 3}
+  _shotPrefab: {fileID: 4154335917838311827, guid: e8950531a0f5a5f4da8c47e76aaa5f98, type: 3}
 --- !u!114 &3911195885330229201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _aimingInterval: 1
-  _shootingRange: 30
+  _shootingRange: 20
 --- !u!114 &8101112890193525553
 MonoBehaviour:
   m_ObjectHideFlags: 0

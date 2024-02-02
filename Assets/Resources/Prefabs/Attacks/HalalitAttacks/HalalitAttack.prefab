@@ -9,8 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2763844978744416126}
-  - component: {fileID: 4112790009911488359}
-  - component: {fileID: 7015433924523990315}
+  - component: {fileID: 8176186989457239363}
   m_Layer: 0
   m_Name: HalalitAttack
   m_TagString: MainCamera
@@ -33,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4112790009911488359
+--- !u!114 &8176186989457239363
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,20 +41,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7939768775836154138}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e39de919ead77d84883ad3dba3b6d053, type: 3}
+  m_Script: {fileID: 11500000, guid: e92ac6754ee3eee4d857bb9dcb96ec76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _triggerHarm: 0
---- !u!114 &7015433924523990315
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7939768775836154138}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e0a9b84502e5144ca14efc169c58421, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Type: 0
+  ShotType: 0
+  AttackStats:
+    _itemRank: 0
+    Power: 0
+    CriticalHit: 0
+    Luck: 0
+    Rate: 0
+    Weight: 0

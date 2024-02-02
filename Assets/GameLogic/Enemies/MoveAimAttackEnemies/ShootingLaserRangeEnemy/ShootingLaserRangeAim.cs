@@ -1,7 +1,8 @@
 using Assets.Utils;
+using System;
 using UnityEngine;
 
-public class ShootingLazerRangeAim : MoveAimAttackAim
+public class ShootingLaserRangeAim : MoveAimAttackAim
 {
     [SerializeField]
     public GameObject AimShotPrefab;
@@ -34,7 +35,7 @@ public class ShootingLazerRangeAim : MoveAimAttackAim
     public Vector2 GetShootingStartPosition()
     {
         Vector2 halfExtents = GetComponent<CapsuleCollider2D>().bounds.extents;
-        Vector3 offset = Utils.GetRotationAsVector2(transform.rotation) * halfExtents.magnitude * _aimingOffsetMultiplier;
+        Vector3 offset = _aimingOffsetMultiplier * halfExtents.magnitude * Utils.GetRotationAsVector2(transform.rotation);
         return transform.position + offset;
     }
 
@@ -46,6 +47,12 @@ public class ShootingLazerRangeAim : MoveAimAttackAim
     public GameObject GetAimingShotTo()
     {
         return _aimingShotTo;
+    }
+
+    public void TurnOff()
+    {
+        _aimingShotFrom.GetComponent<Fader>().StartFadeOut();
+        _aimingShotTo.GetComponent<Fader>().StartFadeOut();
     }
 
     public void DestroyAimingRays()

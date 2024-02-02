@@ -192,7 +192,7 @@ class Health : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (IsHarmer(other.gameObject) && other.gameObject.GetComponent<AttackDto>().Type != AttackType.CONSECUTIVE)
+        if (IsHarmer(other.gameObject) && other.gameObject.GetComponent<AttackBehaviour>().ShotType == AttackShotType.DESCRETE)
         {
             HandleHealth(other.gameObject, false);
         }
@@ -200,7 +200,7 @@ class Health : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (IsHarmer(other.gameObject))
+        if (IsHarmer(other.gameObject) && other.gameObject.GetComponent<AttackBehaviour>().ShotType == AttackShotType.CONSECUTIVE)
         {
             HandleHealth(other.gameObject, false);
         }
@@ -233,7 +233,7 @@ class Health : MonoBehaviour
     }
     #endregion
 
-    #region Predicates
+    #region Predicates 
     private bool IsHarmer(GameObject other)
     {
         return _harmersDescriptions.Contains(other.tag);

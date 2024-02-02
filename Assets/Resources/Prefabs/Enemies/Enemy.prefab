@@ -63,7 +63,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 0
 --- !u!114 &-6310471066468264510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,9 +78,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _healthBar: {fileID: 0}
   _healthBarIcon: {fileID: 21300000, guid: 1073bff4cc302fa459afe59b17dc1b0e, type: 3}
-  _currentMaxHealth: 4
-  _finalMaxHealth: 4
-  _harmers: 03000000040000001100000007000000
+  _currentMaxHealth: 7
+  _finalMaxHealth: 7
+  _harmers: 0300000004000000110000000700000012000000
   _contributors: 
 --- !u!114 &2564062923521873166
 MonoBehaviour:
@@ -108,7 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody2D: {fileID: 1043275914167199002}
-  _knockbackers: 000000000700000002000000
+  _knockbackers: 00000000070000000200000004000000
   _knockbackMultiplier: 1
 --- !u!114 &1399439758609907064
 MonoBehaviour:

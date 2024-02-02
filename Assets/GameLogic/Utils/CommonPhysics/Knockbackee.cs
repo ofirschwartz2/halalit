@@ -20,7 +20,7 @@ class Knockbackee : MonoBehaviour
     private KinematicMovement _kinematicMovement;
 
     #region Init
-    public void Start()
+    public void Awake()
     {
         _knockbackersDescriptions = _knockbackers.Select(tag => Utils.GetDescription(tag)).ToList();
 
@@ -65,7 +65,15 @@ class Knockbackee : MonoBehaviour
             KnockbackMe(other.gameObject);
         }
     }
-     
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        if (IsGameObjectToKnockbackMe(other.gameObject))
+        {
+            KnockbackMe(other.gameObject);
+        }
+    }
+
     private void KnockbackMe(GameObject other)
     {
         Vector2 knockbackDirection = (transform.position - other.transform.position).normalized;
@@ -107,15 +115,12 @@ class Knockbackee : MonoBehaviour
     #region Predicates
     private bool IsGameObjectToKnockbackMe(GameObject other)
     {
-        if (other.tag == null) 
+        if (other.tag != null) 
         {
-            throw new Exception("Tag is null");
-        }
-        if (_knockbackersDescriptions.Contains(other.tag)) // TODO (refactor): fix this function, there is a duplicate below
-        {
-            return true;
+            return IsKnockbackeeBy(other.tag);
         }
 
+        Debug.LogWarning("Missing tag in " + other.name + " game object");
         return false;
     }
 

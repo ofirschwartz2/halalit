@@ -5,8 +5,6 @@ using UnityEngine;
 public class Spikes : MonoBehaviour 
 {
     [SerializeField]
-    private bool _useConfigFile;
-    [SerializeField]
     private float _sideSpikesRotaion;
     [SerializeField]
     private float _extractionTime;
@@ -30,10 +28,6 @@ public class Spikes : MonoBehaviour
 
     void Start()
     {
-        if (_useConfigFile)
-        {
-            ConfigFileReader.LoadMembersFromConfigFile(this);
-        }
         _sideSpikes = new GameObject[2];
 
         InstantiateSpikes();
@@ -188,6 +182,10 @@ public class Spikes : MonoBehaviour
         _centerSpike = Instantiate(_centerSpikePrefab, halalitPosition, transform.rotation);
         _sideSpikes[0] = Instantiate(_sideSpikePrefab, halalitPosition, Utils.GetRotationPlusAngle(transform.rotation, -_sideSpikesRotaion));
         _sideSpikes[1] = Instantiate(_sideSpikePrefab, halalitPosition, Utils.GetRotationPlusAngle(transform.rotation, _sideSpikesRotaion));
+
+        _centerSpike.GetComponent<AttackBehaviour>().Copy(GetComponent<AttackBehaviour>());
+        _sideSpikes[0].GetComponent<AttackBehaviour>().Copy(GetComponent<AttackBehaviour>());
+        _sideSpikes[1].GetComponent<AttackBehaviour>().Copy(GetComponent<AttackBehaviour>());
 
         _extractionStartTime = Time.time;
     }

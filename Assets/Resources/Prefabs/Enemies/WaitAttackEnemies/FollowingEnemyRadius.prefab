@@ -195,8 +195,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidBody: {fileID: 965314189014534193}
-  _movementAmplitude: 3
-  _oneAttackInterval: 3
+  _movementAmplitude: 10
+  _oneAttackInterval: 5
   _rotationSpeed: 5
 --- !u!114 &234383643535462109
 MonoBehaviour:
@@ -210,6 +210,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 516cb7b931e41d545ac2592c986f49a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _waitingRadius: 5
+  _waitingRadius: 10
   _waitingInterval: 1
   _rotationSpeed: 1

@@ -1,55 +1,43 @@
+using Assets.Utils;
 using UnityEngine;
 
 public class ShootingLaserRangeAttack : MoveAimAttackAttack
 {
     [SerializeField]
-    public GameObject ShotPrefab;
+    private GameObject _laserBeamPrefab;
     [SerializeField]
-    private ShootingLazerRangeAim _shootingLazerRangeAim;
+    private ShootingLaserRangeAim _shootingLaserRangeAim;
     [SerializeField]
-    private float _shotRotationSpeed; // If too small - BUG.
+    private float _shotRotationSpeed;
 
-    private bool _shotInitiated;
-    private GameObject _shot;
+    private GameObject _projectiles;
+    private bool _laserBeamInitiated;
+    private ConsecutiveAttack _laserBeamInstance;
     
     void Start()
     {
-        _shotInitiated = false;
+        _laserBeamInitiated = false;
+        _projectiles = GameObject.Find(Constants.PROJECTILES_GAME_OBJECT_NAME);
     }
 
     private void FixedUpdate()
     {
-        if (_shotInitiated)
+        if (_laserBeamInitiated)
         {
             RotateShot();
             TryDestroyShot();
         }
     }
 
-    public override void Shoot(Transform transform)
-    {
-        if (!_shotInitiated)
-        {
-            Debug.Log("Shot initiated");
-            InitiateShot();
-            _shotInitiated = true;
-        }
-    }
-
-    private void InitiateShot() 
-    {
-        Vector3 shootingStartPosition = _shootingLazerRangeAim.GetShootingStartPosition();
-        var shootRotation = _shootingLazerRangeAim.GetAimingShotFrom().transform.rotation;
-        _shot = Instantiate(ShotPrefab, shootingStartPosition, shootRotation);
-        _shot.transform.SetParent(gameObject.transform);
-    }
-
     private void RotateShot()
     {
-        _shot.transform.rotation = Quaternion.Slerp(_shot.transform.rotation, _shootingLazerRangeAim.GetAimingShotTo().transform.rotation, _shotRotationSpeed * Time.deltaTime);  // TODO: check if bug? Time.deltaTime
+        _laserBeamInstance.UpdateConsecitiveAttack(GetShootingPoint(), Quaternion.Slerp(
+            _laserBeamInstance.transform.rotation,
+            _shootingLaserRangeAim.GetAimingShotTo().transform.rotation,
+            _shotRotationSpeed * Time.deltaTime));
     }
 
-    private void TryDestroyShot() 
+    private void TryDestroyShot()
     {
         if (DidShotGetToEndOfAimRange())
         {
@@ -59,15 +47,45 @@ public class ShootingLaserRangeAttack : MoveAimAttackAttack
 
     private bool DidShotGetToEndOfAimRange()
     {
-        return Quaternion.Angle(_shot.transform.rotation, _shootingLazerRangeAim.GetAimingShotTo().transform.rotation) < 2f ;
+        return Quaternion.Angle(_laserBeamInstance.transform.rotation, _shootingLaserRangeAim.GetAimingShotTo().transform.rotation) < 2f; 
     }
 
     private void DestroyShot()
     {
-        _shotInitiated = false;
+        _laserBeamInitiated = false;
 
-        _shootingLazerRangeAim.DestroyAimingRays();
-        Destroy(_shot);
+        _shootingLaserRangeAim.DestroyAimingRays();
+        _laserBeamInstance.StopConsecitiveAttack();
     }
 
+    public override void Shoot(Transform transform)
+    {
+        if (!_laserBeamInitiated)
+        {
+            _shootingLaserRangeAim.TurnOff();
+            InitiateShot();
+        }
+    }
+
+    private void InitiateShot() 
+    {
+        Vector3 shootingStartPosition = _shootingLaserRangeAim.GetShootingStartPosition();
+        var shootRotation = _shootingLaserRangeAim.GetAimingShotFrom().transform.rotation;
+
+        if (_laserBeamInstance == null)
+        {
+            _laserBeamInstance = Instantiate(_laserBeamPrefab, shootingStartPosition, shootRotation, _projectiles.transform).GetComponent<ConsecutiveAttack>();
+        }
+        
+        _laserBeamInstance.StartConsecitiveAttack(GetShootingPoint(), transform.rotation);
+        _laserBeamInitiated = true;
+    }
+
+    private void OnDestroy()
+    {
+        if (_laserBeamInstance != null)
+        {
+            Destroy(_laserBeamInstance.gameObject);
+        }
+    }
 }
