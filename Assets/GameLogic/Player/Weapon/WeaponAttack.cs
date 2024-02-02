@@ -16,6 +16,8 @@ public class WeaponAttack : MonoBehaviour
     private float _cooldownInterval;
     [SerializeField]
     private float _attackJoystickEdge;
+    [SerializeField]
+    private KeyValuePair<AttackName, AttackStats> _currentAttack;    // just for view in the inspector
 
     private AttackToggle _attackToggle;
     private Dictionary<ItemName, Action<Dictionary<EventProperty, float>>> _upgradeActions;
@@ -53,25 +55,21 @@ public class WeaponAttack : MonoBehaviour
     #region Logic
     void FixedUpdate()
     {
-        try 
-        {
-            GameObject attackPrefab = _attackToggle.GetAttackPrefab();
-            AttackType attackType = attackPrefab.GetComponent<AttackDto>().Type;
-            TryAttack(attackPrefab, attackType);
-        }
-        catch (Exception e)
-        {
-            throw e;
-        }
+        KeyValuePair<AttackName, GameObject> attackPrefab = _attackToggle.GetCurrentAttack();                         // TODO (refactor): this should be via event raise, not in update
+        _currentAttack.Key = attackPrefab.Key;
+        _currentAttack.Value = attackPrefab.Value.GetComponent<AttackBehaviour>().AttackStats;
+        AttackShotType shotType = attackPrefab.Value.GetComponent<AttackBehaviour>().ShotType;
+        
+        TryAttack(attackPrefab.Value, shotType);
     }
 
-    private void TryAttack(GameObject attackPrefab, AttackType attackType)
+    private void TryAttack(GameObject attackPrefab, AttackShotType shotType)
     {
-        if (attackType == AttackType.DESCRETE)
+        if (shotType == AttackShotType.DESCRETE)
         {
             TryDescreteAttack(attackPrefab);
         }
-        else if (attackType == AttackType.CONSECUTIVE)
+        else if (shotType == AttackShotType.CONSECUTIVE)
         {
             TryConsecutiveAttack(attackPrefab);
         }
@@ -92,7 +90,7 @@ public class WeaponAttack : MonoBehaviour
 
     private void InstantiateDescreteAttack(GameObject attackPrefab)
     {
-        Instantiate(attackPrefab, transform.position, transform.rotation);
+        Instantiate(attackPrefab, transform.position, transform.rotation, _projectiles.transform);
         _cooldownTime = Time.time + _cooldownInterval; 
     }
 

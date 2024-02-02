@@ -2,8 +2,8 @@
 
 class ConsecutiveTriggerHarmer : TriggerHarmer
 {
-    [SerializeField]
-    private int _triggerHarm;
+    [SerializeReference]
+    private IHarmer _harmer;
     [SerializeField]
     private float _harmInterval;
 
@@ -12,6 +12,16 @@ class ConsecutiveTriggerHarmer : TriggerHarmer
     private void Start()
     {
         _nextHarmTime = 0;
+        InitHarmer();
+    }
+
+    private void InitHarmer()
+    {
+        AttackBehaviour harmer = GetComponent<AttackBehaviour>();
+        if (harmer != null)
+        {
+            _harmer = harmer;
+        }
     }
 
     public override int GetTriggerHarm()
@@ -19,7 +29,7 @@ class ConsecutiveTriggerHarmer : TriggerHarmer
         if (Time.time >= _nextHarmTime)
         {
             _nextHarmTime = Time.time + _harmInterval;
-            return _triggerHarm;
+            return _harmer.GetHarm();
         }
 
         return 0;

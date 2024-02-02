@@ -79,6 +79,7 @@ GameObject:
   - component: {fileID: 8896609280045205352}
   - component: {fileID: -8818738954870154971}
   - component: {fileID: 1705425954863740557}
+  - component: {fileID: -7402078327755545006}
   m_Layer: 11
   m_Name: ItemBase
   m_TagString: Item
@@ -179,3 +180,22 @@ MonoBehaviour:
   _rigidBody: {fileID: 8896609280045205352}
   _maxRotation: 2
   _transparencyPeriod: 2
+--- !u!114 &-7402078327755545006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9195436676840446505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 745c6d62ce5ded946b6f200dea476ec4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDto:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

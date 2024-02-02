@@ -19450,6 +19450,18 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Shot
       objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: ShotType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176186989457239363, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: AttackStats.Power
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4112790009911488359, guid: 68379c5202257be48aaf973610ef6144, type: 3}
     m_RemovedGameObjects: []
@@ -19496,8 +19508,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66fa15904cc4cd7428db45bbad0df6d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _triggerHarm: 1
+  _harmer:
+    rid: -2
   _harmInterval: 0.2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!114 &508034233755956827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19507,7 +19525,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8232562157244517169}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42e60faf31fd90a4381da84de09aa09a, type: 3}
+  m_Script: {fileID: 11500000, guid: 624f3c2c5c8a9b24cb0806437d7239b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _beamLine: {fileID: 972521272700679318}
@@ -19519,8 +19537,8 @@ MonoBehaviour:
   _startVfxParticles: {fileID: 7095953698419033652}
   _endVfxBeamFlash: {fileID: 200410729087050536}
   _endVfxParticles: {fileID: 3598078698703226214}
-  _beamSize: 0.3
-  _beamSpeed: 20
+  _beamSize: 0.4
+  _beamSpeed: 12
 --- !u!61 &1762440474452267912
 BoxCollider2D:
   m_ObjectHideFlags: 0

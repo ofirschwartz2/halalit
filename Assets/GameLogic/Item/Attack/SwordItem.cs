@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using Assets.Utils;
-using Assets.Enums;
+﻿using Assets.Enums;
 
 public class SwordItem : AttackItem
 {

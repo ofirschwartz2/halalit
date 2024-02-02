@@ -10,21 +10,21 @@ namespace Assets.Enums
         [Description("Ball shot item")]
         BALL_SHOT = AttackName.BALL_SHOT,
         [Description("Laser beam item")]
-        LASER_BEAM_SHOT = AttackName.LASER_BEAM_SHOT,
-        [Description("Knockback shot item")]
-        KNOCKBACK_SHOT = AttackName.KNOCKBACK_SHOT,
+        LASER_BEAM = AttackName.LASER_BEAM,
+        [Description("Knockback wave item")]
+        KNOCKBACK_WAVE = AttackName.KNOCKBACK_WAVE,
         [Description("Boomerang item")]
-        BOOMERANG_SHOT = AttackName.BOOMERANG_SHOT,
+        BOOMERANG = AttackName.BOOMERANG,
         [Description("Mirror Ball shot item")]
         MIRROR_BALL_SHOT = AttackName.MIRROR_BALL_SHOT,
         [Description("Sword item")]
         SWORD = AttackName.SWORD,
         [Description("Blast shot item")] 
         BLAST_SHOT = AttackName.BLAST_SHOT,
-        [Description("Granade shot item")]
-        GRANADE_SHOT = AttackName.GRANADE_SHOT,
-        [Description("Shotgun shot item")]
-        SHOTGUN_SHOT = AttackName.SHOTGUN_SHOT,
+        [Description("Granade item")]
+        GRANADE = AttackName.GRANADE,
+        [Description("Shotgun item")]
+        SHOTGUN = AttackName.SHOTGUN,
         [Description("Spikes item")]
         SPIKES = AttackName.SPIKES,
 

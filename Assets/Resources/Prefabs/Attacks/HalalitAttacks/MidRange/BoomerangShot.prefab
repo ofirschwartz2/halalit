@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_LocalScale.x
@@ -96,6 +96,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7939768775836154138, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1962352036762113534}
+    - targetCorrespondingSourceObject: {fileID: 7939768775836154138, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -1931449333599180612}
   m_SourcePrefab: {fileID: 100100000, guid: 68379c5202257be48aaf973610ef6144, type: 3}
 --- !u!1 &8387521740547092234 stripped
 GameObject:
@@ -238,7 +241,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8387521740547092234}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a376fd8f53794849b036b7cd00950c8, type: 3}
+  m_Script: {fileID: 11500000, guid: bab2a86f3891f7145b906611051184d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _rotationSpeed: 8
@@ -250,3 +253,22 @@ MonoBehaviour:
   - {x: 0.5, y: 10.125}
   - {x: 3.5, y: 7.875}
   - {x: 3, y: 3}
+--- !u!114 &-1931449333599180612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8387521740547092234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e39de919ead77d84883ad3dba3b6d053, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _harmer:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

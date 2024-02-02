@@ -30,7 +30,10 @@ public class MoveAimAttackMove : MonoBehaviour
 
     public void MovingState()
     {
-        RotateTowardsHalalit();
+        if (_rigidBody.constraints != RigidbodyConstraints2D.FreezeRotation)
+        {
+            RotateTowardsHalalit();
+        }
         EnemyUtils.MoveUnderSpeedLimit(_rigidBody, _direction, _movementAmplitude, _speedLimit);
     }
 

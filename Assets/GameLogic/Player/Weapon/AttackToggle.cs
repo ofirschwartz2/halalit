@@ -7,12 +7,14 @@ class AttackToggle : MonoBehaviour
     [SerializeField]
     private AttackName _firstAttack;
 
+    private AttackStats _firstAttackStats;
     private KeyValuePair<AttackName, GameObject> _currentAttack;
 
     #region Init
     private void Awake()
     {
         SetEventListeners();
+        _firstAttackStats = new(ItemRank.COMMON, 1, 0, 0, 0, 0);
     }
 
     private void SetEventListeners()
@@ -23,13 +25,14 @@ class AttackToggle : MonoBehaviour
     private void Start()
     {
         _currentAttack = new(_firstAttack, AttacksBank.GetAttackPrefab(_firstAttack));
+        _currentAttack.Value.GetComponent<AttackBehaviour>().AttackStats = _firstAttackStats;
     }
     #endregion
 
     #region Accessors
-    public GameObject GetAttackPrefab()
+    public KeyValuePair<AttackName, GameObject> GetCurrentAttack()
     {
-        return _currentAttack.Value;
+        return _currentAttack;
     }
     #endregion
 
@@ -39,7 +42,7 @@ class AttackToggle : MonoBehaviour
         AttackName attackName = GetAttackName(arguments.Name);
 
         RemoveOldAttack();
-        SetNewAttack(attackName);
+        SetNewAttack(attackName, (AttackStats)arguments.ItemStats);
     }
 
     private AttackName GetAttackName(ItemName name)
@@ -57,13 +60,12 @@ class AttackToggle : MonoBehaviour
         // TODO (dev): implement...
     }
 
-    private void SetNewAttack(AttackName newAttackName)
+    private void SetNewAttack(AttackName newAttackName, AttackStats attackStats)
     {
-        if (_currentAttack.Key != newAttackName)
-        {
-            _currentAttack = new(newAttackName, AttacksBank.GetAttackPrefab(newAttackName));
-            Debug.Log("New attack - " + newAttackName.ToString() + " loaded");
-        }
+        _currentAttack = new(newAttackName, AttacksBank.GetAttackPrefab(newAttackName));
+        AttackBehaviour attackBehaviour = _currentAttack.Value.GetComponent<AttackBehaviour>();
+        attackBehaviour.AttackStats = attackStats;
+        Debug.Log("New attack - " + newAttackName.ToString() + " loaded");
     }
     #endregion
 }
