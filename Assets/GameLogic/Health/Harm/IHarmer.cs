@@ -1,4 +1,0 @@
-﻿interface IHarmer
-{
-    int GetHarm();
-}

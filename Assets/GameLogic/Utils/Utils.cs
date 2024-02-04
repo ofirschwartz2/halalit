@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 namespace Assets.Utils
 {
-    static class Utils
+    public static class Utils
     {
         #region Math 
         public static float Vector2ToDegree(float x, float y)

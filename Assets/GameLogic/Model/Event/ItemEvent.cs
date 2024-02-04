@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-class ItemEvent : MonoBehaviour
+public class ItemEvent : MonoBehaviour
 {
     private static Dictionary<EventName, EventHandler<ItemEventArguments>> _itemEvents;
 

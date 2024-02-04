@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-class AsteroidEvent : MonoBehaviour
+public class AsteroidEvent : MonoBehaviour
 {
     private static Dictionary<EventName, EventHandler<AsteroidEventArguments>> _asteroidEvents;
 

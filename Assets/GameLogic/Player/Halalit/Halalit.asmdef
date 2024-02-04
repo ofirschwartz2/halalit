@@ -1,0 +1,17 @@
+{
+    "name": "Halalit",
+    "rootNamespace": "",
+    "references": [
+        "GUID:95384826625180c418c400453ed33716",
+        "GUID:303077c3078b6f4489a547cd1be93735"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

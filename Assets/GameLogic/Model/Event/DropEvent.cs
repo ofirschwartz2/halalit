@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-class DropEvent : MonoBehaviour
+public class DropEvent : MonoBehaviour
 {
     private static Dictionary<EventName, EventHandler<DropEventArguments>> _dropEvents;
 

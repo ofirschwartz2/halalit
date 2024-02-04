@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-class DeathEvent : MonoBehaviour
+public class DeathEvent : MonoBehaviour
 {
     private static Dictionary<EventName, EventHandler<DeathEventArguments>> _deathEvents;
 

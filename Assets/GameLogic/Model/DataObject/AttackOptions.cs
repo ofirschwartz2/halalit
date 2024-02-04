@@ -12,7 +12,7 @@ public class AttackOptions
     public AttackStatsRange EpicStats;
     public AttackStatsRange LegendaryStats;
 
-    internal void InitRanks()
+    public void InitRanks()
     {
         CommonStats.SetRank(ItemRank.COMMON);
         UncommonStats.SetRank(ItemRank.UNCOMMON);

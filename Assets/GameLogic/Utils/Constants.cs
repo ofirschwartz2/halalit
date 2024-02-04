@@ -1,4 +1,4 @@
-﻿class Constants
+﻿public class Constants
 {
     // Attacks
     public const float BOOMERANG_OUT_OF_HALALIT_TIME = 0.1f;
