@@ -1,18 +1,15 @@
 using NUnit.Framework;
-using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 
 public class JoystickDirectionTest
 {
 
-    [DllImport("AllAssembly.dll", EntryPoint = "Assets.GameLogic.Utils.GetRandomVector2OnCircle")]
+    [DllImport("AllAssembly.dll", EntryPoint = "Assets.Utils.GetRandomVector2OnCircle")]
     public static extern Vector2 GetRandomVector2OnCircle(float radius);
 
     [DllImport("AllAssembly.dll", EntryPoint = "Assets.GameLogic.Player.Halalit.HalalitMovement")]
