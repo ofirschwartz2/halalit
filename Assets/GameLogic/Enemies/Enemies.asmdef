@@ -1,10 +1,10 @@
 {
-    "name": "Attack",
+    "name": "Enemies",
     "rootNamespace": "",
     "references": [
-        "GUID:7abfaf4f6fa494547904ec0b9ed24c9e",
-        "GUID:303077c3078b6f4489a547cd1be93735",
-        "GUID:df2f5808222dedb47802eeef2571dcdc"
+        "GUID:df2f5808222dedb47802eeef2571dcdc",
+        "GUID:ea942d7e218e90c47b726f26eda07200",
+        "GUID:303077c3078b6f4489a547cd1be93735"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
