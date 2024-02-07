@@ -404,7 +404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7fc81f4f6bbce747bfa4ef647f7ea60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _halalit: {fileID: 0}
+  _halalit: {fileID: 2130719621}
   _pickupClawMovement: {fileID: 36141988}
   _rigidBody: {fileID: 36141987}
   _pickupClawState: {fileID: 36141993}
@@ -3366,7 +3366,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09eda82aa978041429b65bf7b2a6798a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rankChances: []
+  _rankChances:
+  - Key: 0
+    Value: 0
+  - Key: 0
+    Value: 0
+  - Key: 0
+    Value: 0
+  - Key: 0
+    Value: 0
+  - Key: 0
+    Value: 0
+  - Key: 0
+    Value: 0
 --- !u!114 &1751165550
 MonoBehaviour:
   m_ObjectHideFlags: 0
