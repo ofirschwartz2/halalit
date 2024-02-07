@@ -1,0 +1,24 @@
+{
+    "name": "Resources",
+    "rootNamespace": "",
+    "references": [
+        "GUID:e0b57583110b2e743a1ece6ceab2a7c8",
+        "GUID:ea942d7e218e90c47b726f26eda07200",
+        "GUID:7467911d37bad9c4ba0a69299140fa8c",
+        "GUID:95384826625180c418c400453ed33716",
+        "GUID:7abfaf4f6fa494547904ec0b9ed24c9e",
+        "GUID:7bc00f688fa185847a31c11f82109c7d",
+        "GUID:df2f5808222dedb47802eeef2571dcdc",
+        "GUID:d06c13ea066342644ae915d2ed5dd13c",
+        "GUID:303077c3078b6f4489a547cd1be93735"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
