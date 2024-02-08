@@ -2412,13 +2412,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ea5f8709a1befa4594e3a65bbfbb2a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _asteroidPrefab: {fileID: 0}
-  _asteroidInitiator: {fileID: 0}
-  _asteroidInstantiationLineLength: 0
-  _asteroidInstantiationTimeInterval: 0
-  _asteroidInstantiationDistanceFromCenter: 0
-  _asteroidMaxScale: 0
-  _maxInstantiationsRetry: 0
+  _asteroidPrefab: {fileID: 6741412782414407016, guid: d17f6aba06990634e92f5f659cf1bf0d, type: 3}
+  _asteroidInitiator: {fileID: 1107869176}
+  _asteroidInstantiationLineLength: 30
+  _asteroidInstantiationTimeInterval: 3
+  _asteroidInstantiationDistanceFromCenter: 25
+  _asteroidMaxScale: 4
+  _maxInstantiationsRetry: 5
 --- !u!114 &1107869175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2431,12 +2431,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8dd82f78a553114ea8f702ac53cc0b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _asteroidPrefab: {fileID: 0}
-  _asteroidInitiator: {fileID: 0}
-  _asteroidMaxScale: 0
-  _asteroidMaxInstantiationCount: 0
-  _asteroidMinInstantiationCount: 0
-  _asteroidNewDirectionOffsetDegree: 0
+  _asteroidPrefab: {fileID: 6741412782414407016, guid: d17f6aba06990634e92f5f659cf1bf0d, type: 3}
+  _asteroidInitiator: {fileID: 1107869176}
+  _asteroidMaxScale: 4
+  _asteroidMaxInstantiationCount: 5
+  _asteroidMinInstantiationCount: 2
+  _asteroidNewDirectionOffsetDegree: 40
 --- !u!114 &1107869176
 MonoBehaviour:
   m_ObjectHideFlags: 0
