@@ -3443,52 +3443,10 @@ MonoBehaviour:
     - ItemName: 2
       OneOfChance: 3
     - ItemName: 0
-      OneOfChance: 3
-    - ItemName: 0
-      OneOfChance: 3
-    - ItemName: 0
-      OneOfChance: 3
-    - ItemName: 0
-      OneOfChance: 3
-    - ItemName: 0
-      OneOfChance: 3
-    - ItemName: 0
-      OneOfChance: 3
-    - ItemName: 0
-      OneOfChance: 3
+      OneOfChance: 2
   - Key: 6
     Value:
     - ItemName: 2
-      OneOfChance: 3
-    - ItemName: 0
-      OneOfChance: 3
-    - ItemName: 0
-      OneOfChance: 3
-    - ItemName: 0
-      OneOfChance: 3
-    - ItemName: 0
-      OneOfChance: 3
-    - ItemName: 0
-      OneOfChance: 3
-    - ItemName: 0
-      OneOfChance: 3
-    - ItemName: 0
-      OneOfChance: 3
-  - Key: 7
-    Value:
-    - ItemName: 2
-      OneOfChance: 3
-    - ItemName: 0
-      OneOfChance: 3
-    - ItemName: 0
-      OneOfChance: 3
-    - ItemName: 0
-      OneOfChance: 3
-    - ItemName: 0
-      OneOfChance: 3
-    - ItemName: 0
-      OneOfChance: 3
-    - ItemName: 0
       OneOfChance: 3
     - ItemName: 0
       OneOfChance: 3
