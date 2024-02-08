@@ -3318,10 +3318,80 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64cd665b8f08f664ba483dbc6fd0d006, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemOptions: {fileID: 0}
-  _itemRankPicker: {fileID: 0}
-  _attacks: []
-  _upgrades: []
+  _itemOptions: {fileID: 1751165550}
+  _itemRankPicker: {fileID: 1751165549}
+  _attacks:
+  - ItemName: 0
+    GameObject: {fileID: 8968850470237194354, guid: 654ded13d581af344a9c0c1d7bf21ca4, type: 3}
+    MaxStock: 5
+    MinimumInitialStock: 3
+    Stock: []
+  - ItemName: 1
+    GameObject: {fileID: 5143544690253330687, guid: 7f2a3d969a4fc6d4ca4f70a8bc42f3f3, type: 3}
+    MaxStock: 5
+    MinimumInitialStock: 3
+    Stock: []
+  - ItemName: 2
+    GameObject: {fileID: 8822757115826082601, guid: b8a7204671c2d644982f3c3de14f8691, type: 3}
+    MaxStock: 5
+    MinimumInitialStock: 3
+    Stock: []
+  - ItemName: 3
+    GameObject: {fileID: 5143544690253330687, guid: 8dd5bd3036a580e4ea1faaa8f34fbc73, type: 3}
+    MaxStock: 5
+    MinimumInitialStock: 3
+    Stock: []
+  - ItemName: 5
+    GameObject: {fileID: 8968850470237194354, guid: 7bf2d58a40dc2f64db585c6ed9d00bff, type: 3}
+    MaxStock: 5
+    MinimumInitialStock: 3
+    Stock: []
+  - ItemName: 7
+    GameObject: {fileID: 8968850470237194354, guid: 58ca17c14a1e3494f8a410148732627d, type: 3}
+    MaxStock: 5
+    MinimumInitialStock: 3
+    Stock: []
+  - ItemName: 8
+    GameObject: {fileID: 8968850470237194354, guid: dec1913d9392a874dbbbc2d4408dcb46, type: 3}
+    MaxStock: 5
+    MinimumInitialStock: 3
+    Stock: []
+  - ItemName: 9
+    GameObject: {fileID: 8968850470237194354, guid: 3a9f86578fb5fb44ea46b609257096ac, type: 3}
+    MaxStock: 5
+    MinimumInitialStock: 3
+    Stock: []
+  - ItemName: 6
+    GameObject: {fileID: 8968850470237194354, guid: 5b0c9ab3ea3ecac41b5a439db2f01127, type: 3}
+    MaxStock: 5
+    MinimumInitialStock: 3
+    Stock: []
+  - ItemName: 4
+    GameObject: {fileID: 8968850470237194354, guid: 229c4aef31f23d7499fca983cdeb65f2, type: 3}
+    MaxStock: 5
+    MinimumInitialStock: 3
+    Stock: []
+  _upgrades:
+  - ItemName: 10
+    GameObject: {fileID: 2051710102036930527, guid: 40d14c0d11f854046b5a7f50b48782cb, type: 3}
+    MaxStock: 40
+    MinimumInitialStock: 30
+    Stock: []
+  - ItemName: 13
+    GameObject: {fileID: 7096595365006072902, guid: 295a3652a26fcff4fb08e93d52b2cff0, type: 3}
+    MaxStock: 7
+    MinimumInitialStock: 5
+    Stock: []
+  - ItemName: 16
+    GameObject: {fileID: 6531215755768581467, guid: 16ebd1bad861a974297f9407b5e67dbe, type: 3}
+    MaxStock: 7
+    MinimumInitialStock: 5
+    Stock: []
+  - ItemName: 11
+    GameObject: {fileID: 29822001511814079, guid: 58133c84bb7526c46ac5ea26534c6156, type: 3}
+    MaxStock: 5
+    MinimumInitialStock: 3
+    Stock: []
   _utilities: []
   references:
     version: 2
@@ -3338,8 +3408,90 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d192d19dc1750fd47bc41b3dcee642f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemsBank: {fileID: 0}
-  _allDefaultDropsList: []
+  _itemsBank: {fileID: 1751165546}
+  _allDefaultDropsList:
+  - Key: 1
+    Value:
+    - ItemName: 0
+      OneOfChance: 2
+    - ItemName: 1
+      OneOfChance: 2
+    - ItemName: 2
+      OneOfChance: 2
+    - ItemName: 3
+      OneOfChance: 2
+    - ItemName: 4
+      OneOfChance: 2
+    - ItemName: 5
+      OneOfChance: 2
+    - ItemName: 6
+      OneOfChance: 2
+    - ItemName: 7
+      OneOfChance: 2
+    - ItemName: 8
+      OneOfChance: 2
+    - ItemName: 9
+      OneOfChance: 2
+  - Key: 4
+    Value:
+    - ItemName: 2
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+  - Key: 5
+    Value:
+    - ItemName: 2
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+  - Key: 6
+    Value:
+    - ItemName: 2
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+  - Key: 7
+    Value:
+    - ItemName: 2
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
+    - ItemName: 0
+      OneOfChance: 3
 --- !u!114 &1751165548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3352,8 +3504,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cbc161356bc8b043bf8eab7c6963f29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemsBank: {fileID: 0}
-  _dropsBank: {fileID: 0}
+  _itemsBank: {fileID: 1751165546}
+  _dropsBank: {fileID: 1751165547}
 --- !u!114 &1751165549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3369,16 +3521,16 @@ MonoBehaviour:
   _rankChances:
   - Key: 0
     Value: 0
-  - Key: 0
-    Value: 0
-  - Key: 0
-    Value: 0
-  - Key: 0
-    Value: 0
-  - Key: 0
-    Value: 0
-  - Key: 0
-    Value: 0
+  - Key: 1
+    Value: 0.7
+  - Key: 2
+    Value: 0.9
+  - Key: 3
+    Value: 0.97
+  - Key: 4
+    Value: 0.99
+  - Key: 5
+    Value: 0.997
 --- !u!114 &1751165550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3391,7 +3543,977 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ea70097281d9be42a41461fb6ee47b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attacks: []
+  _attacks:
+  - attackName: 0
+    CommonStats:
+      Power:
+        min: 1
+        max: 2
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    UncommonStats:
+      Power:
+        min: 2
+        max: 3
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    RareStats:
+      Power:
+        min: 3
+        max: 5
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    ExclusiveStats:
+      Power:
+        min: 5
+        max: 10
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    EpicStats:
+      Power:
+        min: 10
+        max: 15
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    LegendaryStats:
+      Power:
+        min: 15
+        max: 20
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+  - attackName: 1
+    CommonStats:
+      Power:
+        min: 1
+        max: 2
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    UncommonStats:
+      Power:
+        min: 2
+        max: 3
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    RareStats:
+      Power:
+        min: 3
+        max: 4
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    ExclusiveStats:
+      Power:
+        min: 4
+        max: 5
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    EpicStats:
+      Power:
+        min: 5
+        max: 6
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    LegendaryStats:
+      Power:
+        min: 6
+        max: 7
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+  - attackName: 2
+    CommonStats:
+      Power:
+        min: 1
+        max: 2
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    UncommonStats:
+      Power:
+        min: 2
+        max: 3
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    RareStats:
+      Power:
+        min: 3
+        max: 4
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    ExclusiveStats:
+      Power:
+        min: 4
+        max: 5
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    EpicStats:
+      Power:
+        min: 5
+        max: 6
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    LegendaryStats:
+      Power:
+        min: 6
+        max: 7
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+  - attackName: 3
+    CommonStats:
+      Power:
+        min: 1
+        max: 2
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    UncommonStats:
+      Power:
+        min: 2
+        max: 4
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    RareStats:
+      Power:
+        min: 4
+        max: 7
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    ExclusiveStats:
+      Power:
+        min: 7
+        max: 12
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    EpicStats:
+      Power:
+        min: 12
+        max: 17
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    LegendaryStats:
+      Power:
+        min: 17
+        max: 20
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+  - attackName: 4
+    CommonStats:
+      Power:
+        min: 1
+        max: 2
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    UncommonStats:
+      Power:
+        min: 2
+        max: 3
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    RareStats:
+      Power:
+        min: 3
+        max: 5
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    ExclusiveStats:
+      Power:
+        min: 5
+        max: 10
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    EpicStats:
+      Power:
+        min: 10
+        max: 15
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    LegendaryStats:
+      Power:
+        min: 15
+        max: 20
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+  - attackName: 5
+    CommonStats:
+      Power:
+        min: 1
+        max: 5
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    UncommonStats:
+      Power:
+        min: 5
+        max: 7
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    RareStats:
+      Power:
+        min: 7
+        max: 12
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    ExclusiveStats:
+      Power:
+        min: 12
+        max: 17
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    EpicStats:
+      Power:
+        min: 17
+        max: 20
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    LegendaryStats:
+      Power:
+        min: 22
+        max: 25
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+  - attackName: 6
+    CommonStats:
+      Power:
+        min: 0
+        max: 5
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    UncommonStats:
+      Power:
+        min: 5
+        max: 12
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    RareStats:
+      Power:
+        min: 12
+        max: 19
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    ExclusiveStats:
+      Power:
+        min: 19
+        max: 27
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    EpicStats:
+      Power:
+        min: 27
+        max: 35
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    LegendaryStats:
+      Power:
+        min: 35
+        max: 40
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+  - attackName: 7
+    CommonStats:
+      Power:
+        min: 1
+        max: 5
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    UncommonStats:
+      Power:
+        min: 5
+        max: 12
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    RareStats:
+      Power:
+        min: 12
+        max: 19
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    ExclusiveStats:
+      Power:
+        min: 19
+        max: 27
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    EpicStats:
+      Power:
+        min: 27
+        max: 35
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    LegendaryStats:
+      Power:
+        min: 35
+        max: 40
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+  - attackName: 8
+    CommonStats:
+      Power:
+        min: 1
+        max: 2
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    UncommonStats:
+      Power:
+        min: 2
+        max: 3
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    RareStats:
+      Power:
+        min: 3
+        max: 4
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    ExclusiveStats:
+      Power:
+        min: 4
+        max: 5
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    EpicStats:
+      Power:
+        min: 5
+        max: 6
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    LegendaryStats:
+      Power:
+        min: 6
+        max: 7
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+  - attackName: 9
+    CommonStats:
+      Power:
+        min: 1
+        max: 5
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    UncommonStats:
+      Power:
+        min: 5
+        max: 8
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    RareStats:
+      Power:
+        min: 8
+        max: 13
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    ExclusiveStats:
+      Power:
+        min: 13
+        max: 17
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    EpicStats:
+      Power:
+        min: 17
+        max: 25
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
+    LegendaryStats:
+      Power:
+        min: 25
+        max: 30
+      CriticalHit:
+        min: 0
+        max: 0
+      Luck:
+        min: 0
+        max: 0
+      Rate:
+        min: 0
+        max: 0
+      Weight:
+        min: 0
+        max: 0
 --- !u!1 &1759617122
 GameObject:
   m_ObjectHideFlags: 0
