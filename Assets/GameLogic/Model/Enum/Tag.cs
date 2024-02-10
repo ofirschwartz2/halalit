@@ -44,5 +44,9 @@ namespace Assets.Enums
         ENEMY_SHOT,
         [Description("Explosion")]
         EXPLOSION,
+        [Description("MovementJoystick")]
+        MOVEMENT_JOYSTICK,
+        [Description("AttackJoystick")]
+        ATTACK_JOYSTICK,
     }
 }
