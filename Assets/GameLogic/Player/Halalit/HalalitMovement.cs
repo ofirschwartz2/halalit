@@ -14,39 +14,45 @@ public class HalalitMovement : MonoBehaviour
     private float _rotationSpeed;
     [SerializeField]
     private float _speedLimit;
-    
+
     void FixedUpdate()
     {
-        RotateByMovementJoystick();
-        MoveInRotateDirection();
+        TryMove(_joystick.Horizontal, _joystick.Vertical, Time.deltaTime);
     }
 
     #region Moving 
-    private void RotateByMovementJoystick()
+
+    public void TryMove(float joystickHorizontal, float joystickVertical, float deltaTime)
     {
-        if (IsMovementInput())
+        if (IsMovementInput(joystickHorizontal, joystickVertical))
         {
-            float joystickAngle = Utils.Vector2ToDegree(_joystick.Horizontal, _joystick.Vertical);
-            float rotationZ = transform.rotation.eulerAngles.z;
-
-            float normalizedJoystickAngle = Utils.AngleNormalizationBy360(joystickAngle);
-            float normalizedRotationZ = Utils.AngleNormalizationBy360(rotationZ);
-
-            float deltaAngle = normalizedJoystickAngle - normalizedRotationZ;
-            float shorterDeltaAngle = Utils.GetNormalizedAngleBy360(deltaAngle);
-
-            transform.Rotate(_rotationSpeed * Time.deltaTime * new Vector3(0, 0, shorterDeltaAngle));
+            RotateByMovementJoystick(joystickHorizontal, joystickVertical, deltaTime);
+            MoveInRotationDirection(joystickHorizontal, joystickVertical);
         }
     }
 
-    private void MoveInRotateDirection()
+    private void RotateByMovementJoystick(float joystickHorizontal, float joystickVertical, float deltaTime)
     {
-        if (IsMovementInput() && Utils.IsUnderSpeedLimit(_rigidBody.velocity, _speedLimit))
+        float joystickAngle = Utils.Vector2ToDegree(joystickHorizontal, joystickVertical);
+        float rotationZ = transform.rotation.eulerAngles.z;
+
+        float normalizedJoystickAngle = Utils.AngleNormalizationBy360(joystickAngle);
+        float normalizedRotationZ = Utils.AngleNormalizationBy360(rotationZ);
+
+        float deltaAngle = normalizedJoystickAngle - normalizedRotationZ;
+        float shorterDeltaAngle = Utils.GetNormalizedAngleBy360(deltaAngle);
+
+        transform.Rotate(_rotationSpeed * deltaTime * new Vector3(0, 0, shorterDeltaAngle));
+    }
+
+    private void MoveInRotationDirection(float joystickHorizontal, float joystickVertical)
+    {
+        if (Utils.IsUnderSpeedLimit(_rigidBody.velocity, _speedLimit))
         {
             Vector2 direction = Utils.DegreeToVector2(transform.rotation.eulerAngles.z);
 
-            float horizontalForce = Utils.GetDirectionalForce(direction.x, Math.Abs(_joystick.Horizontal), _forceMultiplier);
-            float verticalForce = Utils.GetDirectionalForce(direction.y, Math.Abs(_joystick.Vertical), _forceMultiplier);
+            float horizontalForce = Utils.GetDirectionalForce(direction.x, Math.Abs(joystickHorizontal), _forceMultiplier);
+            float verticalForce = Utils.GetDirectionalForce(direction.y, Math.Abs(joystickVertical), _forceMultiplier);
 
             _rigidBody.AddForce(new Vector2(horizontalForce, verticalForce));
         }
@@ -54,19 +60,19 @@ public class HalalitMovement : MonoBehaviour
     #endregion
 
     #region Predicates
-    private bool IsMovementInput()
+    private bool IsMovementInput(float joystickHorizontal, float joystickVertical)
     {
-        return IsXInput() || IsYInput();
+        return IsXInput(joystickHorizontal) || IsYInput(joystickVertical);
     }
 
-    private bool IsXInput()
+    private bool IsXInput(float joystickHorizontal)
     {
-        return _joystick.Horizontal != 0;
+        return joystickHorizontal != 0;
     }
 
-    private bool IsYInput()
+    private bool IsYInput(float joystickVertical)
     {
-        return _joystick.Vertical != 0;
+        return joystickVertical != 0;
     }
     #endregion
 }

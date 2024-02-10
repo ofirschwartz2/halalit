@@ -167,9 +167,9 @@ namespace Assets.Utils
             return new Vector2(x, y);
         }
 
-        public static Vector2 GetRandomVector2OnCircle()
+        public static Vector2 GetRandomVector2OnCircle(float radius = 1)
         {
-            float angle = UnityEngine.Random.Range(0, 2 * Mathf.PI);
+            float angle = UnityEngine.Random.Range(0, 2 * Mathf.PI * radius);
             return RadianToVector2(angle);
         }
 
