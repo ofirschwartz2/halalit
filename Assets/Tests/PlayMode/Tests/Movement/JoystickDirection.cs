@@ -1,7 +1,6 @@
 using Assets.Utils;
 using NUnit.Framework;
 using System.Collections;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
@@ -19,13 +18,17 @@ public class JoystickDirectionTest
     [UnityTest]
     public IEnumerator JoystickDirection()
     {
+        // GIVEN
         float totalTime = 1f;
         float elapsedTime = 0f;
+        float acceptedDelta = 0.1f;
+
         GameObject halalit = GameObject.FindGameObjectWithTag("Halalit");
         HalalitMovement halalitMovement = halalit.GetComponent<HalalitMovement>();
 
         var randomTouchOnMovementJoystick = GetRandomTouchOnMovementJoystick();
 
+        // WHEN
         while (elapsedTime < totalTime)
         {
             float deltaTime = Time.deltaTime;
@@ -34,10 +37,11 @@ public class JoystickDirectionTest
             yield return null;
         }
 
+        // THEN
         Assert.AreEqual(
             halalitMovement.transform.rotation.eulerAngles.z, 
             Utils.AngleNormalizationBy360(Utils.Vector2ToDegree(randomTouchOnMovementJoystick.x, randomTouchOnMovementJoystick.y)),
-            0.1);
+            acceptedDelta);
     }
 
     private Vector2 GetRandomTouchOnMovementJoystick()
