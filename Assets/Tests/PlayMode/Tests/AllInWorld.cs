@@ -10,10 +10,12 @@ using UnityEngine.TestTools;
 public class AllInWorldTest
 {
 
+    private const string SCENE_NAME = "Playground";
+
     [SetUp]
     public void SetUp()
     {
-        SceneManager.LoadScene("Playground");
+        SceneManager.LoadScene(SCENE_NAME);
     }
 
     [UnityTest]
