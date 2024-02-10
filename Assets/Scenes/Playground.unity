@@ -446,7 +446,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 36141981}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44d8290cd0b7dea449d55ff1777a0dab, type: 3}
+  m_Script: {fileID: 11500000, guid: 717efc595f25e5e4cbb2ece9125a87f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 36141984}
@@ -1736,11 +1736,11 @@ MonoBehaviour:
     Key: 0
     Value:
       _itemRank: 0
-      Power: 0
-      CriticalHit: 0
-      Luck: 0
-      Rate: 0
-      Weight: 0
+      Power: 1
+      CriticalHit: 1
+      Luck: 1
+      Rate: 1
+      Weight: 1
 --- !u!212 &759986612
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1805,7 +1805,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b124fbb6d5e0148884d8a70c8e4981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firstAttack: 0
+  _firstAttack: 8
 --- !u!1 &814139006
 GameObject:
   m_ObjectHideFlags: 0
@@ -2560,7 +2560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3768262cdd28954a8d81a054bb2981c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _exemyExplosionPrefab: {fileID: 6882081014558394494, guid: 5386b52cee93b244da16b74675a38270, type: 3}
+  _enemyExplosionPrefab: {fileID: 6882081014558394494, guid: 5386b52cee93b244da16b74675a38270, type: 3}
 --- !u!1 &1277994820
 GameObject:
   m_ObjectHideFlags: 0
@@ -3354,7 +3354,7 @@ MonoBehaviour:
   - ItemName: 8
     GameObject: {fileID: 8968850470237194354, guid: dec1913d9392a874dbbbc2d4408dcb46, type: 3}
     MaxStock: 5
-    MinimumInitialStock: 2
+    MinimumInitialStock: 3
     Stock: []
   - ItemName: 9
     GameObject: {fileID: 8968850470237194354, guid: 3a9f86578fb5fb44ea46b609257096ac, type: 3}
@@ -3440,37 +3440,15 @@ MonoBehaviour:
       OneOfChance: 3
   - Key: 5
     Value:
-    - ItemName: 1
-      OneOfChance: 2
-    - ItemName: 3
-      OneOfChance: 2
-    - ItemName: 0
-      OneOfChance: 2
     - ItemName: 2
-      OneOfChance: 2
-    - ItemName: 4
-      OneOfChance: 2
-    - ItemName: 6
-      OneOfChance: 2
-    - ItemName: 5
-      OneOfChance: 2
-    - ItemName: 7
-      OneOfChance: 2
-    - ItemName: 8
-      OneOfChance: 2
-    - ItemName: 9
+      OneOfChance: 3
+    - ItemName: 0
       OneOfChance: 2
   - Key: 6
     Value:
-    - ItemName: 4
-      OneOfChance: 3
-    - ItemName: 3
-      OneOfChance: 3
-  - Key: 7
-    Value:
-    - ItemName: 0
-      OneOfChance: 3
     - ItemName: 2
+      OneOfChance: 3
+    - ItemName: 0
       OneOfChance: 3
 --- !u!114 &1751165548
 MonoBehaviour:
@@ -4077,7 +4055,7 @@ MonoBehaviour:
     EpicStats:
       Power:
         min: 17
-        max: 22
+        max: 20
       CriticalHit:
         min: 0
         max: 0
@@ -9525,8 +9503,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _engineFireParticleSystem: {fileID: 1949396159}
   _joystick: {fileID: 1331181818}
-  _engineFireForceMultiplier: 3
-  _engineFireToSpeedMultiplier: 2
+  _engineFireForceMultiplier: 1
+  _engineFireToSpeedMultiplier: 1
 --- !u!1 &2068214588
 GameObject:
   m_ObjectHideFlags: 0

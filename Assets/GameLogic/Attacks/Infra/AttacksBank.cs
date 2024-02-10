@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class AttacksBank : MonoBehaviour
+public class AttacksBank : MonoBehaviour
 {
     [SerializeField]
     private List<KeyValuePair<AttackName,GameObject>> _shortRangeAttacks;

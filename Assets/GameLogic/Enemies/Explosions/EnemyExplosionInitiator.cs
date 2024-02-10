@@ -1,13 +1,9 @@
-﻿using Assets.Enums;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-using Random = UnityEngine.Random;
+﻿using UnityEngine;
 
 public class EnemyExplosionInitiator : MonoBehaviour
 {
     [SerializeField]
-    private GameObject _exemyExplosionPrefab;
+    private GameObject _enemyExplosionPrefab;
 
     #region Init
     private void Awake()
@@ -24,7 +20,7 @@ public class EnemyExplosionInitiator : MonoBehaviour
     #region Events actions
     private void Explode(object initiator, EnemyExplosionEventArguments arguments)
     {
-        Instantiate(_exemyExplosionPrefab, arguments.Position, Quaternion.identity);
+        Instantiate(_enemyExplosionPrefab, arguments.Position, Quaternion.identity);
     }
     #endregion
 }

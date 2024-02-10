@@ -98,7 +98,7 @@ PrefabInstance:
       addedObject: {fileID: -3114368215699159926}
     - targetCorrespondingSourceObject: {fileID: 1487196187939763912, guid: 8893afcb67d58df4882b735116b2a1f1, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8700008376053689897}
+      addedObject: {fileID: 1001022208525125627}
     - targetCorrespondingSourceObject: {fileID: 1487196187939763912, guid: 8893afcb67d58df4882b735116b2a1f1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8760096921453424546}
@@ -236,7 +236,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidBody: {fileID: 1433930271550736712}
   _speed: 10
---- !u!114 &8700008376053689897
+--- !u!114 &1001022208525125627
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -245,7 +245,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4154335917838311827}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e92ac6754ee3eee4d857bb9dcb96ec76, type: 3}
+  m_Script: {fileID: 11500000, guid: 4417cd03facf1bb468bf77db1d19d4b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ShotType: 0

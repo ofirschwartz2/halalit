@@ -22,7 +22,7 @@ class DropEvent : MonoBehaviour
 }
 */
 
-class EnemyExplosionEvent : MonoBehaviour
+public class EnemyExplosionEvent : MonoBehaviour
 {
     private static Dictionary<EventName, EventHandler<EnemyExplosionEventArguments>> _enemyExplosionEvents;
 

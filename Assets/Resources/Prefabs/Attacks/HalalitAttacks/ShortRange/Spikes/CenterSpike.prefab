@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4744029687789755358}
-  - component: {fileID: 1655826301373096419}
   - component: {fileID: 2689437611102277729}
   - component: {fileID: 4113629681697801274}
   - component: {fileID: 1814198330419186363}
   - component: {fileID: 5176700803923875980}
+  - component: {fileID: 6748415574722635735}
   m_Layer: 7
   m_Name: CenterSpike
   m_TagString: Shot
@@ -34,28 +34,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1655826301373096419
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 694313153523152314}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e92ac6754ee3eee4d857bb9dcb96ec76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShotType: 0
-  AttackStats:
-    _itemRank: 0
-    Power: 0
-    CriticalHit: 0
-    Luck: 0
-    Rate: 0
-    Weight: 0
 --- !u!212 &2689437611102277729
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -202,3 +182,23 @@ PolygonCollider2D:
       - {x: -0.5, y: -0.28866667}
       - {x: 0.5, y: -0.28866667}
   m_UseDelaunayMesh: 0
+--- !u!114 &6748415574722635735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 694313153523152314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4417cd03facf1bb468bf77db1d19d4b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShotType: 0
+  AttackStats:
+    _itemRank: 0
+    Power: 1
+    CriticalHit: 0
+    Luck: 0
+    Rate: 0
+    Weight: 0

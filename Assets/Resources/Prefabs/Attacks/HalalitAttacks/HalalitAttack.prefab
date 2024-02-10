@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2763844978744416126}
-  - component: {fileID: 8176186989457239363}
+  - component: {fileID: 2264754643331783421}
   m_Layer: 0
   m_Name: HalalitAttack
   m_TagString: MainCamera
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8176186989457239363
+--- !u!114 &2264754643331783421
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7939768775836154138}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e92ac6754ee3eee4d857bb9dcb96ec76, type: 3}
+  m_Script: {fileID: 11500000, guid: 4417cd03facf1bb468bf77db1d19d4b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ShotType: 0

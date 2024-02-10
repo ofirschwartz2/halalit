@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-class ItemsBankEvent : MonoBehaviour
+public class ItemsBankEvent : MonoBehaviour
 {
     private static Dictionary<EventName, EventHandler<ItemsBankEventArguments>> _itemsBankEvents;
 
