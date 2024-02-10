@@ -1,3 +1,4 @@
+using Assets.Enums;
 using Assets.Utils;
 using NUnit.Framework;
 using System.Collections;
@@ -9,14 +10,12 @@ using UnityEngine.TestTools;
 public class HalalitMovementTests
 {
 
-    private const string PlaygroundSceneName = "Playground";
-    private const string HalalitTag = "Halalit";
-    private const string MovementJoystickTag = "MovementJoystick";
+    private const string SCENE_NAME = "Playground";
 
     [SetUp]
     public void SetUp()
     {
-        SceneManager.LoadScene(PlaygroundSceneName);
+        SceneManager.LoadScene(SCENE_NAME);
     }
 
     [UnityTest]
@@ -27,7 +26,7 @@ public class HalalitMovementTests
         float elapsedTime = 0f;
         float acceptedDelta = 0.1f;
 
-        GameObject halalit = GameObject.FindGameObjectWithTag(HalalitTag);
+        GameObject halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
         HalalitMovement halalitMovement = halalit.GetComponent<HalalitMovement>();
 
         var randomTouchOnMovementJoystick = GetRandomTouchOnMovementJoystick();
@@ -52,29 +51,59 @@ public class HalalitMovementTests
     public IEnumerator JoystickSizeAffectHalalitSpeed()
     {
         // GIVEN
-        var waitBetweenMovements = 1f;
+        var waitBetweenMovements = 2f;
         var totalTime = 0.5f;
+        var smallVectorSize = 0.1f;
 
-        var halalit = GameObject.FindGameObjectWithTag(HalalitTag);
+        var halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
         var halalitMovement = halalit.GetComponent<HalalitMovement>();
-        var movementJoystickRadius = GameObject.FindGameObjectWithTag(MovementJoystickTag).transform.localScale.x / 2;
+        var halalitRigidBody2D = halalit.GetComponent<Rigidbody2D>();
 
-        var smallSizeTouchOnMovementJoystick = new Vector2(movementJoystickRadius / 10, 0);
-        var largeSizeTouchOnMovementJoystick = new Vector2(movementJoystickRadius, 0);
+        var smallSizeTouchOnMovementJoystick = new Vector2(1 * smallVectorSize, 0);
+        var largeSizeTouchOnMovementJoystick = new Vector2(1, 0);
 
         // WHEN
 
         yield return MoveHalalitForTime(halalitMovement, smallSizeTouchOnMovementJoystick, totalTime);
-        var smallVelocity = halalit.GetComponent<Rigidbody2D>().velocity.magnitude;
+        var smallVelocity = halalitRigidBody2D.velocity.magnitude;
 
         yield return new WaitForSeconds(waitBetweenMovements);
 
         yield return MoveHalalitForTime(halalitMovement, largeSizeTouchOnMovementJoystick, totalTime);
-        var largeVelocity = halalit.GetComponent<Rigidbody2D>().velocity.magnitude;
+        var largeVelocity = halalitRigidBody2D.velocity.magnitude;
 
 
         // THEN
         Assert.Less(smallVelocity, largeVelocity);
+    }
+
+    [UnityTest]
+    public IEnumerator HalalitStopsMovingAfterTime()
+    {
+        // GIVEN
+        var totalTime = 0.5f;
+        var elapsedTime = 0f;
+        var waitBetweenMovements = 5f;
+
+        var halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
+        var halalitMovement = halalit.GetComponent<HalalitMovement>();
+        var halalitRigidBody2D = halalit.GetComponent<Rigidbody2D>();
+
+        // WHEN
+        while (elapsedTime < totalTime)
+        {
+            float deltaTime = Time.deltaTime;
+            elapsedTime += deltaTime;
+
+            halalitMovement.TryMove(1, 0, deltaTime);
+
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(waitBetweenMovements);
+
+        // THEN
+        Assert.AreEqual(halalitRigidBody2D.velocity.magnitude, 0);
     }
 
     private IEnumerator MoveHalalitForTime(HalalitMovement halalitMovement, Vector2 touchInput, float totalTime)
@@ -85,15 +114,18 @@ public class HalalitMovementTests
         {
             float deltaTime = Time.deltaTime;
             elapsedTime += deltaTime;
+
             halalitMovement.TryMove(touchInput.x, touchInput.y, deltaTime);
+
             yield return null;
         }
     }
 
     private Vector2 GetRandomTouchOnMovementJoystick()
     {
-        GameObject movementJoystick = GameObject.FindGameObjectWithTag(MovementJoystickTag);
-        RectTransform movementJoystickRectTransform = movementJoystick.GetComponent<RectTransform>();
-        return Utils.GetRandomVector2OnCircle(movementJoystickRectTransform.rect.width / 2);
+        GameObject movementJoystick = GameObject.FindGameObjectWithTag(Tag.MOVEMENT_JOYSTICK.GetDescription());
+        var movementJoystickRadius = movementJoystick.GetComponent<RectTransform>().rect.width / 2;
+
+        return Utils.GetRandomVector2OnCircle(movementJoystickRadius);
     }
 }
