@@ -12,25 +12,31 @@ class WeaponMovement : MonoBehaviour
 
     void Update()
     {
-        if (AttackJoystickPressed())
+        TryChangeWeaponPosition(_attackJoystick);
+    }
+
+    public void TryChangeWeaponPosition(Joystick attackJoystick)
+    {
+        if (AttackJoystickPressed(attackJoystick))
         {
-            ChangeWeaponPosition();
+            ChangeWeaponPosition(attackJoystick);
         }
     }
-    private void ChangeWeaponPosition()
+
+    private void ChangeWeaponPosition(Joystick attackJoystick)
     {
-        float attackJoystickAngle = GetAttackJoystickAngle();
+        float attackJoystickAngle = GetAttackJoystickAngle(attackJoystick);
         Vector3 weaponPosition = Utils.AngleAndRadiusToPointOnCircle(attackJoystickAngle, _weaponSpinRadius) + _halalit.transform.position;
         Quaternion weaponRotation = Quaternion.AngleAxis(attackJoystickAngle - 90f, Vector3.forward);
 
         transform.SetPositionAndRotation(weaponPosition, weaponRotation);
     }
 
-    private float GetAttackJoystickAngle()
+    private float GetAttackJoystickAngle(Joystick attackJoystick)
     {
-        Vector2 attackJoystickDirection = new(_attackJoystick.Horizontal, _attackJoystick.Vertical);
+        Vector2 attackJoystickDirection = new(attackJoystick.Horizontal, attackJoystick.Vertical);
 
-        if (_attackJoystick.Vertical < 0)
+        if (attackJoystick.Vertical < 0)
         {
             return Vector2.Angle(attackJoystickDirection, Vector2.left) + 180f;
         }
@@ -38,8 +44,8 @@ class WeaponMovement : MonoBehaviour
         return Vector2.Angle(attackJoystickDirection, Vector2.right);
     }
 
-    private bool AttackJoystickPressed()
+    private bool AttackJoystickPressed(Joystick attackJoystick)
     {
-        return _attackJoystick.Horizontal != 0 || _attackJoystick.Vertical != 0;
+        return attackJoystick.Horizontal != 0 || attackJoystick.Vertical != 0;
     }
 }
