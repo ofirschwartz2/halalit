@@ -1,7 +1,7 @@
 ﻿using Assets.Utils;
 using UnityEngine;
 
-class WeaponMovement : MonoBehaviour
+public class WeaponMovement : MonoBehaviour
 {
     [SerializeField]
     private GameObject _halalit;
@@ -12,40 +12,39 @@ class WeaponMovement : MonoBehaviour
 
     void Update()
     {
-        TryChangeWeaponPosition(_attackJoystick);
+        TryChangeWeaponPosition(new Vector2(_attackJoystick.Horizontal, _attackJoystick.Vertical));
     }
 
-    public void TryChangeWeaponPosition(Joystick attackJoystick)
+    public void TryChangeWeaponPosition(Vector2 attackJoystickTouch)
     {
-        if (AttackJoystickPressed(attackJoystick))
+        if (AttackJoystickPressed(attackJoystickTouch))
         {
-            ChangeWeaponPosition(attackJoystick);
+            ChangeWeaponPosition(attackJoystickTouch);
         }
     }
 
-    private void ChangeWeaponPosition(Joystick attackJoystick)
+    private void ChangeWeaponPosition(Vector2 attackJoystickTouch)
     {
-        float attackJoystickAngle = GetAttackJoystickAngle(attackJoystick);
+        float attackJoystickAngle = GetAttackJoystickAngle(attackJoystickTouch);
         Vector3 weaponPosition = Utils.AngleAndRadiusToPointOnCircle(attackJoystickAngle, _weaponSpinRadius) + _halalit.transform.position;
         Quaternion weaponRotation = Quaternion.AngleAxis(attackJoystickAngle - 90f, Vector3.forward);
 
         transform.SetPositionAndRotation(weaponPosition, weaponRotation);
     }
 
-    private float GetAttackJoystickAngle(Joystick attackJoystick)
+    private float GetAttackJoystickAngle(Vector2 attackJoystickTouch)
     {
-        Vector2 attackJoystickDirection = new(attackJoystick.Horizontal, attackJoystick.Vertical);
-
-        if (attackJoystick.Vertical < 0)
+        
+        if (attackJoystickTouch.y < 0)
         {
-            return Vector2.Angle(attackJoystickDirection, Vector2.left) + 180f;
+            return Vector2.Angle(attackJoystickTouch, Vector2.left) + 180f;
         }
             
-        return Vector2.Angle(attackJoystickDirection, Vector2.right);
+        return Vector2.Angle(attackJoystickTouch, Vector2.right);
     }
 
-    private bool AttackJoystickPressed(Joystick attackJoystick)
+    private bool AttackJoystickPressed(Vector2 attackJoystick)
     {
-        return attackJoystick.Horizontal != 0 || attackJoystick.Vertical != 0;
+        return attackJoystick.x != 0 || attackJoystick.y != 0;
     }
 }

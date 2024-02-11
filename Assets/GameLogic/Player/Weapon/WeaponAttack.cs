@@ -55,6 +55,11 @@ public class WeaponAttack : MonoBehaviour
     #region Logic
     void FixedUpdate()
     {
+        HumbleFixedUpdate(new Vector2(_attackJoystick.Vertical, _attackJoystick.Horizontal));
+    }
+
+    public void HumbleFixedUpdate(Vector2 attackJoystickTouch)
+    {
         // TODO (refactor): this should be via event raise, not in update
         KeyValuePair<AttackName, GameObject> attackPrefab = _attackToggle.GetCurrentAttack();
         _currentAttack.Key = attackPrefab.Key;
@@ -62,24 +67,24 @@ public class WeaponAttack : MonoBehaviour
         AttackShotType shotType = attackPrefab.Value.GetComponent<AttackBehaviour>().ShotType;
         // TODO (refactor): this should be via event raise, not in update
 
-        TryAttack(_attackJoystick, attackPrefab.Value, shotType);
+        TryAttack(attackJoystickTouch, attackPrefab.Value, shotType);
     }
 
-    private void TryAttack(Joystick attackJoystick, GameObject attackPrefab, AttackShotType shotType)
+    private void TryAttack(Vector2 attackJoystickTouch, GameObject attackPrefab, AttackShotType shotType)
     {
         if (shotType == AttackShotType.DESCRETE)
         {
-            TryDescreteAttack(attackJoystick, attackPrefab);
+            TryDescreteAttack(attackJoystickTouch, attackPrefab);
         }
         else if (shotType == AttackShotType.CONSECUTIVE)
         {
-            TryConsecutiveAttack(attackJoystick, attackPrefab);
+            TryConsecutiveAttack(attackJoystickTouch, attackPrefab);
         }
     }
 
-    private void TryDescreteAttack(Joystick attackJoystick, GameObject attackPrefab)
+    private void TryDescreteAttack(Vector2 attackJoystickTouch, GameObject attackPrefab)
     {
-        if (ShouldAttack(attackJoystick) && IsCoolDownPassed())
+        if (ShouldAttack(attackJoystickTouch) && IsCoolDownPassed())
         {
             if (_consecutiveAttack != null)
             {
@@ -96,9 +101,9 @@ public class WeaponAttack : MonoBehaviour
         _cooldownTime = Time.time + _cooldownInterval; 
     }
 
-    private void TryConsecutiveAttack(Joystick attackJoystick, GameObject attackPrefab)
+    private void TryConsecutiveAttack(Vector2 attackJoystickTouch, GameObject attackPrefab)
     {
-        if (ShouldAttack(attackJoystick))
+        if (ShouldAttack(attackJoystickTouch))
         {
             if (_consecutiveAttack != null && _consecutiveAttack.gameObject.name.Replace("(Clone)", "") != attackPrefab.name) 
             {
@@ -120,7 +125,7 @@ public class WeaponAttack : MonoBehaviour
             }
         }
 
-        if (!ShouldAttack(attackJoystick) && _shootingConsecutivaly)
+        if (!ShouldAttack(attackJoystickTouch) && _shootingConsecutivaly)
         {
             StopConsecutiveAttack();
             RemoveConsecutiveAttack();
@@ -178,9 +183,9 @@ public class WeaponAttack : MonoBehaviour
         return Time.time >= _cooldownTime;
     }
 
-    private bool ShouldAttack(Joystick attackJoystick)
+    private bool ShouldAttack(Vector2 attackJoystickTouch)
     {
-        return Utils.GetLengthOfLine(attackJoystick.Horizontal, attackJoystick.Vertical) >= _attackJoystickEdge;
+        return Utils.GetLengthOfLine(attackJoystickTouch.x, attackJoystickTouch.y) >= _attackJoystickEdge; // TODO: attackJoystickTouch.magnitude
     }
 
 
@@ -189,4 +194,9 @@ public class WeaponAttack : MonoBehaviour
         return _upgradeActions.ContainsKey(arguments.Name);
     }
     #endregion
+
+    public float GetAttackJoystickEdge() 
+    {
+        return _attackJoystickEdge;
+    }
 }

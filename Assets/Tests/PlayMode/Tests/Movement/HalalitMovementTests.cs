@@ -43,7 +43,7 @@ public class HalalitMovementTests
         // THEN
         Assert.AreEqual(
             halalitMovement.transform.rotation.eulerAngles.z, 
-            Utils.AngleNormalizationBy360(Utils.Vector2ToDegree(randomTouchOnMovementJoystick.x, randomTouchOnMovementJoystick.y)),
+            Utils.AngleNormalizationBy360(Utils.Vector2ToDegrees(randomTouchOnMovementJoystick.x, randomTouchOnMovementJoystick.y)),
             acceptedDelta);
     }
 

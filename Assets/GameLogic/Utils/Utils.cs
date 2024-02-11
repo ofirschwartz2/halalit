@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -11,7 +10,12 @@ namespace Assets.Utils
     public static class Utils
     {
         #region Math 
-        public static float Vector2ToDegree(float x, float y)
+        public static float Vector2ToDegrees(Vector2 vector)
+        {
+            return Vector2ToDegrees(vector.x, vector.y);
+        }
+
+        public static float Vector2ToDegrees(float x, float y) // TODO: DELETE
         {
             return Mathf.Atan2(y, x) * Mathf.Rad2Deg;
         }
@@ -114,7 +118,7 @@ namespace Assets.Utils
         {
             float offsetRadians = DegreeToRadian(offsetDegrees);
 
-            float vectorAngle = Vector2ToDegree(vector.x, vector.y);
+            float vectorAngle = Vector2ToDegrees(vector.x, vector.y);
             float newVectorAngle = vectorAngle + offsetRadians;
 
             float newVectorX = vector.magnitude * Mathf.Cos(newVectorAngle);

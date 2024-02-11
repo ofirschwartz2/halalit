@@ -90,11 +90,11 @@ class AsteroidInternalInstantiator : MonoBehaviour
     {
         if (newAsteroidsCount == 1)
         {
-            return Utils.Vector2ToDegree(originalAsteroidDirection.x, originalAsteroidDirection.y);
+            return Utils.Vector2ToDegrees(originalAsteroidDirection.x, originalAsteroidDirection.y);
         }
 
         float leftestOffsetDegree;
-        float originalAsteroidDegree = Utils.Vector2ToDegree(originalAsteroidDirection.x, originalAsteroidDirection.y);
+        float originalAsteroidDegree = Utils.Vector2ToDegrees(originalAsteroidDirection.x, originalAsteroidDirection.y);
 
         if (newAsteroidsCount % 2 == 0)
         {

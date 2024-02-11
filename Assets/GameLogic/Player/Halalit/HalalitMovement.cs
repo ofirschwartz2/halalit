@@ -33,7 +33,7 @@ public class HalalitMovement : MonoBehaviour
 
     private void RotateByMovementJoystick(float joystickHorizontal, float joystickVertical, float deltaTime)
     {
-        float joystickAngle = Utils.Vector2ToDegree(joystickHorizontal, joystickVertical);
+        float joystickAngle = Utils.Vector2ToDegrees(joystickHorizontal, joystickVertical);
         float rotationZ = transform.rotation.eulerAngles.z;
 
         float normalizedJoystickAngle = Utils.AngleNormalizationBy360(joystickAngle);
