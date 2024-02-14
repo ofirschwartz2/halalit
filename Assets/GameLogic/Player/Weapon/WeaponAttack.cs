@@ -199,4 +199,9 @@ public class WeaponAttack : MonoBehaviour
     {
         return _attackJoystickEdge;
     }
+
+    public float GetCooldownInterval()
+    {
+        return _cooldownInterval;
+    }
 }

@@ -39,6 +39,66 @@ public class HalalitWeaponTests
     }
 
     [UnityTest]
+    public IEnumerator JoystickOverAttackTriggerShooting()
+    {
+        var weapon = GameObject.FindGameObjectWithTag(Tag.WEAPON.GetDescription());
+        var weaponAttack = weapon.GetComponent<WeaponAttack>();
+
+        var randomTouchOnAttackJoystick = GetRandomTouchOverAttackTrigger(weaponAttack);
+
+        weaponAttack.HumbleFixedUpdate(randomTouchOnAttackJoystick);
+
+        yield return null;
+
+        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+
+        Assert.IsNotNull(shot);
+    }
+
+    [UnityTest]
+    public IEnumerator DelayBetweenShotsLargerThanCooldown() 
+    {
+        var weapon = GameObject.FindGameObjectWithTag(Tag.WEAPON.GetDescription());
+        var weaponAttack = weapon.GetComponent<WeaponAttack>();
+
+        var randomTouchOnAttackJoystick = GetRandomTouchOverAttackTrigger(weaponAttack);
+
+        float totalTime = 3f;
+        float elapsedTime = 0f;
+        int shotsCount = 0;
+        float firstShotTime = 0f;
+
+        while (elapsedTime < totalTime)
+        {
+            weaponAttack.HumbleFixedUpdate(randomTouchOnAttackJoystick);
+
+            var shots = GameObject.FindGameObjectsWithTag(Tag.SHOT.GetDescription());
+            if (shots.Length > shotsCount)
+            {
+                if (shots.Length == 1)
+                {
+                    firstShotTime = elapsedTime;
+                    shotsCount = shots.Length;
+                }
+                else if (shots.Length == 2)
+                {
+                    Assert.GreaterOrEqual(elapsedTime - firstShotTime, weaponAttack.GetCooldownInterval());
+                    break;
+                }
+                else 
+                {
+                    Assert.Fail();
+                }
+            }
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        Assert.Fail();
+    }
+
+    [UnityTest]
     public IEnumerator JoystickDirectionToWeaponDirection()
     {
 
@@ -61,23 +121,6 @@ public class HalalitWeaponTests
             Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(weaponMovement.transform.rotation)),
             acceptedDelta
             );
-    }
-
-    [UnityTest]
-    public IEnumerator JoystickOverAttackTrigger()
-    {
-        var weapon = GameObject.FindGameObjectWithTag(Tag.WEAPON.GetDescription());
-        var weaponAttack = weapon.GetComponent<WeaponAttack>();
-    
-        var randomTouchOnAttackJoystick = GetRandomTouchOverAttackTrigger(weaponAttack);
-    
-        weaponAttack.HumbleFixedUpdate(randomTouchOnAttackJoystick);
-
-        yield return null;
-
-        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-                
-        Assert.IsNotNull(shot);
     }
 
     #region random touch
