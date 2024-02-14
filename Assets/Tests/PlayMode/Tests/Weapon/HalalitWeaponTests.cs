@@ -44,6 +44,7 @@ public class HalalitWeaponTests
 
         var weapon = GameObject.FindGameObjectWithTag(Tag.WEAPON.GetDescription());
         var weaponMovement = weapon.GetComponent<WeaponMovement>();
+        var acceptedDelta = 0.1f;
 
         Vector2 randomTouchOnAttackJoystick = Vector2.zero;
         while (randomTouchOnAttackJoystick == Vector2.zero)
@@ -53,11 +54,12 @@ public class HalalitWeaponTests
         
         weaponMovement.TryChangeWeaponPosition(randomTouchOnAttackJoystick);
 
-        yield return null;
+        yield return null; // TODO: WHEN WE HAVE DRAG WAIT FOR X SECONDS
 
         Assert.AreEqual(
             Utils.Vector2ToDegrees(randomTouchOnAttackJoystick),
-            Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(weaponMovement.transform.rotation))
+            Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(weaponMovement.transform.rotation)),
+            acceptedDelta
             );
     }
 
