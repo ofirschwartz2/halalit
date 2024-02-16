@@ -24,10 +24,9 @@ public class HalalitWeaponTests
     public IEnumerator JoystickUnderAttackTrigger()
     {
 
-        var weapon = GameObject.FindGameObjectWithTag(Tag.WEAPON.GetDescription());
-        var weaponAttack = weapon.GetComponent<WeaponAttack>();
+        var weaponAttack = TestUtils.GetWeaponAttack();
 
-        var randomTouchOnAttackJoystick = GetRandomTouchUnderAttackTrigger(weaponAttack);
+        var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchUnderAttackTrigger(weaponAttack);
 
         weaponAttack.HumbleFixedUpdate(randomTouchOnAttackJoystick);
 
@@ -41,10 +40,9 @@ public class HalalitWeaponTests
     [UnityTest]
     public IEnumerator JoystickOverAttackTriggerShooting()
     {
-        var weapon = GameObject.FindGameObjectWithTag(Tag.WEAPON.GetDescription());
-        var weaponAttack = weapon.GetComponent<WeaponAttack>();
+        var weaponAttack = TestUtils.GetWeaponAttack();
 
-        var randomTouchOnAttackJoystick = GetRandomTouchOverAttackTrigger(weaponAttack);
+        var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
 
         weaponAttack.HumbleFixedUpdate(randomTouchOnAttackJoystick);
 
@@ -58,10 +56,9 @@ public class HalalitWeaponTests
     [UnityTest]
     public IEnumerator DelayBetweenShotsLargerThanCooldown() 
     {
-        var weapon = GameObject.FindGameObjectWithTag(Tag.WEAPON.GetDescription());
-        var weaponAttack = weapon.GetComponent<WeaponAttack>();
+        var weaponAttack = TestUtils.GetWeaponAttack();
 
-        var randomTouchOnAttackJoystick = GetRandomTouchOverAttackTrigger(weaponAttack);
+        var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
 
         float totalTime = 3f;
         float elapsedTime = 0f;
@@ -100,14 +97,13 @@ public class HalalitWeaponTests
     public IEnumerator JoystickDirectionToWeaponDirection()
     {
 
-        var weapon = GameObject.FindGameObjectWithTag(Tag.WEAPON.GetDescription());
-        var weaponMovement = weapon.GetComponent<WeaponMovement>();
+        var weaponMovement = TestUtils.GetWeaponMovement();
         var acceptedDelta = 0.1f;
 
         Vector2 randomTouchOnAttackJoystick = Vector2.zero;
         while (randomTouchOnAttackJoystick == Vector2.zero)
         {
-            randomTouchOnAttackJoystick = GetRandomTouch();
+            randomTouchOnAttackJoystick = TestUtils.GetRandomTouch();
         } 
         
         weaponMovement.TryChangeWeaponPosition(randomTouchOnAttackJoystick);
@@ -120,34 +116,5 @@ public class HalalitWeaponTests
             acceptedDelta
             );
     }
-
-    #region random touch
-    private Vector2 GetRandomTouch()
-    {
-        return new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-    }
-
-    private Vector2 GetRandomTouchUnderAttackTrigger(WeaponAttack weaponAttack) 
-    {
-        Vector2 randomTouch;
-        do
-        {
-            randomTouch = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-        } while (randomTouch.magnitude >= weaponAttack.GetAttackJoystickEdge());
-
-        return randomTouch;
-    }
-
-    private Vector2 GetRandomTouchOverAttackTrigger(WeaponAttack weaponAttack)
-    {
-        Vector2 randomTouch;
-        do
-        {
-            randomTouch = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-        } while (randomTouch.magnitude < weaponAttack.GetAttackJoystickEdge());
-
-        return randomTouch;
-    }
-    #endregion
 
 }

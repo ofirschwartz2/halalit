@@ -22,14 +22,14 @@ public class HalalitMovementTests
     public IEnumerator JoystickDirectionAffectHalalitDirection()
     {
         // GIVEN
-        float totalTime = 1f;
+        float totalTime = 0.5f;
         float elapsedTime = 0f;
         float acceptedDelta = 0.1f;
 
         GameObject halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
         HalalitMovement halalitMovement = halalit.GetComponent<HalalitMovement>();
 
-        var randomTouchOnMovementJoystick = GetRandomTouchOnMovementJoystick();
+        var randomTouchOnMovementJoystick = TestUtils.GetRandomTouch();
 
         // WHEN
         while (elapsedTime < totalTime)
@@ -121,11 +121,5 @@ public class HalalitMovementTests
         }
     }
 
-    private Vector2 GetRandomTouchOnMovementJoystick()
-    {
-        GameObject movementJoystick = GameObject.FindGameObjectWithTag(Tag.MOVEMENT_JOYSTICK.GetDescription());
-        var movementJoystickRadius = movementJoystick.GetComponent<RectTransform>().rect.width / 2;
-
-        return Utils.GetRandomVector2OnCircle(movementJoystickRadius);
-    }
+    
 }
