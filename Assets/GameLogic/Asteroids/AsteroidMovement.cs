@@ -86,8 +86,8 @@ public class AsteroidMovement : KinematicMovement
 
     private float GetRotationDirectionalMultiplier(Vector2 originalDirection)
     {
-        float originalDirectionAngle = Utils.AngleNormalizationBy360(Utils.Vector2ToDegree(originalDirection.x, originalDirection.y));
-        float currentDirectionAngle = Utils.AngleNormalizationBy360(Utils.Vector2ToDegree(_rigidBody.velocity.x, _rigidBody.velocity.y));
+        float originalDirectionAngle = Utils.AngleNormalizationBy360(Utils.Vector2ToDegrees(originalDirection.x, originalDirection.y));
+        float currentDirectionAngle = Utils.AngleNormalizationBy360(Utils.Vector2ToDegrees(_rigidBody.velocity.x, _rigidBody.velocity.y));
         float rotationDirectionalMultiplier;
 
         if (currentDirectionAngle <= originalDirectionAngle)

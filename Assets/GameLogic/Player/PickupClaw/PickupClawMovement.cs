@@ -167,7 +167,7 @@ public class PickupClawMovement : MonoBehaviour
 
     private void RotateToPickupClawDirectionInstantly()
     {
-        float pickupClawDirectionAngle = Utils.Vector2ToDegree(_pickupClawDirection.x, _pickupClawDirection.y);
+        float pickupClawDirectionAngle = Utils.Vector2ToDegrees(_pickupClawDirection.x, _pickupClawDirection.y);
         float pickupClawRotation = transform.rotation.eulerAngles.z - _initialRotation; ;
 
         if (_pickupClawState.Value == PickupClawStateE.MOVING_BACKWARD)
@@ -183,7 +183,7 @@ public class PickupClawMovement : MonoBehaviour
         float pickupClawRotation = !oposite ?
             Utils.AngleNormalizationBy360(transform.rotation.eulerAngles.z - _initialRotation) :
             Utils.AngleNormalizationBy360(transform.rotation.eulerAngles.z - _initialRotation + 180);
-        float directionRotation = Utils.AngleNormalizationBy360(Utils.Vector2ToDegree(goal.x, goal.y));
+        float directionRotation = Utils.AngleNormalizationBy360(Utils.Vector2ToDegrees(goal.x, goal.y));
         float rotationAntiClockwiseDeference = Utils.AngleNormalizationBy360(directionRotation - pickupClawRotation);
         float rotationClockwiseDeference = 360 - rotationAntiClockwiseDeference;
 
