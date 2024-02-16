@@ -44,9 +44,14 @@ public class BallShotTests
     {
         TestUtils.SetUpBallShot();
 
+        var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
 
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
+        
+        weaponMovement.TryChangeWeaponPosition(randomTouchOnAttackJoystick);
+        
+        yield return null;
 
         weaponAttack.HumbleFixedUpdate(randomTouchOnAttackJoystick);
 
@@ -54,7 +59,7 @@ public class BallShotTests
 
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
 
-        Assert.IsNotNull(shot); // There is a shot
+        Assert.IsNotNull(shot);
 
         Vector2 lastShotPosition;
 
@@ -65,8 +70,6 @@ public class BallShotTests
         } while (shot != null);
 
         Assert.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition));
-
-        // wait until the shot collides with something
 
     }
 
