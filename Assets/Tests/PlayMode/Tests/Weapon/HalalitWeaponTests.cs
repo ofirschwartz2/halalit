@@ -75,12 +75,12 @@ public class HalalitWeaponTests
             var shots = GameObject.FindGameObjectsWithTag(Tag.SHOT.GetDescription());
             if (shots.Length > shotsCount)
             {
-                if (shots.Length == 1)
+                if (shots.Length == 1) // First shot fired
                 {
                     firstShotTime = elapsedTime;
                     shotsCount = shots.Length;
                 }
-                else if (shots.Length == 2)
+                else if (shots.Length == 2) // Second shot fired
                 {
                     Assert.GreaterOrEqual(elapsedTime - firstShotTime, weaponAttack.GetCooldownInterval());
                     break;
