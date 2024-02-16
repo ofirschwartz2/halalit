@@ -2,9 +2,12 @@ using Assets.Enums;
 using Assets.Utils;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class WeaponAttack : MonoBehaviour
+[assembly: InternalsVisibleTo("Tests")]
+
+internal class WeaponAttack : MonoBehaviour
 {
     [SerializeField]
     private GameObject _halalit;
@@ -58,7 +61,7 @@ public class WeaponAttack : MonoBehaviour
         HumbleFixedUpdate(new Vector2(_attackJoystick.Vertical, _attackJoystick.Horizontal));
     }
 
-    public void HumbleFixedUpdate(Vector2 attackJoystickTouch)
+    internal void HumbleFixedUpdate(Vector2 attackJoystickTouch)
     {
         // TODO (refactor): this should be via event raise, not in update
         KeyValuePair<AttackName, GameObject> attackPrefab = _attackToggle.GetCurrentAttack();
@@ -195,12 +198,12 @@ public class WeaponAttack : MonoBehaviour
     }
     #endregion
 
-    public float GetAttackJoystickEdge() 
+    internal float GetAttackJoystickEdge() 
     {
         return _attackJoystickEdge;
     }
 
-    public float GetCooldownInterval()
+    internal float GetCooldownInterval()
     {
         return _cooldownInterval;
     }

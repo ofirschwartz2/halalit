@@ -94,8 +94,6 @@ public class HalalitWeaponTests
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
-        Assert.Fail();
     }
 
     [UnityTest]

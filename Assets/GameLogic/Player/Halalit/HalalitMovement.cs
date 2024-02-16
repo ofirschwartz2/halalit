@@ -1,8 +1,11 @@
 using Assets.Utils;
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class HalalitMovement : MonoBehaviour
+[assembly: InternalsVisibleTo("Tests")]
+
+internal class HalalitMovement : MonoBehaviour
 {
     [SerializeField]
     private Rigidbody2D _rigidBody;
@@ -22,7 +25,7 @@ public class HalalitMovement : MonoBehaviour
 
     #region Moving 
 
-    public void TryMove(float joystickHorizontal, float joystickVertical, float deltaTime)
+    internal void TryMove(float joystickHorizontal, float joystickVertical, float deltaTime)
     {
         if (IsMovementInput(joystickHorizontal, joystickVertical))
         {
