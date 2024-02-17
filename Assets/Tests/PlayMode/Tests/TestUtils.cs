@@ -2,19 +2,20 @@ using Assets.Enums;
 using Assets.Utils;
 using System.Drawing;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 
 internal static class TestUtils
 {
 
     #region SceneSetUp
-    internal static void SetUpBallShot()
+    internal static void SetUpShot(AttackName attackName)
     {
         var weaponAttack = GetWeaponAttack();
 
         weaponAttack._currentAttack =
             new KeyValuePair<AttackName, AttackStats>(
-                AttackName.BALL_SHOT, 
+                attackName, 
                 new AttackStats(ItemRank.COMMON, 1, 1, 1, 1, 1));
     }
 
@@ -60,10 +61,14 @@ internal static class TestUtils
     internal static Vector2 GetTargetNearestPositionToHalalit() 
     {
         ScheneWithTargetValidation();
-
-        var halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
         var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
-        var bounds = target.GetComponent<Collider2D>().bounds;
+        return GetNearestPositionToHalalit(target);
+    }
+
+    internal static Vector2 GetNearestPositionToHalalit(GameObject gameObject)
+    {
+        var halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
+        var bounds = gameObject.GetComponent<Collider2D>().bounds;
         return bounds.ClosestPoint(halalit.transform.position);
     }
     #endregion

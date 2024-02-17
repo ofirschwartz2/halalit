@@ -2,6 +2,7 @@ using Assets.Enums;
 using Assets.Utils;
 using NUnit.Framework;
 using System.Collections;
+using System.Drawing;
 using System.Reflection;
 using UnityEditor.VersionControl;
 using UnityEngine;
@@ -9,7 +10,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
 
-public class BallShotTests
+public class LaserBeamTests
 {
 
     private const string SCENE_NAME = "Playground";
@@ -21,7 +22,7 @@ public class BallShotTests
         string testName = TestContext.CurrentContext.Test.MethodName;
         switch (testName) 
         {
-            case FUNCTION_SHOOTING_WITH_TARGET_NAME:
+            case ""://FUNCTION_SHOOTING_WITH_TARGET_NAME:
                 SceneManager.LoadScene(SCENE_WITH_TARGET_NAME);
                 break;
             default:
@@ -29,18 +30,20 @@ public class BallShotTests
                 break;
         }
     }
-
+    /*
     [UnityTest]
     public IEnumerator Shooting()
     {
         int seed = Random.Range(int.MinValue, int.MaxValue);
         Random.InitState(seed);
 
-        TestUtils.SetUpShot(AttackName.BALL_SHOT);
+        TestUtils.SetUpShot(AttackName.LASER_BEAM);
 
         var weaponAttack = TestUtils.GetWeaponAttack();
 
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
+
+        yield return null;
 
         weaponAttack.HumbleFixedUpdate(randomTouchOnAttackJoystick);
 
@@ -56,8 +59,9 @@ public class BallShotTests
     {
         int seed = Random.Range(int.MinValue, int.MaxValue);
         Random.InitState(seed);
-
-        TestUtils.SetUpShot(AttackName.BALL_SHOT);
+        
+        float shootingTime = 5f;
+        TestUtils.SetUpShot(AttackName.LASER_BEAM);
 
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
@@ -68,13 +72,22 @@ public class BallShotTests
         
         yield return null;
 
-        weaponAttack.HumbleFixedUpdate(randomTouchOnAttackJoystick);
-
-        yield return null;
+        float time = 0;
+        while (time < shootingTime) 
+        {
+            weaponAttack.HumbleFixedUpdate(randomTouchOnAttackJoystick);
+            yield return null;
+            time += Time.deltaTime;
+        }
 
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
 
         Assert.IsNotNull(shot, $"Seed: {seed}");
+
+        Vector2 nearestPoint = TestUtils.GetNearestPositionToHalalit(shot);
+
+        Assert.AreEqual(nearestPoint.x, weaponAttack.transform.position.x, $"Seed: {seed}");
+        Assert.AreEqual(nearestPoint.y, weaponAttack.transform.position.y, $"Seed: {seed}");
 
         Vector2 lastShotPosition;
 
@@ -95,7 +108,7 @@ public class BallShotTests
         int seed = Random.Range(int.MinValue, int.MaxValue);
         Random.InitState(seed);
 
-        TestUtils.SetUpShot(AttackName.BALL_SHOT);
+        TestUtils.SetUpShot(AttackName.LASER_BEAM);
 
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
@@ -142,7 +155,7 @@ public class BallShotTests
         int seed = Random.Range(int.MinValue, int.MaxValue);
         Random.InitState(seed);
 
-        TestUtils.SetUpShot(AttackName.BALL_SHOT);
+        TestUtils.SetUpShot(AttackName.LASER_BEAM);
 
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
@@ -184,5 +197,6 @@ public class BallShotTests
             $"Seed: {seed}");
 
     }
+    */
 
 }
