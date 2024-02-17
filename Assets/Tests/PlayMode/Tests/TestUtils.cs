@@ -17,6 +17,16 @@ internal static class TestUtils
                 AttackName.BALL_SHOT, 
                 new AttackStats(ItemRank.COMMON, 1, 1, 1, 1, 1));
     }
+
+    internal static void SetRandomTargetPosition() 
+    {
+        ScheneWithTargetValidation();
+
+        var radiusOfTargetPositionAroundHalalit = 5;
+
+        var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
+        target[0].transform.position = Utils.GetRandomVector2OnCircle(radiusOfTargetPositionAroundHalalit);
+    }
     #endregion
 
     #region SceneGetters
@@ -37,6 +47,24 @@ internal static class TestUtils
         return 
             GameObject.FindGameObjectWithTag(Tag.INTERNAL_WORLD.GetDescription())
                 .GetComponent<BoxCollider2D>();
+    }
+
+    internal static Vector2 GetTargetPosition()
+    {
+        ScheneWithTargetValidation();
+
+        var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
+        return target.transform.position;
+    }
+
+    internal static Vector2 GetTargetNearestPositionToHalalit() 
+    {
+        ScheneWithTargetValidation();
+
+        var halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
+        var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
+        var bounds = target.GetComponent<Collider2D>().bounds;
+        return bounds.ClosestPoint(halalit.transform.position);
     }
     #endregion
 
@@ -67,8 +95,15 @@ internal static class TestUtils
 
         return randomTouch;
     }
+
+    internal static Vector2 GetTouchOverAttackTriggetTowardsPosition(Vector2 position, float attackJoystickEdge)
+    {
+        var direction = position.normalized;
+        return direction * (attackJoystickEdge + 0.1f);
+    }
     #endregion
 
+    #region Predicates
     internal static bool IsSomewhereOnInternalWorldEdges(Vector2 position) 
     {
         Vector3 position3 = new Vector3(position.x, position.y, 1); // TODO: why our InternalWorldBoxCollider2DBoxCollider2D Z=1?
@@ -87,5 +122,16 @@ internal static class TestUtils
         return false;
 
     }
+    #endregion
 
+    #region Validations
+    internal static void ScheneWithTargetValidation()
+    {
+        var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
+        if (target.Length != 1)
+        {
+            throw new System.Exception("There should be only one target in the scene");
+        }
+    }
+    #endregion
 }

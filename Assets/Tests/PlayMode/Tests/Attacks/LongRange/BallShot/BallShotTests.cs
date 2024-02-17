@@ -12,12 +12,23 @@ public class BallShotTests
 {
 
     private const string SCENE_NAME = "Playground";
+    private const string SCENE_WITH_TARGET_NAME = "PlaygroundWithTarget";
+
+    private const string FUNCTION_BALL_SHOT_SHOOTING_WITH_TARGET_NAME = "BallShotShootingWithTarget";
 
     [SetUp]
     public void SetUp()
     {
-        SceneManager.LoadScene(SCENE_NAME);
-        
+        string testName = TestContext.CurrentContext.Test.MethodName;
+        switch (testName) 
+        {
+            case FUNCTION_BALL_SHOT_SHOOTING_WITH_TARGET_NAME:
+                SceneManager.LoadScene(SCENE_WITH_TARGET_NAME);
+                break;
+            default:
+                SceneManager.LoadScene(SCENE_NAME);
+                break;
+        }
     }
 
     [UnityTest]
@@ -70,6 +81,50 @@ public class BallShotTests
         } while (shot != null);
 
         Assert.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition));
+
+    }
+
+    [UnityTest]
+    public IEnumerator BallShotShootingWithTarget()
+    {
+
+        TestUtils.SetUpBallShot();
+
+        var weaponMovement = TestUtils.GetWeaponMovement();
+        var weaponAttack = TestUtils.GetWeaponAttack();
+
+        TestUtils.SetRandomTargetPosition();
+
+        yield return null;
+
+        var targetClosestPosition = TestUtils.GetTargetNearestPositionToHalalit();
+
+        var acceptedDelta = 0.3f;
+        var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, weaponAttack.GetAttackJoystickEdge());
+
+        weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
+
+        yield return null;
+
+        weaponAttack.HumbleFixedUpdate(touchOnJoystick);
+
+        yield return null;
+
+        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+
+        Assert.IsNotNull(shot);
+
+        Vector2 lastShotPosition;
+
+        do
+        {
+            lastShotPosition = shot.transform.position;
+            yield return null;
+            shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+        } while (shot != null);
+
+        Assert.AreEqual(lastShotPosition.x, targetClosestPosition.x, acceptedDelta);
+        Assert.AreEqual(lastShotPosition.y, targetClosestPosition.y, acceptedDelta);
 
     }
 
