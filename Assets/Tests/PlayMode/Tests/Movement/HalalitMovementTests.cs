@@ -19,12 +19,14 @@ public class HalalitMovementTests
     }
 
     [UnityTest]
-    public IEnumerator JoystickDirectionAffectHalalitDirection()
+    public IEnumerator RandomJoystickDirectionAffectHalalitDirection()
     {
         // GIVEN
         float totalTime = 0.5f;
         float elapsedTime = 0f;
         float acceptedDelta = 0.1f;
+        int seed = Random.Range(int.MinValue, int.MaxValue);
+        Random.InitState(seed);
 
         GameObject halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
         HalalitMovement halalitMovement = halalit.GetComponent<HalalitMovement>();
@@ -44,7 +46,8 @@ public class HalalitMovementTests
         Assert.AreEqual(
             halalitMovement.transform.rotation.eulerAngles.z, 
             Utils.AngleNormalizationBy360(Utils.Vector2ToDegrees(randomTouchOnMovementJoystick.x, randomTouchOnMovementJoystick.y)),
-            acceptedDelta);
+            acceptedDelta,
+            $"Seed: {seed}");
     }
 
     [UnityTest]

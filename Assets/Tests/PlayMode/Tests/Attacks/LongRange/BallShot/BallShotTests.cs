@@ -34,6 +34,9 @@ public class BallShotTests
     [UnityTest]
     public IEnumerator BallShotShooting()
     {
+        int seed = Random.Range(int.MinValue, int.MaxValue);
+        Random.InitState(seed);
+
         TestUtils.SetUpBallShot();
 
         var weaponAttack = TestUtils.GetWeaponAttack();
@@ -46,13 +49,16 @@ public class BallShotTests
 
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
 
-        Assert.IsNotNull(shot);
+        Assert.IsNotNull(shot, $"seed: {seed}");
     }
 
 
     [UnityTest]
     public IEnumerator BallShotShootingWithoutTarget()
     {
+        int seed = Random.Range(int.MinValue, int.MaxValue);
+        Random.InitState(seed);
+
         TestUtils.SetUpBallShot();
 
         var weaponMovement = TestUtils.GetWeaponMovement();
@@ -80,13 +86,15 @@ public class BallShotTests
             shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
         } while (shot != null);
 
-        Assert.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition));
+        Assert.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), $"Seed: {seed}");
 
     }
 
     [UnityTest]
     public IEnumerator BallShotShootingWithTarget()
     {
+        int seed = Random.Range(int.MinValue, int.MaxValue);
+        Random.InitState(seed);
 
         TestUtils.SetUpBallShot();
 
@@ -112,7 +120,7 @@ public class BallShotTests
 
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
 
-        Assert.IsNotNull(shot);
+        Assert.IsNotNull(shot, $"Seed: {seed}");
 
         Vector2 lastShotPosition;
 
@@ -123,8 +131,8 @@ public class BallShotTests
             shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
         } while (shot != null);
 
-        Assert.AreEqual(lastShotPosition.x, targetClosestPosition.x, acceptedDelta);
-        Assert.AreEqual(lastShotPosition.y, targetClosestPosition.y, acceptedDelta);
+        Assert.AreEqual(lastShotPosition.x, targetClosestPosition.x, acceptedDelta, $"Seed: {seed}");
+        Assert.AreEqual(lastShotPosition.y, targetClosestPosition.y, acceptedDelta, $"Seed: {seed}");
 
     }
 
