@@ -2,6 +2,7 @@ using Assets.Enums;
 using Assets.Utils;
 using NUnit.Framework;
 using System.Collections;
+using System.Reflection;
 using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,8 +14,6 @@ public class BallShotTests
 
     private const string SCENE_NAME = "Playground";
     private const string SCENE_WITH_TARGET_NAME = "PlaygroundWithTarget";
-
-    private const string FUNCTION_BALL_SHOT_SHOOTING_WITH_TARGET_NAME = "BallShotShootingWithTarget";
 
     [SetUp]
     public void SetUp()
@@ -32,7 +31,7 @@ public class BallShotTests
     }
 
     [UnityTest]
-    public IEnumerator BallShotShooting()
+    public IEnumerator Shooting()
     {
         int seed = Random.Range(int.MinValue, int.MaxValue);
         Random.InitState(seed);
@@ -53,7 +52,7 @@ public class BallShotTests
     }
 
     [UnityTest]
-    public IEnumerator BallShotShootingWithoutTarget()
+    public IEnumerator ShootingWithoutTarget()
     {
         int seed = Random.Range(int.MinValue, int.MaxValue);
         Random.InitState(seed);
@@ -89,8 +88,9 @@ public class BallShotTests
 
     }
 
+    private const string FUNCTION_BALL_SHOT_SHOOTING_WITH_TARGET_NAME = "ShootingWithTarget";
     [UnityTest]
-    public IEnumerator BallShotShootingWithTarget()
+    public IEnumerator ShootingWithTarget()
     {
         int seed = Random.Range(int.MinValue, int.MaxValue);
         Random.InitState(seed);
@@ -135,9 +135,10 @@ public class BallShotTests
 
     }
 
-    [UnitTest]
+    [UnityTest]
     public IEnumerator ShootingInDirection()
     {
+        var acceptedDelta = 0.01f;
         int seed = Random.Range(int.MinValue, int.MaxValue);
         Random.InitState(seed);
 
@@ -171,8 +172,16 @@ public class BallShotTests
             shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
         } while (shot != null);
 
-        Assert.AreEqual(lastShotPosition.x, targetPosition.x, 0.3f, $"Seed: {seed}");
-        Assert.AreEqual(lastShotPosition.y, targetPosition.y, 0.3f, $"Seed: {seed}");
+        Assert.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), $"Seed: {seed}");
+
+        var weaponDirection = Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(weaponMovement.transform.rotation));
+        var shotDirection = Utils.Vector2ToDegrees(lastShotPosition);
+        
+        Assert.AreEqual(
+            weaponDirection,
+            shotDirection,
+            acceptedDelta,
+            $"Seed: {seed}");
 
     }
 
