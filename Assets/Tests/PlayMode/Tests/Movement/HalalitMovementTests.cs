@@ -19,7 +19,7 @@ public class HalalitMovementTests
     }
 
     [UnityTest]
-    public IEnumerator RandomJoystickDirectionAffectHalalitDirection()
+    public IEnumerator JoystickDirectionAffectHalalitDirection()
     {
         // GIVEN
         float totalTime = 0.5f;

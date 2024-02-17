@@ -52,7 +52,6 @@ public class BallShotTests
         Assert.IsNotNull(shot, $"seed: {seed}");
     }
 
-
     [UnityTest]
     public IEnumerator BallShotShootingWithoutTarget()
     {
@@ -133,6 +132,47 @@ public class BallShotTests
 
         Assert.AreEqual(lastShotPosition.x, targetClosestPosition.x, acceptedDelta, $"Seed: {seed}");
         Assert.AreEqual(lastShotPosition.y, targetClosestPosition.y, acceptedDelta, $"Seed: {seed}");
+
+    }
+
+    [UnitTest]
+    public IEnumerator ShootingInDirection()
+    {
+        int seed = Random.Range(int.MinValue, int.MaxValue);
+        Random.InitState(seed);
+
+        TestUtils.SetUpBallShot();
+
+        var weaponMovement = TestUtils.GetWeaponMovement();
+        var weaponAttack = TestUtils.GetWeaponAttack();
+
+        yield return null;
+
+        var touchOnJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
+
+        weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
+
+        yield return null;
+
+        weaponAttack.HumbleFixedUpdate(touchOnJoystick);
+
+        yield return null;
+
+        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+
+        Assert.IsNotNull(shot, $"Seed: {seed}");
+
+        Vector2 lastShotPosition;
+
+        do
+        {
+            lastShotPosition = shot.transform.position;
+            yield return null;
+            shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+        } while (shot != null);
+
+        Assert.AreEqual(lastShotPosition.x, targetPosition.x, 0.3f, $"Seed: {seed}");
+        Assert.AreEqual(lastShotPosition.y, targetPosition.y, 0.3f, $"Seed: {seed}");
 
     }
 
