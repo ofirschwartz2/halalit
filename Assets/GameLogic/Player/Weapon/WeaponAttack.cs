@@ -20,7 +20,7 @@ internal class WeaponAttack : MonoBehaviour
     [SerializeField]
     private float _attackJoystickEdge;
     [SerializeField]
-    private KeyValuePair<AttackName, AttackStats> _currentAttack;    // just for view in the inspector
+    internal KeyValuePair<AttackName, AttackStats> _currentAttack;    // just for view in the inspector
 
     private AttackToggle _attackToggle;
     private Dictionary<ItemName, Action<Dictionary<EventProperty, float>>> _upgradeActions;

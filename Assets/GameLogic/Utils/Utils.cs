@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 namespace Assets.Utils
@@ -173,8 +174,8 @@ namespace Assets.Utils
 
         public static Vector2 GetRandomVector2OnCircle(float radius = 1)
         {
-            float angle = UnityEngine.Random.Range(0, 2 * Mathf.PI * radius);
-            return RadianToVector2(angle);
+            float angle = UnityEngine.Random.Range(0, 2 * Mathf.PI);
+            return RadianToVector2(angle) * radius;
         }
 
         public static Vector2 GetRandomVector2OnHalfOfCircle(Vector2 halfCircleDirection)
@@ -244,6 +245,7 @@ namespace Assets.Utils
             float angleRadians = angle * Mathf.Deg2Rad;
             return RadianToVector2(angleRadians);
         }
+
         #endregion
 
         #region Quaternions
