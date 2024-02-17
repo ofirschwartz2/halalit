@@ -63,7 +63,7 @@ public class HalalitWeaponTests
     {
         int seed = Random.Range(int.MinValue, int.MaxValue);
         Random.InitState(seed);
-        TestUtils.SetUpBallShot();
+        TestUtils.SetUpShot(AttackName.BALL_SHOT);
 
         var weaponAttack = TestUtils.GetWeaponAttack();
 
