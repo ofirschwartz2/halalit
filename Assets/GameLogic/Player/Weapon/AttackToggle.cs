@@ -1,11 +1,14 @@
 ﻿using Assets.Enums;
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+
+[assembly: InternalsVisibleTo("Tests")]
 
 class AttackToggle : MonoBehaviour
 {
     [SerializeField]
-    private AttackName _firstAttack;
+    internal AttackName _firstAttack;
 
     private AttackStats _firstAttackStats;
     private KeyValuePair<AttackName, GameObject> _currentAttack;

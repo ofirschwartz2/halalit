@@ -11,12 +11,16 @@ internal static class TestUtils
     #region SceneSetUp
     internal static void SetUpShot(AttackName attackName)
     {
+        var attackToggle = GetAttackToggle();
         var weaponAttack = GetWeaponAttack();
+
+        attackToggle._firstAttack = attackName;
 
         weaponAttack._currentAttack =
             new KeyValuePair<AttackName, AttackStats>(
                 attackName, 
                 new AttackStats(ItemRank.COMMON, 1, 1, 1, 1, 1));
+        
     }
 
     internal static void SetRandomTargetPosition() 
@@ -35,6 +39,12 @@ internal static class TestUtils
     {
         var weapon = GameObject.FindGameObjectWithTag(Tag.WEAPON.GetDescription());
         return weapon.GetComponent<WeaponAttack>();
+    }
+
+    internal static AttackToggle GetAttackToggle()
+    {
+        var weapon = GameObject.FindGameObjectWithTag(Tag.WEAPON.GetDescription());
+        return weapon.GetComponent<AttackToggle>();
     }
 
     internal static WeaponMovement GetWeaponMovement()

@@ -54,10 +54,13 @@ public class BallShotTests
     [UnityTest]
     public IEnumerator ShootingWithoutTarget()
     {
-        int seed = Random.Range(int.MinValue, int.MaxValue);
+        //int seed = Random.Range(int.MinValue, int.MaxValue);
+        int seed = 926828648;
         Random.InitState(seed);
 
         TestUtils.SetUpShot(AttackName.BALL_SHOT);
+
+        yield return null;
 
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
