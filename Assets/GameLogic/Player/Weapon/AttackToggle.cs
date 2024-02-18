@@ -63,7 +63,7 @@ class AttackToggle : MonoBehaviour
         // TODO (dev): implement...
     }
 
-    private void SetNewAttack(AttackName newAttackName, AttackStats attackStats)
+    internal void SetNewAttack(AttackName newAttackName, AttackStats attackStats)
     {
         _currentAttack = new(newAttackName, AttacksBank.GetAttackPrefab(newAttackName));
         AttackBehaviour attackBehaviour = _currentAttack.Value.GetComponent<AttackBehaviour>();

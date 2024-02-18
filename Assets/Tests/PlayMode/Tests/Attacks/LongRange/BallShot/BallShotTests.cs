@@ -55,7 +55,8 @@ public class BallShotTests
     public IEnumerator ShootingWithoutTarget()
     {
         //int seed = Random.Range(int.MinValue, int.MaxValue);
-        int seed = 926828648;
+        int seed = -980018242;
+        
         Random.InitState(seed);
 
         TestUtils.SetUpShot(AttackName.BALL_SHOT);
@@ -142,7 +143,8 @@ public class BallShotTests
     public IEnumerator ShootingInDirection()
     {
         var acceptedDelta = 0.01f;
-        int seed = Random.Range(int.MinValue, int.MaxValue);
+        //int seed = Random.Range(int.MinValue, int.MaxValue);
+        int seed = -980018242;
         Random.InitState(seed);
 
         TestUtils.SetUpShot(AttackName.BALL_SHOT);

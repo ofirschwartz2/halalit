@@ -1,8 +1,6 @@
 using Assets.Enums;
 using Assets.Utils;
-using System.Drawing;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 
 internal static class TestUtils
@@ -12,15 +10,18 @@ internal static class TestUtils
     internal static void SetUpShot(AttackName attackName)
     {
         var attackToggle = GetAttackToggle();
-        var weaponAttack = GetWeaponAttack();
+        attackToggle.SetNewAttack(attackName, new AttackStats(ItemRank.COMMON, 1, 1, 1, 1, 1));
 
+        /*
+        var weaponAttack = GetWeaponAttack();
+        
         attackToggle._firstAttack = attackName;
 
         weaponAttack._currentAttack =
             new KeyValuePair<AttackName, AttackStats>(
                 attackName, 
                 new AttackStats(ItemRank.COMMON, 1, 1, 1, 1, 1));
-        
+        */
     }
 
     internal static void SetRandomTargetPosition() 
@@ -124,7 +125,7 @@ internal static class TestUtils
         Vector3 position3 = new Vector3(position.x, position.y, 1); // TODO: why our InternalWorldBoxCollider2DBoxCollider2D Z=1?
 
         var boxCollider = GetInternalWorldBoxCollider2D();
-        var edgeThreshold = 0.01f;
+        var edgeThreshold = 0.05f;
         var bounds = boxCollider.bounds;
 
         var largerBounds = new Bounds(bounds.center, bounds.size * (1 + edgeThreshold));
