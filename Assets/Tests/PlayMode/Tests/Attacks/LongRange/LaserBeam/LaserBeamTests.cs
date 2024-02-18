@@ -22,7 +22,7 @@ public class LaserBeamTests
         string testName = TestContext.CurrentContext.Test.MethodName;
         switch (testName) 
         {
-            case ""://FUNCTION_SHOOTING_WITH_TARGET_NAME:
+            case FUNCTION_SHOOTING_WITH_TARGET_NAME:
                 SceneManager.LoadScene(SCENE_WITH_TARGET_NAME);
                 break;
             default:
@@ -30,7 +30,7 @@ public class LaserBeamTests
                 break;
         }
     }
-    /*
+    
     [UnityTest]
     public IEnumerator Shooting()
     {
@@ -197,6 +197,4 @@ public class LaserBeamTests
             $"Seed: {seed}");
 
     }
-    */
-
 }

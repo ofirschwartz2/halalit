@@ -1,11 +1,14 @@
 ﻿using Assets.Enums;
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+
+[assembly: InternalsVisibleTo("Tests")]
 
 class AttackToggle : MonoBehaviour
 {
     [SerializeField]
-    private AttackName _firstAttack;
+    internal AttackName _firstAttack;
 
     private AttackStats _firstAttackStats;
     private KeyValuePair<AttackName, GameObject> _currentAttack;
@@ -60,7 +63,7 @@ class AttackToggle : MonoBehaviour
         // TODO (dev): implement...
     }
 
-    private void SetNewAttack(AttackName newAttackName, AttackStats attackStats)
+    internal void SetNewAttack(AttackName newAttackName, AttackStats attackStats)
     {
         _currentAttack = new(newAttackName, AttacksBank.GetAttackPrefab(newAttackName));
         AttackBehaviour attackBehaviour = _currentAttack.Value.GetComponent<AttackBehaviour>();
