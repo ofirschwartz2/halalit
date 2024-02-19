@@ -5,6 +5,18 @@ using UnityEngine;
 
 internal static class TestUtils
 {
+    #region Random Seeds
+    internal static int SetRandomSeed(int seed = 0)
+    {
+        if (seed == 0)
+        {
+            seed = Random.Range(int.MinValue, int.MaxValue);
+        }
+        Random.InitState(seed);
+        return seed;
+    }
+    #endregion
+
 
     #region SceneSetUp
     internal static void SetUpShot(AttackName attackName)

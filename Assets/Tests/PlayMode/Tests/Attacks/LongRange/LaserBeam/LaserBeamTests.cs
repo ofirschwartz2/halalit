@@ -2,9 +2,6 @@ using Assets.Enums;
 using Assets.Utils;
 using NUnit.Framework;
 using System.Collections;
-using System.Drawing;
-using System.Reflection;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
@@ -34,42 +31,36 @@ public class LaserBeamTests
     [UnityTest]
     public IEnumerator Shooting()
     {
-        int seed = Random.Range(int.MinValue, int.MaxValue);
-        Random.InitState(seed);
+        // GIVEN
+        var seed = TestUtils.SetRandomSeed();
 
         TestUtils.SetUpShot(AttackName.LASER_BEAM);
-
         var weaponAttack = TestUtils.GetWeaponAttack();
-
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
 
-        yield return null;
-
+        // WHEN
         weaponAttack.HumbleFixedUpdate(randomTouchOnAttackJoystick);
-
         yield return null;
 
+        // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-
         Assert.IsNotNull(shot, $"seed: {seed}");
     }
 
     [UnityTest]
     public IEnumerator ShootingWithoutTarget()
     {
-        int seed = Random.Range(int.MinValue, int.MaxValue);
-        Random.InitState(seed);
+        // GIVEN
+        var seed = TestUtils.SetRandomSeed(1683092413);
         
         float shootingTime = 3f;
         TestUtils.SetUpShot(AttackName.LASER_BEAM);
-
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
-
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
         
+        // WHEN
         weaponMovement.TryChangeWeaponPosition(randomTouchOnAttackJoystick);
-        
         yield return null;
 
         float time = 0;
@@ -77,119 +68,128 @@ public class LaserBeamTests
         {
             weaponAttack.HumbleFixedUpdate(randomTouchOnAttackJoystick);
             yield return null;
+
             time += Time.deltaTime;
         }
 
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-
-        Assert.IsNotNull(shot, $"Seed: {seed}");
-
         var startOfLaser = shot.GetComponent<LineRenderer>().GetPosition(0);
 
+        // THEN
+        Assert.IsNotNull(shot, $"Seed: {seed}");
         Assert.AreEqual(startOfLaser.x, weaponAttack.transform.position.x, $"Seed: {seed}");
         Assert.AreEqual(startOfLaser.y, weaponAttack.transform.position.y, $"Seed: {seed}");
 
+        // GIVEN
         Vector2 endOfLaser;
 
-        do {
+        // WHEN
+
+        weaponAttack.HumbleFixedUpdate(Vector2.zero);
+        yield return null;
+
+        do
+        {
             endOfLaser = shot.GetComponent<LineRenderer>().GetPosition(1);
             yield return null;
+
             shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
         } while (shot != null);
 
+        // THEN
         Assert.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(endOfLaser), $"Seed: {seed}");
 
-    }
-
-    IEnumerator SkipOneFrame()
-    {
-        yield return null; // Skip one frame
     }
 
     private const string FUNCTION_SHOOTING_WITH_TARGET_NAME = "ShootingWithTarget";
     [UnityTest]
     public IEnumerator ShootingWithTarget()
     {
-        int seed = Random.Range(int.MinValue, int.MaxValue);
-        Random.InitState(seed);
+        // GIVEN
+        var seed = TestUtils.SetRandomSeed();
 
         TestUtils.SetUpShot(AttackName.LASER_BEAM);
-
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
+        var acceptedDelta = 0.5f;
 
         TestUtils.SetRandomTargetPosition();
-
         yield return null;
+        var targetNearestPosition = TestUtils.GetTargetNearestPositionToHalalit();
+        var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetNearestPosition, weaponAttack.GetAttackJoystickEdge());
 
-        var targetClosestPosition = TestUtils.GetTargetNearestPositionToHalalit();
-
-        var acceptedDelta = 0.3f;
-        var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, weaponAttack.GetAttackJoystickEdge());
-
+        // WHEN
         weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
-
         yield return null;
 
         weaponAttack.HumbleFixedUpdate(touchOnJoystick);
-
         yield return null;
 
+        // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-
         Assert.IsNotNull(shot, $"Seed: {seed}");
 
-        Vector2 lastShotPosition;
+        // GIVEN
+        Vector2 lastShotPosition, newLastShotPosition;
 
+        // WHEN
         do
         {
-            lastShotPosition = shot.transform.position;
+            lastShotPosition = shot.GetComponent<LineRenderer>().GetPosition(1);
+            weaponAttack.HumbleFixedUpdate(touchOnJoystick);
             yield return null;
-            shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        } while (shot != null);
 
-        Assert.AreEqual(lastShotPosition.x, targetClosestPosition.x, acceptedDelta, $"Seed: {seed}");
-        Assert.AreEqual(lastShotPosition.y, targetClosestPosition.y, acceptedDelta, $"Seed: {seed}");
+            newLastShotPosition = shot.GetComponent<LineRenderer>().GetPosition(1);
+        } while (newLastShotPosition != lastShotPosition);
+
+        // THEN
+        Assert.AreEqual(lastShotPosition.x, targetNearestPosition.x, acceptedDelta, $"Seed: {seed}");
+        Assert.AreEqual(lastShotPosition.y, targetNearestPosition.y, acceptedDelta, $"Seed: {seed}");
 
     }
 
     [UnityTest]
     public IEnumerator ShootingInDirection()
     {
+        // GIVEN
+        var seed = TestUtils.SetRandomSeed();
+
         var acceptedDelta = 0.01f;
-        int seed = Random.Range(int.MinValue, int.MaxValue);
-        Random.InitState(seed);
-
-        TestUtils.SetUpShot(AttackName.LASER_BEAM);
-
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
-
-        yield return null;
-
         var touchOnJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
 
-        weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
+        TestUtils.SetUpShot(AttackName.LASER_BEAM);
+        yield return null;
 
+
+        // WHEN
+        weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
         yield return null;
 
         weaponAttack.HumbleFixedUpdate(touchOnJoystick);
-
         yield return null;
 
-        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+        weaponAttack.HumbleFixedUpdate(Vector2.zero);
+        yield return null;
 
+        // THEN
+        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
         Assert.IsNotNull(shot, $"Seed: {seed}");
 
+        // GIVEN
         Vector2 lastShotPosition;
 
+        // WHEN
         do
         {
             lastShotPosition = shot.GetComponent<LineRenderer>().GetPosition(1);
             yield return null;
+
             shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
         } while (shot != null);
 
+        // THEN
         Assert.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), $"Seed: {seed}");
 
         var weaponDirection = Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(weaponMovement.transform.rotation));

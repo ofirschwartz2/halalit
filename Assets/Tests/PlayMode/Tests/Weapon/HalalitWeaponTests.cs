@@ -23,57 +23,57 @@ public class HalalitWeaponTests
     [UnityTest]
     public IEnumerator JoystickUnderAttackTrigger()
     {
-        int seed = Random.Range(int.MinValue, int.MaxValue);
-        Random.InitState(seed);
+        // GIVEN
+        var seed = TestUtils.SetRandomSeed();
 
+        TestUtils.SetUpShot(AttackName.BALL_SHOT);
         var weaponAttack = TestUtils.GetWeaponAttack();
-
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchUnderAttackTrigger(weaponAttack);
 
+        // WHEN
         weaponAttack.HumbleFixedUpdate(randomTouchOnAttackJoystick);
-
         yield return null;
-
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());        
 
-        Assert.IsNull(shot, $"seed: {seed}");
+        // THEN
+        Assert.IsNull(shot, $"Seed: {seed}");
     }
 
     [UnityTest]
     public IEnumerator JoystickOverAttackTriggerShooting()
     {
-        int seed = Random.Range(int.MinValue, int.MaxValue);
-        Random.InitState(seed);
+        // GIVEN
+        var seed = TestUtils.SetRandomSeed();
 
+        TestUtils.SetUpShot(AttackName.BALL_SHOT);
         var weaponAttack = TestUtils.GetWeaponAttack();
-
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
-
+        
+        // WHEN
         weaponAttack.HumbleFixedUpdate(randomTouchOnAttackJoystick);
-
         yield return null;
-
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
 
-        Assert.IsNotNull(shot, $"seed: {seed}");
+        // THEN
+        Assert.IsNotNull(shot, $"Seed: {seed}");
     }
 
     [UnityTest]
     public IEnumerator DelayBetweenShotsLargerThanCooldown() 
     {
-        int seed = Random.Range(int.MinValue, int.MaxValue);
-        Random.InitState(seed);
-        TestUtils.SetUpShot(AttackName.BALL_SHOT);
-
-        var weaponAttack = TestUtils.GetWeaponAttack();
-
-        var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
+        // GIVEN
+        var seed = TestUtils.SetRandomSeed();
 
         float totalTime = 3f;
         float elapsedTime = 0f;
         int shotsCount = 0;
         float firstShotTime = 0f;
 
+        TestUtils.SetUpShot(AttackName.BALL_SHOT);
+        var weaponAttack = TestUtils.GetWeaponAttack();
+        var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
+
+        // WHEN
         while (elapsedTime < totalTime)
         {
             weaponAttack.HumbleFixedUpdate(randomTouchOnAttackJoystick);
@@ -81,18 +81,20 @@ public class HalalitWeaponTests
             var shots = GameObject.FindGameObjectsWithTag(Tag.SHOT.GetDescription());
             if (shots.Length > shotsCount)
             {
-                if (shots.Length == 1) // First shot fired
+                if (shots.Length == 1) // 1st shot fired
                 {
                     firstShotTime = elapsedTime;
                     shotsCount = shots.Length;
                 }
-                else if (shots.Length == 2) // Second shot fired
+                else if (shots.Length == 2) // 2nd shot fired
                 {
+                    // THEN
                     Assert.GreaterOrEqual(elapsedTime - firstShotTime, weaponAttack.GetCooldownInterval(), $"seed: {seed}");
                     break;
                 }
-                else 
+                else // >2 shots fired
                 {
+                    // THEN
                     Assert.Fail($"Seed: {seed}");
                 }
             }
@@ -105,11 +107,11 @@ public class HalalitWeaponTests
     [UnityTest]
     public IEnumerator JoystickDirectionToWeaponDirection()
     {
-        int seed = Random.Range(int.MinValue, int.MaxValue);
-        Random.InitState(seed);
+        // GIVEN
+        var seed = TestUtils.SetRandomSeed();
 
-        var weaponMovement = TestUtils.GetWeaponMovement();
         var acceptedDelta = 0.1f;
+        var weaponMovement = TestUtils.GetWeaponMovement();
 
         Vector2 randomTouchOnAttackJoystick = Vector2.zero;
         while (randomTouchOnAttackJoystick == Vector2.zero)
@@ -117,15 +119,17 @@ public class HalalitWeaponTests
             randomTouchOnAttackJoystick = TestUtils.GetRandomTouch();
         } 
         
+        // WHEN
         weaponMovement.TryChangeWeaponPosition(randomTouchOnAttackJoystick);
 
-        yield return null; // TODO: WHEN WE HAVE WEAPON DRAG WAIT FOR X SECONDS
+        yield return null; // TODO: WHEN WE HAVE WEAPON DRAG, WAIT FOR X SECONDS
 
+        // THEN
         Assert.AreEqual(
             Utils.Vector2ToDegrees(randomTouchOnAttackJoystick),
             Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(weaponMovement.transform.rotation)),
             acceptedDelta,
-            $"seed: {seed}"
+            $"Seed: {seed}"
             );
     }
 
