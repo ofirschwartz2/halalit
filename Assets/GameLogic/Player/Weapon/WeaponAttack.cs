@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [assembly: InternalsVisibleTo("Tests")]
 
@@ -58,7 +59,10 @@ internal class WeaponAttack : MonoBehaviour
     #region Logic
     void FixedUpdate()
     {
-        HumbleFixedUpdate(new Vector2(_attackJoystick.Vertical, _attackJoystick.Horizontal));
+        #if UNITY_EDITOR
+        if (!SceneManager.GetActiveScene().name.Contains("Testing"))
+        #endif
+            HumbleFixedUpdate(new Vector2(_attackJoystick.Vertical, _attackJoystick.Horizontal));
     }
 
     internal void HumbleFixedUpdate(Vector2 attackJoystickTouch)

@@ -1,4 +1,5 @@
-﻿using Assets.Utils;
+﻿using Assets.Enums;
+using Assets.Utils;
 using UnityEngine;
 
 public abstract class LaserBeamBase : ConsecutiveAttack
@@ -33,6 +34,7 @@ public abstract class LaserBeamBase : ConsecutiveAttack
 
     protected void Start()
     {
+        _beamLine.tag = Tag.SHOT.GetDescription();
         _isBeingShoot = true;
         _distanceFromStartPosition = 0;
         _beamLine.startWidth = _beamSize;
@@ -56,7 +58,6 @@ public abstract class LaserBeamBase : ConsecutiveAttack
         _startVfxBeamFlash.SetActive(true);
         _startVfxParticles.SetActive(true);
         _endVfxBeamFlash.SetActive(true);
-
         UpdateConsecitiveAttack(startPosition, rotation);
     }
 

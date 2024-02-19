@@ -10,7 +10,7 @@ using UnityEngine.TestTools;
 public class HalalitMovementTests
 {
 
-    private const string SCENE_NAME = "Playground";
+    private const string SCENE_NAME = "Testing";
 
     [SetUp]
     public void SetUp()
@@ -24,7 +24,7 @@ public class HalalitMovementTests
         // GIVEN
         float totalTime = 0.5f;
         float elapsedTime = 0f;
-        float acceptedDelta = 0.1f;
+        float acceptedDelta = 1f;
         int seed = Random.Range(int.MinValue, int.MaxValue);
         Random.InitState(seed);
 

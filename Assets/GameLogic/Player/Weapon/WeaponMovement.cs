@@ -1,6 +1,7 @@
 ﻿using Assets.Utils;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [assembly: InternalsVisibleTo("Tests")]
 
@@ -13,10 +14,14 @@ internal class WeaponMovement : MonoBehaviour
     [SerializeField]
     private float _weaponSpinRadius;
 
-    void Update()
+    void Update() // TODO: FIXED UPDATE?
     {
-        TryChangeWeaponPosition(new Vector2(_attackJoystick.Horizontal, _attackJoystick.Vertical));
+        #if UNITY_EDITOR
+        if (!SceneManager.GetActiveScene().name.Contains("Testing"))
+        #endif
+            TryChangeWeaponPosition(new Vector2(_attackJoystick.Horizontal, _attackJoystick.Vertical));
     }
+
 
     internal void TryChangeWeaponPosition(Vector2 attackJoystickTouch)
     {

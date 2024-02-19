@@ -12,7 +12,7 @@ using UnityEngine.TestTools;
 public class HalalitWeaponTests
 {
 
-    private const string SCENE_NAME = "Playground";
+    private const string SCENE_NAME = "Testing";
 
     [SetUp]
     public void SetUp()

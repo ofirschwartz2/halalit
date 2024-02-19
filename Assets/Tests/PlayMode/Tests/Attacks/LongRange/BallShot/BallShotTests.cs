@@ -12,8 +12,8 @@ using UnityEngine.TestTools;
 public class BallShotTests
 {
 
-    private const string SCENE_NAME = "Playground";
-    private const string SCENE_WITH_TARGET_NAME = "PlaygroundWithTarget";
+    private const string SCENE_NAME = "Testing";
+    private const string SCENE_WITH_TARGET_NAME = "TestingWithTarget";
 
     [SetUp]
     public void SetUp()

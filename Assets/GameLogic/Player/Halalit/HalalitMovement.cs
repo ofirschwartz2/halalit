@@ -2,6 +2,7 @@ using Assets.Utils;
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [assembly: InternalsVisibleTo("Tests")]
 
@@ -20,7 +21,10 @@ internal class HalalitMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        TryMove(_joystick.Horizontal, _joystick.Vertical, Time.deltaTime);
+        #if UNITY_EDITOR
+        if (!SceneManager.GetActiveScene().name.Contains("Testing"))
+        #endif
+            TryMove(_joystick.Horizontal, _joystick.Vertical, Time.deltaTime);
     }
 
     #region Moving 

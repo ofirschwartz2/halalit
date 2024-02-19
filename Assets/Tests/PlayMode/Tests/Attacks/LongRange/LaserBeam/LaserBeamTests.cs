@@ -13,8 +13,8 @@ using UnityEngine.TestTools;
 public class LaserBeamTests
 {
 
-    private const string SCENE_NAME = "Playground";
-    private const string SCENE_WITH_TARGET_NAME = "PlaygroundWithTarget";
+    private const string SCENE_NAME = "Testing";
+    private const string SCENE_WITH_TARGET_NAME = "TestingWithTarget";
 
     [SetUp]
     public void SetUp()
@@ -60,7 +60,7 @@ public class LaserBeamTests
         int seed = Random.Range(int.MinValue, int.MaxValue);
         Random.InitState(seed);
         
-        float shootingTime = 5f;
+        float shootingTime = 3f;
         TestUtils.SetUpShot(AttackName.LASER_BEAM);
 
         var weaponMovement = TestUtils.GetWeaponMovement();
@@ -84,21 +84,26 @@ public class LaserBeamTests
 
         Assert.IsNotNull(shot, $"Seed: {seed}");
 
-        Vector2 nearestPoint = TestUtils.GetNearestPositionToHalalit(shot);
+        var startOfLaser = shot.GetComponent<LineRenderer>().GetPosition(0);
 
-        Assert.AreEqual(nearestPoint.x, weaponAttack.transform.position.x, $"Seed: {seed}");
-        Assert.AreEqual(nearestPoint.y, weaponAttack.transform.position.y, $"Seed: {seed}");
+        Assert.AreEqual(startOfLaser.x, weaponAttack.transform.position.x, $"Seed: {seed}");
+        Assert.AreEqual(startOfLaser.y, weaponAttack.transform.position.y, $"Seed: {seed}");
 
-        Vector2 lastShotPosition;
+        Vector2 endOfLaser;
 
         do {
-            lastShotPosition = shot.transform.position;
+            endOfLaser = shot.GetComponent<LineRenderer>().GetPosition(1);
             yield return null;
             shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
         } while (shot != null);
 
-        Assert.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), $"Seed: {seed}");
+        Assert.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(endOfLaser), $"Seed: {seed}");
 
+    }
+
+    IEnumerator SkipOneFrame()
+    {
+        yield return null; // Skip one frame
     }
 
     private const string FUNCTION_SHOOTING_WITH_TARGET_NAME = "ShootingWithTarget";
@@ -180,7 +185,7 @@ public class LaserBeamTests
 
         do
         {
-            lastShotPosition = shot.transform.position;
+            lastShotPosition = shot.GetComponent<LineRenderer>().GetPosition(1);
             yield return null;
             shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
         } while (shot != null);
