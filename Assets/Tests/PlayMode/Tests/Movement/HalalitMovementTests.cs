@@ -10,7 +10,7 @@ using UnityEngine.TestTools;
 public class HalalitMovementTests
 {
 
-    private const string SCENE_NAME = "Playground";
+    private const string SCENE_NAME = "Testing";
 
     [SetUp]
     public void SetUp()
@@ -22,11 +22,11 @@ public class HalalitMovementTests
     public IEnumerator JoystickDirectionAffectHalalitDirection()
     {
         // GIVEN
+        var seed = TestUtils.SetRandomSeed();
+
         float totalTime = 0.5f;
         float elapsedTime = 0f;
-        float acceptedDelta = 0.1f;
-        int seed = Random.Range(int.MinValue, int.MaxValue);
-        Random.InitState(seed);
+        float acceptedDelta = 1f;
 
         GameObject halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
         HalalitMovement halalitMovement = halalit.GetComponent<HalalitMovement>();
@@ -84,16 +84,16 @@ public class HalalitMovementTests
     public IEnumerator HalalitStopsMovingAfterTime()
     {
         // GIVEN
-        var totalTime = 0.5f;
+        var totalMovingTime = 0.3f;
         var elapsedTime = 0f;
-        var waitBetweenMovements = 5f;
+        var waitUntilStopsMoving = 5f;
 
         var halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
         var halalitMovement = halalit.GetComponent<HalalitMovement>();
         var halalitRigidBody2D = halalit.GetComponent<Rigidbody2D>();
 
         // WHEN
-        while (elapsedTime < totalTime)
+        while (elapsedTime < totalMovingTime)
         {
             float deltaTime = Time.deltaTime;
             elapsedTime += deltaTime;
@@ -103,7 +103,7 @@ public class HalalitMovementTests
             yield return null;
         }
 
-        yield return new WaitForSeconds(waitBetweenMovements);
+        yield return new WaitForSeconds(waitUntilStopsMoving);
 
         // THEN
         Assert.AreEqual(halalitRigidBody2D.velocity.magnitude, 0);

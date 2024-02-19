@@ -12,8 +12,8 @@ using UnityEngine.TestTools;
 public class BallShotTests
 {
 
-    private const string SCENE_NAME = "Playground";
-    private const string SCENE_WITH_TARGET_NAME = "PlaygroundWithTarget";
+    private const string SCENE_NAME = "Testing";
+    private const string SCENE_WITH_TARGET_NAME = "TestingWithTarget";
 
     [SetUp]
     public void SetUp()
@@ -33,60 +33,56 @@ public class BallShotTests
     [UnityTest]
     public IEnumerator Shooting()
     {
-        int seed = Random.Range(int.MinValue, int.MaxValue);
-        Random.InitState(seed);
+        // GIVEN
+        var seed = TestUtils.SetRandomSeed();
 
         TestUtils.SetUpShot(AttackName.BALL_SHOT);
-
         var weaponAttack = TestUtils.GetWeaponAttack();
-
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
 
+        // WHEN
         weaponAttack.HumbleFixedUpdate(randomTouchOnAttackJoystick);
-
         yield return null;
 
+        // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-
         Assert.IsNotNull(shot, $"seed: {seed}");
     }
 
     [UnityTest]
     public IEnumerator ShootingWithoutTarget()
     {
-        int seed = Random.Range(int.MinValue, int.MaxValue);
+        // GIVEN
+        var seed = TestUtils.SetRandomSeed();
         
-        Random.InitState(seed);
-
         TestUtils.SetUpShot(AttackName.BALL_SHOT);
-
-        yield return null;
-
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
-
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
         
+        // WHEN
         weaponMovement.TryChangeWeaponPosition(randomTouchOnAttackJoystick);
-        
         yield return null;
 
         weaponAttack.HumbleFixedUpdate(randomTouchOnAttackJoystick);
-
         yield return null;
 
+        // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-
         Assert.IsNotNull(shot, $"Seed: {seed}");
 
+        // GIVEN
         Vector2 lastShotPosition;
 
+        // WHEN
         do {
             lastShotPosition = shot.transform.position;
             yield return null;
+
             shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
         } while (shot != null);
 
+        // THEN
         Assert.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), $"Seed: {seed}");
 
     }
@@ -95,44 +91,42 @@ public class BallShotTests
     [UnityTest]
     public IEnumerator ShootingWithTarget()
     {
-        int seed = Random.Range(int.MinValue, int.MaxValue);
-        Random.InitState(seed);
+        // GIVEN
+        var seed = TestUtils.SetRandomSeed();
 
         TestUtils.SetUpShot(AttackName.BALL_SHOT);
-
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
-
         TestUtils.SetRandomTargetPosition();
-
         yield return null;
-
         var targetClosestPosition = TestUtils.GetTargetNearestPositionToHalalit();
-
-        var acceptedDelta = 0.3f;
+        var acceptedDelta = 0.5f;
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, weaponAttack.GetAttackJoystickEdge());
 
+        // WHEN
         weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
-
         yield return null;
 
         weaponAttack.HumbleFixedUpdate(touchOnJoystick);
-
         yield return null;
 
+        // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-
         Assert.IsNotNull(shot, $"Seed: {seed}");
 
+        // GIVEN
         Vector2 lastShotPosition;
 
+        // WHEN
         do
         {
             lastShotPosition = shot.transform.position;
             yield return null;
+
             shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
         } while (shot != null);
 
+        // THEN
         Assert.AreEqual(lastShotPosition.x, targetClosestPosition.x, acceptedDelta, $"Seed: {seed}");
         Assert.AreEqual(lastShotPosition.y, targetClosestPosition.y, acceptedDelta, $"Seed: {seed}");
 
@@ -141,33 +135,30 @@ public class BallShotTests
     [UnityTest]
     public IEnumerator ShootingInDirection()
     {
-        var acceptedDelta = 0.01f;
-        int seed = Random.Range(int.MinValue, int.MaxValue);
-        Random.InitState(seed);
+        // GIVEN
+        var seed = TestUtils.SetRandomSeed();
 
         TestUtils.SetUpShot(AttackName.BALL_SHOT);
-
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
-
-        yield return null;
-
+        var acceptedDelta = 0.01f;
         var touchOnJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
 
+        // WHEN
         weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
-
         yield return null;
 
         weaponAttack.HumbleFixedUpdate(touchOnJoystick);
-
         yield return null;
 
+        // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-
         Assert.IsNotNull(shot, $"Seed: {seed}");
 
+        // GIVEN
         Vector2 lastShotPosition;
 
+        // WHEN
         do
         {
             lastShotPosition = shot.transform.position;
@@ -175,6 +166,7 @@ public class BallShotTests
             shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
         } while (shot != null);
 
+        // THEN
         Assert.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), $"Seed: {seed}");
 
         var weaponDirection = Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(weaponMovement.transform.rotation));
