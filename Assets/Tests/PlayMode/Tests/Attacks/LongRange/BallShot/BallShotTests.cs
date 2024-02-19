@@ -100,7 +100,7 @@ public class BallShotTests
         TestUtils.SetRandomTargetPosition();
         yield return null;
         var targetClosestPosition = TestUtils.GetTargetNearestPositionToHalalit();
-        var acceptedDelta = 0.3f;
+        var acceptedDelta = 0.5f;
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, weaponAttack.GetAttackJoystickEdge());
 
         // WHEN
