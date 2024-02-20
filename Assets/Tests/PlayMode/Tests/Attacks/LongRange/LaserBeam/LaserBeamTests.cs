@@ -44,7 +44,7 @@ public class LaserBeamTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        Assert.IsNotNull(shot, $"seed: {seed}");
+        TestUtils.IsNotNull(shot, seed);
     }
 
     [UnityTest]
@@ -76,9 +76,9 @@ public class LaserBeamTests
         var startOfLaser = shot.GetComponent<LineRenderer>().GetPosition(0);
 
         // THEN
-        Assert.IsNotNull(shot, $"Seed: {seed}");
-        Assert.AreEqual(startOfLaser.x, weaponAttack.transform.position.x, $"Seed: {seed}");
-        Assert.AreEqual(startOfLaser.y, weaponAttack.transform.position.y, $"Seed: {seed}");
+        TestUtils.IsNotNull(shot, seed);
+        TestUtils.AreEqual(startOfLaser.x, weaponAttack.transform.position.x, "Laser Not Starting from Weapon", seed);
+        TestUtils.AreEqual(startOfLaser.y, weaponAttack.transform.position.y, "Laser Not Starting from Weapon", seed);
 
         // GIVEN
         Vector2 endOfLaser;
@@ -97,7 +97,7 @@ public class LaserBeamTests
         } while (shot != null);
 
         // THEN
-        Assert.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(endOfLaser), $"Seed: {seed}");
+        TestUtils.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(endOfLaser), "Laser Not Ending on Edges", seed);
 
     }
 
@@ -127,7 +127,7 @@ public class LaserBeamTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        Assert.IsNotNull(shot, $"Seed: {seed}");
+        TestUtils.IsNotNull(shot, seed);
 
         // GIVEN
         Vector2 lastShotPosition, newLastShotPosition;
@@ -143,8 +143,8 @@ public class LaserBeamTests
         } while (newLastShotPosition != lastShotPosition);
 
         // THEN
-        Assert.AreEqual(lastShotPosition.x, targetNearestPosition.x, acceptedDelta, $"Seed: {seed}");
-        Assert.AreEqual(lastShotPosition.y, targetNearestPosition.y, acceptedDelta, $"Seed: {seed}");
+        TestUtils.AreEqual(lastShotPosition.x, targetNearestPosition.x, "Laser Is Not Touching Target", seed, acceptedDelta);
+        TestUtils.AreEqual(lastShotPosition.y, targetNearestPosition.y, "Laser Is Not Touching Target", seed, acceptedDelta);
 
     }
 
@@ -175,7 +175,7 @@ public class LaserBeamTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        Assert.IsNotNull(shot, $"Seed: {seed}");
+        TestUtils.IsNotNull(shot, seed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -190,16 +190,17 @@ public class LaserBeamTests
         } while (shot != null);
 
         // THEN
-        Assert.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), $"Seed: {seed}");
+        TestUtils.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Laser Not Ending on Edges", seed);
 
         var weaponDirection = Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(weaponMovement.transform.rotation));
-        var shotDirection = Utils.Vector2ToDegrees(lastShotPosition);
-        
-        Assert.AreEqual(
+        var laserDirection = Utils.Vector2ToDegrees(lastShotPosition);
+
+        TestUtils.AreEqual(
             weaponDirection,
-            shotDirection,
-            acceptedDelta,
-            $"Seed: {seed}");
+            laserDirection,
+            "Weapon vs Laser Direction",
+            seed,
+            acceptedDelta);
 
     }
 }

@@ -2,8 +2,6 @@ using Assets.Enums;
 using Assets.Utils;
 using NUnit.Framework;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
@@ -36,7 +34,7 @@ public class HalalitWeaponTests
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());        
 
         // THEN
-        Assert.IsNull(shot, $"Seed: {seed}");
+        TestUtils.IsNull(shot, seed);
     }
 
     [UnityTest]
@@ -55,7 +53,7 @@ public class HalalitWeaponTests
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
 
         // THEN
-        Assert.IsNotNull(shot, $"Seed: {seed}");
+        TestUtils.IsNotNull(shot, seed);
     }
 
     [UnityTest]
@@ -89,13 +87,13 @@ public class HalalitWeaponTests
                 else if (shots.Length == 2) // 2nd shot fired
                 {
                     // THEN
-                    Assert.GreaterOrEqual(elapsedTime - firstShotTime, weaponAttack.GetCooldownInterval(), $"seed: {seed}");
+                    TestUtils.GreaterOrEqual(elapsedTime - firstShotTime, weaponAttack.GetCooldownInterval(), "Delay Under Cooldown", seed);
                     break;
                 }
-                else // >2 shots fired
+                else
                 {
                     // THEN
-                    Assert.Fail($"Seed: {seed}");
+                    TestUtils.Fail(">2 Shots Fired", seed);
                 }
             }
 
@@ -125,11 +123,12 @@ public class HalalitWeaponTests
         yield return null; // TODO: WHEN WE HAVE WEAPON DRAG, WAIT FOR X SECONDS
 
         // THEN
-        Assert.AreEqual(
+        TestUtils.AreEqual(
             Utils.Vector2ToDegrees(randomTouchOnAttackJoystick),
             Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(weaponMovement.transform.rotation)),
-            acceptedDelta,
-            $"Seed: {seed}"
+            "Joystick vs Weapon Direction",
+            seed,
+            acceptedDelta
             );
     }
 

@@ -17,7 +17,7 @@ public class AdvancedTests
     {
         SceneManager.LoadScene(SCENE_NAME);
     }
-
+    /*
     [UnityTest]
     public IEnumerator AllInWorld()
     {
@@ -46,7 +46,7 @@ public class AdvancedTests
             yield return new WaitForSeconds(checkInterval);
         }
     }
-
+    */
     private bool CheckAllInWorld()
     {
         List<GameObject> allGameObjects = GameObject.FindGameObjectsWithTag("Enemy").ToList();

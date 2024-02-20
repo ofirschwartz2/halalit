@@ -46,7 +46,7 @@ public class BallShotTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        Assert.IsNotNull(shot, $"seed: {seed}");
+        TestUtils.IsNotNull(shot, seed);
     }
 
     [UnityTest]
@@ -69,7 +69,7 @@ public class BallShotTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        Assert.IsNotNull(shot, $"Seed: {seed}");
+        TestUtils.IsNotNull(shot, seed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -83,7 +83,7 @@ public class BallShotTests
         } while (shot != null);
 
         // THEN
-        Assert.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), $"Seed: {seed}");
+        TestUtils.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges", seed);
 
     }
 
@@ -112,7 +112,7 @@ public class BallShotTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        Assert.IsNotNull(shot, $"Seed: {seed}");
+        TestUtils.IsNotNull(shot, seed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -127,9 +127,8 @@ public class BallShotTests
         } while (shot != null);
 
         // THEN
-        Assert.AreEqual(lastShotPosition.x, targetClosestPosition.x, acceptedDelta, $"Seed: {seed}");
-        Assert.AreEqual(lastShotPosition.y, targetClosestPosition.y, acceptedDelta, $"Seed: {seed}");
-
+        TestUtils.AreEqual(lastShotPosition.x, targetClosestPosition.x, "Shot Didn't Hit Target", seed, acceptedDelta);
+        TestUtils.AreEqual(lastShotPosition.y, targetClosestPosition.y, "Shot Didn't Hit Target", seed, acceptedDelta);
     }
 
     [UnityTest]
@@ -153,7 +152,7 @@ public class BallShotTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        Assert.IsNotNull(shot, $"Seed: {seed}");
+        TestUtils.IsNotNull(shot, seed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -167,16 +166,17 @@ public class BallShotTests
         } while (shot != null);
 
         // THEN
-        Assert.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), $"Seed: {seed}");
+        TestUtils.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges", seed);
 
         var weaponDirection = Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(weaponMovement.transform.rotation));
         var shotDirection = Utils.Vector2ToDegrees(lastShotPosition);
         
-        Assert.AreEqual(
+        TestUtils.AreEqual(
             weaponDirection,
             shotDirection,
-            acceptedDelta,
-            $"Seed: {seed}");
+            "Weapon vs Shot Direction",
+            seed,
+            acceptedDelta);
 
     }
 
