@@ -2,19 +2,17 @@ using Assets.Enums;
 using Assets.Utils;
 using NUnit.Framework;
 using System.Collections;
-using System.Reflection;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
 
-public class BallShotTests
+public class MirrorBallShotTests
 {
 
     private const string SCENE_NAME = "Testing";
     private const string SCENE_WITH_TARGET_NAME = "TestingWithTarget";
-    private const AttackName SHOT_NAME = AttackName.BALL_SHOT;
+    private const AttackName SHOT_NAME = AttackName.MIRROR_BALL_SHOT;
 
     [SetUp]
     public void SetUp()
@@ -23,6 +21,7 @@ public class BallShotTests
         switch (testName) 
         {
             case FUNCTION_SHOOTING_WITH_TARGET_NAME:
+            case FUNCTION_BOUNCE_DIRECTION_CHECK_NAME:
                 SceneManager.LoadScene(SCENE_WITH_TARGET_NAME);
                 break;
             default:
@@ -116,20 +115,91 @@ public class BallShotTests
         TestUtils.IsNotNull(shot, seed);
 
         // GIVEN
-        Vector2 lastShotPosition;
+        Vector2 lastShotPosition = Vector2.zero, thisShotPosition = Vector2.zero;
+        Vector2 startShotDirection = Vector2.zero, endShotDirection = Vector2.zero;
 
         // WHEN
         do
         {
             lastShotPosition = shot.transform.position;
             yield return null;
-
+            if (shot != null) 
+            {
+                thisShotPosition = shot.transform.position;
+            }
+            if (thisShotPosition != lastShotPosition && startShotDirection == Vector2.zero) 
+            {
+                startShotDirection = Utils.GetDirectionVector(lastShotPosition, thisShotPosition);
+            }
             shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
         } while (shot != null);
 
         // THEN
-        TestUtils.AreEqual(lastShotPosition.x, targetClosestPosition.x, "Shot Didn't Hit Target", seed, acceptedDelta);
-        TestUtils.AreEqual(lastShotPosition.y, targetClosestPosition.y, "Shot Didn't Hit Target", seed, acceptedDelta);
+        endShotDirection = Utils.GetDirectionVector(lastShotPosition, thisShotPosition);
+        TestUtils.AreNotEqual(startShotDirection.x, endShotDirection.x, "Didn't Change Direction", seed);
+        TestUtils.AreNotEqual(startShotDirection.y, endShotDirection.y, "Didn't Change Direction", seed);
+        TestUtils.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges", seed);
+
+    }
+
+    private const string FUNCTION_BOUNCE_DIRECTION_CHECK_NAME = "BounceCheck";
+    [UnityTest]
+    public IEnumerator BounceDirectionCheck()
+    {
+        // GIVEN
+
+        TestUtils.SetUpShot(SHOT_NAME);
+        var weaponMovement = TestUtils.GetWeaponMovement();
+        var weaponAttack = TestUtils.GetWeaponAttack();
+        TestUtils.RotaeTarget(90);
+        yield return null;
+
+        var touchOnJoystick = new Vector2(1f, 0.2f);
+
+        // WHEN
+        weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
+        yield return null;
+
+        weaponAttack.HumbleFixedUpdate(touchOnJoystick);
+        yield return null;
+
+        // THEN
+        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+        TestUtils.IsNotNull(shot);
+
+        // GIVEN
+        Vector2 lastShotPosition = Vector2.zero, thisShotPosition = Vector2.zero;
+        Vector2 startShotDirection = Vector2.zero, endShotDirection = Vector2.zero;
+
+        // WHEN
+        do
+        {
+            lastShotPosition = shot.transform.position;
+            yield return null;
+            if (shot != null)
+            {
+                thisShotPosition = shot.transform.position;
+            }
+            if (thisShotPosition != lastShotPosition && startShotDirection == Vector2.zero)
+            {
+                startShotDirection = Utils.GetDirectionVector(lastShotPosition, thisShotPosition);
+            }
+            shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+        } while (shot != null);
+
+        // THEN
+        endShotDirection = Utils.GetDirectionVector(lastShotPosition, thisShotPosition);
+        TestUtils.AreNotEqual(startShotDirection.x, endShotDirection.x, "Didn't Change Direction");
+        TestUtils.AreNotEqual(startShotDirection.y, endShotDirection.y, "Didn't Change Direction");
+        TestUtils.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges");
+        TestUtils.Fail("TODO: fix bounce");
+    }
+
+    [UnityTest]
+    public IEnumerator AmountOfBouncesCheck()
+    {
+        yield return null;
+        TestUtils.Fail("TODO: implement, than write test");
     }
 
     [UnityTest]

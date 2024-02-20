@@ -12,6 +12,7 @@ public class LaserBeamTests
 
     private const string SCENE_NAME = "Testing";
     private const string SCENE_WITH_TARGET_NAME = "TestingWithTarget";
+    private const AttackName SHOT_NAME = AttackName.LASER_BEAM;
 
     [SetUp]
     public void SetUp()
@@ -34,7 +35,7 @@ public class LaserBeamTests
         // GIVEN
         var seed = TestUtils.SetRandomSeed();
 
-        TestUtils.SetUpShot(AttackName.LASER_BEAM);
+        TestUtils.SetUpShot(SHOT_NAME);
         var weaponAttack = TestUtils.GetWeaponAttack();
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
 
@@ -54,7 +55,7 @@ public class LaserBeamTests
         var seed = TestUtils.SetRandomSeed(1683092413);
         
         float shootingTime = 3f;
-        TestUtils.SetUpShot(AttackName.LASER_BEAM);
+        TestUtils.SetUpShot(SHOT_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
@@ -108,7 +109,7 @@ public class LaserBeamTests
         // GIVEN
         var seed = TestUtils.SetRandomSeed();
 
-        TestUtils.SetUpShot(AttackName.LASER_BEAM);
+        TestUtils.SetUpShot(SHOT_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         var acceptedDelta = 0.5f;
@@ -159,7 +160,7 @@ public class LaserBeamTests
         var weaponAttack = TestUtils.GetWeaponAttack();
         var touchOnJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
 
-        TestUtils.SetUpShot(AttackName.LASER_BEAM);
+        TestUtils.SetUpShot(SHOT_NAME);
         yield return null;
 
 
