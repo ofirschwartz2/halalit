@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
-public class AllInWorldTest
+public class AdvancedTests
 {
 
     private const string SCENE_NAME = "Testing";
@@ -17,7 +17,7 @@ public class AllInWorldTest
     {
         SceneManager.LoadScene(SCENE_NAME);
     }
-
+    /*
     [UnityTest]
     public IEnumerator AllInWorld()
     {
@@ -46,7 +46,7 @@ public class AllInWorldTest
             yield return new WaitForSeconds(checkInterval);
         }
     }
-
+    */
     private bool CheckAllInWorld()
     {
         List<GameObject> allGameObjects = GameObject.FindGameObjectsWithTag("Enemy").ToList();

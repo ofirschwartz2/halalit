@@ -4,9 +4,11 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+#if UNITY_EDITOR
 [assembly: InternalsVisibleTo("Tests")]
+#endif
 
-internal class HalalitMovement : MonoBehaviour
+class HalalitMovement : MonoBehaviour
 {
     [SerializeField]
     private Rigidbody2D _rigidBody;
@@ -29,7 +31,12 @@ internal class HalalitMovement : MonoBehaviour
 
     #region Moving 
 
-    internal void TryMove(float joystickHorizontal, float joystickVertical, float deltaTime)
+#if UNITY_EDITOR
+    internal
+#else
+    private
+#endif
+    void TryMove(float joystickHorizontal, float joystickVertical, float deltaTime)
     {
         if (IsMovementInput(joystickHorizontal, joystickVertical))
         {
@@ -64,7 +71,7 @@ internal class HalalitMovement : MonoBehaviour
             _rigidBody.AddForce(new Vector2(horizontalForce, verticalForce));
         }
     }
-    #endregion
+#endregion
 
     #region Predicates
     private bool IsMovementInput(float joystickHorizontal, float joystickVertical)

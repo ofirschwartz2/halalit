@@ -6,9 +6,11 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+#if UNITY_EDITOR
 [assembly: InternalsVisibleTo("Tests")]
+#endif
 
-internal class WeaponAttack : MonoBehaviour
+class WeaponAttack : MonoBehaviour
 {
     [SerializeField]
     private GameObject _halalit;
@@ -21,7 +23,7 @@ internal class WeaponAttack : MonoBehaviour
     [SerializeField]
     private float _attackJoystickEdge;
     [SerializeField]
-    internal KeyValuePair<AttackName, AttackStats> _currentAttack;    // just for view in the inspector
+    private KeyValuePair<AttackName, AttackStats> _currentAttack;    // just for view in the inspector
 
     private AttackToggle _attackToggle;
     private Dictionary<ItemName, Action<Dictionary<EventProperty, float>>> _upgradeActions;
@@ -65,7 +67,12 @@ internal class WeaponAttack : MonoBehaviour
             HumbleFixedUpdate(new Vector2(_attackJoystick.Vertical, _attackJoystick.Horizontal));
     }
 
-    internal void HumbleFixedUpdate(Vector2 attackJoystickTouch)
+#if UNITY_EDITOR
+    internal
+#else
+    private
+#endif
+    void HumbleFixedUpdate(Vector2 attackJoystickTouch)
     {
         // TODO (refactor): this should be via event raise, not in update
         KeyValuePair<AttackName, GameObject> attackPrefab = _attackToggle.GetCurrentAttack();
@@ -202,6 +209,7 @@ internal class WeaponAttack : MonoBehaviour
     }
     #endregion
 
+#if UNITY_EDITOR
     internal float GetAttackJoystickEdge() 
     {
         return _attackJoystickEdge;
@@ -211,4 +219,6 @@ internal class WeaponAttack : MonoBehaviour
     {
         return _cooldownInterval;
     }
+#endif
+
 }

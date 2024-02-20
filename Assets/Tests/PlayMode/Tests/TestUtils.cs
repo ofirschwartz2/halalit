@@ -1,5 +1,6 @@
 using Assets.Enums;
 using Assets.Utils;
+using NUnit.Framework;
 using UnityEngine;
 
 
@@ -17,26 +18,14 @@ internal static class TestUtils
     }
     #endregion
 
-
     #region SceneSetUp
     internal static void SetUpShot(AttackName attackName)
     {
         var attackToggle = GetAttackToggle();
         attackToggle.SetNewAttack(attackName, new AttackStats(ItemRank.COMMON, 1, 1, 1, 1, 1));
-
-        /*
-        var weaponAttack = GetWeaponAttack();
-        
-        attackToggle._firstAttack = attackName;
-
-        weaponAttack._currentAttack =
-            new KeyValuePair<AttackName, AttackStats>(
-                attackName, 
-                new AttackStats(ItemRank.COMMON, 1, 1, 1, 1, 1));
-        */
     }
 
-    internal static void SetRandomTargetPosition() 
+    internal static void SetRandomTargetPosition()
     {
         ScheneWithTargetValidation();
 
@@ -68,7 +57,7 @@ internal static class TestUtils
 
     internal static BoxCollider2D GetInternalWorldBoxCollider2D()
     {
-        return 
+        return
             GameObject.FindGameObjectWithTag(Tag.INTERNAL_WORLD.GetDescription())
                 .GetComponent<BoxCollider2D>();
     }
@@ -81,7 +70,7 @@ internal static class TestUtils
         return target.transform.position;
     }
 
-    internal static Vector2 GetTargetNearestPositionToHalalit() 
+    internal static Vector2 GetTargetNearestPositionToHalalit()
     {
         ScheneWithTargetValidation();
         var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
@@ -102,7 +91,7 @@ internal static class TestUtils
         return new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
     }
 
-    internal static Vector2 GetRandomTouchUnderAttackTrigger(WeaponAttack weaponAttack) 
+    internal static Vector2 GetRandomTouchUnderAttackTrigger(WeaponAttack weaponAttack)
     {
         Vector2 randomTouch;
         do
@@ -132,7 +121,7 @@ internal static class TestUtils
     #endregion
 
     #region Predicates
-    internal static bool IsSomewhereOnInternalWorldEdges(Vector2 position) 
+    internal static bool IsSomewhereOnInternalWorldEdges(Vector2 position)
     {
         Vector3 position3 = new Vector3(position.x, position.y, 1); // TODO: why our InternalWorldBoxCollider2DBoxCollider2D Z=1?
 
@@ -162,4 +151,70 @@ internal static class TestUtils
         }
     }
     #endregion
+
+    #region Asserts
+    internal static void AreEqual(float expected, float actual, string failMessage, int? seed = null, float acceptedDelta = 0)
+    {
+        failMessage = CombineFailMessageWithSeed(failMessage, seed);
+        Assert.AreEqual(expected, actual, acceptedDelta, failMessage);
+    }
+
+    //IsNull
+    internal static void IsNull(Object obj, int? seed = null, string failMessage = "Not a Null Object")
+    {
+        failMessage = CombineFailMessageWithSeed(failMessage, seed);
+        Assert.IsNull(obj, failMessage);
+    }
+
+    internal static void IsNotNull(Object obj, int? seed = null, string failMessage = "Null Object")
+    {
+        failMessage = CombineFailMessageWithSeed(failMessage, seed);
+        Assert.IsNotNull(obj, failMessage);
+    }
+
+    internal static void GreaterOrEqual(float greater, float smaller, string failMessage, int? seed = null)
+    {
+        failMessage = CombineFailMessageWithSeed(failMessage, seed);
+        Assert.GreaterOrEqual(greater, smaller, failMessage);
+    }
+
+    internal static void Greater(float greater, float smaller, string failMessage, int? seed = null)
+    {
+        failMessage = CombineFailMessageWithSeed(failMessage, seed);
+        Assert.Greater(greater, smaller, failMessage);
+    }
+
+    internal static void IsTrue(bool condition, string failMessage, int? seed = null)
+    {
+        failMessage = CombineFailMessageWithSeed(failMessage, seed);
+        Assert.IsTrue(condition, failMessage);
+    }
+
+    internal static void IsFalse(bool condition, string failMessage, int? seed = null)
+    {
+        failMessage = CombineFailMessageWithSeed(failMessage, seed);
+        Assert.IsFalse(condition, failMessage);
+    }
+
+    internal static void Fail(string failMessage, int? seed = null)
+    {
+        failMessage = CombineFailMessageWithSeed(failMessage, seed);
+        Assert.Fail(failMessage);
+    }
+
+    internal static void Less(float smaller, float greater, string failMessage, int? seed = null)
+    {
+        failMessage = CombineFailMessageWithSeed(failMessage, seed);
+        Assert.Less(smaller, greater, failMessage);
+    }
+
+    private static string CombineFailMessageWithSeed(string failMessage, int? seed) 
+    {
+        return seed != null? 
+            failMessage + $"\n Seed: {seed}"
+            :
+            failMessage;
+    }
+    #endregion
+
 }

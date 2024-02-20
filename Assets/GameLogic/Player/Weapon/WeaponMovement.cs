@@ -3,9 +3,11 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+#if UNITY_EDITOR
 [assembly: InternalsVisibleTo("Tests")]
+#endif
 
-internal class WeaponMovement : MonoBehaviour
+class WeaponMovement : MonoBehaviour
 {
     [SerializeField]
     private GameObject _halalit;
@@ -22,8 +24,12 @@ internal class WeaponMovement : MonoBehaviour
             TryChangeWeaponPosition(new Vector2(_attackJoystick.Horizontal, _attackJoystick.Vertical));
     }
 
-
-    internal void TryChangeWeaponPosition(Vector2 attackJoystickTouch)
+#if UNITY_EDITOR
+internal
+#else
+private
+#endif
+    void TryChangeWeaponPosition(Vector2 attackJoystickTouch)
     {
         if (AttackJoystickPressed(attackJoystickTouch))
         {

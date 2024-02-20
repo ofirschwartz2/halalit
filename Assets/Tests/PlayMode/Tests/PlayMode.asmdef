@@ -6,7 +6,8 @@
         "UnityEditor.TestRunner",
         "Player",
         "Utils",
-        "Model"
+        "Model",
+        "Attacks"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

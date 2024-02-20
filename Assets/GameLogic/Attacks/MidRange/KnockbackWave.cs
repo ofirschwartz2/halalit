@@ -1,8 +1,13 @@
 using Assets.Enums;
 using Assets.Utils;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class KnockbackWave : MonoBehaviour 
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("Tests")]
+#endif
+
+class KnockbackWave : MonoBehaviour 
 {
     [SerializeField]
     private Rigidbody2D _rigidBody;
@@ -56,4 +61,17 @@ public class KnockbackWave : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+#if UNITY_EDITOR
+    internal float GetLifetime()
+    {
+        return _lifetime;
+    }
+
+    internal float GetSpeed()
+    {
+        return _speed;
+    }
+#endif
+
 }
