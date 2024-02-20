@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
-public class AllInWorldTest
+public class AdvancedTests
 {
 
     private const string SCENE_NAME = "Testing";

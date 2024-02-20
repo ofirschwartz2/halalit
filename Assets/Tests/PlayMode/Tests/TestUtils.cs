@@ -17,23 +17,11 @@ internal static class TestUtils
     }
     #endregion
 
-
     #region SceneSetUp
     internal static void SetUpShot(AttackName attackName)
     {
         var attackToggle = GetAttackToggle();
         attackToggle.SetNewAttack(attackName, new AttackStats(ItemRank.COMMON, 1, 1, 1, 1, 1));
-
-        /*
-        var weaponAttack = GetWeaponAttack();
-        
-        attackToggle._firstAttack = attackName;
-
-        weaponAttack._currentAttack =
-            new KeyValuePair<AttackName, AttackStats>(
-                attackName, 
-                new AttackStats(ItemRank.COMMON, 1, 1, 1, 1, 1));
-        */
     }
 
     internal static void SetRandomTargetPosition() 

@@ -3,12 +3,14 @@ using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
+#if UNITY_EDITOR
 [assembly: InternalsVisibleTo("Tests")]
+#endif
 
 class AttackToggle : MonoBehaviour
 {
     [SerializeField]
-    internal AttackName _firstAttack;
+    private AttackName _firstAttack;
 
     private AttackStats _firstAttackStats;
     private KeyValuePair<AttackName, GameObject> _currentAttack;
@@ -63,13 +65,19 @@ class AttackToggle : MonoBehaviour
         // TODO (dev): implement...
     }
 
-    internal void SetNewAttack(AttackName newAttackName, AttackStats attackStats)
+
+#if UNITY_EDITOR
+    internal
+#else
+    private
+#endif
+    void SetNewAttack(AttackName newAttackName, AttackStats attackStats)
     {
         _currentAttack = new(newAttackName, AttacksBank.GetAttackPrefab(newAttackName));
         AttackBehaviour attackBehaviour = _currentAttack.Value.GetComponent<AttackBehaviour>();
         attackBehaviour.AttackStats = attackStats;
         Debug.Log("New attack - " + newAttackName.ToString() + " loaded");
     }
-    #endregion
+#endregion
 }
 
