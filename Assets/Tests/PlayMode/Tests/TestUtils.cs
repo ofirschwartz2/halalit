@@ -25,14 +25,23 @@ internal static class TestUtils
         attackToggle.SetNewAttack(attackName, new AttackStats(ItemRank.COMMON, 1, 1, 1, 1, 1));
     }
 
+    //TesingWithTarget Scene
     internal static void SetRandomTargetPosition()
     {
-        ScheneWithTargetValidation();
+        TesingWithTargetValidation();
 
         var radiusOfTargetPositionAroundHalalit = 5;
 
         var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
         target[0].transform.position = Utils.GetRandomVector2OnCircle(radiusOfTargetPositionAroundHalalit);
+    }
+
+    //TesingWithTarget Scene
+    internal static void RotaeTarget(float degrees) 
+    {
+        TesingWithTargetValidation();
+        var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
+        target[0].transform.rotation = Quaternion.Euler(0, 0, degrees);
     }
     #endregion
 
@@ -64,7 +73,7 @@ internal static class TestUtils
 
     internal static Vector2 GetTargetPosition()
     {
-        ScheneWithTargetValidation();
+        TesingWithTargetValidation();
 
         var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
         return target.transform.position;
@@ -72,7 +81,7 @@ internal static class TestUtils
 
     internal static Vector2 GetTargetNearestPositionToHalalit()
     {
-        ScheneWithTargetValidation();
+        TesingWithTargetValidation();
         var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
         return GetNearestPositionToHalalit(target);
     }
@@ -142,7 +151,7 @@ internal static class TestUtils
     #endregion
 
     #region Validations
-    internal static void ScheneWithTargetValidation()
+    internal static void TesingWithTargetValidation()
     {
         var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
         if (target.Length != 1)
@@ -159,7 +168,12 @@ internal static class TestUtils
         Assert.AreEqual(expected, actual, acceptedDelta, failMessage);
     }
 
-    //IsNull
+    internal static void AreNotEqual(float expected, float actual, string failMessage, int? seed = null)
+    {
+        failMessage = CombineFailMessageWithSeed(failMessage, seed);
+        Assert.AreNotEqual(expected, actual, failMessage);
+    }
+
     internal static void IsNull(Object obj, int? seed = null, string failMessage = "Not a Null Object")
     {
         failMessage = CombineFailMessageWithSeed(failMessage, seed);
