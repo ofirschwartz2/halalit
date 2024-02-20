@@ -46,7 +46,7 @@ public class MirrorBallShotTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        TestUtils.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, seed);
     }
 
     [UnityTest]
@@ -69,7 +69,7 @@ public class MirrorBallShotTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        TestUtils.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, seed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -83,7 +83,7 @@ public class MirrorBallShotTests
         } while (shot != null);
 
         // THEN
-        TestUtils.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges", seed);
+        AssertWrapper.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges", seed);
 
     }
 
@@ -112,7 +112,7 @@ public class MirrorBallShotTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        TestUtils.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, seed);
 
         // GIVEN
         Vector2 lastShotPosition = Vector2.zero, thisShotPosition = Vector2.zero;
@@ -136,9 +136,9 @@ public class MirrorBallShotTests
 
         // THEN
         endShotDirection = Utils.GetDirectionVector(lastShotPosition, thisShotPosition);
-        TestUtils.AreNotEqual(startShotDirection.x, endShotDirection.x, "Didn't Change Direction", seed);
-        TestUtils.AreNotEqual(startShotDirection.y, endShotDirection.y, "Didn't Change Direction", seed);
-        TestUtils.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges", seed);
+        AssertWrapper.AreNotEqual(startShotDirection.x, endShotDirection.x, "Didn't Change Direction", seed);
+        AssertWrapper.AreNotEqual(startShotDirection.y, endShotDirection.y, "Didn't Change Direction", seed);
+        AssertWrapper.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges", seed);
 
     }
 
@@ -165,7 +165,7 @@ public class MirrorBallShotTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        TestUtils.IsNotNull(shot);
+        AssertWrapper.IsNotNull(shot);
 
         // GIVEN
         Vector2 lastShotPosition = Vector2.zero, thisShotPosition = Vector2.zero;
@@ -189,17 +189,17 @@ public class MirrorBallShotTests
 
         // THEN
         endShotDirection = Utils.GetDirectionVector(lastShotPosition, thisShotPosition);
-        TestUtils.AreNotEqual(startShotDirection.x, endShotDirection.x, "Didn't Change Direction");
-        TestUtils.AreNotEqual(startShotDirection.y, endShotDirection.y, "Didn't Change Direction");
-        TestUtils.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges");
-        TestUtils.Fail("TODO: fix bounce");
+        AssertWrapper.AreNotEqual(startShotDirection.x, endShotDirection.x, "Didn't Change Direction");
+        AssertWrapper.AreNotEqual(startShotDirection.y, endShotDirection.y, "Didn't Change Direction");
+        AssertWrapper.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges");
+        AssertWrapper.Fail("TODO: fix bounce");
     }
 
     [UnityTest]
     public IEnumerator AmountOfBouncesCheck()
     {
         yield return null;
-        TestUtils.Fail("TODO: implement, than write test");
+        AssertWrapper.Fail("TODO: implement, than write test");
     }
 
     [UnityTest]
@@ -223,7 +223,7 @@ public class MirrorBallShotTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        TestUtils.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, seed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -237,12 +237,12 @@ public class MirrorBallShotTests
         } while (shot != null);
 
         // THEN
-        TestUtils.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges", seed);
+        AssertWrapper.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges", seed);
 
         var weaponDirection = Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(weaponMovement.transform.rotation));
         var shotDirection = Utils.Vector2ToDegrees(lastShotPosition);
-        
-        TestUtils.AreEqual(
+
+        AssertWrapper.AreEqual(
             weaponDirection,
             shotDirection,
             "Weapon vs Shot Direction",

@@ -43,7 +43,7 @@ public class HalalitMovementTests
         }
 
         // THEN
-        TestUtils.AreEqual(
+        AssertWrapper.AreEqual(
             halalitMovement.transform.rotation.eulerAngles.z, 
             Utils.AngleNormalizationBy360(Utils.Vector2ToDegrees(randomTouchOnMovementJoystick.x, randomTouchOnMovementJoystick.y)),
             "Joystick vs Halalit Direction",
@@ -78,7 +78,7 @@ public class HalalitMovementTests
 
 
         // THEN
-        TestUtils.Less(smallVelocity, largeVelocity, "Speed Didn't rise as expected");
+        AssertWrapper.Less(smallVelocity, largeVelocity, "Speed Didn't rise as expected");
     }
 
     [UnityTest]
@@ -107,7 +107,7 @@ public class HalalitMovementTests
         yield return new WaitForSeconds(waitUntilStopsMoving);
 
         // THEN
-        TestUtils.AreEqual(halalitRigidBody2D.velocity.magnitude, 0, "Velocity is not 0");
+        AssertWrapper.AreEqual(halalitRigidBody2D.velocity.magnitude, 0, "Velocity is not 0");
     }
 
     private IEnumerator MoveHalalitForTime(HalalitMovement halalitMovement, Vector2 touchInput, float totalTime)
