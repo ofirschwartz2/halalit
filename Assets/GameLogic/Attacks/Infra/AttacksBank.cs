@@ -1,6 +1,11 @@
 ﻿using Assets.Enums;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("Tests")]
+#endif
 
 public class AttacksBank : MonoBehaviour
 {

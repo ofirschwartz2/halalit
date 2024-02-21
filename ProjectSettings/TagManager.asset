@@ -37,6 +37,7 @@ TagManager:
   - KnockbackWave
   - MovementJoystick
   - AttackJoystick
+  - Attacks
   layers:
   - Default
   - TransparentFX

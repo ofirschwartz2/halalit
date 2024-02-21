@@ -46,7 +46,7 @@ public class KnockbackWaveTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
-        TestUtils.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, seed);
     }
 
     [UnityTest]
@@ -69,7 +69,7 @@ public class KnockbackWaveTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
-        TestUtils.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, seed);
 
         // GIVEN
         var thisKnockbackLifeTime = 0f;
@@ -91,10 +91,10 @@ public class KnockbackWaveTests
         thisKnockbackLifeTime += Time.deltaTime;
 
         // THEN
-        TestUtils.GreaterOrEqual(thisKnockbackLifeTime, supposedKnockbackLifeTime, "Ended Under KnockbackLifeTime", seed);
+        AssertWrapper.GreaterOrEqual(thisKnockbackLifeTime, supposedKnockbackLifeTime, "Ended Under KnockbackLifeTime", seed);
 
-        TestUtils.AreEqual(lastShotPosition.x, supposedLastKnockbackPosition.x, "Finish Position Unexpected", seed, acceptedDelta);
-        TestUtils.AreEqual(lastShotPosition.y, supposedLastKnockbackPosition.y, "Finish Position Unexpected", seed, acceptedDelta);
+        AssertWrapper.AreEqual(lastShotPosition.x, supposedLastKnockbackPosition.x, "Finish Position Unexpected", seed, acceptedDelta);
+        AssertWrapper.AreEqual(lastShotPosition.y, supposedLastKnockbackPosition.y, "Finish Position Unexpected", seed, acceptedDelta);
     }
 
     private const string FUNCTION_SHOOTING_WITH_TARGET_NAME = "ShootingWithTarget";
@@ -121,7 +121,7 @@ public class KnockbackWaveTests
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
 
-        TestUtils.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, seed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -155,21 +155,21 @@ public class KnockbackWaveTests
 
 
         // THEN
-        TestUtils.GreaterOrEqual(Math.Abs(lastShotPosition.x), Math.Abs(targetClosestPositionBeforeHit.x), "Did not pass through target", seed);
-        TestUtils.GreaterOrEqual(Math.Abs(lastShotPosition.y), Math.Abs(targetClosestPositionBeforeHit.y), "Did not pass through target", seed);
+        AssertWrapper.GreaterOrEqual(Math.Abs(lastShotPosition.x), Math.Abs(targetClosestPositionBeforeHit.x), "Did not pass through target", seed);
+        AssertWrapper.GreaterOrEqual(Math.Abs(lastShotPosition.y), Math.Abs(targetClosestPositionBeforeHit.y), "Did not pass through target", seed);
 
         sameDirection = Utils.GetDirectionVector(lastTargetPosition, thisTargetPosition);
-        TestUtils.AreEqual(firstHiDirection.x, sameDirection.x, ">1 Hits", seed, acceptedDelta);
-        TestUtils.AreEqual(firstHiDirection.y, sameDirection.y, ">1 Hits", seed, acceptedDelta);
+        AssertWrapper.AreEqual(firstHiDirection.x, sameDirection.x, ">1 Hits", seed, acceptedDelta);
+        AssertWrapper.AreEqual(firstHiDirection.y, sameDirection.y, ">1 Hits", seed, acceptedDelta);
 
         var targetClosestPositionAfterHit = TestUtils.GetTargetNearestPositionToHalalit();
         if (targetClosestPositionBeforeHit.x != 0) 
         {
-            TestUtils.Greater(Math.Abs(targetClosestPositionAfterHit.x), Math.Abs(targetClosestPositionBeforeHit.x), "Did not Knockback", seed);
+            AssertWrapper.Greater(Math.Abs(targetClosestPositionAfterHit.x), Math.Abs(targetClosestPositionBeforeHit.x), "Did not Knockback", seed);
         }
         if (targetClosestPositionBeforeHit.y != 0)
         {
-            TestUtils.Greater(Math.Abs(targetClosestPositionAfterHit.y), Math.Abs(targetClosestPositionBeforeHit.y), "Did not Knockback", seed);
+            AssertWrapper.Greater(Math.Abs(targetClosestPositionAfterHit.y), Math.Abs(targetClosestPositionBeforeHit.y), "Did not Knockback", seed);
         }
     }
 
@@ -196,7 +196,7 @@ public class KnockbackWaveTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
-        TestUtils.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, seed);
 
         // WHEN
         do
@@ -206,7 +206,7 @@ public class KnockbackWaveTests
         } while (shot != null);
 
         // THEN
-        TestUtils.Fail("Amir");
+        AssertWrapper.Fail("Amir");
     }
 
 
@@ -231,7 +231,7 @@ public class KnockbackWaveTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
-        TestUtils.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, seed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -245,12 +245,12 @@ public class KnockbackWaveTests
         } while (shot != null);
 
         // THEN
-        TestUtils.IsFalse(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't finish In The Edges", seed);
+        AssertWrapper.IsFalse(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't finish In The Edges", seed);
 
         var weaponDirection = Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(weaponMovement.transform.rotation));
         var shotDirection = Utils.Vector2ToDegrees(lastShotPosition);
 
-        TestUtils.AreEqual(
+        AssertWrapper.AreEqual(
             weaponDirection,
             shotDirection,
             "Weapon vs Shot Directions difference",

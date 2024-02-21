@@ -1,6 +1,11 @@
 using Assets.Enums;
 using Assets.Utils;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("Tests")]
+#endif
 
 public class ShotgunShot : MonoBehaviour 
 {
@@ -63,4 +68,16 @@ public class ShotgunShot : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+#if UNITY_EDITOR
+    internal float GetMaxLifeTime()
+    {
+        return _averageLifeTime + _lifeTimeVariance;
+    }
+
+    internal float GetMinLifeTime()
+    {
+        return _averageLifeTime - _lifeTimeVariance;
+    }
+#endif
 }

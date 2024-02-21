@@ -31,10 +31,10 @@ public class HalalitWeaponTests
         // WHEN
         weaponAttack.HumbleFixedUpdate(randomTouchOnAttackJoystick);
         yield return null;
-        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());        
+        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
 
         // THEN
-        TestUtils.IsNull(shot, seed);
+        AssertWrapper.IsNull(shot, seed);
     }
 
     [UnityTest]
@@ -53,7 +53,7 @@ public class HalalitWeaponTests
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
 
         // THEN
-        TestUtils.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, seed);
     }
 
     [UnityTest]
@@ -87,13 +87,13 @@ public class HalalitWeaponTests
                 else if (shots.Length == 2) // 2nd shot fired
                 {
                     // THEN
-                    TestUtils.GreaterOrEqual(elapsedTime - firstShotTime, weaponAttack.GetCooldownInterval(), "Delay Under Cooldown", seed);
+                    AssertWrapper.GreaterOrEqual(elapsedTime - firstShotTime, weaponAttack.GetCooldownInterval(), "Delay Under Cooldown", seed);
                     break;
                 }
                 else
                 {
                     // THEN
-                    TestUtils.Fail(">2 Shots Fired", seed);
+                    AssertWrapper.Fail(">2 Shots Fired", seed);
                 }
             }
 
@@ -123,7 +123,7 @@ public class HalalitWeaponTests
         yield return null; // TODO: WHEN WE HAVE WEAPON DRAG, WAIT FOR X SECONDS
 
         // THEN
-        TestUtils.AreEqual(
+        AssertWrapper.AreEqual(
             Utils.Vector2ToDegrees(randomTouchOnAttackJoystick),
             Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(weaponMovement.transform.rotation)),
             "Joystick vs Weapon Direction",
