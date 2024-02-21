@@ -26,11 +26,9 @@ internal static class TestUtils
     }
 
     //TesingWithTarget Scene
-    internal static void SetRandomTargetPosition()
+    internal static void SetRandomTargetPosition(float radiusOfTargetPositionAroundHalalit = 5)
     {
         TesingWithTargetValidation();
-
-        var radiusOfTargetPositionAroundHalalit = 5;
 
         var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
         target[0].transform.position = Utils.GetRandomVector2OnCircle(radiusOfTargetPositionAroundHalalit);
@@ -46,6 +44,7 @@ internal static class TestUtils
     #endregion
 
     #region SceneGetters
+
     internal static WeaponAttack GetWeaponAttack()
     {
         var weapon = GameObject.FindGameObjectWithTag(Tag.WEAPON.GetDescription());

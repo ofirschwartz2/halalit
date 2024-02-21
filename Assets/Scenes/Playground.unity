@@ -1737,7 +1737,7 @@ MonoBehaviour:
   _cooldownInterval: 0.5
   _attackJoystickEdge: 0.8
   _currentAttack:
-    Key: 0
+    Key: 8
     Value:
       _itemRank: 0
       Power: 1
@@ -1809,7 +1809,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b124fbb6d5e0148884d8a70c8e4981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firstAttack: 0
+  _firstAttack: 8
 --- !u!1 &814139006
 GameObject:
   m_ObjectHideFlags: 0
@@ -2315,7 +2315,7 @@ GameObject:
   - component: {fileID: 983959680}
   m_Layer: 0
   m_Name: Attacks
-  m_TagString: Untagged
+  m_TagString: Attacks
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

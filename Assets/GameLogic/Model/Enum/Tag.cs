@@ -48,5 +48,7 @@ namespace Assets.Enums
         MOVEMENT_JOYSTICK,
         [Description("AttackJoystick")]
         ATTACK_JOYSTICK,
+        [Description("Attacks")]
+        ATTACKS,
     }
 }
