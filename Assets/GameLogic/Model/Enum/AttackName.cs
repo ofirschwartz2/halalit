@@ -20,8 +20,8 @@ namespace Assets.Enums
         SWORD,
         [Description("Blast shot")]
         BLAST_SHOT,
-        [Description("Granade")]
-        GRANADE,
+        [Description("Grenade")]
+        GRENADE,
         [Description("Shotgun")]
         SHOTGUN,
         [Description("Spikes")]

@@ -206,6 +206,4 @@ public class ShotgunTests
 
         AssertWrapper.GreaterOrEqual(minimumLifeTime, timeUntilFirstHit, "Didn't Hit Target Fast As Expected", seed);
     }
-
-
 }

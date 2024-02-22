@@ -7,12 +7,12 @@ using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
 
-public class BlastShotTests
+public class GrenadeTests
 {
 
     private const string SCENE_NAME = "Testing";
     private const string SCENE_WITH_TARGET_NAME = "TestingWithTarget";
-    private const AttackName ATTACK_NAME = AttackName.BLAST_SHOT;
+    private const AttackName ATTACK_NAME = AttackName.GRENADE;
     private const Tag ATTACK_TAG = Tag.EXPLOSIVE;
     private const Tag BLAST_TAG = Tag.EXPLOSION;
     private const Tag SHOCK_WAVE_TAG = Tag.EXPLOSION_SHOCK_WAVE;
@@ -76,9 +76,7 @@ public class BlastShotTests
         // GIVEN
         Vector2 lastShotPosition;
         float actualLifetime = 0;
-        float supposedLifetime = shot.GetComponent<BlastShot>().GetLifeTime();
-        float supposedSpeed = shot.GetComponent<BlastShot>().GetSpeed();
-        Vector2 supposedLastPosition = shot.transform.position + shot.transform.up * supposedLifetime * supposedSpeed;
+        float supposedLifetime = shot.GetComponent<Grenade>().GetLifeTime();
         var acceptedDelta = 0.3f;
 
         // WHEN
@@ -93,8 +91,6 @@ public class BlastShotTests
         // THEN
         AssertWrapper.IsTrue(!TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Finished On Edges", seed);
         AssertWrapper.AreEqual(supposedLifetime, actualLifetime, "Lifetime not as expected", seed, acceptedDelta);
-        AssertWrapper.AreEqual(supposedLastPosition.x, lastShotPosition.x, "Last position not as expected", seed, acceptedDelta);
-        AssertWrapper.AreEqual(supposedLastPosition.y, lastShotPosition.y, "Last position not as expected", seed, acceptedDelta);
 
         // GIVEN
         var blast = GameObject.FindGameObjectWithTag(BLAST_TAG.GetDescription());
@@ -144,19 +140,23 @@ public class BlastShotTests
         AssertWrapper.IsNotNull(shot, seed);
 
         // GIVEN
-        float timeUntilHit = 0;
-        var lifeTime = shot.GetComponent<BlastShot>().GetLifeTime();
-
+        float timeUntilExplosion = 0;
+        var lifeTime = shot.GetComponent<Grenade>().GetLifeTime();
+        var initialDirection = Utils.GetDirectionVector(weaponMovement.transform.position, shot.transform.position);
+        Vector2 finalGrenadePosition;
         // WHEN
         do
         {
-            timeUntilHit += Time.deltaTime;
+            timeUntilExplosion += Time.deltaTime;
+            finalGrenadePosition = shot.transform.position;
             yield return null;
 
         } while (shot != null);
 
         // THEN
-        AssertWrapper.GreaterOrEqual(lifeTime, timeUntilHit, "Didn't Hit Target Fast As Expected", seed);
+        AssertWrapper.GreaterOrEqual(timeUntilExplosion, lifeTime, "Exploded Before it should", seed);
+        var finalDirection = Utils.GetDirectionVector(weaponMovement.transform.position, finalGrenadePosition);
+        AssertWrapper.AreNotEqual(Utils.Vector2ToDegrees(initialDirection), Utils.Vector2ToDegrees(finalDirection), "Did Not Change Direction", seed);
 
         // GIVEN
         var blast = GameObject.FindGameObjectWithTag(BLAST_TAG.GetDescription());

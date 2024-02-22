@@ -21,8 +21,8 @@ namespace Assets.Enums
         SWORD = AttackName.SWORD,
         [Description("Blast shot item")] 
         BLAST_SHOT = AttackName.BLAST_SHOT,
-        [Description("Granade item")]
-        GRANADE = AttackName.GRANADE,
+        [Description("Grenade item")]
+        GRENADE = AttackName.GRENADE,
         [Description("Shotgun item")]
         SHOTGUN = AttackName.SHOTGUN,
         [Description("Spikes item")]
