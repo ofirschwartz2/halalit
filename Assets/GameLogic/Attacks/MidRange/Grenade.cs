@@ -1,8 +1,13 @@
 using Assets.Enums;
 using Assets.Utils;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class Granade : MonoBehaviour 
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("Tests")]
+#endif
+
+public class Grenade : MonoBehaviour 
 {
     [SerializeField]
     private Rigidbody2D _rigidBody;
@@ -43,4 +48,12 @@ public class Granade : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+#if UNITY_EDITOR
+    internal float GetLifeTime()
+    {
+        return _lifetime;
+    }
+#endif
+
 }
