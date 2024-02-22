@@ -205,9 +205,5 @@ public class ShotgunTests
         } while (shots.Count(shot => shot != null) == numberOfShots);
 
         AssertWrapper.GreaterOrEqual(minimumLifeTime, timeUntilFirstHit, "Didn't Hit Target Fast As Expected", seed);
-
-        AssertWrapper.Fail("Did Not Knockback", seed);
     }
-
-
 }

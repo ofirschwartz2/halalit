@@ -129,8 +129,8 @@ public class BlastShotTests
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomTargetPosition(2); // MUST BE SMALL TO HIT BEFORE MinLifeTime
         yield return null;
-        var targetPosition = TestUtils.GetTargetPosition();
-        var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetPosition, weaponAttack.GetAttackJoystickEdge());
+        var initialTargetPosition = TestUtils.GetTargetPosition();
+        var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(initialTargetPosition, weaponAttack.GetAttackJoystickEdge());
 
         // WHEN
         weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
@@ -174,9 +174,12 @@ public class BlastShotTests
             blastShockWave = GameObject.FindGameObjectWithTag(SHOCK_WAVE_TAG.GetDescription());
         } while (blast != null || blastShockWave != null);
 
+        var finalTargetPosition = TestUtils.GetTargetPosition();
+
         AssertWrapper.IsNull(blast, seed);
         AssertWrapper.IsNull(blastShockWave, seed);
         AssertWrapper.AreEqual(blastSupposedLifetime, actualLifetime, "Blast Lifetime not as expected", seed, acceptedDelta);
+        AssertWrapper.AreNotEqual(initialTargetPosition.magnitude, finalTargetPosition.magnitude, "Did Not Knockback", seed);
     }
 
     [UnityTest]
