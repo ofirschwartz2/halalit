@@ -108,7 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody2D: {fileID: 1043275914167199002}
-  _knockbackers: 00000000070000000200000004000000
+  _knockbackers: 0000000007000000020000000400000017000000
   _knockbackMultiplier: 1
 --- !u!114 &1399439758609907064
 MonoBehaviour:

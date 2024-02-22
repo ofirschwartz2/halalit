@@ -38,6 +38,7 @@ TagManager:
   - MovementJoystick
   - AttackJoystick
   - Attacks
+  - ExplosionShockWave
   layers:
   - Default
   - TransparentFX
