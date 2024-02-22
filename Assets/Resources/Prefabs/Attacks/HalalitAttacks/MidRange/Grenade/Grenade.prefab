@@ -70,7 +70,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7939768775836154138, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_Name
-      value: Granade
+      value: Grenade
       objectReference: {fileID: 0}
     - target: {fileID: 7939768775836154138, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_Layer
@@ -99,10 +99,10 @@ PrefabInstance:
       addedObject: {fileID: 4512626657008822292}
     - targetCorrespondingSourceObject: {fileID: 7939768775836154138, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4410511240415861317}
+      addedObject: {fileID: 1211506330683726065}
     - targetCorrespondingSourceObject: {fileID: 7939768775836154138, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1211506330683726065}
+      addedObject: {fileID: 5958046226972977458}
   m_SourcePrefab: {fileID: 100100000, guid: 68379c5202257be48aaf973610ef6144, type: 3}
 --- !u!1 &7987590138875183875 stripped
 GameObject:
@@ -223,22 +223,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &4410511240415861317
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7987590138875183875}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96ba80e0f2b6f494db808f30309dcd6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rigidBody: {fileID: 3626681675898438606}
-  _throwForce: 15
-  _lifetime: 3
-  blastPrefab: {fileID: 4043514594342984741, guid: 1b1ab90d62da0ba428424878f4703995, type: 3}
 --- !u!114 &1211506330683726065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,3 +242,19 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+--- !u!114 &5958046226972977458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7987590138875183875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 290a4a87116c0964eaecca2d5b4e4058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rigidBody: {fileID: 3626681675898438606}
+  _throwForce: 5
+  _lifetime: 2
+  blastPrefab: {fileID: 4043514594342984741, guid: 1b1ab90d62da0ba428424878f4703995, type: 3}

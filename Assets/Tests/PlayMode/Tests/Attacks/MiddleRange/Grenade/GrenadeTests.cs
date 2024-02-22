@@ -140,19 +140,23 @@ public class GrenadeTests
         AssertWrapper.IsNotNull(shot, seed);
 
         // GIVEN
-        float timeUntilHit = 0;
-        var lifeTime = shot.GetComponent<BlastShot>().GetLifeTime();
-
+        float timeUntilExplosion = 0;
+        var lifeTime = shot.GetComponent<Grenade>().GetLifeTime();
+        var initialDirection = Utils.GetDirectionVector(weaponMovement.transform.position, shot.transform.position);
+        Vector2 finalGrenadePosition;
         // WHEN
         do
         {
-            timeUntilHit += Time.deltaTime;
+            timeUntilExplosion += Time.deltaTime;
+            finalGrenadePosition = shot.transform.position;
             yield return null;
 
         } while (shot != null);
 
         // THEN
-        AssertWrapper.GreaterOrEqual(lifeTime, timeUntilHit, "Didn't Hit Target Fast As Expected", seed);
+        AssertWrapper.GreaterOrEqual(timeUntilExplosion, lifeTime, "Exploded Before it should", seed);
+        var finalDirection = Utils.GetDirectionVector(weaponMovement.transform.position, finalGrenadePosition);
+        AssertWrapper.AreNotEqual(Utils.Vector2ToDegrees(initialDirection), Utils.Vector2ToDegrees(finalDirection), "Did Not Change Direction", seed);
 
         // GIVEN
         var blast = GameObject.FindGameObjectWithTag(BLAST_TAG.GetDescription());
