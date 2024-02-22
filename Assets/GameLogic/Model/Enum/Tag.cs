@@ -50,5 +50,9 @@ namespace Assets.Enums
         ATTACK_JOYSTICK,
         [Description("Attacks")]
         ATTACKS,
+        [Description("Explosive")]
+        EXPLOSIVE,
+        [Description("ExplosionShockWave")]
+        EXPLOSION_SHOCK_WAVE,
     }
 }

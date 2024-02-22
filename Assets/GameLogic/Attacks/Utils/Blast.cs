@@ -1,5 +1,10 @@
 using Assets.Utils;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("Tests")]
+#endif
 
 public class Blast : MonoBehaviour 
 {
@@ -115,4 +120,12 @@ public class Blast : MonoBehaviour
         Destroy(_shockWave);
         _shockWaveAlive = false;
     }
+
+#if UNITY_EDITOR
+
+    internal float GetLifeTime()
+    {
+        return _lifetime;
+    }
+#endif
 }

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4860921747103008460}
   m_Layer: 7
   m_Name: Blast
-  m_TagString: Untagged
+  m_TagString: Explosion
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

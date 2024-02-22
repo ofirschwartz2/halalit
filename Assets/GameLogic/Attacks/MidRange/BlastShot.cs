@@ -1,6 +1,11 @@
 using Assets.Enums;
 using Assets.Utils;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("Tests")]
+#endif
 
 public class BlastShot : MonoBehaviour 
 {
@@ -51,4 +56,16 @@ public class BlastShot : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+#if UNITY_EDITOR
+    internal float GetSpeed()
+    {
+        return _speed;
+    }
+
+    internal float GetLifeTime()
+    {
+        return _lifetime;
+    }
+#endif
 }
