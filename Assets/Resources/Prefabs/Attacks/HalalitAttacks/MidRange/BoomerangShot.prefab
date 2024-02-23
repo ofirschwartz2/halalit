@@ -8,6 +8,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2264754643331783421, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: AttackStats.Luck
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2264754643331783421, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: AttackStats.Rate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2264754643331783421, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: AttackStats.Power
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2264754643331783421, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: AttackStats.Weight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2264754643331783421, guid: 68379c5202257be48aaf973610ef6144, type: 3}
+      propertyPath: AttackStats.CriticalHit
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -245,7 +265,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rotationSpeed: 8
-  _timeOfShot: 2
+  _lifetime: 2
   bezierCurve6InnerPoints:
   - {x: -3, y: 3}
   - {x: -3.5, y: 7.875}

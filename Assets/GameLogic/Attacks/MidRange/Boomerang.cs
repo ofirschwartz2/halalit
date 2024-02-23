@@ -1,13 +1,18 @@
 using Assets.Enums;
 using Assets.Utils;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("Tests")]
+#endif
 
 public class Boomerang : MonoBehaviour 
 {
     [SerializeField]
     private float _rotationSpeed;
     [SerializeField]
-    private float _timeOfShot;
+    private float _lifetime;
     [SerializeField]
     Vector2[] bezierCurve6InnerPoints;
 
@@ -26,7 +31,7 @@ public class Boomerang : MonoBehaviour
 
     void FixedUpdate()
     {
-        _shootingPercentPassed += Time.deltaTime / _timeOfShot;
+        _shootingPercentPassed += Time.deltaTime / _lifetime;
         Shooting();
     }
 
@@ -66,4 +71,11 @@ public class Boomerang : MonoBehaviour
     {
         return other.gameObject.CompareTag(Tag.HALALIT.GetDescription()) && (Time.time > _creationTime + Constants.BOOMERANG_OUT_OF_HALALIT_TIME);
     }
+
+    #if UNITY_EDITOR
+    internal float GetLifetime()
+    {
+        return _lifetime;
+    }
+    #endif
 }
