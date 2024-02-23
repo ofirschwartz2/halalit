@@ -54,7 +54,7 @@ public class Shotgun : MonoBehaviour
         return _range;
     }
 
-    internal float GetLifeTime()
+    internal float GetLifetime()
     {
         return _lifeTime;
     }
