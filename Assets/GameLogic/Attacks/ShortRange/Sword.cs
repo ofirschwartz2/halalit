@@ -1,6 +1,11 @@
 using Assets.Enums;
 using Assets.Utils;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("Tests")]
+#endif
 
 public class Sword : MonoBehaviour 
 {
@@ -60,4 +65,16 @@ public class Sword : MonoBehaviour
     {
         return Time.time >= _attackStartTime + _attackTime;
     }
+
+#if UNITY_EDITOR
+    internal float GetAttacktime()
+    {
+        return _attackTime;
+    }
+
+    internal float GetSwordRotationRange()
+    {
+        return _swordRotationRange;
+    }
+#endif
 }
