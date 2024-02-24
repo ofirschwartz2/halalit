@@ -176,6 +176,7 @@ public class ShotgunTests
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomTargetPosition(2); // MUST BE SMALL TO HIT BEFORE MinLifeTime
+        var originalTargetHealth = TestUtils.GetTargetHealth();
         yield return null;
         var targetPosition = TestUtils.GetTargetPosition();
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetPosition, weaponAttack.GetAttackJoystickEdge());
@@ -205,5 +206,8 @@ public class ShotgunTests
         } while (shots.Count(shot => shot != null) == numberOfShots);
 
         AssertWrapper.GreaterOrEqual(minimumLifeTime, timeUntilFirstHit, "Didn't Hit Target Fast As Expected", seed);
+
+        var newTargetHealth = TestUtils.GetTargetHealth();
+        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
     }
 }

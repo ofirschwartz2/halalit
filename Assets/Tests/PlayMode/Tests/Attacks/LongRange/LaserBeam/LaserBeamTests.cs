@@ -115,6 +115,7 @@ public class LaserBeamTests
         var acceptedDelta = 0.5f;
 
         TestUtils.SetRandomTargetPosition();
+        var originalTargetHealth = TestUtils.GetTargetHealth();
         yield return null;
         var targetNearestPosition = TestUtils.GetTargetNearestPositionToHalalit();
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetNearestPosition, weaponAttack.GetAttackJoystickEdge());
@@ -147,6 +148,8 @@ public class LaserBeamTests
         AssertWrapper.AreEqual(lastShotPosition.x, targetNearestPosition.x, "Laser Is Not Touching Target", seed, acceptedDelta);
         AssertWrapper.AreEqual(lastShotPosition.y, targetNearestPosition.y, "Laser Is Not Touching Target", seed, acceptedDelta);
 
+        var newTargetHealth = TestUtils.GetTargetHealth();
+        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
     }
 
     [UnityTest]

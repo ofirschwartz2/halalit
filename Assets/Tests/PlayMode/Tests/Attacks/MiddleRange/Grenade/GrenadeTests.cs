@@ -124,6 +124,7 @@ public class GrenadeTests
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomTargetPosition(2); // MUST BE SMALL TO HIT BEFORE MinLifeTime
+        var originalTargetHealth = TestUtils.GetTargetHealth();
         yield return null;
         var initialTargetPosition = TestUtils.GetTargetPosition();
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(initialTargetPosition, weaponAttack.GetAttackJoystickEdge());
@@ -180,6 +181,9 @@ public class GrenadeTests
         AssertWrapper.IsNull(blastShockWave, seed);
         AssertWrapper.AreEqual(blastSupposedLifetime, actualLifetime, "Blast Lifetime not as expected", seed, acceptedDelta);
         AssertWrapper.AreNotEqual(initialTargetPosition.magnitude, finalTargetPosition.magnitude, "Did Not Knockback", seed);
+
+        var newTargetHealth = TestUtils.GetTargetHealth();
+        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
     }
 
     [UnityTest]

@@ -98,6 +98,7 @@ public class MirrorBallShotTests
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomTargetPosition();
+        var originalTargetHealth = TestUtils.GetTargetHealth();
         yield return null;
         var targetClosestPosition = TestUtils.GetTargetNearestPositionToHalalit();
         var acceptedDelta = 0.5f;
@@ -139,7 +140,9 @@ public class MirrorBallShotTests
         AssertWrapper.AreNotEqual(startShotDirection.x, endShotDirection.x, "Didn't Change Direction", seed);
         AssertWrapper.AreNotEqual(startShotDirection.y, endShotDirection.y, "Didn't Change Direction", seed);
         AssertWrapper.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges", seed);
-
+        
+        var newTargetHealth = TestUtils.GetTargetHealth();
+        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
     }
 
     private const string FUNCTION_BOUNCE_DIRECTION_CHECK_NAME = "BounceCheck";

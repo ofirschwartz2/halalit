@@ -107,6 +107,7 @@ public class KnockbackWaveTests
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomTargetPosition();
+        var originalTargetHealth = TestUtils.GetTargetHealth();
         yield return null;
         var targetClosestPositionBeforeHit = TestUtils.GetTargetNearestPositionToHalalit();
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPositionBeforeHit, weaponAttack.GetAttackJoystickEdge());
@@ -171,6 +172,9 @@ public class KnockbackWaveTests
         {
             AssertWrapper.Greater(Math.Abs(targetClosestPositionAfterHit.y), Math.Abs(targetClosestPositionBeforeHit.y), "Did not Knockback", seed);
         }
+
+        var newTargetHealth = TestUtils.GetTargetHealth();
+        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
     }
 
     private const string FUNCTION_KNOCKBACKINT_VECTOR_NAME = "KnockbackingVector";

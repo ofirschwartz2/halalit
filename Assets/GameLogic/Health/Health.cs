@@ -4,9 +4,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
+
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("Tests")]
+#endif
 
 class Health : MonoBehaviour
 {
@@ -246,4 +251,11 @@ class Health : MonoBehaviour
         return _contributorsDescriptions.Contains(other.tag);
     }
     #endregion
+
+#if UNITY_EDITOR
+    internal int GetHealth()
+    {
+        return _health;
+    }
+#endif
 }

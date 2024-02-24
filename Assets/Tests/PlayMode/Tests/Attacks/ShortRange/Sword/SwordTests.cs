@@ -61,6 +61,7 @@ public class SwordTests
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomTargetPosition(1.5f);
+        var originalTargetHealth = TestUtils.GetTargetHealth();
         yield return null;
         var targetClosestPosition = TestUtils.GetTargetNearestPositionToHalalit();
         var acceptedDelta = 1f;
@@ -91,8 +92,9 @@ public class SwordTests
 
         // THEN
 
-        //TODO: Check target's HP
         //TODO: Check target's position
+        var newTargetHealth = TestUtils.GetTargetHealth();
+        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
         AssertWrapper.IsTrue(true, "");
     }
 
