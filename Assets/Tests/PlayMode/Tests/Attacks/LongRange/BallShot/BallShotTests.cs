@@ -103,6 +103,7 @@ public class BallShotTests
         var targetClosestPosition = TestUtils.GetTargetNearestPositionToHalalit();
         var acceptedDelta = 0.5f;
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, weaponAttack.GetAttackJoystickEdge());
+        var originalTargetHealth = TestUtils.GetTargetHealth();
 
         // WHEN
         weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
@@ -130,6 +131,9 @@ public class BallShotTests
         // THEN
         AssertWrapper.AreEqual(lastShotPosition.x, targetClosestPosition.x, "Shot Didn't Hit Target", seed, acceptedDelta);
         AssertWrapper.AreEqual(lastShotPosition.y, targetClosestPosition.y, "Shot Didn't Hit Target", seed, acceptedDelta);
+
+        var newTargetHealth = TestUtils.GetTargetHealth();
+        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
     }
 
     [UnityTest]

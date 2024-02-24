@@ -85,6 +85,13 @@ internal static class TestUtils
         return GetNearestPositionToHalalit(target);
     }
 
+    internal static float GetTargetHealth()
+    {
+        TesingWithTargetValidation();
+        var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
+        return target.GetComponent<Health>().GetHealth();
+    }
+
     internal static Vector2 GetNearestPositionToHalalit(GameObject gameObject)
     {
         var halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());

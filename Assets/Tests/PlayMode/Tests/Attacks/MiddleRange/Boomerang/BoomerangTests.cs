@@ -101,6 +101,7 @@ public class BoomerangTests
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomTargetPosition();
+        var originalTargetHealth = TestUtils.GetTargetHealth();
         yield return null;
         var targetClosestPosition = TestUtils.GetTargetNearestPositionToHalalit();
         var acceptedDelta = 1f;
@@ -132,6 +133,9 @@ public class BoomerangTests
         // THEN
         AssertWrapper.AreEqual(lastShotPosition.x, targetClosestPosition.x, "Shot Didn't Hit Target", seed, acceptedDelta);
         AssertWrapper.AreEqual(lastShotPosition.y, targetClosestPosition.y, "Shot Didn't Hit Target", seed, acceptedDelta);
+
+        var newTargetHealth = TestUtils.GetTargetHealth();
+        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
     }
 
     [UnityTest]
