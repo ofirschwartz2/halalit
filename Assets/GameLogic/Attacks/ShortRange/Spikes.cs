@@ -1,6 +1,11 @@
 ﻿using Assets.Enums;
 using Assets.Utils;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("Tests")]
+#endif
 
 public class Spikes : MonoBehaviour 
 {
@@ -197,4 +202,19 @@ public class Spikes : MonoBehaviour
         Destroy(_sideSpikes[1]);
         Destroy(gameObject);
     }
+
+#if UNITY_EDITOR
+    internal float GetExtractionTime()
+    {
+        return _extractionTime;
+    }
+    internal float GetWaitingTime()
+    {
+        return _waitingTime;
+    }
+    internal float GetRetractionTime()
+    {
+        return _retractionTime;
+    }
+#endif
 }
