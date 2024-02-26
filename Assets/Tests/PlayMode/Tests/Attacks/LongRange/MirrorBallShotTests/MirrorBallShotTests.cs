@@ -2,6 +2,7 @@ using Assets.Enums;
 using Assets.Utils;
 using NUnit.Framework;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
@@ -12,6 +13,7 @@ public class MirrorBallShotTests
 
     private const string SCENE_NAME = "Testing";
     private const string SCENE_WITH_TARGET_NAME = "TestingWithTarget";
+    private const string SCENE_FOR_BOUNCES_NAME = "TestingForBounces";
     private const AttackName SHOT_NAME = AttackName.MIRROR_BALL_SHOT;
 
     [SetUp]
@@ -23,6 +25,9 @@ public class MirrorBallShotTests
             case FUNCTION_SHOOTING_WITH_TARGET_NAME:
             case FUNCTION_BOUNCE_DIRECTION_CHECK_NAME:
                 SceneManager.LoadScene(SCENE_WITH_TARGET_NAME);
+                break;
+            case FUNCTION_AMOUNT_OF_BOUNCES_CHECK_NAME:
+                SceneManager.LoadScene(SCENE_FOR_BOUNCES_NAME);
                 break;
             default:
                 SceneManager.LoadScene(SCENE_NAME);
@@ -145,7 +150,7 @@ public class MirrorBallShotTests
         AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
     }
 
-    private const string FUNCTION_BOUNCE_DIRECTION_CHECK_NAME = "BounceCheck";
+    private const string FUNCTION_BOUNCE_DIRECTION_CHECK_NAME = "BounceDirectionCheck";
     [UnityTest]
     public IEnumerator BounceDirectionCheck()
     {
@@ -198,11 +203,51 @@ public class MirrorBallShotTests
         AssertWrapper.Fail("TODO: fix bounce");
     }
 
+    private const string FUNCTION_AMOUNT_OF_BOUNCES_CHECK_NAME = "AmountOfBouncesCheck";
     [UnityTest]
     public IEnumerator AmountOfBouncesCheck()
     {
+        // GIVEN
+        TestUtils.SetUpShot(SHOT_NAME);
+        var weaponMovement = TestUtils.GetWeaponMovement();
+        var weaponAttack = TestUtils.GetWeaponAttack();
+        var originalTargetsHealth = TestUtils.GetAllTargetsHealth().First();
+        int actualNumberOfHits = 0;
+        var touchOnJoystick = Vector2.right;
+
+        // WHEN
+        weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
         yield return null;
-        AssertWrapper.Fail("TODO: implement, than write test");
+
+        weaponAttack.HumbleFixedUpdate(touchOnJoystick);
+        yield return null;
+
+        // THEN
+        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+        AssertWrapper.IsNotNull(shot);
+
+        // GIVEN
+        var supposedNumberOfHits = shot.GetComponent<MirrorBallShot>().GetMaxBounces() + 1;
+
+        // WHEN
+        do
+        {
+            yield return null;
+            shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+        } while (shot != null);
+
+        // THEN
+        var newTargetsHealth = TestUtils.GetAllTargetsHealth();
+
+        foreach (var newTargetHealth in newTargetsHealth) 
+        {
+            if (newTargetHealth < originalTargetsHealth) 
+            {
+                actualNumberOfHits++;
+            }
+        }
+
+        AssertWrapper.AreEqual(supposedNumberOfHits, actualNumberOfHits, "Wrong Number of Hits");
     }
 
     [UnityTest]

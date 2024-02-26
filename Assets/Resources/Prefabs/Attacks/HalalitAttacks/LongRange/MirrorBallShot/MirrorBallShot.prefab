@@ -290,6 +290,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidBody: {fileID: 2844242733445854716}
   _speed: 10
+  _maxBounces: 5
 --- !u!114 &2586085928504739604
 MonoBehaviour:
   m_ObjectHideFlags: 0
