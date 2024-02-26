@@ -1,7 +1,10 @@
 using Assets.Enums;
 using Assets.Utils;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 
 internal static class TestUtils
@@ -92,6 +95,13 @@ internal static class TestUtils
         return target.GetComponent<Health>().GetHealth();
     }
 
+    internal static List<int> GetAllTargetsHealth()
+    {
+        TesingWithMultipleTargetValidation();
+        var targets = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription()).ToList();
+        return targets.Select(target => target.GetComponent<Health>().GetHealth()).ToList();
+    }
+
     internal static Vector2 GetNearestPositionToHalalit(GameObject gameObject)
     {
         var halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
@@ -163,6 +173,15 @@ internal static class TestUtils
         if (target.Length != 1)
         {
             throw new System.Exception("There should be only one target in the scene");
+        }
+    }
+
+    internal static void TesingWithMultipleTargetValidation() 
+    {
+        var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
+        if (target.Length <= 1)
+        {
+            throw new System.Exception("There should be multiple targets in the scene");
         }
     }
     #endregion
