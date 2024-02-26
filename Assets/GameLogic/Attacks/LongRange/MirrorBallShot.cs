@@ -34,7 +34,7 @@ public class MirrorBallShot : MonoBehaviour
     {
         if (other.gameObject.CompareTag(Tag.ENEMY.GetDescription()) || other.gameObject.CompareTag(Tag.ASTEROID.GetDescription())) 
         {
-            if (_bounces < _maxBounces)
+            if (_bounces == _maxBounces)
             {
                 Destroy(gameObject);
             }

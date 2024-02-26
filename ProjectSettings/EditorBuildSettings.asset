@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Testing.unity
     guid: ac6f457af5572074d990012dc7e19522
+  - enabled: 1
+    path: Assets/Scenes/TestingForBounces.unity
+    guid: fb98a70128a24e9478fa70d52188197d
   m_configObjects: {}
