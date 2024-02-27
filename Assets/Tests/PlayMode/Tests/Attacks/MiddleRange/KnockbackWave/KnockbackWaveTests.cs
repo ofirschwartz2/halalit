@@ -6,6 +6,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
+using UnityEngine.UIElements;
 
 
 public class KnockbackWaveTests
@@ -14,6 +15,7 @@ public class KnockbackWaveTests
     private const string SCENE_NAME = "Testing";
     private const string SCENE_WITH_TARGET_NAME = "TestingWithTarget";
     private const AttackName SHOT_NAME = AttackName.KNOCKBACK_WAVE;
+    private const Tag SHOT_TAG = Tag.KNOCKBACK_WAVE;
     [SetUp]
     public void SetUp()
     {
@@ -22,6 +24,7 @@ public class KnockbackWaveTests
         {
             case FUNCTION_SHOOTING_WITH_TARGET_NAME:
             case FUNCTION_KNOCKBACKINT_VECTOR_NAME:
+            case FUNCTION_DOUBLE_HIT_CHECK_NAME:
                 SceneManager.LoadScene(SCENE_WITH_TARGET_NAME);
                 break;
             default:
@@ -45,7 +48,7 @@ public class KnockbackWaveTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
+        var shot = GameObject.FindGameObjectWithTag(SHOT_TAG.GetDescription());
         AssertWrapper.IsNotNull(shot, seed);
     }
 
@@ -68,7 +71,7 @@ public class KnockbackWaveTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
+        var shot = GameObject.FindGameObjectWithTag(SHOT_TAG.GetDescription());
         AssertWrapper.IsNotNull(shot, seed);
 
         // GIVEN
@@ -85,7 +88,7 @@ public class KnockbackWaveTests
             thisKnockbackLifeTime += Time.deltaTime;
             yield return null;
 
-            shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
+            shot = GameObject.FindGameObjectWithTag(SHOT_TAG.GetDescription());
         } while (shot != null);
 
         thisKnockbackLifeTime += Time.deltaTime;
@@ -120,7 +123,7 @@ public class KnockbackWaveTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
+        var shot = GameObject.FindGameObjectWithTag(SHOT_TAG.GetDescription());
 
         AssertWrapper.IsNotNull(shot, seed);
 
@@ -151,7 +154,7 @@ public class KnockbackWaveTests
                 }
             }
 
-            shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
+            shot = GameObject.FindGameObjectWithTag(SHOT_TAG.GetDescription());
         } while (shot != null);
 
 
@@ -182,13 +185,10 @@ public class KnockbackWaveTests
     public IEnumerator KnockbackingVector()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
         TestUtils.SetUpShot(SHOT_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
 
-
-        var targetClosestPositionBeforeHit = TestUtils.GetTargetNearestPositionToHalalit();
         var touchOnJoystick = new Vector2(1,0);
 
         // WHEN
@@ -199,20 +199,79 @@ public class KnockbackWaveTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        var shot = GameObject.FindGameObjectWithTag(SHOT_TAG.GetDescription());
+        AssertWrapper.IsNotNull(shot);
+
+        // GIVEN
+        Vector2 
+            newTargetPosition = TestUtils.GetTargetPosition(), 
+            oldTargetPosition,
+            shotDirection,
+            shotPosition;
 
         // WHEN
         do
         {
+            oldTargetPosition = newTargetPosition;
+            shotDirection = shot.GetComponent<Rigidbody2D>().velocity.normalized;
+            shotPosition = shot.transform.position;
             yield return null;
-            shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
+
+            newTargetPosition = TestUtils.GetTargetPosition();
+        } while (Utils.Vector2ToDegrees(newTargetPosition) == Utils.Vector2ToDegrees(oldTargetPosition));
+
+        // THEN
+        var targetToShotDirection = (oldTargetPosition - shotPosition).normalized;
+        var combinedVector = (shotDirection + targetToShotDirection).normalized;
+        AssertWrapper.AreEqual(Utils.Vector2ToDegrees(combinedVector), Utils.Vector2ToDegrees(TestUtils.GetTargetMovementDirection()), "Knockback Direction not as expected");
+    }
+
+    private const string FUNCTION_DOUBLE_HIT_CHECK_NAME = "DoubleHitCheck";
+    [UnityTest]
+    public IEnumerator DoubleHitCheck()
+    {
+        // GIVEN
+        TestUtils.SetUpShot(SHOT_NAME);
+        var weaponMovement = TestUtils.GetWeaponMovement();
+        var weaponAttack = TestUtils.GetWeaponAttack();
+
+        var touchOnJoystick = new Vector2(1, 0);
+
+        // WHEN
+        weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
+        yield return null;
+
+        weaponAttack.HumbleFixedUpdate(touchOnJoystick);
+        yield return null;
+
+        // THEN
+        var shot = GameObject.FindGameObjectWithTag(SHOT_TAG.GetDescription());
+        AssertWrapper.IsNotNull(shot);
+
+        // GIVEN
+        var targetOriginalHealth = TestUtils.GetTargetHealth();
+        float targetHealthAfterHit = targetOriginalHealth;
+        bool didGetHit = false;
+        // WHEN
+        do
+        {
+            if (!didGetHit) 
+            {
+                targetHealthAfterHit = TestUtils.GetTargetHealth();
+                if (targetHealthAfterHit != targetOriginalHealth) 
+                {
+                    didGetHit = true;
+                }
+            }
+            yield return null;
+
+            shot = GameObject.FindGameObjectWithTag(SHOT_TAG.GetDescription());
         } while (shot != null);
 
         // THEN
-        AssertWrapper.Fail("Amir");
+        AssertWrapper.Greater(targetOriginalHealth, targetHealthAfterHit, "Did Not Hit Target");
+        AssertWrapper.AreEqual(targetHealthAfterHit, TestUtils.GetTargetHealth(), ">1 Hits");
     }
-
 
     [UnityTest]
     public IEnumerator ShootingInDirection()
@@ -234,7 +293,7 @@ public class KnockbackWaveTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
+        var shot = GameObject.FindGameObjectWithTag(SHOT_TAG.GetDescription());
         AssertWrapper.IsNotNull(shot, seed);
 
         // GIVEN
@@ -245,7 +304,7 @@ public class KnockbackWaveTests
         {
             lastShotPosition = shot.transform.position;
             yield return null;
-            shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
+            shot = GameObject.FindGameObjectWithTag(SHOT_TAG.GetDescription());
         } while (shot != null);
 
         // THEN

@@ -76,10 +76,19 @@ class Knockbackee : MonoBehaviour
 
     private void KnockbackMe(GameObject other)
     {
-        Vector2 knockbackDirection = (transform.position - other.transform.position).normalized;
+        Vector2 knockbackDirection = CalculateKnockbackDirection(other);
         float knockbackSpeed = (GetLinearSpeed(other) + (GetAngularSpeed(other) * Constants.ANGULAR_SPEED_KNOCKBACK_MULTIPLIER)) * _knockbackMultiplier;
         _rigidbody2D.AddForce(knockbackDirection * knockbackSpeed, ForceMode2D.Impulse);
     }
+
+    private Vector2 CalculateKnockbackDirection(GameObject other)
+    {
+        var otherDirection = other.GetComponent<Rigidbody2D>().velocity.normalized;
+        Vector2 targetToOtherDirection = (transform.position - other.transform.position).normalized;
+        var combinedVector = (otherDirection + targetToOtherDirection).normalized;
+        return combinedVector;
+    }
+
     #endregion
 
     #region Speed calculations

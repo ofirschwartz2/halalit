@@ -37,13 +37,14 @@ internal static class TestUtils
         target[0].transform.position = Utils.GetRandomVector2OnCircle(radiusOfTargetPositionAroundHalalit);
     }
 
-    //TesingWithTarget Scene
     internal static void RotaeTarget(float degrees) 
     {
         TesingWithTargetValidation();
         var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
         target[0].transform.rotation = Quaternion.Euler(0, 0, degrees);
     }
+    //TesingWithTarget Scene
+
     #endregion
 
     #region SceneGetters
@@ -73,6 +74,7 @@ internal static class TestUtils
                 .GetComponent<BoxCollider2D>();
     }
 
+    //TesingWithTarget Scene
     internal static Vector2 GetTargetPosition()
     {
         TesingWithTargetValidation();
@@ -81,6 +83,12 @@ internal static class TestUtils
         return target.transform.position;
     }
 
+    internal static Vector2 GetTargetMovementDirection()
+    {
+        TesingWithTargetValidation();
+        var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
+        return target.GetComponent<Rigidbody2D>().velocity.normalized;
+    }
     internal static Vector2 GetTargetNearestPositionToHalalit()
     {
         TesingWithTargetValidation();
@@ -94,13 +102,16 @@ internal static class TestUtils
         var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
         return target.GetComponent<Health>().GetHealth();
     }
+    //TesingWithTarget Scene
 
+    //TestingForBounces Scene
     internal static List<int> GetAllTargetsHealth()
     {
         TesingWithMultipleTargetValidation();
         var targets = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription()).ToList();
         return targets.Select(target => target.GetComponent<Health>().GetHealth()).ToList();
     }
+    //TestingForBounces Scene
 
     internal static Vector2 GetNearestPositionToHalalit(GameObject gameObject)
     {
