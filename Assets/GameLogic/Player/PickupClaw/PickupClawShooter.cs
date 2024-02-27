@@ -1,4 +1,6 @@
 using Assets.Enums;
+using Assets.Utils;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -12,6 +14,10 @@ public class PickupClawShooter : MonoBehaviour
     private PickupClawRetractor _pickupClawRetractor;
     [SerializeField]
     private PickupClawState _pickupClawState;
+    [SerializeField]
+    private GameObject _pickupClawTarget;
+    [SerializeField]
+    private float _targetCircleRadius;
 
     public void TryShoot()
     {
@@ -39,7 +45,39 @@ public class PickupClawShooter : MonoBehaviour
         _pickupClawState.Value = PickupClawStateE.MOVING_FORWARD;
         gameObject.transform.parent = null;
         _pickupClawMovement.SetPerfectRotationToHalalit(false);
+        var targetCircleCenter = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        List<GameObject> optionalTargets = GetOptionalTargets(targetCircleCenter);
+        return GetClosestTarget(optionalTargets, targetCircleCenter);
+    }
 
-        return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    private List<GameObject> GetOptionalTargets(Vector3 targetCircleCenter)
+    {
+        var optionalTargets = new List<GameObject>();
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(targetCircleCenter, _targetCircleRadius);
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.gameObject.CompareTag(Tag.ITEM.GetDescription()))
+            {
+                optionalTargets.Add(collider.gameObject);
+            }
+        }
+
+        return optionalTargets;
+    }
+
+    private GameObject GetClosestTarget(List<GameObject> optionalTargets, Vector3 targetCircleCenter)
+    {
+        GameObject closestTarget = null;
+        float minDistance = float.MaxValue;
+        foreach (GameObject target in optionalTargets)
+        {
+            float distance = Vector3.Distance(target.transform.position, targetCircleCenter);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestTarget = target;
+            }
+        }
+        return closestTarget;
     }
 }

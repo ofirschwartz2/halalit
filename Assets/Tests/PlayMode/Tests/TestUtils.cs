@@ -177,7 +177,7 @@ internal static class TestUtils
     }
     #endregion
 
-    #region Validations
+    #region Scene Validations
     internal static void TesingWithTargetValidation()
     {
         var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
