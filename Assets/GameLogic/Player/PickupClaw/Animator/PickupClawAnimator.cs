@@ -9,7 +9,7 @@ namespace Assets.Animators
         [SerializeField]
         private Animator _animator;
 
-        public void StartMovingForward()
+        public void StartMovingForwardAnimation()
         {
             _animator.SetBool(PickupClawAnimation.IS_SHOOTING.GetDescription(), true);
         }

@@ -1,6 +1,7 @@
 ﻿using Assets.Animators;
 using Assets.Enums;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class PickupClawStateMachine : MonoBehaviour
 {
@@ -26,10 +27,10 @@ public class PickupClawStateMachine : MonoBehaviour
     {
         _lastFramePickupClawState = _pickupClawState.Value;
 
-        _pickupClawShooter.TryShoot();
+        var targetGameObject = _pickupClawShooter.TryMoveForward();
         _pickupClawRetractor.TryRetract();
 
-        HandleMovingForwardTransition();
+        HandleMovingForwardTransition(targetGameObject);
         HandleGrabbingTransition();
         HandleMovingBackwardTransition();
         HandleReturningToHalalitTransition();
@@ -38,13 +39,26 @@ public class PickupClawStateMachine : MonoBehaviour
     }
 
     #region Transition Handler
-    private void HandleMovingForwardTransition()
+    private void HandleMovingForwardTransition(GameObject targetGameObject)
     {
-        if (StartMovingForward())
+        if (MovingForward()) 
         {
-            _pickupClawShooter.Shoot();
-            _pickupClawAnimator.StartMovingForward();
+            if (JustStartedMovingForward())
+            {
+                Vector2 targetPosition = _pickupClawShooter.InitShooting();
+                GameObject targetGameObject = _pickupClawShooter.TryGetTargetGameObject(targetPosition);
+                if (targetGameObject != null) 
+                {
+                    _pickupClawAnimator.StartMovingForwardAnimation();
+                }
+                else
+                {
+                    _pickupClawShooter.ShootToStaticPosition();
+                    _pickupClawAnimator.StartMovingForwardAnimation();
+                }
+            }
         }
+        
     }
 
     private void HandleGrabbingTransition()
@@ -84,9 +98,14 @@ public class PickupClawStateMachine : MonoBehaviour
     #endregion
 
     #region State Predicates
-    private bool StartMovingForward()
+    private bool JustStartedMovingForward()
     {
         return _lastFramePickupClawState == PickupClawStateE.IN_HALALIT && _pickupClawState.Value == PickupClawStateE.MOVING_FORWARD;
+    }
+
+    private bool MovingForward()
+    {
+        return _pickupClawState.Value == PickupClawStateE.MOVING_FORWARD;
     }
 
     private bool StartGrabbing()

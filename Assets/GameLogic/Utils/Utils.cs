@@ -10,6 +10,27 @@ namespace Assets.Utils
 {
     public static class Utils
     {
+
+        public static GameObject GetClosestGameObject(List<GameObject> optionalTargets, Vector3 targetCircleCenter)
+        {
+            GameObject closestTarget = null;
+            float minDistance = float.MaxValue;
+            foreach (GameObject target in optionalTargets)
+            {
+                float distance = Vector3.Distance(target.transform.position, targetCircleCenter);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    closestTarget = target;
+                }
+            }
+            if (closestTarget == null)
+            {
+                throw new Exception("closestTarget is null");
+            }
+            return closestTarget;
+        }
+
         #region Math 
         public static float Vector2ToDegrees(Vector2 vector)
         {
