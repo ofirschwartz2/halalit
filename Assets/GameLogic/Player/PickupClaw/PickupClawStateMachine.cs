@@ -45,8 +45,7 @@ public class PickupClawStateMachine : MonoBehaviour
         {
             if (JustStartedMovingForward())
             {
-                Vector2 targetPosition = _pickupClawShooter.InitShooting();
-                GameObject targetGameObject = _pickupClawShooter.TryGetTargetGameObject(targetPosition);
+                _pickupClawShooter.InitShooting();
                 if (targetGameObject != null) 
                 {
                     _pickupClawAnimator.StartMovingForwardAnimation();
