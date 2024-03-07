@@ -63,6 +63,7 @@ namespace Assets.Utils
             return angle;
         }
 
+        // DELETE. use Vector2.Distance(point1, point2)
         public static float GetDistanceBetweenTwoPoints(Vector2 point1, Vector2 point2)
         {
             float deltaX = Math.Abs(point1.x - point2.x);
@@ -238,17 +239,17 @@ namespace Assets.Utils
             return GetHalalitTransform().position;
         }
 
+        #endregion
+
+        #region Quaternions
+
         public static Vector2 GetRotationAsVector2(Quaternion rotation)
         {
-            rotation = rotation * Quaternion.Euler(0f, 0f, 90f); //TODO: talk w Amir
+            rotation = rotation * Quaternion.Euler(0f, 0f, 90f);
             float angle = rotation.eulerAngles.z;
             float angleRadians = angle * Mathf.Deg2Rad;
             return RadianToVector2(angleRadians);
         }
-
-        #endregion
-
-        #region Quaternions
 
         public static Quaternion GetRotationPlusAngle(Quaternion rotation, float angle)
         {
@@ -319,6 +320,11 @@ namespace Assets.Utils
         public static bool ShouldDie(float endOfLifeTime)
         {
             return Time.time >= endOfLifeTime;
+        }
+
+        public static bool Are2VectorsAlmostEqual(Vector2 a, Vector2 b, float delta = 0.001f)
+        {
+            return Vector2.Distance(a, b) <= delta;
         }
         #endregion
 

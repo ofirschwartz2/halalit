@@ -2,6 +2,7 @@ using UnityEngine;
 using Assets.Utils;
 using Assets.Enums;
 using System.Linq;
+using log4net.Util;
 
 public class ItemMovement : MonoBehaviour
 {
@@ -43,10 +44,11 @@ public class ItemMovement : MonoBehaviour
         }
     }
 
-    public void Grabbed(Transform grabber)
+    public void Grabbed(UnityEngine.Transform grabber)
     {
         _rigidBody.isKinematic = true;
         _rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+        transform.position = grabber.position;
         transform.SetParent(grabber);
     }
 
