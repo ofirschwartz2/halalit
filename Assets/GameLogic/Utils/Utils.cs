@@ -326,6 +326,12 @@ namespace Assets.Utils
         {
             return Vector2.Distance(a, b) <= delta;
         }
+
+        public static bool IsCloserClockwise(float degreeFrom, float degreeTo) 
+        {
+            return degreeTo > degreeFrom ? degreeTo - degreeFrom < 180 : degreeFrom - degreeTo > 180;
+        }
+
         #endregion
 
         #region Lists

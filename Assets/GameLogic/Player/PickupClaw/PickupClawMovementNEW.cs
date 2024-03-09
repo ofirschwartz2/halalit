@@ -1,4 +1,5 @@
 using Assets.Utils;
+using System;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -9,11 +10,15 @@ public class PickupClawMovementNEW : MonoBehaviour
     [SerializeField]
     private float _speed;
     [SerializeField]
+    private float _rotationSpeed;
+    [SerializeField]
     private float _rotationToTargetSpeed;
     [SerializeField]
     private float _rotationFromHalalitSpeed;
     [SerializeField]
     private float _radiusToStartGrabbing;
+    [SerializeField]
+    private float _rotationDelta;
 
     private GameObject _target;
     private bool _facingTarget;
@@ -30,22 +35,44 @@ public class PickupClawMovementNEW : MonoBehaviour
         _rigidBody.velocity = velocity;
     }
 
-    internal void Rotate() 
+    internal void TryRotate()
     {
-        Vector2 direction = _facingTarget? 
-            _target.transform.position - transform.position 
+        var direction = _facingTarget ?
+            _target.transform.position - transform.position
             :
             transform.position - _target.transform.position;
 
-        direction = direction.normalized;
+        var targetDirectionInDegrees = Utils.Vector2ToDegrees(direction);
+        var clawDirectionInDegrees = Utils.GetAngleFromQuaternion(transform.rotation);
 
-        if (_facingTarget)
+        if (ShouldRotate(targetDirectionInDegrees, clawDirectionInDegrees))
         {
-            Utils.GetRotationPlusAngle(transform.rotation, _rotationToTargetSpeed);
+            Rotate(targetDirectionInDegrees);
         }
-        else 
+    }
+
+    private void Rotate(float targetDirectionInDegrees)
+    {
+        bool shouldRotateClockwise = Utils.IsCloserClockwise(Utils.GetAngleFromQuaternion(transform.rotation), targetDirectionInDegrees);
+
+        if (shouldRotateClockwise)
         {
+            transform.rotation = Utils.GetRotationPlusAngle(transform.rotation, _rotationSpeed); // TODO: check if flip is needed
         }
+        else
+        {
+            transform.rotation = Utils.GetRotationPlusAngle(transform.rotation, -_rotationSpeed); // TODO: check if flip is needed
+        }
+    }
+
+    private bool ShouldRotate(float targetDirectionInDegrees, float clawDirectionInDegrees)
+    {
+        return Math.Abs(targetDirectionInDegrees - clawDirectionInDegrees) > _rotationDelta;
+    }
+
+    internal bool IsOnTarget()
+    {
+        return Utils.Are2VectorsAlmostEqual(_target.transform.position, transform.position);
     }
 
     #region Setters

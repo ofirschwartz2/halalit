@@ -40,20 +40,23 @@ public class PickupClawStateMachineNEW : MonoBehaviour
         {
             case PickupClawStateENEW.MOVING_TO_TARGET:
                 pickupClawMovementNEW.MoveTowardsTarget();
-                pickupClawMovementNEW.Rotate();
+                pickupClawMovementNEW.TryRotate();
                 TryChangeToGrabbing();
                 break;
 
             case PickupClawStateENEW.GRABBING:
                 _pickupClawGrabberNEW.GrabTarget(_item);
-                TryChangeToReturningToHalalitWithTarget();
-                TryChangeToReturningToHalalitWithoutTarget();
+                if (!TryChangeToReturningToHalalitWithTarget()) 
+                {
+                    TryChangeToReturningToHalalitWithoutTarget();
+                }
                 break;
 
             case PickupClawStateENEW.RETURNING_TO_HALALIT_WITH_TARGET:
             case PickupClawStateENEW.RETURNING_TO_HALALIT_WITHOUT_TARGET:
                 pickupClawMovementNEW.MoveTowardsTarget();
-                pickupClawMovementNEW.Rotate();
+                pickupClawMovementNEW.TryRotate();
+                TryDie();
                 break;
         }
         
@@ -61,12 +64,14 @@ public class PickupClawStateMachineNEW : MonoBehaviour
 
     #region State Changes
 
-    private void TryChangeToReturningToHalalitWithTarget()
+    private bool TryChangeToReturningToHalalitWithTarget()
     {
         if (IsClawOnTarget())
         {
             ChangeToReturningToHalalitWithTarget();
+            return true;
         }
+        return false;
     }
 
     private void TryChangeToReturningToHalalitWithoutTarget()
@@ -109,6 +114,13 @@ public class PickupClawStateMachineNEW : MonoBehaviour
         pickupClawMovementNEW.SetTarget(_halalit);
     }
 
+    private void TryDie()
+    {
+        if (pickupClawMovementNEW.IsOnTarget())
+        {
+            Destroy(gameObject);
+        }
+    }
     #endregion
 
     #region Init
@@ -118,6 +130,7 @@ public class PickupClawStateMachineNEW : MonoBehaviour
     }
     #endregion
 
+    #region Predicates
     private bool IsClawOnTarget()
     {
         return Utils.Are2VectorsAlmostEqual(_item.transform.position, transform.position);
@@ -127,5 +140,6 @@ public class PickupClawStateMachineNEW : MonoBehaviour
     {
         return Utils.GetDistanceBetweenTwoPoints(Utils.GetHalalitPosition(), transform.position) > _pickupClawManeuverRadius;
     }
+    #endregion
 
 }
