@@ -245,7 +245,11 @@ namespace Assets.Utils
 
         public static Vector2 GetRotationAsVector2(Quaternion rotation)
         {
-            rotation = rotation * Quaternion.Euler(0f, 0f, 90f);
+            // This is because we use sprites that are ritated 'UP' - 90 degrees. If we want we can decide to rotate all sprites 'RIGHT' - 0 degrees.
+            var upQuaternion = Quaternion.Euler(0f, 0f, 90f);
+            // This is because we use sprites that are ritated 'UP' - 90 degrees. If we want we can decide to rotate all sprites 'RIGHT' - 0 degrees.
+
+            rotation = rotation * upQuaternion;
             float angle = rotation.eulerAngles.z;
             float angleRadians = angle * Mathf.Deg2Rad;
             return RadianToVector2(angleRadians);
@@ -262,6 +266,12 @@ namespace Assets.Utils
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
             return GetRotationPlusAngle(Quaternion.identity, angle);
         }
+
+        public static float QuaternionToDegrees(Quaternion rotation)
+        {
+            return Vector2ToDegrees(GetRotationAsVector2(rotation));
+        }
+
         #endregion
 
         #region BezierCurves
@@ -329,7 +339,8 @@ namespace Assets.Utils
 
         public static bool IsCloserClockwise(float degreeFrom, float degreeTo) 
         {
-            return degreeTo > degreeFrom ? degreeTo - degreeFrom < 180 : degreeFrom - degreeTo > 180;
+            var a = degreeTo > degreeFrom ? degreeTo - degreeFrom > 180 : degreeFrom - degreeTo < 180;
+            return a;
         }
 
         #endregion

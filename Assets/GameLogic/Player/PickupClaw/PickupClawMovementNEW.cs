@@ -1,3 +1,4 @@
+using Assets.Enums;
 using Assets.Utils;
 using System;
 using UnityEngine;
@@ -8,7 +9,9 @@ public class PickupClawMovementNEW : MonoBehaviour
     [SerializeField]
     private Rigidbody2D _rigidBody;
     [SerializeField]
-    private float _speed;
+    private float _speedToItem;
+    [SerializeField]
+    private float _speedToHalalit;
     [SerializeField]
     private float _rotationSpeed;
     [SerializeField]
@@ -30,9 +33,14 @@ public class PickupClawMovementNEW : MonoBehaviour
             throw new System.Exception("Target is null");
         }
 
-        Vector2 direction = _target.transform.position - transform.position;
-        Vector2 velocity = direction.normalized * _speed;
+        var direction = _target.transform.position - transform.position;
+        var velocity = direction.normalized * GetSpeed();
         _rigidBody.velocity = velocity;
+    }
+
+    private float GetSpeed()
+    {
+        return _target.tag == Tag.HALALIT.GetDescription()  ? _rotationToTargetSpeed : _speedToItem;
     }
 
     internal void TryRotateInRelationToTarget()
@@ -41,9 +49,11 @@ public class PickupClawMovementNEW : MonoBehaviour
             _target.transform.position - transform.position
             :
             transform.position - _target.transform.position;
+        
+        direction = direction.normalized;
 
         var targetDirectionInDegrees = Utils.Vector2ToDegrees(direction);
-        var clawDirectionInDegrees = Utils.GetAngleFromQuaternion(transform.rotation);
+        var clawDirectionInDegrees = Utils.QuaternionToDegrees(transform.rotation);
 
         if (ShouldRotate(targetDirectionInDegrees, clawDirectionInDegrees))
         {
@@ -53,15 +63,15 @@ public class PickupClawMovementNEW : MonoBehaviour
 
     private void Rotate(float targetDirectionInDegrees)
     {
-        bool shouldRotateClockwise = Utils.IsCloserClockwise(Utils.GetAngleFromQuaternion(transform.rotation), targetDirectionInDegrees);
+        bool shouldRotateClockwise = Utils.IsCloserClockwise(Utils.QuaternionToDegrees(transform.rotation), targetDirectionInDegrees);
 
         if (shouldRotateClockwise)
         {
-            transform.rotation = Utils.GetRotationPlusAngle(transform.rotation, _rotationSpeed); // TODO: check if flip is needed
+            transform.rotation = Utils.GetRotationPlusAngle(transform.rotation, -_rotationSpeed); // TODO: check if flip is needed
         }
         else
         {
-            transform.rotation = Utils.GetRotationPlusAngle(transform.rotation, -_rotationSpeed); // TODO: check if flip is needed
+            transform.rotation = Utils.GetRotationPlusAngle(transform.rotation, _rotationSpeed); // TODO: check if flip is needed
         }
     }
 
@@ -72,7 +82,7 @@ public class PickupClawMovementNEW : MonoBehaviour
 
     internal bool IsOnTarget()
     {
-        return Utils.Are2VectorsAlmostEqual(_target.transform.position, transform.position);
+        return Utils.Are2VectorsAlmostEqual(_target.transform.position, transform.position, 0.1f);
     }
 
     #region Setters

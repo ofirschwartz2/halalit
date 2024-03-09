@@ -7,6 +7,8 @@ using static UnityEngine.GraphicsBuffer;
 internal class PickupClawGrabberNEW : MonoBehaviour
 {
     [SerializeField]
+    private Rigidbody2D _rigidBody;
+    [SerializeField]
     private float _radiusToStartGrabbing;
     [SerializeField]
     private float _grabbingMovementSpeed;
@@ -29,14 +31,13 @@ internal class PickupClawGrabberNEW : MonoBehaviour
 
         GrabMoveClaw(target);
         GrabRotateClaw(target);
-        
     }
 
     private void GrabMoveClaw(GameObject target)
     {
         var direction = target.transform.position - transform.position;
         var velocity = direction.normalized * _grabbingMovementSpeed;
-        transform.position += velocity;
+        _rigidBody.velocity = velocity;
     }
 
     private void GrabRotateClaw(GameObject target)
