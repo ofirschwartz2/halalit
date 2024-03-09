@@ -18,20 +18,19 @@ public class PickupClawStateMachineNEW : MonoBehaviour
     [SerializeField]
     private PickupClawAnimator _pickupClawAnimator;
     [SerializeField]
-    private PickupClawMovementNEW pickupClawMovementNEW;
-    [SerializeField]
-    private GameObject _halalit;
+    private PickupClawMovementNEW _pickupClawMovementNEW;
     [SerializeField]
     private float _pickupClawManeuverRadius;
 
     private PickupClawStateENEW _state;
     private GameObject _item;
+    private GameObject _halalit;
 
     void Start()
     {
         _state = PickupClawStateENEW.MOVING_TO_TARGET;
-        pickupClawMovementNEW.SetTarget(_item);
-        pickupClawMovementNEW.SetFacingTarget(true);
+        _pickupClawMovementNEW.SetTarget(_item);
+        _pickupClawMovementNEW.SetFacingTarget(true);
     }
 
     void FixedUpdate()
@@ -39,8 +38,8 @@ public class PickupClawStateMachineNEW : MonoBehaviour
         switch (_state) 
         {
             case PickupClawStateENEW.MOVING_TO_TARGET:
-                pickupClawMovementNEW.MoveTowardsTarget();
-                pickupClawMovementNEW.TryRotate();
+                _pickupClawMovementNEW.MoveTowardsTarget();
+                _pickupClawMovementNEW.TryRotateInRelationToTarget();
                 TryChangeToGrabbing();
                 break;
 
@@ -54,8 +53,8 @@ public class PickupClawStateMachineNEW : MonoBehaviour
 
             case PickupClawStateENEW.RETURNING_TO_HALALIT_WITH_TARGET:
             case PickupClawStateENEW.RETURNING_TO_HALALIT_WITHOUT_TARGET:
-                pickupClawMovementNEW.MoveTowardsTarget();
-                pickupClawMovementNEW.TryRotate();
+                _pickupClawMovementNEW.MoveTowardsTarget();
+                _pickupClawMovementNEW.TryRotateInRelationToTarget();
                 TryDie();
                 break;
         }
@@ -102,21 +101,21 @@ public class PickupClawStateMachineNEW : MonoBehaviour
         _item.GetComponent<ItemMovement>().Grabbed(transform);
         _state = PickupClawStateENEW.RETURNING_TO_HALALIT_WITH_TARGET;
         _pickupClawRetractorNEW.SetSpeed(true);
-        pickupClawMovementNEW.SetFacingTarget(false);
-        pickupClawMovementNEW.SetTarget(_halalit);
+        _pickupClawMovementNEW.SetFacingTarget(false);
+        _pickupClawMovementNEW.SetTarget(_halalit);
     }
 
     private void ChangeToReturningToHalalitWithoutTarget()
     {
         _state = PickupClawStateENEW.RETURNING_TO_HALALIT_WITHOUT_TARGET;
         _pickupClawRetractorNEW.SetSpeed(false);
-        pickupClawMovementNEW.SetFacingTarget(false);
-        pickupClawMovementNEW.SetTarget(_halalit);
+        _pickupClawMovementNEW.SetFacingTarget(false);
+        _pickupClawMovementNEW.SetTarget(_halalit);
     }
 
     private void TryDie()
     {
-        if (pickupClawMovementNEW.IsOnTarget())
+        if (_pickupClawMovementNEW.IsOnTarget())
         {
             Destroy(gameObject);
         }
@@ -127,6 +126,11 @@ public class PickupClawStateMachineNEW : MonoBehaviour
     public void SetTarget(GameObject target)
     {
         _item = target;
+    }
+
+    public void SetHalalit(GameObject halalit)
+    {
+        _halalit = halalit;
     }
     #endregion
 

@@ -9,6 +9,8 @@ public class PickupClawShooterNEW : MonoBehaviour
     private float _targetFindingCircleRadius;
     [SerializeField]
     private GameObject _pickupClawPrefab;
+    [SerializeField]
+    private GameObject _halalit;
 
     private bool _isClawAlive;
     private GameObject _livingClaw;
@@ -55,6 +57,7 @@ public class PickupClawShooterNEW : MonoBehaviour
     private GameObject InstantiatePickupClaw(GameObject target)
     {
         GameObject claw = Instantiate(_pickupClawPrefab, transform.position, Quaternion.identity);
+        claw.GetComponent<PickupClawStateMachineNEW>().SetHalalit(_halalit);
         claw.GetComponent<PickupClawStateMachineNEW>().SetTarget(target);
         return claw;
     }

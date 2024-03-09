@@ -35,7 +35,7 @@ public class PickupClawMovementNEW : MonoBehaviour
         _rigidBody.velocity = velocity;
     }
 
-    internal void TryRotate()
+    internal void TryRotateInRelationToTarget()
     {
         var direction = _facingTarget ?
             _target.transform.position - transform.position
