@@ -11,7 +11,9 @@ public class PickupClawMovementNEW : MonoBehaviour
     [SerializeField]
     private float _speedToItem;
     [SerializeField]
-    private float _speedToHalalit;
+    private float _speedToHalalitWithItem;
+    [SerializeField]
+    private float _speedToHalalitWithoutItem;
     [SerializeField]
     private float _rotationSpeed;
     [SerializeField]
@@ -40,7 +42,7 @@ public class PickupClawMovementNEW : MonoBehaviour
 
     private float GetSpeed()
     {
-        return _target.tag == Tag.HALALIT.GetDescription()  ? _rotationToTargetSpeed : _speedToItem;
+        return _target.tag == Tag.HALALIT.GetDescription()  ? _speedToHalalitWithoutItem : _speedToItem;
     }
 
     internal void TryRotateInRelationToTarget()
