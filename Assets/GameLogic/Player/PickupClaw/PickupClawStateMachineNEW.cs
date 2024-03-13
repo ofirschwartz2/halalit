@@ -1,6 +1,7 @@
 ﻿using Assets.Animators;
 using Assets.Enums;
 using Assets.Utils;
+using System.Net;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -8,19 +9,15 @@ public class PickupClawStateMachineNEW : MonoBehaviour
 {
 
     [SerializeField]
-    private PickupClawState _pickupClawState;
-    [SerializeField]
-    private PickupClawShooter _pickupClawShooter;
-    [SerializeField]
     private PickupClawGrabberNEW _pickupClawGrabberNEW;
-    [SerializeField]
-    private PickupClawRetractorNEW _pickupClawRetractorNEW;
     [SerializeField]
     private PickupClawAnimator _pickupClawAnimator;
     [SerializeField]
     private PickupClawMovementNEW _pickupClawMovementNEW;
     [SerializeField]
     private float _pickupClawManeuverRadius;
+    [SerializeField]
+    private float _isOnTargetDelta;
 
     private PickupClawStateENEW _state;
     private GameObject _item;
@@ -30,7 +27,6 @@ public class PickupClawStateMachineNEW : MonoBehaviour
     {
         _state = PickupClawStateENEW.MOVING_TO_TARGET;
         _pickupClawMovementNEW.SetTarget(_item);
-        _pickupClawMovementNEW.SetFacingTarget(true);
     }
 
     void FixedUpdate()
@@ -38,8 +34,8 @@ public class PickupClawStateMachineNEW : MonoBehaviour
         switch (_state) 
         {
             case PickupClawStateENEW.MOVING_TO_TARGET:
-                _pickupClawMovementNEW.MoveTowardsTarget();
-                _pickupClawMovementNEW.TryRotateInRelationToTarget();
+                _pickupClawMovementNEW.MoveTowardsTarget(_state);
+                _pickupClawMovementNEW.TryRotateAccordingToTarget(_state);
                 TryChangeToGrabbing();
                 break;
 
@@ -53,8 +49,9 @@ public class PickupClawStateMachineNEW : MonoBehaviour
 
             case PickupClawStateENEW.RETURNING_TO_HALALIT_WITH_TARGET:
             case PickupClawStateENEW.RETURNING_TO_HALALIT_WITHOUT_TARGET:
-                _pickupClawMovementNEW.MoveTowardsTarget();
-                _pickupClawMovementNEW.TryRotateInRelationToTarget();
+                _pickupClawMovementNEW.MoveTowardsTarget(_state);
+                _pickupClawMovementNEW.TryRotateAccordingToTarget(_state);
+                TryChangeToReturningToHalalitWithoutTarget();
                 TryDie();
                 break;
         }
@@ -100,14 +97,16 @@ public class PickupClawStateMachineNEW : MonoBehaviour
     {
         _item.GetComponent<ItemMovement>().Grabbed(transform);
         _state = PickupClawStateENEW.RETURNING_TO_HALALIT_WITH_TARGET;
-        _pickupClawMovementNEW.SetFacingTarget(false);
         _pickupClawMovementNEW.SetTarget(_halalit);
     }
 
     private void ChangeToReturningToHalalitWithoutTarget()
     {
+        if (_state == PickupClawStateENEW.RETURNING_TO_HALALIT_WITH_TARGET)
+        {
+            _item.GetComponent<ItemMovement>().UnGrabbed();
+        }
         _state = PickupClawStateENEW.RETURNING_TO_HALALIT_WITHOUT_TARGET;
-        _pickupClawMovementNEW.SetFacingTarget(false);
         _pickupClawMovementNEW.SetTarget(_halalit);
     }
 
@@ -136,7 +135,7 @@ public class PickupClawStateMachineNEW : MonoBehaviour
     #region Predicates
     private bool IsClawOnTarget()
     {
-        return Utils.Are2VectorsAlmostEqual(_item.transform.position, transform.position, 0.1f);
+        return Utils.Are2VectorsAlmostEqual(_item.transform.position, transform.position, _isOnTargetDelta);
     }
 
     private bool ShouldClawRetract() 

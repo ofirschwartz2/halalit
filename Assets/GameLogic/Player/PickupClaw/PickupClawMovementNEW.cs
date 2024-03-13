@@ -16,44 +16,33 @@ public class PickupClawMovementNEW : MonoBehaviour
     private float _speedToHalalitWithoutItem;
     [SerializeField]
     private float _rotationSpeed;
-    [SerializeField]
-    private float _rotationToTargetSpeed;
-    [SerializeField]
-    private float _rotationFromHalalitSpeed;
-    [SerializeField]
-    private float _radiusToStartGrabbing;
+
     [SerializeField]
     private float _rotationDelta;
 
     private GameObject _target;
-    private bool _facingTarget;
 
-    internal void MoveTowardsTarget()
+    internal void MoveTowardsTarget(PickupClawStateENEW state)
     {
         if (_target == null)
         {
             throw new System.Exception("Target is null");
         }
 
+        SetVelocity(state);
+    }
+
+    private void SetVelocity(PickupClawStateENEW state)
+    {
         var direction = _target.transform.position - transform.position;
-        var velocity = direction.normalized * GetSpeed();
+        var velocity = direction.normalized * GetSpeed(state);
         _rigidBody.velocity = velocity;
     }
 
-    private float GetSpeed()
+    internal void TryRotateAccordingToTarget(PickupClawStateENEW state)
     {
-        return _target.tag == Tag.HALALIT.GetDescription()  ? _speedToHalalitWithoutItem : _speedToItem;
-    }
-
-    internal void TryRotateInRelationToTarget()
-    {
-        var direction = _facingTarget ?
-            _target.transform.position - transform.position
-            :
-            transform.position - _target.transform.position;
+        var direction = GetMovementDirection(state);
         
-        direction = direction.normalized;
-
         var targetDirectionInDegrees = Utils.Vector2ToDegrees(direction);
         var clawDirectionInDegrees = Utils.QuaternionToDegrees(transform.rotation);
 
@@ -69,14 +58,58 @@ public class PickupClawMovementNEW : MonoBehaviour
 
         if (shouldRotateClockwise)
         {
-            transform.rotation = Utils.GetRotationPlusAngle(transform.rotation, -_rotationSpeed); // TODO: check if flip is needed
+            transform.rotation = Utils.GetRotationPlusAngle(transform.rotation, -_rotationSpeed);
         }
         else
         {
-            transform.rotation = Utils.GetRotationPlusAngle(transform.rotation, _rotationSpeed); // TODO: check if flip is needed
+            transform.rotation = Utils.GetRotationPlusAngle(transform.rotation, _rotationSpeed);
         }
     }
 
+    #region Setters
+    internal void SetTarget(GameObject target)
+    {
+        _target = target;
+    }
+    #endregion
+
+    #region Getters
+    private float GetSpeed(PickupClawStateENEW state)
+    {
+        switch (state)
+        {
+            case PickupClawStateENEW.MOVING_TO_TARGET:
+                return _speedToItem;
+
+            case PickupClawStateENEW.RETURNING_TO_HALALIT_WITH_TARGET:
+                return _speedToHalalitWithItem;
+
+            case PickupClawStateENEW.RETURNING_TO_HALALIT_WITHOUT_TARGET:
+                return _speedToHalalitWithoutItem;
+
+            default:
+                throw new System.Exception("Invalid state");
+        }
+    }
+
+    private Vector2 GetMovementDirection(PickupClawStateENEW state)
+    {
+        switch (state)
+        {
+            case PickupClawStateENEW.MOVING_TO_TARGET:
+                return (_target.transform.position - transform.position).normalized;
+
+            case PickupClawStateENEW.RETURNING_TO_HALALIT_WITH_TARGET:
+            case PickupClawStateENEW.RETURNING_TO_HALALIT_WITHOUT_TARGET:
+                return (transform.position - _target.transform.position).normalized;
+
+            default:
+                throw new System.Exception("Invalid state");
+        }
+    }
+    #endregion
+
+    #region Predicates
     private bool ShouldRotate(float targetDirectionInDegrees, float clawDirectionInDegrees)
     {
         return Math.Abs(targetDirectionInDegrees - clawDirectionInDegrees) > _rotationDelta;
@@ -85,17 +118,6 @@ public class PickupClawMovementNEW : MonoBehaviour
     internal bool IsOnTarget()
     {
         return Utils.Are2VectorsAlmostEqual(_target.transform.position, transform.position, 0.1f);
-    }
-
-    #region Setters
-    internal void SetTarget(GameObject target)
-    {
-        _target = target;
-    }
-
-    internal void SetFacingTarget(bool facingTarget)
-    {
-        _facingTarget = facingTarget;
     }
     #endregion
 

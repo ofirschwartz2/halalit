@@ -52,6 +52,13 @@ public class ItemMovement : MonoBehaviour
         transform.SetParent(grabber);
     }
 
+    public void UnGrabbed()
+    {
+        _rigidBody.isKinematic = false;
+        _rigidBody.constraints = RigidbodyConstraints2D.None;
+        transform.parent = null;
+    }
+
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.CompareTag(Tag.INTERNAL_WORLD.GetDescription()))

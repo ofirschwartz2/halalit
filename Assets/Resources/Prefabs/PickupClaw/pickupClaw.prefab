@@ -48,13 +48,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4b2d995fce89ec47ab11758901082dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pickupClawState: {fileID: 0}
-  _pickupClawShooter: {fileID: 0}
   _pickupClawGrabberNEW: {fileID: 4264111230463411018}
-  _pickupClawRetractorNEW: {fileID: 0}
   _pickupClawAnimator: {fileID: 0}
   _pickupClawMovementNEW: {fileID: 2892123107193723990}
   _pickupClawManeuverRadius: 10
+  _isOnTargetDelta: 0.1
 --- !u!114 &2892123107193723990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,12 +66,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidBody: {fileID: 5919605962018131431}
-  _speedToItem: 2
-  _speedToHalalit: 10
+  _speedToItem: 3
+  _speedToHalalitWithItem: 2
+  _speedToHalalitWithoutItem: 6
   _rotationSpeed: 2
-  _rotationToTargetSpeed: 2
-  _rotationFromHalalitSpeed: 2
-  _radiusToStartGrabbing: 2
   _rotationDelta: 0.1
 --- !u!114 &4264111230463411018
 MonoBehaviour:
