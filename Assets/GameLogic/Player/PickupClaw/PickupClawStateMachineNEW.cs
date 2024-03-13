@@ -18,6 +18,8 @@ public class PickupClawStateMachineNEW : MonoBehaviour
     private float _pickupClawManeuverRadius;
     [SerializeField]
     private float _isOnTargetDelta;
+    [SerializeField]
+    private float _returningToHalalitOpacity;
 
     private PickupClawStateENEW _state;
     private GameObject _item;
@@ -108,6 +110,9 @@ public class PickupClawStateMachineNEW : MonoBehaviour
         }
         _state = PickupClawStateENEW.RETURNING_TO_HALALIT_WITHOUT_TARGET;
         _pickupClawMovementNEW.SetTarget(_halalit);
+
+        Utils.ChangeOpacity(GetComponent<Renderer>(), _returningToHalalitOpacity);
+
     }
 
     private void TryDie()

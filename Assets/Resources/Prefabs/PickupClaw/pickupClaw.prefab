@@ -53,6 +53,7 @@ MonoBehaviour:
   _pickupClawMovementNEW: {fileID: 2892123107193723990}
   _pickupClawManeuverRadius: 10
   _isOnTargetDelta: 0.1
+  _returningToHalalitOpacity: 0.5
 --- !u!114 &2892123107193723990
 MonoBehaviour:
   m_ObjectHideFlags: 0

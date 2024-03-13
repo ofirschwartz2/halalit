@@ -357,5 +357,15 @@ namespace Assets.Utils
             }
         }
         #endregion
+
+        #region Visuals
+        public static void ChangeOpacity(Renderer renderer, float opacity) 
+        {
+            Material mat = renderer.material;
+            Color color = mat.color;
+            color.a = opacity;
+            mat.color = color;
+        }
+        #endregion
     }
 }
