@@ -49,7 +49,7 @@ public class PickupClawStateMachineNEW : MonoBehaviour
             case PickupClawStateENEW.RETURNING_TO_HALALIT_WITHOUT_TARGET:
                 _pickupClawMovementNEW.Move(_state);
                 TryChangeToReturningToHalalitWithoutTarget();
-                TryDie();
+                TryDie(_state);
                 break;
         }
         
@@ -59,7 +59,7 @@ public class PickupClawStateMachineNEW : MonoBehaviour
 
     private bool TryChangeToReturningToHalalitWithTarget()
     {
-        if (IsClawOnTarget())
+        if (IsClawOnTarget(_item))
         {
             ChangeToReturningToHalalitWithTarget();
             return true;
@@ -110,12 +110,19 @@ public class PickupClawStateMachineNEW : MonoBehaviour
 
     }
 
-    private void TryDie()
+    private void TryDie(PickupClawStateENEW _state)
     {
-        if (_pickupClawMovementNEW.IsOnTarget())
+        if (IsClawOnTarget(_halalit) || WasItemCaught(_state))
         {
             Destroy(gameObject);
-        }
+        } 
+    }
+
+    private bool WasItemCaught(PickupClawStateENEW _state)
+    {
+        return 
+            _state == PickupClawStateENEW.RETURNING_TO_HALALIT_WITH_TARGET &&
+            _item == null;
     }
 
     private void TryChangeToReturningToHalalit()
@@ -142,9 +149,9 @@ public class PickupClawStateMachineNEW : MonoBehaviour
     #endregion
 
     #region Predicates
-    private bool IsClawOnTarget()
+    private bool IsClawOnTarget(GameObject target)
     {
-        return Utils.Are2VectorsAlmostEqual(_item.transform.position, transform.position, _isOnTargetDelta);
+        return Utils.Are2VectorsAlmostEqual(target.transform.position, transform.position, _isOnTargetDelta);
     }
 
     private bool ShouldClawRetract() 

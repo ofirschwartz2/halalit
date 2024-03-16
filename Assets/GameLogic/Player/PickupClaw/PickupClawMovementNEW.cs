@@ -28,6 +28,7 @@ public class PickupClawMovementNEW : MonoBehaviour
         TryRotateAccordingToTarget(state);
     }
 
+    #region Movement
     private void MoveTowardsTarget(PickupClawStateENEW state)
     {
         if (_target == null)
@@ -44,7 +45,9 @@ public class PickupClawMovementNEW : MonoBehaviour
         var velocity = direction.normalized * GetSpeed(state);
         _rigidBody.velocity = velocity;
     }
+    #endregion
 
+    #region Rotation
     private void TryRotateAccordingToTarget(PickupClawStateENEW state)
     {
         var direction = GetMovementDirection(state);
@@ -71,6 +74,7 @@ public class PickupClawMovementNEW : MonoBehaviour
             transform.rotation = Utils.GetRotationPlusAngle(transform.rotation, _rotationSpeed);
         }
     }
+    #endregion
 
     #region Setters
     internal void SetTarget(GameObject target)
@@ -119,11 +123,6 @@ public class PickupClawMovementNEW : MonoBehaviour
     private bool ShouldRotate(float targetDirectionInDegrees, float clawDirectionInDegrees)
     {
         return Math.Abs(targetDirectionInDegrees - clawDirectionInDegrees) > _rotationDelta;
-    }
-
-    internal bool IsOnTarget()
-    {
-        return Utils.Are2VectorsAlmostEqual(_target.transform.position, transform.position, 0.1f);
     }
     #endregion
 

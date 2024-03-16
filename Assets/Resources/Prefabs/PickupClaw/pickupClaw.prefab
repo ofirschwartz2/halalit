@@ -85,7 +85,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidBody: {fileID: 5919605962018131431}
-  _radiusToStartGrabbing: 2
+  _radiusToStartGrabbing: 1
   _grabbingMovementSpeed: 2
   _grabbingRotationTime: 2
 --- !u!212 &6831447698383972354
