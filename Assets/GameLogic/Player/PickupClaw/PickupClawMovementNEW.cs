@@ -22,7 +22,13 @@ public class PickupClawMovementNEW : MonoBehaviour
 
     private GameObject _target;
 
-    internal void MoveTowardsTarget(PickupClawStateENEW state)
+    internal void Move(PickupClawStateENEW state)
+    {
+        MoveTowardsTarget(state);
+        TryRotateAccordingToTarget(state);
+    }
+
+    private void MoveTowardsTarget(PickupClawStateENEW state)
     {
         if (_target == null)
         {
@@ -39,7 +45,7 @@ public class PickupClawMovementNEW : MonoBehaviour
         _rigidBody.velocity = velocity;
     }
 
-    internal void TryRotateAccordingToTarget(PickupClawStateENEW state)
+    private void TryRotateAccordingToTarget(PickupClawStateENEW state)
     {
         var direction = GetMovementDirection(state);
         

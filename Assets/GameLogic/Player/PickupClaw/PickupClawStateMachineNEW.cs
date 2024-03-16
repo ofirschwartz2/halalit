@@ -36,23 +36,18 @@ public class PickupClawStateMachineNEW : MonoBehaviour
         switch (_state) 
         {
             case PickupClawStateENEW.MOVING_TO_TARGET:
-                _pickupClawMovementNEW.MoveTowardsTarget(_state);
-                _pickupClawMovementNEW.TryRotateAccordingToTarget(_state);
+                _pickupClawMovementNEW.Move(_state);
                 TryChangeToGrabbing();
                 break;
 
             case PickupClawStateENEW.GRABBING:
                 _pickupClawGrabberNEW.GrabTarget(_item);
-                if (!TryChangeToReturningToHalalitWithTarget()) 
-                {
-                    TryChangeToReturningToHalalitWithoutTarget();
-                }
+                TryChangeToReturningToHalalit();
                 break;
 
             case PickupClawStateENEW.RETURNING_TO_HALALIT_WITH_TARGET:
             case PickupClawStateENEW.RETURNING_TO_HALALIT_WITHOUT_TARGET:
-                _pickupClawMovementNEW.MoveTowardsTarget(_state);
-                _pickupClawMovementNEW.TryRotateAccordingToTarget(_state);
+                _pickupClawMovementNEW.Move(_state);
                 TryChangeToReturningToHalalitWithoutTarget();
                 TryDie();
                 break;
@@ -122,6 +117,15 @@ public class PickupClawStateMachineNEW : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    private void TryChangeToReturningToHalalit()
+    {
+        if (!TryChangeToReturningToHalalitWithTarget())
+        {
+            TryChangeToReturningToHalalitWithoutTarget();
+        }
+    }
+
     #endregion
 
     #region Init

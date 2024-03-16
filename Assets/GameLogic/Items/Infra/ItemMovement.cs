@@ -62,6 +62,7 @@ public class ItemMovement : MonoBehaviour
         transform.SetParent(grabber);
         transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer(Assets.Enums.Layer.ITEM_TRIGGERS.GetDescription());
         Utils.ChangeOpacity(GetComponent<Renderer>(), _grabbedOpacity);
+        GetComponent<SpriteRenderer>().sortingLayerName = Assets.Enums.SortingLayer.FRONT.GetDescription();
     }
 
     public void UnGrabbed()
@@ -71,6 +72,7 @@ public class ItemMovement : MonoBehaviour
         transform.parent = null;
         transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer(Assets.Enums.Layer.ITEM_COLLISIONS.GetDescription());
         Utils.ChangeOpacity(GetComponent<Renderer>(), 1);
+        GetComponent<SpriteRenderer>().sortingLayerName = Assets.Enums.SortingLayer.DEFAULT.GetDescription();
     }
 
     private void OnTriggerExit2D(Collider2D other)
