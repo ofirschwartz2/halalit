@@ -61,6 +61,7 @@ public class ItemMovement : MonoBehaviour
         transform.position = grabber.position;
         transform.SetParent(grabber);
         transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer(Assets.Enums.Layer.ITEM_TRIGGERS.GetDescription());
+        transform.GetChild(0).gameObject.GetComponent<CircleCollider2D>().isTrigger = true;
         Utils.ChangeOpacity(GetComponent<Renderer>(), _grabbedOpacity);
         GetComponent<SpriteRenderer>().sortingLayerName = Assets.Enums.SortingLayer.FRONT.GetDescription();
     }
@@ -71,6 +72,7 @@ public class ItemMovement : MonoBehaviour
         _rigidBody.constraints = RigidbodyConstraints2D.None;
         transform.parent = null;
         transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer(Assets.Enums.Layer.ITEM_COLLISIONS.GetDescription());
+        transform.GetChild(0).gameObject.GetComponent<CircleCollider2D>().isTrigger = false;
         Utils.ChangeOpacity(GetComponent<Renderer>(), 1);
         GetComponent<SpriteRenderer>().sortingLayerName = Assets.Enums.SortingLayer.DEFAULT.GetDescription();
     }
