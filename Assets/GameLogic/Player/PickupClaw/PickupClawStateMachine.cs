@@ -1,117 +1,163 @@
 ﻿using Assets.Animators;
 using Assets.Enums;
+using Assets.Utils;
+using System.Net;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class PickupClawStateMachine : MonoBehaviour
 {
-    [SerializeField]
-    private PickupClawState _pickupClawState;
-    [SerializeField]
-    private PickupClawShooter _pickupClawShooter;
+
     [SerializeField]
     private PickupClawGrabber _pickupClawGrabber;
     [SerializeField]
-    private PickupClawRetractor _pickupClawRetractor;
-    [SerializeField]
     private PickupClawAnimator _pickupClawAnimator;
+    [SerializeField]
+    private PickupClawMovement _pickupClawMovement;
+    [SerializeField]
+    private float _pickupClawManeuverRadius;
+    [SerializeField]
+    private float _isOnTargetDelta;
+    [SerializeField]
+    private float _returningToHalalitOpacity;
 
-    private PickupClawStateE _lastFramePickupClawState;
+    private PickupClawState _state;
+    private GameObject _item;
+    private GameObject _halalit;
 
     void Start()
     {
-        _lastFramePickupClawState = PickupClawStateE.IN_HALALIT;
+        _state = PickupClawState.MOVING_TO_TARGET;
+        _pickupClawMovement.SetTarget(_item);
     }
 
     void FixedUpdate()
     {
-        _lastFramePickupClawState = _pickupClawState.Value;
+        switch (_state) 
+        {
+            case PickupClawState.MOVING_TO_TARGET:
+                _pickupClawMovement.Move(_state);
+                TryChangeToGrabbing();
+                break;
 
-        _pickupClawShooter.TryShoot();
-        _pickupClawRetractor.TryRetract();
+            case PickupClawState.GRABBING:
+                _pickupClawGrabber.GrabTarget(_item);
+                TryChangeToReturningToHalalit();
+                break;
 
-        HandleMovingForwardTransition();
-        HandleGrabbingTransition();
-        HandleMovingBackwardTransition();
-        HandleReturningToHalalitTransition();
-
-        _lastFramePickupClawState = _pickupClawState.Value;
+            case PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET:
+            case PickupClawState.RETURNING_TO_HALALIT_WITHOUT_TARGET:
+                _pickupClawMovement.Move(_state);
+                TryChangeToReturningToHalalitWithoutTarget();
+                TryDie(_state);
+                break;
+        }
+        
     }
 
-    #region Transition Handler
-    private void HandleMovingForwardTransition()
+    #region State Changes
+
+    private bool TryChangeToReturningToHalalitWithTarget()
     {
-        if (StartMovingForward())
+        if (IsClawOnTarget(_item))
         {
-            _pickupClawShooter.Shoot();
-            _pickupClawAnimator.StartMovingForward();
+            ChangeToReturningToHalalitWithTarget();
+            return true;
         }
+        return false;
     }
 
-    private void HandleGrabbingTransition()
+    private void TryChangeToReturningToHalalitWithoutTarget()
     {
-        if (StartGrabbing())
+        if (ShouldClawRetract())
         {
-            _pickupClawGrabber.Grab();
-            _pickupClawAnimator.StartGrabbing();
-        }
-        else if (IsGrabbing())
-        {
-            _pickupClawGrabber.Grab();
-        }
-    }
-
-    private void HandleMovingBackwardTransition()
-    {
-        if (StartMovingBackward())
-        {
-            _pickupClawRetractor.Retract();
-            _pickupClawAnimator.StartMovingBackward();
-        }
-        else if (IsMovingBackward())
-        {
-            _pickupClawRetractor.Retract();
+            ChangeToReturningToHalalitWithoutTarget();
         }
     }
 
-    private void HandleReturningToHalalitTransition()
+    private void TryChangeToGrabbing() 
     {
-        if (ReturningToHalalit())
+        var itemToGrab = _pickupClawGrabber.TryGetItemToGrab();
+        if (itemToGrab != null)
         {
-            _pickupClawRetractor.FinalizeRetraction();
-            _pickupClawAnimator.ReturningToHalalit();
+            ChangeToGrabbing(itemToGrab);
         }
+    }
+
+    private void ChangeToGrabbing(GameObject itemToGrab)
+    {
+        _state = PickupClawState.GRABBING;
+        _item = itemToGrab;
+    }
+
+    private void ChangeToReturningToHalalitWithTarget()
+    {
+        _item.GetComponent<ItemMovement>().Grabbed(transform);
+        _state = PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET;
+        _pickupClawMovement.SetTarget(_halalit);
+    }
+
+    private void ChangeToReturningToHalalitWithoutTarget()
+    {
+        if (_state == PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET)
+        {
+            _item.GetComponent<ItemMovement>().UnGrabbed();
+        }
+        _state = PickupClawState.RETURNING_TO_HALALIT_WITHOUT_TARGET;
+        _pickupClawMovement.SetTarget(_halalit);
+
+        Utils.ChangeOpacity(GetComponent<Renderer>(), _returningToHalalitOpacity);
+
+    }
+
+    private void TryDie(Assets.Enums.PickupClawState _state)
+    {
+        if (IsClawOnTarget(_halalit) || WasItemCaught(_state))
+        {
+            Destroy(gameObject);
+        } 
+    }
+
+    private bool WasItemCaught(Assets.Enums.PickupClawState _state)
+    {
+        return 
+            _state == PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET &&
+            _item == null;
+    }
+
+    private void TryChangeToReturningToHalalit()
+    {
+        if (!TryChangeToReturningToHalalitWithTarget())
+        {
+            TryChangeToReturningToHalalitWithoutTarget();
+        }
+    }
+
+    #endregion
+
+    #region Init
+    public void SetTarget(GameObject target)
+    {
+        _item = target;
+        transform.rotation = Utils.GetRorationOutwards(transform.position, target.transform.position);
+    }
+
+    public void SetHalalit(GameObject halalit)
+    {
+        _halalit = halalit;
     }
     #endregion
 
-    #region State Predicates
-    private bool StartMovingForward()
+    #region Predicates
+    private bool IsClawOnTarget(GameObject target)
     {
-        return _lastFramePickupClawState == PickupClawStateE.IN_HALALIT && _pickupClawState.Value == PickupClawStateE.MOVING_FORWARD;
+        return Utils.Are2VectorsAlmostEqual(target.transform.position, transform.position, _isOnTargetDelta);
     }
 
-    private bool StartGrabbing()
+    private bool ShouldClawRetract() 
     {
-        return _pickupClawState.Value == PickupClawStateE.GRABBING && _lastFramePickupClawState != PickupClawStateE.GRABBING;
-    }
-
-    private bool IsGrabbing()
-    {
-        return _pickupClawState.Value == PickupClawStateE.GRABBING && _lastFramePickupClawState == PickupClawStateE.GRABBING;
-    }
-
-    private bool StartMovingBackward()
-    {
-        return _pickupClawState.Value == PickupClawStateE.MOVING_BACKWARD && _lastFramePickupClawState != PickupClawStateE.MOVING_BACKWARD;
-    }
-
-    private bool IsMovingBackward()
-    {
-        return _pickupClawState.Value == PickupClawStateE.MOVING_BACKWARD;
-    }
-
-    private bool ReturningToHalalit()
-    {
-        return _lastFramePickupClawState == PickupClawStateE.MOVING_BACKWARD && _pickupClawState.Value == PickupClawStateE.IN_HALALIT;
+        return Utils.GetDistanceBetweenTwoPoints(Utils.GetHalalitPosition(), transform.position) > _pickupClawManeuverRadius;
     }
     #endregion
+
 }

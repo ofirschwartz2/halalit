@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7276304807678369112}
   - component: {fileID: 2892123107193723990}
   - component: {fileID: 4264111230463411018}
+  - component: {fileID: 7107800525935592075}
   - component: {fileID: 6831447698383972354}
   - component: {fileID: 5919605962018131431}
   m_Layer: 0
@@ -48,9 +49,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4b2d995fce89ec47ab11758901082dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pickupClawGrabberNEW: {fileID: 4264111230463411018}
-  _pickupClawAnimator: {fileID: 0}
-  _pickupClawMovementNEW: {fileID: 2892123107193723990}
+  _pickupClawGrabber: {fileID: 4264111230463411018}
+  _pickupClawAnimator: {fileID: 7107800525935592075}
+  _pickupClawMovement: {fileID: 2892123107193723990}
   _pickupClawManeuverRadius: 10
   _isOnTargetDelta: 0.1
   _returningToHalalitOpacity: 0.5
@@ -88,6 +89,19 @@ MonoBehaviour:
   _radiusToStartGrabbing: 1
   _grabbingMovementSpeed: 2
   _grabbingRotationTime: 2
+--- !u!114 &7107800525935592075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3691832589614287265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 717efc595f25e5e4cbb2ece9125a87f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 0}
 --- !u!212 &6831447698383972354
 SpriteRenderer:
   m_ObjectHideFlags: 0

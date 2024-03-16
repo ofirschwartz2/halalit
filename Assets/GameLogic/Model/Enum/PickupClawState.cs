@@ -1,6 +1,6 @@
 ﻿namespace Assets.Enums
 {
-    public enum PickupClawStateENEW
+    public enum PickupClawState
     {
         MOVING_TO_TARGET,
         GRABBING,

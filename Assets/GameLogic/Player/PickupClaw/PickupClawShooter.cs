@@ -1,45 +1,66 @@
 using Assets.Enums;
+using Assets.Utils;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class PickupClawShooter : MonoBehaviour
 {
     [SerializeField]
-    private Rigidbody2D _rigidBody;
+    private float _targetFindingCircleRadius;
     [SerializeField]
-    private PickupClawMovement _pickupClawMovement;
+    private GameObject _pickupClawPrefab;
     [SerializeField]
-    private PickupClawRetractor _pickupClawRetractor;
-    [SerializeField]
-    private PickupClawState _pickupClawState;
+    private GameObject _halalit;
 
-    public void TryShoot()
+    private bool _isClawAlive;
+    private GameObject _livingClaw;
+
+    void Start()
     {
-        if (Input.GetMouseButtonDown(0) && _pickupClawState.Value == PickupClawStateE.IN_HALALIT && ShootPointIsValid())
+        _livingClaw = null;
+        _isClawAlive = false;
+    }
+
+    void FixedUpdate()
+    {
+        if (!_isClawAlive)
         {
-            _pickupClawState.Value = PickupClawStateE.MOVING_FORWARD;
+            var grabbableTarget = TryGetGrabbableTarget();
+            if (grabbableTarget != null)
+            {
+                _livingClaw = InstantiatePickupClaw(grabbableTarget);
+                _isClawAlive = true;
+            }
+        } else 
+        {
+            if (_livingClaw == null)
+            {
+                _isClawAlive = false;
+            }
         }
     }
 
-    private bool ShootPointIsValid()
+    #region Finding Target
+    private GameObject TryGetGrabbableTarget() 
     {
-        return !EventSystem.current.IsPointerOverGameObject();
-    }
+        if (!Input.GetMouseButtonDown(0)) 
+        {
+            return null;
+        }
 
-    public void Shoot()
+        var targetCircleCenter = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        return PickupClawUtils.TryGetClosestGrabbableTarget(targetCircleCenter, _targetFindingCircleRadius);
+    }
+    #endregion
+
+    #region Claw Instantiation
+    private GameObject InstantiatePickupClaw(GameObject target)
     {
-        Vector3 goal = InitShooting();
-
-        _pickupClawRetractor.SetGoal(goal);
-        _pickupClawMovement.Move(goal);
+        GameObject claw = Instantiate(_pickupClawPrefab, transform.position, Quaternion.identity);
+        claw.GetComponent<PickupClawStateMachine>().SetHalalit(_halalit);
+        claw.GetComponent<PickupClawStateMachine>().SetTarget(target);
+        return claw;
     }
+    #endregion
 
-    private Vector3 InitShooting()
-    {
-        _pickupClawState.Value = PickupClawStateE.MOVING_FORWARD;
-        gameObject.transform.parent = null;
-        _pickupClawMovement.SetPerfectRotationToHalalit(false);
-
-        return Camera.main.ScreenToWorldPoint(Input.mousePosition);
-    }
 }
