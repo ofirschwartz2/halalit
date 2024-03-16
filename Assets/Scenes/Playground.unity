@@ -1317,6 +1317,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1210362507512008272, guid: dec1913d9392a874dbbbc2d4408dcb46, type: 3}
+      propertyPath: m_Radius
+      value: 0.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 1210362507512008272, guid: dec1913d9392a874dbbbc2d4408dcb46, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7077707436052580985, guid: dec1913d9392a874dbbbc2d4408dcb46, type: 3}
       propertyPath: m_RootOrder
       value: 11
