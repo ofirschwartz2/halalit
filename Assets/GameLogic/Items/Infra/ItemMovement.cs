@@ -3,6 +3,7 @@ using Assets.Utils;
 using Assets.Enums;
 using System.Linq;
 using log4net.Util;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class ItemMovement : MonoBehaviour
 {
@@ -12,14 +13,17 @@ public class ItemMovement : MonoBehaviour
     private float _maxRotation;
     [SerializeField]
     private float _transparencyPeriod;
+    [SerializeField]
+    private float _grabbedOpacity;
 
-    private int _defaultLayer;
+
     private float _itemLifeTime;
     private float _rotationSpeed;
+    private bool _removedTransparencyPeriodDone;
 
     public void Start()
     {
-        _defaultLayer = gameObject.layer;
+        _removedTransparencyPeriodDone = false;
         _rotationSpeed = Random.Range(-_maxRotation, _maxRotation);
     }
 
@@ -28,7 +32,7 @@ public class ItemMovement : MonoBehaviour
         _rigidBody.MoveRotation(_rigidBody.rotation + _rotationSpeed * Time.deltaTime);
         _itemLifeTime += Time.deltaTime;
 
-        if (gameObject.layer == _defaultLayer && _itemLifeTime >= _transparencyPeriod)
+        if (!_removedTransparencyPeriodDone)
         {
             TryRemoveTransparency();
         }
@@ -36,12 +40,18 @@ public class ItemMovement : MonoBehaviour
 
     private void TryRemoveTransparency()
     {
-        if (Physics2D.OverlapCircleAll(transform.position, transform.localScale.x)
-            .Where(collider => collider.gameObject.CompareTag(Tag.ASTEROID.GetDescription()) || 
-                               collider.gameObject.CompareTag(Tag.ENEMY.GetDescription())).ToArray().Length == 0)
+        if (_itemLifeTime >= _transparencyPeriod && !IsOverlappingAstroidsOrEnemies())
         {
-            transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer(Layer.ITEM_COLLISIONS.GetDescription());
+            transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer(Assets.Enums.Layer.ITEM_COLLISIONS.GetDescription());
+            _removedTransparencyPeriodDone = true;
         }
+    }
+
+    private bool IsOverlappingAstroidsOrEnemies()
+    {
+        return Physics2D.OverlapCircleAll(transform.position, transform.localScale.x)
+                    .Where(collider => collider.gameObject.CompareTag(Tag.ASTEROID.GetDescription()) ||
+                                       collider.gameObject.CompareTag(Tag.ENEMY.GetDescription())).ToArray().Length > 0;
     }
 
     public void Grabbed(UnityEngine.Transform grabber)
@@ -50,6 +60,8 @@ public class ItemMovement : MonoBehaviour
         _rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
         transform.position = grabber.position;
         transform.SetParent(grabber);
+        transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer(Assets.Enums.Layer.ITEM_TRIGGERS.GetDescription());
+        Utils.ChangeOpacity(GetComponent<Renderer>(), _grabbedOpacity);
     }
 
     public void UnGrabbed()
@@ -57,6 +69,8 @@ public class ItemMovement : MonoBehaviour
         _rigidBody.isKinematic = false;
         _rigidBody.constraints = RigidbodyConstraints2D.None;
         transform.parent = null;
+        transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer(Assets.Enums.Layer.ITEM_COLLISIONS.GetDescription());
+        Utils.ChangeOpacity(GetComponent<Renderer>(), 1);
     }
 
     private void OnTriggerExit2D(Collider2D other)
