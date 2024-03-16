@@ -12,7 +12,7 @@ public class ItemMovement : MonoBehaviour
     [SerializeField]
     private float _maxRotation;
     [SerializeField]
-    private float _transparencyPeriod;
+    private float _transparencyPeriodDuration;
     [SerializeField]
     private float _grabbedOpacity;
 
@@ -20,9 +20,11 @@ public class ItemMovement : MonoBehaviour
     private float _itemLifeTime;
     private float _rotationSpeed;
     private bool _removedTransparencyPeriodDone;
+    private float _transparencyPeriod;
 
     public void Start()
     {
+        SetTransperancyPeriod();
         _removedTransparencyPeriodDone = false;
         _rotationSpeed = Random.Range(-_maxRotation, _maxRotation);
     }
@@ -38,11 +40,18 @@ public class ItemMovement : MonoBehaviour
         }
     }
 
+    private void SetTransperancyPeriod() 
+    {
+        _transparencyPeriod = _itemLifeTime + _transparencyPeriodDuration;
+        _removedTransparencyPeriodDone = false;
+    }
+
     private void TryRemoveTransparency()
     {
         if (_itemLifeTime >= _transparencyPeriod && !IsOverlappingAstroidsOrEnemies())
         {
             transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer(Assets.Enums.Layer.ITEM_COLLISIONS.GetDescription());
+            transform.GetChild(0).gameObject.GetComponent<CircleCollider2D>().isTrigger = false;
             _removedTransparencyPeriodDone = true;
         }
     }
@@ -71,10 +80,9 @@ public class ItemMovement : MonoBehaviour
         _rigidBody.isKinematic = false;
         _rigidBody.constraints = RigidbodyConstraints2D.None;
         transform.parent = null;
-        transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer(Assets.Enums.Layer.ITEM_COLLISIONS.GetDescription());
-        transform.GetChild(0).gameObject.GetComponent<CircleCollider2D>().isTrigger = false;
         Utils.ChangeOpacity(GetComponent<Renderer>(), 1);
         GetComponent<SpriteRenderer>().sortingLayerName = Assets.Enums.SortingLayer.DEFAULT.GetDescription();
+        SetTransperancyPeriod();
     }
 
     private void OnTriggerExit2D(Collider2D other)
