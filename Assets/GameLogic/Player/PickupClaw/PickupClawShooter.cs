@@ -11,6 +11,9 @@ public class PickupClawShooter : MonoBehaviour
     private GameObject _pickupClawPrefab;
     [SerializeField]
     private GameObject _halalit;
+    [SerializeField]
+    private GameObject[] _joysticks;
+
 
     private bool _isClawAlive;
     private GameObject _livingClaw;
@@ -49,6 +52,12 @@ public class PickupClawShooter : MonoBehaviour
         }
 
         var targetCircleCenter = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        if (IsOnJoysticks(targetCircleCenter)) 
+        {
+            return null;
+        }
+
         return PickupClawUtils.TryGetClosestGrabbableTarget(targetCircleCenter, _targetFindingCircleRadius);
     }
     #endregion
@@ -62,5 +71,20 @@ public class PickupClawShooter : MonoBehaviour
         return claw;
     }
     #endregion
+
+    private bool IsOnJoysticks(Vector2 targetCircleCenter) 
+    {
+        foreach (var joystick in _joysticks)
+        {
+            if (Vector2.Distance(joystick.transform.position, targetCircleCenter) < joystick.transform.localScale.x)
+            {
+                return true;
+            }
+        }
+        //var a = Vector2.Distance(_joysticks[0].transform.position, targetCircleCenter);
+        //var b = Vector2.Distance(_joysticks[1].transform.position, targetCircleCenter);
+
+        return false;
+    }
 
 }

@@ -52,8 +52,9 @@ MonoBehaviour:
   _pickupClawGrabber: {fileID: 4264111230463411018}
   _pickupClawAnimator: {fileID: 7107800525935592075}
   _pickupClawMovement: {fileID: 2892123107193723990}
-  _pickupClawManeuverRadius: 10
+  _pickupClawManeuverRadius: 5
   _isOnTargetDelta: 0.1
+  _baseOpacity: 0.9
   _returningToHalalitOpacity: 0.5
 --- !u!114 &2892123107193723990
 MonoBehaviour:

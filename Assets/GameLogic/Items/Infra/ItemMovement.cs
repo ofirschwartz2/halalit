@@ -12,9 +12,9 @@ public class ItemMovement : MonoBehaviour
     [SerializeField]
     private float _maxRotation;
     [SerializeField]
-    private float _transparencyPeriodDuration;
+    private float _baseOpacity;
     [SerializeField]
-    private float _grabbedOpacity;
+    private float _transparencyPeriodDuration;
 
 
     private float _itemLifeTime;
@@ -27,6 +27,7 @@ public class ItemMovement : MonoBehaviour
         SetTransperancyPeriod();
         _removedTransparencyPeriodDone = false;
         _rotationSpeed = Random.Range(-_maxRotation, _maxRotation);
+        Utils.ChangeOpacity(GetComponent<Renderer>(), _baseOpacity);
     }
 
     public void FixedUpdate()
@@ -71,7 +72,6 @@ public class ItemMovement : MonoBehaviour
         transform.SetParent(grabber);
         transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer(Assets.Enums.Layer.ITEM_TRIGGERS.GetDescription());
         transform.GetChild(0).gameObject.GetComponent<CircleCollider2D>().isTrigger = true;
-        Utils.ChangeOpacity(GetComponent<Renderer>(), _grabbedOpacity);
         GetComponent<SpriteRenderer>().sortingLayerName = Assets.Enums.SortingLayer.FRONT.GetDescription();
     }
 
@@ -80,7 +80,6 @@ public class ItemMovement : MonoBehaviour
         _rigidBody.isKinematic = false;
         _rigidBody.constraints = RigidbodyConstraints2D.None;
         transform.parent = null;
-        Utils.ChangeOpacity(GetComponent<Renderer>(), 1);
         GetComponent<SpriteRenderer>().sortingLayerName = Assets.Enums.SortingLayer.DEFAULT.GetDescription();
         SetTransperancyPeriod();
     }

@@ -19,6 +19,8 @@ public class PickupClawStateMachine : MonoBehaviour
     [SerializeField]
     private float _isOnTargetDelta;
     [SerializeField]
+    private float _baseOpacity;
+    [SerializeField]
     private float _returningToHalalitOpacity;
 
     private PickupClawState _state;
@@ -27,6 +29,7 @@ public class PickupClawStateMachine : MonoBehaviour
 
     void Start()
     {
+        Utils.ChangeOpacity(GetComponent<Renderer>(), _baseOpacity);
         _state = PickupClawState.MOVING_TO_TARGET;
         _pickupClawMovement.SetTarget(_item);
     }
@@ -156,7 +159,8 @@ public class PickupClawStateMachine : MonoBehaviour
 
     private bool ShouldClawRetract() 
     {
-        return Utils.GetDistanceBetweenTwoPoints(Utils.GetHalalitPosition(), transform.position) > _pickupClawManeuverRadius;
+        return Vector2.Distance(Utils.GetHalalitPosition(), transform.position) > _pickupClawManeuverRadius;
+        //return Utils.GetDistanceBetweenTwoPoints(Utils.GetHalalitPosition(), transform.position) > _pickupClawManeuverRadius;
     }
     #endregion
 
