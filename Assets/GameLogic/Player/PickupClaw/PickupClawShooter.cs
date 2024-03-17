@@ -2,6 +2,7 @@ using Assets.Enums;
 using Assets.Utils;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PickupClawShooter : MonoBehaviour
 {
@@ -26,15 +27,26 @@ public class PickupClawShooter : MonoBehaviour
 
     void FixedUpdate()
     {
+        var isMounseButtonDown = Input.GetMouseButtonDown(0);
+        var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        #if UNITY_EDITOR
+            if (!SceneManager.GetActiveScene().name.Contains("Testing"))
+        #endif
+                TryShootClaw(isMounseButtonDown, mousePosition);
+    }
+
+    private void TryShootClaw(bool isMounseButtonDown, Vector3 targetCircleCenter)
+    {
         if (!_isClawAlive)
         {
-            var grabbableTarget = TryGetGrabbableTarget();
+            var grabbableTarget = TryGetGrabbableTarget(isMounseButtonDown, targetCircleCenter);
             if (grabbableTarget != null)
             {
                 _livingClaw = InstantiatePickupClaw(grabbableTarget);
                 _isClawAlive = true;
             }
-        } else 
+        }
+        else
         {
             if (_livingClaw == null)
             {
@@ -44,14 +56,12 @@ public class PickupClawShooter : MonoBehaviour
     }
 
     #region Finding Target
-    private GameObject TryGetGrabbableTarget() 
+    private GameObject TryGetGrabbableTarget(bool isMounseButtonDown, Vector3 targetCircleCenter) 
     {
-        if (!Input.GetMouseButtonDown(0)) 
+        if (!isMounseButtonDown) 
         {
             return null;
         }
-
-        var targetCircleCenter = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         if (IsOnJoysticks(targetCircleCenter)) 
         {
@@ -81,9 +91,6 @@ public class PickupClawShooter : MonoBehaviour
                 return true;
             }
         }
-        //var a = Vector2.Distance(_joysticks[0].transform.position, targetCircleCenter);
-        //var b = Vector2.Distance(_joysticks[1].transform.position, targetCircleCenter);
-
         return false;
     }
 
