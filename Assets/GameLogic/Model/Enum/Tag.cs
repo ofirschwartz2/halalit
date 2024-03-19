@@ -18,6 +18,8 @@ namespace Assets.Enums
         KNOCKBACK_WAVE,
         [Description("Item")]
         ITEM,
+        [Description("PickupClawShooter")]
+        PICKUP_CLAW_SHOOTER,
         [Description("PickupClaw")] 
         PICKUP_CLAW,
         [Description("Asteroid")] 

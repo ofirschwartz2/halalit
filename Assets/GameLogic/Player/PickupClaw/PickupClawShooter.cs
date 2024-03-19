@@ -28,18 +28,27 @@ public class PickupClawShooter : MonoBehaviour
     void FixedUpdate()
     {
         var isMounseButtonDown = Input.GetMouseButtonDown(0);
-        var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        #if UNITY_EDITOR
-            if (!SceneManager.GetActiveScene().name.Contains("Testing"))
-        #endif
-                TryShootClaw(isMounseButtonDown, mousePosition);
+
+#if UNITY_EDITOR
+        if (!SceneManager.GetActiveScene().name.Contains("Testing"))
+#endif
+            if (isMounseButtonDown)
+            {
+                var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                TryShootClaw(mousePosition);
+            }
     }
 
-    private void TryShootClaw(bool isMounseButtonDown, Vector3 targetCircleCenter)
+#if UNITY_EDITOR
+    internal
+#else
+    private
+#endif
+    void TryShootClaw(Vector2 position)
     {
         if (!_isClawAlive)
         {
-            var grabbableTarget = TryGetGrabbableTarget(isMounseButtonDown, targetCircleCenter);
+            var grabbableTarget = TryGetGrabbableTarget(position);
             if (grabbableTarget != null)
             {
                 _livingClaw = InstantiatePickupClaw(grabbableTarget);
@@ -56,13 +65,8 @@ public class PickupClawShooter : MonoBehaviour
     }
 
     #region Finding Target
-    private GameObject TryGetGrabbableTarget(bool isMounseButtonDown, Vector3 targetCircleCenter) 
+    private GameObject TryGetGrabbableTarget(Vector3 targetCircleCenter) 
     {
-        if (!isMounseButtonDown) 
-        {
-            return null;
-        }
-
         if (IsOnJoysticks(targetCircleCenter)) 
         {
             return null;

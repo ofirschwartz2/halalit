@@ -39,6 +39,7 @@ TagManager:
   - AttackJoystick
   - Attacks
   - ExplosionShockWave
+  - PickupClawShooter
   layers:
   - Default
   - TransparentFX

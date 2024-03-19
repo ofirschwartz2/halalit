@@ -1,9 +1,7 @@
 ﻿using Assets.Animators;
 using Assets.Enums;
 using Assets.Utils;
-using System.Net;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class PickupClawStateMachine : MonoBehaviour
 {
