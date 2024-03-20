@@ -75,10 +75,20 @@ internal static class TestUtils
         return GameObject.FindGameObjectWithTag(Tag.PICKUP_CLAW.GetDescription());
     }
 
+    internal static GameObject GetItem()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.ITEM.GetDescription());
+    }
+
     internal static PickupClawShooter GetPickupClawShooter()
     {
         var pickupClawShooter = GameObject.FindGameObjectWithTag(Tag.PICKUP_CLAW_SHOOTER.GetDescription());
         return pickupClawShooter.GetComponent<PickupClawShooter>();
+    }
+
+    internal static float GetPickupClawManeuverRadius()
+    {
+        return GetPickupClawShooter().GetPickupClawPrefab().GetComponent<PickupClawStateMachine>().GetPickupClawManeuverRadius();
     }
 
     internal static PickupClawStateMachine GetPickupClawStateMachine(GameObject pickupClaw)
