@@ -11,7 +11,7 @@ using UnityEngine.TestTools;
 public class PickupClawTests
 {
 
-    private const string SCENE_NAME = "TestingPickupClaw";
+    private const string SCENE_NAME = "TestingWithOneItem";
 
     [SetUp]
     public void SetUp()
@@ -24,8 +24,7 @@ public class PickupClawTests
     public IEnumerator ClawPressOnNothing()
     {
         // GIVEN
-        GameObject pickupClawShooterGameObject = GameObject.FindGameObjectWithTag(Tag.PICKUP_CLAW_SHOOTER.GetDescription());
-        PickupClawShooter pickupClawShooter = pickupClawShooterGameObject.GetComponent<PickupClawShooter>();
+        PickupClawShooter pickupClawShooter = TestUtils.GetPickupClawShooter();
         var position = new Vector2(-1, 0);
 
         // WHEN
@@ -34,7 +33,7 @@ public class PickupClawTests
 
         // THEN
         var pickupClaw = GameObject.FindGameObjectWithTag(Tag.PICKUP_CLAW.GetDescription());
-        Assert.IsNull(pickupClaw);
+        AssertWrapper.IsNull(pickupClaw);
         
     }
 
@@ -42,9 +41,8 @@ public class PickupClawTests
     public IEnumerator ClawPressOnJoystick()
     {
         // GIVEN
-        GameObject pickupClawShooterGameObject = GameObject.FindGameObjectWithTag(Tag.PICKUP_CLAW_SHOOTER.GetDescription());
-        PickupClawShooter pickupClawShooter = pickupClawShooterGameObject.GetComponent<PickupClawShooter>();
-        GameObject attackJoystick = GameObject.FindGameObjectWithTag(Tag.ATTACK_JOYSTICK.GetDescription());
+        PickupClawShooter pickupClawShooter = TestUtils.GetPickupClawShooter();
+        GameObject attackJoystick = TestUtils.GetAttackJoystick();
         
         var position = attackJoystick.transform.position;
 
@@ -54,7 +52,7 @@ public class PickupClawTests
 
         // THEN
         var pickupClaw = GameObject.FindGameObjectWithTag(Tag.PICKUP_CLAW.GetDescription());
-        Assert.IsNull(pickupClaw);
+        AssertWrapper.IsNull(pickupClaw);
 
     }
 
@@ -62,19 +60,25 @@ public class PickupClawTests
     public IEnumerator ClawPressOnItemInRange()
     {
         // GIVEN
-        GameObject pickupClawShooterGameObject = GameObject.FindGameObjectWithTag(Tag.PICKUP_CLAW_SHOOTER.GetDescription());
-        PickupClawShooter pickupClawShooter = pickupClawShooterGameObject.GetComponent<PickupClawShooter>();
-        GameObject attackJoystick = GameObject.FindGameObjectWithTag(Tag.ATTACK_JOYSTICK.GetDescription());
+        var seed = TestUtils.SetRandomSeed();
+        var pickupClawShooter = TestUtils.GetPickupClawShooter();
+        var maneuverRadius = pickupClawStateMachine.GetPickupClawManeuverRadius();
 
-        var position = new Vector2(4,2);
+        TestUtils.SetRandomItemPosition(maneuverRadius - 1);
 
+        
         // WHEN
-        pickupClawShooter.TryShootClaw(position);
+        pickupClawShooter.TryShootClaw(TestUtils.GetItemPosition());
         yield return null;
 
         // THEN
-        var pickupClaw = GameObject.FindGameObjectWithTag(Tag.PICKUP_CLAW.GetDescription());
-        Assert.IsNull(pickupClaw);
+        var pickupClaw = TestUtils.GetPickupClaw();
+        AssertWrapper.IsNotNull(pickupClaw, seed);
+
+        var pickupClawStateMachine = TestUtils.GetPickupClawStateMachine(pickupClaw);
+        var state = pickupClawStateMachine.GetState();
+        AssertWrapper.IsNotNull(state, seed);
+        while (state != PickupClawState)
 
     }
 

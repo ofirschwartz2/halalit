@@ -1,7 +1,12 @@
 ﻿using Assets.Animators;
 using Assets.Enums;
 using Assets.Utils;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("Tests")]
+#endif
 
 public class PickupClawStateMachine : MonoBehaviour
 {
@@ -111,7 +116,7 @@ public class PickupClawStateMachine : MonoBehaviour
 
     }
 
-    private void TryDie(Assets.Enums.PickupClawState _state)
+    private void TryDie(PickupClawState _state)
     {
         if (IsClawOnTarget(_halalit) || WasItemCaught(_state))
         {
@@ -119,7 +124,7 @@ public class PickupClawStateMachine : MonoBehaviour
         } 
     }
 
-    private bool WasItemCaught(Assets.Enums.PickupClawState _state)
+    private bool WasItemCaught(PickupClawState _state)
     {
         return 
             _state == PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET &&
@@ -158,8 +163,27 @@ public class PickupClawStateMachine : MonoBehaviour
     private bool ShouldClawRetract() 
     {
         return Vector2.Distance(Utils.GetHalalitPosition(), transform.position) > _pickupClawManeuverRadius;
-        //return Utils.GetDistanceBetweenTwoPoints(Utils.GetHalalitPosition(), transform.position) > _pickupClawManeuverRadius;
     }
     #endregion
 
+    #region Getters
+
+#if UNITY_EDITOR
+    internal PickupClawState GetState()
+    {
+        return _state;
+    }
+
+    internal GameObject GetItem()
+    {
+        return _item;
+    }
+
+    internal float GetPickupClawManeuverRadius()
+    {
+        return _pickupClawManeuverRadius;
+    }
+#endif
+
+    #endregion
 }

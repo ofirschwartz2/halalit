@@ -1,8 +1,10 @@
-using Assets.Enums;
-using Assets.Utils;
-using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("Tests")]
+#endif
 
 public class PickupClawShooter : MonoBehaviour
 {
@@ -86,6 +88,7 @@ public class PickupClawShooter : MonoBehaviour
     }
     #endregion
 
+    #region Predicates
     private bool IsOnJoysticks(Vector2 targetCircleCenter) 
     {
         foreach (var joystick in _joysticks)
@@ -97,5 +100,14 @@ public class PickupClawShooter : MonoBehaviour
         }
         return false;
     }
+    #endregion
+
+    #region Getters
+    internal GameObject GetPickupClawPrefab()
+    {
+        return _pickupClawPrefab;
+    }
+    #endregion
+
 
 }
