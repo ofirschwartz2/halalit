@@ -40,6 +40,7 @@ TagManager:
   - Attacks
   - ExplosionShockWave
   - PickupClawShooter
+  - ItemsFactory
   layers:
   - Default
   - TransparentFX

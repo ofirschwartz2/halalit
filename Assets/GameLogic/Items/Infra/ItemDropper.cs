@@ -1,8 +1,13 @@
 ﻿using Assets.Enums;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using Random = UnityEngine.Random;
+
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("Tests")]
+#endif
 
 public class ItemDropper : MonoBehaviour
 {
@@ -34,7 +39,12 @@ public class ItemDropper : MonoBehaviour
             .ToList();
     }
 
-    private void DropNewItem(ItemName itemName, Vector2 dropPosition, Vector2 dropForce)
+#if UNITY_EDITOR
+internal
+#else
+private
+#endif
+    void DropNewItem(ItemName itemName, Vector2 dropPosition, Vector2 dropForce)
     {
         GameObject item = _itemsBank.GetItem(itemName);
 
@@ -42,7 +52,7 @@ public class ItemDropper : MonoBehaviour
         item.transform.SetParent(transform);
         item.GetComponent<Rigidbody2D>().AddForce(dropForce, ForceMode2D.Impulse); 
     }
-    #endregion
+#endregion
 
     #region Events actions
     private void TryDropNewItem(object initiator, DropEventArguments arguments)

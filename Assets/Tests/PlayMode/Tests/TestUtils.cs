@@ -28,8 +28,6 @@ internal static class TestUtils
         attackToggle.SetNewAttack(attackName, new AttackStats(ItemRank.COMMON, 1, 1, 1, 1, 1));
     }
 
-    //TesingWithTarget Scene
-
     internal static void SetRandomEnemyPosition(float radiusOfTargetPositionAroundHalalit = 5)
     {
         TesingWithOneEnemyValidation();
@@ -48,9 +46,23 @@ internal static class TestUtils
             radiusOfTargetPositionAroundHalalit);
     }
 
+    internal static void SetItemPosition(Vector2 position) 
+    {
+        TesingWithOneItemValidation();
+
+        SetGameObjectPosition(
+            GameObject.FindGameObjectWithTag(Tag.ITEM.GetDescription()),
+            position);
+    }
+
     private static void SetRandomGameObjectPosition(GameObject gameObject, float radiusOfTargetPositionAroundHalalit)
     {
         gameObject.transform.position = Utils.GetRandomVector2OnCircle(radiusOfTargetPositionAroundHalalit);
+    }
+
+    private static void SetGameObjectPosition(GameObject gameObject, Vector2 position) 
+    {
+        gameObject.transform.position = position;
     }
 
     internal static void RotaeTarget(float degrees) 
@@ -65,9 +77,20 @@ internal static class TestUtils
 
     #region SceneGetters
 
+    internal static ItemDropper GetItemDropper() 
+    {
+        var itemsFactory = GameObject.FindGameObjectWithTag(Tag.ITEMS_FACTORY.GetDescription());
+        return itemsFactory.GetComponent<ItemDropper>();
+    }
+
     internal static GameObject GetAttackJoystick()
     {
         return GameObject.FindGameObjectWithTag(Tag.ATTACK_JOYSTICK.GetDescription());
+    }
+
+    internal static GameObject GetMovementJoystick()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.MOVEMENT_JOYSTICK.GetDescription());
     }
 
     internal static GameObject GetPickupClaw()
