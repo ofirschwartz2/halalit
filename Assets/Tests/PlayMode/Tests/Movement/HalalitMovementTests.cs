@@ -28,8 +28,7 @@ public class HalalitMovementTests
         float elapsedTime = 0f;
         float acceptedDelta = 1f;
 
-        GameObject halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
-        HalalitMovement halalitMovement = halalit.GetComponent<HalalitMovement>();
+        var halalitMovement = TestUtils.GetHalalitMovement();
 
         var randomTouchOnMovementJoystick = TestUtils.GetRandomTouch();
 

@@ -3,6 +3,7 @@ using Assets.Utils;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
@@ -231,9 +232,9 @@ public class PickupClawTests
         var seed = TestUtils.SetRandomSeed();
         var pickupClawShooter = TestUtils.GetPickupClawShooter();
         var maneuverRadius = TestUtils.GetPickupClawManeuverRadius();
+        TestUtils.SetRandomItemPosition(maneuverRadius - 1);
         float totalTime = 10f;
         float elapsedTime = 0f;
-        TestUtils.SetRandomItemPosition(maneuverRadius - 1);
         float farItemMutiplier = 1.2f;
         var closeItem = TestUtils.GetItem();
         var closeItemPosition = TestUtils.GetItemPosition();
@@ -290,4 +291,121 @@ public class PickupClawTests
         AssertWrapper.IsNotNull(farItem, seed);
     }
 
+    [UnityTest]
+    public IEnumerator DropItem()
+    {
+        // GIVEN
+        var seed = TestUtils.SetRandomSeed();
+        var pickupClawShooter = TestUtils.GetPickupClawShooter();
+        var maneuverRadius = TestUtils.GetPickupClawManeuverRadius();
+        float totalTime = 10f;
+        float elapsedTime = 0f;
+        TestUtils.SetRandomItemPosition(maneuverRadius - 1);
+        yield return null;
+
+        // WHEN
+        pickupClawShooter.TryShootClaw(TestUtils.GetItemPosition());
+        yield return null;
+
+        // THEN
+        var pickupClaw = TestUtils.GetPickupClaw();
+        AssertWrapper.IsNotNull(pickupClaw, seed);
+        var pickupClawStateMachine = TestUtils.GetPickupClawStateMachine(pickupClaw);
+        var state = pickupClawStateMachine.GetState();
+        AssertWrapper.AreEqual((int)state, (int)PickupClawState.MOVING_TO_TARGET, "Not MOVING_TO_TARGET", seed);
+
+        // GIVEN
+        var item = TestUtils.GetItem();
+        var itemPosition = TestUtils.GetItemPosition();
+        var oppositeVector= Utils.GetOppositeVector(itemPosition.normalized);
+
+        // WHEN
+        while (state == PickupClawState.MOVING_TO_TARGET)
+        {
+            yield return null;
+            state = pickupClawStateMachine.GetState();
+            elapsedTime += Time.deltaTime;
+            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in MOVING_TO_TARGET state", seed);
+        }
+
+        // THEN
+        AssertWrapper.AreEqual((int)state, (int)PickupClawState.GRABBING, "Not GRABBING after MOVING_TO_TARGET", seed);
+
+        // WHEN
+        while (state == PickupClawState.GRABBING)
+        {
+            yield return null;
+            state = pickupClawStateMachine.GetState();
+            elapsedTime += Time.deltaTime;
+            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in GRABBING state", seed);
+        }
+
+        // THEN
+        AssertWrapper.AreEqual((int)state, (int)PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET, "Not RETURNING_TO_HALALIT_WITH_TARGET after GRABBING", seed);
+
+        // GIVEN
+        var halalitMovement = TestUtils.GetHalalitMovement();
+        
+        //WHEN
+        while (state == PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET)
+        {
+            yield return null;
+            state = pickupClawStateMachine.GetState();
+            elapsedTime += Time.deltaTime;
+
+            halalitMovement.TryMove(oppositeVector.x, oppositeVector.y, Time.deltaTime);
+            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in GRABBING state", seed);
+        }
+
+        // THEN
+        AssertWrapper.AreEqual((int)state, (int)PickupClawState.RETURNING_TO_HALALIT_WITHOUT_TARGET, "Not RETURNING_TO_HALALIT_WITHOUT_TARGET after RETURNING_TO_HALALIT_WITH_TARGET", seed);
+        AssertWrapper.AreNotEqual(Utils.Vector2ToDegrees(TestUtils.GetItemPosition()), Utils.Vector2ToDegrees(itemPosition), "Item did not changed position" , seed);
+    }
+
+    // This test is doing the following:
+    // 1) Creating a new item in the opposite direction of the first item
+    // 2) Shooting pickup claw to the item
+    // 3) pressing on the new item from #1
+    // 4) Asserting that the claw keeps moving to the first item, and not the new item
+
+    [UnityTest]
+    public IEnumerator SecondPressWhenClawAlive() 
+    {
+        // GIVEN
+        var seed = TestUtils.SetRandomSeed();
+        var maneuverRadius = TestUtils.GetPickupClawManeuverRadius();
+        TestUtils.SetRandomItemPosition(maneuverRadius - 1);
+        yield return null;
+
+        var pickupClawShooter = TestUtils.GetPickupClawShooter();
+        var itemPosition = TestUtils.GetItemPosition();
+        var itemDropper = TestUtils.GetItemDropper();
+        var secondItemPosition = Utils.GetOppositeVector(itemPosition);
+        itemDropper.DropNewItem(ItemName.BALL_SHOT, secondItemPosition, Vector2.zero);
+        yield return null;
+
+        // WHEN
+        pickupClawShooter.TryShootClaw(itemPosition);
+        yield return null;
+
+        // THEN
+        AssertWrapper.IsNotNull(TestUtils.GetPickupClaw(), seed, "Claw did not shoot");
+
+        // WHEN
+        pickupClawShooter.TryShootClaw(secondItemPosition);
+
+        var items = TestUtils.GetItems();
+        while (items.Length == 2)
+        {
+            yield return null;
+            items = TestUtils.GetItems();
+        }
+
+        // THEN
+        AssertWrapper.AreEqual(items[0].transform.position, secondItemPosition, "Second item moved", seed);
+
+        for (int i = 0; i < 10; i++) yield return null;
+
+        AssertWrapper.IsNull(TestUtils.GetPickupClaw(), seed, "Second pickupClaw shot");
+    }
 }

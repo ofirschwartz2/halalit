@@ -77,6 +77,12 @@ internal static class TestUtils
 
     #region SceneGetters
 
+    internal static HalalitMovement GetHalalitMovement() 
+    {
+        GameObject halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
+        return halalit.GetComponent<HalalitMovement>();
+    }
+
     internal static ItemDropper GetItemDropper() 
     {
         var itemsFactory = GameObject.FindGameObjectWithTag(Tag.ITEMS_FACTORY.GetDescription());
@@ -101,6 +107,11 @@ internal static class TestUtils
     internal static GameObject GetItem()
     {
         return GameObject.FindGameObjectWithTag(Tag.ITEM.GetDescription());
+    }
+
+    internal static GameObject[] GetItems()
+    {
+        return GameObject.FindGameObjectsWithTag(Tag.ITEM.GetDescription());
     }
 
     internal static PickupClawShooter GetPickupClawShooter()

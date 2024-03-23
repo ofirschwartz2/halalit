@@ -163,6 +163,12 @@ namespace Assets.Utils
         #endregion
 
         #region Vectors
+
+        public static Vector2 GetOppositeVector(Vector2 vector)
+        {
+            return new Vector2(-vector.x, -vector.y);
+        }
+
         public static Vector2 GetDestinationPosition(Vector2 startPosition, Vector2 rotation, float distance) // TODO: move to Utils
         {
             float angleInRadians = Vector2ToRadians(rotation);
