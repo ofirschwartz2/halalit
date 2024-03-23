@@ -127,7 +127,7 @@ public class BlastShotTests
         TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
-        TestUtils.SetRandomTargetPosition(2); // MUST BE SMALL TO HIT BEFORE MinLifeTime
+        TestUtils.SetRandomEnemyPosition(2); // MUST BE SMALL TO HIT BEFORE MinLifeTime
         var originalTargetHealth = TestUtils.GetTargetHealth();
         yield return null;
         var initialTargetPosition = TestUtils.GetTargetPosition();

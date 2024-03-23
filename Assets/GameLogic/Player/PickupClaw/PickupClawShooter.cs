@@ -1,45 +1,113 @@
-using Assets.Enums;
+using System.Runtime.CompilerServices;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("Tests")]
+#endif
 
 public class PickupClawShooter : MonoBehaviour
 {
     [SerializeField]
-    private Rigidbody2D _rigidBody;
+    private float _targetFindingCircleRadius;
     [SerializeField]
-    private PickupClawMovement _pickupClawMovement;
+    private GameObject _pickupClawPrefab;
     [SerializeField]
-    private PickupClawRetractor _pickupClawRetractor;
+    private GameObject _halalit;
     [SerializeField]
-    private PickupClawState _pickupClawState;
+    private GameObject[] _joysticks;
 
-    public void TryShoot()
+
+    private bool _isClawAlive;
+    private GameObject _livingClaw;
+
+    void Start()
     {
-        if (Input.GetMouseButtonDown(0) && _pickupClawState.Value == PickupClawStateE.IN_HALALIT && ShootPointIsValid())
+        _livingClaw = null;
+        _isClawAlive = false;
+    }
+
+    void FixedUpdate()
+    {
+        var isMounseButtonDown = Input.GetMouseButtonDown(0);
+
+#if UNITY_EDITOR
+        if (!SceneManager.GetActiveScene().name.Contains("Testing"))
+#endif
+            if (isMounseButtonDown)
+            {
+                var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                TryShootClaw(mousePosition);
+            }
+    }
+
+#if UNITY_EDITOR
+    internal
+#else
+    private
+#endif
+    void TryShootClaw(Vector2 position)
+    {
+        if (!_isClawAlive)
         {
-            _pickupClawState.Value = PickupClawStateE.MOVING_FORWARD;
+            var grabbableTarget = TryGetGrabbableTarget(position);
+            if (grabbableTarget != null)
+            {
+                _livingClaw = InstantiatePickupClaw(grabbableTarget);
+                _isClawAlive = true;
+            }
+        }
+        else
+        {
+            if (_livingClaw == null)
+            {
+                _isClawAlive = false;
+            }
         }
     }
 
-    private bool ShootPointIsValid()
+    #region Finding Target
+    private GameObject TryGetGrabbableTarget(Vector3 targetCircleCenter) 
     {
-        return !EventSystem.current.IsPointerOverGameObject();
-    }
+        if (IsOnJoysticks(targetCircleCenter)) 
+        {
+            return null;
+        }
 
-    public void Shoot()
+        return PickupClawUtils.TryGetClosestGrabbableTarget(targetCircleCenter, _targetFindingCircleRadius);
+    }
+    #endregion
+
+    #region Claw Instantiation
+    private GameObject InstantiatePickupClaw(GameObject target)
     {
-        Vector3 goal = InitShooting();
-
-        _pickupClawRetractor.SetGoal(goal);
-        _pickupClawMovement.Move(goal);
+        GameObject claw = Instantiate(_pickupClawPrefab, transform.position, Quaternion.identity);
+        claw.GetComponent<PickupClawStateMachine>().SetHalalit(_halalit);
+        claw.GetComponent<PickupClawStateMachine>().SetTarget(target);
+        return claw;
     }
+    #endregion
 
-    private Vector3 InitShooting()
+    #region Predicates
+    private bool IsOnJoysticks(Vector2 targetCircleCenter) 
     {
-        _pickupClawState.Value = PickupClawStateE.MOVING_FORWARD;
-        gameObject.transform.parent = null;
-        _pickupClawMovement.SetPerfectRotationToHalalit(false);
-
-        return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        foreach (var joystick in _joysticks)
+        {
+            if (Vector2.Distance(joystick.transform.position, targetCircleCenter) < joystick.transform.localScale.x)
+            {
+                return true;
+            }
+        }
+        return false;
     }
+    #endregion
+
+    #region Getters
+    internal GameObject GetPickupClawPrefab()
+    {
+        return _pickupClawPrefab;
+    }
+    #endregion
+
+
 }

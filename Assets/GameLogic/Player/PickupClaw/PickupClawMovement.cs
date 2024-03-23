@@ -1,218 +1,129 @@
 using Assets.Enums;
 using Assets.Utils;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class PickupClawMovement : MonoBehaviour
 {
     [SerializeField]
     private Rigidbody2D _rigidBody;
     [SerializeField]
-    private GameObject _halalit;
+    private float _speedToItem;
     [SerializeField]
-    private PickupClawState _pickupClawState;
+    private float _speedToHalalitWithItem;
     [SerializeField]
-    private float _ropeLength;
+    private float _speedToHalalitWithoutItem;
     [SerializeField]
-    private float _rotationToHalalitMultiplier;
-    [SerializeField]
-    private float _rotationToItemMultiplier;
-    [SerializeField]
-    private float _moveToItemMultiplier;
-    [SerializeField]
-    private float _velocityMultiplier;
-    [SerializeField]
-    private float _rotationMinProximity; 
-    [SerializeField]
-    private float _positionMinProximity;
-    [SerializeField]
-    private float _dragAtFullRopeSpeed;
+    private float _rotationSpeed;
 
-    private Vector2 _pickupClawDirection;
-    private Vector2 _halalitLastFramePosition;
-    private float _initialRotation;
-    private bool _perfectRotationToHalalit;
-    private Dictionary<ItemName, Action<Dictionary<EventProperty, float>>> _upgradeActions;
+    [SerializeField]
+    private float _rotationDelta;
 
-    #region Init
-    private void Awake()
+    private GameObject _target;
+
+    internal void Move(Assets.Enums.PickupClawState state)
     {
-        SetEventListeners();
-        SetUpgradeActions();
+        MoveTowardsTarget(state);
+        TryRotateAccordingToTarget(state);
     }
 
-    private void SetEventListeners()
+    #region Movement
+    private void MoveTowardsTarget(Assets.Enums.PickupClawState state)
     {
-        ItemEvent.PlayerUpgradePickUp += UpgradeClaw;
-    }
-
-    private void SetUpgradeActions()
-    {
-        _upgradeActions = new()
+        if (_target == null)
         {
-            { ItemName.CLAW_RANGE, UpgradeClawRange },
-            { ItemName.CLAW_AGILITY, UpgradeClawSpeed },
-        };
+            throw new System.Exception("Target is null");
+        }
+
+        SetVelocity(state);
     }
 
-    void Start()
+    private void SetVelocity(Assets.Enums.PickupClawState state)
     {
-        _initialRotation = transform.rotation.eulerAngles.z;
-        _halalitLastFramePosition = _halalit.transform.position;
+        var direction = _target.transform.position - transform.position;
+        var velocity = direction.normalized * GetSpeed(state);
+        _rigidBody.velocity = velocity;
     }
     #endregion
 
-    #region Events actions
-    private void UpgradeClaw(object initiator, ItemEventArguments arguments)
+    #region Rotation
+    private void TryRotateAccordingToTarget(Assets.Enums.PickupClawState state)
     {
-        if (IsRelevantUpgradeEvent(arguments))
+        var direction = GetMovementDirection(state);
+        
+        var targetDirectionInDegrees = Utils.Vector2ToDegrees(direction);
+        var clawDirectionInDegrees = Utils.QuaternionToDegrees(transform.rotation);
+
+        if (ShouldRotate(targetDirectionInDegrees, clawDirectionInDegrees))
         {
-            _upgradeActions[arguments.Name].Invoke(arguments.Properties);
+            Rotate(targetDirectionInDegrees);
         }
     }
 
-    private bool IsRelevantUpgradeEvent(ItemEventArguments arguments)
+    private void Rotate(float targetDirectionInDegrees)
     {
-        return _upgradeActions.ContainsKey(arguments.Name);
-    }
+        bool shouldRotateClockwise = Utils.IsCloserClockwise(Utils.QuaternionToDegrees(transform.rotation), targetDirectionInDegrees);
 
-    private void UpgradeClawRange(Dictionary<EventProperty, float> properties)
-    {
-        _ropeLength += properties[EventProperty.CLAW_RANGE_ADDITION];
-        Debug.Log("Claw range upgraded");
-    }
-
-    private void UpgradeClawSpeed(Dictionary<EventProperty, float> properties)
-    {
-        _velocityMultiplier += properties[EventProperty.CLAW_SPEED_MULTIPLIER_ADDITION];
-        Debug.Log("Claw agility upgraded");
-    }
-    #endregion
-
-    #region Public movement by states
-    public void Move(Vector2 goal)
-    {
-        UpdatePickupClawDirection(goal);
-
-        if (_pickupClawState.Value == PickupClawStateE.MOVING_FORWARD && AtFullRopeLength())
+        if (shouldRotateClockwise)
         {
-            DragAtFullRopeLength();
-        }
-
-        if (_pickupClawState.Value == PickupClawStateE.MOVING_FORWARD || _perfectRotationToHalalit)
-        {
-            RotateToPickupClawDirectionInstantly();
-        }
-        else if (!_perfectRotationToHalalit)
-        {
-            RotateToDirectionSlowly(_pickupClawDirection, true);
-        }
-
-        UpdateVelocityByPickupClawDirection();
-        SaveHalalitLastFramePosition();
-    }
-
-    public void MoveToItem(Vector3 itemPosition)
-    {
-        Vector2 directionToItem = Utils.GetDirectionVector(transform.position, itemPosition);
-
-        MoveCloserToItem(itemPosition);
-        RotateToDirectionSlowly(directionToItem);
-    }
-
-    public bool AtFullRopeLength()
-    {
-        return Utils.GetDistanceBetweenTwoPoints(transform.position, _halalit.transform.position) >= _ropeLength;
-    }
-
-    public bool ReachGoal(Vector2 goal)
-    {
-        return Utils.GetDistanceBetweenTwoPoints(transform.position, goal) <= _positionMinProximity;
-    }
-
-    public void SetPerfectRotationToHalalit(bool perfectRotationToHalalit)
-    {
-        _perfectRotationToHalalit = perfectRotationToHalalit;
-    }
-    #endregion
-
-    #region Movement helpers
-    private void SaveHalalitLastFramePosition()
-    {
-        _halalitLastFramePosition = _halalit.transform.position;
-    }
-
-    private void UpdatePickupClawDirection(Vector2 goal)
-    {
-        float deltaX = Math.Abs(transform.position.x - goal.x);
-        float deltaY = Math.Abs(transform.position.y - goal.y);
-
-        float relativeDeltaX = transform.position.x < goal.x ? deltaX : deltaX * -1;
-        float relativeDeltaY = transform.position.y < goal.y ? deltaY : deltaY * -1;
-
-        float shootDirectionMagnitude = new Vector2(relativeDeltaX, relativeDeltaY).magnitude;
-
-        _pickupClawDirection = new Vector2(relativeDeltaX / shootDirectionMagnitude, relativeDeltaY / shootDirectionMagnitude);
-    }
-
-    private void DragAtFullRopeLength()
-    {
-        float halalitDeltaX = (_halalit.transform.position.x - _halalitLastFramePosition.x);
-        float halalitDeltaY = (_halalit.transform.position.y - _halalitLastFramePosition.y);
-        Vector3 newPosition = new(transform.position.x + halalitDeltaX, transform.position.y + halalitDeltaY, transform.position.z);
-
-        transform.position = Vector3.MoveTowards(transform.position, newPosition, _dragAtFullRopeSpeed);
-    }
-
-    private void RotateToPickupClawDirectionInstantly()
-    {
-        float pickupClawDirectionAngle = Utils.Vector2ToDegrees(_pickupClawDirection.x, _pickupClawDirection.y);
-        float pickupClawRotation = transform.rotation.eulerAngles.z - _initialRotation; ;
-
-        if (_pickupClawState.Value == PickupClawStateE.MOVING_BACKWARD)
-        {
-            pickupClawRotation += 180;
-        }
-
-        transform.Rotate(new Vector3(0, 0, pickupClawDirectionAngle - pickupClawRotation));
-    }
-
-    private void RotateToDirectionSlowly(Vector2 goal, bool oposite = false)
-    {
-        float pickupClawRotation = !oposite ?
-            Utils.AngleNormalizationBy360(transform.rotation.eulerAngles.z - _initialRotation) :
-            Utils.AngleNormalizationBy360(transform.rotation.eulerAngles.z - _initialRotation + 180);
-        float directionRotation = Utils.AngleNormalizationBy360(Utils.Vector2ToDegrees(goal.x, goal.y));
-        float rotationAntiClockwiseDeference = Utils.AngleNormalizationBy360(directionRotation - pickupClawRotation);
-        float rotationClockwiseDeference = 360 - rotationAntiClockwiseDeference;
-
-        if (rotationAntiClockwiseDeference < _rotationMinProximity || rotationClockwiseDeference < _rotationMinProximity)
-        {
-            _perfectRotationToHalalit = true;
-        }
-        else if (rotationAntiClockwiseDeference <= rotationClockwiseDeference)
-        {
-            transform.Rotate(0, 0, _rotationToItemMultiplier);
+            transform.rotation = Utils.GetRotationPlusAngle(transform.rotation, -_rotationSpeed);
         }
         else
         {
-            transform.Rotate(0, 0, -_rotationToItemMultiplier);
+            transform.rotation = Utils.GetRotationPlusAngle(transform.rotation, _rotationSpeed);
+        }
+    }
+    #endregion
+
+    #region Setters
+    internal void SetTarget(GameObject target)
+    {
+        _target = target;
+    }
+    #endregion
+
+    #region Getters
+    private float GetSpeed(Assets.Enums.PickupClawState state)
+    {
+        switch (state)
+        {
+            case Assets.Enums.PickupClawState.MOVING_TO_TARGET:
+                return _speedToItem;
+
+            case Assets.Enums.PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET:
+                return _speedToHalalitWithItem;
+
+            case Assets.Enums.PickupClawState.RETURNING_TO_HALALIT_WITHOUT_TARGET:
+                return _speedToHalalitWithoutItem;
+
+            default:
+                throw new System.Exception("Invalid state");
         }
     }
 
-    private void UpdateVelocityByPickupClawDirection()
+    private Vector2 GetMovementDirection(Assets.Enums.PickupClawState state)
     {
-        float horizontalVelocity = _pickupClawDirection.x * _velocityMultiplier;
-        float verticalVelocity = _pickupClawDirection.y * _velocityMultiplier;
+        switch (state)
+        {
+            case Assets.Enums.PickupClawState.MOVING_TO_TARGET:
+                return (_target.transform.position - transform.position).normalized;
 
-        _rigidBody.velocity = new Vector2(horizontalVelocity, verticalVelocity);
-    }
+            case Assets.Enums.PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET:
+            case Assets.Enums.PickupClawState.RETURNING_TO_HALALIT_WITHOUT_TARGET:
+                return (transform.position - _target.transform.position).normalized;
 
-    private void MoveCloserToItem(Vector3 itemPosition)
-    {
-        Vector3 directionToItem = Utils.GetDirectionVector(transform.position, itemPosition);
-        transform.position += _moveToItemMultiplier * Time.deltaTime * directionToItem;
+            default:
+                throw new System.Exception("Invalid state");
+        }
     }
     #endregion
+
+    #region Predicates
+    private bool ShouldRotate(float targetDirectionInDegrees, float clawDirectionInDegrees)
+    {
+        return Math.Abs(targetDirectionInDegrees - clawDirectionInDegrees) > _rotationDelta;
+    }
+    #endregion
+
 }

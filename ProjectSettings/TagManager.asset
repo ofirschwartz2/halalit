@@ -39,6 +39,8 @@ TagManager:
   - AttackJoystick
   - Attacks
   - ExplosionShockWave
+  - PickupClawShooter
+  - ItemsFactory
   layers:
   - Default
   - TransparentFX

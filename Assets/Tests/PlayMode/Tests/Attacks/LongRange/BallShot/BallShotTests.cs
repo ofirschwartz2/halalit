@@ -98,7 +98,7 @@ public class BallShotTests
         TestUtils.SetUpShot(SHOT_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
-        TestUtils.SetRandomTargetPosition();
+        TestUtils.SetRandomEnemyPosition();
         yield return null;
         var targetClosestPosition = TestUtils.GetTargetNearestPositionToHalalit();
         var acceptedDelta = 0.5f;

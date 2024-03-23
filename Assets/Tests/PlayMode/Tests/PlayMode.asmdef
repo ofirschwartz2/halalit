@@ -8,7 +8,8 @@
         "Utils",
         "Model",
         "Attacks",
-        "Health"
+        "Health",
+        "Items"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
