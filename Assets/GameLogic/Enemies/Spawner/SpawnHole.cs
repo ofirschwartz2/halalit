@@ -38,7 +38,7 @@ public class SpawnHole : MonoBehaviour
     void Start()
     {
         SetOpeningTimes();
-        SetLists();
+        SetEnemiesLists();
 
         _originalScale = transform.localScale;
         transform.localScale = Vector3.zero;
@@ -231,7 +231,7 @@ public class SpawnHole : MonoBehaviour
         return _originalScale * (blastMultiplier);
     }
 
-    private void SetLists()
+    private void SetEnemiesLists()
     {
         _enemyPrefabs = FindObjectOfType<EnemyBank>().GetNextSpawnHoleEnemiesList();
         _enemies = new List<GameObject>();

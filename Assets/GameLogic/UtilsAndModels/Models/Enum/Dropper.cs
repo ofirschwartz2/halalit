@@ -3,7 +3,7 @@
 namespace Assets.Enums
 {
     [Serializable]
-    public enum Dropper
+    public enum Dropper // TODO: Move to another nuget
     {
         DEFAULT,
         ASTEROID,
