@@ -1,4 +1,5 @@
 ﻿using Assets.Enums;
+using Assets.Utils;
 using UnityEngine;
 
 public class EnemiesDestructor : MonoBehaviour
@@ -27,7 +28,7 @@ public class EnemiesDestructor : MonoBehaviour
 
     private void InvokeItemDropEvent(GameObject enemyToKill)
     {
-        Vector2 dropForce = Random.onUnitSphere * enemyToKill.transform.localScale.x;
+        Vector2 dropForce = RandomGenerator.GetInsideUnitCircle() * enemyToKill.transform.localScale.x;
         DropEventArguments itemDropEventArguments = new(enemyToKill.GetComponent<EnemyDropper>().GetDropper(), enemyToKill.transform.position, dropForce);
         DropEvent.Invoke(EventName.NEW_ITEM_DROP, this, itemDropEventArguments);
     }

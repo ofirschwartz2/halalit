@@ -1,4 +1,5 @@
 ﻿using Assets.Enums;
+using Assets.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -57,12 +58,12 @@ private
     #region Events actions
     private void TryDropNewItem(object initiator, DropEventArguments arguments)
     {
-        float dropChance = Random.Range(0f, 1f);
+        var dropChance = RandomGenerator.GetRandomFloatBetweenZeroToOne(true);
         List<ItemName> droppableItemsByChance = GetDroppableItemsByChance(arguments.Dropper, dropChance);
 
         if (droppableItemsByChance.Count > 0)
         {
-            int randomlyPickedDroppableItemByChanceIndex = Random.Range(0, droppableItemsByChance.Count);
+            var randomlyPickedDroppableItemByChanceIndex = RandomGenerator.GetRandomInt(0, droppableItemsByChance.Count, true);
             DropNewItem(droppableItemsByChance[randomlyPickedDroppableItemByChanceIndex], arguments.DropPosition, arguments.DropForce);
         }
     }

@@ -24,6 +24,7 @@ namespace Assets.Utils
         {
             if (fromSeed)
             {
+                TrySetSeed();
                 return seedfullRandom.Next();
             }
             return seedlessRandom.Next();
@@ -33,6 +34,7 @@ namespace Assets.Utils
         {
             if (fromSeed)
             {
+                TrySetSeed();
                 return seedfullRandom.Next(from, to);
             }
             return seedlessRandom.Next(from, to);
@@ -48,14 +50,35 @@ namespace Assets.Utils
         {
             if (fromSeed)
             {
+                TrySetSeed();
                 return (float)seedfullRandom.NextDouble();
             }
             return (float)seedlessRandom.NextDouble();
         }
 
+        public static Vector2 GetInsideUnitCircle(bool fromSeed = false) 
+        {
+            return new Vector2(
+                GetRandomFloat(-1, 1, fromSeed), 
+                GetRandomFloat(-1, 1, fromSeed));
+        }
+
         private static float GetAdjustedFloat(float zeroToOneValue, float from, float to)
         {
             return zeroToOneValue * (to - from) + from;
+        }
+
+        private static void TrySetSeed()
+        {
+            if (!IsSeedSet())
+            {
+                SetSeed();
+            }
+        }
+
+        private static bool IsSeedSet()
+        {
+            return seedfullRandom != null;
         }
     }
 }

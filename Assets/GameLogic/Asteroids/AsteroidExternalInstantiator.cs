@@ -69,7 +69,7 @@ public class AsteroidExternalInstantiator : MonoBehaviour
 
     private float GetRandomAsteroidInstantiationPointX()
     {
-        float centerPointAndInstantiationPointDistance = Random.Range(0, _asteroidInstantiationDistanceFromCenter);
+        float centerPointAndInstantiationPointDistance = RandomGenerator.GetRandomFloat(0, _asteroidInstantiationDistanceFromCenter, true);
 
         float a = _instantiationLineCenterPoint.x;
         float b = centerPointAndInstantiationPointDistance / Mathf.Sqrt(Mathf.Pow(_instantiationLineSlope, 2) + 1);
@@ -124,7 +124,7 @@ public class AsteroidExternalInstantiator : MonoBehaviour
 
     private float GetRandomAsteroidScale()
     {
-        return Random.Range(1, _asteroidMaxScale + 1);
+        return RandomGenerator.GetRandomFloat(1, _asteroidMaxScale + 1, true);
     }
     #endregion
 
@@ -136,7 +136,7 @@ public class AsteroidExternalInstantiator : MonoBehaviour
 
     private Vector2 GetRandomInstantiationLineCenterPoint()
     {
-        return Random.insideUnitCircle.normalized * _asteroidInstantiationDistanceFromCenter;
+        return RandomGenerator.GetInsideUnitCircle(true).normalized * _asteroidInstantiationDistanceFromCenter;
     }
 
     private Vector2 GetAsteroidDirection()

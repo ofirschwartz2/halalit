@@ -26,7 +26,7 @@ public class ItemMovement : MonoBehaviour
     {
         SetTransperancyPeriod();
         _removedTransparencyPeriodDone = false;
-        _rotationSpeed = Random.Range(-_maxRotation, _maxRotation);
+        _rotationSpeed = RandomGenerator.GetRandomFloat(-_maxRotation, _maxRotation);
         Utils.ChangeOpacity(GetComponent<Renderer>(), _baseOpacity);
     }
 

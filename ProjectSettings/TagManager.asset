@@ -41,6 +41,7 @@ TagManager:
   - ExplosionShockWave
   - PickupClawShooter
   - ItemsFactory
+  - Setup
   layers:
   - Default
   - TransparentFX
