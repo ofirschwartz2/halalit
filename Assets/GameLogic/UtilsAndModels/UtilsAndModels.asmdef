@@ -1,9 +1,7 @@
 {
-    "name": "Utils",
+    "name": "UtilsAndModels",
     "rootNamespace": "",
-    "references": [
-        "GUID:df2f5808222dedb47802eeef2571dcdc"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

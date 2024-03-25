@@ -1,8 +1,8 @@
 ﻿using Assets.Enums;
+using Assets.Utils;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 class ItemRankPicker : MonoBehaviour
 {
@@ -11,7 +11,7 @@ class ItemRankPicker : MonoBehaviour
 
     public ItemRank PickAnItemRank()
     {
-        float rankValue = Random.Range(0F, 1F); 
+        float rankValue = RandomGenerator.RangeZeroToOne(true); 
         
         for (int i = _rankChances.Count - 1; i >= 0; i--)
         {

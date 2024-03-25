@@ -43,7 +43,7 @@ public class PickupClawTests
     {
         // GIVEN
         var seed = TestUtils.SetRandomSeed();
-        var randJoysticksIndex = Random.Range(0, 1);
+        var randJoysticksIndex = RandomGenerator.Range(0, 1);
 
         PickupClawShooter pickupClawShooter = TestUtils.GetPickupClawShooter();
         List<GameObject> joysticks = new List<GameObject>
@@ -361,12 +361,6 @@ public class PickupClawTests
         AssertWrapper.AreEqual((int)state, (int)PickupClawState.RETURNING_TO_HALALIT_WITHOUT_TARGET, "Not RETURNING_TO_HALALIT_WITHOUT_TARGET after RETURNING_TO_HALALIT_WITH_TARGET", seed);
         AssertWrapper.AreNotEqual(Utils.Vector2ToDegrees(TestUtils.GetItemPosition()), Utils.Vector2ToDegrees(itemPosition), "Item did not changed position" , seed);
     }
-
-    // This test is doing the following:
-    // 1) Creating a new item in the opposite direction of the first item
-    // 2) Shooting pickup claw to the item
-    // 3) pressing on the new item from #1
-    // 4) Asserting that the claw keeps moving to the first item, and not the new item
 
     [UnityTest]
     public IEnumerator SecondPressWhenClawAlive() 

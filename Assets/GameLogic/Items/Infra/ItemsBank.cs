@@ -1,4 +1,5 @@
 ﻿using Assets.Enums;
+using Assets.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -29,7 +30,7 @@ class ItemsBank : MonoBehaviour
     {
         foreach (ItemStockDto attackItemStockDto in _attacks)
         {
-            int stock = Random.Range(attackItemStockDto.MinimumInitialStock, attackItemStockDto.MaxStock + 1);
+            var stock = RandomGenerator.Range(attackItemStockDto.MinimumInitialStock, attackItemStockDto.MaxStock + 1, true);
 
             for (int i = 0; i < stock; i++)
             {
@@ -39,7 +40,7 @@ class ItemsBank : MonoBehaviour
 
         foreach (ItemStockDto upgradeItemStockDto in _upgrades)
         {
-            int stock = Random.Range(upgradeItemStockDto.MinimumInitialStock, upgradeItemStockDto.MaxStock + 1);
+            var stock = RandomGenerator.Range(upgradeItemStockDto.MinimumInitialStock, upgradeItemStockDto.MaxStock + 1);
 
             for (int i = 0; i < stock; i++)
             {
@@ -49,7 +50,7 @@ class ItemsBank : MonoBehaviour
 
         foreach (ItemStockDto utilityItemStockDto in _utilities)
         {
-            int stock = Random.Range(utilityItemStockDto.MinimumInitialStock, utilityItemStockDto.MaxStock + 1);
+            var stock = RandomGenerator.Range(utilityItemStockDto.MinimumInitialStock, utilityItemStockDto.MaxStock + 1);
 
             for (int i = 0; i < stock; i++)
             {

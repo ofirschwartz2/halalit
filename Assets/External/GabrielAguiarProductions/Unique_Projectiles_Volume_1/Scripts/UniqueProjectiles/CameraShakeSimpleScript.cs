@@ -42,10 +42,10 @@ public class CameraShakeSimpleScript : MonoBehaviour {
 		while (duration > 0.01f) {
 			counter++;
 
-			var x = Random.Range (-1f, 1f) * (amount/counter);
-			var y = Random.Range (-1f, 1f) * (amount/counter);
+			var x = Random.Range (-1f, 1f) * (amount/counter); // Not from RandomGenerator in purpose
+            var y = Random.Range (-1f, 1f) * (amount/counter); // Not from RandomGenerator in purpose
 
-			transform.localPosition = Vector3.Lerp (transform.localPosition, new Vector3 (originalPos.x + x, originalPos.y + y, originalPos.z), 0.5f);
+            transform.localPosition = Vector3.Lerp (transform.localPosition, new Vector3 (originalPos.x + x, originalPos.y + y, originalPos.z), 0.5f);
 
 			duration -= Time.deltaTime;
 			

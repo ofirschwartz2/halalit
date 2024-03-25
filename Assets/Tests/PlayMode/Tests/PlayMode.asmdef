@@ -5,11 +5,10 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Player",
-        "Utils",
-        "Model",
         "Attacks",
         "Health",
-        "Items"
+        "Items",
+        "UtilsAndModels"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
