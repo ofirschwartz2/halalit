@@ -2,7 +2,6 @@
 using Assets.Utils;
 using System;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 internal class PickupClawGrabber : MonoBehaviour
 {

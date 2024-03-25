@@ -362,12 +362,6 @@ public class PickupClawTests
         AssertWrapper.AreNotEqual(Utils.Vector2ToDegrees(TestUtils.GetItemPosition()), Utils.Vector2ToDegrees(itemPosition), "Item did not changed position" , seed);
     }
 
-    // This test is doing the following:
-    // 1) Creating a new item in the opposite direction of the first item
-    // 2) Shooting pickup claw to the item
-    // 3) pressing on the new item from #1
-    // 4) Asserting that the claw keeps moving to the first item, and not the new item
-
     [UnityTest]
     public IEnumerator SecondPressWhenClawAlive() 
     {
