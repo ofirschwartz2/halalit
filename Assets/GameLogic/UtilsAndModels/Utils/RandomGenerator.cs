@@ -15,12 +15,12 @@ namespace Assets.Utils
                 throw new System.Exception("Seed is already set");
             }
 
-            seedfullRandom = new System.Random(GetRandomInt());
+            seedfullRandom = new System.Random(GetNumber());
 
             Debug.Log("Seed set to " + seedfullRandom.GetHashCode());
         }
 
-        public static int GetRandomInt(bool fromSeed = false)
+        public static int GetNumber(bool fromSeed = false)
         {
             if (fromSeed)
             {
@@ -30,7 +30,7 @@ namespace Assets.Utils
             return seedlessRandom.Next();
         }
 
-        public static int GetRandomInt(int from, int to, bool fromSeed = false)
+        public static int Range(int from, int to, bool fromSeed = false)
         {
             if (fromSeed)
             {
@@ -40,13 +40,13 @@ namespace Assets.Utils
             return seedlessRandom.Next(from, to);
         }
 
-        public static float GetRandomFloat(float from, float to, bool fromSeed = false)
+        public static float Range(float from, float to, bool fromSeed = false)
         {
-            var zeroToOneRandom = GetRandomFloatBetweenZeroToOne(fromSeed);
+            var zeroToOneRandom = RangeZeroToOne(fromSeed);
             return GetAdjustedFloat(zeroToOneRandom, from, to);
         }
 
-        public static float GetRandomFloatBetweenZeroToOne(bool fromSeed = false)
+        public static float RangeZeroToOne(bool fromSeed = false)
         {
             if (fromSeed)
             {
@@ -59,8 +59,8 @@ namespace Assets.Utils
         public static Vector2 GetInsideUnitCircle(bool fromSeed = false) 
         {
             return new Vector2(
-                GetRandomFloat(-1, 1, fromSeed), 
-                GetRandomFloat(-1, 1, fromSeed));
+                Range(-1, (float)1, fromSeed),
+                Range(-1, (float)1, fromSeed));
         }
 
         private static float GetAdjustedFloat(float zeroToOneValue, float from, float to)

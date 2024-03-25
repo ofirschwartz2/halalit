@@ -52,7 +52,7 @@ class AsteroidInternalInstantiator : MonoBehaviour
 
     private int GetNewAsteroidsCount(int originalAsteroidScale)
     {
-        return RandomGenerator.GetRandomInt((int)_asteroidMinInstantiationCount, (int)_asteroidMaxInstantiationCount + 1, true);
+        return RandomGenerator.Range((int)_asteroidMinInstantiationCount, (int)_asteroidMaxInstantiationCount + 1, true);
     }
 
     private int GetNewAsteroidsScale(int originalAsteroidScale)

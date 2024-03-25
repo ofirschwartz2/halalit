@@ -58,12 +58,12 @@ private
     #region Events actions
     private void TryDropNewItem(object initiator, DropEventArguments arguments)
     {
-        var dropChance = RandomGenerator.GetRandomFloatBetweenZeroToOne(true);
+        var dropChance = RandomGenerator.RangeZeroToOne(true);
         List<ItemName> droppableItemsByChance = GetDroppableItemsByChance(arguments.Dropper, dropChance);
 
         if (droppableItemsByChance.Count > 0)
         {
-            var randomlyPickedDroppableItemByChanceIndex = RandomGenerator.GetRandomInt(0, droppableItemsByChance.Count, true);
+            var randomlyPickedDroppableItemByChanceIndex = RandomGenerator.Range(0, droppableItemsByChance.Count, true);
             DropNewItem(droppableItemsByChance[randomlyPickedDroppableItemByChanceIndex], arguments.DropPosition, arguments.DropForce);
         }
     }

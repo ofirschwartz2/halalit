@@ -79,7 +79,7 @@ namespace Assets.Utils
 
         public static Vector2 GetRandomVector(float minX, float maxX, float minY, float maxY)
         {
-            return new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+            return new Vector2(RandomGenerator.Range(minX, maxX), RandomGenerator.Range(minY, maxY));
         }
         
         
@@ -105,15 +105,15 @@ namespace Assets.Utils
 
         public static Vector3 Get180RandomNormalizedVector(Vector3 generalDirection)
         {
-            float newX = AngleNormalizationBy1(generalDirection.x + Random.Range(-1f, 1f));
-            float newY = AngleNormalizationBy1(generalDirection.y + Random.Range(-1f, 1f));
+            float newX = AngleNormalizationBy1(generalDirection.x + RandomGenerator.Range(-1f, 1f));
+            float newY = AngleNormalizationBy1(generalDirection.y + RandomGenerator.Range(-1f, 1f));
 
             return new Vector3(newX, newY);
         }
 
         public static bool IsTrueIn50Precent()
         {
-            return Random.Range(0, 2) == 0;
+            return RandomGenerator.Range(0, (float)2) == 0;
         }
 
         public static Vector2 ShiftVectorByOffsetDegree(Vector2 vector, float offsetDegrees)
@@ -143,12 +143,12 @@ namespace Assets.Utils
 
         public static float GetRandomAngleAround(float range)
         {
-            return UnityEngine.Random.Range(-range, range);
+            return RandomGenerator.Range(-range, range);
         }
 
         public static float GetRandomBetween(float bottom, float top)
         {
-            return UnityEngine.Random.Range(bottom, top);
+            return RandomGenerator.Range(bottom, top);
         }
 
         public static float GetEndOfLifeTime(float lifetime)
@@ -181,7 +181,7 @@ namespace Assets.Utils
 
         public static Vector2 GetRandomVector2OnCircle(float radius = 1)
         {
-            float angle = UnityEngine.Random.Range(0, 2 * Mathf.PI);
+            float angle = RandomGenerator.Range(0, 2 * Mathf.PI, false);
             return RadianToVector2(angle) * radius;
         }
 
@@ -318,7 +318,7 @@ namespace Assets.Utils
 
         public static Direction GetRandomDirection()
         {
-            return (Direction)Random.Range(0, Enum.GetValues(typeof(Direction)).Length);
+            return (Direction)RandomGenerator.Range(0, Enum.GetValues(typeof(Direction)).Length, true);
         }
         #endregion
 
@@ -357,7 +357,7 @@ namespace Assets.Utils
             for (int i = 0; i < list.Count; i++)
             {
                 var temp = list[i];
-                var randomIndex = Random.Range(i, list.Count);
+                var randomIndex = RandomGenerator.Range(i, list.Count, true);
                 list[i] = list[randomIndex];
                 list[randomIndex] = temp;
             }

@@ -11,7 +11,7 @@ class ItemRankPicker : MonoBehaviour
 
     public ItemRank PickAnItemRank()
     {
-        float rankValue = RandomGenerator.GetRandomFloatBetweenZeroToOne(true); 
+        float rankValue = RandomGenerator.RangeZeroToOne(true); 
         
         for (int i = _rankChances.Count - 1; i >= 0; i--)
         {

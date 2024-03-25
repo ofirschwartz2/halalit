@@ -44,7 +44,7 @@ public class EnemyBank : MonoBehaviour
 
         while (numberofEnemies > 0)
         {
-            var spawnHoleSize = RandomGenerator.GetRandomInt(_minSpawnEnemyCount, _maxSpawnEnemyCount + 1, true);
+            var spawnHoleSize = RandomGenerator.Range(_minSpawnEnemyCount, _maxSpawnEnemyCount + 1, true);
             if (spawnHoleSize > numberofEnemies)
             {
                 spawnHoleSize = numberofEnemies;

@@ -30,7 +30,7 @@ class ItemsBank : MonoBehaviour
     {
         foreach (ItemStockDto attackItemStockDto in _attacks)
         {
-            var stock = RandomGenerator.GetRandomInt(attackItemStockDto.MinimumInitialStock, attackItemStockDto.MaxStock + 1, true);
+            var stock = RandomGenerator.Range(attackItemStockDto.MinimumInitialStock, attackItemStockDto.MaxStock + 1, true);
 
             for (int i = 0; i < stock; i++)
             {
@@ -40,7 +40,7 @@ class ItemsBank : MonoBehaviour
 
         foreach (ItemStockDto upgradeItemStockDto in _upgrades)
         {
-            var stock = RandomGenerator.GetRandomInt(upgradeItemStockDto.MinimumInitialStock, upgradeItemStockDto.MaxStock + 1);
+            var stock = RandomGenerator.Range(upgradeItemStockDto.MinimumInitialStock, upgradeItemStockDto.MaxStock + 1);
 
             for (int i = 0; i < stock; i++)
             {
@@ -50,7 +50,7 @@ class ItemsBank : MonoBehaviour
 
         foreach (ItemStockDto utilityItemStockDto in _utilities)
         {
-            var stock = RandomGenerator.GetRandomInt(utilityItemStockDto.MinimumInitialStock, utilityItemStockDto.MaxStock + 1);
+            var stock = RandomGenerator.Range(utilityItemStockDto.MinimumInitialStock, utilityItemStockDto.MaxStock + 1);
 
             for (int i = 0; i < stock; i++)
             {

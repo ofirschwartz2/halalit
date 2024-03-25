@@ -49,9 +49,9 @@ public class ProjectileMoveScript : MonoBehaviour {
 			accuracy = 1 - (accuracy / 100);
 
 			for (int i = 0; i < 2; i++) {
-				var val = 1 * Random.Range (-accuracy, accuracy);
-				var index = Random.Range (0, 2);
-				if (i == 0) {
+				var val = 1 * Random.Range (-accuracy, accuracy); // Not from RandomGenerator in purpose
+                var index = Random.Range (0, 2); // Not from RandomGenerator in purpose
+                if (i == 0) {
 					if (index == 0)
 						offset = new Vector3 (0, -val, 0);
 					else

@@ -17,7 +17,7 @@ public class AsteroidMovement : KinematicMovement
 
     void Start()
     {
-        _rotationSpeed = RandomGenerator.GetRandomFloat(-_maxRotation, _maxRotation, true);
+        _rotationSpeed = RandomGenerator.Range(-_maxRotation, _maxRotation, true);
         if (_siblingId == null)
         {
             _siblingId = Guid.NewGuid().ToString();

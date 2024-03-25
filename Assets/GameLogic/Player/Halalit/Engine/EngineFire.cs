@@ -26,7 +26,7 @@ public class EngineFire : MonoBehaviour
         else
         {
             TryTurnOnEngineFireParticleSystem();
-            mainModule.startSpeed = Random.Range(fromSpeed, toSpeed);
+            mainModule.startSpeed = RandomGenerator.Range(fromSpeed, toSpeed);
         }
     }
 
