@@ -25,7 +25,8 @@ internal class PickupClawGrabber : MonoBehaviour
     {
         if (target == null)
         {
-            throw new Exception("Target is null");
+            Debug.Log("Target is null");
+            return;
         }
 
         GrabMoveClaw(target);

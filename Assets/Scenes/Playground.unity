@@ -169,7 +169,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &201934830
 Transform:
   m_ObjectHideFlags: 0
@@ -9674,6 +9674,10 @@ MonoBehaviour:
   _valuableValues:
   - Key: 0
     Value: 10
+  - Key: 1
+    Value: 30
+  - Key: 2
+    Value: 100
   scoreText: {fileID: 2083128243}
 --- !u!1 &2135516712
 GameObject:

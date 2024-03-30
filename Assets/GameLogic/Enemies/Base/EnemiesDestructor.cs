@@ -37,15 +37,15 @@ public class EnemiesDestructor : MonoBehaviour
             randomSeededNumber = randomSeededNumbers.PopRandomSeededNumber();
             if (randomSeededNumber <= potentialValuableDrop.Value)
             {
-                Instantiate(potentialValuableDrop.Key, enemyToKill.transform.position, Quaternion.identity);
+                var valuable = Instantiate(potentialValuableDrop.Key, enemyToKill.transform.position, Quaternion.identity);
+                Vector2 dropForce = RandomGenerator.GetInsideUnitCircle() * enemyToKill.transform.localScale.x;
+                valuable.GetComponent<Rigidbody2D>().AddForce(dropForce, ForceMode2D.Impulse);
                 return;
             }
         }
     }
 
-    // TODO: refactor? -
-    // 1) do we still want an event?
-    // 2) first check chances, then drop if needed
+    // TODO: refactor? - first check chances, then drop if needed
     private void TryInvokeItemDropEvent(GameObject enemyToKill)
     {
         Vector2 dropForce = RandomGenerator.GetInsideUnitCircle() * enemyToKill.transform.localScale.x;

@@ -162,5 +162,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _potentialValuableDrops:
+  - Key: {fileID: 6122301198954446189, guid: 64c888aebb1221e458b3820ab634ee71, type: 3}
+    Value: 0.5
   - Key: {fileID: 6122301198954446189, guid: 23128d9be8456fd41beade43a4d2a36c, type: 3}
-    Value: 0.9
+    Value: 0.3
+  - Key: {fileID: 6122301198954446189, guid: 1f0158013978ae745911e5e2489218f1, type: 3}
+    Value: 0.1

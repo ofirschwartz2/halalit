@@ -3,6 +3,7 @@ using Assets.Enums;
 using Assets.Utils;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 #if UNITY_EDITOR
 [assembly: InternalsVisibleTo("Tests")]
@@ -133,7 +134,7 @@ public class PickupClawStateMachine : MonoBehaviour
 
     private void TryChangeToReturningToHalalit()
     {
-        if (!TryChangeToReturningToHalalitWithTarget())
+        if (_item == null || !TryChangeToReturningToHalalitWithTarget())
         {
             TryChangeToReturningToHalalitWithoutTarget();
         }
