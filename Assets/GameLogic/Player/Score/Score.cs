@@ -7,8 +7,8 @@ class Score : MonoBehaviour
 {
     [SerializeField]
     private List<KeyValuePair<ValuableName, int>> _valuableValues;
-    [SerializeField]
-    private Text scoreText;
+   
+    public Text scoreText;
 
     private int _score;
 
