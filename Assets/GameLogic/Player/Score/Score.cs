@@ -25,6 +25,9 @@ class Score : MonoBehaviour
 
     private void IncreaseScore(object initiator, ValuableEventArguments arguments)
     {
+        var a = arguments.Name;
+        var b = _valuableValues.Find(valuable => valuable.Key == arguments.Name);
+        var c = b.Value;
         _score += _valuableValues.Find(valuable => valuable.Key == arguments.Name).Value;
         scoreText.text = "Score: " + _score.ToString();
     }
