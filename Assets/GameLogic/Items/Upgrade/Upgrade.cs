@@ -8,7 +8,7 @@ public abstract class Upgrade : MonoBehaviour
     protected ItemName _itemName;
     protected Dictionary<EventProperty, float> _pickupEventProperties;
 
-    protected void OnTriggerEnter2D(Collider2D other)
+    protected void OnTriggerEnter2D(Collider2D other) // TODO: Move to a Collectable Common class?
     {
         if (other.gameObject.CompareTag(Tag.HALALIT.GetDescription()))
         {

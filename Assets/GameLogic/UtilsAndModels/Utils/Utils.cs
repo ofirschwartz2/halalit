@@ -351,19 +351,6 @@ namespace Assets.Utils
 
         #endregion
 
-        #region Lists
-        public static void ShuffleList<T>(List<T> list)
-        {
-            for (int i = 0; i < list.Count; i++)
-            {
-                var temp = list[i];
-                var randomIndex = RandomGenerator.Range(i, list.Count, true);
-                list[i] = list[randomIndex];
-                list[randomIndex] = temp;
-            }
-        }
-        #endregion
-
         #region Visuals
         public static void ChangeOpacity(Renderer renderer, float opacity) 
         {

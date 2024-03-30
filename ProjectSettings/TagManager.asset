@@ -42,6 +42,7 @@ TagManager:
   - PickupClawShooter
   - ItemsFactory
   - Setup
+  - Valuable
   layers:
   - Default
   - TransparentFX

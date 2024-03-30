@@ -31,7 +31,8 @@ public class SpawnHole : MonoBehaviour
         _startOfClosingLifeTime, _endOfClosingLifeTime;
     private Vector3 _originalScale;
     private SpawnHoleState _state;
-    private List<GameObject> _enemyPrefabs;
+    //private List<GameObject> _enemyPrefabs;
+    private List<EnemyEntity> _enemyEntities;
     private List<GameObject> _enemies;
     private List<Vector2> _enemiesSpawnFinalPoints;
 
@@ -155,22 +156,25 @@ public class SpawnHole : MonoBehaviour
     #region enemies
     private void InstantiateEnemies()
     {
-        if (_enemyPrefabs == null) 
+        //if (_enemyPrefabs == null) 
+        if(_enemyEntities == null)
         {
             throw new System.Exception("No enemies to spawn");
         }
 
-        foreach (GameObject enemyPrefab in _enemyPrefabs)
+        //foreach (GameObject enemyPrefab in _enemyPrefabs)
+        foreach (var enemyEntity in _enemyEntities)
         {
-            var newEnemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
+            var newEnemy = Instantiate(enemyEntity.Prefab, transform.position, Quaternion.identity, transform.parent);
+            newEnemy.GetComponent<RandomSeededNumbers>().SetRandomSeededNumbers(enemyEntity.RandomSeededNumbers);
             newEnemy.transform.localScale = Vector3.zero;
-            newEnemy.transform.SetParent(transform.parent);
+            //newEnemy.transform.SetParent(transform.parent);
 
             DisableEnemyScripts(newEnemy);
             
             _enemies.Add(newEnemy);
         }
-        _enemiesSpawnFinalPoints = EnemyUtils.GetEvenPositionsAroundCircle(transform, _enemyPrefabs.Count, transform.localScale.magnitude);
+        _enemiesSpawnFinalPoints = EnemyUtils.GetEvenPositionsAroundCircle(transform, _enemyEntities.Count, transform.localScale.magnitude);
     }
 
     private void SpawningEnemies()
@@ -233,7 +237,7 @@ public class SpawnHole : MonoBehaviour
 
     private void SetEnemiesLists()
     {
-        _enemyPrefabs = FindObjectOfType<EnemyBank>().GetNextSpawnHoleEnemiesList();
+        _enemyEntities = FindObjectOfType<EnemyBank>().GetNextSpawnHoleEnemiesList();
         _enemies = new List<GameObject>();
         _enemiesSpawnFinalPoints = new List<Vector2>();
     }

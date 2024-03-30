@@ -11,13 +11,19 @@ public class EnemyBank : MonoBehaviour
     private int _minSpawnEnemyCount;
     [SerializeField]
     private int _maxSpawnEnemyCount;
+    [SerializeField]
+    private int _seededRandomNumbersPerEnemy;
 
-    private List<GameObject> _enemyPrefabList;
+    //TODO: delete
+    //private List<GameObject> _enemyPrefabList;
+    private List<EnemyEntity> _enemyEntityList;
+
     private List<int> _spawnHoleEnemyAmountsList;
 
     void Awake()
     {
-        _enemyPrefabList = new List<GameObject>();
+        //_enemyPrefabList = new List<GameObject>();
+        _enemyEntityList = new List<EnemyEntity>();
         _spawnHoleEnemyAmountsList = new List<int>();
 
         SetEnemiesList();
@@ -26,43 +32,52 @@ public class EnemyBank : MonoBehaviour
 
     private void SetEnemiesList()
     {
-        _enemyPrefabList = new List<GameObject>();
+        // _enemyEntitiesList is a pair of _enemyPrefabsList and _randomSeededNumbersList
+        _enemyEntityList = new List<EnemyEntity>();
+
         foreach (var enemyPrefab in _enemyPrefabsBank)
         {
             for (int i = 0; i < enemyPrefab.Value; i++)
             {
-                _enemyPrefabList.Add(enemyPrefab.Key);
+                //_enemyPrefabList.Add(enemyPrefab.Key);
+                _enemyEntityList.Add(new EnemyEntity(
+                    enemyPrefab.Key, 
+                    RandomGenerator.GetRangeZeroToOneList(_seededRandomNumbersPerEnemy, true)));
             }
         }
 
-        Utils.ShuffleList(_enemyPrefabList);
+        //RandomGenerator.ShuffleList(_enemyPrefabList, true);
+        RandomGenerator.ShuffleList(_enemyEntityList, true);
     }
 
     private void SetSpawnHoleEnemyAmountsList()
     {
-        var numberofEnemies = _enemyPrefabList.Count;
+        //var numberofEnemies = _enemyPrefabList.Count;
+        var numberofEnemies = _enemyEntityList.Count;
 
         while (numberofEnemies > 0)
         {
-            var spawnHoleSize = RandomGenerator.Range(_minSpawnEnemyCount, _maxSpawnEnemyCount + 1, true);
-            if (spawnHoleSize > numberofEnemies)
+            var amountOfEnemiesInSpawnHole = RandomGenerator.Range(_minSpawnEnemyCount, _maxSpawnEnemyCount + 1, true);
+            if (amountOfEnemiesInSpawnHole > numberofEnemies)
             {
-                spawnHoleSize = numberofEnemies;
+                amountOfEnemiesInSpawnHole = numberofEnemies;
             }
-            _spawnHoleEnemyAmountsList.Add(spawnHoleSize);
-            numberofEnemies -= spawnHoleSize;
+            _spawnHoleEnemyAmountsList.Add(amountOfEnemiesInSpawnHole);
+            numberofEnemies -= amountOfEnemiesInSpawnHole;
         }
     }
 
-    public List<GameObject> GetNextSpawnHoleEnemiesList()
+    public List<EnemyEntity> GetNextSpawnHoleEnemiesList()
     {
         if (_spawnHoleEnemyAmountsList.Count == 0) 
         {
             return null;
         }
 
-        var enemiesToSpawn = _enemyPrefabList.Take(_spawnHoleEnemyAmountsList.First()).ToList();
-        _enemyPrefabList.RemoveRange(0, _spawnHoleEnemyAmountsList.First());
+        //var enemiesToSpawn = _enemyPrefabList.Take(_spawnHoleEnemyAmountsList.First()).ToList();
+        var enemiesToSpawn = _enemyEntityList.Take(_spawnHoleEnemyAmountsList.First()).ToList();
+        //_enemyPrefabList.RemoveRange(0, _spawnHoleEnemyAmountsList.First());
+        _enemyEntityList.RemoveRange(0, _spawnHoleEnemyAmountsList.First());
         _spawnHoleEnemyAmountsList.RemoveAt(0);
         return enemiesToSpawn;
     }

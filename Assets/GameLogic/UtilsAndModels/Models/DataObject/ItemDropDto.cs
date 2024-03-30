@@ -2,7 +2,7 @@
 using System;
 
 [Serializable]
-public class DropDto
+public class ItemDropDto
 {
     public ItemName ItemName;
     public int OneOfChance;

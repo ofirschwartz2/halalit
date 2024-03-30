@@ -5,7 +5,7 @@ using System.Linq;
 using log4net.Util;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
-public class ItemMovement : MonoBehaviour
+public class ItemMovement : MonoBehaviour // TODO: change naming to CollectableMovement
 {
     [SerializeField]
     protected Rigidbody2D _rigidBody;
@@ -52,7 +52,7 @@ public class ItemMovement : MonoBehaviour
         if (_itemLifeTime >= _transparencyPeriod && !IsOverlappingAstroidsOrEnemies())
         {
             transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer(Assets.Enums.Layer.ITEM_COLLISIONS.GetDescription());
-            transform.GetChild(0).gameObject.GetComponent<CircleCollider2D>().isTrigger = false;
+            transform.GetChild(0).gameObject.GetComponent<Collider2D>().isTrigger = false;
             _removedTransparencyPeriodDone = true;
         }
     }
@@ -71,7 +71,7 @@ public class ItemMovement : MonoBehaviour
         transform.position = grabber.position;
         transform.SetParent(grabber);
         transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer(Assets.Enums.Layer.ITEM_TRIGGERS.GetDescription());
-        transform.GetChild(0).gameObject.GetComponent<CircleCollider2D>().isTrigger = true;
+        transform.GetChild(0).gameObject.GetComponent<Collider2D>().isTrigger = true;
         GetComponent<SpriteRenderer>().sortingLayerName = Assets.Enums.SortingLayer.FRONT.GetDescription();
     }
 

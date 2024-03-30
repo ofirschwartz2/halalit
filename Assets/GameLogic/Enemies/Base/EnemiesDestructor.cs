@@ -21,12 +21,32 @@ public class EnemiesDestructor : MonoBehaviour
     {
         GameObject enemyToKill = ((MonoBehaviour)initiator).gameObject;
 
-        InvokeItemDropEvent(enemyToKill);
+        TryDropValuable(enemyToKill);
+        TryInvokeItemDropEvent(enemyToKill);
         InvokeExplosionEvent(enemyToKill);
         Destroy(enemyToKill);
     }
 
-    private void InvokeItemDropEvent(GameObject enemyToKill)
+    private void TryDropValuable(GameObject enemyToKill)
+    {
+        var potentialValuableDrops = enemyToKill.GetComponent<PotentialValuableDrops>().GetValuablesWithChances();
+        var randomSeededNumbers = enemyToKill.GetComponent<RandomSeededNumbers>();
+        float randomSeededNumber;
+        foreach (var potentialValuableDrop in potentialValuableDrops)
+        {
+            randomSeededNumber = randomSeededNumbers.PopRandomSeededNumber();
+            if (randomSeededNumber <= potentialValuableDrop.Value)
+            {
+                Instantiate(potentialValuableDrop.Key, enemyToKill.transform.position, Quaternion.identity);
+                return;
+            }
+        }
+    }
+
+    // TODO: refactor? -
+    // 1) do we still want an event?
+    // 2) first check chances, then drop if needed
+    private void TryInvokeItemDropEvent(GameObject enemyToKill)
     {
         Vector2 dropForce = RandomGenerator.GetInsideUnitCircle() * enemyToKill.transform.localScale.x;
         DropEventArguments itemDropEventArguments = new(enemyToKill.GetComponent<EnemyDropper>().GetDropper(), enemyToKill.transform.position, dropForce);

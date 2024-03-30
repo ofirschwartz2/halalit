@@ -9,6 +9,10 @@
         NO_STOCK,
         #endregion
 
+        #region Valuables
+        PLAYER_VALUABLE_PICKUP,
+        #endregion
+
         #region Attacks
         NEW_ATTACK_SWITCH,
         #endregion
