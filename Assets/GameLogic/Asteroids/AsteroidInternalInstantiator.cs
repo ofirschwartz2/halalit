@@ -112,7 +112,7 @@ class AsteroidInternalInstantiator : MonoBehaviour
     #region Predicates
     private bool ShouldInstantiateAsteroidsInternaly(int originalAsteroidScale)
     {
-        return originalAsteroidScale > 1 && Utils.IsTrueIn50Precent();
+        return originalAsteroidScale > 1 && RandomGenerator.IsTrueIn50Precent(false);
     }
     #endregion
 }

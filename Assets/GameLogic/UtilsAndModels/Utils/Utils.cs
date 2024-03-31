@@ -111,11 +111,6 @@ namespace Assets.Utils
             return new Vector3(newX, newY);
         }
 
-        public static bool IsTrueIn50Precent()
-        {
-            return RandomGenerator.Range(0, (float)2) == 0;
-        }
-
         public static Vector2 ShiftVectorByOffsetDegree(Vector2 vector, float offsetDegrees)
         {
             float offsetRadians = DegreeToRadian(offsetDegrees);

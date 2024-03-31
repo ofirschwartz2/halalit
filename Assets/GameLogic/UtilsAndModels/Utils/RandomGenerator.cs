@@ -92,6 +92,11 @@ namespace Assets.Utils
             return zeroToOneValue * (to - from) + from;
         }
 
+        public static bool IsTrueIn50Precent(bool fromSeed = false)
+        {
+            return Range(0, 2, fromSeed) == 0;
+        }
+
         private static void TrySetSeed()
         {
             if (!IsSeedSet())

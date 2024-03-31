@@ -193,8 +193,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db77b32e80f3e54468731ee98eb6e0e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _waitingInterval: 1
-  _rotationSpeed: 1
+  _waitingInterval: 3
+  _rotationSpeed: 0.5
 --- !u!114 &7657997003028529348
 MonoBehaviour:
   m_ObjectHideFlags: 0

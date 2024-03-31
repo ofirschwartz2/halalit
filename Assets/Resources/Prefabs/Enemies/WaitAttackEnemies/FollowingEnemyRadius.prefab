@@ -211,5 +211,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _waitingRadius: 10
-  _waitingInterval: 1
-  _rotationSpeed: 1
+  _waitingInterval: 3
+  _rotationSpeed: 0.5

@@ -44,6 +44,7 @@ public class PickupClawStateMachine : MonoBehaviour
         {
             case PickupClawState.MOVING_TO_TARGET:
                 _pickupClawMovement.Move(_state);
+                TryChangeToReturningToHalalitWithoutTarget();
                 TryChangeToGrabbing();
                 break;
 
@@ -76,7 +77,7 @@ public class PickupClawStateMachine : MonoBehaviour
 
     private void TryChangeToReturningToHalalitWithoutTarget()
     {
-        if (ShouldClawRetract())
+        if (_item == null || ShouldClawRetract())
         {
             ChangeToReturningToHalalitWithoutTarget();
         }
@@ -106,10 +107,11 @@ public class PickupClawStateMachine : MonoBehaviour
 
     private void ChangeToReturningToHalalitWithoutTarget()
     {
-        if (_state == PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET)
+        if (_state == PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET && _item != null)
         {
             _item.GetComponent<ItemMovement>().UnGrabbed();
         }
+
         _state = PickupClawState.RETURNING_TO_HALALIT_WITHOUT_TARGET;
         _pickupClawMovement.SetTarget(_halalit);
 
