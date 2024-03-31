@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Enums;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PotentialValuableDrops : MonoBehaviour
 {
     [SerializeField]
-    private List<KeyValuePair<GameObject, float>> _potentialValuableDrops;
+    private List<KeyValuePair<ValuableName, float>> _potentialValuableDrops;
 
-    public List<KeyValuePair<GameObject, float>> GetValuablesWithChances()
+    public List<KeyValuePair<ValuableName, float>> GetValuablesToChances()
     {
         return _potentialValuableDrops;
     }

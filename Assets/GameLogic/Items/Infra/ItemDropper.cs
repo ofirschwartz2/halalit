@@ -25,7 +25,7 @@ public class ItemDropper : MonoBehaviour
 
     private void SetEventListeners()
     {
-        DropEvent.NewItemDrop += TryDropNewItem;
+        DropEvent.NewDrop += TryDropNewItem;
     }
     #endregion
 

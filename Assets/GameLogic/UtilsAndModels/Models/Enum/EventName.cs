@@ -10,6 +10,7 @@
         #endregion
 
         #region Valuables
+        NEW_VALUABLE_DROP,
         PLAYER_VALUABLE_PICKUP,
         #endregion
 

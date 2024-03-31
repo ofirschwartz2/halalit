@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemiesDestructor : MonoBehaviour
 {
+
     #region Init
     private void Awake()
     {
@@ -29,7 +30,7 @@ public class EnemiesDestructor : MonoBehaviour
 
     private void TryDropValuable(GameObject enemyToKill)
     {
-        var potentialValuableDrops = enemyToKill.GetComponent<PotentialValuableDrops>().GetValuablesWithChances();
+        var potentialValuableDrops = enemyToKill.GetComponent<PotentialValuableDrops>().GetValuablesToChances();
         var randomSeededNumbers = enemyToKill.GetComponent<RandomSeededNumbers>();
         float randomSeededNumber;
         foreach (var potentialValuableDrop in potentialValuableDrops)
@@ -37,9 +38,15 @@ public class EnemiesDestructor : MonoBehaviour
             randomSeededNumber = randomSeededNumbers.PopRandomSeededNumber();
             if (randomSeededNumber <= potentialValuableDrop.Value)
             {
+                Vector2 dropForce = RandomGenerator.GetInsideUnitCircle() * enemyToKill.transform.localScale.x;
+                DropEventArguments valuableDropEventArguments = new(enemyToKill.GetComponent<EnemyDropper>().GetDropper(), enemyToKill.transform.position, dropForce, potentialValuableDrop.Key);
+                DropEvent.Invoke(EventName.NEW_VALUABLE_DROP, this, valuableDropEventArguments);
+
+                /*
                 var valuable = Instantiate(potentialValuableDrop.Key, enemyToKill.transform.position, Quaternion.identity);
                 Vector2 dropForce = RandomGenerator.GetInsideUnitCircle() * enemyToKill.transform.localScale.x;
                 valuable.GetComponent<Rigidbody2D>().AddForce(dropForce, ForceMode2D.Impulse);
+                */
                 return;
             }
         }
