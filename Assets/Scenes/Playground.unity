@@ -1413,7 +1413,7 @@ GameObject:
   - component: {fileID: 759986609}
   - component: {fileID: 759986611}
   - component: {fileID: 759986613}
-  m_Layer: 9
+  m_Layer: 16
   m_Name: Weapon
   m_TagString: Weapon
   m_Icon: {fileID: 0}
@@ -4511,7 +4511,7 @@ GameObject:
   - component: {fileID: 1949396159}
   - component: {fileID: 1949396158}
   - component: {fileID: 1949396160}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: EngineFire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9753,7 +9753,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2135516713}
   - component: {fileID: 2135516714}
-  m_Layer: 9
+  m_Layer: 16
   m_Name: Engine
   m_TagString: Engine
   m_Icon: {fileID: 0}
