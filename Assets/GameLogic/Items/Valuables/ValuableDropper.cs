@@ -1,6 +1,5 @@
 ﻿using Assets.Enums;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class ValuableDropper : MonoBehaviour
@@ -16,13 +15,13 @@ public class ValuableDropper : MonoBehaviour
 
     private void SetEventListeners()
     {
-        DropEvent.NewDrop += DropNewValuable;
+        ValuableDropEvent.NewValuableDrop += DropNewValuable;
     }
     #endregion
 
 
     #region Drop
-    private void DropNewValuable(object initiator, DropEventArguments dropEventArguments)
+    private void DropNewValuable(object initiator, ValuableDropEventArguments dropEventArguments)
     {
         var valuable = Instantiate(
             _valuablesBank.Find(a => a.Key == dropEventArguments.ValuableName).Value,
