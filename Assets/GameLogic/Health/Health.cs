@@ -263,5 +263,10 @@ class Health : MonoBehaviour
     {
         return _health;
     }
+
+    internal void SetHealth(int health)
+    {
+        _health = health;
+    }
 #endif
 }

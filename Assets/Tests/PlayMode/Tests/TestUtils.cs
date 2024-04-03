@@ -9,6 +9,8 @@ using static UnityEngine.GraphicsBuffer;
 
 internal static class TestUtils
 {
+    private const int ENEMIES_SEEDED_NUMBERS_LIST_DEFAULT_LENGTH = 5;
+
     #region Random Seeds
     internal static int SetRandomSeed(int seed = 0)
     {
@@ -28,22 +30,22 @@ internal static class TestUtils
         attackToggle.SetNewAttack(attackName, new AttackStats(ItemRank.COMMON, 1, 1, 1, 1, 1));
     }
 
-    internal static void SetRandomEnemyPosition(float radiusOfTargetPositionAroundHalalit = 5)
+    internal static void SetRandomEnemyPosition(float radiusOfEnemyPositionAroundHalalit = 5)
     {
         TesingWithOneEnemyValidation();
 
         SetRandomGameObjectPosition(
             GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription()), 
-            radiusOfTargetPositionAroundHalalit);
+            radiusOfEnemyPositionAroundHalalit);
     }
 
-    internal static void SetRandomItemPosition(float radiusOfTargetPositionAroundHalalit = 5)
+    internal static void SetRandomItemPosition(float radiusOfItemPositionAroundHalalit = 5)
     {
         TesingWithOneItemValidation();
 
         SetRandomGameObjectPosition(
             GameObject.FindGameObjectWithTag(Tag.ITEM.GetDescription()), 
-            radiusOfTargetPositionAroundHalalit);
+            radiusOfItemPositionAroundHalalit);
     }
 
     internal static void SetItemPosition(Vector2 position) 
@@ -65,14 +67,41 @@ internal static class TestUtils
         gameObject.transform.position = position;
     }
 
-    internal static void RotaeTarget(float degrees) 
+    internal static void RotaeEnemy(float degrees) 
     {
         TesingWithOneEnemyValidation();
-        var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
-        target[0].transform.rotation = Quaternion.Euler(0, 0, degrees);
+        var enemy = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
+        enemy[0].transform.rotation = Quaternion.Euler(0, 0, degrees);
     }
-    //TesingWithTarget Scene
 
+    internal static void SetEnemiesSeededNumbers(int listLength = ENEMIES_SEEDED_NUMBERS_LIST_DEFAULT_LENGTH) 
+    {
+        var enemies = GetEnemies();
+        foreach(var enemy in enemies)
+        {
+            var randomSeededNumbers = new List<float>();
+            for (int i = 0; i < listLength; i++)
+            {
+                randomSeededNumbers.Add(RandomGenerator.RangeZeroToOne(true));
+            }
+            enemy.GetComponent<RandomSeededNumbers>().SetRandomSeededNumbers(randomSeededNumbers);
+        }
+    }
+
+    internal static void SetEnemiesHealth(int health)
+    {
+        var enemies = GetEnemies();
+        foreach (var enemy in enemies)
+        {
+            enemy.GetComponent<Health>().SetHealth(health);
+        }
+    }
+
+    internal static void SetUpMirrorBallShot(int numberOfBounces)
+    {
+        SetUpShot(AttackName.MIRROR_BALL_SHOT);
+
+    }
     #endregion
 
     #region SceneGetters
@@ -112,6 +141,21 @@ internal static class TestUtils
     internal static GameObject[] GetItems()
     {
         return GameObject.FindGameObjectsWithTag(Tag.ITEM.GetDescription());
+    }
+
+    internal static GameObject[] GetValuables()
+    {
+        return GameObject.FindGameObjectsWithTag(Tag.VALUABLE.GetDescription());
+    }
+
+    internal static GameObject GetEnemy()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
+    }
+
+    internal static GameObject[] GetEnemies()
+    {
+        return GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
     }
 
     internal static PickupClawShooter GetPickupClawShooter()
@@ -155,12 +199,12 @@ internal static class TestUtils
                 .GetComponent<BoxCollider2D>();
     }
 
-    internal static Vector2 GetTargetPosition()
+    internal static Vector2 GetEnemyPosition()
     {
         TesingWithOneEnemyValidation();
 
-        var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
-        return target.transform.position;
+        var enemy = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
+        return enemy.transform.position;
     }
 
     internal static Vector2 GetItemPosition()
@@ -171,31 +215,31 @@ internal static class TestUtils
         return item.transform.position;
     }
 
-    internal static Vector2 GetTargetMovementDirection()
+    internal static Vector2 GetEnemyMovementDirection()
     {
         TesingWithOneEnemyValidation();
-        var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
-        return target.GetComponent<Rigidbody2D>().velocity.normalized;
+        var enemy = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
+        return enemy.GetComponent<Rigidbody2D>().velocity.normalized;
     }
-    internal static Vector2 GetTargetNearestPositionToHalalit()
+    internal static Vector2 GetEnemyNearestPositionToHalalit()
     {
         TesingWithOneEnemyValidation();
-        var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
-        return GetNearestPositionToHalalit(target);
-    }
-
-    internal static float GetTargetHealth()
-    {
-        TesingWithOneEnemyValidation();
-        var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
-        return target.GetComponent<Health>().GetHealth();
+        var enemy = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
+        return GetNearestPositionToHalalit(enemy);
     }
 
-    internal static List<int> GetAllTargetsHealth()
+    internal static float GetEnemyHealth()
     {
-        TesingWithMultipleTargetValidation();
-        var targets = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription()).ToList();
-        return targets.Select(target => target.GetComponent<Health>().GetHealth()).ToList();
+        TesingWithOneEnemyValidation();
+        var enemy = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
+        return enemy.GetComponent<Health>().GetHealth();
+    }
+
+    internal static List<int> GetAllEnemiesHealth()
+    {
+        TesingWithMultipleEnemiesValidation();
+        var enemies = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription()).ToList();
+        return enemies.Select(enemy => enemy.GetComponent<Health>().GetHealth()).ToList();
     }
 
     internal static Vector2 GetNearestPositionToHalalit(GameObject gameObject)
@@ -268,7 +312,7 @@ internal static class TestUtils
         var enemy = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
         if (enemy.Length != 1)
         {
-            throw new System.Exception("There should be only one target in the scene");
+            throw new System.Exception("There should be only one Enemy in the scene");
         }
     }
 
@@ -277,16 +321,16 @@ internal static class TestUtils
         var item = GameObject.FindGameObjectsWithTag(Tag.ITEM.GetDescription());
         if (item.Length != 1)
         {
-            throw new System.Exception("There should be only one target in the scene");
+            throw new System.Exception("There should be only one Item in the scene");
         }
     }
 
-    internal static void TesingWithMultipleTargetValidation() 
+    internal static void TesingWithMultipleEnemiesValidation() 
     {
-        var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
-        if (target.Length <= 1)
+        var enemies = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
+        if (enemies.Length <= 1)
         {
-            throw new System.Exception("There should be multiple targets in the scene");
+            throw new System.Exception("There should be multiple Enemies in the scene");
         }
     }
     #endregion

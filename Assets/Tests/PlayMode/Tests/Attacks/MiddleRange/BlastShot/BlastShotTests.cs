@@ -11,7 +11,7 @@ public class BlastShotTests
 {
 
     private const string SCENE_NAME = "Testing";
-    private const string SCENE_WITH_TARGET_NAME = "TestingWithTarget";
+    private const string SCENE_WITH_ENEMY_NAME = "TestingWithEnemy";
     private const AttackName ATTACK_NAME = AttackName.BLAST_SHOT;
     private const Tag ATTACK_TAG = Tag.EXPLOSIVE;
     private const Tag BLAST_TAG = Tag.EXPLOSION;
@@ -24,7 +24,7 @@ public class BlastShotTests
         switch (testName) 
         {
             case FUNCTION_SHOOTING_WITH_TARGET_NAME:
-                SceneManager.LoadScene(SCENE_WITH_TARGET_NAME);
+                SceneManager.LoadScene(SCENE_WITH_ENEMY_NAME);
                 break;
             default:
                 SceneManager.LoadScene(SCENE_NAME);
@@ -128,9 +128,9 @@ public class BlastShotTests
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomEnemyPosition(2); // MUST BE SMALL TO HIT BEFORE MinLifeTime
-        var originalTargetHealth = TestUtils.GetTargetHealth();
+        var originalTargetHealth = TestUtils.GetEnemyHealth();
         yield return null;
-        var initialTargetPosition = TestUtils.GetTargetPosition();
+        var initialTargetPosition = TestUtils.GetEnemyPosition();
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(initialTargetPosition, weaponAttack.GetAttackJoystickEdge());
 
         // WHEN
@@ -175,14 +175,14 @@ public class BlastShotTests
             blastShockWave = GameObject.FindGameObjectWithTag(SHOCK_WAVE_TAG.GetDescription());
         } while (blast != null || blastShockWave != null);
 
-        var finalTargetPosition = TestUtils.GetTargetPosition();
+        var finalTargetPosition = TestUtils.GetEnemyPosition();
 
         AssertWrapper.IsNull(blast, seed);
         AssertWrapper.IsNull(blastShockWave, seed);
         AssertWrapper.AreEqual(blastSupposedLifetime, actualLifetime, "Blast Lifetime not as expected", seed, acceptedDelta);
         AssertWrapper.AreNotEqual(initialTargetPosition.magnitude, finalTargetPosition.magnitude, "Did Not Knockback", seed);
         
-        var newTargetHealth = TestUtils.GetTargetHealth();
+        var newTargetHealth = TestUtils.GetEnemyHealth();
         AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
     }
 

@@ -22,4 +22,5 @@ public class RandomSeededNumbers : MonoBehaviour
         _randomSeededNumbers.RemoveAt(0);
         return randomSeededNumber;
     }
+
 }
