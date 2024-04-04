@@ -128,6 +128,11 @@ internal static class TestUtils
         return GameObject.FindGameObjectWithTag(Tag.MOVEMENT_JOYSTICK.GetDescription());
     }
 
+    internal static GameObject GetShot()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+    }
+
     internal static GameObject GetPickupClaw()
     {
         return GameObject.FindGameObjectWithTag(Tag.PICKUP_CLAW.GetDescription());

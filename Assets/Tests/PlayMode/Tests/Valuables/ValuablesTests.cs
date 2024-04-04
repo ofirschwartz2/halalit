@@ -13,13 +13,23 @@ public class ValuablesTests
 {
 
     private const string SCENE_WITH_ENEMY_NAME = "TestingWithEnemy";
+    private const string SCENE_WITH_MANY_ENEMIES_FROM_RIGHT_NAME = "TestingWithManyEnemiesFromRight";
     private const string SCENE_WITH_ASTEROID_NAME = "TestingWithAsteroid";
 
 
     [SetUp]
     public void SetUp()
     {
-        SceneManager.LoadScene(SCENE_WITH_ENEMY_NAME);
+        string testName = TestContext.CurrentContext.Test.MethodName;
+        switch (testName)
+        {
+            case FUNCTION_ENEMY_SOMETIMES_DROPS_VALUABLE_NAME:
+                SceneManager.LoadScene(SCENE_WITH_MANY_ENEMIES_FROM_RIGHT_NAME);
+                break;
+            default:
+                SceneManager.LoadScene(SCENE_WITH_ENEMY_NAME);
+                break;
+        }
     }
     
     
@@ -60,18 +70,50 @@ public class ValuablesTests
             lastShotPosition = shot.transform.position;
             yield return null;
 
-            shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+            shot = TestUtils.GetShot();
         } while (shot != null);
 
         yield return null;
         yield return null;
         yield return null;
         yield return null;
-
+        yield return null;
 
         // THEN
-        AssertWrapper.IsNull(TestUtils.GetEnemies);
+        AssertWrapper.IsNull(TestUtils.GetEnemy(), seed);
         AssertWrapper.AreEqual(lastShotPosition.x, targetClosestPosition.x, "Shot Didn't Hit Target", seed, acceptedDelta);
         AssertWrapper.AreEqual(lastShotPosition.y, targetClosestPosition.y, "Shot Didn't Hit Target", seed, acceptedDelta);
+    }
+
+    private const string FUNCTION_ENEMY_SOMETIMES_DROPS_VALUABLE_NAME = "EnemySometimesDropValuable";
+    [UnityTest]
+    public IEnumerator EnemySometimesDropValuable()
+    {
+        // GIVEN
+        var seed = TestUtils.SetRandomSeed();
+        TestUtils.SetEnemiesSeededNumbers();
+        TestUtils.SetEnemiesHealth(1);
+        var weaponMovement = TestUtils.GetWeaponMovement();
+        var weaponAttack = TestUtils.GetWeaponAttack();
+        yield return null;
+        var enemies = TestUtils.GetEnemies();
+        var originalEnemiesCount = enemies.Length;
+
+        // WHEN
+        do
+        {
+            weaponMovement.TryChangeWeaponPosition(Vector2.right);
+            yield return null;
+
+            weaponAttack.HumbleFixedUpdate(Vector2.right);
+            yield return null;
+
+            enemies = TestUtils.GetEnemies();
+        } while (enemies.Length != 0);
+
+        // THEN
+        var valuables = TestUtils.GetValuables();
+        AssertWrapper.Greater(valuables.Length, 0, "No Valuables Dropped", seed);
+        AssertWrapper.Greater(originalEnemiesCount, valuables.Length, "All dropped Valuables", seed);
     }
 }

@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TestingWithEnemy.unity
     guid: a352fba1c93c6c34e8a7b0dccd1ef98f
+  - enabled: 1
+    path: Assets/Scenes/TestingWithManyEnemiesFromRight.unity
+    guid: 01674c3ba1808f247a7a963ebf24554d
   m_configObjects: {}
