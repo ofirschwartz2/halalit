@@ -17,6 +17,19 @@ public class EnemiesDestructor : MonoBehaviour
     }
     #endregion
 
+    #region Destroy
+
+    private void OnDestroy()
+    {
+        DestroyEventListeners();
+    }
+
+    public void DestroyEventListeners()
+    {
+        DeathEvent.EnemyDeath -= OnEnemyDeath;
+    }
+    #endregion
+
     #region Enemy destruction
     private void OnEnemyDeath(object initiator, DeathEventArguments arguments)
     {
@@ -36,6 +49,7 @@ public class EnemiesDestructor : MonoBehaviour
         foreach (var potentialValuableDrop in potentialValuableDrops)
         {
             randomSeededNumber = randomSeededNumbers.PopRandomSeededNumber();
+            Debug.Log(randomSeededNumber);
             if (randomSeededNumber <= potentialValuableDrop.Value)
             {
                 Vector2 dropForce = RandomGenerator.GetInsideUnitCircle() * enemyToKill.transform.localScale.x;

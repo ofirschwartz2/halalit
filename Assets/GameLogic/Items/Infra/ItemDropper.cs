@@ -28,6 +28,19 @@ public class ItemDropper : MonoBehaviour
     }
     #endregion
 
+    #region Destroy
+
+    private void OnDestroy()
+    {
+        DestroyEventListeners();
+    }
+
+    public void DestroyEventListeners()
+    {
+        ItemDropEvent.NewItemDrop -= TryDropNewItem;
+    }
+    #endregion
+
     #region Item Dropping
     private List<ItemName> GetDroppableItemsByChance(Dropper dropper, float dropChance)
     {

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using UnityEditor.Graphs;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -136,6 +137,19 @@ class Health : MonoBehaviour
         {
             _healthBar.GetComponentsInChildren<Image>().Where(image => image.gameObject.CompareTag(Tag.BAR_ICON.GetDescription())).ToList()[0].sprite = _healthBarIcon;
         }
+    }
+    #endregion
+
+    #region Destroy
+
+    private void OnDestroy()
+    {
+        DestroyEventListeners();
+    }
+
+    public void DestroyEventListeners()
+    {
+        ItemEvent.PlayerUpgradePickUp -= UpgradeCurrentMaxHealth;
     }
     #endregion
 

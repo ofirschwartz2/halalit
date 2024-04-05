@@ -207,4 +207,10 @@ public class LaserBeamTests
             acceptedDelta);
 
     }
+
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
+    }
 }

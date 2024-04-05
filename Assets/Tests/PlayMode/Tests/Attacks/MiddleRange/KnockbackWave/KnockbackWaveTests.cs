@@ -322,4 +322,9 @@ public class KnockbackWaveTests
 
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
+    }
 }

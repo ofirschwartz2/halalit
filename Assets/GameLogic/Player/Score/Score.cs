@@ -12,6 +12,7 @@ class Score : MonoBehaviour
 
     private int _score;
 
+    #region Init
     private void Awake()
     {
         _score = 0;
@@ -22,6 +23,20 @@ class Score : MonoBehaviour
     {
         ValuableEvent.PlayerValuablePickUp += IncreaseScore;
     }
+    #endregion
+
+    #region Destroy
+
+    private void OnDestroy()
+    {
+        DestroyEventListeners();
+    }
+
+    public void DestroyEventListeners()
+    {
+        ValuableEvent.PlayerValuablePickUp -= IncreaseScore;
+    }
+    #endregion
 
     private void IncreaseScore(object initiator, ValuableEventArguments arguments)
     {

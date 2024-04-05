@@ -132,4 +132,9 @@ public class HalalitWeaponTests
             );
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
+    }
 }

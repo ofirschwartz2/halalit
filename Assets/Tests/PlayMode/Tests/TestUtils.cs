@@ -24,6 +24,16 @@ internal static class TestUtils
     #endregion
 
     #region SceneSetUp
+
+    internal static void DestroyAllGameObjects() 
+    {
+        var gameObjects = GameObject.FindObjectsOfType<GameObject>();
+        foreach (var gameObject in gameObjects)
+        {
+            Object.Destroy(gameObject);
+        }
+    }
+
     internal static void SetUpShot(AttackName attackName)
     {
         var attackToggle = GetAttackToggle();
@@ -37,6 +47,15 @@ internal static class TestUtils
         SetRandomGameObjectPosition(
             GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription()), 
             radiusOfEnemyPositionAroundHalalit);
+    }
+
+    internal static void SetRandomAsteroidPosition(float radiusOfAsteroidPositionAroundHalalit = 5)
+    {
+        TesingWithOneAsteroidValidation();
+
+        SetRandomGameObjectPosition(
+            GameObject.FindGameObjectWithTag(Tag.ASTEROID.GetDescription()),
+            radiusOfAsteroidPositionAroundHalalit);
     }
 
     internal static void SetRandomItemPosition(float radiusOfItemPositionAroundHalalit = 5)
@@ -97,11 +116,15 @@ internal static class TestUtils
         }
     }
 
-    internal static void SetUpMirrorBallShot(int numberOfBounces)
+    internal static void SetAsteroidsHealth(int health) 
     {
-        SetUpShot(AttackName.MIRROR_BALL_SHOT);
-
+        var asteroids = GetAsteroids();
+        foreach (var asteroid in asteroids)
+        {
+            asteroid.GetComponent<Health>().SetHealth(health);
+        }
     }
+
     #endregion
 
     #region SceneGetters
@@ -161,6 +184,16 @@ internal static class TestUtils
     internal static GameObject[] GetEnemies()
     {
         return GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
+    }
+
+    internal static GameObject GetAsteroid()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.ASTEROID.GetDescription());
+    }
+
+    internal static GameObject[] GetAsteroids()
+    {
+        return GameObject.FindGameObjectsWithTag(Tag.ASTEROID.GetDescription());
     }
 
     internal static PickupClawShooter GetPickupClawShooter()
@@ -231,6 +264,14 @@ internal static class TestUtils
         TesingWithOneEnemyValidation();
         var enemy = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
         return GetNearestPositionToHalalit(enemy);
+    }
+
+    internal static Vector2 GetAsteroidNearestPositionToHalalit()
+    {
+        TesingWithOneAsteroidValidation();
+
+        var asteroid = GameObject.FindGameObjectWithTag(Tag.ASTEROID.GetDescription());
+        return GetNearestPositionToHalalit(asteroid);
     }
 
     internal static float GetEnemyHealth()
@@ -318,6 +359,15 @@ internal static class TestUtils
         if (enemy.Length != 1)
         {
             throw new System.Exception("There should be only one Enemy in the scene");
+        }
+    }
+
+    internal static void TesingWithOneAsteroidValidation() 
+    {
+        var asteroid = GameObject.FindGameObjectsWithTag(Tag.ASTEROID.GetDescription());
+        if (asteroid.Length != 1)
+        {
+            throw new System.Exception("There should be only one Asteroid in the scene");
         }
     }
 

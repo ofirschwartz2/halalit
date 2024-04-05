@@ -235,4 +235,9 @@ public class GrenadeTests
 
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
+    }
 }

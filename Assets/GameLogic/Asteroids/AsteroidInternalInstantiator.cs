@@ -31,6 +31,19 @@ class AsteroidInternalInstantiator : MonoBehaviour
     }
     #endregion
 
+    #region Destroy
+
+    private void OnDestroy()
+    {
+        DestroyEventListeners();
+    }
+
+    public void DestroyEventListeners()
+    {
+        AsteroidEvent.AsteroidInternalInstantiation -= InstantiateAsteroidsOnPosition;
+    }
+    #endregion
+
     #region Internal instantiation
     private void InstantiateAsteroidsOnPosition(object initiator, AsteroidEventArguments arguments)
     {

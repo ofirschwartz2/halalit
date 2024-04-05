@@ -186,4 +186,10 @@ public class BallShotTests
 
     }
 
+
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
+    }
 }

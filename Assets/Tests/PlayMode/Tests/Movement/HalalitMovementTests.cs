@@ -124,5 +124,9 @@ public class HalalitMovementTests
         }
     }
 
-    
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
+    }
 }

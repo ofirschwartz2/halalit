@@ -175,4 +175,9 @@ public class SpikesTests
 
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
+    }
 }

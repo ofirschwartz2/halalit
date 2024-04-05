@@ -184,4 +184,9 @@ public class SwordTests
 
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
+    }
 }

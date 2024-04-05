@@ -17,6 +17,19 @@ public class EnemyExplosionInitiator : MonoBehaviour
     }
     #endregion
 
+    #region Destroy
+
+    private void OnDestroy()
+    {
+        DestroyEventListeners();
+    }
+
+    public void DestroyEventListeners()
+    {
+        EnemyExplosionEvent.NewEnemyExplosion -= Explode;
+    }
+    #endregion
+
     #region Events actions
     private void Explode(object initiator, EnemyExplosionEventArguments arguments)
     {

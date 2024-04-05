@@ -17,6 +17,19 @@ public class AsteroidGlobalDestructor : MonoBehaviour
     }
     #endregion
 
+    #region Destroy
+
+    private void OnDestroy()
+    {
+        DestroyEventListeners();
+    }
+
+    public void DestroyEventListeners()
+    {
+        DeathEvent.AsteroidDeath -= OnAsteroidDeath;
+    }
+    #endregion
+
     #region Asteroid destruction
     private void OnAsteroidDeath(object initiator, DeathEventArguments arguments)
     {

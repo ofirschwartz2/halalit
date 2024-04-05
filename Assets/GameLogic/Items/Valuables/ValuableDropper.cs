@@ -19,6 +19,18 @@ public class ValuableDropper : MonoBehaviour
     }
     #endregion
 
+    #region Destroy
+
+    private void OnDestroy()
+    {
+        DestroyEventListeners();
+    }
+
+    public void DestroyEventListeners()
+    {
+        ValuableDropEvent.NewValuableDrop -= DropNewValuable;
+    }
+    #endregion
 
     #region Drop
     private void DropNewValuable(object initiator, ValuableDropEventArguments dropEventArguments)
@@ -29,5 +41,6 @@ public class ValuableDropper : MonoBehaviour
 
         valuable.GetComponent<Rigidbody2D>().AddForce(dropEventArguments.DropForce, ForceMode2D.Impulse);
     }
+
     #endregion
 }

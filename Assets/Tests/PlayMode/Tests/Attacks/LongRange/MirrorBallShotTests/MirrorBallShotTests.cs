@@ -299,4 +299,9 @@ public class MirrorBallShotTests
 
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
+    }
 }

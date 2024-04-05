@@ -58,6 +58,19 @@ class WeaponAttack : MonoBehaviour
     }
     #endregion
 
+    #region Destroy
+
+    private void OnDestroy()
+    {
+        DestroyEventListeners();
+    }
+
+    public void DestroyEventListeners()
+    {
+        ItemEvent.PlayerUpgradePickUp -= UpgradeWeapon;
+    }
+    #endregion
+
     #region Logic
     void FixedUpdate()
     {

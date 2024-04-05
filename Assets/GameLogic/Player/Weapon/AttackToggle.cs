@@ -34,6 +34,19 @@ class AttackToggle : MonoBehaviour
     }
     #endregion
 
+    #region Destroy
+
+    private void OnDestroy()
+    {
+        DestroyEventListeners();
+    }
+
+    public void DestroyEventListeners()
+    {
+        ItemEvent.PlayerAttackItemPickUp -= NewAttackSwitch;
+    }
+    #endregion
+
     #region Accessors
     public KeyValuePair<AttackName, GameObject> GetCurrentAttack()
     {

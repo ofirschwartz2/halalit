@@ -402,4 +402,10 @@ public class PickupClawTests
 
         AssertWrapper.IsNull(TestUtils.GetPickupClaw(), seed, "Second pickupClaw shot");
     }
+
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
+    }
 }

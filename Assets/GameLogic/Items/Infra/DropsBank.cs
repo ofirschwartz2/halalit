@@ -46,6 +46,19 @@ public class DropsBank : MonoBehaviour
     }
     #endregion
 
+    #region Destroy
+
+    private void OnDestroy()
+    {
+        DestroyEventListeners();
+    }
+
+    public void DestroyEventListeners()
+    {
+        ItemsBankEvent.NoStock -= RemoveDroppable;
+    }
+    #endregion
+
     #region Accessors
     public Dictionary<ItemName, float> GetDrops(Dropper dropper)
     {

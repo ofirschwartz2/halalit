@@ -29,4 +29,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TestingWithManyEnemiesFromRight.unity
     guid: 01674c3ba1808f247a7a963ebf24554d
+  - enabled: 1
+    path: Assets/Scenes/TestingWithAsteroid.unity
+    guid: 144af592135d2d348b30bbe1d0fa9ec3
+  - enabled: 1
+    path: Assets/Scenes/TestingWithManyAsteroidsFromRight.unity
+    guid: c12a280abd69ce14793c45ea43b721a8
   m_configObjects: {}
