@@ -129,6 +129,25 @@ internal static class TestUtils
 
     #region SceneGetters
 
+    internal static int GetScore() 
+    {
+        var halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
+        var score = halalit.GetComponent<Score>();
+        return score.GetScore();
+    }
+
+    internal static ValuableName GetValuableName(GameObject valuable) 
+    {
+        return valuable.GetComponent<Valuable>().GetValuableName();
+    }
+
+    internal static List<KeyValuePair<ValuableName, int>> GetValuableValues() 
+    {
+        var halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
+        var score = halalit.GetComponent<Score>();
+        return score.GetValuableValues();
+    }
+
     internal static HalalitMovement GetHalalitMovement() 
     {
         GameObject halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());

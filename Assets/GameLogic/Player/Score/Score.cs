@@ -1,7 +1,12 @@
 ﻿using Assets.Enums;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
+
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("Tests")]
+#endif
 
 class Score : MonoBehaviour
 {
@@ -43,4 +48,17 @@ class Score : MonoBehaviour
         _score += _valuableValues.Find(valuable => valuable.Key == arguments.Name).Value;
         scoreText.text = "Score: " + _score.ToString();
     }
+
+#if UNITY_EDITOR
+    internal List<KeyValuePair<ValuableName, int>> GetValuableValues()
+    {
+        return _valuableValues;
+    }
+
+    internal int GetScore()
+    {
+        return _score;
+    }
+#endif
+
 }

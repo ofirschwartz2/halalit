@@ -49,7 +49,6 @@ public class EnemiesDestructor : MonoBehaviour
         foreach (var potentialValuableDrop in potentialValuableDrops)
         {
             randomSeededNumber = randomSeededNumbers.PopRandomSeededNumber();
-            Debug.Log(randomSeededNumber);
             if (randomSeededNumber <= potentialValuableDrop.Value)
             {
                 Vector2 dropForce = RandomGenerator.GetInsideUnitCircle() * enemyToKill.transform.localScale.x;

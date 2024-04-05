@@ -1,6 +1,12 @@
 ﻿using Assets.Enums;
 using Assets.Utils;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("Tests")]
+#endif
 
 public abstract class Valuable : MonoBehaviour
 {
@@ -19,4 +25,11 @@ public abstract class Valuable : MonoBehaviour
     {
         ValuableEvent.Invoke(EventName.PLAYER_VALUABLE_PICKUP, initiator, arguments);
     }
+
+#if UNITY_EDITOR
+    internal ValuableName GetValuableName()
+    {
+        return _valuableName;
+    }
+#endif
 }

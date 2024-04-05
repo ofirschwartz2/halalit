@@ -3,6 +3,7 @@ using Assets.Utils;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,7 +17,7 @@ public class ValuablesTests
     private const string SCENE_WITH_MANY_ENEMIES_FROM_RIGHT_NAME = "TestingWithManyEnemiesFromRight";
     private const string SCENE_WITH_ASTEROID_NAME = "TestingWithAsteroid";
     private const string SCENE_WITH_MANY_ASTEROIDS_FROM_RIGHT_NAME = "TestingWithManyAsteroidsFromRight";
-
+    private const string SCENE_WITH_VALUABLES_NAME = "TestingWithValuables";
 
     [SetUp]
     public void SetUp()
@@ -40,7 +41,10 @@ public class ValuablesTests
             case FUNCTION_ASTEROID_SOMETIMES_DROPS_VALUABLE_NAME:
                 SceneManager.LoadScene(SCENE_WITH_MANY_ASTEROIDS_FROM_RIGHT_NAME);
                 break;
-                
+
+            case FUNCTION_VALUABLES_ADD_SCORE_NAME:
+                SceneManager.LoadScene(SCENE_WITH_VALUABLES_NAME);
+                break;
             default:
                 throw new System.Exception("No scene for test: " + testName);
         }
@@ -218,7 +222,38 @@ public class ValuablesTests
         AssertWrapper.Greater(valuables.Length, 0, "No Valuables Dropped", seed);
         AssertWrapper.Greater(originalAsteroidsCount, valuables.Length, "All dropped Valuables", seed);
     }
-    
+
+    private const string FUNCTION_VALUABLES_ADD_SCORE_NAME = "ValuablesAddScore";
+    [UnityTest]
+    public IEnumerator ValuablesAddScore() 
+    {
+        // GIVEN
+        var halalitMovement = TestUtils.GetHalalitMovement();
+        var valuableValues = TestUtils.GetValuableValues();
+        var newValuables = TestUtils.GetValuables();
+        var oldValuables = newValuables;
+        var scoreHistory = new List<int>();
+
+        // WHEN
+        do
+        {
+            halalitMovement.TryMove(Vector2.right.x, Vector2.right.y, Time.deltaTime);
+            newValuables = TestUtils.GetValuables();
+            if (newValuables.Length < oldValuables.Length) 
+            {
+                scoreHistory.Add(TestUtils.GetScore());
+                oldValuables = newValuables;
+            }
+            yield return null;
+
+        } while (newValuables.Length != 0);
+
+        // THEN
+        AssertWrapper.AreEqual(scoreHistory[0], valuableValues.Find(valuableValue => valuableValue.Key == ValuableName.SILVER).Value, "Score Not Added Right");
+        AssertWrapper.AreEqual(scoreHistory[1], scoreHistory[0] + valuableValues.Find(valuableValue => valuableValue.Key == ValuableName.GOLD).Value, "Score Not Added Right");
+        AssertWrapper.AreEqual(scoreHistory[2], scoreHistory[1] + valuableValues.Find(valuableValue => valuableValue.Key == ValuableName.DIAMOND).Value, "Score Not Added Right");
+    }
+
     [TearDown]
     public void TearDown()
     {
