@@ -1,41 +1,52 @@
 ﻿using Assets.Enums;
 using Assets.Utils;
+using System;
 using UnityEngine;
 
-public class PickupClawGrabber : MonoBehaviour
+internal class PickupClawGrabber : MonoBehaviour
 {
     [SerializeField]
     private Rigidbody2D _rigidBody;
     [SerializeField]
-    private PickupClawMovement _pickupClawMovement;
+    private float _radiusToStartGrabbing;
     [SerializeField]
-    private PickupClawState _pickupClawState;
+    private float _grabbingMovementSpeed;
     [SerializeField]
-    private float _grabDelay;
-    
-    private float _grabDelayTimer;
-    private GameObject _item;
+    private float _grabbingRotationTime;
 
-    public void Grab()
+    private float _grabbingRotationTimePassed;
+
+    internal GameObject TryGetItemToGrab()
     {
-        _grabDelayTimer += Time.deltaTime;
-        _pickupClawMovement.MoveToItem(_item.transform.position);
-
-        if (_grabDelayTimer >= _grabDelay)
-        {
-            _item.GetComponent<ItemMovement>().Grabbed(transform);
-            _pickupClawState.Value = PickupClawStateE.MOVING_BACKWARD;
-        }
+        return PickupClawUtils.TryGetClosestGrabbableTarget(transform.position, _radiusToStartGrabbing);
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    internal void GrabTarget(GameObject target)
     {
-        if (other.gameObject.CompareTag(Tag.ITEM.GetDescription()) && _pickupClawState.Value == PickupClawStateE.MOVING_FORWARD)
+        if (target == null)
         {
-            _pickupClawState.Value = PickupClawStateE.GRABBING;
-            _grabDelayTimer = 0;
-            _rigidBody.velocity = Vector2.zero;
-            _item = other.gameObject;
+            throw new Exception("Target is null");
         }
+
+        GrabMoveClaw(target);
+        GrabRotateClaw(target);
+    }
+
+    private void GrabMoveClaw(GameObject target)
+    {
+        var direction = target.transform.position - transform.position;
+        var velocity = direction.normalized * _grabbingMovementSpeed;
+        _rigidBody.velocity = velocity;
+    }
+
+    private void GrabRotateClaw(GameObject target)
+    {
+        _grabbingRotationTimePassed += Time.deltaTime;
+        var direction = Utils.GetRorationOutwards(transform.position, target.transform.position);
+
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            direction,
+            Math.Min(_grabbingRotationTimePassed / _grabbingRotationTime, 1));
     }
 }

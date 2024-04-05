@@ -1,7 +1,9 @@
 {
-    "name": "Model",
+    "name": "Setup",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:303077c3078b6f4489a547cd1be93735"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

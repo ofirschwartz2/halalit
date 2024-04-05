@@ -34,7 +34,7 @@ internal static class TestUtils
     {
         if (seed == 0)
         {
-            seed = Random.Range(int.MinValue, int.MaxValue);
+            seed = RandomGenerator.Range(int.MinValue, int.MaxValue);
         }
         Random.InitState(seed);
         return seed;
@@ -59,15 +59,44 @@ internal static class TestUtils
 
     internal static void SetRandomTargetPosition(float radiusOfTargetPositionAroundHalalit = DEFAULT_RADIUS_OF_TARGET_POSITION_AROUND_HALALIT)
     {
-        TesingWithTargetValidation();
+        TesingWithOneEnemyValidation();
 
-        var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
-        target[0].transform.position = Utils.GetRandomVector2OnCircle(radiusOfTargetPositionAroundHalalit);
+        SetRandomGameObjectPosition(
+            GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription()), 
+            radiusOfTargetPositionAroundHalalit);
+    }
+
+    internal static void SetRandomItemPosition(float radiusOfTargetPositionAroundHalalit = 5)
+    {
+        TesingWithOneItemValidation();
+
+        SetRandomGameObjectPosition(
+            GameObject.FindGameObjectWithTag(Tag.ITEM.GetDescription()), 
+            radiusOfTargetPositionAroundHalalit);
+    }
+
+    internal static void SetItemPosition(Vector2 position) 
+    {
+        TesingWithOneItemValidation();
+
+        SetGameObjectPosition(
+            GameObject.FindGameObjectWithTag(Tag.ITEM.GetDescription()),
+            position);
+    }
+
+    private static void SetRandomGameObjectPosition(GameObject gameObject, float radiusOfTargetPositionAroundHalalit)
+    {
+        gameObject.transform.position = Utils.GetRandomVector2OnCircle(radiusOfTargetPositionAroundHalalit);
+    }
+
+    private static void SetGameObjectPosition(GameObject gameObject, Vector2 position) 
+    {
+        gameObject.transform.position = position;
     }
 
     internal static void RotateTarget(float degrees) 
     {
-        TesingWithTargetValidation();
+        TesingWithOneEnemyValidation();
         var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
         target[0].transform.rotation = Quaternion.Euler(0, 0, degrees);
     }
@@ -75,7 +104,61 @@ internal static class TestUtils
 
     #endregion
 
-    #region Scene Getters
+    #region SceneGetters
+
+    internal static HalalitMovement GetHalalitMovement() 
+    {
+        GameObject halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
+        return halalit.GetComponent<HalalitMovement>();
+    }
+
+    internal static ItemDropper GetItemDropper() 
+    {
+        var itemsFactory = GameObject.FindGameObjectWithTag(Tag.ITEMS_FACTORY.GetDescription());
+        return itemsFactory.GetComponent<ItemDropper>();
+    }
+
+    internal static GameObject GetAttackJoystick()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.ATTACK_JOYSTICK.GetDescription());
+    }
+
+    internal static GameObject GetMovementJoystick()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.MOVEMENT_JOYSTICK.GetDescription());
+    }
+
+    internal static GameObject GetPickupClaw()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.PICKUP_CLAW.GetDescription());
+    }
+
+    internal static GameObject GetItem()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.ITEM.GetDescription());
+    }
+
+    internal static GameObject[] GetItems()
+    {
+        return GameObject.FindGameObjectsWithTag(Tag.ITEM.GetDescription());
+    }
+
+    internal static PickupClawShooter GetPickupClawShooter()
+    {
+        var pickupClawShooter = GameObject.FindGameObjectWithTag(Tag.PICKUP_CLAW_SHOOTER.GetDescription());
+        return pickupClawShooter.GetComponent<PickupClawShooter>();
+    }
+
+    internal static float GetPickupClawManeuverRadius()
+    {
+        return GetPickupClawShooter().GetPickupClawPrefab().GetComponent<PickupClawStateMachine>().GetPickupClawManeuverRadius();
+    }
+
+    internal static PickupClawStateMachine GetPickupClawStateMachine(GameObject pickupClaw)
+    {
+        return pickupClaw.GetComponent<PickupClawStateMachine>();
+    }
+
     internal static WeaponAttack GetWeaponAttack()
     {
         var weapon = GameObject.FindGameObjectWithTag(Tag.WEAPON.GetDescription());
@@ -101,44 +184,48 @@ internal static class TestUtils
                 .GetComponent<BoxCollider2D>();
     }
 
-    //TesingWithTarget Scene
     internal static Vector2 GetTargetPosition()
     {
-        TesingWithTargetValidation();
+        TesingWithOneEnemyValidation();
 
         var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
         return target.transform.position;
     }
 
+    internal static Vector2 GetItemPosition()
+    {
+        TesingWithOneItemValidation();
+
+        var item = GameObject.FindGameObjectWithTag(Tag.ITEM.GetDescription());
+        return item.transform.position;
+    }
+
     internal static Vector2 GetTargetMovementDirection()
     {
-        TesingWithTargetValidation();
+        TesingWithOneEnemyValidation();
         var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
         return target.GetComponent<Rigidbody2D>().velocity.normalized;
     }
     internal static Vector2 GetTargetNearestPositionToHalalit()
     {
-        TesingWithTargetValidation();
+        TesingWithOneEnemyValidation();
         var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
         return GetNearestPositionToHalalit(target);
     }
 
     internal static float GetTargetHealth()
     {
-        TesingWithTargetValidation();
+        TesingWithOneEnemyValidation();
         var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
         return target.GetComponent<Health>().GetHealth();
     }
-    //TesingWithTarget Scene
 
-    //TestingForBounces Scene
     internal static List<int> GetAllTargetsHealth()
     {
         TesingWithMultipleTargetValidation();
         var targets = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription()).ToList();
         return targets.Select(target => target.GetComponent<Health>().GetHealth()).ToList();
     }
-    //TestingForBounces Scene
 
     internal static Vector2 GetNearestPositionToHalalit(GameObject gameObject)
     {
@@ -151,7 +238,7 @@ internal static class TestUtils
     #region Joystick Touchs
     internal static Vector2 GetRandomTouch()
     {
-        return new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+        return new Vector2(RandomGenerator.Range(-1f, 1f, true), RandomGenerator.Range(-1f, 1f, true));
     }
 
     internal static Vector2 GetRandomTouchUnderAttackTrigger(WeaponAttack weaponAttack)
@@ -159,7 +246,7 @@ internal static class TestUtils
         Vector2 randomTouch;
         do
         {
-            randomTouch = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+            randomTouch = new Vector2(RandomGenerator.Range(-1f, 1f, true), RandomGenerator.Range(-1f, 1f, true));
         } while (randomTouch.magnitude >= weaponAttack.GetAttackJoystickEdge());
 
         return randomTouch;
@@ -170,7 +257,7 @@ internal static class TestUtils
         Vector2 randomTouch;
         do
         {
-            randomTouch = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+            randomTouch = new Vector2(RandomGenerator.Range(-1f, 1f, true), RandomGenerator.Range(-1f, 1f, true));
         } while (randomTouch.magnitude < attackJoystickEdge);
 
         return randomTouch;
@@ -205,10 +292,19 @@ internal static class TestUtils
     #endregion
 
     #region Validations
-    internal static void TesingWithTargetValidation()
+    internal static void TesingWithOneEnemyValidation()
     {
-        var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
-        if (target.Length != 1)
+        var enemy = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
+        if (enemy.Length != 1)
+        {
+            throw new System.Exception("There should be only one target in the scene");
+        }
+    }
+
+    internal static void TesingWithOneItemValidation()
+    {
+        var item = GameObject.FindGameObjectsWithTag(Tag.ITEM.GetDescription());
+        if (item.Length != 1)
         {
             throw new System.Exception("There should be only one target in the scene");
         }

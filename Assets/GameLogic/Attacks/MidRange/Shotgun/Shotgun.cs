@@ -21,7 +21,7 @@ public class Shotgun : MonoBehaviour
 
     void Start()
     {
-        InstantiateShots((int)Random.Range(_numberOfShots.min, _numberOfShots.max + 1), _range);
+        InstantiateShots((int)RandomGenerator.Range(_numberOfShots.min, _numberOfShots.max + 1), _range);
         _endOfLifeTime = Time.time + _lifeTime;
     }
 
@@ -54,9 +54,5 @@ public class Shotgun : MonoBehaviour
         return _range;
     }
 
-    internal float GetLifetime()
-    {
-        return _lifeTime;
-    }
 #endif
 }

@@ -105,7 +105,7 @@ public class KnockbackWaveTests
         TestUtils.SetUpShot(AttackName.KNOCKBACK_WAVE);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
-        TestUtils.SetRandomTargetPosition();
+        TestUtils.SetRandomEnemyPosition();
         var originalTargetHealth = TestUtils.GetTargetHealth();
         yield return null;
         var targetClosestPositionBeforeHit = TestUtils.GetTargetNearestPositionToHalalit();

@@ -62,6 +62,7 @@ namespace Assets.Utils
             return angle;
         }
 
+        // DELETE. use Vector2.Distance(point1, point2)
         public static float GetDistanceBetweenTwoPoints(Vector2 point1, Vector2 point2)
         {
             float deltaX = Math.Abs(point1.x - point2.x);
@@ -77,7 +78,7 @@ namespace Assets.Utils
 
         public static Vector2 GetRandomVector(float minX, float maxX, float minY, float maxY)
         {
-            return new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+            return new Vector2(RandomGenerator.Range(minX, maxX), RandomGenerator.Range(minY, maxY));
         }
         
         
@@ -103,15 +104,15 @@ namespace Assets.Utils
 
         public static Vector3 Get180RandomNormalizedVector(Vector3 generalDirection)
         {
-            float newX = AngleNormalizationBy1(generalDirection.x + Random.Range(-1f, 1f));
-            float newY = AngleNormalizationBy1(generalDirection.y + Random.Range(-1f, 1f));
+            float newX = AngleNormalizationBy1(generalDirection.x + RandomGenerator.Range(-1f, 1f));
+            float newY = AngleNormalizationBy1(generalDirection.y + RandomGenerator.Range(-1f, 1f));
 
             return new Vector3(newX, newY);
         }
 
         public static bool IsTrueIn50Precent()
         {
-            return Random.Range(0, 2) == 0;
+            return RandomGenerator.Range(0, (float)2) == 0;
         }
 
         public static Vector2 ShiftVectorByOffsetDegree(Vector2 vector, float offsetDegrees)
@@ -141,12 +142,12 @@ namespace Assets.Utils
 
         public static float GetRandomAngleAround(float range)
         {
-            return UnityEngine.Random.Range(-range, range);
+            return RandomGenerator.Range(-range, range);
         }
 
         public static float GetRandomBetween(float bottom, float top)
         {
-            return UnityEngine.Random.Range(bottom, top);
+            return RandomGenerator.Range(bottom, top);
         }
 
         public static float GetEndOfLifeTime(float lifetime)
@@ -161,6 +162,12 @@ namespace Assets.Utils
         #endregion
 
         #region Vectors
+
+        public static Vector2 GetOppositeVector(Vector2 vector)
+        {
+            return new Vector2(-vector.x, -vector.y);
+        }
+
         public static Vector2 GetDestinationPosition(Vector2 startPosition, Vector2 rotation, float distance) // TODO: move to Utils
         {
             float angleInRadians = Vector2ToRadians(rotation);
@@ -173,7 +180,7 @@ namespace Assets.Utils
 
         public static Vector2 GetRandomVector2OnCircle(float radius = 1)
         {
-            float angle = Random.Range(0, 2 * Mathf.PI);
+            float angle = RandomGenerator.Range(0, 2 * Mathf.PI, false);
             return RadianToVector2(angle) * radius;
         }
 
@@ -237,17 +244,21 @@ namespace Assets.Utils
             return GetHalalitTransform().position;
         }
 
+        #endregion
+
+        #region Quaternions
+
         public static Vector2 GetRotationAsVector2(Quaternion rotation)
         {
-            rotation = rotation * Quaternion.Euler(0f, 0f, 90f); //TODO: talk w Amir
+            // This is because we use sprites that are ritated 'UP' - 90 degrees. If we want we can decide to rotate all sprites 'RIGHT' - 0 degrees.
+            var upQuaternion = Quaternion.Euler(0f, 0f, 90f);
+            // This is because we use sprites that are ritated 'UP' - 90 degrees. If we want we can decide to rotate all sprites 'RIGHT' - 0 degrees.
+
+            rotation = rotation * upQuaternion;
             float angle = rotation.eulerAngles.z;
             float angleRadians = angle * Mathf.Deg2Rad;
             return RadianToVector2(angleRadians);
         }
-
-        #endregion
-
-        #region Quaternions
 
         public static Quaternion GetRotationPlusAngle(Quaternion rotation, float angle)
         {
@@ -260,6 +271,12 @@ namespace Assets.Utils
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
             return GetRotationPlusAngle(Quaternion.identity, angle);
         }
+
+        public static float QuaternionToDegrees(Quaternion rotation)
+        {
+            return Vector2ToDegrees(GetRotationAsVector2(rotation));
+        }
+
         #endregion
 
         #region BezierCurves
@@ -300,7 +317,7 @@ namespace Assets.Utils
 
         public static Direction GetRandomDirection()
         {
-            return (Direction)Random.Range(0, Enum.GetValues(typeof(Direction)).Length);
+            return (Direction)RandomGenerator.Range(0, Enum.GetValues(typeof(Direction)).Length, true);
         }
         #endregion
 
@@ -319,6 +336,18 @@ namespace Assets.Utils
         {
             return Time.time >= endOfLifeTime;
         }
+
+        public static bool Are2VectorsAlmostEqual(Vector2 a, Vector2 b, float delta = 0.001f)
+        {
+            return Vector2.Distance(a, b) <= delta;
+        }
+
+        public static bool IsCloserClockwise(float degreeFrom, float degreeTo) 
+        {
+            var a = degreeTo > degreeFrom ? degreeTo - degreeFrom > 180 : degreeFrom - degreeTo < 180;
+            return a;
+        }
+
         #endregion
 
         #region Lists
@@ -327,10 +356,20 @@ namespace Assets.Utils
             for (int i = 0; i < list.Count; i++)
             {
                 var temp = list[i];
-                var randomIndex = Random.Range(i, list.Count);
+                var randomIndex = RandomGenerator.Range(i, list.Count, true);
                 list[i] = list[randomIndex];
                 list[randomIndex] = temp;
             }
+        }
+        #endregion
+
+        #region Visuals
+        public static void ChangeOpacity(Renderer renderer, float opacity) 
+        {
+            Material mat = renderer.material;
+            Color color = mat.color;
+            color.a = opacity;
+            mat.color = color;
         }
         #endregion
     }

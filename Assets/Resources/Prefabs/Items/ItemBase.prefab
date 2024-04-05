@@ -179,7 +179,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidBody: {fileID: 8896609280045205352}
   _maxRotation: 2
-  _transparencyPeriod: 2
+  _baseOpacity: 0.9
+  _transparencyPeriodDuration: 0.5
+  _grabbedOpacity: 0.75
 --- !u!114 &-7402078327755545006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,7 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 745c6d62ce5ded946b6f200dea476ec4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemDto:
+  itemStats:
     rid: -2
   references:
     version: 2
