@@ -114,7 +114,7 @@ public class LaserBeamTests
         var weaponAttack = TestUtils.GetWeaponAttack();
         var acceptedDelta = 0.5f;
 
-        TestUtils.SetRandomEnemyPosition();
+        TestUtils.SetRandomTargetPosition();
         var originalTargetHealth = TestUtils.GetTargetHealth();
         yield return null;
         var targetNearestPosition = TestUtils.GetTargetNearestPositionToHalalit();

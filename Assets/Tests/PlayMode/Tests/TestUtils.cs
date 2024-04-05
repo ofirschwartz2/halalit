@@ -51,8 +51,6 @@ internal static class TestUtils
     //TesingWithTarget Scene
     internal static void SetTargetPosition(Vector2 targetPosition)
     {
-        TesingWithTargetValidation();
-
         var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
         target[0].transform.position = targetPosition;
     }

@@ -98,7 +98,7 @@ public class MirrorBallShotTests
         TestUtils.SetUpShot(AttackName.MIRROR_BALL_SHOT);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
-        TestUtils.SetRandomEnemyPosition();
+        TestUtils.SetRandomTargetPosition();
         var originalTargetHealth = TestUtils.GetTargetHealth();
         yield return null;
         var targetClosestPosition = TestUtils.GetTargetNearestPositionToHalalit();
