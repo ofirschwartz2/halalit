@@ -1,11 +1,9 @@
 ﻿using Assets.Enums;
 using Assets.Utils;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -154,13 +152,13 @@ class Health : MonoBehaviour
                 other.GetComponent<TriggerHarmer>() :
                 other.GetComponentInParent<TriggerHarmer>();
 
-            HandleTriggerHarmer(triggerHarmer);
+            HandleTriggerHarmer(other, triggerHarmer);
         }
     }
 
-    private void HandleTriggerHarmer(TriggerHarmer triggerHarmer)
+    private void HandleTriggerHarmer(GameObject target, TriggerHarmer triggerHarmer)
     {
-        int harm = triggerHarmer.GetTriggerHarm();
+        int harm = triggerHarmer.GetTriggerHarm(target);
         ChangeHealth(-harm);
     }
 

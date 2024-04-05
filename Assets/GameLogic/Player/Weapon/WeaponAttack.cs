@@ -19,7 +19,7 @@ class WeaponAttack : MonoBehaviour
     [SerializeField]
     private GameObject _projectiles;
     [SerializeField]
-    private float _cooldownInterval;
+    private float _cooldownMultiplier;
     [SerializeField]
     private float _attackJoystickEdge;
     [SerializeField]
@@ -72,7 +72,7 @@ class WeaponAttack : MonoBehaviour
 #else
     private
 #endif
-    void HumbleFixedUpdate(Vector2 attackJoystickTouch)
+    bool HumbleFixedUpdate(Vector2 attackJoystickTouch)
     {
         // TODO (refactor): this should be via event raise, not in update
         KeyValuePair<AttackName, GameObject> attackPrefab = _attackToggle.GetCurrentAttack();
@@ -81,22 +81,22 @@ class WeaponAttack : MonoBehaviour
         AttackShotType shotType = attackPrefab.Value.GetComponent<AttackBehaviour>().ShotType;
         // TODO (refactor): this should be via event raise, not in update
 
-        TryAttack(attackJoystickTouch, attackPrefab.Value, shotType);
+        return TryAttack(attackJoystickTouch, attackPrefab.Value, shotType);
     }
 
-    private void TryAttack(Vector2 attackJoystickTouch, GameObject attackPrefab, AttackShotType shotType)
+    private bool TryAttack(Vector2 attackJoystickTouch, GameObject attackPrefab, AttackShotType shotType)
     {
         if (shotType == AttackShotType.DESCRETE)
         {
-            TryDescreteAttack(attackJoystickTouch, attackPrefab);
+            return TryDescreteAttack(attackJoystickTouch, attackPrefab);
         }
-        else if (shotType == AttackShotType.CONSECUTIVE)
+        else
         {
-            TryConsecutiveAttack(attackJoystickTouch, attackPrefab);
+            return TryConsecutiveAttack(attackJoystickTouch, attackPrefab);
         }
     }
 
-    private void TryDescreteAttack(Vector2 attackJoystickTouch, GameObject attackPrefab)
+    private bool TryDescreteAttack(Vector2 attackJoystickTouch, GameObject attackPrefab)
     {
         if (ShouldAttack(attackJoystickTouch) && IsCoolDownPassed())
         {
@@ -106,16 +106,19 @@ class WeaponAttack : MonoBehaviour
             }
 
             InstantiateDescreteAttack(attackPrefab);
+            return true;
         }
+
+        return false;
     }
 
     private void InstantiateDescreteAttack(GameObject attackPrefab)
     {
         Instantiate(attackPrefab, transform.position, transform.rotation, _projectiles.transform);
-        _cooldownTime = Time.time + _cooldownInterval; 
+        _cooldownTime = Time.time + _currentAttack.Value.Rate * _cooldownMultiplier; 
     }
 
-    private void TryConsecutiveAttack(Vector2 attackJoystickTouch, GameObject attackPrefab)
+    private bool TryConsecutiveAttack(Vector2 attackJoystickTouch, GameObject attackPrefab)
     {
         if (ShouldAttack(attackJoystickTouch))
         {
@@ -137,6 +140,8 @@ class WeaponAttack : MonoBehaviour
             {
                 UpdateConsecitiveAttack();
             }
+
+            return true;
         }
 
         if (!ShouldAttack(attackJoystickTouch) && _shootingConsecutivaly)
@@ -144,6 +149,8 @@ class WeaponAttack : MonoBehaviour
             StopConsecutiveAttack();
             RemoveConsecutiveAttack();
         }
+
+        return false;
     }
 
     private void RemoveConsecutiveAttack()
@@ -186,7 +193,7 @@ class WeaponAttack : MonoBehaviour
 
     private void UpgradeCooldownInterval(Dictionary<EventProperty, float> properties)
     {
-        _cooldownInterval -= properties[EventProperty.WEAPON_COOLDOWN_MULTIPLIER_SUBTRUCTION];
+        _cooldownMultiplier -= properties[EventProperty.WEAPON_COOLDOWN_MULTIPLIER_SUBTRUCTION];
         Debug.Log("Weapon stamina upgraded");
     } 
     #endregion
@@ -217,8 +224,7 @@ class WeaponAttack : MonoBehaviour
 
     internal float GetCooldownInterval()
     {
-        return _cooldownInterval;
+        return _cooldownMultiplier;
     }
 #endif
-
 }

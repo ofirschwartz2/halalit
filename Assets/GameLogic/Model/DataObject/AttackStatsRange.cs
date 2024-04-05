@@ -23,7 +23,7 @@ public class AttackStatsRange
         int power = Random.Range((int)Power.min, (int)Power.max + 1);
         float criticalHit = Random.Range(CriticalHit.min, CriticalHit.max);
         float luck = Random.Range(Luck.min, Luck.max);
-        float rate = Random.Range(Rate.min, Rate.max);
+        float rate = (float) Math.Round(Random.Range(Rate.min, Rate.max), 2);
         float weight = Random.Range(Weight.min, Weight.max);
 
         return new AttackStats(_itemRank, power, criticalHit, luck, rate, weight);
