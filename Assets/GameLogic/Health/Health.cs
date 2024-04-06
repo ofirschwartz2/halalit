@@ -175,7 +175,7 @@ class Health : MonoBehaviour
 
     private void HandleTriggerHarmer(GameObject target, TriggerHarmer triggerHarmer)
     {
-        int harm = triggerHarmer.GetTriggerHarm();
+        int harm = triggerHarmer.GetTriggerHarm(target);
         TryChangeHealth(-harm);
     }
 
