@@ -49,13 +49,14 @@ public class ValuablesTests
         // GIVEN
         var seed = TestUtils.SetRandomSeed();
         TestUtils.SetEnemiesSeededNumbers();
+        TestUtils.SetUpShot(AttackName.BALL_SHOT);
 
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomEnemyPosition();
+        TestUtils.SetEnemiesHealth(1);
         yield return new WaitForSeconds(1);
 
-        TestUtils.SetEnemiesHealth(1);
         var targetClosestPosition = TestUtils.GetEnemyNearestPositionToHalalit();
         var acceptedDelta = 0.5f;
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, weaponAttack.GetAttackJoystickEdge());
@@ -99,6 +100,7 @@ public class ValuablesTests
         var seed = TestUtils.SetRandomSeed();
         TestUtils.SetEnemiesSeededNumbers();
         TestUtils.SetEnemiesHealth(1);
+        TestUtils.SetUpShot(AttackName.BALL_SHOT);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         yield return new WaitForSeconds(1);
@@ -132,12 +134,12 @@ public class ValuablesTests
         // GIVEN
         var seed = TestUtils.SetRandomSeed();
         //TestUtils.SetAsteroidsSeededNumbers(); // TODO: Fix this
-
+        TestUtils.SetUpShot(AttackName.BALL_SHOT);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomAsteroidPosition();
-        yield return new WaitForSeconds(1);
         TestUtils.SetAsteroidsHealth(1);
+        yield return new WaitForSeconds(1);
 
         var targetClosestPosition = TestUtils.GetAsteroidNearestPositionToHalalit();
         var acceptedDelta = 0.5f;
@@ -180,6 +182,7 @@ public class ValuablesTests
     {
         // GIVEN
         var seed = TestUtils.SetRandomSeed();
+        TestUtils.SetUpShot(AttackName.BALL_SHOT);
         //TestUtils.SetAsteroidsSeededNumbers(); // TODO: Fix this
         TestUtils.SetAsteroidsHealth(1);
         var weaponMovement = TestUtils.GetWeaponMovement();

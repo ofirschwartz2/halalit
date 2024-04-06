@@ -92,4 +92,10 @@ public class PowerTests
         var newTargetHealth = TestUtils.GetEnemyHealth();
         AssertWrapper.AreEqual(_originalTargetHealth - attackStats.Power * consecutiveHitsCount, newTargetHealth, "Target Health Didn't drop correctly", _currentSeed);
     }
+
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
+    }
 }

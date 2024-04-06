@@ -116,7 +116,8 @@ public class LaserBeamTests
 
         TestUtils.SetRandomEnemyPosition();
         var originalTargetHealth = TestUtils.GetEnemyHealth();
-        yield return null;
+        yield return new WaitForSeconds(1);
+
         var targetNearestPosition = TestUtils.GetEnemyNearestPositionToHalalit();
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetNearestPosition, weaponAttack.GetAttackJoystickEdge());
 
