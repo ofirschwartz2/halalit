@@ -1340,6 +1340,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+--- !u!1 &709582701 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2929252283123773939, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+  m_PrefabInstance: {fileID: 709582700}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &737901647
 GameObject:
   m_ObjectHideFlags: 0
@@ -2378,7 +2383,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2929252283123773951, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
   m_PrefabInstance: {fileID: 1350869345}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1350869346}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45977bbae16431c46a013576a1aea384, type: 3}
@@ -2396,7 +2401,7 @@ GameObject:
   - component: {fileID: 1115091192}
   m_Layer: 9
   m_Name: Pickup Claw Shooter
-  m_TagString: Untagged
+  m_TagString: PickupClawShooter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2431,7 +2436,9 @@ MonoBehaviour:
   _targetFindingCircleRadius: 2
   _pickupClawPrefab: {fileID: 3691832589614287265, guid: b0e242514fc11984eac41f4fa4721f7d, type: 3}
   _halalit: {fileID: 2130719621}
-  _joysticks: []
+  _joysticks:
+  - {fileID: 1350869346}
+  - {fileID: 709582701}
 --- !u!1 &1125677064 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5212479352641103145, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
@@ -2782,7 +2789,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2929252283123773951, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
   m_PrefabInstance: {fileID: 709582700}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 709582701}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45977bbae16431c46a013576a1aea384, type: 3}
@@ -2933,6 +2940,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+--- !u!1 &1350869346 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2929252283123773939, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+  m_PrefabInstance: {fileID: 1350869345}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1351303701
 GameObject:
   m_ObjectHideFlags: 0

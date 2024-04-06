@@ -15,10 +15,10 @@ EditorBuildSettings:
     path: Assets/TextMesh Pro/Scenes_DELETE/Testing_DELETE.unity
     guid: ac6f457af5572074d990012dc7e19522
   - enabled: 1
-    path: Assets/TextMesh Pro/Scenes_DELETE/TestingForBounces.unity
+    path: Assets/TextMesh Pro/Scenes_DELETE/TestingForBounces_DELETE.unity
     guid: fb98a70128a24e9478fa70d52188197d
   - enabled: 1
-    path: Assets/TextMesh Pro/Scenes_DELETE/TestingWithOneItem.unity
+    path: Assets/TextMesh Pro/Scenes_DELETE/TestingWithOneItem_DELETE.unity
     guid: a866feb42ad80fe40a7b2612cb7ec946
   - enabled: 1
     path: Assets/Scenes/Testing.unity
@@ -38,4 +38,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TestingWithValuables.unity
     guid: 43ea6881b1c395d479cc5ff88eca4476
+  - enabled: 1
+    path: Assets/Scenes/TestingForBounces.unity
+    guid: 64e8c8191441a174fb8f4a21f3c31af7
+  - enabled: 1
+    path: Assets/Scenes/TestingWithOneItem.unity
+    guid: b452cc5f4c5ad7a46a133c3594fd941b
   m_configObjects: {}
