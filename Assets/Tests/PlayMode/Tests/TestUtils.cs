@@ -1,5 +1,6 @@
 using Assets.Enums;
 using Assets.Utils;
+using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -460,24 +461,23 @@ internal static class TestUtils
     {
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
         Vector2 lastShotPosition;
-        Vector2 newLastShotPosition;
         int hits = 0;
-        float nextCooldownTime = 0;
-
+        float newHealth = GetEnemyHealth();
+        float lastEnemyHealth = newHealth;
         do
         {
+            lastEnemyHealth = GetEnemyHealth();
             lastShotPosition = shot.GetComponent<LineRenderer>().GetPosition(1);
             weaponAttack.HumbleFixedUpdate(attackJoystickTouch);
             yield return null;
 
-            newLastShotPosition = shot.GetComponent<LineRenderer>().GetPosition(1);
-            if (newLastShotPosition == lastShotPosition && CooldownPassed(nextCooldownTime))
+            newHealth = GetEnemyHealth();
+            if (newHealth < lastEnemyHealth)
             {
                 hits++;
-                nextCooldownTime = Time.time + attackCooldown;
             }
         }
-        while (newLastShotPosition != lastShotPosition || hits != expectedHits);
+        while (hits != expectedHits);
 
         yield return lastShotPosition;
     }

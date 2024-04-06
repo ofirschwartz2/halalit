@@ -37,12 +37,14 @@ public class PowerTests
     public IEnumerator AttackWithDescreteWeaponTest([ValueSource(nameof(_statsValues))] AttackStats attackStats)
     {
         // GIVEN
-        TestUtils.SetUpShot(AttackName.BALL_SHOT);
+        TestUtils.SetUpShot(AttackName.BALL_SHOT, attackStats);
         TestUtils.SetEnemiesSeededNumbers();
         yield return null;
 
         TestUtils.SetTargetPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
         LoadAttackTestData();
+
+        yield return new WaitForSeconds(1f);
 
         // WHEN
         _weaponMovement.TryChangeWeaponPosition(_attackJoystickTouch);
@@ -53,10 +55,13 @@ public class PowerTests
 
         IEnumerator coroutine = TestUtils.GetDescreteShotPositionHittingTarget();
 
-        while (coroutine.MoveNext())
+
+        do
         {
-            yield return null; 
-        }
+            yield return null;
+        } while (coroutine.MoveNext());
+
+        yield return new WaitForSeconds(1f);
 
         // THEN
         var newTargetHealth = TestUtils.GetEnemyHealth();
@@ -74,6 +79,8 @@ public class PowerTests
         TestUtils.SetTargetPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
         LoadAttackTestData();
 
+        yield return new WaitForSeconds(1f);
+
         // WHEN
         _weaponMovement.TryChangeWeaponPosition(_attackJoystickTouch);
         yield return null;
@@ -87,6 +94,7 @@ public class PowerTests
         {
             yield return null;
         }
+
 
         // THEN
         var newTargetHealth = TestUtils.GetEnemyHealth();
