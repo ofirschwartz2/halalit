@@ -49,13 +49,13 @@ public class ValuablesTests
         // GIVEN
         var seed = TestUtils.SetRandomSeed();
         TestUtils.SetEnemiesSeededNumbers();
-        TestUtils.SetEnemiesHealth(1);
 
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomEnemyPosition();
         yield return new WaitForSeconds(1);
 
+        TestUtils.SetEnemiesHealth(1);
         var targetClosestPosition = TestUtils.GetEnemyNearestPositionToHalalit();
         var acceptedDelta = 0.5f;
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, weaponAttack.GetAttackJoystickEdge());
@@ -132,12 +132,12 @@ public class ValuablesTests
         // GIVEN
         var seed = TestUtils.SetRandomSeed();
         //TestUtils.SetAsteroidsSeededNumbers(); // TODO: Fix this
-        TestUtils.SetAsteroidsHealth(1);
 
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomAsteroidPosition();
         yield return new WaitForSeconds(1);
+        TestUtils.SetAsteroidsHealth(1);
 
         var targetClosestPosition = TestUtils.GetAsteroidNearestPositionToHalalit();
         var acceptedDelta = 0.5f;
