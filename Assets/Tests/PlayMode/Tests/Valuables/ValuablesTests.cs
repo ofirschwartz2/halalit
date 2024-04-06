@@ -3,8 +3,6 @@ using Assets.Utils;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
@@ -56,7 +54,7 @@ public class ValuablesTests
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomEnemyPosition();
-        yield return null;
+        yield return new WaitForSeconds(1);
 
         var targetClosestPosition = TestUtils.GetEnemyNearestPositionToHalalit();
         var acceptedDelta = 0.5f;
@@ -85,11 +83,7 @@ public class ValuablesTests
             shot = TestUtils.GetShot();
         } while (shot != null);
 
-        yield return null;
-        yield return null;
-        yield return null;
-        yield return null;
-        yield return null;
+        yield return new WaitForSeconds(1);
 
         // THEN
         AssertWrapper.IsNull(TestUtils.GetEnemy(), seed);
@@ -107,7 +101,7 @@ public class ValuablesTests
         TestUtils.SetEnemiesHealth(1);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
-        yield return null;
+        yield return new WaitForSeconds(1);
 
         var enemies = TestUtils.GetEnemies();
         var originalEnemiesCount = enemies.Length;
@@ -143,7 +137,7 @@ public class ValuablesTests
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomAsteroidPosition();
-        yield return null;
+        yield return new WaitForSeconds(1);
 
         var targetClosestPosition = TestUtils.GetAsteroidNearestPositionToHalalit();
         var acceptedDelta = 0.5f;
@@ -172,11 +166,7 @@ public class ValuablesTests
             shot = TestUtils.GetShot();
         } while (shot != null);
 
-        yield return null;
-        yield return null;
-        yield return null;
-        yield return null;
-        yield return null;
+        yield return new WaitForSeconds(1);
 
         // THEN
         AssertWrapper.IsNull(TestUtils.GetAsteroid(), seed);
@@ -194,7 +184,7 @@ public class ValuablesTests
         TestUtils.SetAsteroidsHealth(1);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
-        yield return null;
+        yield return new WaitForSeconds(1);
 
         var asteroids = TestUtils.GetAsteroids();
         var originalAsteroidsCount = asteroids.Length;
@@ -227,6 +217,7 @@ public class ValuablesTests
         var newValuables = TestUtils.GetValuables();
         var oldValuables = newValuables;
         var scoreHistory = new List<int>();
+        yield return new WaitForSeconds(1);
 
         // WHEN
         do

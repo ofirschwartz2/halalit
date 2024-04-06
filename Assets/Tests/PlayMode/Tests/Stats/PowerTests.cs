@@ -38,6 +38,7 @@ public class PowerTests
     {
         // GIVEN
         TestUtils.SetUpShot(AttackName.BALL_SHOT);
+        TestUtils.SetEnemiesSeededNumbers();
         yield return null;
 
         TestUtils.SetTargetPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
@@ -67,6 +68,7 @@ public class PowerTests
     {
         // GIVEN
         TestUtils.SetUpShot(AttackName.LASER_BEAM, attackStats);
+        TestUtils.SetEnemiesSeededNumbers();
         yield return null;
 
         TestUtils.SetTargetPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
