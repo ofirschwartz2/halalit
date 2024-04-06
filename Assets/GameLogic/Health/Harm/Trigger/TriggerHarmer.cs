@@ -2,5 +2,5 @@
 
 abstract class TriggerHarmer : MonoBehaviour
 {
-    public abstract int GetTriggerHarm();
+    public abstract int GetTriggerHarm(GameObject target);
 } 

@@ -24,7 +24,7 @@ public class AttackStatsRange
         int power = RandomGenerator.Range((int)Power.min, (int)Power.max + 1, true);
         float criticalHit = RandomGenerator.Range(CriticalHit.min, CriticalHit.max, true);
         float luck = RandomGenerator.Range(Luck.min, Luck.max, true);
-        float rate = RandomGenerator.Range(Rate.min, Rate.max, true);
+        float rate = (float)Math.Round(RandomGenerator.Range(Rate.min, Rate.max, true), 2);
         float weight = RandomGenerator.Range(Weight.min, Weight.max, true);
 
         return new AttackStats(_itemRank, power, criticalHit, luck, rate, weight);

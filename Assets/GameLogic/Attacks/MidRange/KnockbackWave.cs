@@ -24,7 +24,6 @@ class KnockbackWave : MonoBehaviour
 
     void Start()
     {
-        
         _endOfLifeTime = Utils.GetEndOfLifeTime(_lifetime);
         _rigidBody.velocity = transform.up * _speed;
     }

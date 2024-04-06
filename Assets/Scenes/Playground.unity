@@ -1438,10 +1438,10 @@ MonoBehaviour:
   _halalit: {fileID: 2130719621}
   _attackJoystick: {fileID: 1115015985}
   _projectiles: {fileID: 752615852}
-  _cooldownInterval: 0.5
+  _cooldownMultiplier: 1
   _attackJoystickEdge: 0.8
   _currentAttack:
-    Key: 8
+    Key: 0
     Value:
       _itemRank: 0
       Power: 1
@@ -1513,7 +1513,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6b124fbb6d5e0148884d8a70c8e4981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firstAttack: 8
+  _firstAttack:
+    Key: 2
+    Value:
+      _itemRank: 0
+      Power: 1
+      CriticalHit: 0
+      Luck: 0
+      Rate: 0.5
+      Weight: 0
 --- !u!1 &814139006
 GameObject:
   m_ObjectHideFlags: 0
@@ -2212,9 +2220,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d17c811e34ed0bd488cc4dce1c117cd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _targetFindingCircleRadius: 2
-  _pickupClawPrefab: {fileID: 3691832589614287265, guid: b0e242514fc11984eac41f4fa4721f7d, type: 3}
-  _halalit: {fileID: 2130719621}
+  _targetFindingCircleRadius: 0
+  _pickupClawPrefab: {fileID: 0}
+  _halalit: {fileID: 0}
   _joysticks: []
 --- !u!1 &1125677064 stripped
 GameObject:
@@ -3144,8 +3152,8 @@ MonoBehaviour:
     Stock: []
   - ItemName: 16
     GameObject: {fileID: 6531215755768581467, guid: 16ebd1bad861a974297f9407b5e67dbe, type: 3}
-    MaxStock: 7
-    MinimumInitialStock: 5
+    MaxStock: 3
+    MinimumInitialStock: 1
     Stock: []
   - ItemName: 11
     GameObject: {fileID: 29822001511814079, guid: 58133c84bb7526c46ac5ea26534c6156, type: 3}
@@ -3274,8 +3282,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.45
+        max: 0.5
       Weight:
         min: 0
         max: 0
@@ -3290,8 +3298,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.42
+        max: 0.47
       Weight:
         min: 0
         max: 0
@@ -3306,8 +3314,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.4
+        max: 0.45
       Weight:
         min: 0
         max: 0
@@ -3322,8 +3330,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.38
+        max: 0.42
       Weight:
         min: 0
         max: 0
@@ -3338,8 +3346,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.37
+        max: 0.41
       Weight:
         min: 0
         max: 0
@@ -3354,8 +3362,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.35
+        max: 0.4
       Weight:
         min: 0
         max: 0
@@ -3371,14 +3379,14 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.4
+        max: 0.5
       Weight:
         min: 0
         max: 0
     UncommonStats:
       Power:
-        min: 2
+        min: 1
         max: 3
       CriticalHit:
         min: 0
@@ -3387,14 +3395,14 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.35
+        max: 0.45
       Weight:
         min: 0
         max: 0
     RareStats:
       Power:
-        min: 3
+        min: 1
         max: 4
       CriticalHit:
         min: 0
@@ -3403,14 +3411,14 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.3
+        max: 0.35
       Weight:
         min: 0
         max: 0
     ExclusiveStats:
       Power:
-        min: 4
+        min: 2
         max: 5
       CriticalHit:
         min: 0
@@ -3419,14 +3427,14 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.27
+        max: 0.3
       Weight:
         min: 0
         max: 0
     EpicStats:
       Power:
-        min: 5
+        min: 3
         max: 6
       CriticalHit:
         min: 0
@@ -3435,14 +3443,14 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.25
+        max: 0.3
       Weight:
         min: 0
         max: 0
     LegendaryStats:
       Power:
-        min: 6
+        min: 3
         max: 7
       CriticalHit:
         min: 0
@@ -3451,8 +3459,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.22
+        max: 0.27
       Weight:
         min: 0
         max: 0
@@ -3468,8 +3476,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.9
+        max: 1
       Weight:
         min: 0
         max: 0
@@ -3484,8 +3492,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.85
+        max: 0.95
       Weight:
         min: 0
         max: 0
@@ -3500,8 +3508,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.75
+        max: 0.85
       Weight:
         min: 0
         max: 0
@@ -3516,8 +3524,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.7
+        max: 0.8
       Weight:
         min: 0
         max: 0
@@ -3532,8 +3540,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.6
+        max: 0.75
       Weight:
         min: 0
         max: 0
@@ -3548,8 +3556,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.5
+        max: 0.65
       Weight:
         min: 0
         max: 0
@@ -3565,8 +3573,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.65
+        max: 0.7
       Weight:
         min: 0
         max: 0
@@ -3581,8 +3589,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.6
+        max: 0.65
       Weight:
         min: 0
         max: 0
@@ -3597,8 +3605,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.55
+        max: 0.6
       Weight:
         min: 0
         max: 0
@@ -3613,8 +3621,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.5
+        max: 0.55
       Weight:
         min: 0
         max: 0
@@ -3629,8 +3637,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.45
+        max: 0.5
       Weight:
         min: 0
         max: 0
@@ -3645,8 +3653,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.4
+        max: 0.5
       Weight:
         min: 0
         max: 0
@@ -3662,8 +3670,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.5
+        max: 0.55
       Weight:
         min: 0
         max: 0
@@ -3678,8 +3686,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.47
+        max: 0.52
       Weight:
         min: 0
         max: 0
@@ -3694,8 +3702,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.45
+        max: 0.5
       Weight:
         min: 0
         max: 0
@@ -3710,8 +3718,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.43
+        max: 0.47
       Weight:
         min: 0
         max: 0
@@ -3726,8 +3734,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.42
+        max: 0.46
       Weight:
         min: 0
         max: 0
@@ -3742,8 +3750,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.4
+        max: 0.45
       Weight:
         min: 0
         max: 0
@@ -3759,8 +3767,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.65
+        max: 0.7
       Weight:
         min: 0
         max: 0
@@ -3775,8 +3783,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.6
+        max: 0.65
       Weight:
         min: 0
         max: 0
@@ -3791,8 +3799,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.55
+        max: 0.6
       Weight:
         min: 0
         max: 0
@@ -3807,8 +3815,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.5
+        max: 0.55
       Weight:
         min: 0
         max: 0
@@ -3823,8 +3831,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.45
+        max: 0.5
       Weight:
         min: 0
         max: 0
@@ -3839,8 +3847,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.4
+        max: 0.45
       Weight:
         min: 0
         max: 0
@@ -3856,8 +3864,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 1.2
+        max: 1.3
       Weight:
         min: 0
         max: 0
@@ -3872,8 +3880,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 1.1
+        max: 1.2
       Weight:
         min: 0
         max: 0
@@ -3888,8 +3896,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 1
+        max: 1.1
       Weight:
         min: 0
         max: 0
@@ -3904,8 +3912,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.9
+        max: 1
       Weight:
         min: 0
         max: 0
@@ -3920,8 +3928,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.85
+        max: 1
       Weight:
         min: 0
         max: 0
@@ -3936,8 +3944,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.8
+        max: 0.95
       Weight:
         min: 0
         max: 0
@@ -3953,8 +3961,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 1.2
+        max: 1.3
       Weight:
         min: 0
         max: 0
@@ -3969,8 +3977,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 1.1
+        max: 1.2
       Weight:
         min: 0
         max: 0
@@ -3985,8 +3993,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 1
+        max: 1.1
       Weight:
         min: 0
         max: 0
@@ -4001,8 +4009,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.9
+        max: 1
       Weight:
         min: 0
         max: 0
@@ -4017,8 +4025,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.85
+        max: 1
       Weight:
         min: 0
         max: 0
@@ -4033,8 +4041,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.8
+        max: 0.95
       Weight:
         min: 0
         max: 0
@@ -4050,8 +4058,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.8
+        max: 0.9
       Weight:
         min: 0
         max: 0
@@ -4066,8 +4074,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.7
+        max: 0.8
       Weight:
         min: 0
         max: 0
@@ -4082,8 +4090,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.6
+        max: 0.7
       Weight:
         min: 0
         max: 0
@@ -4098,8 +4106,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.5
+        max: 0.6
       Weight:
         min: 0
         max: 0
@@ -4114,8 +4122,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.45
+        max: 0.6
       Weight:
         min: 0
         max: 0
@@ -4130,8 +4138,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.4
+        max: 0.55
       Weight:
         min: 0
         max: 0
@@ -4147,8 +4155,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.65
+        max: 0.7
       Weight:
         min: 0
         max: 0
@@ -4163,8 +4171,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.6
+        max: 0.65
       Weight:
         min: 0
         max: 0
@@ -4179,8 +4187,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.55
+        max: 0.6
       Weight:
         min: 0
         max: 0
@@ -4195,8 +4203,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.5
+        max: 0.55
       Weight:
         min: 0
         max: 0
@@ -4211,8 +4219,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.45
+        max: 0.5
       Weight:
         min: 0
         max: 0
@@ -4227,8 +4235,8 @@ MonoBehaviour:
         min: 0
         max: 0
       Rate:
-        min: 0
-        max: 0
+        min: 0.4
+        max: 0.45
       Weight:
         min: 0
         max: 0

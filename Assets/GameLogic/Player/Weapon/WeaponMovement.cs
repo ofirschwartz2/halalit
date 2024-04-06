@@ -16,7 +16,7 @@ class WeaponMovement : MonoBehaviour
     [SerializeField]
     private float _weaponSpinRadius;
 
-    void Update() // TODO: FIXED UPDATE?
+    void FixedUpdate()
     {
         #if UNITY_EDITOR
         if (!SceneManager.GetActiveScene().name.Contains("Testing"))
@@ -48,7 +48,6 @@ private
 
     private float GetAttackJoystickAngle(Vector2 attackJoystickTouch)
     {
-        
         if (attackJoystickTouch.y < 0)
         {
             return Vector2.Angle(attackJoystickTouch, Vector2.left) + 180f;

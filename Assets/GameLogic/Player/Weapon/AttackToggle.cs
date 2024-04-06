@@ -10,7 +10,7 @@ using UnityEngine;
 class AttackToggle : MonoBehaviour
 {
     [SerializeField]
-    private AttackName _firstAttack;
+    private KeyValuePair<AttackName, AttackStats> _firstAttack;
 
     private AttackStats _firstAttackStats;
     private KeyValuePair<AttackName, GameObject> _currentAttack;
@@ -19,7 +19,7 @@ class AttackToggle : MonoBehaviour
     private void Awake()
     {
         SetEventListeners();
-        _firstAttackStats = new(ItemRank.COMMON, 1, 0, 0, 0, 0);
+        _firstAttackStats = _firstAttack.Value;
     }
 
     private void SetEventListeners()
@@ -29,7 +29,7 @@ class AttackToggle : MonoBehaviour
 
     private void Start()
     {
-        _currentAttack = new(_firstAttack, AttacksBank.GetAttackPrefab(_firstAttack));
+        _currentAttack = new(_firstAttack.Key, AttacksBank.GetAttackPrefab(_firstAttack.Key));
         _currentAttack.Value.GetComponent<AttackBehaviour>().AttackStats = _firstAttackStats;
     }
     #endregion

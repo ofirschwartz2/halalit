@@ -1,14 +1,34 @@
 using Assets.Enums;
 using Assets.Utils;
-using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
-
 
 internal static class TestUtils
 {
+    #region Constants
+    // Scenes:
+    public const string TEST_SCENE_WITH_TARGET_NAME = "TestingWithTarget";
+    public const string TEST_SCENE_WITHOUT_TARGET_NAME = "Testing"; 
+    public const string TEST_SCENE_FOR_BOUNCES = "TestingForBounces";
+
+    // Defaults:
+    public const int DEFAULT_RADIUS_OF_TARGET_POSITION_AROUND_HALALIT = 5;
+    public const ItemRank DEFAULT_ITEM_RANK_1 = ItemRank.COMMON;
+    public const ItemRank DEFAULT_ITEM_RANK_2 = ItemRank.RARE;
+    public const int DEFAULT_POWER_1 = 1;
+    public const int DEFAULT_POWER_2 = 5;
+    public const float DEFAULT_CRITICAL_HIT = 1;
+    public const float DEFAULT_LUCK = 0;
+    public const float DEFAULT_RATE_1 = 2;
+    public const float DEFAULT_RATE_2 = 0.5f;
+    public const float DEFAULT_WEIGHT = 0;
+    public static readonly AttackStats DEFAULT_ATTACK_STATS_1 = new(DEFAULT_ITEM_RANK_1, DEFAULT_POWER_1, DEFAULT_CRITICAL_HIT, DEFAULT_LUCK, DEFAULT_RATE_1, DEFAULT_WEIGHT);
+    public static readonly AttackStats DEFAULT_ATTACK_STATS_2 = new(DEFAULT_ITEM_RANK_2, DEFAULT_POWER_2, DEFAULT_CRITICAL_HIT, DEFAULT_LUCK, DEFAULT_RATE_2, DEFAULT_WEIGHT);
+    public static readonly Vector2 DEFAULT_POSITION_TO_THE_RIGHT = new(5, 0);
+    #endregion
+
     #region Random Seeds
     internal static int SetRandomSeed(int seed = 0)
     {
@@ -21,14 +41,21 @@ internal static class TestUtils
     }
     #endregion
 
-    #region SceneSetUp
-    internal static void SetUpShot(AttackName attackName)
+    #region Scene Setup
+    internal static void SetUpShot(AttackName attackName, AttackStats attackStats = null)
     {
         var attackToggle = GetAttackToggle();
-        attackToggle.SetNewAttack(attackName, new AttackStats(ItemRank.COMMON, 1, 1, 1, 1, 1));
+        attackToggle.SetNewAttack(attackName, attackStats ?? DEFAULT_ATTACK_STATS_1);
     }
 
-    internal static void SetRandomEnemyPosition(float radiusOfTargetPositionAroundHalalit = 5)
+    //TesingWithTarget Scene
+    internal static void SetTargetPosition(Vector2 targetPosition)
+    {
+        var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
+        target[0].transform.position = targetPosition;
+    }
+
+    internal static void SetRandomTargetPosition(float radiusOfTargetPositionAroundHalalit = DEFAULT_RADIUS_OF_TARGET_POSITION_AROUND_HALALIT)
     {
         TesingWithOneEnemyValidation();
 
@@ -65,7 +92,7 @@ internal static class TestUtils
         gameObject.transform.position = position;
     }
 
-    internal static void RotaeTarget(float degrees) 
+    internal static void RotateTarget(float degrees) 
     {
         TesingWithOneEnemyValidation();
         var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
@@ -288,6 +315,107 @@ internal static class TestUtils
         {
             throw new System.Exception("There should be multiple targets in the scene");
         }
+    }
+    #endregion
+
+    #region Shot Actions
+        public static IEnumerator GetDescreteShotPositionHittingTarget()
+    {
+        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+        Vector2 lastShotPosition;
+
+        do
+        {
+            lastShotPosition = shot.transform.position;
+            yield return null;
+
+            shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+            yield return lastShotPosition;
+        } 
+        while (shot != null);
+    }
+
+    public static IEnumerator GetConsecutiveShotPositionHitingTarget(int expectedHits, float attackCooldown, WeaponAttack weaponAttack, Vector2 attackJoystickTouch)
+    {
+        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+        Vector2 lastShotPosition;
+        Vector2 newLastShotPosition;
+        int hits = 0;
+        float nextCooldownTime = 0;
+
+        do
+        {
+            lastShotPosition = shot.GetComponent<LineRenderer>().GetPosition(1);
+            weaponAttack.HumbleFixedUpdate(attackJoystickTouch);
+            yield return null;
+
+            newLastShotPosition = shot.GetComponent<LineRenderer>().GetPosition(1);
+            if (newLastShotPosition == lastShotPosition && CooldownPassed(nextCooldownTime))
+            {
+                hits++;
+                nextCooldownTime = Time.time + attackCooldown;
+            }
+        }
+        while (newLastShotPosition != lastShotPosition || hits != expectedHits);
+
+        yield return lastShotPosition;
+    }
+
+    public static IEnumerator GetTimeBetweenProjectedDescreteShot(int expectedShotCount, WeaponAttack weaponAttack, Vector2 attackJoystickTouch)
+    {
+        int shotsCount = 0;
+        float startTime = Time.time;
+
+        do
+        {
+            bool isShotProjected = weaponAttack.HumbleFixedUpdate(attackJoystickTouch);
+            yield return null;
+
+            shotsCount += isShotProjected ? 1 : 0;
+        }
+        while (shotsCount != expectedShotCount);
+
+        yield return Time.time - startTime;
+    }
+
+    public static IEnumerator GetTimeBetweenHittingConsecutiveShot(int expectedHits, WeaponAttack weaponAttack, Vector2 attackJoystickTouch)
+    {
+        int hits = 0;
+        float lastTargetHealth = GetTargetHealth();
+        float newTargetHealth;
+        float lastHitTime = 0;
+
+        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+        Vector2 lastShotPosition;
+        Vector2 newLastShotPosition;
+
+        do
+        {
+            lastShotPosition = shot.GetComponent<LineRenderer>().GetPosition(1);
+            weaponAttack.HumbleFixedUpdate(attackJoystickTouch);
+            yield return null;
+
+            newLastShotPosition = shot.GetComponent<LineRenderer>().GetPosition(1);
+            newTargetHealth = GetTargetHealth();
+            if (newLastShotPosition == lastShotPosition && newTargetHealth != lastTargetHealth)
+            {
+                lastTargetHealth = newTargetHealth;
+                hits++;
+
+                if (hits != expectedHits)
+                {
+                    lastHitTime = Time.time;
+                }
+            }
+        }
+        while (hits != expectedHits);
+
+        yield return Time.time - lastHitTime;
+    }
+
+    private static bool CooldownPassed(float nextCooldownTime)
+    {
+        return Time.time >= nextCooldownTime;
     }
     #endregion
 }
