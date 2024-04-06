@@ -19,7 +19,7 @@ public class PowerTests
     [SetUp]
     public void SetUp()
     {
-        SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_TARGET_NAME);
+        SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
     }
 
     private void LoadAttackTestData()
@@ -27,9 +27,9 @@ public class PowerTests
         _currentSeed = TestUtils.SetRandomSeed();
         _weaponAttack = TestUtils.GetWeaponAttack();
         _weaponMovement = TestUtils.GetWeaponMovement();
-        _originalTargetHealth = TestUtils.GetTargetHealth();
+        _originalTargetHealth = TestUtils.GetEnemyHealth();
 
-        Vector2 targetClosestPosition = TestUtils.GetTargetNearestPositionToHalalit();
+        Vector2 targetClosestPosition = TestUtils.GetEnemyNearestPositionToHalalit();
         _attackJoystickTouch = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, _weaponAttack.GetAttackJoystickEdge());
     }
 
@@ -38,10 +38,13 @@ public class PowerTests
     {
         // GIVEN
         TestUtils.SetUpShot(AttackName.BALL_SHOT, attackStats);
+        TestUtils.SetEnemiesSeededNumbers();
         yield return null;
 
         TestUtils.SetTargetPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
         LoadAttackTestData();
+
+        yield return new WaitForSeconds(1f);
 
         // WHEN
         _weaponMovement.TryChangeWeaponPosition(_attackJoystickTouch);
@@ -52,13 +55,16 @@ public class PowerTests
 
         IEnumerator coroutine = TestUtils.GetDescreteShotPositionHittingTarget();
 
-        while (coroutine.MoveNext())
+
+        do
         {
-            yield return null; 
-        }
+            yield return null;
+        } while (coroutine.MoveNext());
+
+        yield return new WaitForSeconds(1f);
 
         // THEN
-        var newTargetHealth = TestUtils.GetTargetHealth();
+        var newTargetHealth = TestUtils.GetEnemyHealth();
         AssertWrapper.AreEqual(_originalTargetHealth - attackStats.Power, newTargetHealth, "Target Health Didn't drop correctly", _currentSeed);
     }
 
@@ -67,10 +73,13 @@ public class PowerTests
     {
         // GIVEN
         TestUtils.SetUpShot(AttackName.LASER_BEAM, attackStats);
+        TestUtils.SetEnemiesSeededNumbers();
         yield return null;
 
         TestUtils.SetTargetPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
         LoadAttackTestData();
+
+        yield return new WaitForSeconds(1f);
 
         // WHEN
         _weaponMovement.TryChangeWeaponPosition(_attackJoystickTouch);
@@ -86,8 +95,15 @@ public class PowerTests
             yield return null;
         }
 
+
         // THEN
-        var newTargetHealth = TestUtils.GetTargetHealth();
+        var newTargetHealth = TestUtils.GetEnemyHealth();
         AssertWrapper.AreEqual(_originalTargetHealth - attackStats.Power * consecutiveHitsCount, newTargetHealth, "Target Health Didn't drop correctly", _currentSeed);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
     }
 }

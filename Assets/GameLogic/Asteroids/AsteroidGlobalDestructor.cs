@@ -17,6 +17,19 @@ public class AsteroidGlobalDestructor : MonoBehaviour
     }
     #endregion
 
+    #region Destroy
+
+    private void OnDestroy()
+    {
+        DestroyEventListeners();
+    }
+
+    public void DestroyEventListeners()
+    {
+        DeathEvent.AsteroidDeath -= OnAsteroidDeath;
+    }
+    #endregion
+
     #region Asteroid destruction
     private void OnAsteroidDeath(object initiator, DeathEventArguments arguments)
     {
@@ -30,8 +43,8 @@ public class AsteroidGlobalDestructor : MonoBehaviour
     private void InvokeItemDropEvent(GameObject asteroidToKill)
     {
         Vector2 dropForce = RandomGenerator.GetInsideUnitCircle() * asteroidToKill.transform.localScale.x;
-        DropEventArguments itemDropEventArguments = new(Dropper.ASTEROID, asteroidToKill.transform.position, dropForce);
-        DropEvent.Invoke(EventName.NEW_ITEM_DROP, this, itemDropEventArguments);
+        ItemDropEventArguments itemDropEventArguments = new(Dropper.ASTEROID, asteroidToKill.transform.position, dropForce);
+        ItemDropEvent.Invoke(EventName.NEW_ITEM_DROP, this, itemDropEventArguments);
     }
 
     private void InvokeAsteroidInternalInstantiationEvent(GameObject asteroidToKill)

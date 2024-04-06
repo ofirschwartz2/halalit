@@ -64,4 +64,10 @@ public class AdvancedTests
     }
 
 
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
+    }
+
 }

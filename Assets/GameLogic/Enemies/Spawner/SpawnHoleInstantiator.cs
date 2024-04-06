@@ -83,7 +83,7 @@ public class SpawnHoleInstantiator : MonoBehaviour
     {
         for (int i = 0; i < _findPositionRetries; i++)
         {
-            var potentialPosition = Utils.GetRandomVector(_minX, _maxX, _minY, _maxY);
+            var potentialPosition = new Vector2(RandomGenerator.Range(_minX, _maxX, true), RandomGenerator.Range(_minY, _maxY, true));
             Collider2D[] colliders = Physics2D.OverlapCircleAll(potentialPosition, _instantiationDistanceFree);
             if (colliders.Length == 1)
             {

@@ -12,8 +12,6 @@ using UnityEngine.TestTools;
 public class SpikesTests
 {
 
-    private const string SCENE_NAME = "Testing";
-    private const string SCENE_WITH_TARGET_NAME = "TestingWithTarget";
     private const AttackName SHOT_NAME = AttackName.SPIKES;
 
     [SetUp]
@@ -23,10 +21,10 @@ public class SpikesTests
         switch (testName) 
         {
             case FUNCTION_STABBING_WITH_TARGET_NAME:
-                SceneManager.LoadScene(SCENE_WITH_TARGET_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
                 break;
             default:
-                SceneManager.LoadScene(SCENE_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);
                 break;
         }
     }
@@ -60,10 +58,10 @@ public class SpikesTests
         TestUtils.SetUpShot(SHOT_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
-        TestUtils.SetRandomTargetPosition(1.5f);
-        var originalTargetHealth = TestUtils.GetTargetHealth();
+        TestUtils.SetRandomEnemyPosition(1.5f);
+        var originalTargetHealth = TestUtils.GetEnemyHealth();
         yield return null;
-        var targetClosestPosition = TestUtils.GetTargetNearestPositionToHalalit();
+        var targetClosestPosition = TestUtils.GetEnemyNearestPositionToHalalit();
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, weaponAttack.GetAttackJoystickEdge());
 
         // WHEN
@@ -92,7 +90,7 @@ public class SpikesTests
         // THEN
 
         //TODO: Check target's position
-        var newTargetHealth = TestUtils.GetTargetHealth();
+        var newTargetHealth = TestUtils.GetEnemyHealth();
         AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
         AssertWrapper.IsTrue(true, "");
     }
@@ -174,4 +172,9 @@ public class SpikesTests
 
     }
 
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
+    }
 }

@@ -23,7 +23,7 @@ internal static class PickupClawUtils
         Collider2D[] colliders = Physics2D.OverlapCircleAll(targetCircleCenter, targetFindingCircleRadius);
         foreach (Collider2D collider in colliders)
         {
-            if (collider.gameObject.CompareTag(Tag.ITEM.GetDescription()))
+            if (IsCollectable(collider.gameObject))
             {
                 optionalTargets.Add(collider.gameObject);
             }
@@ -46,5 +46,10 @@ internal static class PickupClawUtils
             }
         }
         return closestTarget;
+    }
+
+    private static bool IsCollectable(GameObject target)
+    {
+        return target.CompareTag(Tag.ITEM.GetDescription()) || target.CompareTag(Tag.VALUABLE.GetDescription());
     }
 }

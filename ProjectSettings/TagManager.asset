@@ -42,6 +42,7 @@ TagManager:
   - PickupClawShooter
   - ItemsFactory
   - Setup
+  - Valuable
   layers:
   - Default
   - TransparentFX
@@ -59,7 +60,7 @@ TagManager:
   - PlayerWeapon
   - InternalWorld
   - ExternalWorld
-  - 
+  - PlayerEquipment
   - 
   - 
   - 

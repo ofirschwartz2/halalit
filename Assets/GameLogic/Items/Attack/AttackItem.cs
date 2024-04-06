@@ -8,7 +8,7 @@ public abstract class AttackItem : MonoBehaviour
 
     protected ItemName _itemName;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other) // TODO: Move to a Collectable Common class?
     {
         if (other.gameObject.CompareTag(Tag.HALALIT.GetDescription()))
         {

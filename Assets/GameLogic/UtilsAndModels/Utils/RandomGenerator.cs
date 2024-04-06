@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Utils
@@ -63,9 +64,37 @@ namespace Assets.Utils
                 Range(-1, (float)1, fromSeed));
         }
 
+        public static void ShuffleList<T>(List<T> list, bool fromSeed = false)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                var temp = list[i];
+                var randomIndex = Range(i, list.Count, fromSeed);
+                list[i] = list[randomIndex];
+                list[randomIndex] = temp;
+            }
+        }
+
+        public static List<float> GetRangeZeroToOneList(int length, bool fromSeed = false)
+        {
+            var zeroToOneArray = new List<float>();
+
+            for (int i = 0; i < length; i++)
+            {
+                zeroToOneArray.Add(RangeZeroToOne(fromSeed));
+            }
+
+            return zeroToOneArray;
+        }
+
         private static float GetAdjustedFloat(float zeroToOneValue, float from, float to)
         {
             return zeroToOneValue * (to - from) + from;
+        }
+
+        public static bool IsTrueIn50Precent(bool fromSeed = false)
+        {
+            return Range(0, 2, fromSeed) == 0;
         }
 
         private static void TrySetSeed()

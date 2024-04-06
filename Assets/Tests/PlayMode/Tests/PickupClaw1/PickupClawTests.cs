@@ -397,9 +397,15 @@ public class PickupClawTests
 
         // THEN
         AssertWrapper.AreEqual(items[0].transform.position, secondItemPosition, "Second item moved", seed);
-
-        for (int i = 0; i < 10; i++) yield return null;
+        
+        yield return new WaitForSeconds(1f);
 
         AssertWrapper.IsNull(TestUtils.GetPickupClaw(), seed, "Second pickupClaw shot");
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
     }
 }

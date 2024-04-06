@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using UnityEditor.Graphs;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,6 +34,7 @@ class Health : MonoBehaviour
     private List<string> _harmersDescriptions;
     private List<string> _contributorsDescriptions;
     private Canvas _privateCanvas;
+    private bool _died;
 
     #region Init
     private void Awake()
@@ -39,6 +42,7 @@ class Health : MonoBehaviour
         SetEventListeners();
         _harmersDescriptions = new List<string>();
         _contributorsDescriptions = new List<string>();
+        _died = false;
     }
 
     private void SetEventListeners()
@@ -135,6 +139,19 @@ class Health : MonoBehaviour
     }
     #endregion
 
+    #region Destroy
+
+    private void OnDestroy()
+    {
+        DestroyEventListeners();
+    }
+
+    public void DestroyEventListeners()
+    {
+        ItemEvent.PlayerUpgradePickUp -= UpgradeCurrentMaxHealth;
+    }
+    #endregion
+
     #region Change health
     private void HandleHealth(GameObject other, bool physical)
     {
@@ -159,29 +176,33 @@ class Health : MonoBehaviour
     private void HandleTriggerHarmer(GameObject target, TriggerHarmer triggerHarmer)
     {
         int harm = triggerHarmer.GetTriggerHarm(target);
-        ChangeHealth(-harm);
+        TryChangeHealth(-harm);
     }
 
     private void HandleCollisionHarmer(CollisionHarmer collisionHarmer)
     {
         int harm = collisionHarmer.GetCollisionHarm();
-        ChangeHealth(-harm);
+        TryChangeHealth(-harm);
     }
 
-    public void ChangeHealth(int healthChange)
+    public void TryChangeHealth(int healthChange)
     {
-        _health += healthChange;
-
-        if (_health > _currentMaxHealth)
+        if (!_died) 
         {
-            _health = _currentMaxHealth;
-        }
+            _health += healthChange;
 
-        _healthBarFill.value = _health;
+            if (_health > _currentMaxHealth)
+            {
+                _health = _currentMaxHealth;
+            }
 
-        if (_health <= 0)
-        {
-            InvokeDeathEvent();
+            _healthBarFill.value = _health;
+
+            if (_health <= 0)
+            {
+                InvokeDeathEvent();
+                _died = true;
+            }
         }
     }
     #endregion
@@ -254,6 +275,11 @@ class Health : MonoBehaviour
     internal int GetHealth()
     {
         return _health;
+    }
+
+    internal void SetHealth(int health)
+    {
+        _health = health;
     }
 #endif
 }

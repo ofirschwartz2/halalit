@@ -3,6 +3,7 @@ using Assets.Enums;
 using Assets.Utils;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 #if UNITY_EDITOR
 [assembly: InternalsVisibleTo("Tests")]
@@ -43,6 +44,7 @@ public class PickupClawStateMachine : MonoBehaviour
         {
             case PickupClawState.MOVING_TO_TARGET:
                 _pickupClawMovement.Move(_state);
+                TryChangeToReturningToHalalitWithoutTarget();
                 TryChangeToGrabbing();
                 break;
 
@@ -75,7 +77,7 @@ public class PickupClawStateMachine : MonoBehaviour
 
     private void TryChangeToReturningToHalalitWithoutTarget()
     {
-        if (ShouldClawRetract())
+        if (_item == null || ShouldClawRetract())
         {
             ChangeToReturningToHalalitWithoutTarget();
         }
@@ -105,10 +107,11 @@ public class PickupClawStateMachine : MonoBehaviour
 
     private void ChangeToReturningToHalalitWithoutTarget()
     {
-        if (_state == PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET)
+        if (_state == PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET && _item != null)
         {
             _item.GetComponent<ItemMovement>().UnGrabbed();
         }
+
         _state = PickupClawState.RETURNING_TO_HALALIT_WITHOUT_TARGET;
         _pickupClawMovement.SetTarget(_halalit);
 
@@ -133,7 +136,7 @@ public class PickupClawStateMachine : MonoBehaviour
 
     private void TryChangeToReturningToHalalit()
     {
-        if (!TryChangeToReturningToHalalitWithTarget())
+        if (_item == null || !TryChangeToReturningToHalalitWithTarget())
         {
             TryChangeToReturningToHalalitWithoutTarget();
         }

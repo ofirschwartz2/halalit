@@ -1,5 +1,6 @@
 using Assets.Enums;
 using Assets.Utils;
+using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,16 @@ internal static class TestUtils
 {
     #region Constants
     // Scenes:
-    public const string TEST_SCENE_WITH_TARGET_NAME = "TestingWithTarget";
+    public const string TEST_SCENE_WITH_ENEMY_NAME = "TestingWithEnemy";
     public const string TEST_SCENE_WITHOUT_TARGET_NAME = "Testing"; 
     public const string TEST_SCENE_FOR_BOUNCES = "TestingForBounces";
+    public const string TEST_SCENE_WITH_MANY_ENEMIES_FROM_RIGHT_NAME = "TestingWithManyEnemiesFromRight";
+    public const string TEST_SCENE_WITH_ASTEROID_NAME = "TestingWithAsteroid";
+    public const string TEST_SCENE_WITH_MANY_ASTEROIDS_FROM_RIGHT_NAME = "TestingWithManyAsteroidsFromRight";
+    public const string TEST_SCENE_WITH_VALUABLES_NAME = "TestingWithValuables";
 
     // Defaults:
+    public const int ENEMIES_SEEDED_NUMBERS_LIST_DEFAULT_LENGTH = 5;
     public const int DEFAULT_RADIUS_OF_TARGET_POSITION_AROUND_HALALIT = 5;
     public const ItemRank DEFAULT_ITEM_RANK_1 = ItemRank.COMMON;
     public const ItemRank DEFAULT_ITEM_RANK_2 = ItemRank.RARE;
@@ -41,7 +47,17 @@ internal static class TestUtils
     }
     #endregion
 
-    #region Scene Setup
+    #region Scene SetUp
+
+    internal static void DestroyAllGameObjects() 
+    {
+        var gameObjects = GameObject.FindObjectsOfType<GameObject>();
+        foreach (var gameObject in gameObjects)
+        {
+            Object.Destroy(gameObject);
+        }
+    }
+
     internal static void SetUpShot(AttackName attackName, AttackStats attackStats = null)
     {
         var attackToggle = GetAttackToggle();
@@ -55,22 +71,31 @@ internal static class TestUtils
         target[0].transform.position = targetPosition;
     }
 
-    internal static void SetRandomTargetPosition(float radiusOfTargetPositionAroundHalalit = DEFAULT_RADIUS_OF_TARGET_POSITION_AROUND_HALALIT)
+    internal static void SetRandomEnemyPosition(float radiusOfEnemyPositionAroundHalalit = 5)
     {
         TesingWithOneEnemyValidation();
 
         SetRandomGameObjectPosition(
             GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription()), 
-            radiusOfTargetPositionAroundHalalit);
+            radiusOfEnemyPositionAroundHalalit);
     }
 
-    internal static void SetRandomItemPosition(float radiusOfTargetPositionAroundHalalit = 5)
+    internal static void SetRandomAsteroidPosition(float radiusOfAsteroidPositionAroundHalalit = 5)
+    {
+        TesingWithOneAsteroidValidation();
+
+        SetRandomGameObjectPosition(
+            GameObject.FindGameObjectWithTag(Tag.ASTEROID.GetDescription()),
+            radiusOfAsteroidPositionAroundHalalit);
+    }
+
+    internal static void SetRandomItemPosition(float radiusOfItemPositionAroundHalalit = 5)
     {
         TesingWithOneItemValidation();
 
         SetRandomGameObjectPosition(
             GameObject.FindGameObjectWithTag(Tag.ITEM.GetDescription()), 
-            radiusOfTargetPositionAroundHalalit);
+            radiusOfItemPositionAroundHalalit);
     }
 
     internal static void SetItemPosition(Vector2 position) 
@@ -92,17 +117,67 @@ internal static class TestUtils
         gameObject.transform.position = position;
     }
 
-    internal static void RotateTarget(float degrees) 
+    internal static void RotaeEnemy(float degrees) 
     {
         TesingWithOneEnemyValidation();
-        var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
-        target[0].transform.rotation = Quaternion.Euler(0, 0, degrees);
+        var enemy = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
+        enemy[0].transform.rotation = Quaternion.Euler(0, 0, degrees);
     }
-    //TesingWithTarget Scene
+
+    internal static void SetEnemiesSeededNumbers(int listLength = ENEMIES_SEEDED_NUMBERS_LIST_DEFAULT_LENGTH) 
+    {
+        var enemies = GetEnemies();
+        foreach(var enemy in enemies)
+        {
+            var randomSeededNumbers = new List<float>();
+            for (int i = 0; i < listLength; i++)
+            {
+                randomSeededNumbers.Add(RandomGenerator.RangeZeroToOne(true));
+            }
+            enemy.GetComponent<RandomSeededNumbers>().SetRandomSeededNumbers(randomSeededNumbers);
+        }
+    }
+
+    internal static void SetEnemiesHealth(int health)
+    {
+        var enemies = GetEnemies();
+        foreach (var enemy in enemies)
+        {
+            enemy.GetComponent<Health>().SetHealth(health);
+        }
+    }
+
+    internal static void SetAsteroidsHealth(int health) 
+    {
+        var asteroids = GetAsteroids();
+        foreach (var asteroid in asteroids)
+        {
+            asteroid.GetComponent<Health>().SetHealth(health);
+        }
+    }
 
     #endregion
 
     #region SceneGetters
+
+    internal static int GetScore() 
+    {
+        var halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
+        var score = halalit.GetComponent<Score>();
+        return score.GetScore();
+    }
+
+    internal static ValuableName GetValuableName(GameObject valuable) 
+    {
+        return valuable.GetComponent<Valuable>().GetValuableName();
+    }
+
+    internal static List<KeyValuePair<ValuableName, int>> GetValuableValues() 
+    {
+        var halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
+        var score = halalit.GetComponent<Score>();
+        return score.GetValuableValues();
+    }
 
     internal static HalalitMovement GetHalalitMovement() 
     {
@@ -126,6 +201,11 @@ internal static class TestUtils
         return GameObject.FindGameObjectWithTag(Tag.MOVEMENT_JOYSTICK.GetDescription());
     }
 
+    internal static GameObject GetShot()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+    }
+
     internal static GameObject GetPickupClaw()
     {
         return GameObject.FindGameObjectWithTag(Tag.PICKUP_CLAW.GetDescription());
@@ -139,6 +219,31 @@ internal static class TestUtils
     internal static GameObject[] GetItems()
     {
         return GameObject.FindGameObjectsWithTag(Tag.ITEM.GetDescription());
+    }
+
+    internal static GameObject[] GetValuables()
+    {
+        return GameObject.FindGameObjectsWithTag(Tag.VALUABLE.GetDescription());
+    }
+
+    internal static GameObject GetEnemy()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
+    }
+
+    internal static GameObject[] GetEnemies()
+    {
+        return GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
+    }
+
+    internal static GameObject GetAsteroid()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.ASTEROID.GetDescription());
+    }
+
+    internal static GameObject[] GetAsteroids()
+    {
+        return GameObject.FindGameObjectsWithTag(Tag.ASTEROID.GetDescription());
     }
 
     internal static PickupClawShooter GetPickupClawShooter()
@@ -182,12 +287,12 @@ internal static class TestUtils
                 .GetComponent<BoxCollider2D>();
     }
 
-    internal static Vector2 GetTargetPosition()
+    internal static Vector2 GetEnemyPosition()
     {
         TesingWithOneEnemyValidation();
 
-        var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
-        return target.transform.position;
+        var enemy = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
+        return enemy.transform.position;
     }
 
     internal static Vector2 GetItemPosition()
@@ -198,31 +303,39 @@ internal static class TestUtils
         return item.transform.position;
     }
 
-    internal static Vector2 GetTargetMovementDirection()
+    internal static Vector2 GetEnemyMovementDirection()
     {
         TesingWithOneEnemyValidation();
-        var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
-        return target.GetComponent<Rigidbody2D>().velocity.normalized;
+        var enemy = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
+        return enemy.GetComponent<Rigidbody2D>().velocity.normalized;
     }
-    internal static Vector2 GetTargetNearestPositionToHalalit()
+    internal static Vector2 GetEnemyNearestPositionToHalalit()
     {
         TesingWithOneEnemyValidation();
-        var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
-        return GetNearestPositionToHalalit(target);
-    }
-
-    internal static float GetTargetHealth()
-    {
-        TesingWithOneEnemyValidation();
-        var target = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
-        return target.GetComponent<Health>().GetHealth();
+        var enemy = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
+        return GetNearestPositionToHalalit(enemy);
     }
 
-    internal static List<int> GetAllTargetsHealth()
+    internal static Vector2 GetAsteroidNearestPositionToHalalit()
     {
-        TesingWithMultipleTargetValidation();
-        var targets = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription()).ToList();
-        return targets.Select(target => target.GetComponent<Health>().GetHealth()).ToList();
+        TesingWithOneAsteroidValidation();
+
+        var asteroid = GameObject.FindGameObjectWithTag(Tag.ASTEROID.GetDescription());
+        return GetNearestPositionToHalalit(asteroid);
+    }
+
+    internal static float GetEnemyHealth()
+    {
+        TesingWithOneEnemyValidation();
+        var enemy = GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription());
+        return enemy.GetComponent<Health>().GetHealth();
+    }
+
+    internal static List<int> GetAllEnemiesHealth()
+    {
+        TesingWithMultipleEnemiesValidation();
+        var enemies = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription()).ToList();
+        return enemies.Select(enemy => enemy.GetComponent<Health>().GetHealth()).ToList();
     }
 
     internal static Vector2 GetNearestPositionToHalalit(GameObject gameObject)
@@ -295,7 +408,16 @@ internal static class TestUtils
         var enemy = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
         if (enemy.Length != 1)
         {
-            throw new System.Exception("There should be only one target in the scene");
+            throw new System.Exception("There should be only one Enemy in the scene");
+        }
+    }
+
+    internal static void TesingWithOneAsteroidValidation() 
+    {
+        var asteroid = GameObject.FindGameObjectsWithTag(Tag.ASTEROID.GetDescription());
+        if (asteroid.Length != 1)
+        {
+            throw new System.Exception("There should be only one Asteroid in the scene");
         }
     }
 
@@ -304,16 +426,16 @@ internal static class TestUtils
         var item = GameObject.FindGameObjectsWithTag(Tag.ITEM.GetDescription());
         if (item.Length != 1)
         {
-            throw new System.Exception("There should be only one target in the scene");
+            throw new System.Exception("There should be only one Item in the scene");
         }
     }
 
-    internal static void TesingWithMultipleTargetValidation() 
+    internal static void TesingWithMultipleEnemiesValidation() 
     {
-        var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
-        if (target.Length <= 1)
+        var enemies = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
+        if (enemies.Length <= 1)
         {
-            throw new System.Exception("There should be multiple targets in the scene");
+            throw new System.Exception("There should be multiple Enemies in the scene");
         }
     }
     #endregion
@@ -339,24 +461,23 @@ internal static class TestUtils
     {
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
         Vector2 lastShotPosition;
-        Vector2 newLastShotPosition;
         int hits = 0;
-        float nextCooldownTime = 0;
-
+        float newHealth = GetEnemyHealth();
+        float lastEnemyHealth = newHealth;
         do
         {
+            lastEnemyHealth = GetEnemyHealth();
             lastShotPosition = shot.GetComponent<LineRenderer>().GetPosition(1);
             weaponAttack.HumbleFixedUpdate(attackJoystickTouch);
             yield return null;
 
-            newLastShotPosition = shot.GetComponent<LineRenderer>().GetPosition(1);
-            if (newLastShotPosition == lastShotPosition && CooldownPassed(nextCooldownTime))
+            newHealth = GetEnemyHealth();
+            if (newHealth < lastEnemyHealth)
             {
                 hits++;
-                nextCooldownTime = Time.time + attackCooldown;
             }
         }
-        while (newLastShotPosition != lastShotPosition || hits != expectedHits);
+        while (hits != expectedHits);
 
         yield return lastShotPosition;
     }
@@ -381,7 +502,7 @@ internal static class TestUtils
     public static IEnumerator GetTimeBetweenHittingConsecutiveShot(int expectedHits, WeaponAttack weaponAttack, Vector2 attackJoystickTouch)
     {
         int hits = 0;
-        float lastTargetHealth = GetTargetHealth();
+        float lastTargetHealth = GetEnemyHealth();
         float newTargetHealth;
         float lastHitTime = 0;
 
@@ -396,7 +517,7 @@ internal static class TestUtils
             yield return null;
 
             newLastShotPosition = shot.GetComponent<LineRenderer>().GetPosition(1);
-            newTargetHealth = GetTargetHealth();
+            newTargetHealth = GetEnemyHealth();
             if (newLastShotPosition == lastShotPosition && newTargetHealth != lastTargetHealth)
             {
                 lastTargetHealth = newTargetHealth;

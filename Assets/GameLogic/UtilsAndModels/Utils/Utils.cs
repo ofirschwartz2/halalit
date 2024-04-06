@@ -110,11 +110,6 @@ namespace Assets.Utils
             return new Vector3(newX, newY);
         }
 
-        public static bool IsTrueIn50Precent()
-        {
-            return RandomGenerator.Range(0, (float)2) == 0;
-        }
-
         public static Vector2 ShiftVectorByOffsetDegree(Vector2 vector, float offsetDegrees)
         {
             float offsetRadians = DegreeToRadian(offsetDegrees);
@@ -348,19 +343,6 @@ namespace Assets.Utils
             return a;
         }
 
-        #endregion
-
-        #region Lists
-        public static void ShuffleList<T>(List<T> list)
-        {
-            for (int i = 0; i < list.Count; i++)
-            {
-                var temp = list[i];
-                var randomIndex = RandomGenerator.Range(i, list.Count, true);
-                list[i] = list[randomIndex];
-                list[randomIndex] = temp;
-            }
-        }
         #endregion
 
         #region Visuals

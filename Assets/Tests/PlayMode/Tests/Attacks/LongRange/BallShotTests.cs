@@ -9,8 +9,6 @@ using UnityEngine.TestTools;
 
 public class BallShotTests
 {
-    private const string SCENE_NAME = "Testing";
-    private const string SCENE_WITH_TARGET_NAME = "TestingWithTarget";
     private const AttackName SHOT_NAME = AttackName.BALL_SHOT;
 
     [SetUp]
@@ -20,10 +18,10 @@ public class BallShotTests
         switch (testName) 
         {
             case FUNCTION_SHOOTING_WITH_TARGET_NAME:
-                SceneManager.LoadScene(SCENE_WITH_TARGET_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
                 break;
             default:
-                SceneManager.LoadScene(SCENE_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);
                 break;
         }
     }
@@ -95,12 +93,13 @@ public class BallShotTests
         TestUtils.SetUpShot(SHOT_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
-        TestUtils.SetRandomTargetPosition();
+        TestUtils.SetRandomEnemyPosition();
         yield return null;
-        var targetClosestPosition = TestUtils.GetTargetNearestPositionToHalalit();
+
+        var targetClosestPosition = TestUtils.GetEnemyNearestPositionToHalalit();
         var acceptedDelta = 0.5f;
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, weaponAttack.GetAttackJoystickEdge());
-        var originalTargetHealth = TestUtils.GetTargetHealth();
+        var originalTargetHealth = TestUtils.GetEnemyHealth();
 
         // WHEN
         weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
@@ -129,7 +128,7 @@ public class BallShotTests
         AssertWrapper.AreEqual(lastShotPosition.x, targetClosestPosition.x, "Shot Didn't Hit Target", seed, acceptedDelta);
         AssertWrapper.AreEqual(lastShotPosition.y, targetClosestPosition.y, "Shot Didn't Hit Target", seed, acceptedDelta);
 
-        var newTargetHealth = TestUtils.GetTargetHealth();
+        var newTargetHealth = TestUtils.GetEnemyHealth();
         AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
     }
 
@@ -180,5 +179,12 @@ public class BallShotTests
             seed,
             acceptedDelta);
 
+    }
+
+
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
     }
 }

@@ -11,7 +11,7 @@ public class LaserBeamTests
 {
 
     private const string SCENE_NAME = "Testing";
-    private const string SCENE_WITH_TARGET_NAME = "TestingWithTarget";
+    private const string SCENE_WITH_NEMY_NAME = "TestingWithEnemy";
     private const AttackName SHOT_NAME = AttackName.LASER_BEAM;
 
     [SetUp]
@@ -21,7 +21,7 @@ public class LaserBeamTests
         switch (testName) 
         {
             case FUNCTION_SHOOTING_WITH_TARGET_NAME:
-                SceneManager.LoadScene(SCENE_WITH_TARGET_NAME);
+                SceneManager.LoadScene(SCENE_WITH_NEMY_NAME);
                 break;
             default:
                 SceneManager.LoadScene(SCENE_NAME);
@@ -114,10 +114,11 @@ public class LaserBeamTests
         var weaponAttack = TestUtils.GetWeaponAttack();
         var acceptedDelta = 0.5f;
 
-        TestUtils.SetRandomTargetPosition();
-        var originalTargetHealth = TestUtils.GetTargetHealth();
-        yield return null;
-        var targetNearestPosition = TestUtils.GetTargetNearestPositionToHalalit();
+        TestUtils.SetRandomEnemyPosition();
+        var originalTargetHealth = TestUtils.GetEnemyHealth();
+        yield return new WaitForSeconds(1);
+
+        var targetNearestPosition = TestUtils.GetEnemyNearestPositionToHalalit();
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetNearestPosition, weaponAttack.GetAttackJoystickEdge());
 
         // WHEN
@@ -148,7 +149,7 @@ public class LaserBeamTests
         AssertWrapper.AreEqual(lastShotPosition.x, targetNearestPosition.x, "Laser Is Not Touching Target", seed, acceptedDelta);
         AssertWrapper.AreEqual(lastShotPosition.y, targetNearestPosition.y, "Laser Is Not Touching Target", seed, acceptedDelta);
 
-        var newTargetHealth = TestUtils.GetTargetHealth();
+        var newTargetHealth = TestUtils.GetEnemyHealth();
         AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
     }
 
@@ -206,5 +207,11 @@ public class LaserBeamTests
             seed,
             acceptedDelta);
 
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
     }
 }

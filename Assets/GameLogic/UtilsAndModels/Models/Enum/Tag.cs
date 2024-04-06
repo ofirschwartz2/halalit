@@ -58,5 +58,7 @@ namespace Assets.Enums
         EXPLOSIVE,
         [Description("ExplosionShockWave")]
         EXPLOSION_SHOCK_WAVE,
+        [Description("Valuable")]
+        VALUABLE,
     }
 }

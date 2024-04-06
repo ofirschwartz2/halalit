@@ -31,6 +31,19 @@ class AsteroidInternalInstantiator : MonoBehaviour
     }
     #endregion
 
+    #region Destroy
+
+    private void OnDestroy()
+    {
+        DestroyEventListeners();
+    }
+
+    public void DestroyEventListeners()
+    {
+        AsteroidEvent.AsteroidInternalInstantiation -= InstantiateAsteroidsOnPosition;
+    }
+    #endregion
+
     #region Internal instantiation
     private void InstantiateAsteroidsOnPosition(object initiator, AsteroidEventArguments arguments)
     {
@@ -112,7 +125,7 @@ class AsteroidInternalInstantiator : MonoBehaviour
     #region Predicates
     private bool ShouldInstantiateAsteroidsInternaly(int originalAsteroidScale)
     {
-        return originalAsteroidScale > 1 && Utils.IsTrueIn50Precent();
+        return originalAsteroidScale > 1 && RandomGenerator.IsTrueIn50Precent(false);
     }
     #endregion
 }

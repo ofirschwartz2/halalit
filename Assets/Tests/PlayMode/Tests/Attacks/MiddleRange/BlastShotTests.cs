@@ -21,7 +21,7 @@ public class BlastShotTests
         switch (testName) 
         {
             case FUNCTION_SHOOTING_WITH_TARGET_NAME:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_TARGET_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
                 break;
             default:
                 SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);
@@ -123,10 +123,10 @@ public class BlastShotTests
         TestUtils.SetUpShot(AttackName.BLAST_SHOT);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
-        TestUtils.SetRandomTargetPosition(2); // MUST BE SMALL TO HIT BEFORE MinLifeTime
-        var originalTargetHealth = TestUtils.GetTargetHealth();
+        TestUtils.SetRandomEnemyPosition(2); // MUST BE SMALL TO HIT BEFORE MinLifeTime
+        var originalTargetHealth = TestUtils.GetEnemyHealth();
         yield return null;
-        var initialTargetPosition = TestUtils.GetTargetPosition();
+        var initialTargetPosition = TestUtils.GetEnemyPosition();
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(initialTargetPosition, weaponAttack.GetAttackJoystickEdge());
 
         // WHEN
@@ -175,7 +175,7 @@ public class BlastShotTests
         AssertWrapper.IsNull(blastShockWave, seed);
         AssertWrapper.AreEqual(blastExpectedLifetime, actualLifetime, "Blast Lifetime not as expected", seed, acceptedDelta);
         
-        var newTargetHealth = TestUtils.GetTargetHealth();
+        var newTargetHealth = TestUtils.GetEnemyHealth();
         AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
     }
 
@@ -226,5 +226,11 @@ public class BlastShotTests
             seed,
             acceptedDelta);
 
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
     }
 }

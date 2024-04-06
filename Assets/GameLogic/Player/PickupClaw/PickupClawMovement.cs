@@ -22,24 +22,25 @@ public class PickupClawMovement : MonoBehaviour
 
     private GameObject _target;
 
-    internal void Move(Assets.Enums.PickupClawState state)
+    internal void Move(PickupClawState state)
     {
+        if (_target == null)
+        {
+            Debug.Log("Target is null");
+            return;
+        }
+
         MoveTowardsTarget(state);
         TryRotateAccordingToTarget(state);
     }
 
     #region Movement
-    private void MoveTowardsTarget(Assets.Enums.PickupClawState state)
+    private void MoveTowardsTarget(PickupClawState state)
     {
-        if (_target == null)
-        {
-            throw new System.Exception("Target is null");
-        }
-
         SetVelocity(state);
     }
 
-    private void SetVelocity(Assets.Enums.PickupClawState state)
+    private void SetVelocity(PickupClawState state)
     {
         var direction = _target.transform.position - transform.position;
         var velocity = direction.normalized * GetSpeed(state);

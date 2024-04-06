@@ -22,7 +22,7 @@ public class KnockbackWaveTests
             case FUNCTION_SHOOTING_WITH_TARGET_NAME:
             case FUNCTION_KNOCKBACKINT_VECTOR_NAME:
             case FUNCTION_DOUBLE_HIT_CHECK_NAME:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_TARGET_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
                 break;
             default:
                 SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);
@@ -105,10 +105,10 @@ public class KnockbackWaveTests
         TestUtils.SetUpShot(AttackName.KNOCKBACK_WAVE);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
-        TestUtils.SetRandomTargetPosition();
-        var originalTargetHealth = TestUtils.GetTargetHealth();
+        TestUtils.SetRandomEnemyPosition();
+        var originalTargetHealth = TestUtils.GetEnemyHealth();
         yield return null;
-        var targetClosestPositionBeforeHit = TestUtils.GetTargetNearestPositionToHalalit();
+        var targetClosestPositionBeforeHit = TestUtils.GetEnemyNearestPositionToHalalit();
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPositionBeforeHit, weaponAttack.GetAttackJoystickEdge());
 
         // WHEN
@@ -126,7 +126,7 @@ public class KnockbackWaveTests
         // GIVEN
         Vector2 lastShotPosition;
         Vector2 lastTargetPosition, thisTargetPosition;
-        lastTargetPosition = TestUtils.GetTargetPosition();
+        lastTargetPosition = TestUtils.GetEnemyPosition();
         thisTargetPosition = lastTargetPosition;
         Vector2 firstHiDirection = Vector2.zero, sameDirection = Vector2.zero;
         bool gotHit = false;
@@ -139,7 +139,7 @@ public class KnockbackWaveTests
             lastTargetPosition = thisTargetPosition;
             yield return null;
 
-            thisTargetPosition = TestUtils.GetTargetPosition();
+            thisTargetPosition = TestUtils.GetEnemyPosition();
 
             if (!gotHit)
             {
@@ -162,7 +162,7 @@ public class KnockbackWaveTests
         AssertWrapper.AreEqual(firstHiDirection.x, sameDirection.x, ">1 Hits", seed, acceptedDelta);
         AssertWrapper.AreEqual(firstHiDirection.y, sameDirection.y, ">1 Hits", seed, acceptedDelta);
 
-        var targetClosestPositionAfterHit = TestUtils.GetTargetNearestPositionToHalalit();
+        var targetClosestPositionAfterHit = TestUtils.GetEnemyNearestPositionToHalalit();
         if (targetClosestPositionBeforeHit.x != 0) 
         {
             AssertWrapper.Greater(Math.Abs(targetClosestPositionAfterHit.x), Math.Abs(targetClosestPositionBeforeHit.x), "Did not Knockback", seed);
@@ -172,7 +172,7 @@ public class KnockbackWaveTests
             AssertWrapper.Greater(Math.Abs(targetClosestPositionAfterHit.y), Math.Abs(targetClosestPositionBeforeHit.y), "Did not Knockback", seed);
         }
 
-        var newTargetHealth = TestUtils.GetTargetHealth();
+        var newTargetHealth = TestUtils.GetEnemyHealth();
         AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
     }
 
@@ -199,7 +199,7 @@ public class KnockbackWaveTests
 
         // GIVEN
         Vector2 
-            newTargetPosition = TestUtils.GetTargetPosition(), 
+            newTargetPosition = TestUtils.GetEnemyPosition(), 
             oldTargetPosition,
             shotDirection,
             shotPosition;
@@ -212,13 +212,13 @@ public class KnockbackWaveTests
             shotPosition = shot.transform.position;
             yield return null;
 
-            newTargetPosition = TestUtils.GetTargetPosition();
+            newTargetPosition = TestUtils.GetEnemyPosition();
         } while (Utils.Vector2ToDegrees(newTargetPosition) == Utils.Vector2ToDegrees(oldTargetPosition));
 
         // THEN
         var targetToShotDirection = (oldTargetPosition - shotPosition).normalized;
         var combinedVector = (shotDirection + targetToShotDirection).normalized;
-        AssertWrapper.AreEqual(Utils.Vector2ToDegrees(combinedVector), Utils.Vector2ToDegrees(TestUtils.GetTargetMovementDirection()), "Knockback Direction not as expected");
+        AssertWrapper.AreEqual(Utils.Vector2ToDegrees(combinedVector), Utils.Vector2ToDegrees(TestUtils.GetEnemyMovementDirection()), "Knockback Direction not as expected");
     }
 
     [UnityTest]
@@ -242,7 +242,7 @@ public class KnockbackWaveTests
         AssertWrapper.IsNotNull(shot);
 
         // GIVEN
-        var targetOriginalHealth = TestUtils.GetTargetHealth();
+        var targetOriginalHealth = TestUtils.GetEnemyHealth();
         float targetHealthAfterHit = targetOriginalHealth;
         bool didGetHit = false;
 
@@ -251,7 +251,7 @@ public class KnockbackWaveTests
         {
             if (!didGetHit) 
             {
-                targetHealthAfterHit = TestUtils.GetTargetHealth();
+                targetHealthAfterHit = TestUtils.GetEnemyHealth();
                 if (targetHealthAfterHit != targetOriginalHealth) 
                 {
                     didGetHit = true;
@@ -264,7 +264,7 @@ public class KnockbackWaveTests
 
         // THEN
         AssertWrapper.Greater(targetOriginalHealth, targetHealthAfterHit, "Did Not Hit Target");
-        AssertWrapper.AreEqual(targetHealthAfterHit, TestUtils.GetTargetHealth(), "> 1 Hits");
+        AssertWrapper.AreEqual(targetHealthAfterHit, TestUtils.GetEnemyHealth(), ">1 Hits");
     }
 
     [UnityTest]
@@ -313,5 +313,11 @@ public class KnockbackWaveTests
             "Weapon vs Shot Directions difference",
             seed,
             acceptedDelta);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
     }
 }

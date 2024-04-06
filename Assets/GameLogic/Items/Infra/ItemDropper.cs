@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 #if UNITY_EDITOR
 [assembly: InternalsVisibleTo("Tests")]
@@ -25,7 +24,20 @@ public class ItemDropper : MonoBehaviour
 
     private void SetEventListeners()
     {
-        DropEvent.NewItemDrop += TryDropNewItem;
+        ItemDropEvent.NewItemDrop += TryDropNewItem;
+    }
+    #endregion
+
+    #region Destroy
+
+    private void OnDestroy()
+    {
+        DestroyEventListeners();
+    }
+
+    public void DestroyEventListeners()
+    {
+        ItemDropEvent.NewItemDrop -= TryDropNewItem;
     }
     #endregion
 
@@ -56,7 +68,7 @@ private
 #endregion
 
     #region Events actions
-    private void TryDropNewItem(object initiator, DropEventArguments arguments)
+    private void TryDropNewItem(object initiator, ItemDropEventArguments arguments)
     {
         var dropChance = RandomGenerator.RangeZeroToOne(true);
         List<ItemName> droppableItemsByChance = GetDroppableItemsByChance(arguments.Dropper, dropChance);

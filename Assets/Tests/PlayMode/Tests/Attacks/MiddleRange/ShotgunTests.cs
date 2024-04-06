@@ -13,8 +13,6 @@ using UnityEngine.TestTools;
 public class ShotgunTests
 {
 
-    private const string SCENE_NAME = "Testing";
-    private const string SCENE_WITH_TARGET_NAME = "TestingWithTarget";
     private const AttackName ATTACK_NAME = AttackName.SHOTGUN;
     private const Tag ATTACK_TAG = Tag.SHOT;
 
@@ -25,10 +23,10 @@ public class ShotgunTests
         switch (testName) 
         {
             case FUNCTION_SHOOTING_WITH_TARGET_NAME:
-                SceneManager.LoadScene(SCENE_WITH_TARGET_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
                 break;
             default:
-                SceneManager.LoadScene(SCENE_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);
                 break;
         }
     }
@@ -175,10 +173,10 @@ public class ShotgunTests
         TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
-        TestUtils.SetRandomTargetPosition(2); // MUST BE SMALL TO HIT BEFORE MinLifeTime
-        var originalTargetHealth = TestUtils.GetTargetHealth();
+        TestUtils.SetRandomEnemyPosition(2); // MUST BE SMALL TO HIT BEFORE MinLifeTime
+        var originalTargetHealth = TestUtils.GetEnemyHealth();
         yield return null;
-        var targetPosition = TestUtils.GetTargetPosition();
+        var targetPosition = TestUtils.GetEnemyPosition();
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetPosition, weaponAttack.GetAttackJoystickEdge());
 
         // WHEN
@@ -207,7 +205,13 @@ public class ShotgunTests
 
         AssertWrapper.GreaterOrEqual(minimumLifeTime, timeUntilFirstHit, "Didn't Hit Target Fast As Expected", seed);
 
-        var newTargetHealth = TestUtils.GetTargetHealth();
+        var newTargetHealth = TestUtils.GetEnemyHealth();
         AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
     }
 }

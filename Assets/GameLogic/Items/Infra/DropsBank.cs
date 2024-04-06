@@ -7,7 +7,7 @@ public class DropsBank : MonoBehaviour
     [SerializeField]
     private ItemsBank _itemsBank;
     [SerializeField]
-    private List<KeyValuePair<Dropper, List<DropDto>>> _allDefaultDropsList;
+    private List<KeyValuePair<Dropper, List<ItemDropDto>>> _allDefaultDropsList;
 
     private Dictionary<Dropper, Dictionary<ItemName, float>> _allDroppables;
 
@@ -31,11 +31,11 @@ public class DropsBank : MonoBehaviour
     {
         _allDroppables = new();
 
-        foreach (KeyValuePair<Dropper, List<DropDto>> dropperDrops in _allDefaultDropsList)
+        foreach (KeyValuePair<Dropper, List<ItemDropDto>> dropperDrops in _allDefaultDropsList)
         {
             _allDroppables[dropperDrops.Key] = new();
 
-            foreach (DropDto drop in dropperDrops.Value)
+            foreach (ItemDropDto drop in dropperDrops.Value)
             {
                 if (_itemsBank.IsAvailable(drop.ItemName))
                 {
@@ -43,6 +43,19 @@ public class DropsBank : MonoBehaviour
                 }
             }
         }
+    }
+    #endregion
+
+    #region Destroy
+
+    private void OnDestroy()
+    {
+        DestroyEventListeners();
+    }
+
+    public void DestroyEventListeners()
+    {
+        ItemsBankEvent.NoStock -= RemoveDroppable;
     }
     #endregion
 
