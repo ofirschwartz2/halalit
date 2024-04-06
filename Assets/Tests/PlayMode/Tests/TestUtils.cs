@@ -57,7 +57,7 @@ internal static class TestUtils
         }
     }
 
-    internal static void SetUpShot(AttackName attackName)
+    internal static void SetUpShot(AttackName attackName, AttackStats attackStats = null)
     {
         var attackToggle = GetAttackToggle();
         attackToggle.SetNewAttack(attackName, attackStats ?? DEFAULT_ATTACK_STATS_1);
