@@ -63,7 +63,7 @@ Rigidbody2D:
     serializedVersion: 2
     m_Bits: 0
   m_Interpolate: 0
-  m_SleepingMode: 1
+  m_SleepingMode: 0
   m_CollisionDetection: 0
   m_Constraints: 0
 --- !u!114 &-6310471066468264510
@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 244123eb6da9bcd4995a1c63575dcb83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _healthBar: {fileID: 5212479352641103145, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
+  _healthBar: {fileID: 0}
   _healthBarIcon: {fileID: 21300000, guid: 1073bff4cc302fa459afe59b17dc1b0e, type: 3}
   _currentMaxHealth: 7
   _finalMaxHealth: 7

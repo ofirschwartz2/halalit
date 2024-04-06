@@ -142,6 +142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _harmer:
     rid: -2
+  _singleHitter: 1
   references:
     version: 2
     RefIds:
