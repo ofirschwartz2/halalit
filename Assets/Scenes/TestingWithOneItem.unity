@@ -201,11 +201,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7077707436052580985, guid: 654ded13d581af344a9c0c1d7bf21ca4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.89
+      value: 4.33
       objectReference: {fileID: 0}
     - target: {fileID: 7077707436052580985, guid: 654ded13d581af344a9c0c1d7bf21ca4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.01
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 7077707436052580985, guid: 654ded13d581af344a9c0c1d7bf21ca4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -927,11 +927,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6741412782414407020, guid: d17f6aba06990634e92f5f659cf1bf0d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.82
+      value: 3.26
       objectReference: {fileID: 0}
     - target: {fileID: 6741412782414407020, guid: d17f6aba06990634e92f5f659cf1bf0d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.02
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 6741412782414407020, guid: d17f6aba06990634e92f5f659cf1bf0d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3262,8 +3262,8 @@ GameObject:
   - component: {fileID: 1751165547}
   - component: {fileID: 1751165548}
   m_Layer: 0
-  m_Name: Items
-  m_TagString: Untagged
+  m_Name: ItemsFactory
+  m_TagString: ItemsFactory
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9496,11 +9496,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1550774248884840464, guid: 235a16c82bb99a347b9b60318f79de27, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.61
+      value: 2.0500002
       objectReference: {fileID: 0}
     - target: {fileID: 1550774248884840464, guid: 235a16c82bb99a347b9b60318f79de27, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.05453205
+      value: 0.08453205
       objectReference: {fileID: 0}
     - target: {fileID: 1550774248884840464, guid: 235a16c82bb99a347b9b60318f79de27, type: 3}
       propertyPath: m_LocalPosition.z
