@@ -21,7 +21,7 @@ public class BlastShotTests
         switch (testName) 
         {
             case FUNCTION_SHOOTING_WITH_TARGET_NAME:
-                SceneManager.LoadScene(SCENE_WITH_ENEMY_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
                 break;
             default:
                 SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);

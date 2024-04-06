@@ -12,8 +12,13 @@ internal static class TestUtils
     public const string TEST_SCENE_WITH_ENEMY_NAME = "TestingWithEnemy";
     public const string TEST_SCENE_WITHOUT_TARGET_NAME = "Testing"; 
     public const string TEST_SCENE_FOR_BOUNCES = "TestingForBounces";
+    public const string TEST_SCENE_WITH_MANY_ENEMIES_FROM_RIGHT_NAME = "TestingWithManyEnemiesFromRight";
+    public const string TEST_SCENE_WITH_ASTEROID_NAME = "TestingWithAsteroid";
+    public const string TEST_SCENE_WITH_MANY_ASTEROIDS_FROM_RIGHT_NAME = "TestingWithManyAsteroidsFromRight";
+    public const string TEST_SCENE_WITH_VALUABLES_NAME = "TestingWithValuables";
 
     // Defaults:
+    public const int ENEMIES_SEEDED_NUMBERS_LIST_DEFAULT_LENGTH = 5;
     public const int DEFAULT_RADIUS_OF_TARGET_POSITION_AROUND_HALALIT = 5;
     public const ItemRank DEFAULT_ITEM_RANK_1 = ItemRank.COMMON;
     public const ItemRank DEFAULT_ITEM_RANK_2 = ItemRank.RARE;
@@ -497,7 +502,7 @@ internal static class TestUtils
     public static IEnumerator GetTimeBetweenHittingConsecutiveShot(int expectedHits, WeaponAttack weaponAttack, Vector2 attackJoystickTouch)
     {
         int hits = 0;
-        float lastTargetHealth = GetTargetHealth();
+        float lastTargetHealth = GetEnemyHealth();
         float newTargetHealth;
         float lastHitTime = 0;
 
@@ -512,7 +517,7 @@ internal static class TestUtils
             yield return null;
 
             newLastShotPosition = shot.GetComponent<LineRenderer>().GetPosition(1);
-            newTargetHealth = GetTargetHealth();
+            newTargetHealth = GetEnemyHealth();
             if (newLastShotPosition == lastShotPosition && newTargetHealth != lastTargetHealth)
             {
                 lastTargetHealth = newTargetHealth;

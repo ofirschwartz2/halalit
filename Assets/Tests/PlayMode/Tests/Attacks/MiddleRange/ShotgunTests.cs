@@ -13,8 +13,6 @@ using UnityEngine.TestTools;
 public class ShotgunTests
 {
 
-    private const string SCENE_NAME = "Testing";
-    private const string SCENE_WITH_ENEMY_NAME = "TestingWithEnemy";
     private const AttackName ATTACK_NAME = AttackName.SHOTGUN;
     private const Tag ATTACK_TAG = Tag.SHOT;
 
@@ -25,10 +23,10 @@ public class ShotgunTests
         switch (testName) 
         {
             case FUNCTION_SHOOTING_WITH_TARGET_NAME:
-                SceneManager.LoadScene(SCENE_WITH_ENEMY_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
                 break;
             default:
-                SceneManager.LoadScene(SCENE_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);
                 break;
         }
     }

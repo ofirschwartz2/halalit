@@ -13,12 +13,6 @@ using UnityEngine.TestTools;
 public class ValuablesTests
 {
 
-    private const string SCENE_WITH_ENEMY_NAME = "TestingWithEnemy";
-    private const string SCENE_WITH_MANY_ENEMIES_FROM_RIGHT_NAME = "TestingWithManyEnemiesFromRight";
-    private const string SCENE_WITH_ASTEROID_NAME = "TestingWithAsteroid";
-    private const string SCENE_WITH_MANY_ASTEROIDS_FROM_RIGHT_NAME = "TestingWithManyAsteroidsFromRight";
-    private const string SCENE_WITH_VALUABLES_NAME = "TestingWithValuables";
-
     [SetUp]
     public void SetUp()
     {
@@ -27,23 +21,23 @@ public class ValuablesTests
         switch (testName)
         {
             case FUNCTION_ENEMY_DROPS_1_OR_0_VALUABLES_NAME:
-                SceneManager.LoadScene(SCENE_WITH_ENEMY_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
                 break;
 
             case FUNCTION_ENEMY_SOMETIMES_DROPS_VALUABLE_NAME:
-                SceneManager.LoadScene(SCENE_WITH_MANY_ENEMIES_FROM_RIGHT_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_MANY_ENEMIES_FROM_RIGHT_NAME);
                 break;
                 
             case FUNCTION_ASTEROID_DROPS_1_OR_0_VALUABLES_NAME:
-                SceneManager.LoadScene(SCENE_WITH_ASTEROID_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ASTEROID_NAME);
                 break;
 
             case FUNCTION_ASTEROID_SOMETIMES_DROPS_VALUABLE_NAME:
-                SceneManager.LoadScene(SCENE_WITH_MANY_ASTEROIDS_FROM_RIGHT_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_MANY_ASTEROIDS_FROM_RIGHT_NAME);
                 break;
 
             case FUNCTION_VALUABLES_ADD_SCORE_NAME:
-                SceneManager.LoadScene(SCENE_WITH_VALUABLES_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_VALUABLES_NAME);
                 break;
             default:
                 throw new System.Exception("No scene for test: " + testName);

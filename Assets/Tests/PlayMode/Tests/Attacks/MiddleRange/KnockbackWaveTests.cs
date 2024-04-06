@@ -22,7 +22,7 @@ public class KnockbackWaveTests
             case FUNCTION_SHOOTING_WITH_TARGET_NAME:
             case FUNCTION_KNOCKBACKINT_VECTOR_NAME:
             case FUNCTION_DOUBLE_HIT_CHECK_NAME:
-                SceneManager.LoadScene(SCENE_WITH_ENEMY_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
                 break;
             default:
                 SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);

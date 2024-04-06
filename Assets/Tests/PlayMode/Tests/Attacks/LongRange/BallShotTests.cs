@@ -9,8 +9,6 @@ using UnityEngine.TestTools;
 
 public class BallShotTests
 {
-    private const string SCENE_NAME = "Testing";
-    private const string SCENE_WITH_ENEMY_NAME = "TestingWithEnemy";
     private const AttackName SHOT_NAME = AttackName.BALL_SHOT;
 
     [SetUp]
@@ -20,10 +18,10 @@ public class BallShotTests
         switch (testName) 
         {
             case FUNCTION_SHOOTING_WITH_TARGET_NAME:
-                SceneManager.LoadScene(SCENE_WITH_ENEMY_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
                 break;
             default:
-                SceneManager.LoadScene(SCENE_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);
                 break;
         }
     }
@@ -95,7 +93,7 @@ public class BallShotTests
         TestUtils.SetUpShot(SHOT_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
-        TestUtils.SetRandomTargetPosition();
+        TestUtils.SetRandomEnemyPosition();
         yield return null;
 
         var targetClosestPosition = TestUtils.GetEnemyNearestPositionToHalalit();

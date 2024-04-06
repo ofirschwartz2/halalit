@@ -13,7 +13,6 @@ public class BoomerangTests
 {
 
     private const string SCENE_NAME = "Testing";
-    private const string SCENE_WITH_ENEMY_NAME = "TestingWithEnemy";
     private const AttackName SHOT_NAME = AttackName.BOOMERANG;
 
     [SetUp]
@@ -23,7 +22,7 @@ public class BoomerangTests
         switch (testName) 
         {
             case FUNCTION_SHOOTING_WITH_TARGET_NAME:
-                SceneManager.LoadScene(SCENE_WITH_ENEMY_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
                 break;
             default:
                 SceneManager.LoadScene(SCENE_NAME);

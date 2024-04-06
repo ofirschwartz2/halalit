@@ -19,7 +19,7 @@ public class PowerTests
     [SetUp]
     public void SetUp()
     {
-        SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_TARGET_NAME);
+        SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
     }
 
     private void LoadAttackTestData()
@@ -27,9 +27,9 @@ public class PowerTests
         _currentSeed = TestUtils.SetRandomSeed();
         _weaponAttack = TestUtils.GetWeaponAttack();
         _weaponMovement = TestUtils.GetWeaponMovement();
-        _originalTargetHealth = TestUtils.GetTargetHealth();
+        _originalTargetHealth = TestUtils.GetEnemyHealth();
 
-        Vector2 targetClosestPosition = TestUtils.GetTargetNearestPositionToHalalit();
+        Vector2 targetClosestPosition = TestUtils.GetEnemyNearestPositionToHalalit();
         _attackJoystickTouch = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, _weaponAttack.GetAttackJoystickEdge());
     }
 
@@ -37,7 +37,7 @@ public class PowerTests
     public IEnumerator AttackWithDescreteWeaponTest([ValueSource(nameof(_statsValues))] AttackStats attackStats)
     {
         // GIVEN
-        TestUtils.SetUpShot(AttackName.BALL_SHOT, attackStats);
+        TestUtils.SetUpShot(AttackName.BALL_SHOT);
         yield return null;
 
         TestUtils.SetTargetPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
@@ -58,7 +58,7 @@ public class PowerTests
         }
 
         // THEN
-        var newTargetHealth = TestUtils.GetTargetHealth();
+        var newTargetHealth = TestUtils.GetEnemyHealth();
         AssertWrapper.AreEqual(_originalTargetHealth - attackStats.Power, newTargetHealth, "Target Health Didn't drop correctly", _currentSeed);
     }
 
@@ -87,7 +87,7 @@ public class PowerTests
         }
 
         // THEN
-        var newTargetHealth = TestUtils.GetTargetHealth();
+        var newTargetHealth = TestUtils.GetEnemyHealth();
         AssertWrapper.AreEqual(_originalTargetHealth - attackStats.Power * consecutiveHitsCount, newTargetHealth, "Target Health Didn't drop correctly", _currentSeed);
     }
 }

@@ -25,7 +25,7 @@ public class RateTests
             SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);
         }
         else {
-            SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_TARGET_NAME);
+            SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
         }
     }
 
@@ -43,7 +43,7 @@ public class RateTests
         }
         else
         {
-            Vector2 targetClosestPosition = TestUtils.GetTargetNearestPositionToHalalit();
+            Vector2 targetClosestPosition = TestUtils.GetEnemyNearestPositionToHalalit();
             _attackJoystickTouch = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, _weaponAttack.GetAttackJoystickEdge());
         }
     }

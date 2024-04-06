@@ -21,7 +21,7 @@ public class MirrorBallShotTests
         {
             case FUNCTION_SHOOTING_WITH_TARGET_NAME:
             case FUNCTION_BOUNCE_DIRECTION_CHECK_NAME:
-                SceneManager.LoadScene(SCENE_WITH_ENEMY_NAME);
+                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
                 break;
             case FUNCTION_AMOUNT_OF_BOUNCES_CHECK_NAME:
                 SceneManager.LoadScene(TestUtils.TEST_SCENE_FOR_BOUNCES);
