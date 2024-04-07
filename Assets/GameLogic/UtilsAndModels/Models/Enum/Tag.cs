@@ -67,6 +67,10 @@ namespace Assets.Enums
         [Description("AsteroidsContainer")]
         ASTEROIDS_CONTAINER,
         [Description("EnemiesContainer")]
-        ENEMIES_CONTAINER
+        ENEMIES_CONTAINER,
+        [Description("EventSystem")]
+        EVENT_SYSTEM,
+        [Description("ValuablesContainer")]
+        VALUABLES_CONTAINER
     }
 }

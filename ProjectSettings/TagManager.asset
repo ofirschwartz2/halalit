@@ -48,6 +48,8 @@ TagManager:
   - AsteroidDestructor
   - AsteroidsContainer
   - EnemiesContainer
+  - EventSystem
+  - ValuablesContainer
   layers:
   - Default
   - TransparentFX

@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class PlaygroundTests
@@ -292,4 +293,49 @@ public class PlaygroundTests
         AssertWrapper.IsNotNull(attacksBankScript);
     }
 
+    [Test]
+    public void EventSystemTests() 
+    {
+        // EVENT SYSTEM
+        var eventSystem = TestUtils.GetEventSystem();
+        var eventSystemTransform = eventSystem.transform;
+        var eventSystemEventSystem = eventSystem.GetComponent<EventSystem>();
+        var eventSystemStandaloneInputModule = eventSystem.GetComponent<StandaloneInputModule>();
+        var eventSystemEvent = eventSystem.GetComponent<Event>();
+        var eventSystemDeathEvent = eventSystem.GetComponent<DeathEvent>();
+        var eventSystemAsteroidEvent = eventSystem.GetComponent<AsteroidEvent>();
+        var eventSystemItemEvent = eventSystem.GetComponent<ItemEvent>();
+        var eventSystemItemsBankEvent = eventSystem.GetComponent<ItemsBankEvent>();
+        var eventSystemEnemyExplosionEvent = eventSystem.GetComponent<EnemyExplosionEvent>();
+        var eventSystemValuableEvent = eventSystem.GetComponent<ValuableEvent>();
+        var eventSystemItemDropEvent = eventSystem.GetComponent<ItemDropEvent>();
+        var eventSystemValuableDropEvent = eventSystem.GetComponent<ValuableDropEvent>();
+
+        AssertWrapper.IsNotNull(eventSystem);
+        AssertWrapper.IsNotNull(eventSystemTransform);
+        AssertWrapper.IsNotNull(eventSystemEventSystem);
+        AssertWrapper.IsNotNull(eventSystemStandaloneInputModule);
+        AssertWrapper.IsNotNull(eventSystemEvent);
+        AssertWrapper.IsNotNull(eventSystemDeathEvent);
+        AssertWrapper.IsNotNull(eventSystemAsteroidEvent);
+        AssertWrapper.IsNotNull(eventSystemItemEvent);
+        AssertWrapper.IsNotNull(eventSystemItemsBankEvent);
+        AssertWrapper.IsNotNull(eventSystemEnemyExplosionEvent);
+        AssertWrapper.IsNotNull(eventSystemValuableEvent);
+        AssertWrapper.IsNotNull(eventSystemItemDropEvent);
+        AssertWrapper.IsNotNull(eventSystemValuableDropEvent);
+    }
+
+    [Test]
+    public void ValuablesContainerTests()
+    {
+        // VALUABLES CONTAINER
+        var valuablesContainer = TestUtils.GetValuablesContainer();
+        var valuablesContainerTransform = valuablesContainer.transform;
+        var valuablesContainerValuableDropper = valuablesContainer.GetComponent<ValuableDropper>();
+
+        AssertWrapper.IsNotNull(valuablesContainer);
+        AssertWrapper.IsNotNull(valuablesContainerTransform);
+        AssertWrapper.IsNotNull(valuablesContainerValuableDropper);
+    }
 }

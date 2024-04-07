@@ -163,6 +163,15 @@ internal static class TestUtils
 
     #region SceneGetters
 
+    internal static GameObject GetValuablesContainer()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.VALUABLES_CONTAINER.GetDescription());
+    }
+    internal static GameObject GetEventSystem() 
+    {
+        return GameObject.FindGameObjectWithTag(Tag.EVENT_SYSTEM.GetDescription());
+    }
+
     internal static GameObject GetAttacks() 
     {
         return GameObject.FindGameObjectWithTag(Tag.ATTACKS.GetDescription());
