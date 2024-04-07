@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-class Knockbackee : MonoBehaviour
+public class Knockbackee : MonoBehaviour
 {
     [SerializeField]
     private Rigidbody2D _rigidbody2D;

@@ -43,6 +43,11 @@ TagManager:
   - ItemsFactory
   - Setup
   - Valuable
+  - HalalitHealthBar
+  - AsteroidInstantiator
+  - AsteroidDestructor
+  - AsteroidsContainer
+  - EnemiesContainer
   layers:
   - Default
   - TransparentFX

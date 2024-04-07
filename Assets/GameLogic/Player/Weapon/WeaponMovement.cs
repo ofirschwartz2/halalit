@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
 [assembly: InternalsVisibleTo("PlayModeTests")]
+[assembly: InternalsVisibleTo("EditModeTests")]
 #endif
 
 class WeaponMovement : MonoBehaviour

@@ -60,5 +60,13 @@ namespace Assets.Enums
         EXPLOSION_SHOCK_WAVE,
         [Description("Valuable")]
         VALUABLE,
+        [Description("HalalitHealthBar")]
+        HALALIT_HEALTH_BAR,
+        [Description("MainCamera")]
+        MAIN_CAMERA,
+        [Description("AsteroidsContainer")]
+        ASTEROIDS_CONTAINER,
+        [Description("EnemiesContainer")]
+        ENEMIES_CONTAINER
     }
 }

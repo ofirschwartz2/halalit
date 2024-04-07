@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 [assembly: InternalsVisibleTo("PlayModeTests")]
 #endif
 
-class HalalitMovement : MonoBehaviour
+public class HalalitMovement : MonoBehaviour
 {
     [SerializeField]
     private Rigidbody2D _rigidBody;

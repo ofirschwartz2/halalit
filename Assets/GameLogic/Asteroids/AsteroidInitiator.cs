@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-class AsteroidInitiator : MonoBehaviour
+public class AsteroidInitiator : MonoBehaviour
 {
     public void InitAsteroid(GameObject asteroid, Vector2 direction, float scale, string newSiblingAsteroidsId = null)
     {
