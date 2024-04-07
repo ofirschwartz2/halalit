@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 #if UNITY_EDITOR
-[assembly: InternalsVisibleTo("Tests")]
+[assembly: InternalsVisibleTo("PlayModeTests")]
 #endif
 
 class Score : MonoBehaviour
