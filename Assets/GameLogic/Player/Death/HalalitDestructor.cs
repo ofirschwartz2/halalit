@@ -2,7 +2,7 @@
 using Assets.Utils;
 using UnityEngine;
 
-public class EnemiesDestructor : MonoBehaviour
+public class HalalitDestructor : MonoBehaviour
 {
 
     #region Init
@@ -37,6 +37,5 @@ public class EnemiesDestructor : MonoBehaviour
 
         Destroy(enemyToKill);
     }
-
 
 }

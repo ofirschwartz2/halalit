@@ -49,15 +49,15 @@ public class Score : MonoBehaviour
         scoreText.text = "Score: " + _score.ToString();
     }
 
+    public int GetScore()
+    {
+        return _score;
+    }
+
 #if UNITY_EDITOR
     internal List<KeyValuePair<ValuableName, int>> GetValuableValues()
     {
         return _valuableValues;
-    }
-
-    internal int GetScore()
-    {
-        return _score;
     }
 #endif
 
