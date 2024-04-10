@@ -10,10 +10,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 #if UNITY_EDITOR
-[assembly: InternalsVisibleTo("Tests")]
+[assembly: InternalsVisibleTo("PlayModeTests")]
 #endif
 
-class Health : MonoBehaviour
+public class Health : MonoBehaviour
 {
     [SerializeField]
     private GameObject _healthBar;

@@ -6,7 +6,7 @@ using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
 #if UNITY_EDITOR
-[assembly: InternalsVisibleTo("Tests")]
+[assembly: InternalsVisibleTo("PlayModeTests")]
 #endif
 
 public class PickupClawStateMachine : MonoBehaviour

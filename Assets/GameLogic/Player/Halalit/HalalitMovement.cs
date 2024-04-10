@@ -5,10 +5,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
-[assembly: InternalsVisibleTo("Tests")]
+[assembly: InternalsVisibleTo("PlayModeTests")]
 #endif
 
-class HalalitMovement : MonoBehaviour
+public class HalalitMovement : MonoBehaviour
 {
     [SerializeField]
     private Rigidbody2D _rigidBody;

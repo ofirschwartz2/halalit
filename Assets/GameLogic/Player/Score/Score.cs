@@ -5,10 +5,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 #if UNITY_EDITOR
-[assembly: InternalsVisibleTo("Tests")]
+[assembly: InternalsVisibleTo("PlayModeTests")]
 #endif
 
-class Score : MonoBehaviour
+public class Score : MonoBehaviour
 {
     [SerializeField]
     private List<KeyValuePair<ValuableName, int>> _valuableValues;

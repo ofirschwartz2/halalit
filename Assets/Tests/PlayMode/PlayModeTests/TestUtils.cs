@@ -4,7 +4,10 @@ using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+
+[assembly: InternalsVisibleTo("EditModeTests")]
 
 internal static class TestUtils
 {
@@ -160,6 +163,40 @@ internal static class TestUtils
 
     #region SceneGetters
 
+    internal static GameObject GetValuablesContainer()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.VALUABLES_CONTAINER.GetDescription());
+    }
+    internal static GameObject GetEventSystem() 
+    {
+        return GameObject.FindGameObjectWithTag(Tag.EVENT_SYSTEM.GetDescription());
+    }
+
+    internal static GameObject GetAttacks() 
+    {
+        return GameObject.FindGameObjectWithTag(Tag.ATTACKS.GetDescription());
+    }
+
+    internal static GameObject GetHalalit()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
+    }
+
+    internal static GameObject GetEnemiesContainer() 
+    {
+        return GameObject.FindGameObjectWithTag(Tag.ENEMIES_CONTAINER.GetDescription());
+    }
+
+    internal static GameObject GetAsteroidsContainer()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.ASTEROIDS_CONTAINER.GetDescription());
+    }
+
+    internal static GameObject GetCamera()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.MAIN_CAMERA.GetDescription());
+    }
+
     internal static int GetScore() 
     {
         var halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
@@ -191,6 +228,36 @@ internal static class TestUtils
         return itemsFactory.GetComponent<ItemDropper>();
     }
 
+    internal static GameObject GetInternalWorld() 
+    {
+        return GameObject.FindGameObjectWithTag(Tag.INTERNAL_WORLD.GetDescription());
+    }
+
+    internal static GameObject GetExternalWorld()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.EXTERNAL_WORLD.GetDescription());
+    }
+
+    internal static GameObject GetExternalTopEdge() 
+    {
+        return GameObject.FindGameObjectWithTag(Tag.TOP_EDGE.GetDescription());
+    }
+
+    internal static GameObject GetExternalBottomEdge()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.BOTTOM_EDGE.GetDescription());
+    }
+
+    internal static GameObject GetExternalLeftEdge()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.LEFT_EDGE.GetDescription());
+    }
+
+    internal static GameObject GetExternalRightEdge()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.RIGHT_EDGE.GetDescription());
+    }
+
     internal static GameObject GetAttackJoystick()
     {
         return GameObject.FindGameObjectWithTag(Tag.ATTACK_JOYSTICK.GetDescription());
@@ -199,6 +266,16 @@ internal static class TestUtils
     internal static GameObject GetMovementJoystick()
     {
         return GameObject.FindGameObjectWithTag(Tag.MOVEMENT_JOYSTICK.GetDescription());
+    }
+
+    internal static GameObject GetScoreText() 
+    {
+        return GameObject.FindGameObjectWithTag(Tag.SCORE_TEXT.GetDescription());
+    }
+
+    internal static GameObject GetHalalitHealthBar()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.HALALIT_HEALTH_BAR.GetDescription());
     }
 
     internal static GameObject GetShot()
