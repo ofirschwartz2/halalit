@@ -268,6 +268,11 @@ internal static class TestUtils
         return GameObject.FindGameObjectWithTag(Tag.MOVEMENT_JOYSTICK.GetDescription());
     }
 
+    internal static GameObject GetScoreText() 
+    {
+        return GameObject.FindGameObjectWithTag(Tag.SCORE_TEXT.GetDescription());
+    }
+
     internal static GameObject GetHalalitHealthBar()
     {
         return GameObject.FindGameObjectWithTag(Tag.HALALIT_HEALTH_BAR.GetDescription());

@@ -12,11 +12,13 @@ public class PlaygroundTests
         var attackJoystick = TestUtils.GetAttackJoystick();
         var movementJoystick = TestUtils.GetMovementJoystick();
         var halalitHealthBar = TestUtils.GetHalalitHealthBar();
+        var ScoreText = TestUtils.GetScoreText();
         var parentRotationCounteractor = halalitHealthBar.GetComponent<ParentRotationCounteractor>();
 
         AssertWrapper.IsNotNull(attackJoystick);
         AssertWrapper.IsNotNull(movementJoystick);
         AssertWrapper.IsNotNull(halalitHealthBar);
+        AssertWrapper.IsNotNull(ScoreText);
         AssertWrapper.IsNotNull(parentRotationCounteractor);
     }
     
