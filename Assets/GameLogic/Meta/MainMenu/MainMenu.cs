@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
@@ -9,7 +10,10 @@ public class MainMenu : MonoBehaviour
     private int _highScore;
 
     [SerializeField]
-    private Text highScoreText;
+    private Text _scoreText;
+
+    [SerializeField]
+    private Text _highScoreText;
 
     private void Awake()
     {
@@ -34,7 +38,7 @@ public class MainMenu : MonoBehaviour
 
     public void TrySetHighScore(object initiator, HalalitDeathEventArguments arguments)
     {
-        var deathScore = Score.GetScore();
+        var deathScore = _scoreText.GetComponent<Score>().GetScore();
         if (deathScore > _highScore)
         {
             _highScore = deathScore;

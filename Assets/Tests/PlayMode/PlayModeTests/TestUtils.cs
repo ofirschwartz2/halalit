@@ -199,8 +199,8 @@ internal static class TestUtils
 
     internal static int GetScore() 
     {
-        var halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
-        var score = halalit.GetComponent<Score>();
+        var ScoreText = GetScoreText();
+        var score = ScoreText.GetComponent<Score>();
         return score.GetScore();
     }
 

@@ -11,7 +11,8 @@
         "Player",
         "Items",
         "Attacks",
-        "Health"
+        "Health",
+        "Meta"
     ],
     "includePlatforms": [
         "Editor"
