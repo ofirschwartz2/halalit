@@ -13,7 +13,7 @@ public class EnemiesDestructor : MonoBehaviour
 
     private void SetEventListeners()
     {
-        DeathEvent.HalalitDeath += OnHalalitDeath;
+        DeathEvent.EnemyDeath += OnEnemyDeath;
     }
     #endregion
 
@@ -26,17 +26,17 @@ public class EnemiesDestructor : MonoBehaviour
 
     public void DestroyEventListeners()
     {
-        DeathEvent.HalalitDeath -= OnHalalitDeath;
+        DeathEvent.EnemyDeath -= OnEnemyDeath;
     }
     #endregion
 
-    #region Halalit destruction
-    private void OnHalalitDeath(object initiator, TargetDeathEventArguments arguments)
+    #region Enemy destruction
+    private void OnEnemyDeath(object initiator, TargetDeathEventArguments arguments)
     {
         GameObject enemyToKill = ((MonoBehaviour)initiator).gameObject;
 
         Destroy(enemyToKill);
     }
 
-
+    #endregion
 }

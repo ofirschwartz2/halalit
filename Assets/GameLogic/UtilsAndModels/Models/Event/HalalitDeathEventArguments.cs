@@ -1,9 +1,6 @@
 ﻿public class HalalitDeathEventArguments : System.EventArgs
 {
-    public float Score;
-
-    public HalalitDeathEventArguments(float score)
+    public HalalitDeathEventArguments()
     {
-        Score = score;
     }
 }
