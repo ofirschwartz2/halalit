@@ -48,6 +48,11 @@ public class Score : MonoBehaviour
     {
         _score += _valuableValues.Find(valuable => valuable.Key == arguments.Name).Value;
         scoreText.text = "Score: " + _score.ToString();
+
+        if (_score > _highScore) 
+        {
+            _highScore = _score;
+        }
     }
 
     public int GetScore()

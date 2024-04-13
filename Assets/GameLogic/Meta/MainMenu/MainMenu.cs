@@ -5,25 +5,18 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-
-    [SerializeField]
-    private int _highScore;
-
-    [SerializeField]
-    private Text _scoreText;
-
     [SerializeField]
     private Text _highScoreText;
 
     private void Awake()
     {
-        _highScore = 0;
         SetEventListeners();
+        SetHighScore();
     }
 
     private void SetEventListeners()
     {
-        HalalitDeathEvent.HalalitDeath += TrySetHighScore;
+        HalalitDeathEvent.HalalitDeath += HandleDeath;
     }
 
     public void StartGame()
@@ -36,12 +29,13 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
-    public void TrySetHighScore(object initiator, HalalitDeathEventArguments arguments)
+    public void HandleDeath(object initiator, HalalitDeathEventArguments arguments)
     {
-        var deathScore = _scoreText.GetComponent<Score>().GetScore();
-        if (deathScore > _highScore)
-        {
-            _highScore = deathScore;
-        }
+        SetHighScore();
+    }
+
+    public void SetHighScore()
+    {
+        _highScoreText.text = "High Score: " + Score._highScore;
     }
 }
