@@ -34,7 +34,7 @@ public abstract class LaserBeamBase : ConsecutiveAttack
 
     protected void Start()
     {
-        _beamLine.tag = Tag.SHOT.GetDescription();
+        //_beamLine.tag = Tag.SHOT.GetDescription();
         _isBeingShoot = true;
         _distanceFromStartPosition = 0;
         _beamLine.startWidth = _beamSize;

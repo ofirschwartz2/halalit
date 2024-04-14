@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 2ff62b37a58827d41b9a25f716ba6459
   - enabled: 1
+    path: Assets/Scenes/Playground.unity
+    guid: 5b7cb81d6d7127b4180a8d3c61ccbb83
+  - enabled: 1
     path: Assets/Scenes/Testing.unity
     guid: d9e990ddd60488348891d4074f09c099
   - enabled: 1
@@ -32,7 +35,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TestingWithOneItem.unity
     guid: b452cc5f4c5ad7a46a133c3594fd941b
-  - enabled: 1
-    path: Assets/Scenes/Playground.unity
-    guid: 5b7cb81d6d7127b4180a8d3c61ccbb83
   m_configObjects: {}

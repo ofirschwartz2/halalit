@@ -10,13 +10,7 @@ public class MainMenu : MonoBehaviour
 
     private void Awake()
     {
-        SetEventListeners();
         SetHighScore();
-    }
-
-    private void SetEventListeners()
-    {
-        HalalitDeathEvent.HalalitDeath += HandleDeath;
     }
 
     public void StartGame()
@@ -29,13 +23,8 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
-    public void HandleDeath(object initiator, HalalitDeathEventArguments arguments)
-    {
-        SetHighScore();
-    }
-
     public void SetHighScore()
     {
-        _highScoreText.text = "High Score: " + Score._highScore;
+        _highScoreText.text = "High Score: " + HighScore._highScore;
     }
 }

@@ -19,15 +19,21 @@ public class Score : MonoBehaviour
     private int _score;
 
     #region Init
+
+    private void Start()
+    {
+        SetEventListeners();
+    }
+
     private void Awake()
     {
         _score = 0;
-        SetEventListeners();
     }
 
     private void SetEventListeners()
     {
         ValuableEvent.PlayerValuablePickUp += IncreaseScore;
+        HalalitDeathEvent.HalalitDeath += TrySetHighScore;
     }
     #endregion
 
@@ -49,9 +55,13 @@ public class Score : MonoBehaviour
         _score += _valuableValues.Find(valuable => valuable.Key == arguments.Name).Value;
         scoreText.text = "Score: " + _score.ToString();
 
-        if (_score > _highScore) 
+    }
+
+    private void TrySetHighScore(object initiator, HalalitDeathEventArguments arguments)
+    {
+        if (_score > HighScore._highScore)
         {
-            _highScore = _score;
+            HighScore._highScore = _score;
         }
     }
 

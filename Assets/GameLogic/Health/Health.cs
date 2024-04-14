@@ -246,7 +246,7 @@ public class Health : MonoBehaviour
     {
         if (gameObject.CompareTag(Tag.HALALIT.GetDescription()))
         {
-            HalalitDeathEvent.InvokeHalalitDeath(this, new()); // TODO: fix
+            HalalitDeathEvent.InvokeHalalitDeath(this, new());
         }
         else if (gameObject.CompareTag(Tag.ENEMY.GetDescription()))
         {
