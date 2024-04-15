@@ -19,14 +19,9 @@ public class Score : MonoBehaviour
     private int _score;
 
     #region Init
-
-    private void Start()
-    {
-        SetEventListeners();
-    }
-
     private void Awake()
     {
+        SetEventListeners();
         _score = 0;
     }
 

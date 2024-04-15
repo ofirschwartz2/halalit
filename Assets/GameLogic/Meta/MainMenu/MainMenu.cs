@@ -1,6 +1,7 @@
+using Assets.Enums;
+using Assets.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
@@ -15,7 +16,7 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(SceneName.PLAYGROUND.GetDescription());
     }
 
     public void ExitGame()

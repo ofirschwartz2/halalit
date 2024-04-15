@@ -1452,7 +1452,7 @@ MonoBehaviour:
   _halalit: {fileID: 2130719621}
   _attackJoystick: {fileID: 1115015985}
   _projectiles: {fileID: 752615852}
-  _cooldownMultiplier: 1
+  _cooldownMultiplier: 0.3
   _attackJoystickEdge: 0.8
   _currentAttack:
     Key: 0
@@ -1531,7 +1531,7 @@ MonoBehaviour:
     Key: 0
     Value:
       _itemRank: 0
-      Power: 5
+      Power: 50
       CriticalHit: 1
       Luck: 1
       Rate: 1
@@ -9455,6 +9455,7 @@ GameObject:
   - component: {fileID: 2083128242}
   - component: {fileID: 2083128244}
   - component: {fileID: 2083128243}
+  - component: {fileID: 2083128245}
   m_Layer: 5
   m_Name: ScoreText
   m_TagString: ScoreText
@@ -9524,6 +9525,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2083128241}
   m_CullTransparentMesh: 1
+--- !u!114 &2083128245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083128241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 444a1b8789c454a4cad8311cba881ae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _valuableValues:
+  - Key: 0
+    Value: 10
+  - Key: 1
+    Value: 30
+  - Key: 2
+    Value: 50
+  scoreText: {fileID: 2083128243}
 --- !u!1 &2130719621
 GameObject:
   m_ObjectHideFlags: 0
@@ -9710,7 +9731,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _healthBar: {fileID: 1125677064}
   _healthBarIcon: {fileID: 21300000, guid: b2b25edd941b5c94793518d2adf495ee, type: 3}
-  _currentMaxHealth: 1
+  _currentMaxHealth: 5
   _finalMaxHealth: 50
   _harmers: 0200000013000000
   _contributors: 

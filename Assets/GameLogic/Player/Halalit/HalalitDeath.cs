@@ -1,3 +1,5 @@
+using Assets.Enums;
+using Assets.Utils;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -36,7 +38,7 @@ public class HalalitDeath : MonoBehaviour
     #region Enemy destruction
     private void OnHalalitDeath(object initiator, HalalitDeathEventArguments arguments)
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(SceneName.MAIN_MENU.GetDescription());
     }
 
     #endregion
