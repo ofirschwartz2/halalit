@@ -5,23 +5,21 @@ using UnityEngine;
 
 public class DeathEvent : MonoBehaviour
 {
-    private static Dictionary<EventName, EventHandler<DeathEventArguments>> _deathEvents;
+    private static Dictionary<EventName, EventHandler<TargetDeathEventArguments>> _targetDeathEvents;
 
-    public static event EventHandler<DeathEventArguments> HalalitDeath;
-    public static event EventHandler<DeathEventArguments> EnemyDeath;
-    public static event EventHandler<DeathEventArguments> AsteroidDeath;
+    public static event EventHandler<TargetDeathEventArguments> EnemyDeath;
+    public static event EventHandler<TargetDeathEventArguments> AsteroidDeath;
 
     void Start()
     {
-        _deathEvents = new();
-        _deathEvents.Add(EventName.HALALIT_DEATH, HalalitDeath);
-        _deathEvents.Add(EventName.ENEMY_DEATH, EnemyDeath);
-        _deathEvents.Add(EventName.ASTEROID_DEATH, AsteroidDeath);
+        _targetDeathEvents = new();
+        _targetDeathEvents.Add(EventName.ENEMY_DEATH, EnemyDeath);
+        _targetDeathEvents.Add(EventName.ASTEROID_DEATH, AsteroidDeath);
     }
 
-    public static void Invoke(EventName eventName, object initiator, DeathEventArguments deathEventArguments)
+    public static void InvokeTargetDeath(EventName eventName, object initiator, TargetDeathEventArguments deathEventArguments)
     {
-        Event.Invoke(_deathEvents[eventName], initiator, deathEventArguments);
+        Event.Invoke(_targetDeathEvents[eventName], initiator, deathEventArguments);
     }
 }
 

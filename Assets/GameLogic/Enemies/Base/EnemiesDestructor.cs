@@ -31,7 +31,7 @@ public class EnemiesDestructor : MonoBehaviour
     #endregion
 
     #region Enemy destruction
-    private void OnEnemyDeath(object initiator, DeathEventArguments arguments)
+    private void OnEnemyDeath(object initiator, TargetDeathEventArguments arguments)
     {
         GameObject enemyToKill = ((MonoBehaviour)initiator).gameObject;
 

@@ -12,14 +12,17 @@ public class PlaygroundTests
         var attackJoystick = TestUtils.GetAttackJoystick();
         var movementJoystick = TestUtils.GetMovementJoystick();
         var halalitHealthBar = TestUtils.GetHalalitHealthBar();
-        var ScoreText = TestUtils.GetScoreText();
+        var scoreText = TestUtils.GetScoreText();
         var parentRotationCounteractor = halalitHealthBar.GetComponent<ParentRotationCounteractor>();
+        var scoreScript = scoreText.GetComponent<ScoreScript>();
+
 
         AssertWrapper.IsNotNull(attackJoystick);
         AssertWrapper.IsNotNull(movementJoystick);
         AssertWrapper.IsNotNull(halalitHealthBar);
-        AssertWrapper.IsNotNull(ScoreText);
+        AssertWrapper.IsNotNull(scoreText);
         AssertWrapper.IsNotNull(parentRotationCounteractor);
+        AssertWrapper.IsNotNull(scoreScript);
     }
     
     [Test]
@@ -225,7 +228,6 @@ public class PlaygroundTests
         var halalitHalalitMovement = halalit.GetComponent<HalalitMovement>();
         var halalitKnockbackee = halalit.GetComponent<Knockbackee>();
         var halalitHealth = halalit.GetComponent<Health>();
-        var halalitScore = halalit.GetComponent<Score>();
 
         AssertWrapper.IsNotNull(halalit);
         AssertWrapper.IsNotNull(halalitTransform);
@@ -235,7 +237,6 @@ public class PlaygroundTests
         AssertWrapper.IsNotNull(halalitHalalitMovement);
         AssertWrapper.IsNotNull(halalitKnockbackee);
         AssertWrapper.IsNotNull(halalitHealth);
-        AssertWrapper.IsNotNull(halalitScore);
 
 
         // ENGINE

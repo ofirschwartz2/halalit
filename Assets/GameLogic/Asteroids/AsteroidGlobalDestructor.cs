@@ -31,7 +31,7 @@ public class AsteroidGlobalDestructor : MonoBehaviour
     #endregion
 
     #region Asteroid destruction
-    private void OnAsteroidDeath(object initiator, DeathEventArguments arguments)
+    private void OnAsteroidDeath(object initiator, TargetDeathEventArguments arguments)
     {
         GameObject asteroidToKill = ((MonoBehaviour)initiator).gameObject;
 

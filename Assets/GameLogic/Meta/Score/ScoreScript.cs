@@ -8,25 +8,27 @@ using UnityEngine.UI;
 [assembly: InternalsVisibleTo("PlayModeTests")]
 #endif
 
-public class Score : MonoBehaviour
+public class ScoreScript : MonoBehaviour
 {
     [SerializeField]
     private List<KeyValuePair<ValuableName, int>> _valuableValues;
-   
-    public Text scoreText;
+
+    [SerializeField]
+    private Text scoreText;
 
     private int _score;
 
     #region Init
     private void Awake()
     {
-        _score = 0;
         SetEventListeners();
+        _score = 0;
     }
 
     private void SetEventListeners()
     {
         ValuableEvent.PlayerValuablePickUp += IncreaseScore;
+        HalalitDeathEvent.HalalitDeath += TrySetHighScore;
     }
     #endregion
 
@@ -47,17 +49,26 @@ public class Score : MonoBehaviour
     {
         _score += _valuableValues.Find(valuable => valuable.Key == arguments.Name).Value;
         scoreText.text = "Score: " + _score.ToString();
+
+    }
+
+    private void TrySetHighScore(object initiator, HalalitDeathEventArguments arguments)
+    {
+        if (_score > HighScore._highScore)
+        {
+            HighScore._highScore = _score;
+        }
+    }
+
+    public int GetScore()
+    {
+        return _score;
     }
 
 #if UNITY_EDITOR
     internal List<KeyValuePair<ValuableName, int>> GetValuableValues()
     {
         return _valuableValues;
-    }
-
-    internal int GetScore()
-    {
-        return _score;
     }
 #endif
 

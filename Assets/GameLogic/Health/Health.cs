@@ -246,15 +246,15 @@ public class Health : MonoBehaviour
     {
         if (gameObject.CompareTag(Tag.HALALIT.GetDescription()))
         {
-            DeathEvent.Invoke(EventName.HALALIT_DEATH, this, new(transform.localScale.x));
+            HalalitDeathEvent.InvokeHalalitDeath(this, new());
         }
         else if (gameObject.CompareTag(Tag.ENEMY.GetDescription()))
         {
-            DeathEvent.Invoke(EventName.ENEMY_DEATH, this, new(transform.localScale.x));
+            DeathEvent.InvokeTargetDeath(EventName.ENEMY_DEATH, this, new(transform.localScale.x));
         }
         else if (gameObject.CompareTag(Tag.ASTEROID.GetDescription()))
         {
-            DeathEvent.Invoke(EventName.ASTEROID_DEATH, this, new(transform.localScale.x));
+            DeathEvent.InvokeTargetDeath(EventName.ASTEROID_DEATH, this, new(transform.localScale.x));
         }
     }
     #endregion

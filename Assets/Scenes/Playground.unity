@@ -393,6 +393,7 @@ GameObject:
   - component: {fileID: 430440945}
   - component: {fileID: 430440946}
   - component: {fileID: 430440947}
+  - component: {fileID: 430440948}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: EventSystem
@@ -556,6 +557,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b0bdbb864c94de4ea28d5a30efd238f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &430440948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 430440934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f301a2af89c6fc4e99b711e2ea4fc4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &471757023
@@ -1439,7 +1452,7 @@ MonoBehaviour:
   _halalit: {fileID: 2130719621}
   _attackJoystick: {fileID: 1115015985}
   _projectiles: {fileID: 752615852}
-  _cooldownMultiplier: 1
+  _cooldownMultiplier: 0.3
   _attackJoystickEdge: 0.8
   _currentAttack:
     Key: 0
@@ -1518,11 +1531,11 @@ MonoBehaviour:
     Key: 0
     Value:
       _itemRank: 0
-      Power: 0
-      CriticalHit: 0
-      Luck: 0
-      Rate: 0
-      Weight: 0
+      Power: 50
+      CriticalHit: 1
+      Luck: 1
+      Rate: 1
+      Weight: 1
 --- !u!1 &814139006
 GameObject:
   m_ObjectHideFlags: 0
@@ -9442,9 +9455,10 @@ GameObject:
   - component: {fileID: 2083128242}
   - component: {fileID: 2083128244}
   - component: {fileID: 2083128243}
+  - component: {fileID: 2083128245}
   m_Layer: 5
-  m_Name: ScoreText
-  m_TagString: ScoreText
+  m_Name: Score
+  m_TagString: Score
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9511,6 +9525,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2083128241}
   m_CullTransparentMesh: 1
+--- !u!114 &2083128245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083128241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 444a1b8789c454a4cad8311cba881ae8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _valuableValues:
+  - Key: 0
+    Value: 10
+  - Key: 1
+    Value: 30
+  - Key: 2
+    Value: 50
+  scoreText: {fileID: 2083128243}
 --- !u!1 &2130719621
 GameObject:
   m_ObjectHideFlags: 0
@@ -9697,7 +9731,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _healthBar: {fileID: 1125677064}
   _healthBarIcon: {fileID: 21300000, guid: b2b25edd941b5c94793518d2adf495ee, type: 3}
-  _currentMaxHealth: 10
+  _currentMaxHealth: 5
   _finalMaxHealth: 50
   _harmers: 0200000013000000
   _contributors: 
@@ -9725,17 +9759,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2130719621}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2f66d9d5a7092d49b57ddcdbe9f6756, type: 3}
+  m_Script: {fileID: 11500000, guid: 39103179fc2142244a9a82fd99b7de7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _valuableValues:
-  - Key: 0
-    Value: 10
-  - Key: 1
-    Value: 30
-  - Key: 2
-    Value: 100
-  scoreText: {fileID: 2083128243}
 --- !u!1 &2135516712
 GameObject:
   m_ObjectHideFlags: 0
