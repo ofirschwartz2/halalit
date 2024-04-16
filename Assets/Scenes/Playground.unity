@@ -9457,8 +9457,8 @@ GameObject:
   - component: {fileID: 2083128243}
   - component: {fileID: 2083128245}
   m_Layer: 5
-  m_Name: ScoreText
-  m_TagString: ScoreText
+  m_Name: Score
+  m_TagString: Score
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

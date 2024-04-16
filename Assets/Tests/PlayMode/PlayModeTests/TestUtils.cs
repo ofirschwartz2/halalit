@@ -200,7 +200,7 @@ internal static class TestUtils
     internal static int GetScore() 
     {
         var ScoreText = GetScoreText();
-        var score = ScoreText.GetComponent<Score>();
+        var score = ScoreText.GetComponent<ScoreScript>();
         return score.GetScore();
     }
 
@@ -211,9 +211,9 @@ internal static class TestUtils
 
     internal static List<KeyValuePair<ValuableName, int>> GetValuableValues() 
     {
-        var halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
-        var score = halalit.GetComponent<Score>();
-        return score.GetValuableValues();
+        var score = GameObject.FindGameObjectWithTag(Tag.SCORE.GetDescription());
+        var scoreScript = score.GetComponent<ScoreScript>();
+        return scoreScript.GetValuableValues();
     }
 
     internal static HalalitMovement GetHalalitMovement() 
@@ -270,7 +270,7 @@ internal static class TestUtils
 
     internal static GameObject GetScoreText() 
     {
-        return GameObject.FindGameObjectWithTag(Tag.SCORE_TEXT.GetDescription());
+        return GameObject.FindGameObjectWithTag(Tag.SCORE.GetDescription());
     }
 
     internal static GameObject GetHalalitHealthBar()

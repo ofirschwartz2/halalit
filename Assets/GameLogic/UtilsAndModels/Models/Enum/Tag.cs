@@ -72,7 +72,7 @@ namespace Assets.Enums
         EVENT_SYSTEM,
         [Description("ValuablesContainer")]
         VALUABLES_CONTAINER,
-        [Description("ScoreText")]
-        SCORE_TEXT
+        [Description("Score")]
+        SCORE
     }
 }

@@ -50,7 +50,7 @@ TagManager:
   - EnemiesContainer
   - EventSystem
   - ValuablesContainer
-  - ScoreText
+  - Score
   layers:
   - Default
   - TransparentFX

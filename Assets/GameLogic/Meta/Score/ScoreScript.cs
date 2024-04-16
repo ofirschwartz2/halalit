@@ -8,7 +8,7 @@ using UnityEngine.UI;
 [assembly: InternalsVisibleTo("PlayModeTests")]
 #endif
 
-public class Score : MonoBehaviour
+public class ScoreScript : MonoBehaviour
 {
     [SerializeField]
     private List<KeyValuePair<ValuableName, int>> _valuableValues;

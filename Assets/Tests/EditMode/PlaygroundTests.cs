@@ -14,7 +14,7 @@ public class PlaygroundTests
         var halalitHealthBar = TestUtils.GetHalalitHealthBar();
         var scoreText = TestUtils.GetScoreText();
         var parentRotationCounteractor = halalitHealthBar.GetComponent<ParentRotationCounteractor>();
-        var scoreScript = scoreText.GetComponent<Score>();
+        var scoreScript = scoreText.GetComponent<ScoreScript>();
 
 
         AssertWrapper.IsNotNull(attackJoystick);
