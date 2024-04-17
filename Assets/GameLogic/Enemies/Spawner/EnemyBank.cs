@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class EnemyBank : MonoBehaviour
+public class EnemyBank : SeedfulRandomGeneratorUser
 {
     [SerializeField]
     private List<KeyValuePair<GameObject, int>> _enemyPrefabsBank;
@@ -11,8 +11,6 @@ public class EnemyBank : MonoBehaviour
     private int _minSpawnEnemyCount;
     [SerializeField]
     private int _maxSpawnEnemyCount;
-    [SerializeField]
-    private int _seededRandomNumbersPerEnemy;
 
     private List<EnemyEntity> _enemyEntityList;
 
@@ -36,12 +34,12 @@ public class EnemyBank : MonoBehaviour
             for (int i = 0; i < enemyPrefab.Value; i++)
             {
                 _enemyEntityList.Add(new EnemyEntity(
-                    enemyPrefab.Key, 
-                    RandomGenerator.GetRangeZeroToOneList(_seededRandomNumbersPerEnemy, true)));
+                    enemyPrefab.Key,
+                    _seedfulRandomGenerator.GetNumber()));
             }
         }
 
-        RandomGenerator.ShuffleList(_enemyEntityList, true);
+        _seedfulRandomGenerator.ShuffleList(_enemyEntityList);
     }
 
     private void SetSpawnHoleEnemyAmountsList()
@@ -50,7 +48,7 @@ public class EnemyBank : MonoBehaviour
 
         while (numberofEnemies > 0)
         {
-            var amountOfEnemiesInSpawnHole = RandomGenerator.Range(_minSpawnEnemyCount, _maxSpawnEnemyCount + 1, true);
+            var amountOfEnemiesInSpawnHole = _seedfulRandomGenerator.Range(_minSpawnEnemyCount, _maxSpawnEnemyCount + 1);
             if (amountOfEnemiesInSpawnHole > numberofEnemies)
             {
                 amountOfEnemiesInSpawnHole = numberofEnemies;

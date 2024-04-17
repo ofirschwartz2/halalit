@@ -1,0 +1,18 @@
+{
+    "name": "Setup",
+    "rootNamespace": "",
+    "references": [
+        "GUID:7467911d37bad9c4ba0a69299140fa8c",
+        "GUID:e0b57583110b2e743a1ece6ceab2a7c8",
+        "GUID:303077c3078b6f4489a547cd1be93735"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

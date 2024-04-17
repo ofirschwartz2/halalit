@@ -2,7 +2,7 @@ using Assets.Utils;
 using System.Collections;
 using UnityEngine;
 
-public class SpawnHoleInstantiator : MonoBehaviour
+public class SpawnHoleInstantiator : SeedfulRandomGeneratorUser
 {
     [SerializeField]
     private float[] _instantiationRate;

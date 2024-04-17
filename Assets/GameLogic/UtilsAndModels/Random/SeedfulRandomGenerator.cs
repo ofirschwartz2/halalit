@@ -13,7 +13,7 @@ namespace Assets.Utils
             seedfullRandom = new System.Random(seed);
             Debug.Log("Seed set to " + seedfullRandom.GetHashCode());
         }
-
+        
         public int GetNumber()
         {
             return seedfullRandom.Next();

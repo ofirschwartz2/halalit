@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class AsteroidExternalInstantiator : MonoBehaviour
+public class AsteroidExternalInstantiator : SeedfulRandomGeneratorUser
 {
     [SerializeField]
     private GameObject _asteroidPrefab;

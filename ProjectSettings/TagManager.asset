@@ -51,6 +51,8 @@ TagManager:
   - EventSystem
   - ValuablesContainer
   - Score
+  - EnemiesSpawner
+  - EnemiesDestructor
   layers:
   - Default
   - TransparentFX

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class AsteroidInternalInstantiator : MonoBehaviour
+public class AsteroidInternalInstantiator : SeedfulRandomGeneratorUser
 {
     [SerializeField]
     private GameObject _asteroidPrefab;

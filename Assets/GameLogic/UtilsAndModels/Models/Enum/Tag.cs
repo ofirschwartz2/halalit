@@ -73,6 +73,14 @@ namespace Assets.Enums
         [Description("ValuablesContainer")]
         VALUABLES_CONTAINER,
         [Description("Score")]
-        SCORE
+        SCORE,
+        [Description("EnemiesSpawner")]
+        ENEMIES_SPAWNER,
+        [Description("EnemiesDestructor")]
+        ENEMIES_DESTRUCTOR,
+        [Description("AsteroidInstantiator")]
+        ASTEROID_INSTANTIATOR,
+        [Description("AsteroidDestructor")]
+        ASTEROID_DESTRUCTOR,
     }
 }
