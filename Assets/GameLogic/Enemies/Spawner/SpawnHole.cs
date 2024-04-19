@@ -166,9 +166,8 @@ public class SpawnHole : MonoBehaviour
         foreach (var enemyEntity in _enemyEntities)
         {
             var newEnemy = Instantiate(enemyEntity.Prefab, transform.position, Quaternion.identity, transform.parent);
-            newEnemy.GetComponent<RandomSeededNumbers>().SetRandomSeededNumbers(enemyEntity.RandomSeededNumbers);
+            newEnemy.GetComponent<EnemySharedBehavior>().SetInitialSeedfulRandomGenerator(enemyEntity.RandomSeededNumber);
             newEnemy.transform.localScale = Vector3.zero;
-            //newEnemy.transform.SetParent(transform.parent);
 
             DisableEnemyScripts(newEnemy);
             

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Assets.Utils
 {
+    
     public static class RandomGenerator
     {
         private static System.Random seedlessRandom = new System.Random();
@@ -110,4 +111,5 @@ namespace Assets.Utils
             return seedfullRandom != null;
         }
     }
+    
 }

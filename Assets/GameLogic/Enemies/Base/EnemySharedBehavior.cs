@@ -2,7 +2,7 @@
 using Assets.Utils;
 using UnityEngine;
 
-public class EnemySharedBehavior : MonoBehaviour
+public class EnemySharedBehavior : SeedfulRandomGeneratorUser
 {
     private void OnTriggerExit2D(Collider2D other)
     {
