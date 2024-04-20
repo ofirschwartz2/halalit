@@ -3,7 +3,7 @@ using Assets.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SinusEnemy : MonoBehaviour
+public class SinusEnemy : SeedfulRandomGeneratorUser
 {
     [SerializeField]
     private Rigidbody2D _rigidBody;
@@ -29,7 +29,7 @@ public class SinusEnemy : MonoBehaviour
 
     void Start()
     {
-        _sinDirection = Utils.GetRandomDirection();
+        _sinDirection = _seedfulRandomGenerator.GetRandomDirection();
         SetSinDirections(_sinDirection);
         SetChangeSinForceDirectionTime(_changeSinForceInterval / 2);
     }

@@ -1,9 +1,7 @@
-using UnityEngine;
-using Assets.Utils;
 using Assets.Enums;
+using Assets.Utils;
 using System.Linq;
-using log4net.Util;
-using static UnityEditor.Experimental.GraphView.GraphView;
+using UnityEngine;
 
 public class ItemMovement : MonoBehaviour // TODO: change naming to CollectableMovement
 {
@@ -26,7 +24,7 @@ public class ItemMovement : MonoBehaviour // TODO: change naming to CollectableM
     {
         SetTransperancyPeriod();
         _removedTransparencyPeriodDone = false;
-        _rotationSpeed = RandomGenerator.Range(-_maxRotation, _maxRotation);
+        _rotationSpeed = SeedlessRandomGenerator.Range(-_maxRotation, _maxRotation);
         Utils.ChangeOpacity(GetComponent<Renderer>(), _baseOpacity);
     }
 

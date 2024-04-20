@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Enums;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -73,6 +74,11 @@ namespace Assets.Utils
         private float GetAdjustedFloat(float zeroToOneValue, float from, float to)
         {
             return zeroToOneValue * (to - from) + from;
+        }
+
+        public Direction GetRandomDirection()
+        {
+            return (Direction)Range(0, Enum.GetValues(typeof(Direction)).Length);
         }
     }
 }

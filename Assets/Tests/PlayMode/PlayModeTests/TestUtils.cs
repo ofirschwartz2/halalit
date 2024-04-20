@@ -43,7 +43,7 @@ internal static class TestUtils
     {
         if (seed == 0)
         {
-            seed = RandomGenerator.Range(int.MinValue, int.MaxValue);
+            seed = TestingRandomGenerator.Range(int.MinValue, int.MaxValue);
         }
         Random.InitState(seed);
         return seed;
@@ -127,6 +127,7 @@ internal static class TestUtils
         enemy[0].transform.rotation = Quaternion.Euler(0, 0, degrees);
     }
 
+    // TODO: Delete this method after removing RandomSeededNumbers
     internal static void SetEnemiesSeededNumbers(int listLength = ENEMIES_SEEDED_NUMBERS_LIST_DEFAULT_LENGTH) 
     {
         var enemies = GetEnemies();
@@ -135,11 +136,13 @@ internal static class TestUtils
             var randomSeededNumbers = new List<float>();
             for (int i = 0; i < listLength; i++)
             {
-                randomSeededNumbers.Add(RandomGenerator.RangeZeroToOne(true));
+                randomSeededNumbers.Add(TestingRandomGenerator.RangeZeroToOne(true));
             }
             enemy.GetComponent<RandomSeededNumbers>().SetRandomSeededNumbers(randomSeededNumbers);
         }
     }
+    // TODO: Delete this method after removing RandomSeededNumbers
+
 
     internal static void SetEnemiesHealth(int health)
     {
@@ -426,7 +429,7 @@ internal static class TestUtils
     #region Joystick Touchs
     internal static Vector2 GetRandomTouch()
     {
-        return new Vector2(RandomGenerator.Range(-1f, 1f, true), RandomGenerator.Range(-1f, 1f, true));
+        return new Vector2(TestingRandomGenerator.Range(-1f, 1f, true), TestingRandomGenerator.Range(-1f, 1f, true));
     }
 
     internal static Vector2 GetRandomTouchUnderAttackTrigger(WeaponAttack weaponAttack)
@@ -434,7 +437,7 @@ internal static class TestUtils
         Vector2 randomTouch;
         do
         {
-            randomTouch = new Vector2(RandomGenerator.Range(-1f, 1f, true), RandomGenerator.Range(-1f, 1f, true));
+            randomTouch = new Vector2(TestingRandomGenerator.Range(-1f, 1f, true), TestingRandomGenerator.Range(-1f, 1f, true));
         } while (randomTouch.magnitude >= weaponAttack.GetAttackJoystickEdge());
 
         return randomTouch;
@@ -445,7 +448,7 @@ internal static class TestUtils
         Vector2 randomTouch;
         do
         {
-            randomTouch = new Vector2(RandomGenerator.Range(-1f, 1f, true), RandomGenerator.Range(-1f, 1f, true));
+            randomTouch = new Vector2(TestingRandomGenerator.Range(-1f, 1f, true), TestingRandomGenerator.Range(-1f, 1f, true));
         } while (randomTouch.magnitude < attackJoystickEdge);
 
         return randomTouch;

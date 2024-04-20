@@ -43,7 +43,7 @@ public class PickupClawTests
     {
         // GIVEN
         var seed = TestUtils.SetRandomSeed();
-        var randJoysticksIndex = RandomGenerator.Range(0, 1);
+        var randJoysticksIndex = TestingRandomGenerator.Range(0, 1);
 
         PickupClawShooter pickupClawShooter = TestUtils.GetPickupClawShooter();
         List<GameObject> joysticks = new List<GameObject>

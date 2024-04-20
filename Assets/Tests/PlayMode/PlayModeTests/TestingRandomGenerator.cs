@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Assets.Utils
 {
     
-    public static class RandomGenerator
+    public static class TestingRandomGenerator
     {
         private static System.Random seedlessRandom = new System.Random();
         private static System.Random seedfullRandom = null;

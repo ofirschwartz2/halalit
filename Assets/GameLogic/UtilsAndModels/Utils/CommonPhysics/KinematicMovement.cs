@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class KinematicMovement : MonoBehaviour
+public abstract class KinematicMovement : SeedfulRandomGeneratorUser
 {
     [SerializeField]
     protected Rigidbody2D _rigidBody;

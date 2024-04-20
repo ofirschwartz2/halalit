@@ -2,9 +2,8 @@
 using Assets.Utils;
 using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
-class ItemsBank : MonoBehaviour
+class ItemsBank : SeedfulRandomGeneratorUser
 {
     [SerializeField]
     private ItemOptions _itemOptions;
@@ -28,9 +27,10 @@ class ItemsBank : MonoBehaviour
 
     private void GenerateStock()
     {
+        // TODO: bad smell, refactor
         foreach (ItemStockDto attackItemStockDto in _attacks)
         {
-            var stock = RandomGenerator.Range(attackItemStockDto.MinimumInitialStock, attackItemStockDto.MaxStock + 1, true);
+            var stock = _seedfulRandomGenerator.Range(attackItemStockDto.MinimumInitialStock, attackItemStockDto.MaxStock + 1);
 
             for (int i = 0; i < stock; i++)
             {
@@ -40,7 +40,7 @@ class ItemsBank : MonoBehaviour
 
         foreach (ItemStockDto upgradeItemStockDto in _upgrades)
         {
-            var stock = RandomGenerator.Range(upgradeItemStockDto.MinimumInitialStock, upgradeItemStockDto.MaxStock + 1);
+            var stock = _seedfulRandomGenerator.Range(upgradeItemStockDto.MinimumInitialStock, upgradeItemStockDto.MaxStock + 1);
 
             for (int i = 0; i < stock; i++)
             {
@@ -50,7 +50,7 @@ class ItemsBank : MonoBehaviour
 
         foreach (ItemStockDto utilityItemStockDto in _utilities)
         {
-            var stock = RandomGenerator.Range(utilityItemStockDto.MinimumInitialStock, utilityItemStockDto.MaxStock + 1);
+            var stock = _seedfulRandomGenerator.Range(utilityItemStockDto.MinimumInitialStock, utilityItemStockDto.MaxStock + 1);
 
             for (int i = 0; i < stock; i++)
             {
