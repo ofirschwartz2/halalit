@@ -21,11 +21,22 @@ public class AttackOptions
             throw new Exception("Invalid number of seeds");
         }
 
+        CommonStats = new AttackStatsRange();
         CommonStats.SetInitialSeedfulRandomGenerator(seeds[(int)ItemRank.COMMON]);
+
+        UncommonStats = new AttackStatsRange();
         UncommonStats.SetInitialSeedfulRandomGenerator(seeds[(int)ItemRank.UNCOMMON]);
+
+        RareStats = new AttackStatsRange();
         RareStats.SetInitialSeedfulRandomGenerator(seeds[(int)ItemRank.RARE]);
+
+        ExclusiveStats = new AttackStatsRange();
         ExclusiveStats.SetInitialSeedfulRandomGenerator(seeds[(int)ItemRank.EXCLUSIVE]);
+
+        EpicStats = new AttackStatsRange();
         EpicStats.SetInitialSeedfulRandomGenerator(seeds[(int)ItemRank.EPIC]);
+
+        LegendaryStats = new AttackStatsRange();
         LegendaryStats.SetInitialSeedfulRandomGenerator(seeds[(int)ItemRank.LEGENDARY]);
     }
 

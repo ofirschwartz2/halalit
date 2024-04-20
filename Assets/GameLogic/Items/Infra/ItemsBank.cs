@@ -1,4 +1,5 @@
 ﻿using Assets.Enums;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,7 +34,7 @@ public class ItemsBank : SeedfulRandomGeneratorUser
 
             for (int i = 0; i < stock; i++)
             {
-                attackItemStockDto.Stock.Insert(0, GenerateAttackDto(attackItemStockDto.ItemName));
+                attackItemStockDto.Stock.Insert(0, GenerateAttackStats(attackItemStockDto.ItemName));
             }
         }
 
@@ -58,12 +59,20 @@ public class ItemsBank : SeedfulRandomGeneratorUser
         }
     }
 
-    private AttackStats GenerateAttackDto(ItemName itemName)
+    private AttackStats GenerateAttackStats(ItemName itemName)
     {
         ItemRank itemRank = _itemRankPicker.PickAnItemRank();
         AttackOptions attackPossibleStats = _itemOptions.GetAttackPossibleStats(itemName);
         AttackStatsRange attackStatsRange = attackPossibleStats.GetAttackDtoRange(itemRank);
-        return attackStatsRange.GetRandom();
+        var statsRanges = attackStatsRange.StatsRanges;
+
+        int power = _seedfulRandomGenerator.Range((int)statsRanges[AttackStatsType.POWER].min, (int)statsRanges[AttackStatsType.POWER].max + 1);
+        float criticalHit = _seedfulRandomGenerator.Range(statsRanges[AttackStatsType.CRITICAL_HIT].min, statsRanges[AttackStatsType.CRITICAL_HIT].max);
+        float luck = _seedfulRandomGenerator.Range(statsRanges[AttackStatsType.LUCK].min, statsRanges[AttackStatsType.LUCK].max);
+        float rate = (float)Math.Round(_seedfulRandomGenerator.Range(statsRanges[AttackStatsType.RATE].min, statsRanges[AttackStatsType.RATE].max), 2);
+        float weight = _seedfulRandomGenerator.Range(statsRanges[AttackStatsType.WEIGHT].min, statsRanges[AttackStatsType.WEIGHT].max);
+
+        return attackStatsRange.GetAttackStats(power, criticalHit, luck, rate, weight);
     }
 
     private void InitAllItems()

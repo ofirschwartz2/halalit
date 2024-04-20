@@ -1,15 +1,11 @@
 ﻿using Assets.Enums;
-using Assets.Utils;
 using System;
+using System.Collections.Generic;
 
 [Serializable]
 public class AttackStatsRange : SeedfulRandomGeneratorUser
 {
-    public MinMaxRange Power;
-    public MinMaxRange CriticalHit;
-    public MinMaxRange Luck;
-    public MinMaxRange Rate;
-    public MinMaxRange Weight;
+    public Dictionary<AttackStatsType, MinMaxRange> StatsRanges;
 
     private ItemRank _itemRank;
 
@@ -18,14 +14,13 @@ public class AttackStatsRange : SeedfulRandomGeneratorUser
         _itemRank = itemRank;
     }
 
-    public AttackStats GetRandom() 
+    public AttackStats GetAttackStats(int power, float criticalHit, float luck, float rate, float weight) 
     {
-        int power = _seedfulRandomGenerator.Range((int)Power.min, (int)Power.max + 1);
-        float criticalHit = _seedfulRandomGenerator.Range(CriticalHit.min, CriticalHit.max);
-        float luck = _seedfulRandomGenerator.Range(Luck.min, Luck.max);
-        float rate = (float)Math.Round(_seedfulRandomGenerator.Range(Rate.min, Rate.max), 2);
-        float weight = _seedfulRandomGenerator.Range(Weight.min, Weight.max);
-
         return new AttackStats(_itemRank, power, criticalHit, luck, rate, weight);
+    }
+
+    public Dictionary<AttackStatsType, MinMaxRange> GetStatsRanges() 
+    {
+        return StatsRanges;
     }
 }
