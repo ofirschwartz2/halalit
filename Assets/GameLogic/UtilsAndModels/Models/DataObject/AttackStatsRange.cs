@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 [Serializable]
-public class AttackStatsRange : SeedfulRandomGeneratorUser
+public class AttackStatsRange
 {
     public Dictionary<AttackStatsType, MinMaxRange> StatsRanges;
 
