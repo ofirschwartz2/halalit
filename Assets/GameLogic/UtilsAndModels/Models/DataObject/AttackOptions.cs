@@ -1,5 +1,7 @@
 ﻿using Assets.Enums;
+using Codice.CM.Common;
 using System;
+using System.Collections.Generic;
 
 [Serializable]
 public class AttackOptions
@@ -11,6 +13,21 @@ public class AttackOptions
     public AttackStatsRange ExclusiveStats;
     public AttackStatsRange EpicStats;
     public AttackStatsRange LegendaryStats;
+
+    public void InitSeeds(List<int> seeds)
+    {
+        if (seeds.Count != Enum.GetValues(typeof(ItemRank)).Length) 
+        {
+            throw new Exception("Invalid number of seeds");
+        }
+
+        CommonStats.SetInitialSeedfulRandomGenerator(seeds[(int)ItemRank.COMMON]);
+        UncommonStats.SetInitialSeedfulRandomGenerator(seeds[(int)ItemRank.UNCOMMON]);
+        RareStats.SetInitialSeedfulRandomGenerator(seeds[(int)ItemRank.RARE]);
+        ExclusiveStats.SetInitialSeedfulRandomGenerator(seeds[(int)ItemRank.EXCLUSIVE]);
+        EpicStats.SetInitialSeedfulRandomGenerator(seeds[(int)ItemRank.EPIC]);
+        LegendaryStats.SetInitialSeedfulRandomGenerator(seeds[(int)ItemRank.LEGENDARY]);
+    }
 
     public void InitRanks()
     {

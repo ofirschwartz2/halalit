@@ -127,23 +127,6 @@ internal static class TestUtils
         enemy[0].transform.rotation = Quaternion.Euler(0, 0, degrees);
     }
 
-    // TODO: Delete this method after removing RandomSeededNumbers
-    internal static void SetEnemiesSeededNumbers(int listLength = ENEMIES_SEEDED_NUMBERS_LIST_DEFAULT_LENGTH) 
-    {
-        var enemies = GetEnemies();
-        foreach(var enemy in enemies)
-        {
-            var randomSeededNumbers = new List<float>();
-            for (int i = 0; i < listLength; i++)
-            {
-                randomSeededNumbers.Add(TestingRandomGenerator.RangeZeroToOne(true));
-            }
-            enemy.GetComponent<RandomSeededNumbers>().SetRandomSeededNumbers(randomSeededNumbers);
-        }
-    }
-    // TODO: Delete this method after removing RandomSeededNumbers
-
-
     internal static void SetEnemiesHealth(int health)
     {
         var enemies = GetEnemies();

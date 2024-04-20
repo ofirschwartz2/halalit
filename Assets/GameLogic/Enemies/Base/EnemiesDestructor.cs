@@ -2,7 +2,7 @@
 using Assets.Utils;
 using UnityEngine;
 
-public class EnemiesDestructor : MonoBehaviour
+public class EnemiesDestructor : SeedfulRandomGeneratorUser
 {
 
     #region Init
@@ -44,11 +44,10 @@ public class EnemiesDestructor : MonoBehaviour
     private void TryInvokeValuableDropEvent(GameObject enemyToKill)
     {
         var potentialValuableDrops = enemyToKill.GetComponent<PotentialValuableDrops>().GetValuablesToChances();
-        var randomSeededNumbers = enemyToKill.GetComponent<RandomSeededNumbers>();
-        float randomSeededNumber;
+
         foreach (var potentialValuableDrop in potentialValuableDrops)
         {
-            randomSeededNumber = randomSeededNumbers.PopRandomSeededNumber();
+            var randomSeededNumber = _seedfulRandomGenerator.RangeZeroToOne();
             if (randomSeededNumber <= potentialValuableDrop.Value)
             {
                 Vector2 dropForce = SeedlessRandomGenerator.GetInsideUnitCircle() * enemyToKill.transform.localScale.x;

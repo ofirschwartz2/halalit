@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-class ItemRankPicker : SeedfulRandomGeneratorUser
+public class ItemRankPicker : SeedfulRandomGeneratorUser
 {
     [SerializeField]
     private List<KeyValuePair<ItemRank, float>> _rankChances;

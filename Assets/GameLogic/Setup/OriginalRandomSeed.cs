@@ -1,18 +1,19 @@
 ﻿using UnityEngine;
 using Assets.Utils;
 using Assets.Enums;
+using System;
 
 public class OriginalRandomSeed : MonoBehaviour
 {
-    private SeedfulRandomGenerator seedfulRandomGenerator;
+    private SeedfulRandomGenerator _seedfulRandomGenerator;
 
-    void Start()
+    void Awake()
     {
         int originalRandomSeed = SeedlessRandomGenerator.GetNumber();
 
         Debug.Log("Generated Original Random seed: " + originalRandomSeed);
 
-        seedfulRandomGenerator = new SeedfulRandomGenerator(originalRandomSeed);
+        _seedfulRandomGenerator = new SeedfulRandomGenerator(originalRandomSeed);
 
         SetAllInitialSeedfulRandomGenerators();
     }
@@ -25,10 +26,20 @@ public class OriginalRandomSeed : MonoBehaviour
         var ansteroidInstantiator = GameObject.FindGameObjectWithTag(Tag.ASTEROID_INSTANTIATOR.GetDescription());
         var asteroidExternalInstantiator = ansteroidInstantiator.GetComponent<AsteroidExternalInstantiator>();
         var asteroidInternalInstantiator = ansteroidInstantiator.GetComponent<AsteroidInternalInstantiator>();
+        var itemsFactory = GameObject.FindGameObjectWithTag(Tag.ITEMS_FACTORY.GetDescription());
+        var itemsBank = itemsFactory.GetComponent<ItemsBank>();
+        var itemOptions = itemsFactory.GetComponent<ItemOptions>();
+        var itemRankPicker = itemsFactory.GetComponent<ItemRankPicker>();
 
-        enemyBank.SetInitialSeedfulRandomGenerator(seedfulRandomGenerator.GetNumber());
-        spawnHoleInstantiator.SetInitialSeedfulRandomGenerator(seedfulRandomGenerator.GetNumber());
-        asteroidExternalInstantiator.SetInitialSeedfulRandomGenerator(seedfulRandomGenerator.GetNumber());
-        asteroidInternalInstantiator.SetInitialSeedfulRandomGenerator(seedfulRandomGenerator.GetNumber());
+        enemyBank.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
+        spawnHoleInstantiator.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
+        asteroidExternalInstantiator.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
+        asteroidInternalInstantiator.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
+        itemsBank.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
+        itemRankPicker.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
+
+        var seeds = _seedfulRandomGenerator.GetRandomNumbersList(Enum.GetValues(typeof(ItemRank)).Length);
+        itemOptions.SetAttackOptionsSeeds(seeds);
+
     }
 }

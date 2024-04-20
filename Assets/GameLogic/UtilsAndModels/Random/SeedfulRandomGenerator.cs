@@ -54,6 +54,18 @@ namespace Assets.Utils
             }
         }
 
+        public List<int> GetRandomNumbersList(int length)
+        {
+            var randomNumbers = new List<int>();
+
+            for (int i = 0; i < length; i++)
+            {
+                randomNumbers.Add(GetNumber());
+            }
+
+            return randomNumbers;
+        }
+
         public List<float> GetRangeZeroToOneList(int length)
         {
             var zeroToOneArray = new List<float>();

@@ -1,9 +1,8 @@
 ﻿using Assets.Enums;
-using Assets.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
-class ItemsBank : SeedfulRandomGeneratorUser
+public class ItemsBank : SeedfulRandomGeneratorUser
 {
     [SerializeField]
     private ItemOptions _itemOptions;

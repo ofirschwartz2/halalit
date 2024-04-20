@@ -1,4 +1,5 @@
 ﻿using Assets.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,11 +9,19 @@ public class ItemOptions : MonoBehaviour
     [SerializeField]
     private List<AttackOptions> _attacks;
 
-    private void Awake()
+    void Start()
     {
         foreach (AttackOptions attackOptions in _attacks)
         {
             attackOptions.InitRanks();
+        }
+    }
+
+    public void SetAttackOptionsSeeds(List<int> seeds) 
+    {
+        foreach (AttackOptions attackOptions in _attacks)
+        {
+            attackOptions.InitSeeds(seeds);
         }
     }
 

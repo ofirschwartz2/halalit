@@ -16,7 +16,7 @@ public class EnemyBank : SeedfulRandomGeneratorUser
 
     private List<int> _spawnHoleEnemyAmountsList;
 
-    void Awake()
+    void Start()
     {
         _enemyEntityList = new List<EnemyEntity>();
         _spawnHoleEnemyAmountsList = new List<int>();
