@@ -14,32 +14,6 @@ public class AttackOptions
     public AttackStatsRange EpicStats;
     public AttackStatsRange LegendaryStats;
 
-    public void InitSeeds(List<int> seeds)
-    {
-        if (seeds.Count != Enum.GetValues(typeof(ItemRank)).Length) 
-        {
-            throw new Exception("Invalid number of seeds");
-        }
-
-        CommonStats = new AttackStatsRange();
-        CommonStats.SetInitialSeedfulRandomGenerator(seeds[(int)ItemRank.COMMON]);
-
-        UncommonStats = new AttackStatsRange();
-        UncommonStats.SetInitialSeedfulRandomGenerator(seeds[(int)ItemRank.UNCOMMON]);
-
-        RareStats = new AttackStatsRange();
-        RareStats.SetInitialSeedfulRandomGenerator(seeds[(int)ItemRank.RARE]);
-
-        ExclusiveStats = new AttackStatsRange();
-        ExclusiveStats.SetInitialSeedfulRandomGenerator(seeds[(int)ItemRank.EXCLUSIVE]);
-
-        EpicStats = new AttackStatsRange();
-        EpicStats.SetInitialSeedfulRandomGenerator(seeds[(int)ItemRank.EPIC]);
-
-        LegendaryStats = new AttackStatsRange();
-        LegendaryStats.SetInitialSeedfulRandomGenerator(seeds[(int)ItemRank.LEGENDARY]);
-    }
-
     public void InitRanks()
     {
         CommonStats.SetRank(ItemRank.COMMON);

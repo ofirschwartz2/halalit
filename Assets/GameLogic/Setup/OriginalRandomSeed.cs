@@ -28,7 +28,6 @@ public class OriginalRandomSeed : MonoBehaviour
         var asteroidInternalInstantiator = ansteroidInstantiator.GetComponent<AsteroidInternalInstantiator>();
         var itemsFactory = GameObject.FindGameObjectWithTag(Tag.ITEMS_FACTORY.GetDescription());
         var itemsBank = itemsFactory.GetComponent<ItemsBank>();
-        var itemOptions = itemsFactory.GetComponent<ItemOptions>();
         var itemRankPicker = itemsFactory.GetComponent<ItemRankPicker>();
 
         enemyBank.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
@@ -37,9 +36,5 @@ public class OriginalRandomSeed : MonoBehaviour
         asteroidInternalInstantiator.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
         itemsBank.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
         itemRankPicker.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
-
-        var seeds = _seedfulRandomGenerator.GetRandomNumbersList(Enum.GetValues(typeof(ItemRank)).Length);
-        itemOptions.SetAttackOptionsSeeds(seeds);
-
     }
 }
