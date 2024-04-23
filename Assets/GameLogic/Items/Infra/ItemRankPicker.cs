@@ -4,14 +4,14 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-class ItemRankPicker : MonoBehaviour
+public class ItemRankPicker : SeedfulRandomGeneratorUser
 {
     [SerializeField]
     private List<KeyValuePair<ItemRank, float>> _rankChances;
 
     public ItemRank PickAnItemRank()
     {
-        float rankValue = RandomGenerator.RangeZeroToOne(true); 
+        float rankValue = _seedfulRandomGenerator.RangeZeroToOne(); 
         
         for (int i = _rankChances.Count - 1; i >= 0; i--)
         {

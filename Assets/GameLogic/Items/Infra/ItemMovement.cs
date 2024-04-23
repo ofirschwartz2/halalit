@@ -26,7 +26,7 @@ public class ItemMovement : MonoBehaviour // TODO: change naming to CollectableM
     {
         SetTransperancyPeriod();
         _removedTransparencyPeriodDone = false;
-        _rotationSpeed = RandomGenerator.Range(-_maxRotation, _maxRotation);
+        _rotationSpeed = SeedlessRandomGenerator.Range(-_maxRotation, _maxRotation);
         Utils.ChangeOpacity(GetComponent<Renderer>(), _baseOpacity);
     }
 

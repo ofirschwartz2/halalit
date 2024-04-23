@@ -102,7 +102,6 @@ public class MirrorBallShotTests
         var originalTargetHealth = TestUtils.GetEnemyHealth();
         yield return null;
         var targetClosestPosition = TestUtils.GetEnemyNearestPositionToHalalit();
-        var acceptedDelta = 0.5f;
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, weaponAttack.GetAttackJoystickEdge());
 
         // WHEN

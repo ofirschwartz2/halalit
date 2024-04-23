@@ -42,7 +42,7 @@ public class AsteroidGlobalDestructor : MonoBehaviour
 
     private void InvokeItemDropEvent(GameObject asteroidToKill)
     {
-        Vector2 dropForce = RandomGenerator.GetInsideUnitCircle() * asteroidToKill.transform.localScale.x;
+        Vector2 dropForce = SeedlessRandomGenerator.GetInsideUnitCircle() * asteroidToKill.transform.localScale.x;
         ItemDropEventArguments itemDropEventArguments = new(Dropper.ASTEROID, asteroidToKill.transform.position, dropForce);
         ItemDropEvent.Invoke(EventName.NEW_ITEM_DROP, this, itemDropEventArguments);
     }

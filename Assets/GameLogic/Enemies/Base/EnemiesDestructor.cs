@@ -51,7 +51,7 @@ public class EnemiesDestructor : MonoBehaviour
             randomSeededNumber = randomSeededNumbers.PopRandomSeededNumber();
             if (randomSeededNumber <= potentialValuableDrop.Value)
             {
-                Vector2 dropForce = RandomGenerator.GetInsideUnitCircle() * enemyToKill.transform.localScale.x;
+                Vector2 dropForce = SeedlessRandomGenerator.GetInsideUnitCircle() * enemyToKill.transform.localScale.x;
                 ValuableDropEventArguments valuableDropEventArguments = new(enemyToKill.GetComponent<EnemyDropper>().GetDropper(), enemyToKill.transform.position, dropForce, potentialValuableDrop.Key);
                 ValuableDropEvent.Invoke(EventName.NEW_VALUABLE_DROP, this, valuableDropEventArguments);
                 return;
@@ -62,7 +62,7 @@ public class EnemiesDestructor : MonoBehaviour
     // TODO: refactor? - first check chances, then drop if needed
     private void TryInvokeItemDropEvent(GameObject enemyToKill)
     {
-        Vector2 dropForce = RandomGenerator.GetInsideUnitCircle() * enemyToKill.transform.localScale.x;
+        Vector2 dropForce = SeedlessRandomGenerator.GetInsideUnitCircle() * enemyToKill.transform.localScale.x;
         ItemDropEventArguments itemDropEventArguments = new(enemyToKill.GetComponent<EnemyDropper>().GetDropper(), enemyToKill.transform.position, dropForce);
         ItemDropEvent.Invoke(EventName.NEW_ITEM_DROP, this, itemDropEventArguments);
     }

@@ -2,9 +2,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
-public class AsteroidInternalInstantiator : MonoBehaviour
+public class AsteroidInternalInstantiator : SeedfulRandomGeneratorUser
 {
     [SerializeField]
     private GameObject _asteroidPrefab;
@@ -65,7 +64,7 @@ public class AsteroidInternalInstantiator : MonoBehaviour
 
     private int GetNewAsteroidsCount(int originalAsteroidScale)
     {
-        return RandomGenerator.Range((int)_asteroidMinInstantiationCount, (int)_asteroidMaxInstantiationCount + 1, true);
+        return _seedfulRandomGenerator.Range((int)_asteroidMinInstantiationCount, (int)_asteroidMaxInstantiationCount + 1);
     }
 
     private int GetNewAsteroidsScale(int originalAsteroidScale)
@@ -125,7 +124,7 @@ public class AsteroidInternalInstantiator : MonoBehaviour
     #region Predicates
     private bool ShouldInstantiateAsteroidsInternaly(int originalAsteroidScale)
     {
-        return originalAsteroidScale > 1 && RandomGenerator.IsTrueIn50Precent(false);
+        return originalAsteroidScale > 1 && SeedlessRandomGenerator.IsTrueIn50Precent();
     }
     #endregion
 }

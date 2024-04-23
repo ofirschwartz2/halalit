@@ -2313,7 +2313,7 @@ GameObject:
   - component: {fileID: 1170308205}
   m_Layer: 8
   m_Name: EnemyDestructor
-  m_TagString: Untagged
+  m_TagString: EnemiesDestructor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2405,7 +2405,7 @@ GameObject:
   - component: {fileID: 1277994821}
   m_Layer: 8
   m_Name: EnemySpawner
-  m_TagString: Untagged
+  m_TagString: EnemiesSpawner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9537,14 +9537,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 444a1b8789c454a4cad8311cba881ae8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _valuableValues:
-  - Key: 0
-    Value: 10
-  - Key: 1
-    Value: 30
-  - Key: 2
-    Value: 50
-  scoreText: {fileID: 2083128243}
 --- !u!1 &2130719621
 GameObject:
   m_ObjectHideFlags: 0

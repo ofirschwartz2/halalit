@@ -1,6 +1,5 @@
 using Assets.Utils;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class EngineFire : MonoBehaviour
 {
@@ -26,7 +25,7 @@ public class EngineFire : MonoBehaviour
         else
         {
             TryTurnOnEngineFireParticleSystem();
-            mainModule.startSpeed = RandomGenerator.Range(fromSpeed, toSpeed);
+            mainModule.startSpeed = SeedlessRandomGenerator.Range(fromSpeed, toSpeed);
         }
     }
 

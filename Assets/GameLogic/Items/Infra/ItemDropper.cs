@@ -9,7 +9,7 @@ using UnityEngine;
 [assembly: InternalsVisibleTo("PlayModeTests")]
 #endif
 
-public class ItemDropper : MonoBehaviour
+public class ItemDropper : SeedfulRandomGeneratorUser
 {
     [SerializeField]
     private ItemsBank _itemsBank;
@@ -70,12 +70,12 @@ private
     #region Events actions
     private void TryDropNewItem(object initiator, ItemDropEventArguments arguments)
     {
-        var dropChance = RandomGenerator.RangeZeroToOne(true);
+        var dropChance = _seedfulRandomGenerator.RangeZeroToOne();
         List<ItemName> droppableItemsByChance = GetDroppableItemsByChance(arguments.Dropper, dropChance);
 
         if (droppableItemsByChance.Count > 0)
         {
-            var randomlyPickedDroppableItemByChanceIndex = RandomGenerator.Range(0, droppableItemsByChance.Count, true);
+            var randomlyPickedDroppableItemByChanceIndex = _seedfulRandomGenerator.Range(0, droppableItemsByChance.Count);
             DropNewItem(droppableItemsByChance[randomlyPickedDroppableItemByChanceIndex], arguments.DropPosition, arguments.DropForce);
         }
     }
