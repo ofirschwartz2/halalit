@@ -9,7 +9,8 @@
         "Health",
         "Items",
         "UtilsAndModels",
-        "Meta"
+        "Meta",
+        "Setup"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

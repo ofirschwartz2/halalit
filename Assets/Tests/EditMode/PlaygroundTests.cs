@@ -341,4 +341,15 @@ public class PlaygroundTests
         AssertWrapper.IsNotNull(valuablesContainerTransform);
         AssertWrapper.IsNotNull(valuablesContainerValuableDropper);
     }
+
+    [Test]
+    public void SetupTests() 
+    {
+        // SETUP
+        var setUp = TestUtils.GetSetup();
+        var originalRandomSeed = setUp.GetComponent<OriginalRandomSeed>();
+
+        AssertWrapper.IsNotNull(originalRandomSeed);
+
+    }
 }

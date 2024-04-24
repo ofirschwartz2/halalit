@@ -167,6 +167,12 @@ internal static class TestUtils
     {
         return GameObject.FindGameObjectWithTag(Tag.VALUABLES_CONTAINER.GetDescription());
     }
+
+    internal static GameObject GetSetup() 
+    {
+        return GameObject.FindGameObjectWithTag(Tag.SETUP.GetDescription());
+    }
+
     internal static GameObject GetEventSystem() 
     {
         return GameObject.FindGameObjectWithTag(Tag.EVENT_SYSTEM.GetDescription());
