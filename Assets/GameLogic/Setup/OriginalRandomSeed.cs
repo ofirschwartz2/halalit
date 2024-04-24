@@ -48,10 +48,13 @@ public class OriginalRandomSeed : MonoBehaviour
 #if UNITY_EDITOR
     void SetTestsInitialSeedfulRandomGenerators()
     {
-        var asteroids = TestUtils.GetAsteroidMovement();
-        //var shotgunComponent = shotgun.GetComponent<Shotgun>();
-
-        shotgunComponent.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
+        var asteroids = GameObject.FindGameObjectsWithTag(Tag.ASTEROID.GetDescription());
+        var enemies = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
+        foreach (var asteroid in asteroids)
+        {
+            var asteroidMovement = asteroid.GetComponent<AsteroidMovement>();
+            asteroidMovement.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
+        }
     }
 #endif
 
