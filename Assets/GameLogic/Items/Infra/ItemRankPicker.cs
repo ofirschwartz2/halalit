@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-class ItemRankPicker : MonoBehaviour
+public class ItemRankPicker : MonoBehaviour
 {
     [SerializeField]
     private List<KeyValuePair<ItemRank, float>> _rankChances;
