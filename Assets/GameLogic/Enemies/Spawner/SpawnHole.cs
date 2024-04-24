@@ -156,19 +156,17 @@ public class SpawnHole : MonoBehaviour
     #region enemies
     private void InstantiateEnemies()
     {
-        //if (_enemyPrefabs == null) 
         if(_enemyEntities == null)
         {
             throw new System.Exception("No enemies to spawn");
         }
 
-        //foreach (GameObject enemyPrefab in _enemyPrefabs)
         foreach (var enemyEntity in _enemyEntities)
         {
             var newEnemy = Instantiate(enemyEntity.Prefab, transform.position, Quaternion.identity, transform.parent);
+            TrySetSeedfulRandomGeneratorUser(newEnemy);
             newEnemy.GetComponent<RandomSeededNumbers>().SetRandomSeededNumbers(enemyEntity.RandomSeededNumbers);
             newEnemy.transform.localScale = Vector3.zero;
-            //newEnemy.transform.SetParent(transform.parent);
 
             DisableEnemyScripts(newEnemy);
             
@@ -242,4 +240,14 @@ public class SpawnHole : MonoBehaviour
         _enemiesSpawnFinalPoints = new List<Vector2>();
     }
 
+    private void TrySetSeedfulRandomGeneratorUser(GameObject newEnemy)
+    {
+        var sinusEnemy = newEnemy.GetComponent<SinusEnemy>();
+        var greekEnemy = newEnemy.GetComponent<GreekEnemy>();
+
+        if (sinusEnemy != null) 
+        {
+            sinusEnemy.SetInitialSeedfulRandomGenerator(_seedf);
+        }
+    }
 }
