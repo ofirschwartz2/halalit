@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 
 public class PlaygroundTests
 {
