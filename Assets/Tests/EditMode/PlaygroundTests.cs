@@ -24,7 +24,7 @@ public class PlaygroundTests
         AssertWrapper.IsNotNull(parentRotationCounteractor);
         AssertWrapper.IsNotNull(scoreScript);
     }
-    
+
     [Test]
     public void WorldTests()
     {
