@@ -3,7 +3,6 @@ using Assets.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class AsteroidExternalInstantiator : SeedfulRandomGeneratorUser
 {
@@ -119,7 +118,7 @@ public class AsteroidExternalInstantiator : SeedfulRandomGeneratorUser
     private void InstantiateDirectionalAsteroids(Vector2 position)
     {
         GameObject asteroid = Instantiate(_asteroidPrefab, position, Quaternion.identity);
-        _asteroidInitiator.InitAsteroid(asteroid, _asteroidsDirection, GetRandomAsteroidScale());
+        _asteroidInitiator.InitAsteroid(asteroid, _asteroidsDirection, GetRandomAsteroidScale(), _seedfulRandomGenerator);
     }
 
     private float GetRandomAsteroidScale()

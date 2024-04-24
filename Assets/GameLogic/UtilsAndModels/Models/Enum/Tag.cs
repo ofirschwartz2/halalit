@@ -82,5 +82,7 @@ namespace Assets.Enums
         ASTEROID_INSTANTIATOR,
         [Description("AsteroidDestructor")]
         ASTEROID_DESTRUCTOR,
+        [Description("Setup")]
+        SETUP
     }
 }

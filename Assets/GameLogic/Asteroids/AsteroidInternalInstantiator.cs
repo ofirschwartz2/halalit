@@ -57,7 +57,7 @@ public class AsteroidInternalInstantiator : SeedfulRandomGeneratorUser
             for (int i = 0; i < newAsteroidPositions.Count; i++)
             {
                 GameObject asteroid = Instantiate(_asteroidPrefab, newAsteroidPositions[i], Quaternion.identity);
-                _asteroidInitiator.InitAsteroid(asteroid, newAsteroidDirections[i], newAsteroidsScale, newSiblingAsteroidsId);
+                _asteroidInitiator.InitAsteroid(asteroid, newAsteroidDirections[i], newAsteroidsScale, _seedfulRandomGenerator, newSiblingAsteroidsId);
             }
         }
     }
