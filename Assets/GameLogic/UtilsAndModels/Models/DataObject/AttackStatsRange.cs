@@ -1,7 +1,6 @@
 ﻿using Assets.Enums;
 using Assets.Utils;
 using System;
-using Random = UnityEngine.Random;
 
 [Serializable]
 public class AttackStatsRange
@@ -19,13 +18,13 @@ public class AttackStatsRange
         _itemRank = itemRank;
     }
 
-    public AttackStats GetRandom() 
+    public AttackStats GetRandom(SeedfulRandomGenerator seedfulRandomGenerator) 
     {
-        int power = RandomGenerator.Range((int)Power.min, (int)Power.max + 1, true);
-        float criticalHit = RandomGenerator.Range(CriticalHit.min, CriticalHit.max, true);
-        float luck = RandomGenerator.Range(Luck.min, Luck.max, true);
-        float rate = (float)Math.Round(RandomGenerator.Range(Rate.min, Rate.max, true), 2);
-        float weight = RandomGenerator.Range(Weight.min, Weight.max, true);
+        int power = seedfulRandomGenerator.Range((int)Power.min, (int)Power.max + 1);
+        float criticalHit = seedfulRandomGenerator.Range(CriticalHit.min, CriticalHit.max);
+        float luck = seedfulRandomGenerator.Range(Luck.min, Luck.max);
+        float rate = (float)Math.Round(seedfulRandomGenerator.Range(Rate.min, Rate.max), 2);
+        float weight = seedfulRandomGenerator.Range(Weight.min, Weight.max);
 
         return new AttackStats(_itemRank, power, criticalHit, luck, rate, weight);
     }

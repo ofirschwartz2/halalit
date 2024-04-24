@@ -78,7 +78,7 @@ namespace Assets.Utils
 
         public static Vector2 GetRandomVector(float minX, float maxX, float minY, float maxY)
         {
-            return new Vector2(RandomGenerator.Range(minX, maxX), RandomGenerator.Range(minY, maxY));
+            return new Vector2(SeedlessRandomGenerator.Range(minX, maxX), SeedlessRandomGenerator.Range(minY, maxY));
         }
         
         
@@ -104,8 +104,8 @@ namespace Assets.Utils
 
         public static Vector3 Get180RandomNormalizedVector(Vector3 generalDirection)
         {
-            float newX = AngleNormalizationBy1(generalDirection.x + RandomGenerator.Range(-1f, 1f));
-            float newY = AngleNormalizationBy1(generalDirection.y + RandomGenerator.Range(-1f, 1f));
+            float newX = AngleNormalizationBy1(generalDirection.x + SeedlessRandomGenerator.Range(-1f, 1f));
+            float newY = AngleNormalizationBy1(generalDirection.y + SeedlessRandomGenerator.Range(-1f, 1f));
 
             return new Vector3(newX, newY);
         }
@@ -137,12 +137,12 @@ namespace Assets.Utils
 
         public static float GetRandomAngleAround(float range)
         {
-            return RandomGenerator.Range(-range, range);
+            return SeedlessRandomGenerator.Range(-range, range);
         }
 
         public static float GetRandomBetween(float bottom, float top)
         {
-            return RandomGenerator.Range(bottom, top);
+            return SeedlessRandomGenerator.Range(bottom, top);
         }
 
         public static float GetEndOfLifeTime(float lifetime)
@@ -175,7 +175,7 @@ namespace Assets.Utils
 
         public static Vector2 GetRandomVector2OnCircle(float radius = 1)
         {
-            float angle = RandomGenerator.Range(0, 2 * Mathf.PI, false);
+            float angle = SeedlessRandomGenerator.Range(0, 2 * Mathf.PI);
             return RadianToVector2(angle) * radius;
         }
 
@@ -310,10 +310,6 @@ namespace Assets.Utils
             return attributes.Length > 0 ? attributes[0].Description : string.Empty;
         }
 
-        public static Direction GetRandomDirection()
-        {
-            return (Direction)RandomGenerator.Range(0, Enum.GetValues(typeof(Direction)).Length, true);
-        }
         #endregion
 
         #region Predicates

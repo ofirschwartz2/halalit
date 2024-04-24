@@ -63,7 +63,7 @@ public class ItemsBank : SeedfulRandomGeneratorUser
         ItemRank itemRank = _itemRankPicker.PickAnItemRank();
         AttackOptions attackPossibleStats = _itemOptions.GetAttackPossibleStats(itemName);
         AttackStatsRange attackStatsRange = attackPossibleStats.GetAttackDtoRange(itemRank);
-        return attackStatsRange.GetRandom();
+        return attackStatsRange.GetRandom(_seedfulRandomGenerator);
     }
 
     private void InitAllItems()
