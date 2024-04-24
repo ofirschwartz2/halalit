@@ -3,7 +3,6 @@ using Assets.Utils;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
@@ -13,6 +12,7 @@ public class PickupClawTests
 {
 
     private const string SCENE_NAME = "TestingWithOneItem";
+    private int _seed;
 
     [SetUp]
     public void SetUp()
@@ -25,6 +25,8 @@ public class PickupClawTests
     public IEnumerator PressOnNothing()
     {
         // GIVEN
+        var asteroidMovement = TestUtils.GetAsteroidMovement();
+        asteroidMovement.SetInitialSeedfulRandomGenerator(_seed);
         PickupClawShooter pickupClawShooter = TestUtils.GetPickupClawShooter();
         var position = new Vector2(-1, 0);
 

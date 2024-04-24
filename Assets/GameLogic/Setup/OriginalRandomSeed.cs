@@ -1,6 +1,7 @@
 using Assets.Enums;
 using Assets.Utils;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class OriginalRandomSeed : MonoBehaviour
 {
@@ -15,6 +16,11 @@ public class OriginalRandomSeed : MonoBehaviour
         _seedfulRandomGenerator = new SeedfulRandomGenerator(originalRandomSeed);
 
         SetAllInitialSeedfulRandomGenerators();
+
+#if UNITY_EDITOR
+        if (SceneManager.GetActiveScene().name.Contains("Testing"))
+#endif
+            SetTestsInitialSeedfulRandomGenerators();
     }
 
     void SetAllInitialSeedfulRandomGenerators()
@@ -38,4 +44,15 @@ public class OriginalRandomSeed : MonoBehaviour
         itemRankPicker.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
         itemDropper.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
     }
+
+#if UNITY_EDITOR
+    void SetTestsInitialSeedfulRandomGenerators()
+    {
+        var asteroids = TestUtils.GetAsteroidMovement();
+        //var shotgunComponent = shotgun.GetComponent<Shotgun>();
+
+        shotgunComponent.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
+    }
+#endif
+
 }

@@ -324,6 +324,11 @@ internal static class TestUtils
         return GameObject.FindGameObjectWithTag(Tag.ASTEROID.GetDescription());
     }
 
+    internal static AsteroidMovement GetAsteroidMovement() 
+    {
+        return GetAsteroid().GetComponent<AsteroidMovement>();
+    }
+
     internal static GameObject[] GetAsteroids()
     {
         return GameObject.FindGameObjectsWithTag(Tag.ASTEROID.GetDescription());

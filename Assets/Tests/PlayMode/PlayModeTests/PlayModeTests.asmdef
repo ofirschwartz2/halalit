@@ -10,7 +10,8 @@
         "Items",
         "UtilsAndModels",
         "Meta",
-        "Setup"
+        "Setup",
+        "Asteroid"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
