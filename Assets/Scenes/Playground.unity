@@ -2244,6 +2244,7 @@ MonoBehaviour:
   _asteroidInstantiationDistanceFromCenter: 25
   _asteroidMaxScale: 4
   _maxInstantiationsRetry: 5
+  _maxInstantiations: 30
 --- !u!114 &1107869175
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -20,15 +20,19 @@ public class AsteroidExternalInstantiator : SeedfulRandomGeneratorUser
     private int _asteroidMaxScale;
     [SerializeField]
     private float _maxInstantiationsRetry;
+    [SerializeField]
+    private int _maxInstantiations;
 
     private Vector2 _instantiationLineCenterPoint;
     private Vector2 _asteroidsDirection;
     private float _instantiationLineSlope;
     private float _timeToInstantiation;
+    private int _instantiatedAsteroidsCount;
 
     void Start()
     {
         _timeToInstantiation = 0;
+        _instantiatedAsteroidsCount = 0;
         _instantiationLineCenterPoint = GetRandomInstantiationLineCenterPoint();
         _instantiationLineSlope = GetAsteroidInstantiationLineSlope();
         _asteroidsDirection = GetAsteroidDirection();
@@ -36,7 +40,14 @@ public class AsteroidExternalInstantiator : SeedfulRandomGeneratorUser
 
     void Update()
     {
-        InstantiateAsteroidsFromStartLinePeriodicaly();
+        if (_instantiatedAsteroidsCount < _maxInstantiations)
+        {
+            InstantiateAsteroidsFromStartLinePeriodicaly();
+        }
+        else 
+        {
+            Destroy(this);
+        }
     }
 
     #region Determine instantiation position
@@ -119,6 +130,7 @@ public class AsteroidExternalInstantiator : SeedfulRandomGeneratorUser
     {
         GameObject asteroid = Instantiate(_asteroidPrefab, position, Quaternion.identity);
         _asteroidInitiator.InitAsteroid(asteroid, _asteroidsDirection, GetRandomAsteroidScale(), _seedfulRandomGenerator);
+        _instantiatedAsteroidsCount++;
     }
 
     private float GetRandomAsteroidScale()

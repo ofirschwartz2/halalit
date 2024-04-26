@@ -175,7 +175,7 @@ public class ValuablesTests
     }
 
     private const string FUNCTION_ASTEROID_SOMETIMES_DROPS_VALUABLE_NAME = "AsteroidSometimesDropValuable";
-    /*
+    
     [UnityTest]
     public IEnumerator AsteroidSometimesDropValuable() 
     {
@@ -208,7 +208,7 @@ public class ValuablesTests
         AssertWrapper.Greater(valuables.Length, 0, "No Valuables Dropped", seed);
         AssertWrapper.Greater(originalAsteroidsCount, valuables.Length, "All dropped Valuables", seed);
     }
-    */
+    
 
     private const string FUNCTION_VALUABLES_ADD_SCORE_NAME = "ValuablesAddScore";
     [UnityTest]

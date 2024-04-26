@@ -2507,6 +2507,7 @@ MonoBehaviour:
   _asteroidInstantiationDistanceFromCenter: 25
   _asteroidMaxScale: 4
   _maxInstantiationsRetry: 5
+  _maxInstantiations: 0
 --- !u!114 &1107869175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2522,8 +2523,8 @@ MonoBehaviour:
   _asteroidPrefab: {fileID: 6741412782414407016, guid: d17f6aba06990634e92f5f659cf1bf0d, type: 3}
   _asteroidInitiator: {fileID: 1107869176}
   _asteroidMaxScale: 4
-  _asteroidMaxInstantiationCount: 5
-  _asteroidMinInstantiationCount: 2
+  _asteroidMaxInstantiationCount: 0
+  _asteroidMinInstantiationCount: 0
   _asteroidNewDirectionOffsetDegree: 40
 --- !u!114 &1107869176
 MonoBehaviour:
@@ -2818,7 +2819,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyPrefabsBank:
   - Key: {fileID: 996304911696120768, guid: 4355ed09f91899447974575e85cf5644, type: 3}
-    Value: 5
+    Value: 0
   - Key: {fileID: 392433141160692767, guid: b8a4753e3ee47d44e8ba42303dc92738, type: 3}
     Value: 0
   - Key: {fileID: 6245285285944762974, guid: 2765640acd2407942b41effe8df456b0, type: 3}
@@ -2828,9 +2829,9 @@ MonoBehaviour:
   - Key: {fileID: 8952326225390038146, guid: b77eb97050ad93344867b53d638aa440, type: 3}
     Value: 0
   - Key: {fileID: 1692324214522588343, guid: 939d79704bc231d499e7a2e72b9ff97d, type: 3}
-    Value: 5
+    Value: 0
   - Key: {fileID: 6129749417454103745, guid: 2451ba2c5f1016b439d2717f1ecbb690, type: 3}
-    Value: 5
+    Value: 0
   - Key: {fileID: 5072172639208078113, guid: 235a16c82bb99a347b9b60318f79de27, type: 3}
     Value: 0
   - Key: {fileID: 5844340177478583602, guid: 78f5376bf1e971542ba8bfa6e19ffa7c, type: 3}
