@@ -9,7 +9,7 @@ public class OriginalRandomSeed : MonoBehaviour
 
     void Awake()
     {
-        int originalRandomSeed = 666;// SeedlessRandomGenerator.GetNumber();
+        int originalRandomSeed = SeedlessRandomGenerator.GetNumber();
 
         Debug.Log("Generated Original Random seed: " + originalRandomSeed);
 
