@@ -184,7 +184,7 @@ public class PlaygroundTests
         AssertWrapper.IsNotNull(asteroidInternalInstantiator);
 
         var asteroidDestructor = asteroids.transform.Find("AsteroidDestructor");
-        var asteroidDestructorScript = asteroidDestructor.GetComponent<AsteroidGlobalDestructor>();
+        var asteroidDestructorScript = asteroidDestructor.GetComponent<AsteroidsGlobalDestructor>();
 
         AssertWrapper.IsNotNull(asteroidDestructor);
         AssertWrapper.IsNotNull(asteroidDestructorScript);

@@ -4,11 +4,11 @@ using UnityEngine;
 public class EnemyEntity
 {
     public GameObject Prefab { get; private set; }
-    public List<float> RandomSeededNumbers { get; private set; }
+    public int Seed { get; private set; }
 
-    public EnemyEntity(GameObject prefab, List<float> randomSeededNumbers)
+    public EnemyEntity(GameObject prefab, int seed)
     {
         Prefab = prefab;
-        RandomSeededNumbers = randomSeededNumbers;
+        Seed = seed;
     }
 }

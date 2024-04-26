@@ -17,7 +17,7 @@ public class AsteroidMovement : KinematicMovement
 
     void Start()
     {
-        _rotationSpeed = _seedfulRandomGenerator.Range(-_maxRotation, _maxRotation);
+        _rotationSpeed = gameObject.GetComponent<AsteroidSharedBehavior>()._seedfulRandomGenerator.Range(-_maxRotation, _maxRotation);
         if (_siblingId == null)
         {
             _siblingId = Guid.NewGuid().ToString();

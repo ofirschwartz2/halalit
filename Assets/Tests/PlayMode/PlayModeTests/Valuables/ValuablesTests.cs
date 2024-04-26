@@ -48,7 +48,6 @@ public class ValuablesTests
     {
         // GIVEN
         var seed = TestUtils.SetRandomSeed();
-        TestUtils.SetEnemiesSeededNumbers();
         TestUtils.SetUpShot(AttackName.BALL_SHOT);
 
         var weaponMovement = TestUtils.GetWeaponMovement();
@@ -98,7 +97,6 @@ public class ValuablesTests
     {
         // GIVEN
         var seed = TestUtils.SetRandomSeed();
-        TestUtils.SetEnemiesSeededNumbers();
         TestUtils.SetEnemiesHealth(1);
         TestUtils.SetUpShot(AttackName.BALL_SHOT);
         var weaponMovement = TestUtils.GetWeaponMovement();

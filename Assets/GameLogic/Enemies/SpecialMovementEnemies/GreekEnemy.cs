@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 
-public class GreekEnemy : SeedfulRandomGeneratorUser
+public class GreekEnemy : MonoBehaviour
 {
     [SerializeField]
     private Rigidbody2D _rigidBody;
@@ -30,7 +30,7 @@ public class GreekEnemy : SeedfulRandomGeneratorUser
     void Start()
     {
         _waitForNextStage = false;
-        _greekDirection = _seedfulRandomGenerator.GetRandomDirection();
+        _greekDirection = gameObject.GetComponent<EnemySharedBehavior>()._seedfulRandomGenerator.GetRandomDirection();
         _movementStage = GreekEnemyMovementState.ONE;
         _currentMovementDirection = GetStageDirectionVector(_movementStage, _greekDirection);
         SetChangeDirectionTime();

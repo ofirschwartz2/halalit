@@ -2,7 +2,7 @@
 using Assets.Utils;
 using UnityEngine;
 
-public class AsteroidSelfDestructor : MonoBehaviour
+public class AsteroidSharedBehavior : SeedfulRandomGeneratorUser
 {
     private void OnTriggerExit2D(Collider2D other)
     {
@@ -20,5 +20,4 @@ public class AsteroidSelfDestructor : MonoBehaviour
         }
     }
 }
-
 

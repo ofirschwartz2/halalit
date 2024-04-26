@@ -164,8 +164,7 @@ public class SpawnHole : MonoBehaviour
         foreach (var enemyEntity in _enemyEntities)
         {
             var newEnemy = Instantiate(enemyEntity.Prefab, transform.position, Quaternion.identity, transform.parent);
-            TrySetSeedfulRandomGeneratorUser(newEnemy);
-            newEnemy.GetComponent<RandomSeededNumbers>().SetRandomSeededNumbers(enemyEntity.RandomSeededNumbers);
+            SetSeedfulRandomGeneratorUser(newEnemy, enemyEntity.Seed);
             newEnemy.transform.localScale = Vector3.zero;
 
             DisableEnemyScripts(newEnemy);
@@ -240,14 +239,9 @@ public class SpawnHole : MonoBehaviour
         _enemiesSpawnFinalPoints = new List<Vector2>();
     }
 
-    private void TrySetSeedfulRandomGeneratorUser(GameObject newEnemy)
+    private void SetSeedfulRandomGeneratorUser(GameObject newEnemy, int seed)
     {
-        var sinusEnemy = newEnemy.GetComponent<SinusEnemy>();
-        var greekEnemy = newEnemy.GetComponent<GreekEnemy>();
-
-        if (sinusEnemy != null) 
-        {
-            sinusEnemy.SetInitialSeedfulRandomGenerator(_seedf);
-        }
+        var enemySharedBehavior = newEnemy.GetComponent<EnemySharedBehavior>();
+        enemySharedBehavior.SetInitialSeedfulRandomGenerator(seed);
     }
 }

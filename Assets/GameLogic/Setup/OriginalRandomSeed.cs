@@ -49,11 +49,17 @@ public class OriginalRandomSeed : MonoBehaviour
     void SetTestsInitialSeedfulRandomGenerators()
     {
         var asteroids = GameObject.FindGameObjectsWithTag(Tag.ASTEROID.GetDescription());
-        var enemies = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
         foreach (var asteroid in asteroids)
         {
-            var asteroidMovement = asteroid.GetComponent<AsteroidMovement>();
-            asteroidMovement.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
+            var asteroidSharedBehavior = asteroid.GetComponent<AsteroidSharedBehavior>();
+            asteroidSharedBehavior.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
+        }
+
+        var enemies = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
+        foreach (var enemy in enemies)
+        {
+            var enemySharedBehavior = enemy.GetComponent<EnemySharedBehavior>();
+            enemySharedBehavior.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
         }
     }
 #endif

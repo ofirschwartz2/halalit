@@ -37,7 +37,7 @@ public class EnemyBank : SeedfulRandomGeneratorUser
             {
                 _enemyEntityList.Add(new EnemyEntity(
                     enemyPrefab.Key,
-                    _seedfulRandomGenerator.GetRangeZeroToOneList(_seededRandomNumbersPerEnemy)));
+                    _seedfulRandomGenerator.GetNumber()));
             }
         }
 
