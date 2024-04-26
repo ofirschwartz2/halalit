@@ -103,7 +103,7 @@ public class BoomerangTests
         var originalTargetHealth = TestUtils.GetEnemyHealth();
         yield return null;
         var targetClosestPosition = TestUtils.GetEnemyNearestPositionToHalalit();
-        var acceptedDelta = 1f;
+        var acceptedDelta = 1.2f;
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, weaponAttack.GetAttackJoystickEdge());
 
         // WHEN

@@ -12,7 +12,7 @@ namespace Assets.Utils
         public SeedfulRandomGenerator(int seed)
         {
             seedfullRandom = new System.Random(seed);
-            Debug.Log("Seed set to " + seedfullRandom.GetHashCode());
+            Debug.Log("Seed set to " + seed);
         }
 
         public int GetNumber()

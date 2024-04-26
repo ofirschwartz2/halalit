@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 170492327}
   m_Layer: 0
   m_Name: Setup
-  m_TagString: Untagged
+  m_TagString: Setup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -540,7 +540,7 @@ GameObject:
   - component: {fileID: 430440947}
   m_Layer: 0
   m_Name: EventSystem
-  m_TagString: Untagged
+  m_TagString: EventSystem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1485,7 +1485,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 742983412}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 913671d8b5233784cb2d17e3108f7614, type: 3}
+  m_Script: {fileID: 11500000, guid: d8c56b4573ebdea4baa6a28e91b24c17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &752615852
@@ -3331,6 +3331,10 @@ PrefabInstance:
     - target: {fileID: 5212479352641103145, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
       propertyPath: m_Layer
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5212479352641103145, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
+      propertyPath: m_TagString
+      value: HalalitHealthBar
       objectReference: {fileID: 0}
     - target: {fileID: 5460845519376436997, guid: 2fed489d096187c41818e2f946963b9f, type: 3}
       propertyPath: m_Layer

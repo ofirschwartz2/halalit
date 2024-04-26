@@ -73,7 +73,7 @@ public class AsteroidExternalInstantiator : SeedfulRandomGeneratorUser
         float a = _instantiationLineCenterPoint.x;
         float b = centerPointAndInstantiationPointDistance / Mathf.Sqrt(Mathf.Pow(_instantiationLineSlope, 2) + 1);
 
-        if (SeedlessRandomGenerator.IsTrueIn50Precent())
+        if (_seedfulRandomGenerator.IsTrueIn50Precent())
         {
             return a + b;
         }
