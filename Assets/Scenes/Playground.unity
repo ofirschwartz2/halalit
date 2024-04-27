@@ -1531,7 +1531,7 @@ MonoBehaviour:
     Key: 0
     Value:
       _itemRank: 0
-      Power: 50
+      Power: 1
       CriticalHit: 1
       Luck: 1
       Rate: 1
@@ -9776,7 +9776,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _healthBar: {fileID: 1125677064}
   _healthBarIcon: {fileID: 21300000, guid: b2b25edd941b5c94793518d2adf495ee, type: 3}
-  _currentMaxHealth: 5
+  _currentMaxHealth: 30
   _finalMaxHealth: 50
   _harmers: 0200000013000000
   _contributors: 
