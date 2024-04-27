@@ -514,7 +514,7 @@ internal static class TestUtils
     #endregion
 
     #region Shot Actions
-        public static IEnumerator GetDescreteShotPositionHittingTarget()
+    public static IEnumerator GetDescreteShotPositionHittingTarget()
     {
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
         Vector2 lastShotPosition;
