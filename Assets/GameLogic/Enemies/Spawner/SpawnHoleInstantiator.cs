@@ -2,7 +2,7 @@ using Assets.Utils;
 using System.Collections;
 using UnityEngine;
 
-public class SpawnHoleInstantiator : MonoBehaviour
+public class SpawnHoleInstantiator : SeedfulRandomGeneratorUser
 {
     [SerializeField]
     private float[] _instantiationRate;
@@ -83,7 +83,7 @@ public class SpawnHoleInstantiator : MonoBehaviour
     {
         for (int i = 0; i < _findPositionRetries; i++)
         {
-            var potentialPosition = new Vector2(RandomGenerator.Range(_minX, _maxX, true), RandomGenerator.Range(_minY, _maxY, true));
+            var potentialPosition = new Vector2(_seedfulRandomGenerator.Range(_minX, _maxX), _seedfulRandomGenerator.Range(_minY, _maxY));
             Collider2D[] colliders = Physics2D.OverlapCircleAll(potentialPosition, _instantiationDistanceFree);
             if (colliders.Length == 1)
             {

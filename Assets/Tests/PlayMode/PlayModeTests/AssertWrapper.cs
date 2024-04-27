@@ -17,6 +17,12 @@ internal static class AssertWrapper
         Assert.AreEqual(expected.y, actual.y, acceptedDelta, failMessage);
     }
 
+    internal static void AreEqual(string expected, string actual, string failMessage, int? seed = null)
+    {
+        failMessage = CombineFailMessageWithSeed(failMessage, seed);
+        Assert.AreEqual(expected, actual, failMessage);
+    }
+
     internal static void AreEqual(float expected, float actual, string failMessage, int? seed = null, float acceptedDelta = 0)
     {
         failMessage = CombineFailMessageWithSeed(failMessage, seed);

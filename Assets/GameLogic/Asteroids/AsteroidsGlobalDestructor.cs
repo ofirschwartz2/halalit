@@ -3,7 +3,7 @@ using Assets.Utils;
 using System;
 using UnityEngine;
 
-public class AsteroidGlobalDestructor : MonoBehaviour
+public class AsteroidsGlobalDestructor : MonoBehaviour
 {
     #region Init
     private void Awake()
@@ -37,12 +37,29 @@ public class AsteroidGlobalDestructor : MonoBehaviour
 
         InvokeItemDropEvent(asteroidToKill);
         InvokeAsteroidInternalInstantiationEvent(asteroidToKill);
+        TryInvokeValuableDropEvent(asteroidToKill);
         Destroy(asteroidToKill);
+    }
+
+    private void TryInvokeValuableDropEvent(GameObject asteroidToKill)
+    {
+        var potentialValuableDrops = asteroidToKill.GetComponent<PotentialValuableDrops>().GetValuablesToChances();
+        foreach (var potentialValuableDrop in potentialValuableDrops)
+        {
+            float randomSeededNumber = asteroidToKill.GetComponent<AsteroidSharedBehavior>()._seedfulRandomGenerator.RangeZeroToOne();
+            if (randomSeededNumber <= potentialValuableDrop.Value)
+            {
+                Vector2 dropForce = SeedlessRandomGenerator.GetInsideUnitCircle() * asteroidToKill.transform.localScale.x;
+                ValuableDropEventArguments valuableDropEventArguments = new(asteroidToKill.GetComponent<AsteroidDropper>().GetDropper(), asteroidToKill.transform.position, dropForce, potentialValuableDrop.Key);
+                ValuableDropEvent.Invoke(EventName.NEW_VALUABLE_DROP, this, valuableDropEventArguments);
+                return;
+            }
+        }
     }
 
     private void InvokeItemDropEvent(GameObject asteroidToKill)
     {
-        Vector2 dropForce = RandomGenerator.GetInsideUnitCircle() * asteroidToKill.transform.localScale.x;
+        Vector2 dropForce = SeedlessRandomGenerator.GetInsideUnitCircle() * asteroidToKill.transform.localScale.x;
         ItemDropEventArguments itemDropEventArguments = new(Dropper.ASTEROID, asteroidToKill.transform.position, dropForce);
         ItemDropEvent.Invoke(EventName.NEW_ITEM_DROP, this, itemDropEventArguments);
     }

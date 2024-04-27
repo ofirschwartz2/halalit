@@ -1,6 +1,5 @@
 ﻿using Assets.Enums;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HalalitDeathEvent : MonoBehaviour

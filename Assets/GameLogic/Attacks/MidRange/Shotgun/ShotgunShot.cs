@@ -48,7 +48,7 @@ public class ShotgunShot : MonoBehaviour
 
     private void SetLifeTime()
     {
-        _lifeTime = RandomGenerator.Range(_averageLifeTime - _lifeTimeVariance, _averageLifeTime + _lifeTimeVariance);
+        _lifeTime = SeedlessRandomGenerator.Range(_averageLifeTime - _lifeTimeVariance, _averageLifeTime + _lifeTimeVariance);
         _startOfLifeTime = Time.time;
         _endOfLifeTime = _startOfLifeTime + _lifeTime;
     }

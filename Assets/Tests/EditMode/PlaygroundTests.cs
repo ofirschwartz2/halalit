@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 
 public class PlaygroundTests
 {
@@ -185,7 +184,7 @@ public class PlaygroundTests
         AssertWrapper.IsNotNull(asteroidInternalInstantiator);
 
         var asteroidDestructor = asteroids.transform.Find("AsteroidDestructor");
-        var asteroidDestructorScript = asteroidDestructor.GetComponent<AsteroidGlobalDestructor>();
+        var asteroidDestructorScript = asteroidDestructor.GetComponent<AsteroidsGlobalDestructor>();
 
         AssertWrapper.IsNotNull(asteroidDestructor);
         AssertWrapper.IsNotNull(asteroidDestructorScript);
@@ -340,5 +339,16 @@ public class PlaygroundTests
         AssertWrapper.IsNotNull(valuablesContainer);
         AssertWrapper.IsNotNull(valuablesContainerTransform);
         AssertWrapper.IsNotNull(valuablesContainerValuableDropper);
+    }
+
+    [Test]
+    public void SetupTests() 
+    {
+        // SETUP
+        var setUp = TestUtils.GetSetup();
+        var originalRandomSeed = setUp.GetComponent<OriginalRandomSeed>();
+
+        AssertWrapper.IsNotNull(originalRandomSeed);
+
     }
 }

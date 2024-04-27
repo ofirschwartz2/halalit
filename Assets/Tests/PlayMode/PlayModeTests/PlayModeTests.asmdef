@@ -9,7 +9,9 @@
         "Health",
         "Items",
         "UtilsAndModels",
-        "Meta"
+        "Meta",
+        "Setup",
+        "Asteroid"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

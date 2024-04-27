@@ -3,9 +3,8 @@ using Assets.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
-public class AsteroidExternalInstantiator : MonoBehaviour
+public class AsteroidExternalInstantiator : SeedfulRandomGeneratorUser
 {
     [SerializeField]
     private GameObject _asteroidPrefab;
@@ -21,15 +20,19 @@ public class AsteroidExternalInstantiator : MonoBehaviour
     private int _asteroidMaxScale;
     [SerializeField]
     private float _maxInstantiationsRetry;
+    [SerializeField]
+    private int _maxInstantiations;
 
     private Vector2 _instantiationLineCenterPoint;
     private Vector2 _asteroidsDirection;
     private float _instantiationLineSlope;
     private float _timeToInstantiation;
+    private int _instantiatedAsteroidsCount;
 
     void Start()
     {
         _timeToInstantiation = 0;
+        _instantiatedAsteroidsCount = 0;
         _instantiationLineCenterPoint = GetRandomInstantiationLineCenterPoint();
         _instantiationLineSlope = GetAsteroidInstantiationLineSlope();
         _asteroidsDirection = GetAsteroidDirection();
@@ -37,7 +40,14 @@ public class AsteroidExternalInstantiator : MonoBehaviour
 
     void Update()
     {
-        InstantiateAsteroidsFromStartLinePeriodicaly();
+        if (_instantiatedAsteroidsCount < _maxInstantiations)
+        {
+            InstantiateAsteroidsFromStartLinePeriodicaly();
+        }
+        else 
+        {
+            Destroy(this);
+        }
     }
 
     #region Determine instantiation position
@@ -69,12 +79,12 @@ public class AsteroidExternalInstantiator : MonoBehaviour
 
     private float GetRandomAsteroidInstantiationPointX()
     {
-        float centerPointAndInstantiationPointDistance = RandomGenerator.Range(0, _asteroidInstantiationDistanceFromCenter, true);
+        float centerPointAndInstantiationPointDistance = _seedfulRandomGenerator.Range(0, _asteroidInstantiationDistanceFromCenter);
 
         float a = _instantiationLineCenterPoint.x;
         float b = centerPointAndInstantiationPointDistance / Mathf.Sqrt(Mathf.Pow(_instantiationLineSlope, 2) + 1);
 
-        if (RandomGenerator.IsTrueIn50Precent(false))
+        if (_seedfulRandomGenerator.IsTrueIn50Precent())
         {
             return a + b;
         }
@@ -119,12 +129,13 @@ public class AsteroidExternalInstantiator : MonoBehaviour
     private void InstantiateDirectionalAsteroids(Vector2 position)
     {
         GameObject asteroid = Instantiate(_asteroidPrefab, position, Quaternion.identity);
-        _asteroidInitiator.InitAsteroid(asteroid, _asteroidsDirection, GetRandomAsteroidScale());
+        _asteroidInitiator.InitAsteroid(asteroid, _asteroidsDirection, GetRandomAsteroidScale(), _seedfulRandomGenerator);
+        _instantiatedAsteroidsCount++;
     }
 
     private float GetRandomAsteroidScale()
     {
-        return RandomGenerator.Range(1, (float)(_asteroidMaxScale + 1), true);
+        return _seedfulRandomGenerator.Range(1, (float)(_asteroidMaxScale + 1));
     }
     #endregion
 
@@ -136,7 +147,7 @@ public class AsteroidExternalInstantiator : MonoBehaviour
 
     private Vector2 GetRandomInstantiationLineCenterPoint()
     {
-        return RandomGenerator.GetInsideUnitCircle(true).normalized * _asteroidInstantiationDistanceFromCenter;
+        return _seedfulRandomGenerator.GetInsideUnitCircle().normalized * _asteroidInstantiationDistanceFromCenter;
     }
 
     private Vector2 GetAsteroidDirection()

@@ -1353,7 +1353,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 742983412}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 913671d8b5233784cb2d17e3108f7614, type: 3}
+  m_Script: {fileID: 11500000, guid: d8c56b4573ebdea4baa6a28e91b24c17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &752615852
@@ -1531,7 +1531,7 @@ MonoBehaviour:
     Key: 0
     Value:
       _itemRank: 0
-      Power: 50
+      Power: 1
       CriticalHit: 1
       Luck: 1
       Rate: 1
@@ -2147,6 +2147,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1018808179
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1018808181}
+  - component: {fileID: 1018808180}
+  m_Layer: 0
+  m_Name: Setup
+  m_TagString: Setup
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1018808180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1018808179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1963dfa14156cf549956f41174b19930, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1018808181
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1018808179}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 578, y: 391.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1107869172
 GameObject:
   m_ObjectHideFlags: 0
@@ -2200,6 +2244,7 @@ MonoBehaviour:
   _asteroidInstantiationDistanceFromCenter: 25
   _asteroidMaxScale: 4
   _maxInstantiationsRetry: 5
+  _maxInstantiations: 30
 --- !u!114 &1107869175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2313,7 +2358,7 @@ GameObject:
   - component: {fileID: 1170308205}
   m_Layer: 8
   m_Name: EnemyDestructor
-  m_TagString: Untagged
+  m_TagString: EnemiesDestructor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2405,7 +2450,7 @@ GameObject:
   - component: {fileID: 1277994821}
   m_Layer: 8
   m_Name: EnemySpawner
-  m_TagString: Untagged
+  m_TagString: EnemiesSpawner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9731,7 +9776,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _healthBar: {fileID: 1125677064}
   _healthBarIcon: {fileID: 21300000, guid: b2b25edd941b5c94793518d2adf495ee, type: 3}
-  _currentMaxHealth: 5
+  _currentMaxHealth: 30
   _finalMaxHealth: 50
   _harmers: 0200000013000000
   _contributors: 

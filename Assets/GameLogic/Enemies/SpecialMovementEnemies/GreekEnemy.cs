@@ -30,7 +30,7 @@ public class GreekEnemy : MonoBehaviour
     void Start()
     {
         _waitForNextStage = false;
-        _greekDirection = Utils.GetRandomDirection();
+        _greekDirection = gameObject.GetComponent<EnemySharedBehavior>()._seedfulRandomGenerator.GetRandomDirection();
         _movementStage = GreekEnemyMovementState.ONE;
         _currentMovementDirection = GetStageDirectionVector(_movementStage, _greekDirection);
         SetChangeDirectionTime();

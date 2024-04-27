@@ -3,7 +3,6 @@ using Assets.Utils;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
@@ -43,7 +42,7 @@ public class PickupClawTests
     {
         // GIVEN
         var seed = TestUtils.SetRandomSeed();
-        var randJoysticksIndex = RandomGenerator.Range(0, 1);
+        var randJoysticksIndex = TestingRandomGenerator.Range(0, 1);
 
         PickupClawShooter pickupClawShooter = TestUtils.GetPickupClawShooter();
         List<GameObject> joysticks = new List<GameObject>
