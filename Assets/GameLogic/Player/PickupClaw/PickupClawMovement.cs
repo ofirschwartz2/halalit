@@ -2,7 +2,6 @@ using Assets.Enums;
 using Assets.Utils;
 using System;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class PickupClawMovement : MonoBehaviour
 {

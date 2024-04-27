@@ -35,7 +35,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TestingWithOneItem.unity
     guid: b452cc5f4c5ad7a46a133c3594fd941b
-  - enabled: 1
-    path: Assets/Scenes/TestingWith1000AsteroidsFromRight.unity
-    guid: 820e4c2c0d3880343a73b32bbc794906
   m_configObjects: {}
