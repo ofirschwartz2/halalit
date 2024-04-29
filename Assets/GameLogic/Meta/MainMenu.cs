@@ -14,10 +14,12 @@ public class MainMenu : MonoBehaviour
         SetHighScore();
     }
 
+    /*
     private async void Start()
     {
-        await UnityServices.InitializeAsync();
+        //await UnityServices.InitializeAsync();
     }
+    */
 
     public void StartGame()
     {
