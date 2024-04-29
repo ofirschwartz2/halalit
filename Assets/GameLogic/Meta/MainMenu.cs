@@ -14,6 +14,11 @@ public class MainMenu : MonoBehaviour
         SetHighScore();
     }
 
+    private async void Start()
+    {
+        await UnityServices.InitializeAsync();
+    }
+
     public void StartGame()
     {
         SceneManager.LoadScene(SceneName.PLAYGROUND.GetDescription());
