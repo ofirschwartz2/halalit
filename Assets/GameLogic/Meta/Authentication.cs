@@ -7,7 +7,16 @@ using UnityEngine;
 public class Authentication : MonoBehaviour
 {
 
-    async void Awake()
+    public static Task InitializationTask { get; private set; }
+
+    void Awake()
+    {
+        _dailyScoreKey = "DailyScore_" + DateTime.Now.ToString("dd-MM-yy");
+
+        InitializationTask = Initialize();
+    }
+
+    private async Task Initialize()
     {
         try
         {
@@ -26,8 +35,10 @@ public class Authentication : MonoBehaviour
     // Setup authentication event handlers if desired
     void SetupEvents()
     {
-        AuthenticationService.Instance.SignedIn += () => {
+        AuthenticationService.Instance.SignedIn += () =>
+        {
             // Shows how to get a playerID
+            PlayerStats._playerId = AuthenticationService.Instance.PlayerId;
             Debug.Log($"PlayerID: {AuthenticationService.Instance.PlayerId}");
 
             // Shows how to get an access token
@@ -35,11 +46,13 @@ public class Authentication : MonoBehaviour
 
         };
 
-        AuthenticationService.Instance.SignInFailed += (err) => {
+        AuthenticationService.Instance.SignInFailed += (err) =>
+        {
             Debug.LogError(err);
         };
 
-        AuthenticationService.Instance.SignedOut += () => {
+        AuthenticationService.Instance.SignedOut += () =>
+        {
             Debug.Log("Player signed out.");
         };
 
@@ -53,14 +66,20 @@ public class Authentication : MonoBehaviour
     {
         try
         {
-            await AuthenticationService.Instance.SignInAnonymouslyAsync();
-            Debug.Log("Signed in anonymously.");
-            Debug.Log($"PlayerID: {AuthenticationService.Instance.PlayerId}");
+            if (!AuthenticationService.Instance.IsSignedIn)
+            {
+                await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            }
         }
         catch (Exception e)
         {
             Debug.LogException(e);
         }
+    }
+
+    public string GetPlayerId()
+    {
+        return AuthenticationService.Instance.PlayerId;
     }
 
 }

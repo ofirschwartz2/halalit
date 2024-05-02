@@ -1,6 +1,10 @@
 using Assets.Enums;
 using Assets.Utils;
+using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Unity.Services.CloudSave;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,7 +12,7 @@ using UnityEngine.SceneManagement;
 [assembly: InternalsVisibleTo("PlayModeTests")]
 #endif
 
-public class HalalitDeath : MonoBehaviour
+public class GameOver : MonoBehaviour
 {
     #region Init
     private void Awake()
@@ -18,7 +22,7 @@ public class HalalitDeath : MonoBehaviour
 
     private void SetEventListeners()
     {
-        HalalitDeathEvent.HalalitDeath += OnHalalitDeath;
+        GameOverEvent.GameOver += OnGameOver;
     }
     #endregion
 
@@ -31,13 +35,15 @@ public class HalalitDeath : MonoBehaviour
 
     public void DestroyEventListeners()
     {
-        HalalitDeathEvent.HalalitDeath -= OnHalalitDeath;
+        GameOverEvent.GameOver -= OnGameOver;
     }
     #endregion
 
-    #region Enemy destruction
-    private void OnHalalitDeath(object initiator, HalalitDeathEventArguments arguments)
+    #region GameOver
+    private void OnGameOver(object initiator, GameOverEventArguments arguments)
     {
+        GameObject.FindGameObjectWithTag(Tag.SCORE.GetDescription()).GetComponent<Score>().SetGameStats();
+
         SceneManager.LoadScene(SceneName.MAIN_MENU.GetDescription());
     }
 
