@@ -9,14 +9,7 @@ public class Authentication : MonoBehaviour
 
     public static Task InitializationTask { get; private set; }
 
-    void Awake()
-    {
-        _dailyScoreKey = "DailyScore_" + DateTime.Now.ToString("dd-MM-yy");
-
-        InitializationTask = Initialize();
-    }
-
-    private async Task Initialize()
+    internal static async Task Initialize()
     {
         try
         {
@@ -33,7 +26,7 @@ public class Authentication : MonoBehaviour
     }
 
     // Setup authentication event handlers if desired
-    void SetupEvents()
+    static void SetupEvents()
     {
         AuthenticationService.Instance.SignedIn += () =>
         {
@@ -62,7 +55,7 @@ public class Authentication : MonoBehaviour
         };
     }
 
-    private async Task SignInAnonymously()
+    private static async Task SignInAnonymously()
     {
         try
         {
@@ -77,7 +70,7 @@ public class Authentication : MonoBehaviour
         }
     }
 
-    public string GetPlayerId()
+    public static string GetPlayerId()
     {
         return AuthenticationService.Instance.PlayerId;
     }

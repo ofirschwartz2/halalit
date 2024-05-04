@@ -1,10 +1,6 @@
 using Assets.Enums;
 using Assets.Utils;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.Services.CloudSave;
-using Unity.Services.CloudSave.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -16,25 +12,30 @@ public class MainMenu : MonoBehaviour
     [SerializeField]
     private Text _dailyScoreText;
 
-    private Dictionary<string, object> _playerHighScore;
-    private Dictionary<string, object> _playerDailyScore;
-    private string _dailyScoreKey, _highScoreKey;
+    [SerializeField]
+    private Button _dailyButton;
 
-    private async void Start()
+    private async void Awake()
     {
-        _dailyScoreKey = "DailyScore_" + DateTime.Now.ToString("dd-MM-yy");
-        _highScoreKey = "HighScore";
-        await Authentication.InitializationTask;
+        if (Authentication.InitializationTask == null)
+        {
+            await Authentication.Initialize();
+        }
+        else
+        {
+            await Authentication.InitializationTask;
+        }
 
-        await TryToUpdatePlayerStatsAsync();
-        await GetPlayerStatsAsync();
-        SetHighScoreText();
-        SetDailyScoreText();
+        await PlayerStats.InitAllAsync();
+        await TrySetNewDailyScoreAsync();
+        await TrySetNewHighScoreAsync();
+        TrySetScoreTexts();
 
-        PlayerStats._isDaily = false;
-        PlayerStats._newHighScore = false;
+        _dailyButton.interactable = PlayerStats._dailyScore == null;
+
     }
 
+    #region ButtonMethods
     public void StartGame()
     {
         SceneManager.LoadScene(SceneName.PLAYGROUND.GetDescription());
@@ -42,84 +43,64 @@ public class MainMenu : MonoBehaviour
 
     public void StartDaily()
     {
-        PlayerStats._isDaily = true;
-        PlayerStats._dailyDate = DateTime.Now;
+        if (!_dailyButton.interactable) return;
+
+        PlayerStats.SetStartDaily();
         StartGame();
+    }
+
+    public void LeaderBoard()
+    {
+        SceneManager.LoadScene(SceneName.LEADERBOARD.GetDescription());
     }
 
     public void ExitGame()
     {
         Application.Quit();
     }
+    #endregion
 
-    public async Task GetPlayerStatsAsync()
+    #region Setters
+    private void TrySetScoreTexts()
     {
-        var playerStats = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string>() { _highScoreKey, _dailyScoreKey });
-        SetPlayerStat(playerStats);
-
-        PlayerStats.SetPlayerStat(playerStats, _dailyScoreKey);
-        if (playerStats.TryGetValue(_dailyScoreKey, out var DailyScoreObject))
-        {
-            PlayerStats._dailyScore = DailyScoreObject.Value.GetAs<int>();
-        }
-
-        if (playerStats.TryGetValue(_highScoreKey, out var HighScoreObject))
-        {
-            PlayerStats._highScore = HighScoreObject.Value.GetAs<int>();
-        }
+        TrySetHighScoreText();
+        TrySetDailyScoreText();
     }
 
-    private void SetPlayerStat(Dictionary<string, Item> playerStats)
+    public void TrySetHighScoreText()
     {
-        
-    }
-
-    public void SetHighScoreText()
-    {
-        if (PlayerStats._highScore != 0)
+        if (PlayerStats._highScore != null)
         {
             _highScoreText.text = "High Score: " + PlayerStats._highScore;
         }        
     }
 
-    public void SetDailyScoreText()
+    public void TrySetDailyScoreText()
     {
         if (PlayerStats._dailyScore != null)
         {
             _dailyScoreText.text = "Daily Score: " + PlayerStats._dailyScore;
         }
     }
-
-    public async Task TryToUpdatePlayerStatsAsync()
-    {
-        await TrySetNewHighScoreAsync();
-        await TrySetNewDailyScoreAsync();
-    }
+    #endregion
 
     private async Task TrySetNewDailyScoreAsync()
     {
-        if (PlayerStats._isDaily)
+        if (PlayerStats._isDailyRun)
         {
-            _playerDailyScore = new Dictionary<string, object>();
-            _playerDailyScore[_dailyScoreKey] = PlayerStats._dailyScore;
+            await PlayerStats.SaveDailyScoreAsync();
 
-            await CloudSaveService.Instance.Data.Player.SaveAsync(_playerDailyScore);
-            SetDailyScoreText();
-
-            PlayerStats._isDaily = false;
+            PlayerStats._isDailyRun = false;
         }
     }
 
     private async Task TrySetNewHighScoreAsync()
     {
-        if (PlayerStats._newHighScore)
+        if (PlayerStats._isNewHighScore)
         {
-            _playerHighScore = new Dictionary<string, object>();
-            _playerHighScore["HighScore"] = PlayerStats._highScore;
+            await PlayerStats.SavePlayerHighScoreAsync();
 
-            await CloudSaveService.Instance.Data.Player.SaveAsync(_playerHighScore);
-
-            PlayerStats._newHighScore = false;
+            PlayerStats._isNewHighScore = false;
         }
     }
 }

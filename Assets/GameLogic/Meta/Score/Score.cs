@@ -62,7 +62,7 @@ public class Score : MonoBehaviour
 
     private void TrySetDailyScore()
     {
-        if (PlayerStats._isDaily) 
+        if (PlayerStats._isDailyRun) 
         {
             PlayerStats._dailyScore = _score;
         }
@@ -73,7 +73,7 @@ public class Score : MonoBehaviour
         if (_score > PlayerStats._highScore)
         {
             PlayerStats._highScore = _score;
-            PlayerStats._newHighScore = true;
+            PlayerStats._isNewHighScore = true;
         }
     }
 

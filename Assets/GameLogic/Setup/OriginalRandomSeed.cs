@@ -7,9 +7,12 @@ public class OriginalRandomSeed : MonoBehaviour
 {
     private SeedfulRandomGenerator _seedfulRandomGenerator;
 
-    void Awake()
+    private void Awake()
     {
-        int originalRandomSeed = SeedlessRandomGenerator.GetNumber();
+        
+        int originalRandomSeed;
+
+        originalRandomSeed = PlayerStats._isDailyRun ? (int)PlayerStats._dailySeed : SeedlessRandomGenerator.GetNumber();
 
         Debug.Log("Generated Original Random seed: " + originalRandomSeed);
 

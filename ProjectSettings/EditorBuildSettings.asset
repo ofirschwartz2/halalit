@@ -35,4 +35,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TestingWithOneItem.unity
     guid: b452cc5f4c5ad7a46a133c3594fd941b
+  - enabled: 1
+    path: Assets/Scenes/Leaderboard.unity
+    guid: f11c46fc453fffb469f33a2ea142c649
   m_configObjects: {}

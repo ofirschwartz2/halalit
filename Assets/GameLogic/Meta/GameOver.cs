@@ -1,10 +1,6 @@
 using Assets.Enums;
 using Assets.Utils;
-using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using Unity.Services.CloudSave;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -43,7 +39,7 @@ public class GameOver : MonoBehaviour
     private void OnGameOver(object initiator, GameOverEventArguments arguments)
     {
         GameObject.FindGameObjectWithTag(Tag.SCORE.GetDescription()).GetComponent<Score>().SetGameStats();
-
+        
         SceneManager.LoadScene(SceneName.MAIN_MENU.GetDescription());
     }
 
