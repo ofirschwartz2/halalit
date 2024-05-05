@@ -17,6 +17,17 @@ public class MainMenu : MonoBehaviour
 
     private async void Awake()
     {
+        await PlayerInitialization();
+        await TrySetNewDailyScoreAsync();
+        await TrySetNewHighScoreAsync();
+        TrySetScoreTexts();
+
+        _dailyButton.interactable = PlayerStats._dailyScore == null;
+
+    }
+
+    private static async Task PlayerInitialization() // TODO: FIX
+    {
         if (Authentication.InitializationTask == null)
         {
             await Authentication.Initialize();
@@ -27,12 +38,6 @@ public class MainMenu : MonoBehaviour
         }
 
         await PlayerStats.InitAllAsync();
-        await TrySetNewDailyScoreAsync();
-        await TrySetNewHighScoreAsync();
-        TrySetScoreTexts();
-
-        _dailyButton.interactable = PlayerStats._dailyScore == null;
-
     }
 
     #region ButtonMethods
