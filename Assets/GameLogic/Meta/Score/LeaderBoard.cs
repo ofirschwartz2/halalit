@@ -62,9 +62,10 @@ public class LeaderBoard : MonoBehaviour
             entryRectTransform.anchoredPosition = new Vector2(0, -2 * i);
             entryTransform.gameObject.SetActive(true);
 
-            entryTransform.Find("IdText").GetComponent<Text>().text = (i + 1).ToString();
-            entryTransform.Find("PlayerNameText").GetComponent<Text>().text = _highScoresResponse.Results[i].PlayerName;
-            entryTransform.Find("ScoreText").GetComponent<Text>().text = _highScoresResponse.Results[i].Score.ToString();
+            entryTransform.Find("IdText").GetComponent<TextMesh>();
+            entryTransform.Find("IdText").GetComponent<TextMesh>().text = (i + 1).ToString();
+            entryTransform.Find("PlayerNameText").GetComponent<TextMesh>().text = _highScoresResponse.Results[i].PlayerName;
+            entryTransform.Find("ScoreText").GetComponent<TextMesh>().text = _highScoresResponse.Results[i].Score.ToString();
         }
 
         entryTemplate.gameObject.SetActive(false);
