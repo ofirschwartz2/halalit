@@ -1,4 +1,6 @@
 ﻿using Assets.Enums;
+using Assets.Utils;
+using System;
 using UnityEngine;
 
 public class AttackBehaviour : MonoBehaviour, IHarmer
@@ -14,6 +16,25 @@ public class AttackBehaviour : MonoBehaviour, IHarmer
 
     public int GetHarm()
     {
-       return AttackStats.Power;
+        int criticalDamage = GetCriticalDamage();
+        
+        if (criticalDamage > 0)
+        {
+            return criticalDamage;
+        }
+
+        return AttackStats.Power;
+    }
+
+    private int GetCriticalDamage()
+    {
+        bool isCriticalDamage = SeedlessRandomGenerator.Range(0, 100) < AttackStats.Luck;
+
+        if (isCriticalDamage)
+        {
+            return (int)Math.Floor(AttackStats.Power * AttackStats.CriticalHit);
+        }
+
+        return 0;
     }
 }

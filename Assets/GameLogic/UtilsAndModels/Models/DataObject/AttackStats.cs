@@ -9,11 +9,11 @@ public class AttackStats : IItemStats
     private ItemRank _itemRank;
     public int Power;
     public float CriticalHit;
-    public float Luck;
+    public int Luck;
     public float Rate;
     public float Weight;
 
-    public AttackStats(ItemRank itemRank, int power, float criticalHit, float luck, float rate, float weight)
+    public AttackStats(ItemRank itemRank, int power, float criticalHit, int luck, float rate, float weight)
     {
         _itemRank = itemRank;
         Power = power;

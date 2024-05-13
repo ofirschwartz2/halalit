@@ -22,7 +22,7 @@ public class AttackStatsRange
     {
         int power = seedfulRandomGenerator.Range((int)Power.min, (int)Power.max + 1);
         float criticalHit = seedfulRandomGenerator.Range(CriticalHit.min, CriticalHit.max);
-        float luck = seedfulRandomGenerator.Range(Luck.min, Luck.max);
+        int luck = seedfulRandomGenerator.Range((int)Luck.min, (int)Luck.max);
         float rate = (float)Math.Round(seedfulRandomGenerator.Range(Rate.min, Rate.max), 2);
         float weight = seedfulRandomGenerator.Range(Weight.min, Weight.max);
 
