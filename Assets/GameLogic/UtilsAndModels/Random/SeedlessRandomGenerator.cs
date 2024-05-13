@@ -1,30 +1,77 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Utils
 {
     public static class SeedlessRandomGenerator
     {
-        private static System.Random seedlessRandom = new System.Random();
+        private static int _testingExpectedIntValue;
+        private static float _testingExpectedFloatValue;
+
+        
+        #if UNITY_EDITOR
+        public static void SetTestingExpectedValue(int testingExpectedIntValue)
+        {
+            _testingExpectedIntValue = testingExpectedIntValue;
+        }
+        #endif
+
+        #if UNITY_EDITOR
+        public static void SetTestingExpectedValue(float testingExpectedFloatValue)
+        {
+            _testingExpectedFloatValue = testingExpectedFloatValue;
+        }
+        #endif
+
+        private static readonly System.Random seedlessRandom = new();
 
         public static int GetNumber()
         {
+            #if UNITY_EDITOR
+            if (SceneManager.GetActiveScene().name.Contains("Testing"))
+            {
+                return _testingExpectedIntValue;
+            }
+            #endif
+
             return seedlessRandom.Next();
         }
 
         public static int Range(int from, int to)
         {
+            #if UNITY_EDITOR
+            if (SceneManager.GetActiveScene().name.Contains("Testing"))
+            {
+                return _testingExpectedIntValue;
+            }
+            #endif
+
             return seedlessRandom.Next(from, to);
         }
 
         public static float Range(float from, float to)
         {
+            #if UNITY_EDITOR
+            if (SceneManager.GetActiveScene().name.Contains("Testing"))
+            {
+                return _testingExpectedFloatValue;
+            }
+            #endif
+
             var zeroToOneRandom = RangeZeroToOne();
             return GetAdjustedFloat(zeroToOneRandom, from, to);
         }
 
         public static float RangeZeroToOne()
         {
+            #if UNITY_EDITOR
+            if (SceneManager.GetActiveScene().name.Contains("Testing"))
+            {
+                return _testingExpectedFloatValue;
+            }
+            #endif
+
             return (float)seedlessRandom.NextDouble();
         }
 

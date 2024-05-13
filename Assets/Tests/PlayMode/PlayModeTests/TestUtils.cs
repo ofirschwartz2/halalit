@@ -27,13 +27,17 @@ internal static class TestUtils
     public const ItemRank DEFAULT_ITEM_RANK_2 = ItemRank.RARE;
     public const int DEFAULT_POWER_1 = 1;
     public const int DEFAULT_POWER_2 = 5;
-    public const float DEFAULT_CRITICAL_HIT = 1;
-    public const float DEFAULT_LUCK = 0;
+    public const float DEFAULT_CRITICAL_HIT_1 = 0.5f;
+    public const float DEFAULT_CRITICAL_HIT_2 = 1.5f;
+    public const int DEFAULT_LUCK_1 = 0;
+    public const int DEFAULT_LUCK_2 = 50;
     public const float DEFAULT_RATE_1 = 2;
     public const float DEFAULT_RATE_2 = 0.5f;
     public const float DEFAULT_WEIGHT = 0;
-    public static readonly AttackStats DEFAULT_ATTACK_STATS_1 = new(DEFAULT_ITEM_RANK_1, DEFAULT_POWER_1, DEFAULT_CRITICAL_HIT, DEFAULT_LUCK, DEFAULT_RATE_1, DEFAULT_WEIGHT);
-    public static readonly AttackStats DEFAULT_ATTACK_STATS_2 = new(DEFAULT_ITEM_RANK_2, DEFAULT_POWER_2, DEFAULT_CRITICAL_HIT, DEFAULT_LUCK, DEFAULT_RATE_2, DEFAULT_WEIGHT);
+    public static readonly AttackStats DEFAULT_ATTACK_STATS_1 = new(DEFAULT_ITEM_RANK_1, DEFAULT_POWER_1, DEFAULT_CRITICAL_HIT_1, DEFAULT_LUCK_1, DEFAULT_RATE_1, DEFAULT_WEIGHT);
+    public static readonly AttackStats DEFAULT_ATTACK_STATS_2 = new(DEFAULT_ITEM_RANK_2, DEFAULT_POWER_2, DEFAULT_CRITICAL_HIT_1, DEFAULT_LUCK_1, DEFAULT_RATE_2, DEFAULT_WEIGHT);
+    public static readonly AttackStats DEFAULT_ATTACK_STATS_3 = new(DEFAULT_ITEM_RANK_1, DEFAULT_POWER_2, DEFAULT_CRITICAL_HIT_1, DEFAULT_LUCK_2, DEFAULT_RATE_1, DEFAULT_WEIGHT);
+    public static readonly AttackStats DEFAULT_ATTACK_STATS_4 = new(DEFAULT_ITEM_RANK_1, DEFAULT_POWER_2, DEFAULT_CRITICAL_HIT_2, DEFAULT_LUCK_2, DEFAULT_RATE_1, DEFAULT_WEIGHT);
     public static readonly Vector2 DEFAULT_POSITION_TO_THE_RIGHT = new(5, 0);
     #endregion
 
@@ -50,7 +54,6 @@ internal static class TestUtils
     #endregion
 
     #region Scene SetUp
-
     internal static void DestroyAllGameObjects() 
     {
         var gameObjects = GameObject.FindObjectsOfType<GameObject>();
@@ -147,7 +150,6 @@ internal static class TestUtils
     #endregion
 
     #region SceneGetters
-
     internal static GameObject GetValuablesContainer()
     {
         return GameObject.FindGameObjectWithTag(Tag.VALUABLES_CONTAINER.GetDescription());
@@ -535,8 +537,8 @@ internal static class TestUtils
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
         Vector2 lastShotPosition;
         int hits = 0;
-        float newHealth = GetEnemyHealth();
-        float lastEnemyHealth = newHealth;
+        float newHealth;
+        float lastEnemyHealth;
         do
         {
             lastEnemyHealth = GetEnemyHealth();
@@ -605,11 +607,6 @@ internal static class TestUtils
         while (hits != expectedHits);
 
         yield return Time.time - lastHitTime;
-    }
-
-    private static bool CooldownPassed(float nextCooldownTime)
-    {
-        return Time.time >= nextCooldownTime;
     }
     #endregion
 }
