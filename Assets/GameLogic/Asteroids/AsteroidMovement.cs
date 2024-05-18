@@ -28,6 +28,8 @@ public class AsteroidMovement : KinematicMovement
     {
         base.FixedUpdate();
         _asteroidLifeTime += Time.deltaTime;
+
+        SpeedLimiter.LimitSpeed(_rigidBody);
     }
 
     private void OnTriggerExit2D(Collider2D other)

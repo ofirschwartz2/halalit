@@ -20,6 +20,8 @@ public class LameEnemy : MonoBehaviour
     void FixedUpdate()
     {
         EnemyUtils.MoveUnderSpeedLimit(_rigidBody, _direction, _movementAmplitude, _speedLimit);
+
+        SpeedLimiter.LimitSpeed(_rigidBody);
     }
 
     private void SetDirection() 

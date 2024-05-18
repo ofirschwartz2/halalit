@@ -52,6 +52,8 @@ public class GreekEnemy : MonoBehaviour
                 _changeGreekDirectionInterval,
                 _startMovementTime);
         }
+
+        SpeedLimiter.LimitSpeed(_rigidBody);
     }
 
     private void ChangeGreekStage()

@@ -38,6 +38,8 @@ public class SinusEnemy : MonoBehaviour
     {
         otherAxisMovement(_otherAxisDirection);
         SinAxisMovement();
+
+        SpeedLimiter.LimitSpeed(_rigidBody);
     }
 
     private void SetSinDirections(Direction sinDirection) 

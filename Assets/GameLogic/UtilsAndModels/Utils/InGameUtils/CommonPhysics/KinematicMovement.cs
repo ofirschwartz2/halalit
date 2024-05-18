@@ -13,7 +13,7 @@ public abstract class KinematicMovement : MonoBehaviour
 
     public void FixedUpdate()
     {
-        _rigidBody.MovePosition(_rigidBody.position + _direction * _speed * Time.deltaTime);
+        _rigidBody.MovePosition(_rigidBody.position + _speed * Time.deltaTime * _direction);
         _rigidBody.MoveRotation(_rigidBody.rotation + _rotationSpeed * Time.deltaTime);
     }
 

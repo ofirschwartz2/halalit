@@ -9,17 +9,14 @@ using UnityEngine.TestTools;
 
 public class HalalitMovementTests
 {
-
-    private const string SCENE_NAME = "Testing";
-
     [SetUp]
     public void SetUp()
     {
-        SceneManager.LoadScene(SCENE_NAME);
+        SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);
     }
 
     [UnityTest]
-    public IEnumerator JoystickDirectionAffectHalalitDirection()
+    public IEnumerator JoystickDirectionAffectHalalitDirectionTest()
     {
         // GIVEN
         var seed = TestUtils.SetRandomSeed();
@@ -51,7 +48,7 @@ public class HalalitMovementTests
     }
 
     [UnityTest]
-    public IEnumerator JoystickSizeAffectHalalitSpeed()
+    public IEnumerator JoystickSizeAffectHalalitSpeedTest()
     {
         // GIVEN
         var waitBetweenMovements = 2f;
@@ -81,7 +78,7 @@ public class HalalitMovementTests
     }
 
     [UnityTest]
-    public IEnumerator HalalitStopsMovingAfterTime()
+    public IEnumerator HalalitStopsMovingAfterTimeTest()
     {
         // GIVEN
         var totalMovingTime = 0.3f;

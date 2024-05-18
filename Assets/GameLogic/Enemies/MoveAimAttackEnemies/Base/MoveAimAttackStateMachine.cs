@@ -38,6 +38,8 @@ public class MoveAimAttackStateMachine : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException();
         }
+
+        SpeedLimiter.LimitSpeed(_rigidBody);
     }
 
     private void Moving()

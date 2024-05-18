@@ -32,6 +32,7 @@ class CriticalHitTests
     public void SetUp()
     {
         SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
+        SeedlessRandomGenerator.SetUseTestingExpectedValue(true);
     }
 
     [UnityTest]
@@ -101,5 +102,11 @@ class CriticalHitTests
         // THEN
         var newTargetHealth = TestUtils.GetEnemyHealth();
         AssertWrapper.AreEqual(_originalTargetHealth - attackStats.Power, newTargetHealth, "Target Health Didn't drop correctly", _currentSeed);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
     }
 }

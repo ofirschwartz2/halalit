@@ -6,11 +6,18 @@ namespace Assets.Utils
 {
     public static class SeedlessRandomGenerator
     {
+        private static bool _useTestingExpectedValue;
         private static int _testingExpectedIntValue;
         private static float _testingExpectedFloatValue;
 
-        
         #if UNITY_EDITOR
+        public static void SetUseTestingExpectedValue(bool useTestingExpectedValue)
+        {
+            _useTestingExpectedValue = useTestingExpectedValue;
+        }
+        #endif
+
+#if UNITY_EDITOR
         public static void SetTestingExpectedValue(int testingExpectedIntValue)
         {
             _testingExpectedIntValue = testingExpectedIntValue;
@@ -29,7 +36,7 @@ namespace Assets.Utils
         public static int GetNumber()
         {
             #if UNITY_EDITOR
-            if (SceneManager.GetActiveScene().name.Contains("Testing"))
+            if (SceneManager.GetActiveScene().name.Contains("Testing") && _useTestingExpectedValue)
             {
                 return _testingExpectedIntValue;
             }
@@ -41,7 +48,7 @@ namespace Assets.Utils
         public static int Range(int from, int to)
         {
             #if UNITY_EDITOR
-            if (SceneManager.GetActiveScene().name.Contains("Testing"))
+            if (SceneManager.GetActiveScene().name.Contains("Testing") && _useTestingExpectedValue)
             {
                 return _testingExpectedIntValue;
             }
@@ -53,7 +60,7 @@ namespace Assets.Utils
         public static float Range(float from, float to)
         {
             #if UNITY_EDITOR
-            if (SceneManager.GetActiveScene().name.Contains("Testing"))
+            if (SceneManager.GetActiveScene().name.Contains("Testing") && _useTestingExpectedValue)
             {
                 return _testingExpectedFloatValue;
             }
@@ -66,7 +73,7 @@ namespace Assets.Utils
         public static float RangeZeroToOne()
         {
             #if UNITY_EDITOR
-            if (SceneManager.GetActiveScene().name.Contains("Testing"))
+            if (SceneManager.GetActiveScene().name.Contains("Testing") && _useTestingExpectedValue)
             {
                 return _testingExpectedFloatValue;
             }

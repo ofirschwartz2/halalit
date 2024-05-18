@@ -29,6 +29,8 @@ public class WaitAttackStateMachine : MonoBehaviour
                 Attacking();
                 break;
         }
+
+        SpeedLimiter.LimitSpeed(_rigidBody);
     }
 
     private void Waiting()

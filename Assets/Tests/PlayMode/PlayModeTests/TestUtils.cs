@@ -18,6 +18,7 @@ internal static class TestUtils
     public const string TEST_SCENE_WITH_MANY_ENEMIES_FROM_RIGHT_NAME = "TestingWithManyEnemiesFromRight";
     public const string TEST_SCENE_WITH_ASTEROID_NAME = "TestingWithAsteroid";
     public const string TEST_SCENE_WITH_MANY_ASTEROIDS_FROM_RIGHT_NAME = "TestingWithManyAsteroidsFromRight";
+    public const string TEST_SCENE_WITH_ONE_ITEM_NAME = "TestingWithOneItem";
     public const string TEST_SCENE_WITH_VALUABLES_NAME = "TestingWithValuables";
 
     // Defaults:

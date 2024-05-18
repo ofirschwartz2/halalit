@@ -32,6 +32,8 @@ public class ZigZagEnemy : MonoBehaviour
         }
 
         EnemyMovementUtils.MoveInStraightLine(_rigidBody, _direction, _movementAmplitude, _changeZigZagDirectionInterval, _startMovementTime);
+
+        SpeedLimiter.LimitSpeed(_rigidBody);
     }
 
     private void ChangeZigZagDirection()
