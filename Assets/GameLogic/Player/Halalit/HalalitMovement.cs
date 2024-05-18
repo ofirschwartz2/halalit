@@ -27,6 +27,8 @@ public class HalalitMovement : MonoBehaviour
         if (!SceneManager.GetActiveScene().name.Contains("Testing"))
         #endif
             TryMove(_joystick.Horizontal, _joystick.Vertical, Time.deltaTime);
+
+        SpeedLimiter.LimitSpeed(_rigidBody);
     }
 
     #region Moving 

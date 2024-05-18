@@ -99,4 +99,10 @@ public class RateTests
         // THEN
         AssertWrapper.AreEqual(attackStats.Rate, timeBetweenShotHits, "The time between the shot hits wasn't as the attack rate", _currentSeed, _acceptedDelta);
     }
+
+    [TearDown]
+    public void TearDown()
+    {
+        TestUtils.DestroyAllGameObjects();
+    }
 }

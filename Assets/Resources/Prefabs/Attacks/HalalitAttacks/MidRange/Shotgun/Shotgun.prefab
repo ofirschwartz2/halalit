@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2264754643331783421, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: AttackStats.Rate
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2264754643331783421, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: AttackStats.Power
@@ -30,7 +30,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2763844978744416126, guid: 68379c5202257be48aaf973610ef6144, type: 3}
       propertyPath: m_LocalPosition.x

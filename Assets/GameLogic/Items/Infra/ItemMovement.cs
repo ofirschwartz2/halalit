@@ -2,8 +2,6 @@ using UnityEngine;
 using Assets.Utils;
 using Assets.Enums;
 using System.Linq;
-using log4net.Util;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class ItemMovement : MonoBehaviour // TODO: change naming to CollectableMovement
 {
@@ -15,7 +13,6 @@ public class ItemMovement : MonoBehaviour // TODO: change naming to CollectableM
     private float _baseOpacity;
     [SerializeField]
     private float _transparencyPeriodDuration;
-
 
     private float _itemLifeTime;
     private float _rotationSpeed;
@@ -39,6 +36,8 @@ public class ItemMovement : MonoBehaviour // TODO: change naming to CollectableM
         {
             TryRemoveTransparency();
         }
+
+        SpeedLimiter.LimitSpeed(_rigidBody);
     }
 
     private void SetTransperancyPeriod() 

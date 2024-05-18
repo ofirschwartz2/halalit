@@ -10,15 +10,11 @@ using UnityEngine.TestTools;
 
 public class PickupClawTests
 {
-
-    private const string SCENE_NAME = "TestingWithOneItem";
-
     [SetUp]
     public void SetUp()
     {
-        SceneManager.LoadScene(SCENE_NAME);
+        SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ONE_ITEM_NAME);
     }
-    
     
     [UnityTest]
     public IEnumerator PressOnNothing()

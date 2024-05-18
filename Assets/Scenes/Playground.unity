@@ -324,7 +324,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac6ad0ba7abf375419a8c4a4e3e83d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pushies: 0000000005000000
+  _pushies: 0000000002000000060000001a000000
   _forceDirection: {x: 1, y: 0}
   _slowerForceMagnitude: 25
   _pusherForceMagnitude: 25
@@ -449,7 +449,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &430440938
 MonoBehaviour:
@@ -1043,7 +1043,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac6ad0ba7abf375419a8c4a4e3e83d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pushies: 0000000005000000
+  _pushies: 0000000002000000060000001a000000
   _forceDirection: {x: -1, y: 0}
   _slowerForceMagnitude: 19
   _pusherForceMagnitude: 1
@@ -1853,7 +1853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac6ad0ba7abf375419a8c4a4e3e83d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pushies: 0000000005000000
+  _pushies: 0000000002000000060000001a000000
   _forceDirection: {x: -1, y: 0}
   _slowerForceMagnitude: 25
   _pusherForceMagnitude: 25
@@ -1992,7 +1992,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac6ad0ba7abf375419a8c4a4e3e83d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pushies: 0000000005000000
+  _pushies: 0000000002000000060000001a000000
   _forceDirection: {x: 0, y: -1}
   _slowerForceMagnitude: 19
   _pusherForceMagnitude: 1
@@ -2094,7 +2094,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &997421910
 GameObject:
@@ -2145,7 +2145,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1018808179
 GameObject:
@@ -2157,6 +2157,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1018808181}
   - component: {fileID: 1018808180}
+  - component: {fileID: 1018808182}
   m_Layer: 0
   m_Name: Setup
   m_TagString: Setup
@@ -2184,13 +2185,26 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1018808179}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 578, y: 391.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1018808182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1018808179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ce22150d4f751f408110af9bd5fb89d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxSpeed: 20
 --- !u!1 &1107869172
 GameObject:
   m_ObjectHideFlags: 0
@@ -2818,7 +2832,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac6ad0ba7abf375419a8c4a4e3e83d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pushies: 0000000005000000
+  _pushies: 0000000002000000060000001a000000
   _forceDirection: {x: 0, y: 1}
   _slowerForceMagnitude: 25
   _pusherForceMagnitude: 25
@@ -4452,7 +4466,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac6ad0ba7abf375419a8c4a4e3e83d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pushies: 0000000005000000
+  _pushies: 0000000002000000060000001a000000
   _forceDirection: {x: 1, y: 0}
   _slowerForceMagnitude: 19
   _pusherForceMagnitude: 1
@@ -4546,7 +4560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac6ad0ba7abf375419a8c4a4e3e83d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pushies: 0000000005000000
+  _pushies: 0000000002000000060000001a000000
   _forceDirection: {x: 0, y: 1}
   _slowerForceMagnitude: 19
   _pusherForceMagnitude: 1
@@ -9440,7 +9454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac6ad0ba7abf375419a8c4a4e3e83d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pushies: 0000000005000000
+  _pushies: 0000000002000000060000001a000000
   _forceDirection: {x: 0, y: -1}
   _slowerForceMagnitude: 25
   _pusherForceMagnitude: 25
@@ -9793,7 +9807,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody2D: {fileID: 2130719624}
-  _knockbackers: 0200000007000000
+  _knockbackers: 020000000700000009000000
   _knockbackMultiplier: 3
 --- !u!114 &2130719629
 MonoBehaviour:

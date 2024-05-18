@@ -9,7 +9,6 @@ using UnityEngine.TestTools;
 
 public class LaserBeamTests
 {
-
     private const string SCENE_NAME = "Testing";
     private const string SCENE_WITH_NEMY_NAME = "TestingWithEnemy";
     private const AttackName SHOT_NAME = AttackName.LASER_BEAM;
