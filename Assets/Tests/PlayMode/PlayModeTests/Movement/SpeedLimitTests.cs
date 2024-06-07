@@ -26,7 +26,7 @@ class SpeedLimitTests
     }
 
     [UnityTest]
-    public IEnumerator GameObjectBeingPushedNotPassingSpeedLimitTest(
+    public IEnumerator GameObjectBeingPushedNotPassingSpeedLimitTest (
         [ValueSource(nameof(_scenesAndGameObjectTagsToPush))] KeyValuePair<string, Tag> sceneAndGameObjectTagToPush,
         [ValueSource(nameof(_givenMovement))] Vector2 gameObjectGivenMovement)
     {
@@ -52,11 +52,11 @@ class SpeedLimitTests
         }
         else
         {
-            while (gameObjectToPushRigidBody.velocity != Vector2.zero && gameObjectToPushRigidBody.velocity.magnitude > 5f)
+            while (gameObjectToPushRigidBody != null && gameObjectToPushRigidBody.velocity.magnitude > 5f)
             {
                 yield return null;
 
-                if (gameObjectToPushRigidBody.velocity.magnitude > maxSpeedReached)
+                if (gameObjectToPushRigidBody != null && gameObjectToPushRigidBody.velocity.magnitude > maxSpeedReached)
                 {
                     maxSpeedReached = gameObjectToPushRigidBody.velocity.magnitude;
                 }

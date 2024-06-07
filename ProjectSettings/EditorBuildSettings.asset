@@ -35,4 +35,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Tests/TestingWithOneItem.unity
     guid: b452cc5f4c5ad7a46a133c3594fd941b
+  - enabled: 1
+    path: Assets/Scenes/Tests/TestingIgnoreEdgeForceFields.unity
+    guid: 9ff40ffd018d7ce4bb87960717e9193a
   m_configObjects: {}

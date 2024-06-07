@@ -1,15 +1,12 @@
-﻿using Assets.Enums;
-using Assets.Utils;
-using UnityEngine;
+﻿using Assets.Utils;
 
 public class EnemySharedBehavior : SeedfulRandomGeneratorUser
 {
-    private void OnTriggerExit2D(Collider2D other)
+    private void FixedUpdate()
     {
-        if (other.gameObject.CompareTag(Tag.INTERNAL_WORLD.GetDescription()))
+        if (!Utils.IsCenterInsideTheWorld(gameObject) && !Utils.IsCenterInExternalSafeIsland(transform.position))
         {
-            Destroy(gameObject);
+            Destroy(gameObject); 
         }
     }
 }
-

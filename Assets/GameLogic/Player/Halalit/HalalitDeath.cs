@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
-[assembly: InternalsVisibleTo("PlayModeTests")]
+[assembly: InternalsVisibleTo("TestsPlayMode")]
 #endif
 
 public class HalalitDeath : MonoBehaviour
@@ -23,7 +23,6 @@ public class HalalitDeath : MonoBehaviour
     #endregion
 
     #region Destroy
-
     private void OnDestroy()
     {
         DestroyEventListeners();
@@ -35,11 +34,20 @@ public class HalalitDeath : MonoBehaviour
     }
     #endregion
 
+    #region Instadeath
+    private void Update() 
+    {
+        if (!Utils.IsCenterInsideTheWorld(gameObject) && !Utils.IsCenterInExternalSafeIsland(transform.position)) 
+        {
+            HalalitDeathEvent.InvokeHalalitDeath(this, new());
+        }
+    }
+    #endregion
+
     #region Enemy destruction
     private void OnHalalitDeath(object initiator, HalalitDeathEventArguments arguments)
     {
         SceneManager.LoadScene(SceneName.MAIN_MENU.GetDescription());
     }
-
     #endregion
 }

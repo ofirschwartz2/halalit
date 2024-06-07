@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
-[assembly: InternalsVisibleTo("PlayModeTests")]
+[assembly: InternalsVisibleTo("TestsPlayMode")]
 #endif
 
 class WeaponAttack : MonoBehaviour
@@ -59,7 +59,6 @@ class WeaponAttack : MonoBehaviour
     #endregion
 
     #region Destroy
-
     private void OnDestroy()
     {
         DestroyEventListeners();

@@ -127,4 +127,11 @@ public class AsteroidInternalInstantiator : SeedfulRandomGeneratorUser
         return originalAsteroidScale > 1 && SeedlessRandomGenerator.IsTrueIn50Precent();
     }
     #endregion
+
+    #region
+    public float GetAsteroidMaxScale()
+    {
+        return _asteroidMaxScale;
+    }
+    #endregion
 }

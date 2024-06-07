@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 #if UNITY_EDITOR
-[assembly: InternalsVisibleTo("PlayModeTests")]
+[assembly: InternalsVisibleTo("TestsPlayMode")]
 #endif
 
 class AttackToggle : MonoBehaviour
@@ -35,7 +35,6 @@ class AttackToggle : MonoBehaviour
     #endregion
 
     #region Destroy
-
     private void OnDestroy()
     {
         DestroyEventListeners();

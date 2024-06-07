@@ -52,7 +52,4 @@ public class EngineFire : MonoBehaviour
     {
         return Utils.GetLengthOfLine(_joystick.Horizontal, _joystick.Vertical) * _engineFireForceMultiplier;
     }
-
-
-
 }

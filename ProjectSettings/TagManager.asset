@@ -53,6 +53,7 @@ TagManager:
   - Score
   - EnemiesSpawner
   - EnemiesDestructor
+  - EdgeForceField
   layers:
   - Default
   - TransparentFX

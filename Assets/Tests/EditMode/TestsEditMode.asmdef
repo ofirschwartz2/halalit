@@ -1,0 +1,33 @@
+{
+    "name": "TestsEditMode",
+    "rootNamespace": "",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "TestsPlayMode",
+        "UtilsAndModels",
+        "Asteroid",
+        "Enemies",
+        "Player",
+        "Items",
+        "Attacks",
+        "Health",
+        "Meta",
+        "Setup"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

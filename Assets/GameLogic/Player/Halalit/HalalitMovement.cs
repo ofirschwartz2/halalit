@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
-[assembly: InternalsVisibleTo("PlayModeTests")]
+[assembly: InternalsVisibleTo("TestsPlayMode")]
 #endif
 
 public class HalalitMovement : MonoBehaviour
@@ -32,7 +32,6 @@ public class HalalitMovement : MonoBehaviour
     }
 
     #region Moving 
-
 #if UNITY_EDITOR
     internal
 #else
@@ -73,7 +72,7 @@ public class HalalitMovement : MonoBehaviour
             _rigidBody.AddForce(new Vector2(horizontalForce, verticalForce));
         }
     }
-#endregion
+    #endregion
 
     #region Predicates
     private bool IsMovementInput(float joystickHorizontal, float joystickVertical)

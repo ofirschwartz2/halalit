@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
-[assembly: InternalsVisibleTo("PlayModeTests")]
-[assembly: InternalsVisibleTo("EditModeTests")]
+[assembly: InternalsVisibleTo("TestsPlayMode")]
+[assembly: InternalsVisibleTo("TestsEditMode")]
 #endif
 
 class WeaponMovement : MonoBehaviour
