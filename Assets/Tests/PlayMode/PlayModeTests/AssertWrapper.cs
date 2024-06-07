@@ -3,7 +3,6 @@ using UnityEngine;
 
 internal static class AssertWrapper
 {
-
     internal static void AreSame(object expected, object actual, string failMessage, int? seed = null)
     {
         failMessage = CombineFailMessageWithSeed(failMessage, seed);

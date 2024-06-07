@@ -83,6 +83,8 @@ namespace Assets.Enums
         [Description("AsteroidDestructor")]
         ASTEROID_DESTRUCTOR,
         [Description("Setup")]
-        SETUP
+        SETUP,
+        [Description("EdgeForceField")]
+        EDGE_FORCE_FIELD
     }
 }

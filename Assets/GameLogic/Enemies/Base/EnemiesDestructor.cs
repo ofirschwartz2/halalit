@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemiesDestructor : MonoBehaviour
 {
-
     #region Init
     private void Awake()
     {

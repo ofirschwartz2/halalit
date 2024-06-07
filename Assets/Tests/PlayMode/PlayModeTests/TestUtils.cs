@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-[assembly: InternalsVisibleTo("EditModeTests")]
+[assembly: InternalsVisibleTo("TestsEditMode")]
 
 internal static class TestUtils
 {
@@ -20,6 +21,8 @@ internal static class TestUtils
     public const string TEST_SCENE_WITH_MANY_ASTEROIDS_FROM_RIGHT_NAME = "TestingWithManyAsteroidsFromRight";
     public const string TEST_SCENE_WITH_ONE_ITEM_NAME = "TestingWithOneItem";
     public const string TEST_SCENE_WITH_VALUABLES_NAME = "TestingWithValuables";
+    public const string TEST_SCENE_IGNORING_EDGE_FORCE_FIELDS_OBJECTS_NAME = "TestingIgnoreEdgeForceFields";
+    public const string MAIN_MENU_SCENE_NAME= "MainMenu";
 
     // Defaults:
     public const int ENEMIES_SEEDED_NUMBERS_LIST_DEFAULT_LENGTH = 5;
@@ -358,9 +361,7 @@ internal static class TestUtils
 
     internal static BoxCollider2D GetInternalWorldBoxCollider2D()
     {
-        return
-            GameObject.FindGameObjectWithTag(Tag.INTERNAL_WORLD.GetDescription())
-                .GetComponent<BoxCollider2D>();
+        return GameObject.FindGameObjectWithTag(Tag.INTERNAL_WORLD.GetDescription()).GetComponent<BoxCollider2D>();
     }
 
     internal static Vector2 GetEnemyPosition()
@@ -458,9 +459,14 @@ internal static class TestUtils
     #endregion
 
     #region Predicates
+    internal static bool IsGameOver()
+    {
+        return SceneManager.GetActiveScene().name == MAIN_MENU_SCENE_NAME;
+    }
+
     internal static bool IsSomewhereOnInternalWorldEdges(Vector2 position)
     {
-        Vector3 position3 = new Vector3(position.x, position.y, 1); // TODO: why our InternalWorldBoxCollider2DBoxCollider2D Z=1?
+        Vector3 position3 = new(position.x, position.y, 1); // TODO: why our InternalWorldBoxCollider2DBoxCollider2D Z=1?
 
         var boxCollider = GetInternalWorldBoxCollider2D();
         var edgeThreshold = 0.05f;
@@ -469,12 +475,43 @@ internal static class TestUtils
         var largerBounds = new Bounds(bounds.center, bounds.size * (1 + edgeThreshold));
         var smallerBounds = new Bounds(bounds.center, bounds.size * (1 - edgeThreshold));
 
-        if (largerBounds.Contains(position3) && !smallerBounds.Contains(position3))
-        {
-            return true;
-        }
-        return false;
+        return largerBounds.Contains(position3) && !smallerBounds.Contains(position3);
+    }
 
+    internal static bool AreCollidersTouch(Collider2D collider1, Collider2D collider2)
+    {
+        ContactFilter2D contactFilter = new();
+        contactFilter.useTriggers = true;
+
+        Collider2D[] results = new Collider2D[10];
+        int overlapCount = collider1.OverlapCollider(contactFilter, results);
+
+        bool isColliding = false;
+        for (int i = 0; i < overlapCount; i++)
+        {
+            if (results[i] == collider2)
+            {
+                isColliding = true;
+                break;
+            }
+        }
+
+        return isColliding;
+    }
+
+    public static bool IsPartlyInsideTheWorld(GameObject gameObject)
+    {
+        //Bounds gameObjectBounds = gameObject.GetComponent<Renderer>().bounds;
+        //Bounds internalWorldBounds = _internalWorld.GetComponent<Collider2D>().bounds;
+
+        //Vector3 maxBoundsPosition = new(gameObjectBounds.max.x, gameObjectBounds.max.y, 1); // TODO: why our InternalWorldBoxCollider2DBoxCollider2D Z=1?
+        //Vector3 minBoundsPosition = new(gameObjectBounds.min.x, gameObjectBounds.min.y, 1); // TODO: why our InternalWorldBoxCollider2DBoxCollider2D Z=1?
+
+        //return internalWorldBounds.Contains(maxBoundsPosition) && internalWorldBounds.Contains(minBoundsPosition);
+
+        var internalWorldCollider = GameObject.FindGameObjectWithTag(Tag.INTERNAL_WORLD.GetDescription()).GetComponent<Collider2D>();
+
+        return AreCollidersTouch(gameObject.GetComponent<Collider2D>(), internalWorldCollider);
     }
     #endregion
 

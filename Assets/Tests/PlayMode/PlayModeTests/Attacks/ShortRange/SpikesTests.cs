@@ -2,8 +2,6 @@ using Assets.Enums;
 using Assets.Utils;
 using NUnit.Framework;
 using System.Collections;
-using System.Reflection;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
@@ -11,8 +9,7 @@ using UnityEngine.TestTools;
 
 public class SpikesTests
 {
-
-    private const AttackName SHOT_NAME = AttackName.SPIKES;
+    private const string FUNCTION_STABBING_WITH_TARGET_NAME = "StabbingWithTarget";
 
     [SetUp]
     public void SetUp()
@@ -35,7 +32,7 @@ public class SpikesTests
         // GIVEN
         var seed = TestUtils.SetRandomSeed();
 
-        TestUtils.SetUpShot(SHOT_NAME);
+        TestUtils.SetUpShot(AttackName.SPIKES);
         var weaponAttack = TestUtils.GetWeaponAttack();
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
         
@@ -48,14 +45,13 @@ public class SpikesTests
         AssertWrapper.IsNotNull(shot, seed);
     }
 
-    private const string FUNCTION_STABBING_WITH_TARGET_NAME = "StabbingWithTarget";
     [UnityTest]
     public IEnumerator StabbingWithTarget()
     {
         // GIVEN
         var seed = TestUtils.SetRandomSeed();
 
-        TestUtils.SetUpShot(SHOT_NAME);
+        TestUtils.SetUpShot(AttackName.SPIKES);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomEnemyPosition(1.5f);
@@ -101,7 +97,7 @@ public class SpikesTests
         // GIVEN
         var seed = TestUtils.SetRandomSeed();
 
-        TestUtils.SetUpShot(SHOT_NAME);
+        TestUtils.SetUpShot(AttackName.SPIKES);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         var touchOnJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());

@@ -47,10 +47,10 @@ public class ItemMovement : MonoBehaviour // TODO: change naming to CollectableM
     }
 
     private void TryRemoveTransparency()
-    {
+    { 
         if (_itemLifeTime >= _transparencyPeriod && !IsOverlappingAstroidsOrEnemies())
         {
-            transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer(Assets.Enums.Layer.ITEM_COLLISIONS.GetDescription());
+            transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer(Layer.ITEM_COLLISIONS.GetDescription());
             transform.GetChild(0).gameObject.GetComponent<Collider2D>().isTrigger = false;
             _removedTransparencyPeriodDone = true;
         }
@@ -63,13 +63,13 @@ public class ItemMovement : MonoBehaviour // TODO: change naming to CollectableM
                                        collider.gameObject.CompareTag(Tag.ENEMY.GetDescription())).ToArray().Length > 0;
     }
 
-    public void Grabbed(UnityEngine.Transform grabber)
+    public void Grabbed(Transform grabber)
     {
         _rigidBody.isKinematic = true;
         _rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
         transform.position = grabber.position;
         transform.SetParent(grabber);
-        transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer(Assets.Enums.Layer.ITEM_TRIGGERS.GetDescription());
+        transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer(Layer.ITEM_TRIGGERS.GetDescription());
         transform.GetChild(0).gameObject.GetComponent<Collider2D>().isTrigger = true;
         GetComponent<SpriteRenderer>().sortingLayerName = Assets.Enums.SortingLayer.FRONT.GetDescription();
     }

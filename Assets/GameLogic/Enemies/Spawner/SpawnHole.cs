@@ -156,7 +156,7 @@ public class SpawnHole : MonoBehaviour
     #region enemies
     private void InstantiateEnemies()
     {
-        if(_enemyEntities == null)
+        if (_enemyEntities == null)
         {
             throw new System.Exception("No enemies to spawn");
         }

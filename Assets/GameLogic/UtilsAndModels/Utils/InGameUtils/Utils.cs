@@ -1,14 +1,23 @@
 ﻿using Assets.Enums;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Assets.Utils
 {
     public static class Utils
     {
+        private static GameObject _internalWorld;
+        private static GameObject _externalSafeIsland;
+
+        #region Init
+        public static void SetGameObjects(GameObject internalWorld, GameObject externalSafeIsland)
+        {
+            _internalWorld = internalWorld;
+            _externalSafeIsland = externalSafeIsland;
+        }
+        #endregion
+
         #region Math 
         public static float Vector2ToDegrees(Vector2 vector)
         {
@@ -339,6 +348,19 @@ namespace Assets.Utils
             return a;
         }
 
+        public static bool IsCenterInsideTheWorld(GameObject gameObject)
+        {
+            Vector3 position3 = new(gameObject.transform.position.x, gameObject.transform.position.y, 1); // TODO: why our InternalWorldBoxCollider2DBoxCollider2D Z=1?
+
+            return _internalWorld.GetComponent<Collider2D>().bounds.Contains(position3); 
+        }
+
+        public static bool IsCenterInExternalSafeIsland(Vector2 position)
+        {
+            Vector3 position3 = new(position.x, position.y, 1); // TODO: why our InternalWorldBoxCollider2DBoxCollider2D Z=1?
+
+            return _externalSafeIsland.GetComponent<Collider2D>().bounds.Contains(position3);
+        }
         #endregion
 
         #region Visuals
