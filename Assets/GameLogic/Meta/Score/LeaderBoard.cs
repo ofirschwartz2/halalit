@@ -53,7 +53,7 @@ public class LeaderBoard : MonoBehaviour
     public void DisplayScores() 
     {
         entryContainer = transform.Find("LeaderboardEntryContainer");
-        entryTemplate = entryContainer.Find("LeaderboardEntryTemplate");
+        entryTemplate = entryContainer.transform.Find("LeaderboardEntryTemplate");
 
         for (int i = 0; i < _highScoresResponse.Results.Count; i++)
         {
@@ -62,14 +62,27 @@ public class LeaderBoard : MonoBehaviour
             entryRectTransform.anchoredPosition = new Vector2(0, -2 * i);
             entryTransform.gameObject.SetActive(true);
 
-            entryTransform.Find("IdText").GetComponent<TextMesh>();
-            entryTransform.Find("IdText").GetComponent<TextMesh>().text = (i + 1).ToString();
-            entryTransform.Find("PlayerNameText").GetComponent<TextMesh>().text = _highScoresResponse.Results[i].PlayerName;
-            entryTransform.Find("ScoreText").GetComponent<TextMesh>().text = _highScoresResponse.Results[i].Score.ToString();
+
+            SetTextOnComponent(entryTransform, "IdText", (i + 1).ToString());
+            SetTextOnComponent(entryTransform, "PlayerNameText", _highScoresResponse.Results[i].PlayerName);
+            SetTextOnComponent(entryTransform, "ScoreText", _highScoresResponse.Results[i].Score.ToString());
         }
 
         entryTemplate.gameObject.SetActive(false);
 
+    }
+
+    private void SetTextOnComponent(Transform parentTransform, string childName, string textValue)
+    {
+        Text text = parentTransform.Find(childName).GetComponent<Text>();
+        if (text != null)
+        {
+            text.text = textValue;
+        }
+        else
+        {
+            Debug.LogError($"Text component not found on '{childName}' game object.");
+        }
     }
 
     public void MainMenu()
