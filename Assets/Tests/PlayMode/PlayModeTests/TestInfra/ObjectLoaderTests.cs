@@ -120,7 +120,6 @@ class ObjectLoaderTests
         objectLoader.LoadValuableInExternalSafeIsland();
         yield return null;
 
-
         // THEN
         GameObject loadedValuable = externalSafeIsland.transform.GetChild(0).gameObject;
         bool IsValubaleInExternalSafeIsland = externalSafeIsland.transform.childCount == 1 && loadedValuable.CompareTag(Tag.VALUABLE.GetDescription());
@@ -144,12 +143,11 @@ class ObjectLoaderTests
         Collider2D loadedEnemyCollider = objectLoader.LoadEnemyInExternalSafeIsland().GetComponent<Collider2D>();
         Collider2D loadedAsteroidCollider = objectLoader.LoadAsteroidInExternalSafeIsland(_currentSeed).GetComponent<Collider2D>();
         Collider2D loadedItemCollider = objectLoader.LoadItemInExternalSafeIsland().GetComponent<Collider2D>(); 
-        Collider2D loadedValuableCollider = objectLoader.LoadValuableInExternalSafeIsland().GetComponent<Collider2D>();
-
+        Collider2D loadedValuableCollider = objectLoader.LoadValuableInExternalSafeIsland().GetComponentInChildren<Collider2D>();
         yield return null;
 
         // THEN
-        var allCollidersList = (new[] { loadedEnemyCollider, loadedAsteroidCollider, loadedValuableCollider }).ToList();
+        var allCollidersList = (new[] { halalitCollider, loadedEnemyCollider, loadedAsteroidCollider, loadedValuableCollider, loadedItemCollider }).ToList();
 
         AssertWrapper.AreEqual(5, externalSafeIsland.transform.childCount, "Not all game objects were loaded into the external safe island", _currentSeed);
         AssertWrapper.IsFalse(TestUtils.SomeCollidersTouch(allCollidersList), "Some loaded gameObjects touch each other", _currentSeed);
