@@ -30,6 +30,7 @@ internal class ObjectLoader : MonoBehaviour
     {
         Vector2 externalSafeIslandFreeLoadPosition = GetExternalSafeIslandFreeLoadPosition(_enemyBasePrefab);
         GameObject loadedEnemy = Instantiate(_enemyBasePrefab, externalSafeIslandFreeLoadPosition, Quaternion.identity, _externalSafeIsland.transform);
+        loadedEnemy.GetComponent<LameEnemy>().Stop();
 
         return loadedEnemy;
     }

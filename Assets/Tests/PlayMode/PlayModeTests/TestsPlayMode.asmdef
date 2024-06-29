@@ -12,7 +12,8 @@
         "Meta",
         "Setup",
         "Asteroid",
-        "World"
+        "World",
+        "Enemies"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

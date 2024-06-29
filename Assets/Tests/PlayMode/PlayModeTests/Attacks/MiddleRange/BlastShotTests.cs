@@ -9,32 +9,21 @@ using UnityEngine.TestTools;
 
 public class BlastShotTests
 {
-    private const Tag ATTACK_TAG = Tag.EXPLOSIVE;
-    private const Tag BLAST_TAG = Tag.EXPLOSION;
-    private const Tag SHOCK_WAVE_TAG = Tag.EXPLOSION_SHOCK_WAVE;
-    private const string FUNCTION_SHOOTING_WITH_TARGET_NAME = "ShootingWithTarget";
+    private int _currentSeed;
 
     [SetUp]
     public void SetUp()
     {
-        string testName = TestContext.CurrentContext.Test.MethodName;
-        switch (testName) 
-        {
-            case FUNCTION_SHOOTING_WITH_TARGET_NAME:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
-                break;
-            default:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);
-                break;
-        }
+        _currentSeed = TestUtils.SetRandomSeed();
+        SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
     }
 
     [UnityTest]
     public IEnumerator Shooting()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-
+        yield return null;
+        TestUtils.SetTestMode();
         TestUtils.SetUpShot(AttackName.BLAST_SHOT);
         var weaponAttack = TestUtils.GetWeaponAttack();
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
@@ -44,16 +33,16 @@ public class BlastShotTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        var shot = GameObject.FindGameObjectWithTag(Tag.EXPLOSIVE.GetDescription());
+        AssertWrapper.IsNotNull(shot, _currentSeed);
     }
 
     [UnityTest]
     public IEnumerator ShootingWithoutTarget()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-        
+        yield return null;
+        TestUtils.SetTestMode();
         TestUtils.SetUpShot(AttackName.BLAST_SHOT);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
@@ -67,8 +56,8 @@ public class BlastShotTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        var shot = GameObject.FindGameObjectWithTag(Tag.EXPLOSIVE.GetDescription());
+        AssertWrapper.IsNotNull(shot, _currentSeed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -84,18 +73,18 @@ public class BlastShotTests
             actualLifetime += Time.deltaTime;
             yield return null;
 
-            shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
+            shot = GameObject.FindGameObjectWithTag(Tag.EXPLOSIVE.GetDescription());
         } while (shot != null);
 
         // THEN
-        AssertWrapper.IsTrue(!TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Finished On Edges", seed);
-        AssertWrapper.AreEqual(supposedLifetime, actualLifetime, "Lifetime not as expected", seed, acceptedDelta);
-        AssertWrapper.AreEqual(supposedLastPosition.x, lastShotPosition.x, "Last position not as expected", seed, acceptedDelta);
-        AssertWrapper.AreEqual(supposedLastPosition.y, lastShotPosition.y, "Last position not as expected", seed, acceptedDelta);
+        AssertWrapper.IsTrue(!TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Finished On Edges", _currentSeed);
+        AssertWrapper.AreEqual(supposedLifetime, actualLifetime, "Lifetime not as expected", _currentSeed, acceptedDelta);
+        AssertWrapper.AreEqual(supposedLastPosition.x, lastShotPosition.x, "Last position not as expected", _currentSeed, acceptedDelta);
+        AssertWrapper.AreEqual(supposedLastPosition.y, lastShotPosition.y, "Last position not as expected", _currentSeed, acceptedDelta);
 
         // GIVEN
-        var blast = GameObject.FindGameObjectWithTag(BLAST_TAG.GetDescription());
-        var blastShockWave = GameObject.FindGameObjectWithTag(SHOCK_WAVE_TAG.GetDescription());
+        var blast = GameObject.FindGameObjectWithTag(Tag.EXPLOSION.GetDescription());
+        var blastShockWave = GameObject.FindGameObjectWithTag(Tag.EXPLOSION_SHOCK_WAVE.GetDescription());
         float blastSupposedLifetime = blast.GetComponent<Blast>().GetLifeTime();
         actualLifetime = 0;
 
@@ -105,13 +94,13 @@ public class BlastShotTests
             actualLifetime += Time.deltaTime;
             yield return null;
 
-            blast = GameObject.FindGameObjectWithTag(BLAST_TAG.GetDescription());
-            blastShockWave = GameObject.FindGameObjectWithTag(SHOCK_WAVE_TAG.GetDescription());
+            blast = GameObject.FindGameObjectWithTag(Tag.EXPLOSION.GetDescription());
+            blastShockWave = GameObject.FindGameObjectWithTag(Tag.EXPLOSION_SHOCK_WAVE.GetDescription());
         } while (blast != null || blastShockWave != null);
 
-        AssertWrapper.IsNull(blast, seed);
-        AssertWrapper.IsNull(blastShockWave, seed);
-        AssertWrapper.AreEqual(blastSupposedLifetime, actualLifetime, "Blast Lifetime not as expected", seed, acceptedDelta);
+        AssertWrapper.IsNull(blast, _currentSeed);
+        AssertWrapper.IsNull(blastShockWave, _currentSeed);
+        AssertWrapper.AreEqual(blastSupposedLifetime, actualLifetime, "Blast Lifetime not as expected", _currentSeed, acceptedDelta);
 
     }
 
@@ -119,7 +108,11 @@ public class BlastShotTests
     public IEnumerator ShootingWithTarget()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
+        yield return null;
+        TestUtils.SetTestMode();
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadEnemyInExternalSafeIsland();
+        yield return null;
         TestUtils.SetUpShot(AttackName.BLAST_SHOT);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
@@ -137,8 +130,8 @@ public class BlastShotTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        var shot = GameObject.FindGameObjectWithTag(Tag.EXPLOSIVE.GetDescription());
+        AssertWrapper.IsNotNull(shot, _currentSeed);
 
         // GIVEN
         float timeUntilHit = 0;
@@ -153,10 +146,10 @@ public class BlastShotTests
         } while (shot != null);
 
         // THEN
-        AssertWrapper.GreaterOrEqual(lifeTime, timeUntilHit, "Didn't Hit Target Fast As Expected", seed);
+        AssertWrapper.GreaterOrEqual(lifeTime, timeUntilHit, "Didn't Hit Target Fast As Expected", _currentSeed);
 
         // GIVEN
-        var blast = GameObject.FindGameObjectWithTag(BLAST_TAG.GetDescription());
+        var blast = GameObject.FindGameObjectWithTag(Tag.EXPLOSION.GetDescription());
         GameObject blastShockWave;
         float blastExpectedLifetime = blast.GetComponent<Blast>().GetLifeTime();
         var actualLifetime = 0f;
@@ -167,24 +160,24 @@ public class BlastShotTests
             actualLifetime += Time.deltaTime;
             yield return null;
 
-            blast = GameObject.FindGameObjectWithTag(BLAST_TAG.GetDescription());
-            blastShockWave = GameObject.FindGameObjectWithTag(SHOCK_WAVE_TAG.GetDescription());
+            blast = GameObject.FindGameObjectWithTag(Tag.EXPLOSION.GetDescription());
+            blastShockWave = GameObject.FindGameObjectWithTag(Tag.EXPLOSION_SHOCK_WAVE.GetDescription());
         } while (blast != null || blastShockWave != null);
 
-        AssertWrapper.IsNull(blast, seed);
-        AssertWrapper.IsNull(blastShockWave, seed);
-        AssertWrapper.AreEqual(blastExpectedLifetime, actualLifetime, "Blast Lifetime not as expected", seed, acceptedDelta);
+        AssertWrapper.IsNull(blast, _currentSeed);
+        AssertWrapper.IsNull(blastShockWave, _currentSeed);
+        AssertWrapper.AreEqual(blastExpectedLifetime, actualLifetime, "Blast Lifetime not as expected", _currentSeed, acceptedDelta);
         
         var newTargetHealth = TestUtils.GetEnemyHealth();
-        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
+        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", _currentSeed);
     }
 
     [UnityTest]
     public IEnumerator ShootingInDirection()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-
+        yield return null;
+        TestUtils.SetTestMode();
         TestUtils.SetUpShot(AttackName.BLAST_SHOT);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
@@ -199,8 +192,8 @@ public class BlastShotTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        var shot = GameObject.FindGameObjectWithTag(Tag.EXPLOSIVE.GetDescription());
+        AssertWrapper.IsNotNull(shot, _currentSeed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -210,11 +203,11 @@ public class BlastShotTests
         {
             lastShotPosition = shot.transform.position;
             yield return null;
-            shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
+            shot = GameObject.FindGameObjectWithTag(Tag.EXPLOSIVE.GetDescription());
         } while (shot != null);
 
         // THEN
-        AssertWrapper.IsTrue(!TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Finish On Edges", seed);
+        AssertWrapper.IsTrue(!TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Finish On Edges", _currentSeed);
 
         var weaponDirection = Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(weaponMovement.transform.rotation));
         var shotDirection = Utils.Vector2ToDegrees(lastShotPosition);
@@ -223,7 +216,7 @@ public class BlastShotTests
             weaponDirection,
             shotDirection,
             "Weapon vs Shot Direction",
-            seed,
+            _currentSeed,
             acceptedDelta);
 
     }

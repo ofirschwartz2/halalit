@@ -34,6 +34,13 @@ public class LameEnemy : MonoBehaviour
         _direction = EnemyUtils.GetAnotherDirectionFromEdge(_rigidBody, edgeTag);
     }
 
+    public void Stop()
+    {
+        _rigidBody.velocity = Vector3.zero;
+        _movementAmplitude = 0;
+        _direction = Vector2.zero;
+    }
+
     #region Triggers
     void OnTriggerEnter2D(Collider2D other)
     {
