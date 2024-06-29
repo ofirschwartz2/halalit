@@ -16,6 +16,18 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 4077664471241976544, guid: 161684b0011ec3a45a98d794ee68a316, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.x
+      value: 0.82
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077664471241976544, guid: 161684b0011ec3a45a98d794ee68a316, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4077664471241976544, guid: 161684b0011ec3a45a98d794ee68a316, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4467855061491186574, guid: 161684b0011ec3a45a98d794ee68a316, type: 3}
       propertyPath: m_Layer
       value: 0
