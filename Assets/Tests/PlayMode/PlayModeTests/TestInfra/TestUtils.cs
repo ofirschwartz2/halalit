@@ -13,6 +13,7 @@ internal static class TestUtils
 {
     #region Constants
     // Scenes:
+    public const string PLAYGROUND_SCENE_NAME = "Playground";
     public const string TEST_SCENE_WITH_ENEMY_NAME = "TestingWithEnemy";
     public const string TEST_SCENE_WITHOUT_TARGET_NAME = "Testing"; 
     public const string TEST_SCENE_FOR_BOUNCES = "TestingForBounces";
@@ -23,6 +24,15 @@ internal static class TestUtils
     public const string TEST_SCENE_WITH_VALUABLES_NAME = "TestingWithValuables";
     public const string TEST_SCENE_IGNORING_EDGE_FORCE_FIELDS_OBJECTS_NAME = "TestingIgnoreEdgeForceFields";
     public const string MAIN_MENU_SCENE_NAME= "MainMenu";
+
+    // GameObjects names:
+    public const string OBJECT_LOADER_NAME = "ObjectLoader";
+    public const string ASTEROID_CONTAINER_NAME = "AsteroidsContainer";
+    public const string ENEMIES_CONTAINER_NAME = "EnemiesContainer";
+    public const string EXTERNAL_SAFE_ISLAND_NAME = "ExternalSafeIsland";
+
+    // Resources paths:
+    public const string SPRITE_CIRCLE_PATH = "Sprites/Circle";
 
     // Defaults:
     public const int ENEMIES_SEEDED_NUMBERS_LIST_DEFAULT_LENGTH = 5;
@@ -149,6 +159,13 @@ internal static class TestUtils
         {
             asteroid.GetComponent<Health>().SetHealth(health);
         }
+    }
+
+    internal static void SetTestMode()
+    {
+        GameObject.Find(OBJECT_LOADER_NAME).SetActive(true);
+        GameObject.Find(ASTEROID_CONTAINER_NAME).SetActive(false);
+        GameObject.Find(ENEMIES_CONTAINER_NAME).SetActive(false);
     }
 
     #endregion
@@ -499,16 +516,24 @@ internal static class TestUtils
         return isColliding;
     }
 
+    internal static bool SomeCollidersTouch(List<Collider2D> colliders)
+    {
+        foreach (Collider2D collider1 in colliders)
+        {
+            foreach (Collider2D collider2 in colliders)
+            {
+                if (collider1 != collider2 && AreCollidersTouch(collider1, collider2))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public static bool IsPartlyInsideTheWorld(GameObject gameObject)
     {
-        //Bounds gameObjectBounds = gameObject.GetComponent<Renderer>().bounds;
-        //Bounds internalWorldBounds = _internalWorld.GetComponent<Collider2D>().bounds;
-
-        //Vector3 maxBoundsPosition = new(gameObjectBounds.max.x, gameObjectBounds.max.y, 1); // TODO: why our InternalWorldBoxCollider2DBoxCollider2D Z=1?
-        //Vector3 minBoundsPosition = new(gameObjectBounds.min.x, gameObjectBounds.min.y, 1); // TODO: why our InternalWorldBoxCollider2DBoxCollider2D Z=1?
-
-        //return internalWorldBounds.Contains(maxBoundsPosition) && internalWorldBounds.Contains(minBoundsPosition);
-
         var internalWorldCollider = GameObject.FindGameObjectWithTag(Tag.INTERNAL_WORLD.GetDescription()).GetComponent<Collider2D>();
 
         return AreCollidersTouch(gameObject.GetComponent<Collider2D>(), internalWorldCollider);

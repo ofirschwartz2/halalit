@@ -1,5 +1,4 @@
-﻿using Assets.Enums;
-using Assets.Utils;
+﻿using Assets.Utils;
 using System;
 using UnityEngine;
 

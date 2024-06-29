@@ -3,7 +3,7 @@ using Assets.Utils;
 using Assets.Enums;
 using System.Linq;
 
-public class ItemMovement : MonoBehaviour // TODO: change naming to CollectableMovement
+public class ItemMovement : MonoBehaviour
 {
     [SerializeField]
     protected Rigidbody2D _rigidBody;

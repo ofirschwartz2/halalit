@@ -72,7 +72,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: FollowingEnemyInterval
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6361326973792696324, guid: 57c968e9cf3876545bdaee49816ba18f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:

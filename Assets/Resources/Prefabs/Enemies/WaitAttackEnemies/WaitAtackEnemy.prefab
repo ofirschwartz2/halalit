@@ -64,7 +64,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: WaitAtackEnemy
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -2045388931349795983, guid: a15140abd887f8143b8a6accac65b90e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -97,4 +98,3 @@ MonoBehaviour:
   _rigidBody: {fileID: 3864331875020387951}
   _waitAttackWait: {fileID: 0}
   _waitAttackAttack: {fileID: 0}
-  _spawningTime: 10

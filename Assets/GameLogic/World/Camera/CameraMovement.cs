@@ -37,7 +37,7 @@ public class CameraMovement : MonoBehaviour
 
     private void SetBackgroundSizes()
     {
-        Vector3 backgroundSize = _background.GetComponent<Renderer>().bounds.size;
+        Vector3 backgroundSize = _background.GetComponent<SpriteRenderer>().bounds.size;
 
         _rightSceneEdge = backgroundSize.x / 2;
         _leftSceneEdge = _rightSceneEdge * (-1);
