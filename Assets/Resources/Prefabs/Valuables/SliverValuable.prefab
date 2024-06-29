@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1984189302029878180, guid: 161684b0011ec3a45a98d794ee68a316, type: 3}
       propertyPath: m_Name
-      value: SliverValuable 1
+      value: SliverValuable
       objectReference: {fileID: 0}
     - target: {fileID: 1984189302029878180, guid: 161684b0011ec3a45a98d794ee68a316, type: 3}
       propertyPath: m_Layer
@@ -22,6 +22,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4515440249897612703, guid: 161684b0011ec3a45a98d794ee68a316, type: 3}
       propertyPath: m_GravityScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5987367263921210706, guid: 161684b0011ec3a45a98d794ee68a316, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6287983460156502420, guid: 161684b0011ec3a45a98d794ee68a316, type: 3}

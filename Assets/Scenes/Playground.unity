@@ -2406,7 +2406,7 @@ MonoBehaviour:
   _enemyBasePrefab: {fileID: 9160889592167678377, guid: a15140abd887f8143b8a6accac65b90e, type: 3}
   _asteroidPrefab: {fileID: 6741412782414407016, guid: d17f6aba06990634e92f5f659cf1bf0d, type: 3}
   _itemBasePrefab: {fileID: 9195436676840446505, guid: 4d6d8e29eb0888046837d54ee7155feb, type: 3}
-  _valuableBasePrefab: {fileID: 1984189302029878180, guid: 161684b0011ec3a45a98d794ee68a316, type: 3}
+  _valuableBasePrefab: {fileID: 6122301198954446189, guid: 23128d9be8456fd41beade43a4d2a36c, type: 3}
   _loadedObjectsDistance: 0.5
 --- !u!4 &1037661397
 Transform:
@@ -2756,7 +2756,7 @@ GameObject:
   - component: {fileID: 1115091191}
   - component: {fileID: 1115091192}
   m_Layer: 9
-  m_Name: Pickup Claw Shooter
+  m_Name: ClawShooter
   m_TagString: PickupClawShooter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -60,7 +60,6 @@ public class PickupClawStateMachine : MonoBehaviour
                 TryDie(_state);
                 break;
         }
-        
     }
 
     #region State Changes

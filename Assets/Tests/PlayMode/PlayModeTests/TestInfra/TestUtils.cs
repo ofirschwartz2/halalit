@@ -55,6 +55,11 @@ internal static class TestUtils
     public static readonly Vector2 DEFAULT_POSITION_TO_THE_RIGHT = new(5, 0);
     #endregion
 
+    #region Turned off game objects
+    public static GameObject _asteroidContainer;
+    public static GameObject _enemiesContainer;
+    #endregion
+
     #region Random Seeds
     internal static int SetRandomSeed(int seed = 0)
     {
@@ -66,6 +71,7 @@ internal static class TestUtils
         return seed;
     }
     #endregion
+
 
     #region Scene SetUp
     internal static void DestroyAllGameObjects() 
@@ -83,7 +89,6 @@ internal static class TestUtils
         attackToggle.SetNewAttack(attackName, attackStats ?? DEFAULT_ATTACK_STATS_1);
     }
 
-    //TesingWithTarget Scene
     internal static void SetTargetPosition(Vector2 targetPosition)
     {
         var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
@@ -163,9 +168,11 @@ internal static class TestUtils
 
     internal static void SetTestMode()
     {
-        GameObject.Find(OBJECT_LOADER_NAME).SetActive(true);
-        GameObject.Find(ASTEROID_CONTAINER_NAME).SetActive(false);
-        GameObject.Find(ENEMIES_CONTAINER_NAME).SetActive(false);
+        _asteroidContainer = GameObject.Find(ASTEROID_CONTAINER_NAME);
+        _asteroidContainer.SetActive(false);
+
+        _enemiesContainer = GameObject.Find(ENEMIES_CONTAINER_NAME);
+        _enemiesContainer.SetActive(false);
     }
 
     #endregion
@@ -535,8 +542,11 @@ internal static class TestUtils
     public static bool IsPartlyInsideTheWorld(GameObject gameObject)
     {
         var internalWorldCollider = GameObject.FindGameObjectWithTag(Tag.INTERNAL_WORLD.GetDescription()).GetComponent<Collider2D>();
+        var gameObjectCollider = gameObject.GetComponent<Collider2D>() != null ?
+            gameObject.GetComponent<Collider2D>() : 
+            gameObject.GetComponentInChildren<Collider2D>();
 
-        return AreCollidersTouch(gameObject.GetComponent<Collider2D>(), internalWorldCollider);
+        return AreCollidersTouch(gameObjectCollider, internalWorldCollider);
     }
     #endregion
 
