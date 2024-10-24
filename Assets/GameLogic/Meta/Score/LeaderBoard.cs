@@ -12,14 +12,11 @@ public class LeaderBoard : MonoBehaviour
     const string HIGHSCORE_LEADERBOARD_ID = "1";
     private LeaderboardScoresPage _highScoresResponse;
 
-    private Transform entryContainer;
-    private Transform entryTemplate;
-
     public async void Awake()
     {
         await PlayerInitialization();
 
-        await GetScores();
+        await TryGetScores();
 
         DisplayScores();
     }
@@ -38,7 +35,7 @@ public class LeaderBoard : MonoBehaviour
         await PlayerStats.InitAllAsync();
     }
 
-    public async Task GetScores()
+    public async Task TryGetScores()
     {
         _highScoresResponse = await LeaderboardsService.Instance.GetScoresAsync(HIGHSCORE_LEADERBOARD_ID);
         _highScoresResponse.Results.ForEach(score =>
@@ -50,10 +47,14 @@ public class LeaderBoard : MonoBehaviour
 
     }
 
-    public void DisplayScores() 
+    public void DisplayScores()
     {
-        entryContainer = transform.Find("LeaderboardEntryContainer");
-        entryTemplate = entryContainer.transform.Find("LeaderboardEntryTemplate");
+        var highscoreTableContainer = FindTransformChild(transform, "HighscoreTable");
+
+        var entryContainer = FindTransformChild(highscoreTableContainer, "HighscoreTable");
+
+        var entryTemplate = FindTransformChild(entryContainer, "HighscoreTable");
+
 
         for (int i = 0; i < _highScoresResponse.Results.Count; i++)
         {
@@ -71,6 +72,19 @@ public class LeaderBoard : MonoBehaviour
         entryTemplate.gameObject.SetActive(false);
 
     }
+
+    // TODO: move to utils
+    private Transform FindTransformChild(Transform fatherTransaform, string childName)
+    {
+        var transformChild = fatherTransaform.Find(childName);
+        if (transformChild == null)
+        {
+            throw new System.Exception($"{childName} not found.");
+        }
+
+        return transformChild;
+    }
+    // TODO: move to utils
 
     private void SetTextOnComponent(Transform parentTransform, string childName, string textValue)
     {

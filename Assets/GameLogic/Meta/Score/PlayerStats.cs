@@ -4,7 +4,6 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Unity.Services.CloudSave;
 using Unity.Services.Leaderboards;
-using UnityEngine.SocialPlatforms.Impl;
 
 
 #if UNITY_EDITOR
@@ -18,6 +17,7 @@ public static class PlayerStats
 
     public static bool _isDailyRun;
     public static DateTime _dailyDate;
+    public static Dictionary<string, object> _dailySeeds;
     public static int? _dailySeed;
     public static int? _highScore, _dailyScore;
 
@@ -38,42 +38,34 @@ public static class PlayerStats
         _dailyDate = DateTime.Now;
         _dailyScore = null;
         _dailyScoreKey = "DailyScore_" + DateTime.Now.ToString("dd-MM-yy");
-        _dailySeedKey = "DailySeed_" + DateTime.Now.ToString("dd-MM-yy");
+        _dailySeedKey = DateTime.Now.ToString("dd-MM-yy");
         _highScoreKey = "HighScore";
         _playerHighScore = new Dictionary<string, object>();
         _playerDailyScore = new Dictionary<string, object>();
-        //await SetAllDailySeeds();
+        SetAllDailySeeds();
 
         await SyncPlayerFromServerAsync();
 
     }
 
-    /*
-    private static async Task SetAllDailySeeds()
+    
+    private static void SetAllDailySeeds()
     {
-        var allDailySeeds = new Dictionary<string, object>();
-        allDailySeeds["DailySeed_03-05-24"] = SeedlessRandomGenerator.GetNumber();
-        allDailySeeds["DailySeed_04-05-24"] = SeedlessRandomGenerator.GetNumber();
-        
-        allDailySeeds["DailySeed_05-05-24"] = SeedlessRandomGenerator.GetNumber();
-        allDailySeeds["DailySeed_06-05-24"] = SeedlessRandomGenerator.GetNumber();
-        allDailySeeds["DailySeed_07-05-24"] = SeedlessRandomGenerator.GetNumber();
-        allDailySeeds["DailySeed_08-05-24"] = SeedlessRandomGenerator.GetNumber();
-        allDailySeeds["DailySeed_09-05-24"] = SeedlessRandomGenerator.GetNumber();
-        allDailySeeds["DailySeed_10-05-24"] = SeedlessRandomGenerator.GetNumber();
-        allDailySeeds["DailySeed_11-05-24"] = SeedlessRandomGenerator.GetNumber();
-        allDailySeeds["DailySeed_12-05-24"] = SeedlessRandomGenerator.GetNumber();
-        allDailySeeds["DailySeed_13-05-24"] = SeedlessRandomGenerator.GetNumber();
-        allDailySeeds["DailySeed_14-05-24"] = SeedlessRandomGenerator.GetNumber();
-        allDailySeeds["DailySeed_15-05-24"] = SeedlessRandomGenerator.GetNumber();
-        allDailySeeds["DailySeed_16-05-24"] = SeedlessRandomGenerator.GetNumber();
-        allDailySeeds["DailySeed_17-05-24"] = SeedlessRandomGenerator.GetNumber();
-        allDailySeeds["DailySeed_18-05-24"] = SeedlessRandomGenerator.GetNumber();
-        
-        await CloudSaveService.Instance.Data.ForceSaveAsync(allDailySeeds);
-        // not doing global, but JUST FOR THE PLAYER...
+        // TODO: Fix
+        _dailySeeds = new Dictionary<string, object>();
+        _dailySeeds["12-06-24"] = 1;
+        _dailySeeds["13-06-24"] = 2;
+        _dailySeeds["14-06-24"] = 3;
+        _dailySeeds["15-06-24"] = 4;
+        _dailySeeds["16-06-24"] = 5;
+        _dailySeeds["17-06-24"] = 6;
+        _dailySeeds["18-06-24"] = 7;
+        _dailySeeds["19-06-24"] = 8;
+        _dailySeeds["20-06-24"] = 9;
+        _dailySeeds["21-06-24"] = 10;
+        // TODO: Fix
     }
-    */
+    
 
     public static async Task SyncPlayerFromServerAsync()
     {

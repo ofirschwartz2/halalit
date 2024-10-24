@@ -53,6 +53,7 @@ TagManager:
   - Score
   - EnemiesSpawner
   - EnemiesDestructor
+  - LeaderboardEntryContainer
   layers:
   - Default
   - TransparentFX
