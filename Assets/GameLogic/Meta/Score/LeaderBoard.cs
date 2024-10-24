@@ -51,9 +51,9 @@ public class LeaderBoard : MonoBehaviour
     {
         var highscoreTableContainer = FindTransformChild(transform, "HighscoreTable");
 
-        var entryContainer = FindTransformChild(highscoreTableContainer, "HighscoreTable");
+        var entryContainer = FindTransformChild(highscoreTableContainer, "LeaderboardEntryContainer");
 
-        var entryTemplate = FindTransformChild(entryContainer, "HighscoreTable");
+        var entryTemplate = FindTransformChild(entryContainer, "LeaderboardEntryTemplate");
 
 
         for (int i = 0; i < _highScoresResponse.Results.Count; i++)
