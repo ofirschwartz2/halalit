@@ -38,7 +38,8 @@ public static class PlayerStats
         _dailyDate = DateTime.Now;
         _dailyScore = null;
         _dailyScoreKey = "DailyScore_" + DateTime.Now.ToString("dd-MM-yy");
-        _dailySeedKey = DateTime.Now.ToString("dd-MM-yy");
+        // TODO: fix - move from Player to Game
+        _dailySeedKey = "DailySeed_04-05-24"; // "DailySeed_" + DateTime.Now.ToString("dd-MM-yy");
         _highScoreKey = "HighScore";
         _playerHighScore = new Dictionary<string, object>();
         _playerDailyScore = new Dictionary<string, object>();
