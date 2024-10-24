@@ -93,6 +93,7 @@ public class LeaderBoard : MonoBehaviour
     }
     // TODO: move to utils
 
+    // TODO: move to utils
     private void SetTextOnComponent(Transform parentTransform, string childName, string textValue)
     {
         Text text = parentTransform.Find(childName).GetComponent<Text>();
@@ -105,6 +106,7 @@ public class LeaderBoard : MonoBehaviour
             Debug.LogError($"Text component not found on '{childName}' game object.");
         }
     }
+    // TODO: move to utils
 
     public void MainMenu()
     {
