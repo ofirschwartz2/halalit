@@ -10,6 +10,13 @@ using UnityEngine.UI;
 public class LeaderBoard : MonoBehaviour
 {
     const string HIGHSCORE_LEADERBOARD_ID = "1";
+    const string HIGHSCORE_TABLE_NAME = "HighscoreTable";
+    const string LEADERBOARD_ENTRY_CONTAINER_NAME = "LeaderboardEntryContainer";
+    const string LEADERBOARD_ENTRY_TEMPLATE_NAME = "LeaderboardEntryTemplate";
+    const string ID_TEXT_NAME = "IdText";
+    const string PLAYER_NAME_TEXT_NAME = "PlayerNameText";
+    const string SCORE_TEXT_NAME = "ScoreText";
+
     private LeaderboardScoresPage _highScoresResponse;
 
     public async void Awake()
@@ -49,11 +56,11 @@ public class LeaderBoard : MonoBehaviour
 
     public void DisplayScores()
     {
-        var highscoreTableContainer = FindTransformChild(transform, "HighscoreTable");
+        var highscoreTableContainer = FindTransformChild(transform, HIGHSCORE_TABLE_NAME);
 
-        var entryContainer = FindTransformChild(highscoreTableContainer, "LeaderboardEntryContainer");
+        var entryContainer = FindTransformChild(highscoreTableContainer, LEADERBOARD_ENTRY_CONTAINER_NAME);
 
-        var entryTemplate = FindTransformChild(entryContainer, "LeaderboardEntryTemplate");
+        var entryTemplate = FindTransformChild(entryContainer, LEADERBOARD_ENTRY_TEMPLATE_NAME);
 
 
         for (int i = 0; i < _highScoresResponse.Results.Count; i++)
@@ -64,9 +71,9 @@ public class LeaderBoard : MonoBehaviour
             entryTransform.gameObject.SetActive(true);
 
 
-            SetTextOnComponent(entryTransform, "IdText", (i + 1).ToString());
-            SetTextOnComponent(entryTransform, "PlayerNameText", _highScoresResponse.Results[i].PlayerName);
-            SetTextOnComponent(entryTransform, "ScoreText", _highScoresResponse.Results[i].Score.ToString());
+            SetTextOnComponent(entryTransform, ID_TEXT_NAME, (i + 1).ToString());
+            SetTextOnComponent(entryTransform, PLAYER_NAME_TEXT_NAME, _highScoresResponse.Results[i].PlayerName);
+            SetTextOnComponent(entryTransform, SCORE_TEXT_NAME, _highScoresResponse.Results[i].Score.ToString());
         }
 
         entryTemplate.gameObject.SetActive(false);
