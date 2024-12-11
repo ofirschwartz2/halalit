@@ -44,7 +44,10 @@ public class LeaderBoard : MonoBehaviour
 
     public async Task TryGetScores()
     {
+        // TODO: Move to Cloud Provider class
         _highScoresResponse = await LeaderboardsService.Instance.GetScoresAsync(HIGHSCORE_LEADERBOARD_ID);
+        // TODO: Move to Cloud Provider class
+
         _highScoresResponse.Results.ForEach(score =>
         {
             Debug.Log($"Player: {score.PlayerId}, PlayerName: {score.PlayerName}, Score: {score.Score}");

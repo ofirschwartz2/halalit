@@ -4,7 +4,8 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Unity.Services.CloudSave;
 using Unity.Services.Leaderboards;
-
+using UnityEngine;
+using Unity.Services.Core;
 
 #if UNITY_EDITOR
 [assembly: InternalsVisibleTo("PlayModeTests")]
@@ -27,6 +28,7 @@ public static class PlayerStats
 
     public async static Task InitAllAsync()
     {
+        Debug.Log("Starting InitAllAsync");
 
         await TrySaveNewHighScoreAsync();
         await TrySaveNewDailyScoreAsync();
@@ -47,9 +49,10 @@ public static class PlayerStats
 
         await SyncPlayerFromServerAsync();
 
+        Debug.Log("Finished InitAllAsync");
     }
 
-    
+
     private static void SetAllDailySeeds()
     {
         // TODO: Fix
@@ -66,27 +69,72 @@ public static class PlayerStats
         _dailySeeds["21-06-24"] = 10;
         // TODO: Fix
     }
-    
+
 
     public static async Task SyncPlayerFromServerAsync()
     {
-        var playerStats = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string>() { _highScoreKey, _dailyScoreKey, _dailySeedKey });
-
-        if (playerStats.TryGetValue(_dailyScoreKey, out var DailyScoreObject))
+        try
         {
-            _dailyScore = DailyScoreObject.Value.GetAs<int>();
-        }
 
-        if (playerStats.TryGetValue(_highScoreKey, out var HighScoreObject))
+            Debug.Log("Starting SyncPlayerFromServerAsync");
+
+            Debug.Log("Starting SyncPlayerFromServerAsync");
+            Debug.Log($"Current Player ID: {Unity.Services.Authentication.AuthenticationService.Instance.PlayerId}");
+
+            Debug.Log($"Is Unity Services Initialized: {UnityServices.State}");
+            Debug.Log($"Attempting to load keys: {_highScoreKey}, {_dailyScoreKey}, {_dailySeedKey}");
+
+            var playerStats = await CloudSaveService.Instance.Data.Player.LoadAsync(
+                new HashSet<string>() { _highScoreKey, _dailyScoreKey, _dailySeedKey });
+
+            Debug.Log($"Received playerStats with {playerStats.Count} entries");
+            foreach (var playerStat in playerStats)
+            {
+                Debug.Log($"Key: {playerStat.Key}, Value: {playerStat.Value?.Value}");
+            }
+
+            if (playerStats.TryGetValue(_dailyScoreKey, out var DailyScoreObject))
+            {
+                _dailyScore = DailyScoreObject.Value.GetAs<int>();
+            }
+
+            if (playerStats.TryGetValue(_highScoreKey, out var HighScoreObject))
+            {
+                _highScore = HighScoreObject.Value.GetAs<int>();
+            }
+
+            if (playerStats.TryGetValue(_dailySeedKey, out var DailySeedObject))
+            {
+                _dailySeed = DailySeedObject.Value.GetAs<int>();
+            }
+            Debug.Log("Finished SyncPlayerFromServerAsync");
+
+        }
+        catch (Exception e)
         {
-            _highScore = HighScoreObject.Value.GetAs<int>();
+            Debug.LogError($"Error in SyncPlayerFromServerAsync: {e.Message}");
+            throw;
         }
+    }
 
-        if (playerStats.TryGetValue(_dailySeedKey, out var DailySeedObject))
-        {
-            _dailySeed = DailySeedObject.Value.GetAs<int>();
-        }
+    private static async Task testSaveAndLoad()
+    {
+        // First try to save some test data
+        var testData = new Dictionary<string, object>
+            {
+                { "DailyScore_02-05-24", 60 },
+                { "DailyScore_04-05-24", 70 },
+                { "DailyScore_24-10-24", 40 },
+                { "DailySeed_03-05-24", 1539402699 },
+                { "DailySeed_04-05-24", 1823848950 },
+                { "HighScore", 40 }
+            };
+        await CloudSaveService.Instance.Data.Player.SaveAsync(testData);
+        Debug.Log("Test data saved");
 
+        // Then try to load it back
+        var testLoad = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string>() { "test_key" });
+        Debug.Log($"Test load result count: {testLoad.Count}");
     }
 
     public static void SetStartDaily()
@@ -103,7 +151,7 @@ public static class PlayerStats
         await CloudSaveService.Instance.Data.Player.SaveAsync(_playerDailyScore);
     }
 
-    public static async Task SavePlayerHighScoreAsync() 
+    public static async Task SavePlayerHighScoreAsync()
     {
         _playerHighScore = new Dictionary<string, object>();
         _playerHighScore[_highScoreKey] = _highScore;
