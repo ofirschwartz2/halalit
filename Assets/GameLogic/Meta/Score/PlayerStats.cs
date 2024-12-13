@@ -6,6 +6,8 @@ using Unity.Services.CloudSave;
 using Unity.Services.Leaderboards;
 using UnityEngine;
 using Unity.Services.Core;
+using Unity.Services.CloudSave.Models;
+
 
 #if UNITY_EDITOR
 [assembly: InternalsVisibleTo("PlayModeTests")]
@@ -18,11 +20,11 @@ public static class PlayerStats
 
     public static bool _isDailyRun;
     public static DateTime _dailyDate;
-    public static Dictionary<string, object> _dailySeeds;
+    public static Dictionary<string, int> _dailySeeds;
     public static int? _dailySeed;
     public static int? _highScore, _dailyScore;
 
-    public static string _dailyScoreKey, _highScoreKey, _dailySeedKey;
+    public static string _dailyScoreKey, _highScoreKey;
     public static Dictionary<string, object> _playerHighScore, _playerDailyScore;
     const string HIGHSCORE_LEADERBOARD_ID = "1";
 
@@ -41,11 +43,32 @@ public static class PlayerStats
         _dailyScore = null;
         _dailyScoreKey = "DailyScore_" + DateTime.Now.ToString("dd-MM-yy");
         // TODO: fix - move from Player to Game
-        _dailySeedKey = "DailySeed_04-05-24"; // "DailySeed_" + DateTime.Now.ToString("dd-MM-yy");
         _highScoreKey = "HighScore";
+        _dailySeeds = new Dictionary<string, int>()
+        {
+            { "DailySeed_13-12-24", 1823848950 },
+            { "DailySeed_14-12-24", -542789631 },
+            { "DailySeed_15-12-24", 967123405 },
+            { "DailySeed_16-12-24", -234567890 },
+            { "DailySeed_17-12-24", 1357924680 },
+            { "DailySeed_18-12-24", -891234567 },
+            { "DailySeed_19-12-24", 456789123 },
+            { "DailySeed_20-12-24", -123456789 },
+            { "DailySeed_21-12-24", 2047483647 },
+            { "DailySeed_22-12-24", -987654321 },
+            { "DailySeed_23-12-24", 741852963 },
+            { "DailySeed_24-12-24", -369258147 },
+            { "DailySeed_25-12-24", 159753468 },
+            { "DailySeed_26-12-24", -852963741 },
+            { "DailySeed_27-12-24", 246813579 },
+            { "DailySeed_28-12-24", -147258369 },
+            { "DailySeed_29-12-24", 963852741 },
+            { "DailySeed_30-12-24", -741852963 },
+            { "DailySeed_31-12-24", 357159852 },
+            { "DailySeed_01-01-25", -258369147 }
+        };
         _playerHighScore = new Dictionary<string, object>();
         _playerDailyScore = new Dictionary<string, object>();
-        SetAllDailySeeds();
 
         await SyncPlayerFromServerAsync();
 
@@ -53,23 +76,12 @@ public static class PlayerStats
     }
 
 
-    private static void SetAllDailySeeds()
+   
+    private static int GenerateRandomSeed()
     {
-        // TODO: Fix
-        _dailySeeds = new Dictionary<string, object>();
-        _dailySeeds["12-06-24"] = 1;
-        _dailySeeds["13-06-24"] = 2;
-        _dailySeeds["14-06-24"] = 3;
-        _dailySeeds["15-06-24"] = 4;
-        _dailySeeds["16-06-24"] = 5;
-        _dailySeeds["17-06-24"] = 6;
-        _dailySeeds["18-06-24"] = 7;
-        _dailySeeds["19-06-24"] = 8;
-        _dailySeeds["20-06-24"] = 9;
-        _dailySeeds["21-06-24"] = 10;
-        // TODO: Fix
+        System.Random random = new System.Random();
+        return random.Next(Int32.MinValue, Int32.MaxValue);
     }
-
 
     public static async Task SyncPlayerFromServerAsync()
     {
@@ -82,10 +94,10 @@ public static class PlayerStats
             Debug.Log($"Current Player ID: {Unity.Services.Authentication.AuthenticationService.Instance.PlayerId}");
 
             Debug.Log($"Is Unity Services Initialized: {UnityServices.State}");
-            Debug.Log($"Attempting to load keys: {_highScoreKey}, {_dailyScoreKey}, {_dailySeedKey}");
+            Debug.Log($"Attempting to load keys: {_highScoreKey}, {_dailyScoreKey}");
 
             var playerStats = await CloudSaveService.Instance.Data.Player.LoadAsync(
-                new HashSet<string>() { _highScoreKey, _dailyScoreKey, _dailySeedKey });
+                new HashSet<string>() { _highScoreKey, _dailyScoreKey });
 
             Debug.Log($"Received playerStats with {playerStats.Count} entries");
             foreach (var playerStat in playerStats)
@@ -103,10 +115,8 @@ public static class PlayerStats
                 _highScore = HighScoreObject.Value.GetAs<int>();
             }
 
-            if (playerStats.TryGetValue(_dailySeedKey, out var DailySeedObject))
-            {
-                _dailySeed = DailySeedObject.Value.GetAs<int>();
-            }
+
+            _dailySeed = GetDailySeed(DateTime.Now);
             Debug.Log("Finished SyncPlayerFromServerAsync");
 
         }
@@ -117,25 +127,7 @@ public static class PlayerStats
         }
     }
 
-    private static async Task testSaveAndLoad()
-    {
-        // First try to save some test data
-        var testData = new Dictionary<string, object>
-            {
-                { "DailyScore_02-05-24", 60 },
-                { "DailyScore_04-05-24", 70 },
-                { "DailyScore_24-10-24", 40 },
-                { "DailySeed_03-05-24", 1539402699 },
-                { "DailySeed_04-05-24", 1823848950 },
-                { "HighScore", 40 }
-            };
-        await CloudSaveService.Instance.Data.Player.SaveAsync(testData);
-        Debug.Log("Test data saved");
-
-        // Then try to load it back
-        var testLoad = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string>() { "test_key" });
-        Debug.Log($"Test load result count: {testLoad.Count}");
-    }
+    
 
     public static void SetStartDaily()
     {
@@ -176,6 +168,16 @@ public static class PlayerStats
             await SavePlayerHighScoreAsync();
             _isNewHighScore = false;
         }
+    }
+
+    public static int GetDailySeed(DateTime date)
+    {
+        string key = $"DailySeed_{date.ToString("dd-MM-yy")}";
+        if (_dailySeeds.TryGetValue(key, out int value) && value is int intValue)
+        {
+            return intValue;
+        }
+        return 0;
     }
 
 }
