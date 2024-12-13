@@ -6,6 +6,7 @@ using Unity.Services.Leaderboards.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class LeaderBoard : MonoBehaviour
 {
@@ -70,7 +71,7 @@ public class LeaderBoard : MonoBehaviour
         {
             Transform entryTransform = Instantiate(entryTemplate, entryContainer);
             RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
-            entryRectTransform.anchoredPosition = new Vector2(0, -2 * i);
+            entryRectTransform.anchoredPosition = new Vector2(0, -70 * i);
             entryTransform.gameObject.SetActive(true);
 
 
@@ -99,7 +100,7 @@ public class LeaderBoard : MonoBehaviour
     // TODO: move to utils
     private void SetTextOnComponent(Transform parentTransform, string childName, string textValue)
     {
-        Text text = parentTransform.Find(childName).GetComponent<Text>();
+        TMPro.TextMeshProUGUI text = parentTransform.Find(childName).GetComponent<TMPro.TextMeshProUGUI>();
         if (text != null)
         {
             text.text = textValue;
