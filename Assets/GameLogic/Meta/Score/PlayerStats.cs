@@ -41,6 +41,7 @@ public static class PlayerStats
         _isDailyRun = false;
         _dailyDate = DateTime.Now;
         _dailyScore = null;
+        _dailySeed = null;
         _dailyScoreKey = "DailyScore_" + DateTime.Now.ToString("dd-MM-yy");
         // TODO: fix - move from Player to Game
         _highScoreKey = "HighScore";
@@ -173,9 +174,9 @@ public static class PlayerStats
     public static int GetDailySeed(DateTime date)
     {
         string key = $"DailySeed_{date.ToString("dd-MM-yy")}";
-        if (_dailySeeds.TryGetValue(key, out int value) && value is int intValue)
+        if (_dailySeeds.TryGetValue(key, out int value) && value is int dailySeed)
         {
-            return intValue;
+            return dailySeed;
         }
         return 0;
     }
