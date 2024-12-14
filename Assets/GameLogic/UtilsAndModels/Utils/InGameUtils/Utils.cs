@@ -352,6 +352,7 @@ namespace Assets.Utils
         }
         #endregion
 
+        #region SceneManipulations
         public static Transform FindTransformChild(Transform fatherTransaform, string childName)
         {
             var transformChild = fatherTransaform.Find(childName);
@@ -375,5 +376,6 @@ namespace Assets.Utils
                 Debug.LogError($"Text component not found on '{childName}' game object.");
             }
         }
+        #endregion
     }
 }
