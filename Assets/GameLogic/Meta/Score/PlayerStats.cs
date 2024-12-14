@@ -27,20 +27,30 @@ public static class PlayerStats
 #region Init
     public async static Task InitAllAsync()
     {
-        Debug.Log("Starting InitAllAsync");
+        await InitAuthenticationAsync();
 
         await TrySaveHighScoresAsync();
 
-        SetDefaultValues();
+        SetDefaultPlayerStatsValues();
 
         SetDailySeeds();
 
         await SyncPlayerFromServerAsync();
-
-        Debug.Log("Finished InitAllAsync");
     }
 
-    internal static void SetDefaultValues()
+    private static async Task InitAuthenticationAsync()
+    {
+        if (Authentication.InitializationTask == null)
+        {
+            await Authentication.Initialize();
+        }
+        else
+        {
+            await Authentication.InitializationTask;
+        }
+    }
+
+    internal static void SetDefaultPlayerStatsValues()
     {
         _playerId = "";
         _dateInFormat = DateTime.Now.ToString("dd-MM-yy");

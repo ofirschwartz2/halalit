@@ -6,7 +6,6 @@ using Unity.Services.Leaderboards.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro;
 
 public class LeaderBoard : MonoBehaviour
 {
@@ -22,49 +21,23 @@ public class LeaderBoard : MonoBehaviour
 
     public async void Awake()
     {
-        await PlayerInitialization();
+        await PlayerStats.InitAllAsync();
 
         await TryGetScores();
 
         DisplayScores();
     }
 
-    private static async Task PlayerInitialization() // TODO: FIX
-    {
-        if (Authentication.InitializationTask == null)
-        {
-            await Authentication.Initialize();
-        }
-        else
-        {
-            await Authentication.InitializationTask;
-        }
-
-        await PlayerStats.InitAllAsync();
-    }
-
     public async Task TryGetScores()
     {
-        // TODO: Move to Cloud Provider class
         _highScoresResponse = await LeaderboardsService.Instance.GetScoresAsync(HIGHSCORE_LEADERBOARD_ID);
-        // TODO: Move to Cloud Provider class
-
-        _highScoresResponse.Results.ForEach(score =>
-        {
-            Debug.Log($"Player: {score.PlayerId}, PlayerName: {score.PlayerName}, Score: {score.Score}");
-        });
-
-        Debug.Log("Leaderboard Scores:" + _highScoresResponse.ToString());
-
     }
 
     public void DisplayScores()
     {
-        var highscoreTableContainer = FindTransformChild(transform, HIGHSCORE_TABLE_NAME);
-
-        var entryContainer = FindTransformChild(highscoreTableContainer, LEADERBOARD_ENTRY_CONTAINER_NAME);
-
-        var entryTemplate = FindTransformChild(entryContainer, LEADERBOARD_ENTRY_TEMPLATE_NAME);
+        var highscoreTableContainer = Utils.FindTransformChild(transform, HIGHSCORE_TABLE_NAME);
+        var entryContainer = Utils.FindTransformChild(highscoreTableContainer, LEADERBOARD_ENTRY_CONTAINER_NAME);
+        var entryTemplate = Utils.FindTransformChild(entryContainer, LEADERBOARD_ENTRY_TEMPLATE_NAME);
 
 
         for (int i = 0; i < _highScoresResponse.Results.Count; i++)
@@ -74,46 +47,20 @@ public class LeaderBoard : MonoBehaviour
             entryRectTransform.anchoredPosition = new Vector2(0, -70 * i);
             entryTransform.gameObject.SetActive(true);
 
-
-            SetTextOnComponent(entryTransform, ID_TEXT_NAME, (i + 1).ToString());
-            SetTextOnComponent(entryTransform, PLAYER_NAME_TEXT_NAME, _highScoresResponse.Results[i].PlayerName);
-            SetTextOnComponent(entryTransform, SCORE_TEXT_NAME, _highScoresResponse.Results[i].Score.ToString());
+            Utils.SetTMProTextOnComponent(entryTransform, ID_TEXT_NAME, (i + 1).ToString());
+            Utils.SetTMProTextOnComponent(entryTransform, PLAYER_NAME_TEXT_NAME, _highScoresResponse.Results[i].PlayerName);
+            Utils.SetTMProTextOnComponent(entryTransform, SCORE_TEXT_NAME, _highScoresResponse.Results[i].Score.ToString());
         }
 
         entryTemplate.gameObject.SetActive(false);
 
     }
 
-    // TODO: move to utils
-    private Transform FindTransformChild(Transform fatherTransaform, string childName)
-    {
-        var transformChild = fatherTransaform.Find(childName);
-        if (transformChild == null)
-        {
-            throw new System.Exception($"{childName} not found.");
-        }
-
-        return transformChild;
-    }
-    // TODO: move to utils
-
-    // TODO: move to utils
-    private void SetTextOnComponent(Transform parentTransform, string childName, string textValue)
-    {
-        TMPro.TextMeshProUGUI text = parentTransform.Find(childName).GetComponent<TMPro.TextMeshProUGUI>();
-        if (text != null)
-        {
-            text.text = textValue;
-        }
-        else
-        {
-            Debug.LogError($"Text component not found on '{childName}' game object.");
-        }
-    }
-    // TODO: move to utils
-
-    public void MainMenu()
+#region Buttons
+    public void BackToMainMenu()
     {
         SceneManager.LoadScene(SceneName.MAIN_MENU.GetDescription());
     }
+#endregion
+
 }

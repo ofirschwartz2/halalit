@@ -1227,7 +1227,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 416422726}
         m_TargetAssemblyTypeName: LeaderBoard, Meta
-        m_MethodName: MainMenu
+        m_MethodName: BackToMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
