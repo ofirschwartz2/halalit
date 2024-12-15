@@ -221,7 +221,7 @@ internal static class TestUtils
     internal static int GetScore() 
     {
         var ScoreText = GetScoreText();
-        var score = ScoreText.GetComponent<ScoreScript>();
+        var score = ScoreText.GetComponent<Score>();
         return score.GetScore();
     }
 
@@ -233,7 +233,7 @@ internal static class TestUtils
     internal static List<KeyValuePair<ValuableName, int>> GetValuableValues() 
     {
         var score = GameObject.FindGameObjectWithTag(Tag.SCORE.GetDescription());
-        var scoreScript = score.GetComponent<ScoreScript>();
+        var scoreScript = score.GetComponent<Score>();
         return scoreScript.GetValuableValues();
     }
 
