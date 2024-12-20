@@ -9,11 +9,11 @@
         "Health",
         "Items",
         "UtilsAndModels",
-        "Meta",
         "Setup",
         "Asteroid",
         "World",
-        "Enemies"
+        "Enemies",
+        "NewAssembly"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
