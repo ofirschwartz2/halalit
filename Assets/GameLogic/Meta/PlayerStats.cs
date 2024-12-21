@@ -79,7 +79,7 @@ public static class PlayerStats
         }
         catch (Exception e)
         {
-            Debug.LogError($"Error in SyncPlayerFromServerAsync: {e.Message}");
+            Debug.LogError($"Error in SyncPlayerFromServerAsync: {e.Message}. _dailyScoreKey: {_dailyScoreKey}, _highScoreKey: {_highScoreKey}");
             throw;
         }
     }
@@ -104,6 +104,8 @@ public static class PlayerStats
 
     internal static async Task TrySaveNewDailyScoreAsync()
     {
+        Debug.Log($"TrySaveNewDailyScoreAsync: _isDailyRun: {_isDailyRun}");
+
         if (_isDailyRun)
         {
             await SaveDailyScoreAsync();
@@ -121,6 +123,8 @@ public static class PlayerStats
 
     internal static async Task TrySaveNewHighScoreAsync()
     {
+        Debug.Log($"TrySaveNewHighScoreAsync: _isNewHighScore: {_isNewHighScore}");
+        
         if (_isNewHighScore)
         {
             await SavePlayerHighScoreAsync();
