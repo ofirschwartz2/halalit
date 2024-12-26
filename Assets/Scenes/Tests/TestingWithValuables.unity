@@ -171,16 +171,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 113483074}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 594f9087de197fb40bdc9fe5b7499584, type: 3}
+  m_Script: {fileID: 11500000, guid: 013f4d96ff84f47ed91c37a4827ce89f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _valuableValues:
   - Key: 0
     Value: 10
   - Key: 1
-    Value: 30
+    Value: 20
   - Key: 2
-    Value: 50
+    Value: 30
   scoreText: {fileID: 113483077}
 --- !u!114 &113483077
 MonoBehaviour:
