@@ -10,6 +10,7 @@ namespace Assets.Enums
         PLAYGROUND,
         [Description("MainMenu")]
         MAIN_MENU,
-        
+        [Description("Leaderboard")]
+        LEADERBOARD,
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using UnityEngine;
+using TMPro;
 
 namespace Assets.Utils
 {
@@ -370,6 +371,32 @@ namespace Assets.Utils
             Color color = mat.color;
             color.a = opacity;
             mat.color = color;
+        }
+        #endregion
+
+        #region SceneManipulations
+        public static Transform FindTransformChild(Transform fatherTransaform, string childName)
+        {
+            var transformChild = fatherTransaform.Find(childName);
+            if (transformChild == null)
+            {
+                throw new System.Exception($"{childName} not found.");
+            }
+
+            return transformChild;
+        }
+
+        public static void SetTMProTextOnComponent(Transform parentTransform, string childName, string textValue)
+        {
+            TMPro.TextMeshProUGUI text = parentTransform.Find(childName).GetComponent<TMPro.TextMeshProUGUI>();
+            if (text != null)
+            {
+                text.text = textValue;
+            }
+            else
+            {
+                Debug.LogError($"Text component not found on '{childName}' game object.");
+            }
         }
         #endregion
     }

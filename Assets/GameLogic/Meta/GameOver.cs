@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 [assembly: InternalsVisibleTo("TestsPlayMode")]
 #endif
 
-public class HalalitDeath : MonoBehaviour
+public class GameOver : MonoBehaviour
 {
     #region Init
     private void Awake()
@@ -18,7 +18,7 @@ public class HalalitDeath : MonoBehaviour
 
     private void SetEventListeners()
     {
-        HalalitDeathEvent.HalalitDeath += OnHalalitDeath;
+        GameOverEvent.GameOver += OnGameOver;
     }
     #endregion
 
@@ -30,7 +30,7 @@ public class HalalitDeath : MonoBehaviour
 
     public void DestroyEventListeners()
     {
-        HalalitDeathEvent.HalalitDeath -= OnHalalitDeath;
+        GameOverEvent.GameOver -= OnGameOver;
     }
     #endregion
 
@@ -39,13 +39,13 @@ public class HalalitDeath : MonoBehaviour
     {
         if (!Utils.IsCenterInsideTheWorld(gameObject) && !Utils.IsCenterInExternalSafeIsland(transform.position)) 
         {
-            HalalitDeathEvent.InvokeHalalitDeath(this, new());
+            GameOverEvent.InvokeGameOver(this, new());
         }
     }
     #endregion
 
     #region Enemy destruction
-    private void OnHalalitDeath(object initiator, HalalitDeathEventArguments arguments)
+    private void OnGameOver(object initiator, GameOverEventArguments arguments)
     {
         SceneManager.LoadScene(SceneName.MAIN_MENU.GetDescription());
     }
