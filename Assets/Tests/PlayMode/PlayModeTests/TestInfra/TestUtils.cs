@@ -233,7 +233,17 @@ internal static class TestUtils
     internal static List<KeyValuePair<ValuableName, int>> GetValuableValues() 
     {
         var score = GameObject.FindGameObjectWithTag(Tag.SCORE.GetDescription());
+        if (score == null)
+        {
+            Debug.LogError("Score GameObject not found!");
+            return new List<KeyValuePair<ValuableName, int>>(); // Return an empty list to avoid further errors
+        }
         var scoreScript = score.GetComponent<Score>();
+        if (scoreScript == null)
+        {
+            Debug.LogError("Score component not found on the Score GameObject!");
+            return new List<KeyValuePair<ValuableName, int>>(); // Return an empty list to avoid further errors
+        }
         return scoreScript.GetValuableValues();
     }
 
