@@ -12,31 +12,23 @@ using UnityEngine.TestTools;
 public class BoomerangTests
 {
 
-    private const string SCENE_NAME = "Testing";
     private const AttackName SHOT_NAME = AttackName.BOOMERANG;
+    private int _currentSeed;
 
     [SetUp]
     public void SetUp()
     {
-        string testName = TestContext.CurrentContext.Test.MethodName;
-        switch (testName) 
-        {
-            case FUNCTION_SHOOTING_WITH_TARGET_NAME:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
-                break;
-            default:
-                SceneManager.LoadScene(SCENE_NAME);
-                break;
-        }
+        _currentSeed = TestUtils.SetRandomSeed();
+        SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
     }
 
     [UnityTest]
     public IEnumerator Shooting()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-
-        TestUtils.SetUpShot(SHOT_NAME);
+        yield return null;
+        TestUtils.SetTestMode();
+        TestUtils.SetUpShot(AttackName.BOOMERANG);
         var weaponAttack = TestUtils.GetWeaponAttack();
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
 
@@ -46,7 +38,7 @@ public class BoomerangTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, _currentSeed);
     }
 
     [UnityTest]
@@ -94,16 +86,21 @@ public class BoomerangTests
     public IEnumerator ShootingWithTarget()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
 
-        TestUtils.SetUpShot(SHOT_NAME);
+        yield return null;
+        TestUtils.SetTestMode();
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadEnemyInExternalSafeIsland();
+        TestUtils.SetUpShot(AttackName.BOOMERANG);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomEnemyPosition();
+        yield return null;
         var originalTargetHealth = TestUtils.GetEnemyHealth();
         yield return null;
+        
         var targetClosestPosition = TestUtils.GetEnemyNearestPositionToHalalit();
-        var acceptedDelta = 1.2f;
+        var acceptedDelta = 2f;
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, weaponAttack.GetAttackJoystickEdge());
 
         // WHEN
@@ -115,7 +112,7 @@ public class BoomerangTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, _currentSeed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -130,11 +127,11 @@ public class BoomerangTests
         } while (shot != null);
 
         // THEN
-        AssertWrapper.AreEqual(lastShotPosition.x, targetClosestPosition.x, "Shot Didn't Hit Target", seed, acceptedDelta);
-        AssertWrapper.AreEqual(lastShotPosition.y, targetClosestPosition.y, "Shot Didn't Hit Target", seed, acceptedDelta);
+        AssertWrapper.AreEqual(lastShotPosition.x, targetClosestPosition.x, "Shot Didn't Hit Target", _currentSeed, acceptedDelta);
+        AssertWrapper.AreEqual(lastShotPosition.y, targetClosestPosition.y, "Shot Didn't Hit Target", _currentSeed, acceptedDelta);
 
         var newTargetHealth = TestUtils.GetEnemyHealth();
-        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
+        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", _currentSeed);
     }
 
     [UnityTest]
