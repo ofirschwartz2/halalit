@@ -92,8 +92,6 @@ class EdgeForceFieldsTests
         [ValueSource(nameof(_fullEdgeForceFieldTestInputs))] TestArguments testArguments)
     {   
         // GIVEN
-        //SceneManager.LoadScene(TestUtils.TEST_SCENE_IGNORING_EDGE_FORCE_FIELDS_OBJECTS_NAME);
-
         yield return null;
         TestUtils.SetTestMode();
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();

@@ -10,6 +10,7 @@ using UnityEngine.TestTools;
 public class GrenadeTests
 {
 
+    private int _currentSeed;
     private const AttackName ATTACK_NAME = AttackName.GRENADE;
     private const Tag ATTACK_TAG = Tag.EXPLOSIVE;
     private const Tag BLAST_TAG = Tag.EXPLOSION;
@@ -18,16 +19,8 @@ public class GrenadeTests
     [SetUp]
     public void SetUp()
     {
-        string testName = TestContext.CurrentContext.Test.MethodName;
-        switch (testName) 
-        {
-            case FUNCTION_SHOOTING_WITH_TARGET_NAME:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
-                break;
-            default:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);
-                break;
-        }
+        _currentSeed = TestUtils.SetRandomSeed();
+        SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
     }
 
     [UnityTest]
@@ -35,6 +28,7 @@ public class GrenadeTests
     {
         // GIVEN
         var seed = TestUtils.SetRandomSeed();
+        TestUtils.SetTestMode();
 
         TestUtils.SetUpShot(ATTACK_NAME);
         var weaponAttack = TestUtils.GetWeaponAttack();
@@ -54,10 +48,12 @@ public class GrenadeTests
     {
         // GIVEN
         var seed = TestUtils.SetRandomSeed();
-        
+        TestUtils.SetTestMode();
+
         TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
+
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
         
         // WHEN
@@ -106,9 +102,9 @@ public class GrenadeTests
             blastShockWave = GameObject.FindGameObjectWithTag(SHOCK_WAVE_TAG.GetDescription());
         } while (blast != null || blastShockWave != null);
 
-        AssertWrapper.IsNull(blast, seed);
-        AssertWrapper.IsNull(blastShockWave, seed);
-        AssertWrapper.AreEqual(blastSupposedLifetime, actualLifetime, "Blast Lifetime not as expected", seed, acceptedDelta);
+        AssertWrapper.IsNull(blast, _currentSeed);
+        AssertWrapper.IsNull(blastShockWave, _currentSeed);
+        AssertWrapper.AreEqual(blastSupposedLifetime, actualLifetime, "Blast Lifetime not as expected", _currentSeed, acceptedDelta);
 
     }
 
@@ -117,7 +113,12 @@ public class GrenadeTests
     public IEnumerator ShootingWithTarget()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
+        yield return null;
+        TestUtils.SetTestMode();
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadEnemyInExternalSafeIsland();
+        yield return null;
+
         TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
@@ -136,7 +137,7 @@ public class GrenadeTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, _currentSeed);
 
         // GIVEN
         float timeUntilExplosion = 0;
@@ -153,9 +154,9 @@ public class GrenadeTests
         } while (shot != null);
 
         // THEN
-        AssertWrapper.GreaterOrEqual(timeUntilExplosion, lifeTime, "Exploded Before it should", seed);
+        AssertWrapper.GreaterOrEqual(timeUntilExplosion, lifeTime, "Exploded Before it should", _currentSeed);
         var finalDirection = Utils.GetDirectionVector(weaponMovement.transform.position, finalGrenadePosition);
-        AssertWrapper.AreNotEqual(Utils.Vector2ToDegrees(initialDirection), Utils.Vector2ToDegrees(finalDirection), "Did Not Change Direction", seed);
+        AssertWrapper.AreNotEqual(Utils.Vector2ToDegrees(initialDirection), Utils.Vector2ToDegrees(finalDirection), "Did Not Change Direction", _currentSeed);
 
         // GIVEN
         var blast = GameObject.FindGameObjectWithTag(BLAST_TAG.GetDescription());
@@ -175,20 +176,19 @@ public class GrenadeTests
 
         var finalTargetPosition = TestUtils.GetEnemyPosition();
 
-        AssertWrapper.IsNull(blast, seed);
-        AssertWrapper.IsNull(blastShockWave, seed);
-        AssertWrapper.AreEqual(blastSupposedLifetime, actualLifetime, "Blast Lifetime not as expected", seed, acceptedDelta);
-        AssertWrapper.AreNotEqual(initialTargetPosition.magnitude, finalTargetPosition.magnitude, "Did Not Knockback", seed);
+        AssertWrapper.IsNull(blast, _currentSeed);
+        AssertWrapper.IsNull(blastShockWave, _currentSeed);
+        AssertWrapper.AreEqual(blastSupposedLifetime, actualLifetime, "Blast Lifetime not as expected", _currentSeed, acceptedDelta);
+        AssertWrapper.AreNotEqual(initialTargetPosition.magnitude, finalTargetPosition.magnitude, "Did Not Knockback", _currentSeed);
 
         var newTargetHealth = TestUtils.GetEnemyHealth();
-        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
+        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", _currentSeed);
     }
 
     [UnityTest]
     public IEnumerator ShootingInDirection()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
 
         TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
@@ -205,7 +205,7 @@ public class GrenadeTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, _currentSeed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -219,7 +219,7 @@ public class GrenadeTests
         } while (shot != null);
 
         // THEN
-        AssertWrapper.IsTrue(!TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Finish On Edges", seed);
+        AssertWrapper.IsTrue(!TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Finish On Edges", _currentSeed);
 
         var weaponDirection = Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(weaponMovement.transform.rotation));
         var shotDirection = Utils.Vector2ToDegrees(lastShotPosition);
@@ -228,7 +228,7 @@ public class GrenadeTests
             weaponDirection,
             shotDirection,
             "Weapon vs Shot Direction",
-            seed,
+            _currentSeed,
             acceptedDelta);
 
     }
