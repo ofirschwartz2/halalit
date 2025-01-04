@@ -10,20 +10,19 @@ using UnityEngine.TestTools;
 public class HalalitWeaponTests
 {
 
-    private const string SCENE_NAME = "Testing";
+    private int _currentSeed;
 
     [SetUp]
     public void SetUp()
     {
-        SceneManager.LoadScene(SCENE_NAME);
+        _currentSeed = TestUtils.SetRandomSeed();
+        SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
     }
 
     [UnityTest]
     public IEnumerator JoystickUnderAttackTrigger()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-
         TestUtils.SetUpShot(AttackName.BALL_SHOT);
         var weaponAttack = TestUtils.GetWeaponAttack();
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchUnderAttackTrigger(weaponAttack);
@@ -34,15 +33,13 @@ public class HalalitWeaponTests
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
 
         // THEN
-        AssertWrapper.IsNull(shot, seed);
+        AssertWrapper.IsNull(shot, _currentSeed);
     }
 
     [UnityTest]
     public IEnumerator JoystickOverAttackTriggerShooting()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-
         TestUtils.SetUpShot(AttackName.BALL_SHOT);
         var weaponAttack = TestUtils.GetWeaponAttack();
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
@@ -53,15 +50,13 @@ public class HalalitWeaponTests
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
 
         // THEN
-        AssertWrapper.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, _currentSeed);
     }
 
     [UnityTest]
     public IEnumerator DelayBetweenShotsLargerThanCooldown() 
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-
         float totalTime = 3f;
         float elapsedTime = 0f;
         int shotsCount = 0;
@@ -87,13 +82,13 @@ public class HalalitWeaponTests
                 else if (shots.Length == 2) // 2nd shot fired
                 {
                     // THEN
-                    AssertWrapper.GreaterOrEqual(elapsedTime - firstShotTime, weaponAttack.GetCooldownInterval(), "Delay Under Cooldown", seed);
+                    AssertWrapper.GreaterOrEqual(elapsedTime - firstShotTime, weaponAttack.GetCooldownInterval(), "Delay Under Cooldown", _currentSeed);
                     break;
                 }
                 else
                 {
                     // THEN
-                    AssertWrapper.Fail(">2 Shots Fired", seed);
+                    AssertWrapper.Fail(">2 Shots Fired", _currentSeed);
                 }
             }
 
@@ -106,8 +101,6 @@ public class HalalitWeaponTests
     public IEnumerator JoystickDirectionToWeaponDirection()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-
         var acceptedDelta = 0.1f;
         var weaponMovement = TestUtils.GetWeaponMovement();
 
@@ -127,7 +120,7 @@ public class HalalitWeaponTests
             Utils.Vector2ToDegrees(randomTouchOnAttackJoystick),
             Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(weaponMovement.transform.rotation)),
             "Joystick vs Weapon Direction",
-            seed,
+            _currentSeed,
             acceptedDelta
             );
     }
