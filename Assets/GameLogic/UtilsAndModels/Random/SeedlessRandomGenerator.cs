@@ -17,6 +17,7 @@ namespace Assets.Utils
         }
         #endif
 
+/*
 #if UNITY_EDITOR
         public static void SetTestingExpectedValue(int testingExpectedIntValue)
         {
@@ -30,7 +31,7 @@ namespace Assets.Utils
             _testingExpectedFloatValue = testingExpectedFloatValue;
         }
         #endif
-
+*/
         private static readonly System.Random seedlessRandom = new();
 
         public static int GetNumber()

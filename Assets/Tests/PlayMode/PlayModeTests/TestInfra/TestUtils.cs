@@ -44,7 +44,7 @@ internal static class TestUtils
     public const float DEFAULT_CRITICAL_HIT_1 = 0.5f;
     public const float DEFAULT_CRITICAL_HIT_2 = 1.5f;
     public const int DEFAULT_LUCK_1 = 0;
-    public const int DEFAULT_LUCK_2 = 50;
+    public const int DEFAULT_LUCK_2 = 100;
     public const float DEFAULT_RATE_1 = 2;
     public const float DEFAULT_RATE_2 = 0.5f;
     public const float DEFAULT_WEIGHT = 0;
@@ -52,6 +52,8 @@ internal static class TestUtils
     public static readonly AttackStats DEFAULT_ATTACK_STATS_2 = new(DEFAULT_ITEM_RANK_2, DEFAULT_POWER_2, DEFAULT_CRITICAL_HIT_1, DEFAULT_LUCK_1, DEFAULT_RATE_2, DEFAULT_WEIGHT);
     public static readonly AttackStats DEFAULT_ATTACK_STATS_3 = new(DEFAULT_ITEM_RANK_1, DEFAULT_POWER_2, DEFAULT_CRITICAL_HIT_1, DEFAULT_LUCK_2, DEFAULT_RATE_1, DEFAULT_WEIGHT);
     public static readonly AttackStats DEFAULT_ATTACK_STATS_4 = new(DEFAULT_ITEM_RANK_1, DEFAULT_POWER_2, DEFAULT_CRITICAL_HIT_2, DEFAULT_LUCK_2, DEFAULT_RATE_1, DEFAULT_WEIGHT);
+    public static readonly AttackStats DEFAULT_ATTACK_STATS_5 = new(DEFAULT_ITEM_RANK_1, DEFAULT_POWER_2, DEFAULT_CRITICAL_HIT_1, DEFAULT_LUCK_1, DEFAULT_RATE_1, DEFAULT_WEIGHT);
+    public static readonly AttackStats DEFAULT_ATTACK_STATS_6 = new(DEFAULT_ITEM_RANK_1, DEFAULT_POWER_2, DEFAULT_CRITICAL_HIT_2, DEFAULT_LUCK_1, DEFAULT_RATE_1, DEFAULT_WEIGHT);
     public static readonly Vector2 DEFAULT_POSITION_TO_THE_RIGHT = new(5, 0);
     #endregion
 
@@ -100,8 +102,9 @@ internal static class TestUtils
         TesingWithOneEnemyValidation();
 
         SetRandomGameObjectPosition(
-            GameObject.FindGameObjectWithTag(Tag.ENEMY.GetDescription()), 
-            radiusOfEnemyPositionAroundHalalit);
+            GameObject.FindGameObjectWithTag(
+                Tag.ENEMY.GetDescription()), 
+                radiusOfEnemyPositionAroundHalalit);
     }
 
     internal static void SetRandomAsteroidPosition(float radiusOfAsteroidPositionAroundHalalit = 5)

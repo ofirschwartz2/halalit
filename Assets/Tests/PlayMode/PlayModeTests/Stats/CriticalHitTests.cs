@@ -15,7 +15,8 @@ class CriticalHitTests
     private float _originalTargetHealth;
     private Vector2 _attackJoystickTouch;
 
-    private static readonly AttackStats[] _statsValues = new AttackStats[] { TestUtils.DEFAULT_ATTACK_STATS_3, TestUtils.DEFAULT_ATTACK_STATS_4 };
+    private static readonly AttackStats[] _statsValuesAttackWithSuccessfulCriticalHitTest = new AttackStats[] { TestUtils.DEFAULT_ATTACK_STATS_3, TestUtils.DEFAULT_ATTACK_STATS_4 };
+    private static readonly AttackStats[] _statsValuesAttackWithUnsuccessfulCriticalHitTest = new AttackStats[] { TestUtils.DEFAULT_ATTACK_STATS_5, TestUtils.DEFAULT_ATTACK_STATS_6 };
 
     private void LoadAttackTestData()
     {
@@ -31,20 +32,26 @@ class CriticalHitTests
     [SetUp]
     public void SetUp()
     {
-        SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
-        SeedlessRandomGenerator.SetUseTestingExpectedValue(true);
+        _currentSeed = TestUtils.SetRandomSeed();
+        SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
     }
 
     [UnityTest]
-    public IEnumerator AttackWithSuccessfulCriticalHitTest([ValueSource(nameof(_statsValues))] AttackStats attackStats)
+    public IEnumerator AttackWithSuccessfulCriticalHitTest([ValueSource(nameof(_statsValuesAttackWithSuccessfulCriticalHitTest))] AttackStats attackStatsAttackWithSuccessfulCriticalHitTest)
     {
         // GIVEN
-        SeedlessRandomGenerator.SetTestingExpectedValue(attackStats.Luck - 1);
-        TestUtils.SetUpShot(AttackName.BALL_SHOT, attackStats);
+        yield return null;
+        TestUtils.SetTestMode();
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadEnemyInExternalSafeIsland();
+        TestUtils.SetTargetPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
         yield return null;
 
-        TestUtils.SetTargetPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
         LoadAttackTestData();
+
+        // SeedlessRandomGenerator.SetTestingExpectedValue(attackStats.Luck - 1);
+        TestUtils.SetUpShot(AttackName.BALL_SHOT, attackStatsAttackWithSuccessfulCriticalHitTest);
+        yield return null;
 
         yield return new WaitForSeconds(1f);
 
@@ -66,16 +73,16 @@ class CriticalHitTests
 
         // THEN
         var newTargetHealth = TestUtils.GetEnemyHealth();
-        float expectedDamage = (float) Math.Floor(attackStats.Power * attackStats.CriticalHit);
+        float expectedDamage = (float) Math.Floor(attackStatsAttackWithSuccessfulCriticalHitTest.Power * attackStatsAttackWithSuccessfulCriticalHitTest.CriticalHit);
         AssertWrapper.AreEqual(_originalTargetHealth - expectedDamage, newTargetHealth, "Target Health Didn't drop correctly", _currentSeed);
     }
 
     [UnityTest]
-    public IEnumerator AttackWithUnsuccessfulCriticalHitTest([ValueSource(nameof(_statsValues))] AttackStats attackStats)
+    public IEnumerator AttackWithUnsuccessfulCriticalHitTest([ValueSource(nameof(_statsValuesAttackWithUnsuccessfulCriticalHitTest))] AttackStats attackStatsAttackWithUnsuccessfulCriticalHitTest)
     {
         // GIVEN
-        SeedlessRandomGenerator.SetTestingExpectedValue(attackStats.Luck + 1);
-        TestUtils.SetUpShot(AttackName.BALL_SHOT, attackStats);
+        // SeedlessRandomGenerator.SetTestingExpectedValue(attackStats.Luck + 1);
+        TestUtils.SetUpShot(AttackName.BALL_SHOT, attackStatsAttackWithUnsuccessfulCriticalHitTest);
         yield return null;
 
         TestUtils.SetTargetPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
@@ -101,7 +108,7 @@ class CriticalHitTests
 
         // THEN
         var newTargetHealth = TestUtils.GetEnemyHealth();
-        AssertWrapper.AreEqual(_originalTargetHealth - attackStats.Power, newTargetHealth, "Target Health Didn't drop correctly", _currentSeed);
+        AssertWrapper.AreEqual(_originalTargetHealth - attackStatsAttackWithUnsuccessfulCriticalHitTest.Power, newTargetHealth, "Target Health Didn't drop correctly", _currentSeed);
     }
 
     [TearDown]
