@@ -176,6 +176,9 @@ internal static class TestUtils
 
         _enemiesContainer = GameObject.Find(ENEMIES_CONTAINER_NAME);
         _enemiesContainer.SetActive(false);
+
+        var weaponAttack = GetWeaponAttack();
+        weaponAttack.SetIsTesting(true);
     }
 
     #endregion
