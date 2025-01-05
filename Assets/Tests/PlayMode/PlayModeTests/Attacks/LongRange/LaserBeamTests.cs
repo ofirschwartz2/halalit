@@ -139,8 +139,7 @@ public class LaserBeamTests
         // THEN
         AssertWrapper.AreEqual(lastShotPosition.x, targetNearestPosition.x, "Laser Is Not Touching Target", _currentSeed, acceptedDelta);
         AssertWrapper.AreEqual(lastShotPosition.y, targetNearestPosition.y, "Laser Is Not Touching Target", _currentSeed, acceptedDelta);
-        yield return null;
-        yield return null;
+        yield return new WaitForSeconds(0.5f);
 
         var newTargetHealth = TestUtils.GetEnemyHealth();
         AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", _currentSeed);
