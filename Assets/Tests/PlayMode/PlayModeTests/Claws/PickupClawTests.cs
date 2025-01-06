@@ -10,16 +10,28 @@ using UnityEngine.TestTools;
 
 public class PickupClawTests
 {
+    private int _currentSeed;
+
     [SetUp]
     public void SetUp()
     {
-        SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ONE_ITEM_NAME);
+        _currentSeed = TestUtils.SetRandomSeed();
+        SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
     }
     
     [UnityTest]
     public IEnumerator PressOnNothing()
     {
         // GIVEN
+        TestUtils.SetTestMode();
+        yield return null;
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadItemInExternalSafeIsland();
+        yield return null;
+        var maneuverRadius = TestUtils.GetPickupClawManeuverRadius();
+        TestUtils.SetRandomItemPosition(maneuverRadius - 1);
+        yield return null;
+
         PickupClawShooter pickupClawShooter = TestUtils.GetPickupClawShooter();
         var position = new Vector2(-1, 0);
 
@@ -37,7 +49,15 @@ public class PickupClawTests
     public IEnumerator PressOnJoystick()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
+        TestUtils.SetTestMode();
+        yield return null;
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadItemInExternalSafeIsland();
+        yield return null;
+        var maneuverRadius = TestUtils.GetPickupClawManeuverRadius();
+        TestUtils.SetRandomItemPosition(maneuverRadius - 1);
+        yield return null;
+
         var randJoysticksIndex = TestingRandomGenerator.Range(0, 1);
 
         PickupClawShooter pickupClawShooter = TestUtils.GetPickupClawShooter();
@@ -57,7 +77,7 @@ public class PickupClawTests
 
         // THEN
         var pickupClaw = GameObject.FindGameObjectWithTag(Tag.PICKUP_CLAW.GetDescription());
-        AssertWrapper.IsNull(pickupClaw, seed);
+        AssertWrapper.IsNull(pickupClaw, _currentSeed);
 
     }
 
@@ -65,7 +85,12 @@ public class PickupClawTests
     public IEnumerator PressOnItemInRange()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
+        TestUtils.SetTestMode();
+        yield return null;
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadItemInExternalSafeIsland();
+        yield return null;
+
         var pickupClawShooter = TestUtils.GetPickupClawShooter();
         var maneuverRadius = TestUtils.GetPickupClawManeuverRadius();
         float totalTime = 10f;
@@ -79,10 +104,10 @@ public class PickupClawTests
 
         // THEN
         var pickupClaw = TestUtils.GetPickupClaw();
-        AssertWrapper.IsNotNull(pickupClaw, seed);
+        AssertWrapper.IsNotNull(pickupClaw, _currentSeed);
         var pickupClawStateMachine = TestUtils.GetPickupClawStateMachine(pickupClaw);
         var state = pickupClawStateMachine.GetState();
-        AssertWrapper.AreEqual((int)state, (int)PickupClawState.MOVING_TO_TARGET, "Not MOVING_TO_TARGET", seed);
+        AssertWrapper.AreEqual((int)state, (int)PickupClawState.MOVING_TO_TARGET, "Not MOVING_TO_TARGET", _currentSeed);
 
         // GIVEN
         var item = TestUtils.GetItem();
@@ -93,11 +118,11 @@ public class PickupClawTests
             yield return null;
             state = pickupClawStateMachine.GetState();
             elapsedTime += Time.deltaTime;
-            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in MOVING_TO_TARGET state", seed);
+            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in MOVING_TO_TARGET state", _currentSeed);
         }
 
         // THEN
-        AssertWrapper.AreEqual((int)state, (int)PickupClawState.GRABBING, "Not GRABBING after MOVING_TO_TARGET", seed);
+        AssertWrapper.AreEqual((int)state, (int)PickupClawState.GRABBING, "Not GRABBING after MOVING_TO_TARGET", _currentSeed);
 
         // WHEN
         while (state == PickupClawState.GRABBING)
@@ -105,18 +130,18 @@ public class PickupClawTests
             yield return null;
             state = pickupClawStateMachine.GetState();
             elapsedTime += Time.deltaTime;
-            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in GRABBING state", seed);
+            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in GRABBING state", _currentSeed);
         }
 
         // THEN
-        AssertWrapper.AreEqual((int)state, (int)PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET, "Not RETURNING_TO_HALALIT_WITH_TARGET after GRABBING", seed);
+        AssertWrapper.AreEqual((int)state, (int)PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET, "Not RETURNING_TO_HALALIT_WITH_TARGET after GRABBING", _currentSeed);
 
         // WHEN
         while (item != null)
         {
             yield return null;
             elapsedTime += Time.deltaTime;
-            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in item NOT null", seed);
+            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in item NOT null", _currentSeed);
         }
 
     }
@@ -125,7 +150,12 @@ public class PickupClawTests
     public IEnumerator PressOnItemOutOfRange()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
+        TestUtils.SetTestMode();
+        yield return null;
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadItemInExternalSafeIsland();
+        yield return null;
+
         var pickupClawShooter = TestUtils.GetPickupClawShooter();
         var maneuverRadius = TestUtils.GetPickupClawManeuverRadius();
         float totalTime = 10f;
@@ -140,10 +170,10 @@ public class PickupClawTests
 
         // THEN
         var pickupClaw = TestUtils.GetPickupClaw();
-        AssertWrapper.IsNotNull(pickupClaw, seed);
+        AssertWrapper.IsNotNull(pickupClaw, _currentSeed);
         var pickupClawStateMachine = TestUtils.GetPickupClawStateMachine(pickupClaw);
         var state = pickupClawStateMachine.GetState();
-        AssertWrapper.AreEqual((int)state, (int)PickupClawState.MOVING_TO_TARGET, "Not MOVING_TO_TARGET", seed);
+        AssertWrapper.AreEqual((int)state, (int)PickupClawState.MOVING_TO_TARGET, "Not MOVING_TO_TARGET", _currentSeed);
 
         // GIVEN
         var item = TestUtils.GetItem();
@@ -156,9 +186,9 @@ public class PickupClawTests
             state = pickupClawStateMachine.GetState();
 
             // THEN
-            AssertWrapper.IsNotNull(item, seed);
-            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in pickupClaw NOT null", seed);
-            AssertWrapper.AreNotEqual((int)state, (int)PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET, "Should Not be RETURNING_TO_HALALIT_WITH_TARGET", seed);
+            AssertWrapper.IsNotNull(item, _currentSeed);
+            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in pickupClaw NOT null", _currentSeed);
+            AssertWrapper.AreNotEqual((int)state, (int)PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET, "Should Not be RETURNING_TO_HALALIT_WITH_TARGET", _currentSeed);
         }
 
     }
@@ -167,6 +197,20 @@ public class PickupClawTests
     public IEnumerator PressOnItemInRangeThroughObstacles()
     {
         // GIVEN
+        TestUtils.SetTestMode();
+        yield return null;
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadItemInExternalSafeIsland();
+        objectLoader.LoadAsteroidInExternalSafeIsland(_currentSeed);
+        objectLoader.LoadEnemyInExternalSafeIsland();
+        yield return null;
+        var maneuverRadius = TestUtils.GetPickupClawManeuverRadius();
+        TestUtils.SetItemPosition(new Vector2(maneuverRadius - 1, 0));
+        yield return null;
+        TestUtils.SetAsteroidPosition(new Vector2(1.5f, 0), 0);
+        TestUtils.SetEnemyPosition(new Vector2(3f, 0), 0);
+        yield return null;
+
         var pickupClawShooter = TestUtils.GetPickupClawShooter();
         float totalTime = 10f;
         float elapsedTime = 0f;
@@ -224,10 +268,16 @@ public class PickupClawTests
     public IEnumerator PressOnItemWhenItemOnTheWay()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-        var pickupClawShooter = TestUtils.GetPickupClawShooter();
+        TestUtils.SetTestMode();
+        yield return null;
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadItemInExternalSafeIsland();
+        yield return null;
         var maneuverRadius = TestUtils.GetPickupClawManeuverRadius();
         TestUtils.SetRandomItemPosition(maneuverRadius - 1);
+        yield return null;
+
+        var pickupClawShooter = TestUtils.GetPickupClawShooter();
         float totalTime = 10f;
         float elapsedTime = 0f;
         float farItemMutiplier = 1.2f;
@@ -235,7 +285,7 @@ public class PickupClawTests
         var closeItemPosition = TestUtils.GetItemPosition();
         var farItemPosition = closeItemPosition * farItemMutiplier;
         var itemDropper = TestUtils.GetItemDropper();
-        itemDropper.DropNewItem(ItemName.BALL_SHOT, farItemPosition, Vector2.zero);
+        itemDropper.DropNewItem(ItemName.BALL_SHOT, farItemPosition, Vector2.zero); // TODO: objectLoader.LoadItemInExternalSafeIsland()
         yield return null;
 
         // WHEN
@@ -244,10 +294,10 @@ public class PickupClawTests
 
         // THEN
         var pickupClaw = TestUtils.GetPickupClaw();
-        AssertWrapper.IsNotNull(pickupClaw, seed);
+        AssertWrapper.IsNotNull(pickupClaw, _currentSeed);
         var pickupClawStateMachine = TestUtils.GetPickupClawStateMachine(pickupClaw);
         var state = pickupClawStateMachine.GetState();
-        AssertWrapper.AreEqual((int)state, (int)PickupClawState.MOVING_TO_TARGET, "Not MOVING_TO_TARGET", seed);
+        AssertWrapper.AreEqual((int)state, (int)PickupClawState.MOVING_TO_TARGET, "Not MOVING_TO_TARGET", _currentSeed);
 
         // WHEN
         while (state == PickupClawState.MOVING_TO_TARGET)
@@ -255,11 +305,11 @@ public class PickupClawTests
             yield return null;
             state = pickupClawStateMachine.GetState();
             elapsedTime += Time.deltaTime;
-            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in MOVING_TO_TARGET state", seed);
+            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in MOVING_TO_TARGET state", _currentSeed);
         }
 
         // THEN
-        AssertWrapper.AreEqual((int)state, (int)PickupClawState.GRABBING, "Not GRABBING after MOVING_TO_TARGET", seed);
+        AssertWrapper.AreEqual((int)state, (int)PickupClawState.GRABBING, "Not GRABBING after MOVING_TO_TARGET", _currentSeed);
 
         // WHEN
         while (state == PickupClawState.GRABBING)
@@ -267,35 +317,41 @@ public class PickupClawTests
             yield return null;
             state = pickupClawStateMachine.GetState();
             elapsedTime += Time.deltaTime;
-            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in GRABBING state", seed);
+            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in GRABBING state", _currentSeed);
         }
 
         // THEN
-        AssertWrapper.AreEqual((int)state, (int)PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET, "Not RETURNING_TO_HALALIT_WITH_TARGET after GRABBING", seed);
+        AssertWrapper.AreEqual((int)state, (int)PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET, "Not RETURNING_TO_HALALIT_WITH_TARGET after GRABBING", _currentSeed);
 
         // WHEN
         while (closeItem != null)
         {
             yield return null;
             elapsedTime += Time.deltaTime;
-            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in item NOT null", seed);
+            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in item NOT null", _currentSeed);
         }
 
         var farItem = TestUtils.GetItem();
-        AssertWrapper.AreEqual(farItem.transform.position, farItemPosition, "Far item changed position" , seed);
-        AssertWrapper.IsNotNull(farItem, seed);
+        AssertWrapper.AreEqual(farItem.transform.position, farItemPosition, "Far item changed position" , _currentSeed);
+        AssertWrapper.IsNotNull(farItem, _currentSeed);
     }
 
     [UnityTest]
     public IEnumerator DropItem()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-        var pickupClawShooter = TestUtils.GetPickupClawShooter();
+        TestUtils.SetTestMode();
+        yield return null;
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadItemInExternalSafeIsland();
+        yield return null;
         var maneuverRadius = TestUtils.GetPickupClawManeuverRadius();
+        TestUtils.SetRandomItemPosition(maneuverRadius - 1);
+        yield return null;
+        var pickupClawShooter = TestUtils.GetPickupClawShooter();
+
         float totalTime = 10f;
         float elapsedTime = 0f;
-        TestUtils.SetRandomItemPosition(maneuverRadius - 1);
         yield return null;
 
         // WHEN
@@ -304,10 +360,10 @@ public class PickupClawTests
 
         // THEN
         var pickupClaw = TestUtils.GetPickupClaw();
-        AssertWrapper.IsNotNull(pickupClaw, seed);
+        AssertWrapper.IsNotNull(pickupClaw, _currentSeed);
         var pickupClawStateMachine = TestUtils.GetPickupClawStateMachine(pickupClaw);
         var state = pickupClawStateMachine.GetState();
-        AssertWrapper.AreEqual((int)state, (int)PickupClawState.MOVING_TO_TARGET, "Not MOVING_TO_TARGET", seed);
+        AssertWrapper.AreEqual((int)state, (int)PickupClawState.MOVING_TO_TARGET, "Not MOVING_TO_TARGET", _currentSeed);
 
         // GIVEN
         var item = TestUtils.GetItem();
@@ -320,11 +376,11 @@ public class PickupClawTests
             yield return null;
             state = pickupClawStateMachine.GetState();
             elapsedTime += Time.deltaTime;
-            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in MOVING_TO_TARGET state", seed);
+            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in MOVING_TO_TARGET state", _currentSeed);
         }
 
         // THEN
-        AssertWrapper.AreEqual((int)state, (int)PickupClawState.GRABBING, "Not GRABBING after MOVING_TO_TARGET", seed);
+        AssertWrapper.AreEqual((int)state, (int)PickupClawState.GRABBING, "Not GRABBING after MOVING_TO_TARGET", _currentSeed);
 
         // WHEN
         while (state == PickupClawState.GRABBING)
@@ -332,11 +388,11 @@ public class PickupClawTests
             yield return null;
             state = pickupClawStateMachine.GetState();
             elapsedTime += Time.deltaTime;
-            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in GRABBING state", seed);
+            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in GRABBING state", _currentSeed);
         }
 
         // THEN
-        AssertWrapper.AreEqual((int)state, (int)PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET, "Not RETURNING_TO_HALALIT_WITH_TARGET after GRABBING", seed);
+        AssertWrapper.AreEqual((int)state, (int)PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET, "Not RETURNING_TO_HALALIT_WITH_TARGET after GRABBING", _currentSeed);
 
         // GIVEN
         var halalitMovement = TestUtils.GetHalalitMovement();
@@ -349,19 +405,24 @@ public class PickupClawTests
             elapsedTime += Time.deltaTime;
 
             halalitMovement.TryMove(oppositeVector.x, oppositeVector.y, Time.deltaTime);
-            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in GRABBING state", seed);
+            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in GRABBING state", _currentSeed);
         }
 
         // THEN
-        AssertWrapper.AreEqual((int)state, (int)PickupClawState.RETURNING_TO_HALALIT_WITHOUT_TARGET, "Not RETURNING_TO_HALALIT_WITHOUT_TARGET after RETURNING_TO_HALALIT_WITH_TARGET", seed);
-        AssertWrapper.AreNotEqual(Utils.Vector2ToDegrees(TestUtils.GetItemPosition()), Utils.Vector2ToDegrees(itemPosition), "Item did not changed position" , seed);
+        AssertWrapper.AreEqual((int)state, (int)PickupClawState.RETURNING_TO_HALALIT_WITHOUT_TARGET, "Not RETURNING_TO_HALALIT_WITHOUT_TARGET after RETURNING_TO_HALALIT_WITH_TARGET", _currentSeed);
+        AssertWrapper.AreNotEqual(Utils.Vector2ToDegrees(TestUtils.GetItemPosition()), Utils.Vector2ToDegrees(itemPosition), "Item did not changed position" , _currentSeed);
     }
 
     [UnityTest]
     public IEnumerator SecondPressWhenClawAlive() 
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
+        TestUtils.SetTestMode();
+        yield return null;
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadItemInExternalSafeIsland();
+        yield return null;
+
         var maneuverRadius = TestUtils.GetPickupClawManeuverRadius();
         TestUtils.SetRandomItemPosition(maneuverRadius - 1);
         yield return null;
@@ -378,7 +439,7 @@ public class PickupClawTests
         yield return null;
 
         // THEN
-        AssertWrapper.IsNotNull(TestUtils.GetPickupClaw(), seed, "Claw did not shoot");
+        AssertWrapper.IsNotNull(TestUtils.GetPickupClaw(), _currentSeed, "Claw did not shoot");
 
         // WHEN
         pickupClawShooter.TryShootClaw(secondItemPosition);
@@ -391,11 +452,11 @@ public class PickupClawTests
         }
 
         // THEN
-        AssertWrapper.AreEqual(items[0].transform.position, secondItemPosition, "Second item moved", seed);
+        AssertWrapper.AreEqual(items[0].transform.position, secondItemPosition, "Second item moved", _currentSeed);
         
         yield return new WaitForSeconds(1f);
 
-        AssertWrapper.IsNull(TestUtils.GetPickupClaw(), seed, "Second pickupClaw shot");
+        AssertWrapper.IsNull(TestUtils.GetPickupClaw(), _currentSeed, "Second pickupClaw shot");
     }
 
     [TearDown]

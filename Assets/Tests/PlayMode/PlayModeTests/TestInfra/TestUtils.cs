@@ -91,11 +91,10 @@ internal static class TestUtils
         attackToggle.SetNewAttack(attackName, attackStats ?? DEFAULT_ATTACK_STATS_1);
     }
 
-    internal static void SetTargetPosition(Vector2 targetPosition, int index = 0)
+    internal static void SetEnemyPosition(Vector2 enemyPosition, int index = 0)
     {
         var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
-        Debug.Log(target.Length);
-        target[index].transform.position = targetPosition;
+        target[index].transform.position = enemyPosition;
     }
 
     internal static void SetRandomEnemyPosition(float radiusOfEnemyPositionAroundHalalit = 5)
@@ -106,6 +105,12 @@ internal static class TestUtils
             GameObject.FindGameObjectWithTag(
                 Tag.ENEMY.GetDescription()), 
                 radiusOfEnemyPositionAroundHalalit);
+    }
+
+    internal static void SetAsteroidPosition(Vector2 asteroidPosition, int index = 0)
+    {
+        var target = GameObject.FindGameObjectsWithTag(Tag.ASTEROID.GetDescription());
+        SetGameObjectPosition(target[index], asteroidPosition);
     }
 
     internal static void SetRandomAsteroidPosition(float radiusOfAsteroidPositionAroundHalalit = 5)

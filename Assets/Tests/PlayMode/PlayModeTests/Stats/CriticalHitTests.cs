@@ -44,7 +44,7 @@ class CriticalHitTests
         TestUtils.SetTestMode();
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
         objectLoader.LoadEnemyInExternalSafeIsland();
-        TestUtils.SetTargetPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
+        TestUtils.SetEnemyPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
         yield return null;
 
         LoadAttackTestData();
@@ -85,7 +85,7 @@ class CriticalHitTests
         TestUtils.SetUpShot(AttackName.BALL_SHOT, attackStatsAttackWithUnsuccessfulCriticalHitTest);
         yield return null;
 
-        TestUtils.SetTargetPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
+        TestUtils.SetEnemyPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
         LoadAttackTestData();
 
         yield return new WaitForSeconds(1f);

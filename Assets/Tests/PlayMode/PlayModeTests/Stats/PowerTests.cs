@@ -40,7 +40,7 @@ public class PowerTests
         TestUtils.SetUpShot(AttackName.BALL_SHOT, attackStats);
         yield return null;
 
-        TestUtils.SetTargetPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
+        TestUtils.SetEnemyPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
         LoadAttackTestData();
 
         yield return new WaitForSeconds(1f);
@@ -73,7 +73,7 @@ public class PowerTests
         TestUtils.SetUpShot(AttackName.LASER_BEAM, attackStats);
         yield return null;
 
-        TestUtils.SetTargetPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
+        TestUtils.SetEnemyPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
         LoadAttackTestData();
 
         yield return new WaitForSeconds(1f);

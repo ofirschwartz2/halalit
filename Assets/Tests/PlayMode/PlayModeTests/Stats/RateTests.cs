@@ -79,7 +79,7 @@ public class RateTests
         TestUtils.SetUpShot(AttackName.LASER_BEAM, attackStats);
         yield return null;
 
-        TestUtils.SetTargetPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
+        TestUtils.SetEnemyPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
         LoadAttackTestData();
 
         // WHEN
