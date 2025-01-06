@@ -91,10 +91,11 @@ internal static class TestUtils
         attackToggle.SetNewAttack(attackName, attackStats ?? DEFAULT_ATTACK_STATS_1);
     }
 
-    internal static void SetTargetPosition(Vector2 targetPosition)
+    internal static void SetTargetPosition(Vector2 targetPosition, int index = 0)
     {
         var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
-        target[0].transform.position = targetPosition;
+        Debug.Log(target.Length);
+        target[index].transform.position = targetPosition;
     }
 
     internal static void SetRandomEnemyPosition(float radiusOfEnemyPositionAroundHalalit = 5)
