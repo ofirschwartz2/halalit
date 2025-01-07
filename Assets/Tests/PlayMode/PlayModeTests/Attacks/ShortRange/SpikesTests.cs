@@ -9,28 +9,22 @@ using UnityEngine.TestTools;
 
 public class SpikesTests
 {
-    private const string FUNCTION_STABBING_WITH_TARGET_NAME = "StabbingWithTarget";
+    private int _currentSeed;
+    private const AttackName ATTACK_NAME = AttackName.SPIKES;
+    private const Tag ATTACK_TAG = Tag.SHOT;
 
     [SetUp]
     public void SetUp()
     {
-        string testName = TestContext.CurrentContext.Test.MethodName;
-        switch (testName) 
-        {
-            case FUNCTION_STABBING_WITH_TARGET_NAME:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
-                break;
-            default:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);
-                break;
-        }
+        _currentSeed = TestUtils.SetRandomSeed();
+        SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
     }
 
     [UnityTest]
     public IEnumerator Stabbing()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
+        TestUtils.SetTestMode();
 
         TestUtils.SetUpShot(AttackName.SPIKES);
         var weaponAttack = TestUtils.GetWeaponAttack();
@@ -42,16 +36,19 @@ public class SpikesTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, _currentSeed);
     }
 
     [UnityTest]
     public IEnumerator StabbingWithTarget()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
+        TestUtils.SetTestMode();
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadEnemyInExternalSafeIsland();
+        yield return null;
 
-        TestUtils.SetUpShot(AttackName.SPIKES);
+        TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomEnemyPosition(1.5f);
@@ -68,8 +65,8 @@ public class SpikesTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        var shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
+        AssertWrapper.IsNotNull(shot, _currentSeed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -80,14 +77,14 @@ public class SpikesTests
             lastShotPosition = shot.transform.position;
             yield return null;
 
-            shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+            shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
         } while (shot != null);
 
         // THEN
 
         //TODO: Check target's position
         var newTargetHealth = TestUtils.GetEnemyHealth();
-        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
+        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", _currentSeed);
         AssertWrapper.IsTrue(true, "");
     }
 
@@ -95,9 +92,9 @@ public class SpikesTests
     public IEnumerator StabLifetime()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-
-        TestUtils.SetUpShot(AttackName.SPIKES);
+        TestUtils.SetTestMode();
+        
+        TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         var touchOnJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
@@ -110,8 +107,8 @@ public class SpikesTests
         yield return null;
 
         // THEN
-        var spikes = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.IsNotNull(spikes, seed);
+        var spikes = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
+        AssertWrapper.IsNotNull(spikes, _currentSeed);
 
         // GIVEN
         var oldSpikesPosition = spikes.transform.position + new Vector3(1,1,1);
@@ -157,14 +154,14 @@ public class SpikesTests
             oldSpikesPosition = newSpikesPosition;
             yield return null;
 
-            spikes = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+            spikes = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
         } while (spikes != null);
 
         // THEN
-        AssertWrapper.AreEqual(actualExtractionTime, supposedExtractionTime, "Wrong Extraction Time", seed, acceptedDelta);
-        AssertWrapper.AreEqual(actualWaitingTime, supposedWaitingTime, "Wrong Waiting Time", seed, acceptedDelta);
-        AssertWrapper.AreEqual(actualRetractionTime, supposedRetractionTime, "Wrong Retraction Time", seed, acceptedDelta);
-        AssertWrapper.AreEqual(actualExtractionTime + actualWaitingTime + actualRetractionTime, supposedLifetime, "Wrong Lifetime", seed, acceptedDelta);
+        AssertWrapper.AreEqual(actualExtractionTime, supposedExtractionTime, "Wrong Extraction Time", _currentSeed, acceptedDelta);
+        AssertWrapper.AreEqual(actualWaitingTime, supposedWaitingTime, "Wrong Waiting Time", _currentSeed, acceptedDelta);
+        AssertWrapper.AreEqual(actualRetractionTime, supposedRetractionTime, "Wrong Retraction Time", _currentSeed, acceptedDelta);
+        AssertWrapper.AreEqual(actualExtractionTime + actualWaitingTime + actualRetractionTime, supposedLifetime, "Wrong Lifetime", _currentSeed, acceptedDelta);
 
     }
 
