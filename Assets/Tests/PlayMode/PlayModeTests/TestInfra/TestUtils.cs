@@ -131,13 +131,20 @@ internal static class TestUtils
             radiusOfItemPositionAroundHalalit);
     }
 
-    internal static void SetItemPosition(Vector2 position) 
+    internal static void SetItemPosition(Vector2 position, int index = 0) 
     {
         TesingWithOneItemValidation();
 
         SetGameObjectPosition(
-            GameObject.FindGameObjectWithTag(Tag.ITEM.GetDescription()),
+            GameObject.FindGameObjectsWithTag(Tag.ITEM.GetDescription())[index],
             position);
+    }
+
+    internal static void SetValuablePosition(Vector2 valuablePosition, int index = 0)
+    {
+        SetGameObjectPosition(
+            GameObject.FindGameObjectsWithTag(Tag.VALUABLE.GetDescription())[index],
+            valuablePosition);
     }
 
     private static void SetRandomGameObjectPosition(GameObject gameObject, float radiusOfTargetPositionAroundHalalit)
