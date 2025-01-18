@@ -108,7 +108,7 @@ class AsteroidInteractionsTests
                 objectLoader.MoveHalalitToExternalSafeIsland();
                 break;
             case Tag.ENEMY:
-                objectLoader.LoadEnemyInExternalSafeIsland();
+                objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
                 break;
             case Tag.ITEM:
                 objectLoader.LoadItemInExternalSafeIsland();

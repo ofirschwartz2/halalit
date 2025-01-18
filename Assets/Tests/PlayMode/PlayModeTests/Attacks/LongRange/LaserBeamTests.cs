@@ -104,7 +104,7 @@ public class LaserBeamTests
         var weaponAttack = TestUtils.GetWeaponAttack();
         var acceptedDelta = 0.5f;
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
-        objectLoader.LoadEnemyInExternalSafeIsland();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
         yield return null;
 
         TestUtils.SetRandomEnemyPosition();

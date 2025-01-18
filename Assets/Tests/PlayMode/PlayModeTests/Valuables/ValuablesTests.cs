@@ -11,45 +11,24 @@ using UnityEngine.TestTools;
 public class ValuablesTests
 {
 
+    private int _currentSeed;
+
     [SetUp]
     public void SetUp()
     {
-
-        string testName = TestContext.CurrentContext.Test.MethodName;
-        switch (testName)
-        {
-            case FUNCTION_ENEMY_DROPS_1_OR_0_VALUABLES_NAME:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
-                break;
-
-            case FUNCTION_ENEMY_SOMETIMES_DROPS_VALUABLE_NAME:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_MANY_ENEMIES_FROM_RIGHT_NAME);
-                break;
-                
-            case FUNCTION_ASTEROID_DROPS_1_OR_0_VALUABLES_NAME:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ASTEROID_NAME);
-                break;
-
-            case FUNCTION_ASTEROID_SOMETIMES_DROPS_VALUABLE_NAME:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_MANY_ASTEROIDS_FROM_RIGHT_NAME);
-                break;
-
-            case FUNCTION_VALUABLES_ADD_SCORE_NAME:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_VALUABLES_NAME);
-                break;
-            default:
-                throw new System.Exception("No scene for test: " + testName);
-        }
+        _currentSeed = TestUtils.SetRandomSeed();
+        SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
     }
 
-    private const string FUNCTION_ENEMY_DROPS_1_OR_0_VALUABLES_NAME = "EnemyDrops1Or0Valuables";
     [UnityTest]
     public IEnumerator EnemyDrops1Or0Valuables()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-        TestUtils.SetUpShot(AttackName.BALL_SHOT);
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        var enemy = objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
+        yield return null;
 
+        TestUtils.SetUpShot(AttackName.BALL_SHOT);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomEnemyPosition();
@@ -69,7 +48,7 @@ public class ValuablesTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, _currentSeed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -86,17 +65,40 @@ public class ValuablesTests
         yield return new WaitForSeconds(1);
 
         // THEN
-        AssertWrapper.IsNull(TestUtils.GetEnemy(), seed);
-        AssertWrapper.AreEqual(lastShotPosition.x, targetClosestPosition.x, "Shot Didn't Hit Target", seed, acceptedDelta);
-        AssertWrapper.AreEqual(lastShotPosition.y, targetClosestPosition.y, "Shot Didn't Hit Target", seed, acceptedDelta);
+        AssertWrapper.IsNull(TestUtils.GetEnemy(), _currentSeed);
+        AssertWrapper.AreEqual(lastShotPosition.x, targetClosestPosition.x, "Shot Didn't Hit Target", _currentSeed, acceptedDelta);
+        AssertWrapper.AreEqual(lastShotPosition.y, targetClosestPosition.y, "Shot Didn't Hit Target", _currentSeed, acceptedDelta);
     }
 
-    private const string FUNCTION_ENEMY_SOMETIMES_DROPS_VALUABLE_NAME = "EnemySometimesDropValuable";
     [UnityTest]
     public IEnumerator EnemySometimesDropValuable()
     {
+        
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
+        TestUtils.SetTestMode();
+
+        var numberOfEnemies = 10;
+        var positions = new List<Vector2>();
+        for (int i = 0; i < numberOfEnemies; i++)
+        {
+            positions.Add(new Vector2((i * 1f) + 1f, 0f));
+        }
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        var loadedEnemies = objectLoader.LoadEnemiesInExternalSafeIsland(numberOfEnemies, _currentSeed);
+        yield return null;
+
+        foreach (var enemy in loadedEnemies)
+        {
+            if (enemy == null)
+            {
+                throw new System.Exception("Enemy is null");
+            }
+        }
+
+        for (int i = 0; i < numberOfEnemies; i++)
+        {
+            TestUtils.SetGameObjectPosition(loadedEnemies[i], positions[i]);
+        }
         TestUtils.SetEnemiesHealth(1);
         TestUtils.SetUpShot(AttackName.BALL_SHOT);
         var weaponMovement = TestUtils.GetWeaponMovement();
@@ -120,18 +122,19 @@ public class ValuablesTests
 
         // THEN
         var valuables = TestUtils.GetValuables();
-        AssertWrapper.Greater(valuables.Length, 0, "No Valuables Dropped", seed);
-        AssertWrapper.Greater(originalEnemiesCount, valuables.Length, "All dropped Valuables", seed);
+        AssertWrapper.Greater(valuables.Length, 0, "No Valuables Dropped", _currentSeed);
+        AssertWrapper.Greater(originalEnemiesCount, valuables.Length, "All dropped Valuables", _currentSeed);
     }
 
-    
-    private const string FUNCTION_ASTEROID_DROPS_1_OR_0_VALUABLES_NAME = "AsteroidDrops1Or0Valuables";
     [UnityTest]
     public IEnumerator AsteroidDrops1Or0Valuables() 
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-        //TestUtils.SetAsteroidsSeededNumbers(); // TODO: Fix this
+        TestUtils.SetTestMode();
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadAsteroidInExternalSafeIsland(_currentSeed);
+        yield return null;
+
         TestUtils.SetUpShot(AttackName.BALL_SHOT);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
@@ -152,7 +155,7 @@ public class ValuablesTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, _currentSeed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -169,21 +172,41 @@ public class ValuablesTests
         yield return new WaitForSeconds(1);
 
         // THEN
-        AssertWrapper.IsNull(TestUtils.GetAsteroid(), seed);
-        AssertWrapper.AreEqual(lastShotPosition.x, targetClosestPosition.x, "Shot Didn't Hit Target", seed, acceptedDelta);
-        AssertWrapper.AreEqual(lastShotPosition.y, targetClosestPosition.y, "Shot Didn't Hit Target", seed, acceptedDelta);
+        AssertWrapper.IsNull(TestUtils.GetAsteroid(), _currentSeed);
+        AssertWrapper.AreEqual(lastShotPosition.x, targetClosestPosition.x, "Shot Didn't Hit Target", _currentSeed, acceptedDelta);
+        AssertWrapper.AreEqual(lastShotPosition.y, targetClosestPosition.y, "Shot Didn't Hit Target", _currentSeed, acceptedDelta);
     }
-
-    private const string FUNCTION_ASTEROID_SOMETIMES_DROPS_VALUABLE_NAME = "AsteroidSometimesDropValuable";
     
     [UnityTest]
     public IEnumerator AsteroidSometimesDropValuable() 
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-        TestUtils.SetUpShot(AttackName.BALL_SHOT);
-        //TestUtils.SetAsteroidsSeededNumbers(); // TODO: Fix this
+        var numberOfAsteroids = 10;
+        var positions = new List<Vector2>()
+        {
+            new Vector2(3f, 0f),
+            new Vector2(4f, 0f),
+            new Vector2(5f, 0f),
+            new Vector2(6f, 0f),
+            new Vector2(7f, 0f),
+            new Vector2(8f, 0f),
+            new Vector2(9f, 0f),
+            new Vector2(10f, 0f),
+            new Vector2(11f, 0f),
+            new Vector2(12f, 0f)
+        };
+        TestUtils.SetTestMode();
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        var loadedAsteroids = objectLoader.LoadAsteroidsInExternalSafeIsland(numberOfAsteroids, _currentSeed);
+        yield return null;
+
+        for (int i = 0; i < numberOfAsteroids; i++)
+        {
+            TestUtils.SetGameObjectPosition(loadedAsteroids[i], positions[i]);
+        }
+
         TestUtils.SetAsteroidsHealth(1);
+        TestUtils.SetUpShot(AttackName.BALL_SHOT);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         yield return new WaitForSeconds(1);
@@ -205,16 +228,31 @@ public class ValuablesTests
 
         // THEN
         var valuables = TestUtils.GetValuables();
-        AssertWrapper.Greater(valuables.Length, 0, "No Valuables Dropped", seed);
-        AssertWrapper.Greater(originalAsteroidsCount, valuables.Length, "All dropped Valuables", seed);
+        AssertWrapper.Greater(valuables.Length, 0, "No Valuables Dropped", _currentSeed);
+        AssertWrapper.Greater(originalAsteroidsCount, valuables.Length, "All dropped Valuables", _currentSeed);
     }
     
-
-    private const string FUNCTION_VALUABLES_ADD_SCORE_NAME = "ValuablesAddScore";
     [UnityTest]
     public IEnumerator ValuablesAddScore() 
     {
         // GIVEN
+        var numberOfValuables = 3;
+        var positions = new List<Vector2>()
+        {
+            new Vector2(1f, 0f),
+            new Vector2(2f, 0f),
+            new Vector2(3f, 0f)
+        };
+        TestUtils.SetTestMode();
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        List<GameObject> valuables = objectLoader.LoadValuablesInExternalSafeIsland(numberOfValuables);
+        yield return null;
+
+        for (int i = 0; i < numberOfValuables; i++)
+        {
+            TestUtils.SetGameObjectPosition(valuables[i], positions[i]);
+        }
+
         var halalitMovement = TestUtils.GetHalalitMovement();
         var valuableValues = TestUtils.GetValuableValues();
         var newValuables = TestUtils.GetValuables();
@@ -225,7 +263,8 @@ public class ValuablesTests
         // WHEN
         do
         {
-            halalitMovement.TryMove(Vector2.right.x, Vector2.right.y, Time.deltaTime);
+            var rightVector = Vector2.right;
+            halalitMovement.TryMove(rightVector.x, rightVector.y, Time.deltaTime);
             newValuables = TestUtils.GetValuables();
             if (newValuables.Length < oldValuables.Length) 
             {
@@ -237,9 +276,9 @@ public class ValuablesTests
         } while (newValuables.Length != 0);
 
         // THEN
-        AssertWrapper.AreEqual(scoreHistory[0], valuableValues.Find(valuableValue => valuableValue.Key == ValuableName.SILVER).Value, "Score Not Added Right");
+        AssertWrapper.AreEqual(scoreHistory[0], valuableValues.Find(valuableValue => valuableValue.Key == ValuableName.GOLD).Value, "Score Not Added Right");
         AssertWrapper.AreEqual(scoreHistory[1], scoreHistory[0] + valuableValues.Find(valuableValue => valuableValue.Key == ValuableName.GOLD).Value, "Score Not Added Right");
-        AssertWrapper.AreEqual(scoreHistory[2], scoreHistory[1] + valuableValues.Find(valuableValue => valuableValue.Key == ValuableName.DIAMOND).Value, "Score Not Added Right");
+        AssertWrapper.AreEqual(scoreHistory[2], scoreHistory[1] + valuableValues.Find(valuableValue => valuableValue.Key == ValuableName.GOLD).Value, "Score Not Added Right");
     }
 
     [TearDown]

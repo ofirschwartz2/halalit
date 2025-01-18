@@ -41,7 +41,7 @@ class SpeedLimitTests
         switch (gameObjectTagToPush)
         {
             case Tag.ENEMY:
-                objectLoader.LoadEnemyInExternalSafeIsland();
+                objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
                 yield return null;
                 TestUtils.SetEnemyPosition(TEST_POSITION);
                 break;

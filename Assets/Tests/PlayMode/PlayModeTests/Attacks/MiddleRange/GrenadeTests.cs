@@ -116,7 +116,7 @@ public class GrenadeTests
         yield return null;
         TestUtils.SetTestMode();
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
-        objectLoader.LoadEnemyInExternalSafeIsland();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
         yield return null;
 
         TestUtils.SetUpShot(ATTACK_NAME);

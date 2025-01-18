@@ -45,7 +45,7 @@ public class SpikesTests
         // GIVEN
         TestUtils.SetTestMode();
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
-        objectLoader.LoadEnemyInExternalSafeIsland();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
         yield return null;
 
         TestUtils.SetUpShot(ATTACK_NAME);
@@ -93,7 +93,7 @@ public class SpikesTests
     {
         // GIVEN
         TestUtils.SetTestMode();
-        
+
         TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();

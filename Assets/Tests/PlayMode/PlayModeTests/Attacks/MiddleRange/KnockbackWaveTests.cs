@@ -95,7 +95,7 @@ public class KnockbackWaveTests
         TestUtils.SetTestMode();
         TestUtils.SetUpShot(ATTACK_NAME);
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
-        objectLoader.LoadEnemyInExternalSafeIsland();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomEnemyPosition();
@@ -179,7 +179,7 @@ public class KnockbackWaveTests
         TestUtils.SetTestMode();
         TestUtils.SetUpShot(ATTACK_NAME);
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
-        objectLoader.LoadEnemyInExternalSafeIsland();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
         yield return null;
         TestUtils.SetRandomEnemyPosition();
         yield return null;
@@ -230,7 +230,7 @@ public class KnockbackWaveTests
         yield return null;
         TestUtils.SetTestMode();
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
-        objectLoader.LoadEnemyInExternalSafeIsland();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
         yield return null;
         TestUtils.SetRandomEnemyPosition();
         yield return null;

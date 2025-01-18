@@ -202,7 +202,7 @@ public class PickupClawTests
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
         objectLoader.LoadItemInExternalSafeIsland();
         objectLoader.LoadAsteroidInExternalSafeIsland(_currentSeed);
-        objectLoader.LoadEnemyInExternalSafeIsland();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
         yield return null;
         var maneuverRadius = TestUtils.GetPickupClawManeuverRadius();
         TestUtils.SetItemPosition(new Vector2(maneuverRadius - 1, 0));

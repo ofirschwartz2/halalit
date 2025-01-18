@@ -50,7 +50,7 @@ class ObjectLoaderTests
         yield return null;
 
         // WHEN
-        objectLoader.LoadEnemyInExternalSafeIsland();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
         yield return null;
 
         // THEN
@@ -140,7 +140,7 @@ class ObjectLoaderTests
 
         // WHEN
         Collider2D halalitCollider = objectLoader.MoveHalalitToExternalSafeIsland().GetComponent<Collider2D>();
-        Collider2D loadedEnemyCollider = objectLoader.LoadEnemyInExternalSafeIsland().GetComponent<Collider2D>();
+        Collider2D loadedEnemyCollider = objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed).GetComponent<Collider2D>();
         Collider2D loadedAsteroidCollider = objectLoader.LoadAsteroidInExternalSafeIsland(_currentSeed).GetComponent<Collider2D>();
         Collider2D loadedItemCollider = objectLoader.LoadItemInExternalSafeIsland().GetComponent<Collider2D>(); 
         Collider2D loadedValuableCollider = objectLoader.LoadValuableInExternalSafeIsland().GetComponentInChildren<Collider2D>();

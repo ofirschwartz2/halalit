@@ -97,7 +97,7 @@ public class MirrorBallShotTests
         var weaponAttack = TestUtils.GetWeaponAttack();
 
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
-        objectLoader.LoadEnemyInExternalSafeIsland();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
         yield return null;
 
         TestUtils.SetRandomEnemyPosition();
@@ -156,7 +156,7 @@ public class MirrorBallShotTests
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
-        objectLoader.LoadEnemyInExternalSafeIsland();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
         yield return null;
         TestUtils.SetEnemyPosition(new Vector2(5, 1), 0);
         TestUtils.RotaeEnemy(90);
@@ -217,7 +217,7 @@ public class MirrorBallShotTests
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
         for (int i = 0; i < AMOUNT_OF_BOUNCES_ENEMIES_POSITIONS.Length; i++)
         {
-            objectLoader.LoadEnemyInExternalSafeIsland();
+            objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
             yield return null;
             TestUtils.SetEnemyPosition(AMOUNT_OF_BOUNCES_ENEMIES_POSITIONS[i], i);
         }

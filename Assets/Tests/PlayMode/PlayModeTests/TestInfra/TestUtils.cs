@@ -91,6 +91,7 @@ internal static class TestUtils
         attackToggle.SetNewAttack(attackName, attackStats ?? DEFAULT_ATTACK_STATS_1);
     }
 
+
     internal static void SetEnemyPosition(Vector2 enemyPosition, int index = 0)
     {
         var target = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
@@ -147,14 +148,14 @@ internal static class TestUtils
             valuablePosition);
     }
 
+    internal static void SetGameObjectPosition(GameObject gameObject, Vector2 position) 
+    {
+        gameObject.transform.position = position;
+    }
+
     private static void SetRandomGameObjectPosition(GameObject gameObject, float radiusOfTargetPositionAroundHalalit)
     {
         gameObject.transform.position = Utils.GetRandomVector2OnCircle(radiusOfTargetPositionAroundHalalit);
-    }
-
-    private static void SetGameObjectPosition(GameObject gameObject, Vector2 position) 
-    {
-        gameObject.transform.position = position;
     }
 
     internal static void RotaeEnemy(float degrees) 
