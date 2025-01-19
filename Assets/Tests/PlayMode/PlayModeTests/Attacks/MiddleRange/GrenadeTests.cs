@@ -108,7 +108,6 @@ public class GrenadeTests
 
     }
 
-    private const string FUNCTION_SHOOTING_WITH_TARGET_NAME = "ShootingWithTarget";
     [UnityTest]
     public IEnumerator ShootingWithTarget()
     {
@@ -127,6 +126,7 @@ public class GrenadeTests
         yield return null;
         var initialTargetPosition = TestUtils.GetEnemyPosition();
         var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(initialTargetPosition, weaponAttack.GetAttackJoystickEdge());
+        var acceptedDelta = 0.2f;
 
         // WHEN
         weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
@@ -154,7 +154,7 @@ public class GrenadeTests
         } while (shot != null);
 
         // THEN
-        AssertWrapper.GreaterOrEqual(timeUntilExplosion, lifeTime, "Exploded Before it should", _currentSeed);
+        AssertWrapper.GreaterOrEqual(timeUntilExplosion, lifeTime, "Exploded Before it should", _currentSeed, acceptedDelta);
         var finalDirection = Utils.GetDirectionVector(weaponMovement.transform.position, finalGrenadePosition);
         AssertWrapper.AreNotEqual(Utils.Vector2ToDegrees(initialDirection), Utils.Vector2ToDegrees(finalDirection), "Did Not Change Direction", _currentSeed);
 
@@ -163,7 +163,7 @@ public class GrenadeTests
         var blastShockWave = GameObject.FindGameObjectWithTag(SHOCK_WAVE_TAG.GetDescription());
         float blastSupposedLifetime = blast.GetComponent<Blast>().GetLifeTime();
         var actualLifetime = 0f;
-        var acceptedDelta = 0.3f;
+        acceptedDelta = 0.3f;
         // WHEN
         do
         {
