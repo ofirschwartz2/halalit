@@ -40,16 +40,17 @@ class CriticalHitTests
     public IEnumerator AttackWithSuccessfulCriticalHitTest([ValueSource(nameof(_statsValuesAttackWithSuccessfulCriticalHitTest))] AttackStats attackStatsAttackWithSuccessfulCriticalHitTest)
     {
         // GIVEN
-        yield return null;
         TestUtils.SetTestMode();
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
         objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
         TestUtils.SetEnemyPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
         yield return null;
 
+        TestUtils.SetEnemiesHealth(100);
+        yield return null;
+
         LoadAttackTestData();
 
-        // SeedlessRandomGenerator.SetTestingExpectedValue(attackStats.Luck - 1);
         TestUtils.SetUpShot(AttackName.BALL_SHOT, attackStatsAttackWithSuccessfulCriticalHitTest);
         yield return null;
 
@@ -81,7 +82,13 @@ class CriticalHitTests
     public IEnumerator AttackWithUnsuccessfulCriticalHitTest([ValueSource(nameof(_statsValuesAttackWithUnsuccessfulCriticalHitTest))] AttackStats attackStatsAttackWithUnsuccessfulCriticalHitTest)
     {
         // GIVEN
-        // SeedlessRandomGenerator.SetTestingExpectedValue(attackStats.Luck + 1);
+
+        TestUtils.SetTestMode();
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
+        TestUtils.SetEnemyPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
+        yield return null;
+
         TestUtils.SetUpShot(AttackName.BALL_SHOT, attackStatsAttackWithUnsuccessfulCriticalHitTest);
         yield return null;
 

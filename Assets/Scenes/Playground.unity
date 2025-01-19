@@ -2149,13 +2149,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pushies: 00000000
-  _wallSlowerForceMagnitude: 20
-  _wallPusherForceMagnitude: 1
-  _wallResistanceMultiplier: 1.3
+  _wallSlowerForceMagnitude: 60
+  _wallPusherForceMagnitude: 3
+  _wallResistanceMultiplier: 3.9
   _wallImplsePush: 0
-  _cornerSlowerForceMagnitude: 30
-  _cornerPusherForceMagnitude: 30
-  _cornerResistanceMultiplier: 1
+  _cornerSlowerForceMagnitude: 90
+  _cornerPusherForceMagnitude: 90
+  _cornerResistanceMultiplier: 3
   _cornerImplsePush: 1
   _bottomWallForceField:
     Key: {fileID: 1862005230}

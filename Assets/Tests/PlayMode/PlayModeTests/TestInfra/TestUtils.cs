@@ -14,15 +14,6 @@ internal static class TestUtils
     #region Constants
     // Scenes:
     public const string PLAYGROUND_SCENE_NAME = "Playground";
-    public const string TEST_SCENE_WITH_ENEMY_NAME = "TestingWithEnemy";
-    public const string TEST_SCENE_WITHOUT_TARGET_NAME = "Testing"; 
-    public const string TEST_SCENE_FOR_BOUNCES = "TestingForBounces";
-    public const string TEST_SCENE_WITH_MANY_ENEMIES_FROM_RIGHT_NAME = "TestingWithManyEnemiesFromRight";
-    public const string TEST_SCENE_WITH_ASTEROID_NAME = "TestingWithAsteroid";
-    public const string TEST_SCENE_WITH_MANY_ASTEROIDS_FROM_RIGHT_NAME = "TestingWithManyAsteroidsFromRight";
-    public const string TEST_SCENE_WITH_ONE_ITEM_NAME = "TestingWithOneItem";
-    public const string TEST_SCENE_WITH_VALUABLES_NAME = "TestingWithValuables";
-    public const string TEST_SCENE_IGNORING_EDGE_FORCE_FIELDS_OBJECTS_NAME = "TestingIgnoreEdgeForceFields";
     public const string MAIN_MENU_SCENE_NAME= "MainMenu";
 
     // GameObjects names:
@@ -576,7 +567,7 @@ internal static class TestUtils
         var enemy = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
         if (enemy.Length != 1)
         {
-            throw new System.Exception("There should be only one Enemy in the scene");
+            throw new System.Exception("There should be only one Enemy in the scene. There are " + enemy.Length + " enemies in the scene");
         }
     }
 
@@ -585,7 +576,7 @@ internal static class TestUtils
         var asteroid = GameObject.FindGameObjectsWithTag(Tag.ASTEROID.GetDescription());
         if (asteroid.Length != 1)
         {
-            throw new System.Exception("There should be only one Asteroid in the scene");
+            throw new System.Exception("There should be only one Asteroid in the scene. There are " + asteroid.Length + " asteroids in the scene");
         }
     }
 
@@ -594,7 +585,7 @@ internal static class TestUtils
         var item = GameObject.FindGameObjectsWithTag(Tag.ITEM.GetDescription());
         if (item.Length != 1)
         {
-            throw new System.Exception("There should be only one Item in the scene");
+            throw new System.Exception("There should be only one Item in the scene. There are " + item.Length + " items in the scene");
         }
     }
 
@@ -603,7 +594,7 @@ internal static class TestUtils
         var enemies = GameObject.FindGameObjectsWithTag(Tag.ENEMY.GetDescription());
         if (enemies.Length <= 1)
         {
-            throw new System.Exception("There should be multiple Enemies in the scene");
+            throw new System.Exception("There should be multiple Enemies in the scene. There are " + enemies.Length + " enemies in the scene");
         }
     }
     #endregion

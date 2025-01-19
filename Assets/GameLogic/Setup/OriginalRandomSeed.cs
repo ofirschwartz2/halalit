@@ -17,10 +17,7 @@ public class OriginalRandomSeed : MonoBehaviour
 
         SetAllInitialSeedfulRandomGenerators();
 
-#if UNITY_EDITOR
-        if (SceneManager.GetActiveScene().name.Contains("Testing"))
-#endif
-            SetTestsInitialSeedfulRandomGenerators();
+        SetTestsInitialSeedfulRandomGenerators();
     }
 
     void SetAllInitialSeedfulRandomGenerators()

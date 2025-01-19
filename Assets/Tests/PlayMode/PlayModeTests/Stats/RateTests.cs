@@ -19,14 +19,8 @@ public class RateTests
     [SetUp]
     public void SetUp()
     {
-        string testName = TestContext.CurrentContext.Test.MethodName;
-        if (testName.Contains(AttackShotType.DESCRETE.ToString(), StringComparison.OrdinalIgnoreCase))
-        {
-            SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);
-        }
-        else {
-            SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
-        }
+        _currentSeed = TestUtils.SetRandomSeed();
+        SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
     }
 
     private void LoadAttackTestData()
@@ -36,23 +30,24 @@ public class RateTests
         _weaponMovement = TestUtils.GetWeaponMovement();
         _acceptedDelta = 0.03f;
 
-        string testName = TestContext.CurrentContext.Test.MethodName;
-        if (testName.Contains(AttackShotType.DESCRETE.ToString(), StringComparison.OrdinalIgnoreCase))
-        {
-            _attackJoystickTouch = TestUtils.GetRandomTouchOverAttackTrigger(_weaponAttack.GetAttackJoystickEdge());
-        }
-        else
-        {
-            Vector2 targetClosestPosition = TestUtils.GetEnemyNearestPositionToHalalit();
-            _attackJoystickTouch = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, _weaponAttack.GetAttackJoystickEdge());
-        }
+        Vector2 targetClosestPosition = TestUtils.GetEnemyNearestPositionToHalalit();
+        _attackJoystickTouch = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, _weaponAttack.GetAttackJoystickEdge());
     }
 
     [UnityTest]
     public IEnumerator AttackWithDescreteWeaponTest([ValueSource(nameof(_statsValues))] AttackStats attackStats)
     {
         // GIVEN
+        TestUtils.SetTestMode();
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
+        yield return null;
+
         TestUtils.SetUpShot(AttackName.BALL_SHOT, attackStats);
+        yield return null;
+
+        TestUtils.SetEnemyPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
+        TestUtils.SetEnemiesHealth(100);
         yield return null;
 
         LoadAttackTestData();
@@ -69,17 +64,25 @@ public class RateTests
         float timeBetweenShots = (float)coroutine.Current;
 
         // THEN
-        AssertWrapper.AreEqual(attackStats.Rate, timeBetweenShots, "The time between the shots wasn't as the attack rate", _currentSeed, _acceptedDelta);
+        AssertWrapper.AreEqual(attackStats.Rate * _weaponAttack.GetCooldownInterval(), timeBetweenShots, "The time between the shots wasn't as the attack rate", _currentSeed, _acceptedDelta);
     }
 
     [UnityTest]
     public IEnumerator AttackWithConsecutiveWeaponTest([ValueSource(nameof(_statsValues))] AttackStats attackStats)
     {
         // GIVEN
+        TestUtils.SetTestMode();
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
+        yield return null;
+
         TestUtils.SetUpShot(AttackName.LASER_BEAM, attackStats);
         yield return null;
 
         TestUtils.SetEnemyPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
+        TestUtils.SetEnemiesHealth(100);
+        yield return null;
+
         LoadAttackTestData();
 
         // WHEN

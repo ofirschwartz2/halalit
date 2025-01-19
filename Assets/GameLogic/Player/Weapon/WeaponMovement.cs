@@ -19,10 +19,7 @@ class WeaponMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        #if UNITY_EDITOR
-        if (!SceneManager.GetActiveScene().name.Contains("Testing"))
-        #endif
-            TryChangeWeaponPosition(new Vector2(_attackJoystick.Horizontal, _attackJoystick.Vertical));
+        TryChangeWeaponPosition(new Vector2(_attackJoystick.Horizontal, _attackJoystick.Vertical));
     }
 
 #if UNITY_EDITOR

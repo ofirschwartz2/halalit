@@ -278,6 +278,7 @@ public class Health : MonoBehaviour
     internal void SetHealth(int health)
     {
         _health = health;
+        _currentMaxHealth = health;
     }
 #endif
 }

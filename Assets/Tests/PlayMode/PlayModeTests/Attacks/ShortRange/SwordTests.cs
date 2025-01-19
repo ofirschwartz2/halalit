@@ -42,7 +42,6 @@ public class SwordTests
         AssertWrapper.IsNotNull(shot, _currentSeed);
     }
 
-    private const string FUNCTION_SLASHING_WITH_TARGET_NAME = "SlashingWithTarget";
     [UnityTest]
     public IEnumerator SlashingWithTarget()
     {

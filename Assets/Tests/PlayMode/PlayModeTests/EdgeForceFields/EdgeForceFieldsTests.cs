@@ -74,7 +74,7 @@ class EdgeForceFieldsTests
         }
 
         // THEN
-        AssertWrapper.IsTrue(lastHalalitVelocityBeforeForceField > halalitRigidBody.velocity.magnitude, "force field slower force didn't work", _currentSeed);
+        AssertWrapper.Greater(lastHalalitVelocityBeforeForceField, halalitRigidBody.velocity.magnitude, "force field slower force didn't work", _currentSeed);
 
         // WHEN
         for (int i = 0; i < 100; i++) // stop move for 100 more frames

@@ -23,10 +23,7 @@ public class HalalitMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        #if UNITY_EDITOR
-        if (!SceneManager.GetActiveScene().name.Contains("Testing"))
-        #endif
-            TryMove(_joystick.Horizontal, _joystick.Vertical, Time.deltaTime);
+        TryMove(_joystick.Horizontal, _joystick.Vertical, Time.deltaTime);
 
         SpeedLimiter.LimitSpeed(_rigidBody);
     }

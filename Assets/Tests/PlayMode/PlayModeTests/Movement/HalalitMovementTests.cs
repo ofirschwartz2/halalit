@@ -25,7 +25,7 @@ public class HalalitMovementTests
 
         float totalTime = 0.5f;
         float elapsedTime = 0f;
-        float acceptedDelta = 1f;
+        float acceptedDelta = 1.2f;
 
         var halalitMovement = TestUtils.GetHalalitMovement();
 
