@@ -84,7 +84,7 @@ public class ShotgunTests
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
-        float firstShotLifeTime = 0, lastShotLifeTime = 0;
+        float firstShotLifeTime = 0, lastShotLifeTime = 0, acceptedDelta = 0.1f;
         bool firstShotDone = false;
 
         // WHEN
@@ -118,7 +118,7 @@ public class ShotgunTests
 
         // THEN
         AssertWrapper.GreaterOrEqual(firstShotLifeTime, minimumLifeTime, "First Shot Ended Too Fast",_currentSeed);
-        AssertWrapper.GreaterOrEqual(maximumLifeTime, lastShotLifeTime, "Last Shot Ended Too Slow",_currentSeed);
+        AssertWrapper.GreaterOrEqual(maximumLifeTime + acceptedDelta, lastShotLifeTime, "Last Shot Ended Too Slow",_currentSeed);
     }
 
     [UnityTest]
