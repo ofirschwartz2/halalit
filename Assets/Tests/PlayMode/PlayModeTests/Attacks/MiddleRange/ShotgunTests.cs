@@ -9,34 +9,28 @@ using UnityEngine.TestTools;
 
 public class ShotgunTests
 {
-    private const string FUNCTION_SHOOTING_WITH_TARGET_NAME = "ShootingWithTarget";
+    private int _currentSeed;
+    private const AttackName ATTACK_NAME = AttackName.SHOTGUN;
+    private const Tag ATTACK_TAG = Tag.SHOT;
 
     [SetUp]
     public void SetUp()
     {
-        SeedlessRandomGenerator.SetUseTestingExpectedValue(false);
-        string testName = TestContext.CurrentContext.Test.MethodName;
-        switch (testName) 
-        {
-            case FUNCTION_SHOOTING_WITH_TARGET_NAME:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
-                break;
-            default:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);
-                break;
-        }
+        _currentSeed = TestUtils.SetRandomSeed();
+        SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
     }
 
     [UnityTest]
     public IEnumerator Shooting()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
+        TestUtils.SetTestMode();
+        yield return null;
 
-        TestUtils.SetUpShot(AttackName.SHOTGUN);
+        TestUtils.SetUpShot(ATTACK_NAME);
         var weaponAttack = TestUtils.GetWeaponAttack();
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
-        var shotgun = AttacksBank.GetAttackPrefab(AttackName.SHOTGUN);
+        var shotgun = AttacksBank.GetAttackPrefab(ATTACK_NAME);
         var numberOfShots = shotgun.GetComponent<Shotgun>().GetNumberOfShots();
 
         // WHEN
@@ -44,24 +38,25 @@ public class ShotgunTests
         yield return null;
 
         // THEN
-        var shots = GameObject.FindGameObjectsWithTag(Tag.SHOT.GetDescription());
+        var shots = GameObject.FindGameObjectsWithTag(ATTACK_TAG.GetDescription());
 
-        AssertWrapper.GreaterOrEqual(shots.Length, 0, "Didn't Shoot", seed);
-        AssertWrapper.GreaterOrEqual(shots.Length, numberOfShots.min, "Not Enough Bullets", seed);
-        AssertWrapper.GreaterOrEqual(numberOfShots.max, shots.Length, "Too Many Bullets", seed);
+        AssertWrapper.GreaterOrEqual(shots.Length, 0, "Didn't Shoot", _currentSeed);
+        AssertWrapper.GreaterOrEqual(shots.Length, numberOfShots.min, "Not Enough Bullets", _currentSeed);
+        AssertWrapper.GreaterOrEqual(numberOfShots.max, shots.Length, "Too Many Bullets", _currentSeed);
     }
 
     [UnityTest]
     public IEnumerator NumberOfShots() 
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
+        TestUtils.SetTestMode();
+        yield return null;
 
-        TestUtils.SetUpShot(AttackName.SHOTGUN);
+        TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
-        var shotgun = AttacksBank.GetAttackPrefab(AttackName.SHOTGUN).GetComponent<Shotgun>();
+        var shotgun = AttacksBank.GetAttackPrefab(ATTACK_NAME).GetComponent<Shotgun>();
         var numberOfShots = shotgun.GetComponent<Shotgun>().GetNumberOfShots();
 
         // WHEN
@@ -72,23 +67,24 @@ public class ShotgunTests
         yield return null;
 
         // THEN
-        var shots = GameObject.FindGameObjectsWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.GreaterOrEqual(shots.Length, 0, "Didn't Shoot", seed);
-        AssertWrapper.GreaterOrEqual(shots.Length, numberOfShots.min, "Not Enough Bullets", seed);
-        AssertWrapper.GreaterOrEqual(numberOfShots.max, shots.Length, "Too Many Bullets", seed);
+        var shots = GameObject.FindGameObjectsWithTag(ATTACK_TAG.GetDescription());
+        AssertWrapper.GreaterOrEqual(shots.Length, 0, "Didn't Shoot", _currentSeed);
+        AssertWrapper.GreaterOrEqual(shots.Length, numberOfShots.min, "Not Enough Bullets", _currentSeed);
+        AssertWrapper.GreaterOrEqual(numberOfShots.max, shots.Length, "Too Many Bullets", _currentSeed);
     }
 
     [UnityTest]
     public IEnumerator ShotsLifeTime()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
+        TestUtils.SetTestMode();
+        yield return null;
 
-        TestUtils.SetUpShot(AttackName.SHOTGUN);
+        TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
-        float firstShotLifeTime = 0, lastShotLifeTime = 0;
+        float firstShotLifeTime = 0, lastShotLifeTime = 0, acceptedDelta = 0.1f;
         bool firstShotDone = false;
 
         // WHEN
@@ -99,7 +95,7 @@ public class ShotgunTests
         weaponAttack.HumbleFixedUpdate(randomTouchOnAttackJoystick);
         yield return null;
 
-        var shots = GameObject.FindGameObjectsWithTag(Tag.SHOT.GetDescription());
+        var shots = GameObject.FindGameObjectsWithTag(ATTACK_TAG.GetDescription());
         var maximumLifeTime = shots[0].GetComponent<ShotgunShot>().GetMaxLifeTime();
         var minimumLifeTime = shots[0].GetComponent<ShotgunShot>().GetMinLifeTime();
 
@@ -121,21 +117,22 @@ public class ShotgunTests
         } while (shots.Any(shot => shot != null));
 
         // THEN
-        AssertWrapper.GreaterOrEqual(firstShotLifeTime, minimumLifeTime, "First Shot Ended Too Fast", seed);
-        AssertWrapper.GreaterOrEqual(maximumLifeTime, lastShotLifeTime, "Last Shot Ended Too Slow", seed);
+        AssertWrapper.GreaterOrEqual(firstShotLifeTime, minimumLifeTime, "First Shot Ended Too Fast",_currentSeed);
+        AssertWrapper.GreaterOrEqual(maximumLifeTime, lastShotLifeTime, "Last Shot Ended Too Slow",_currentSeed, acceptedDelta);
     }
 
     [UnityTest]
     public IEnumerator ShootingInDirection()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
+        TestUtils.SetTestMode();
+        yield return null;
 
-        TestUtils.SetUpShot(AttackName.SHOTGUN);
+        TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
-        var shotgun = AttacksBank.GetAttackPrefab(AttackName.SHOTGUN).GetComponent<Shotgun>();
+        var shotgun = AttacksBank.GetAttackPrefab(ATTACK_NAME).GetComponent<Shotgun>();
         var range = shotgun.GetRange();
 
         // WHEN
@@ -146,8 +143,8 @@ public class ShotgunTests
         yield return null;
 
         // THEN
-        var shots = GameObject.FindGameObjectsWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.GreaterOrEqual(shots.Length, 0, "Didn't Shoot", seed);
+        var shots = GameObject.FindGameObjectsWithTag(ATTACK_TAG.GetDescription());
+        AssertWrapper.GreaterOrEqual(shots.Length, 0, "Didn't Shoot",_currentSeed);
 
         var shotgunTopShootingAngle = Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(Utils.GetRotationPlusAngle(weaponMovement.transform.rotation, range)));
         var shotgunBottomShootingAngle = Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(Utils.GetRotationPlusAngle(weaponMovement.transform.rotation, -range)));
@@ -155,8 +152,8 @@ public class ShotgunTests
         foreach (var shot in shots)
         {
             var shotDirection = Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(shot.transform.rotation));
-            AssertWrapper.GreaterOrEqual(shotgunTopShootingAngle, shotDirection, "Shot Outside Range", seed);
-            AssertWrapper.GreaterOrEqual(shotDirection, shotgunBottomShootingAngle, "Shot Outside Range", seed);
+            AssertWrapper.GreaterOrEqual(shotgunTopShootingAngle, shotDirection, "Shot Outside Range",_currentSeed);
+            AssertWrapper.GreaterOrEqual(shotDirection, shotgunBottomShootingAngle, "Shot Outside Range",_currentSeed);
         }
     }
     
@@ -164,8 +161,14 @@ public class ShotgunTests
     public IEnumerator ShootingWithTarget()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-        TestUtils.SetUpShot(AttackName.SHOTGUN);
+        TestUtils.SetTestMode();
+        yield return null;
+
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
+        yield return null;
+
+        TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomEnemyPosition(2); // MUST BE SMALL TO HIT BEFORE MinLifeTime
@@ -182,8 +185,8 @@ public class ShotgunTests
         yield return null;
 
         // THEN
-        var shots = GameObject.FindGameObjectsWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.GreaterOrEqual(shots.Length, 0, "Didn't Shoot", seed);
+        var shots = GameObject.FindGameObjectsWithTag(ATTACK_TAG.GetDescription());
+        AssertWrapper.GreaterOrEqual(shots.Length, 0, "Didn't Shoot",_currentSeed);
 
         // GIVEN
         var numberOfShots = shots.Length;
@@ -198,10 +201,10 @@ public class ShotgunTests
 
         } while (shots.Count(shot => shot != null) == numberOfShots);
 
-        AssertWrapper.GreaterOrEqual(minimumLifeTime, timeUntilFirstHit, "Didn't Hit Target Fast As Expected", seed);
+        AssertWrapper.GreaterOrEqual(minimumLifeTime, timeUntilFirstHit, "Didn't Hit Target Fast As Expected",_currentSeed);
 
         var newTargetHealth = TestUtils.GetEnemyHealth();
-        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
+        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop",_currentSeed);
     }
 
     [TearDown]

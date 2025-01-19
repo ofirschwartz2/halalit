@@ -34,7 +34,7 @@ public class LameEnemy : MonoBehaviour
         _direction = EnemyUtils.GetAnotherDirectionFromEdge(_rigidBody, edgeTag);
     }
 
-    public void Stop()
+    public void StopMovement()
     {
         _rigidBody.velocity = Vector3.zero;
         _movementAmplitude = 0;

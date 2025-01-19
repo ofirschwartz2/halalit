@@ -15,6 +15,7 @@ class EdgeForceFieldsTests
     public void SetUp()
     {
         _currentSeed = TestUtils.SetRandomSeed();
+        SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
     }
 
     public struct TestArguments
@@ -44,8 +45,9 @@ class EdgeForceFieldsTests
     public IEnumerator FullEdgeForceFieldHalalitTest([ValueSource(nameof(_fullEdgeForceFieldTestInputs))] TestArguments testArguments)
     {
         // GIVEN
-        SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);
         yield return null;
+        TestUtils.SetTestMode();
+
         var halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
         var halalitCollider = halalit.GetComponent<Collider2D>();
         var halalitMovement = halalit.GetComponent<HalalitMovement>();
@@ -72,7 +74,7 @@ class EdgeForceFieldsTests
         }
 
         // THEN
-        AssertWrapper.IsTrue(lastHalalitVelocityBeforeForceField > halalitRigidBody.velocity.magnitude, "force field slower force didn't work", _currentSeed);
+        AssertWrapper.Greater(lastHalalitVelocityBeforeForceField, halalitRigidBody.velocity.magnitude, "force field slower force didn't work", _currentSeed);
 
         // WHEN
         for (int i = 0; i < 100; i++) // stop move for 100 more frames
@@ -90,16 +92,32 @@ class EdgeForceFieldsTests
         [ValueSource(nameof(_fullEdgeForceFieldTestInputs))] TestArguments testArguments)
     {   
         // GIVEN
-        SceneManager.LoadScene(TestUtils.TEST_SCENE_IGNORING_EDGE_FORCE_FIELDS_OBJECTS_NAME);
         yield return null;
+        TestUtils.SetTestMode();
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+
+        switch (gameObjectTag)
+        {
+            case Tag.ENEMY:
+                objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
+                break;
+            case Tag.ITEM:
+                objectLoader.LoadItemInExternalSafeIsland();
+                break;
+            case Tag.VALUABLE:
+                objectLoader.LoadValuableInExternalSafeIsland();
+                break;
+        }
+
         var gameObject = GameObject.FindGameObjectWithTag(gameObjectTag.GetDescription()); 
         var gameObjectCollider = gameObject.GetComponent<Collider2D>();
         var gameObjectRigidBody = gameObject.GetComponent<Rigidbody2D>();
+        gameObjectRigidBody.drag = 0f;
         var forceFieldCollider = GameObject.Find(testArguments.ForceFieldName).GetComponent<Collider2D>();
         var lastGameObjectVelocityBeforeForceField = 0f;
         var gameObjectInForceField = false;
 
-        gameObject.transform.position = Vector2.zero;
+        gameObject.transform.position = new Vector2(3f, 3f);
 
         // WHEN
         gameObjectRigidBody.velocity = new Vector2(testArguments.XMovement, testArguments.YMovement) * 10;

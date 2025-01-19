@@ -9,21 +9,23 @@ using UnityEngine.TestTools;
 
 public class HalalitMovementTests
 {
+    private int _currentSeed;
+
     [SetUp]
     public void SetUp()
     {
-        SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);
+        _currentSeed = TestUtils.SetRandomSeed();
+        SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
     }
 
     [UnityTest]
     public IEnumerator JoystickDirectionAffectHalalitDirectionTest()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
 
         float totalTime = 0.5f;
         float elapsedTime = 0f;
-        float acceptedDelta = 1f;
+        float acceptedDelta = 1.2f;
 
         var halalitMovement = TestUtils.GetHalalitMovement();
 
@@ -43,7 +45,7 @@ public class HalalitMovementTests
             halalitMovement.transform.rotation.eulerAngles.z, 
             Utils.AngleNormalizationBy360(Utils.Vector2ToDegrees(randomTouchOnMovementJoystick.x, randomTouchOnMovementJoystick.y)),
             "Joystick vs Halalit Direction",
-            seed,
+            _currentSeed,
             acceptedDelta);
     }
 

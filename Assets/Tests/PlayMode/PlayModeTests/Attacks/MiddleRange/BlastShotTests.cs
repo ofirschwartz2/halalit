@@ -111,7 +111,7 @@ public class BlastShotTests
         yield return null;
         TestUtils.SetTestMode();
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
-        objectLoader.LoadEnemyInExternalSafeIsland();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
         yield return null;
         TestUtils.SetUpShot(AttackName.BLAST_SHOT);
         var weaponMovement = TestUtils.GetWeaponMovement();

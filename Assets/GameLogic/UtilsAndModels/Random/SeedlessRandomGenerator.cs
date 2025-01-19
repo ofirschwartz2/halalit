@@ -17,26 +17,12 @@ namespace Assets.Utils
         }
         #endif
 
-#if UNITY_EDITOR
-        public static void SetTestingExpectedValue(int testingExpectedIntValue)
-        {
-            _testingExpectedIntValue = testingExpectedIntValue;
-        }
-        #endif
-
-        #if UNITY_EDITOR
-        public static void SetTestingExpectedValue(float testingExpectedFloatValue)
-        {
-            _testingExpectedFloatValue = testingExpectedFloatValue;
-        }
-        #endif
-
         private static readonly System.Random seedlessRandom = new();
 
         public static int GetNumber()
         {
             #if UNITY_EDITOR
-            if (SceneManager.GetActiveScene().name.Contains("Testing") && _useTestingExpectedValue)
+            if (_useTestingExpectedValue)
             {
                 return _testingExpectedIntValue;
             }
@@ -48,7 +34,7 @@ namespace Assets.Utils
         public static int Range(int from, int to)
         {
             #if UNITY_EDITOR
-            if (SceneManager.GetActiveScene().name.Contains("Testing") && _useTestingExpectedValue)
+            if (_useTestingExpectedValue)
             {
                 return _testingExpectedIntValue;
             }
@@ -60,7 +46,7 @@ namespace Assets.Utils
         public static float Range(float from, float to)
         {
             #if UNITY_EDITOR
-            if (SceneManager.GetActiveScene().name.Contains("Testing") && _useTestingExpectedValue)
+            if (_useTestingExpectedValue)
             {
                 return _testingExpectedFloatValue;
             }
@@ -73,7 +59,7 @@ namespace Assets.Utils
         public static float RangeZeroToOne()
         {
             #if UNITY_EDITOR
-            if (SceneManager.GetActiveScene().name.Contains("Testing") && _useTestingExpectedValue)
+            if (_useTestingExpectedValue)
             {
                 return _testingExpectedFloatValue;
             }

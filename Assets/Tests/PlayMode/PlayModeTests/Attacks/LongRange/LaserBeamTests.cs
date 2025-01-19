@@ -9,32 +9,21 @@ using UnityEngine.TestTools;
 
 public class LaserBeamTests
 {
-    private const string SCENE_NAME = "Testing";
-    private const string SCENE_WITH_NEMY_NAME = "TestingWithEnemy";
-    private const AttackName SHOT_NAME = AttackName.LASER_BEAM;
+    private int _currentSeed;
+    private const AttackName ATTACK_NAME = AttackName.LASER_BEAM;
 
     [SetUp]
     public void SetUp()
     {
-        string testName = TestContext.CurrentContext.Test.MethodName;
-        switch (testName) 
-        {
-            case FUNCTION_SHOOTING_WITH_TARGET_NAME:
-                SceneManager.LoadScene(SCENE_WITH_NEMY_NAME);
-                break;
-            default:
-                SceneManager.LoadScene(SCENE_NAME);
-                break;
-        }
+        _currentSeed = TestUtils.SetRandomSeed();
+        SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
     }
     
     [UnityTest]
     public IEnumerator Shooting()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-
-        TestUtils.SetUpShot(SHOT_NAME);
+        TestUtils.SetUpShot(ATTACK_NAME);
         var weaponAttack = TestUtils.GetWeaponAttack();
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
 
@@ -44,17 +33,17 @@ public class LaserBeamTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, _currentSeed);
     }
 
     [UnityTest]
     public IEnumerator ShootingWithoutTarget()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed(1683092413);
-        
+        yield return null;
+        TestUtils.SetTestMode();            
         float shootingTime = 3f;
-        TestUtils.SetUpShot(SHOT_NAME);
+        TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
@@ -76,9 +65,9 @@ public class LaserBeamTests
         var startOfLaser = shot.GetComponent<LineRenderer>().GetPosition(0);
 
         // THEN
-        AssertWrapper.IsNotNull(shot, seed);
-        AssertWrapper.AreEqual(startOfLaser.x, weaponAttack.transform.position.x, "Laser Not Starting from Weapon", seed);
-        AssertWrapper.AreEqual(startOfLaser.y, weaponAttack.transform.position.y, "Laser Not Starting from Weapon", seed);
+        AssertWrapper.IsNotNull(shot, _currentSeed);
+        AssertWrapper.AreEqual(startOfLaser.x, weaponAttack.transform.position.x, "Laser Not Starting from Weapon", _currentSeed);
+        AssertWrapper.AreEqual(startOfLaser.y, weaponAttack.transform.position.y, "Laser Not Starting from Weapon", _currentSeed);
 
         // GIVEN
         Vector2 endOfLaser;
@@ -97,7 +86,7 @@ public class LaserBeamTests
         } while (shot != null);
 
         // THEN
-        AssertWrapper.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(endOfLaser), "Laser Not Ending on Edges", seed);
+        AssertWrapper.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(endOfLaser), "Laser Not Ending on Edges", _currentSeed);
 
     }
 
@@ -106,12 +95,17 @@ public class LaserBeamTests
     public IEnumerator ShootingWithTarget()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
+        yield return null;
+        TestUtils.SetTestMode();
+        
 
-        TestUtils.SetUpShot(SHOT_NAME);
+        TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         var acceptedDelta = 0.5f;
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
+        yield return null;
 
         TestUtils.SetRandomEnemyPosition();
         var originalTargetHealth = TestUtils.GetEnemyHealth();
@@ -122,14 +116,12 @@ public class LaserBeamTests
 
         // WHEN
         weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
-        yield return null;
-
         weaponAttack.HumbleFixedUpdate(touchOnJoystick);
         yield return null;
-
+        
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, _currentSeed);
 
         // GIVEN
         Vector2 lastShotPosition, newLastShotPosition;
@@ -145,26 +137,24 @@ public class LaserBeamTests
         } while (newLastShotPosition != lastShotPosition);
 
         // THEN
-        AssertWrapper.AreEqual(lastShotPosition.x, targetNearestPosition.x, "Laser Is Not Touching Target", seed, acceptedDelta);
-        AssertWrapper.AreEqual(lastShotPosition.y, targetNearestPosition.y, "Laser Is Not Touching Target", seed, acceptedDelta);
-        yield return null;
+        AssertWrapper.AreEqual(lastShotPosition.x, targetNearestPosition.x, "Laser Is Not Touching Target", _currentSeed, acceptedDelta);
+        AssertWrapper.AreEqual(lastShotPosition.y, targetNearestPosition.y, "Laser Is Not Touching Target", _currentSeed, acceptedDelta);
+        yield return new WaitForSeconds(0.5f);
 
         var newTargetHealth = TestUtils.GetEnemyHealth();
-        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
+        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", _currentSeed);
     }
 
     [UnityTest]
     public IEnumerator ShootingInDirection()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-
         var acceptedDelta = 0.01f;
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         var touchOnJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
 
-        TestUtils.SetUpShot(SHOT_NAME);
+        TestUtils.SetUpShot(ATTACK_NAME);
         yield return null;
 
 
@@ -180,7 +170,7 @@ public class LaserBeamTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, _currentSeed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -195,7 +185,7 @@ public class LaserBeamTests
         } while (shot != null);
 
         // THEN
-        AssertWrapper.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Laser Not Ending on Edges", seed);
+        AssertWrapper.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Laser Not Ending on Edges", _currentSeed);
 
         var weaponDirection = Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(weaponMovement.transform.rotation));
         var laserDirection = Utils.Vector2ToDegrees(lastShotPosition);
@@ -204,7 +194,7 @@ public class LaserBeamTests
             weaponDirection,
             laserDirection,
             "Weapon vs Laser Direction",
-            seed,
+            _currentSeed,
             acceptedDelta);
 
     }

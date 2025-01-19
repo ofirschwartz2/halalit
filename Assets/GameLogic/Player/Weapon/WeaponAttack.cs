@@ -29,7 +29,7 @@ class WeaponAttack : MonoBehaviour
     private Dictionary<ItemName, Action<Dictionary<EventProperty, float>>> _upgradeActions;
     private float _cooldownTime;
     private ConsecutiveAttack _consecutiveAttack;
-    private bool _shootingConsecutivaly;
+    private bool _shootingConsecutivaly, _isTesting;
 
     #region Init
     private void Awake()
@@ -55,6 +55,7 @@ class WeaponAttack : MonoBehaviour
     {
         _attackToggle = gameObject.GetComponentInParent<AttackToggle>();
         _cooldownTime = 0;
+        _isTesting = false;
     }
     #endregion
 
@@ -73,10 +74,12 @@ class WeaponAttack : MonoBehaviour
     #region Logic
     void FixedUpdate()
     {
+        
         #if UNITY_EDITOR
-        if (!SceneManager.GetActiveScene().name.Contains("Testing"))
+        if (!_isTesting) // In testing mode, we don't want to DOUBLE update
         #endif
             HumbleFixedUpdate(new Vector2(_attackJoystick.Vertical, _attackJoystick.Horizontal));
+            
     }
 
 #if UNITY_EDITOR
@@ -237,6 +240,11 @@ class WeaponAttack : MonoBehaviour
     internal float GetCooldownInterval()
     {
         return _cooldownMultiplier;
+    }
+
+    internal void SetIsTesting(bool isTesting)
+    {
+        _isTesting = isTesting;
     }
 #endif
 }

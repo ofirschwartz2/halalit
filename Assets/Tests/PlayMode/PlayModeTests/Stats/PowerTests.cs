@@ -19,7 +19,8 @@ public class PowerTests
     [SetUp]
     public void SetUp()
     {
-        SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
+        _currentSeed = TestUtils.SetRandomSeed();
+        SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
     }
 
     private void LoadAttackTestData()
@@ -37,10 +38,18 @@ public class PowerTests
     public IEnumerator AttackWithDescreteWeaponTest([ValueSource(nameof(_statsValues))] AttackStats attackStats)
     {
         // GIVEN
+        TestUtils.SetTestMode();
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
+        yield return null;
+
         TestUtils.SetUpShot(AttackName.BALL_SHOT, attackStats);
         yield return null;
 
-        TestUtils.SetTargetPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
+        TestUtils.SetEnemiesHealth(100);
+        TestUtils.SetEnemyPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
+        yield return null;
+
         LoadAttackTestData();
 
         yield return new WaitForSeconds(1f);
@@ -70,10 +79,18 @@ public class PowerTests
     public IEnumerator AttackWithConsecutiveWeaponTest([ValueSource(nameof(_consecutiveHitsCountsValues))] int consecutiveHitsCount, [ValueSource(nameof(_statsValues))] AttackStats attackStats)
     {
         // GIVEN
+        TestUtils.SetTestMode();
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
+        yield return null;
+
         TestUtils.SetUpShot(AttackName.LASER_BEAM, attackStats);
         yield return null;
 
-        TestUtils.SetTargetPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
+        TestUtils.SetEnemiesHealth(100);
+        TestUtils.SetEnemyPosition(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
+        yield return null;
+
         LoadAttackTestData();
 
         yield return new WaitForSeconds(1f);

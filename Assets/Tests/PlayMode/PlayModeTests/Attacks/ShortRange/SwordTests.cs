@@ -12,30 +12,24 @@ using UnityEngine.TestTools;
 public class SwordTests
 {
 
-    private const AttackName SHOT_NAME = AttackName.SWORD;
+    private int _currentSeed;
+    private const AttackName ATTACK_NAME = AttackName.SWORD;
+    private const Tag ATTACK_TAG = Tag.SHOT;
 
     [SetUp]
     public void SetUp()
     {
-        string testName = TestContext.CurrentContext.Test.MethodName;
-        switch (testName) 
-        {
-            case FUNCTION_SLASHING_WITH_TARGET_NAME:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
-                break;
-            default:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);
-                break;
-        }
+        _currentSeed = TestUtils.SetRandomSeed();
+        SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
     }
 
     [UnityTest]
     public IEnumerator Slashing()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
+        TestUtils.SetTestMode();
+        TestUtils.SetUpShot(ATTACK_NAME);
 
-        TestUtils.SetUpShot(SHOT_NAME);
         var weaponAttack = TestUtils.GetWeaponAttack();
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
         
@@ -44,18 +38,21 @@ public class SwordTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        var shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
+        AssertWrapper.IsNotNull(shot, _currentSeed);
     }
 
-    private const string FUNCTION_SLASHING_WITH_TARGET_NAME = "SlashingWithTarget";
     [UnityTest]
     public IEnumerator SlashingWithTarget()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
+        TestUtils.SetTestMode();
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
+        yield return null;
 
-        TestUtils.SetUpShot(SHOT_NAME);
+        TestUtils.SetUpShot(ATTACK_NAME);
+
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         TestUtils.SetRandomEnemyPosition(1.5f);
@@ -72,8 +69,8 @@ public class SwordTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        var shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
+        AssertWrapper.IsNotNull(shot, _currentSeed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -84,14 +81,14 @@ public class SwordTests
             lastShotPosition = shot.transform.position;
             yield return null;
 
-            shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+            shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
         } while (shot != null);
 
         // THEN
 
         //TODO: Check target's position
         var newTargetHealth = TestUtils.GetEnemyHealth();
-        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
+        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", _currentSeed);
         AssertWrapper.IsTrue(true, "");
     }
 
@@ -99,9 +96,8 @@ public class SwordTests
     public IEnumerator SlashLifetime()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-
-        TestUtils.SetUpShot(SHOT_NAME);
+        TestUtils.SetTestMode();
+        TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         var acceptedDelta = 0.5f;
@@ -115,8 +111,8 @@ public class SwordTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        var shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
+        AssertWrapper.IsNotNull(shot, _currentSeed);
 
         // GIVEN
         float supposedLifetime = shot.GetComponent<Sword>().GetAttacktime();
@@ -127,11 +123,11 @@ public class SwordTests
         {
             actualShotTime += Time.deltaTime;
             yield return null;
-            shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+            shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
         } while (shot != null);
 
         // THEN
-        AssertWrapper.AreEqual(supposedLifetime, actualShotTime, "Sword Lifetime Not As Expected", seed, acceptedDelta);
+        AssertWrapper.AreEqual(supposedLifetime, actualShotTime, "Sword Lifetime Not As Expected", _currentSeed, acceptedDelta);
 
     }
 
@@ -139,9 +135,8 @@ public class SwordTests
     public IEnumerator SlashRotationRange()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-
-        TestUtils.SetUpShot(SHOT_NAME);
+        TestUtils.SetTestMode();
+        TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         var acceptedDelta = 0.5f;
@@ -155,8 +150,8 @@ public class SwordTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        var shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
+        AssertWrapper.IsNotNull(shot, _currentSeed);
 
         // GIVEN
         var swordRotationRange = shot.GetComponent<Sword>().GetSwordRotationRange();
@@ -170,14 +165,14 @@ public class SwordTests
         {
             actualToRotation = Utils.GetRotationAsVector2(shot.transform.rotation);
             yield return null;
-            shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+            shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
         } while (shot != null);
 
         // THEN
-        AssertWrapper.AreEqual(supposedFromRotation.x, actualFromRotation.x, "Sword From Rotation Not As Expected", seed, acceptedDelta);
-        AssertWrapper.AreEqual(supposedFromRotation.y, actualFromRotation.y, "Sword From Rotation Not As Expected", seed, acceptedDelta);
-        AssertWrapper.AreEqual(supposedToRotation.x, actualToRotation.x, "Sword To Rotation Not As Expected", seed, acceptedDelta);
-        AssertWrapper.AreEqual(supposedToRotation.y, actualToRotation.y, "Sword To Rotation Not As Expected", seed, acceptedDelta);
+        AssertWrapper.AreEqual(supposedFromRotation.x, actualFromRotation.x, "Sword From Rotation Not As Expected", _currentSeed, acceptedDelta);
+        AssertWrapper.AreEqual(supposedFromRotation.y, actualFromRotation.y, "Sword From Rotation Not As Expected", _currentSeed, acceptedDelta);
+        AssertWrapper.AreEqual(supposedToRotation.x, actualToRotation.x, "Sword To Rotation Not As Expected", _currentSeed, acceptedDelta);
+        AssertWrapper.AreEqual(supposedToRotation.y, actualToRotation.y, "Sword To Rotation Not As Expected", _currentSeed, acceptedDelta);
 
     }
 

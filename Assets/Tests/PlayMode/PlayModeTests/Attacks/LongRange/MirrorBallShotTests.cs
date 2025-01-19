@@ -9,36 +9,35 @@ using UnityEngine.TestTools;
 
 public class MirrorBallShotTests
 {
-    private const string FUNCTION_AMOUNT_OF_BOUNCES_CHECK_NAME = "AmountOfBouncesCheck";
-    private const string FUNCTION_SHOOTING_WITH_TARGET_NAME = "ShootingWithTarget";
-    private const string FUNCTION_BOUNCE_DIRECTION_CHECK_NAME = "BounceDirectionCheck";
+    private int _currentSeed;
+    private const AttackName ATTACK_NAME = AttackName.MIRROR_BALL_SHOT;
+    private const Tag ATTACK_TAG = Tag.SHOT;
+
+    private static readonly Vector2[] AMOUNT_OF_BOUNCES_ENEMIES_POSITIONS = new Vector2[]
+    {
+        new Vector2(-2.66f, 1.29f),
+        new Vector2(4.23f, 2.56f),
+        new Vector2(-2.57f, 3.6f),
+        new Vector2(4.19f, 5.37f),
+        new Vector2(-2.62f, 5.86f),
+        new Vector2(4.5f, -0.11f)
+    };
 
     [SetUp]
     public void SetUp()
     {
-        string testName = TestContext.CurrentContext.Test.MethodName;
-        switch (testName) 
-        {
-            case FUNCTION_SHOOTING_WITH_TARGET_NAME:
-            case FUNCTION_BOUNCE_DIRECTION_CHECK_NAME:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITH_ENEMY_NAME);
-                break;
-            case FUNCTION_AMOUNT_OF_BOUNCES_CHECK_NAME:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_FOR_BOUNCES);
-                break;
-            default:
-                SceneManager.LoadScene(TestUtils.TEST_SCENE_WITHOUT_TARGET_NAME);
-                break;
-        }
+        _currentSeed = TestUtils.SetRandomSeed();
+        SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
     }
 
     [UnityTest]
     public IEnumerator Shooting()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
+        TestUtils.SetTestMode();
+        
+        TestUtils.SetUpShot(ATTACK_NAME);
 
-        TestUtils.SetUpShot(AttackName.MIRROR_BALL_SHOT);
         var weaponAttack = TestUtils.GetWeaponAttack();
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
 
@@ -47,17 +46,16 @@ public class MirrorBallShotTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        var shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
+        AssertWrapper.IsNotNull(shot, _currentSeed);
     }
 
     [UnityTest]
     public IEnumerator ShootingWithoutTarget()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-        
-        TestUtils.SetUpShot(AttackName.MIRROR_BALL_SHOT);
+        TestUtils.SetTestMode();
+        TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         var randomTouchOnAttackJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
@@ -70,8 +68,8 @@ public class MirrorBallShotTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        var shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
+        AssertWrapper.IsNotNull(shot, _currentSeed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -81,11 +79,11 @@ public class MirrorBallShotTests
             lastShotPosition = shot.transform.position;
             yield return null;
 
-            shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+            shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
         } while (shot != null);
 
         // THEN
-        AssertWrapper.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges", seed);
+        AssertWrapper.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges", _currentSeed);
 
     }
 
@@ -93,11 +91,15 @@ public class MirrorBallShotTests
     public IEnumerator ShootingWithTarget()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-
-        TestUtils.SetUpShot(AttackName.MIRROR_BALL_SHOT);
+        TestUtils.SetTestMode();
+        TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
+
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
+        yield return null;
+
         TestUtils.SetRandomEnemyPosition();
         var originalTargetHealth = TestUtils.GetEnemyHealth();
         yield return null;
@@ -112,8 +114,8 @@ public class MirrorBallShotTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        var shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
+        AssertWrapper.IsNotNull(shot, _currentSeed);
 
         // GIVEN
         Vector2 lastShotPosition = Vector2.zero, thisShotPosition = Vector2.zero;
@@ -132,30 +134,35 @@ public class MirrorBallShotTests
             {
                 startShotDirection = Utils.GetDirectionVector(lastShotPosition, thisShotPosition);
             }
-            shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+            shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
         } while (shot != null);
 
         // THEN
         endShotDirection = Utils.GetDirectionVector(lastShotPosition, thisShotPosition);
-        AssertWrapper.AreNotEqual(startShotDirection.x, endShotDirection.x, "Didn't Change Direction", seed);
-        AssertWrapper.AreNotEqual(startShotDirection.y, endShotDirection.y, "Didn't Change Direction", seed);
-        AssertWrapper.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges", seed);
+        AssertWrapper.AreNotEqual(startShotDirection.x, endShotDirection.x, "Didn't Change Direction", _currentSeed);
+        AssertWrapper.AreNotEqual(startShotDirection.y, endShotDirection.y, "Didn't Change Direction", _currentSeed);
+        AssertWrapper.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges", _currentSeed);
         
         var newTargetHealth = TestUtils.GetEnemyHealth();
-        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", seed);
+        AssertWrapper.Greater(originalTargetHealth, newTargetHealth, "Target Health Didn't drop", _currentSeed);
     }
   
     [UnityTest]
     public IEnumerator BounceDirectionCheck()
     {
         // GIVEN
-        TestUtils.SetUpShot(AttackName.MIRROR_BALL_SHOT);
+        TestUtils.SetTestMode();
+        TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
+        yield return null;
+        TestUtils.SetEnemyPosition(new Vector2(5, 1), 0);
         TestUtils.RotaeEnemy(90);
         yield return null;
 
-        var touchOnJoystick = new Vector2(1f, 0.2f);
+        var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(TestUtils.GetEnemyPosition(), weaponAttack.GetAttackJoystickEdge());
 
         // WHEN
         weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
@@ -165,7 +172,7 @@ public class MirrorBallShotTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+        var shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
         AssertWrapper.IsNotNull(shot);
 
         // GIVEN
@@ -187,7 +194,7 @@ public class MirrorBallShotTests
             {
                 startShotDirection = Utils.GetDirectionVector(lastShotPosition, thisShotPosition);
             }
-            shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+            shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
         } while (shot != null);
 
         // THEN
@@ -201,12 +208,22 @@ public class MirrorBallShotTests
     public IEnumerator AmountOfBouncesCheck()
     {
         // GIVEN
-        TestUtils.SetUpShot(AttackName.MIRROR_BALL_SHOT);
+        TestUtils.SetTestMode();
+        TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
-        var originalTargetsHealth = TestUtils.GetAllEnemiesHealth().First();
         int actualNumberOfHits = 0;
         var touchOnJoystick = Vector2.right;
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        for (int i = 0; i < AMOUNT_OF_BOUNCES_ENEMIES_POSITIONS.Length; i++)
+        {
+            objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
+            yield return null;
+            TestUtils.SetEnemyPosition(AMOUNT_OF_BOUNCES_ENEMIES_POSITIONS[i], i);
+        }
+        yield return null;
+
+        var originalTargetsHealth = TestUtils.GetAllEnemiesHealth().First();
 
         // WHEN
         weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
@@ -216,7 +233,7 @@ public class MirrorBallShotTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+        var shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
         AssertWrapper.IsNotNull(shot);
 
         // GIVEN
@@ -226,7 +243,7 @@ public class MirrorBallShotTests
         do
         {
             yield return null;
-            shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+            shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
         } while (shot != null);
 
         // THEN
@@ -247,9 +264,8 @@ public class MirrorBallShotTests
     public IEnumerator ShootingInDirection()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
-
-        TestUtils.SetUpShot(AttackName.MIRROR_BALL_SHOT);
+        TestUtils.SetTestMode();
+        TestUtils.SetUpShot(ATTACK_NAME);
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         var acceptedDelta = 0.01f;
@@ -263,8 +279,8 @@ public class MirrorBallShotTests
         yield return null;
 
         // THEN
-        var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        var shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
+        AssertWrapper.IsNotNull(shot, _currentSeed);
 
         // GIVEN
         Vector2 lastShotPosition;
@@ -274,11 +290,11 @@ public class MirrorBallShotTests
         {
             lastShotPosition = shot.transform.position;
             yield return null;
-            shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
+            shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
         } while (shot != null);
 
         // THEN
-        AssertWrapper.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges", seed);
+        AssertWrapper.IsTrue(TestUtils.IsSomewhereOnInternalWorldEdges(lastShotPosition), "Didn't Finish On Edges", _currentSeed);
 
         var weaponDirection = Utils.Vector2ToDegrees(Utils.GetRotationAsVector2(weaponMovement.transform.rotation));
         var shotDirection = Utils.Vector2ToDegrees(lastShotPosition);
@@ -287,7 +303,7 @@ public class MirrorBallShotTests
             weaponDirection,
             shotDirection,
             "Weapon vs Shot Direction",
-            seed,
+            _currentSeed,
             acceptedDelta);
     }
 

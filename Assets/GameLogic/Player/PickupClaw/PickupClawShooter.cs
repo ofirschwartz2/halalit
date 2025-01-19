@@ -31,14 +31,11 @@ public class PickupClawShooter : MonoBehaviour
     {
         var isMounseButtonDown = Input.GetMouseButtonDown(0);
 
-#if UNITY_EDITOR
-        if (!SceneManager.GetActiveScene().name.Contains("Testing"))
-#endif
-            if (isMounseButtonDown)
-            {
-                var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                TryShootClaw(mousePosition);
-            }
+        if (isMounseButtonDown)
+        {
+            var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            TryShootClaw(mousePosition);
+        }
     }
 
 #if UNITY_EDITOR

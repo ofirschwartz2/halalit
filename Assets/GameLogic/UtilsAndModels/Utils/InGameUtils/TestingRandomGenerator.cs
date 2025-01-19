@@ -18,7 +18,6 @@ namespace Assets.Utils
 
             seedfullRandom = new System.Random(GetNumber());
 
-            Debug.Log("Seed set to " + seedfullRandom.GetHashCode());
         }
 
         public static int GetNumber(bool fromSeed = false)

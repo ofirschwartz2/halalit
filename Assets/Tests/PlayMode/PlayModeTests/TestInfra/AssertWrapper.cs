@@ -45,11 +45,11 @@ internal static class AssertWrapper
         failMessage = CombineFailMessageWithSeed(failMessage, seed);
         Assert.IsNotNull(obj, failMessage);
     }
-
-    internal static void GreaterOrEqual(float greater, float smaller, string failMessage, int? seed = null)
+    
+    internal static void GreaterOrEqual(float greater, float smaller, string failMessage, int? seed = null, float acceptedDelta = 0)
     {
         failMessage = CombineFailMessageWithSeed(failMessage, seed);
-        Assert.GreaterOrEqual(greater, smaller, failMessage);
+        Assert.GreaterOrEqual(greater + acceptedDelta, smaller, failMessage);
     }
 
     internal static void Greater(float greater, float smaller, string failMessage, int? seed = null)

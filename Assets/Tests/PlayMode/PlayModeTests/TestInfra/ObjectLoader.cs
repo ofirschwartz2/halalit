@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
+
 
 internal class ObjectLoader : MonoBehaviour
 {
@@ -14,8 +16,11 @@ internal class ObjectLoader : MonoBehaviour
     private GameObject _itemBasePrefab;
     [SerializeField]
     private GameObject _valuableBasePrefab;
+
     [SerializeField]
     private float _loadedObjectsDistance;
+    private System.Random _random;
+
 
     public GameObject MoveHalalitToExternalSafeIsland()
     {
@@ -26,20 +31,58 @@ internal class ObjectLoader : MonoBehaviour
         return _halalit;
     }
 
-    public GameObject LoadEnemyInExternalSafeIsland()
+    public List<GameObject> LoadEnemiesInExternalSafeIsland(int enemiesCount, int seed)
     {
+        InitializeRandomIfNeeded(seed);
+
+        List<GameObject> loadedEnemies = new List<GameObject>();
+        for (int i = 0; i < enemiesCount; i++)
+        {
+            var enemy = LoadEnemyInExternalSafeIsland(_random.Next());
+            if (enemy == null)
+            {
+                throw new System.Exception("Enemy is null");
+            }
+            loadedEnemies.Add(enemy);
+        }
+        return loadedEnemies;
+    }
+    
+    public GameObject LoadEnemyInExternalSafeIsland(int seed)
+    {
+        InitializeRandomIfNeeded(seed);
+
         Vector2 externalSafeIslandFreeLoadPosition = GetExternalSafeIslandFreeLoadPosition(_enemyBasePrefab);
         GameObject loadedEnemy = Instantiate(_enemyBasePrefab, externalSafeIslandFreeLoadPosition, Quaternion.identity, _externalSafeIsland.transform);
-        loadedEnemy.GetComponent<LameEnemy>().Stop();
-
+        loadedEnemy.GetComponent<EnemySharedBehavior>().SetInitialSeedfulRandomGenerator(_random.Next());
+        loadedEnemy.GetComponent<LameEnemy>().StopMovement();
         return loadedEnemy;
+    }
+
+    public List<GameObject> LoadAsteroidsInExternalSafeIsland(int asteroidsCount, int seed)
+    {
+        InitializeRandomIfNeeded(seed);
+
+        List<GameObject> loadedAsteroids = new List<GameObject>();
+        for (int i = 0; i < asteroidsCount; i++)
+        {
+            var asteroid = LoadAsteroidInExternalSafeIsland(_random.Next());
+            if (asteroid == null)
+            {
+                throw new System.Exception("Asteroid is null");
+            }
+            loadedAsteroids.Add(asteroid);
+        }
+        return loadedAsteroids;
     }
 
     public GameObject LoadAsteroidInExternalSafeIsland(int seed)
     {
+        InitializeRandomIfNeeded(seed);
+
         Vector2 externalSafeIslandFreeLoadPosition = GetExternalSafeIslandFreeLoadPosition(_asteroidPrefab);
         GameObject loadedAsteroid = Instantiate(_asteroidPrefab, externalSafeIslandFreeLoadPosition, Quaternion.identity, _externalSafeIsland.transform);
-        loadedAsteroid.GetComponent<AsteroidSharedBehavior>().SetInitialSeedfulRandomGenerator(seed);
+        loadedAsteroid.GetComponent<AsteroidSharedBehavior>().SetInitialSeedfulRandomGenerator(_random.Next());
         loadedAsteroid.GetComponent<AsteroidMovement>().SetSpeed(0);
         loadedAsteroid.GetComponent<AsteroidMovement>().SetDirection(Vector2.zero);
 
@@ -53,6 +96,16 @@ internal class ObjectLoader : MonoBehaviour
         loadedItem.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
         return loadedItem;
+    }
+
+    public List<GameObject> LoadValuablesInExternalSafeIsland(int valuablesCount)
+    {
+        List<GameObject> loadedValuables = new List<GameObject>();
+        for (int i = 0; i < valuablesCount; i++)
+        {
+            loadedValuables.Add(LoadValuableInExternalSafeIsland());
+        }
+        return loadedValuables;
     }
 
     public GameObject LoadValuableInExternalSafeIsland()
@@ -99,6 +152,14 @@ internal class ObjectLoader : MonoBehaviour
         {
             Bounds externalSafeIslandBounds = _externalSafeIsland.GetComponent<BoxCollider2D>().bounds;
             return new(externalSafeIslandBounds.center.x, externalSafeIslandBounds.max.y);
+        }
+    }
+
+    private void InitializeRandomIfNeeded(int seed)
+    {
+        if (_random == null)
+        {
+            _random = new System.Random(seed);
         }
     }
     #endregion
