@@ -5,6 +5,7 @@
         #region Items
         PLAYER_UPGRADE_PICKUP,
         PLAYER_ATTACK_ITEM_PICKUP,
+        PLAYER_UTILITY_PICKUP,
         NEW_ITEM_DROP,
         NO_STOCK,
         #endregion
