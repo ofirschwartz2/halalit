@@ -1,4 +1,5 @@
 using Assets.Utils;
+using Assets.Models;
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -8,7 +9,7 @@ using UnityEngine.SceneManagement;
 [assembly: InternalsVisibleTo("TestsPlayMode")]
 #endif
 
-public class HalalitMovement : MonoBehaviour
+public class HalalitMovement : MonoBehaviour, ISpeedForceController
 {
     [SerializeField]
     private Rigidbody2D _rigidBody;

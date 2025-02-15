@@ -3331,6 +3331,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 355f999edf2c3496ab14367b8f0ca889, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nitroConfiguration:
+    duration: 10
+    speedMultiplier: 2
+    forceMultiplier: 2
 --- !u!1 &1409987982
 GameObject:
   m_ObjectHideFlags: 0
