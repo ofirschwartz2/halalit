@@ -3,12 +3,15 @@ using Assets.Models;
 using Assets.Utils;
 using Items.Factory;
 using Items.Utility;
+using Meta.UI;
 using UnityEngine;
 
 namespace Assets.Player
 {
     public class UtilityManager : MonoBehaviour
     {
+        [SerializeField] private UtilityButton utilityButton;
+
         private UtilityFactory _utilityFactory;
         private IUtility _currentUtility;
         private GameObject _halalit;
@@ -19,6 +22,15 @@ namespace Assets.Player
             _utilityFactory = new UtilityFactory();
             SetEventListeners();
             TryInitializeHalalitReference();
+
+            if (utilityButton != null)
+            {
+                utilityButton.AddClickListener(OnUtilityButtonClicked);
+            }
+            else
+            {
+                Debug.LogError("UtilityManager: UtilityButton reference is missing!");
+            }
         }
 
         private bool TryInitializeHalalitReference()
@@ -50,6 +62,11 @@ namespace Assets.Player
             {
                 _currentUtility.Deactivate();
             }
+
+            if (utilityButton != null)
+            {
+                utilityButton.RemoveClickListener(OnUtilityButtonClicked);
+            }
         }
 
         private void DestroyEventListeners()
@@ -62,22 +79,16 @@ namespace Assets.Player
             if (_currentUtility?.IsActive == true && _currentUtility is NitroUtility nitro && nitro.ShouldDeactivate())
             {
                 _currentUtility.Deactivate();
+                utilityButton.ClearUtility();
             }
+        }
 
-            if (Input.GetKeyDown(KeyCode.U))
+        private void OnUtilityButtonClicked()
+        {
+            if (_currentUtility != null && _currentUtility.CanActivate() && TryInitializeHalalitReference())
             {
-                Debug.Log("UtilityManager: U key pressed");
-                if (_currentUtility != null && _currentUtility.CanActivate())
-                {
-                    if (TryInitializeHalalitReference())
-                    {
-                        _currentUtility.Activate(_halalit);
-                    }
-                }
-                else
-                {
-                    Debug.Log("UtilityManager: No utility to activate or utility is already active");
-                }
+                _currentUtility.Activate(_halalit);
+                utilityButton.ClearUtility();
             }
         }
 
@@ -95,12 +106,26 @@ namespace Assets.Player
                 }
                 
                 _currentUtility = newUtility;
+                UpdateUtilityButtonText(arguments.Name);
                 Debug.Log($"UtilityManager: Stored new utility of type {arguments.Name}");
             }
             catch (System.ArgumentException e)
             {
                 Debug.LogError($"UtilityManager: {e.Message}");
             }
+        }
+
+        private void UpdateUtilityButtonText(ItemName utilityName)
+        {
+            if (utilityButton == null) return;
+
+            string buttonText = utilityName switch
+            {
+                ItemName.NITRO_FUEL => "NF",
+                _ => "??"
+            };
+
+            utilityButton.SetUtilityText(buttonText);
         }
     }
 } 
