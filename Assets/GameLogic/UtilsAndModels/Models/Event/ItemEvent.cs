@@ -9,12 +9,14 @@ public class ItemEvent : MonoBehaviour
 
     public static event EventHandler<ItemEventArguments> PlayerUpgradePickUp;
     public static event EventHandler<ItemEventArguments> PlayerAttackItemPickUp;
+    public static event EventHandler<ItemEventArguments> PlayerUtilityPickUp;
 
     void Start()
     {
         _itemEvents = new();
         _itemEvents.Add(EventName.PLAYER_UPGRADE_PICKUP, PlayerUpgradePickUp);
         _itemEvents.Add(EventName.PLAYER_ATTACK_ITEM_PICKUP, PlayerAttackItemPickUp);
+        _itemEvents.Add(EventName.PLAYER_UTILITY_PICKUP, PlayerUtilityPickUp);
     }
 
     public static void Invoke(EventName eventName, object initiator, ItemEventArguments itemEventArguments)

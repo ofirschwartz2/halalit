@@ -21,15 +21,19 @@ public class ItemsBank : SeedfulRandomGeneratorUser
     #region Init
     void Start()
     {
+        Debug.Log("ItemsBank: Starting initialization");
         GenerateStock();
         InitAllItems();
     }
 
     private void GenerateStock()
     {
+        Debug.Log($"ItemsBank: Generating stock for {_attacks.Count} attacks, {_upgrades.Count} upgrades, {_utilities.Count} utilities");
+        
         foreach (ItemStockDto attackItemStockDto in _attacks)
         {
             var stock = _seedfulRandomGenerator.Range(attackItemStockDto.MinimumInitialStock, attackItemStockDto.MaxStock + 1);
+            Debug.Log($"ItemsBank: Generating {stock} stock for attack {attackItemStockDto.ItemName} (Min: {attackItemStockDto.MinimumInitialStock}, Max: {attackItemStockDto.MaxStock})");
 
             for (int i = 0; i < stock; i++)
             {
@@ -40,6 +44,7 @@ public class ItemsBank : SeedfulRandomGeneratorUser
         foreach (ItemStockDto upgradeItemStockDto in _upgrades)
         {
             var stock = _seedfulRandomGenerator.Range(upgradeItemStockDto.MinimumInitialStock, upgradeItemStockDto.MaxStock + 1);
+            Debug.Log($"ItemsBank: Generating {stock} stock for upgrade {upgradeItemStockDto.ItemName} (Min: {upgradeItemStockDto.MinimumInitialStock}, Max: {upgradeItemStockDto.MaxStock})");
 
             for (int i = 0; i < stock; i++)
             {
@@ -50,6 +55,7 @@ public class ItemsBank : SeedfulRandomGeneratorUser
         foreach (ItemStockDto utilityItemStockDto in _utilities)
         {
             var stock = _seedfulRandomGenerator.Range(utilityItemStockDto.MinimumInitialStock, utilityItemStockDto.MaxStock + 1);
+            Debug.Log($"ItemsBank: Generating {stock} stock for utility {utilityItemStockDto.ItemName} (Min: {utilityItemStockDto.MinimumInitialStock}, Max: {utilityItemStockDto.MaxStock})");
 
             for (int i = 0; i < stock; i++)
             {
@@ -70,15 +76,23 @@ public class ItemsBank : SeedfulRandomGeneratorUser
     {
         _allItems = new();
 
+        Debug.Log($"ItemsBank: Initializing with {_attacks.Count} attacks, {_upgrades.Count} upgrades, {_utilities.Count} utilities");
+        
         AddToAllItemsByName(_attacks);
         AddToAllItemsByName(_upgrades);
         AddToAllItemsByName(_utilities);
+
+        foreach (var item in _allItems)
+        {
+            Debug.Log($"ItemsBank: Item {item.Key} initialized with stock count: {item.Value.Stock.Count}");
+        }
     }
 
     private void AddToAllItemsByName(List<ItemStockDto> items)
     {
         foreach (ItemStockDto item in items)
         {
+            Debug.Log($"ItemsBank: Adding {item.ItemName} to all items dictionary. Has GameObject: {item.GameObject != null}");
             _allItems.Add(item.ItemName, item);
         }
     }

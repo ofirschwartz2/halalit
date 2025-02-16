@@ -62,4 +62,14 @@ public class SpeedLimiter : MonoBehaviour
         return speed <= _staticMaxSpeed;
     }
 
+    public float GetMaxSpeed()
+    {
+        return _maxSpeed;
+    }
+
+    public void SetMaxSpeed(float maxSpeed)
+    {
+        _maxSpeed = maxSpeed;
+        _staticMaxSpeed = maxSpeed;
+    }
 }
