@@ -7,6 +7,7 @@ namespace Items.Utility
     {
         private readonly NitroConfiguration _configuration;
         private ISpeedForceController _speedForceController;
+        private IEngineFireController _engineFire;
         private float _originalSpeedLimit;
         private float _originalForceMultiplier;
         private float _remainingGas;
@@ -28,6 +29,7 @@ namespace Items.Utility
             if (!CanActivate()) return;
 
             _speedForceController = target.GetComponent<ISpeedForceController>();
+            _engineFire = target.GetComponentInChildren<IEngineFireController>();
             
             if (_speedForceController == null)
             {
@@ -44,6 +46,11 @@ namespace Items.Utility
             _remainingGas = _configuration.MaxGasAmount;
             _configuration.Activate();
 
+            if (_engineFire != null)
+            {
+                _engineFire.SetNitroActive(true);
+            }
+
             Debug.Log($"NitroUtility: Activated with {_remainingGas} gas. Speed limit increased to {_originalSpeedLimit * _configuration.SpeedMultiplier}, Force increased to {_originalForceMultiplier * _configuration.ForceMultiplier}");
         }
 
@@ -53,6 +60,11 @@ namespace Items.Utility
 
             _speedForceController.SetSpeedLimit(_originalSpeedLimit);
             _speedForceController.SetForceMultiplier(_originalForceMultiplier);
+            
+            if (_engineFire != null)
+            {
+                _engineFire.SetNitroActive(false);
+            }
             
             _configuration.Reset();
 
