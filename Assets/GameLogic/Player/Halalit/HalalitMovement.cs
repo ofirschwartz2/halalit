@@ -22,6 +22,8 @@ public class HalalitMovement : MonoBehaviour, ISpeedForceController
     [SerializeField]
     private float _speedLimit;
 
+    private Vector2 _currentForce;
+
     public float GetSpeedLimit() => _speedLimit;
     public void SetSpeedLimit(float value) 
     { 
@@ -31,6 +33,8 @@ public class HalalitMovement : MonoBehaviour, ISpeedForceController
 
     public float GetForceMultiplier() => _forceMultiplier;
     public void SetForceMultiplier(float value) => _forceMultiplier = value;
+
+    public Vector2 GetCurrentForce() => _currentForce;
 
     void FixedUpdate()
     {
@@ -49,6 +53,10 @@ public class HalalitMovement : MonoBehaviour, ISpeedForceController
         {
             RotateByMovementJoystick(joystickHorizontal, joystickVertical, deltaTime);
             MoveInRotationDirection(joystickHorizontal, joystickVertical);
+        }
+        else
+        {
+            _currentForce = Vector2.zero;
         }
     }
 
@@ -75,8 +83,9 @@ public class HalalitMovement : MonoBehaviour, ISpeedForceController
 
             float horizontalForce = Utils.GetDirectionalForce(direction.x, Math.Abs(joystickHorizontal), _forceMultiplier);
             float verticalForce = Utils.GetDirectionalForce(direction.y, Math.Abs(joystickVertical), _forceMultiplier);
+            _currentForce = new Vector2(horizontalForce, verticalForce);
 
-            _rigidBody.AddForce(new Vector2(horizontalForce, verticalForce));
+            _rigidBody.AddForce(_currentForce);
             
             // Log current speed for debugging
             if (_rigidBody.velocity.magnitude > 0)

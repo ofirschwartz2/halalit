@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Assets.Models
 {
     public interface ISpeedForceController
@@ -6,5 +8,6 @@ namespace Assets.Models
         float GetForceMultiplier();
         void SetSpeedLimit(float value);
         void SetForceMultiplier(float value);
+        Vector2 GetCurrentForce();
     }
 } 
