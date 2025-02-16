@@ -14,6 +14,7 @@ namespace Assets.Player
 
         private UtilityFactory _utilityFactory;
         private IUtility _currentUtility;
+        private IUtility _pendingUtility;
         private GameObject _halalit;
 
         private void Awake()
@@ -79,6 +80,22 @@ namespace Assets.Player
             if (_currentUtility?.IsActive == true && _currentUtility is NitroUtility nitro && nitro.ShouldDeactivate())
             {
                 _currentUtility.Deactivate();
+                HandleUtilityDeactivation();
+            }
+        }
+
+        private void HandleUtilityDeactivation()
+        {
+            if (_pendingUtility != null)
+            {
+                _currentUtility = _pendingUtility;
+                _pendingUtility = null;
+                UpdateUtilityButtonState();
+                Debug.Log("UtilityManager: Activated pending utility after previous utility finished");
+            }
+            else
+            {
+                _currentUtility = null;
                 utilityButton.ClearUtility();
             }
         }
@@ -88,7 +105,7 @@ namespace Assets.Player
             if (_currentUtility != null && _currentUtility.CanActivate() && TryInitializeHalalitReference())
             {
                 _currentUtility.Activate(_halalit);
-                utilityButton.ClearUtility();
+                UpdateUtilityButtonState();
             }
         }
 
@@ -99,14 +116,17 @@ namespace Assets.Player
             try
             {
                 var newUtility = _utilityFactory.CreateUtility(arguments.Name);
+                
                 if (_currentUtility?.IsActive == true)
                 {
-                    Debug.Log("UtilityManager: Current utility is active, not replacing it");
+                    _pendingUtility = newUtility;
+                    UpdateUtilityButtonState();
+                    Debug.Log("UtilityManager: Current utility is active, storing new utility as pending");
                     return;
                 }
                 
                 _currentUtility = newUtility;
-                UpdateUtilityButtonText(arguments.Name);
+                UpdateUtilityButtonState();
                 Debug.Log($"UtilityManager: Stored new utility of type {arguments.Name}");
             }
             catch (System.ArgumentException e)
@@ -115,17 +135,41 @@ namespace Assets.Player
             }
         }
 
-        private void UpdateUtilityButtonText(ItemName utilityName)
+        private void UpdateUtilityButtonState()
         {
             if (utilityButton == null) return;
 
-            string buttonText = utilityName switch
+            if (_currentUtility?.IsActive == true)
             {
-                ItemName.NITRO_FUEL => "NF",
-                _ => "??"
-            };
+                // If there's a pending utility, show it but disabled
+                if (_pendingUtility != null)
+                {
+                    utilityButton.SetUtilityText(GetUtilityButtonText(_pendingUtility));
+                    utilityButton.SetInteractable(false);
+                }
+                else
+                {
+                    utilityButton.ClearUtility();
+                }
+            }
+            else if (_currentUtility != null)
+            {
+                utilityButton.SetUtilityText(GetUtilityButtonText(_currentUtility));
+                utilityButton.SetInteractable(true);
+            }
+            else
+            {
+                utilityButton.ClearUtility();
+            }
+        }
 
-            utilityButton.SetUtilityText(buttonText);
+        private string GetUtilityButtonText(IUtility utility)
+        {
+            if (utility is NitroUtility)
+            {
+                return "NF";
+            }
+            return "??";
         }
     }
 } 
