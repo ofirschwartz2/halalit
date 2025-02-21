@@ -61,7 +61,10 @@ internal static class TestUtils
         {
             seed = TestingRandomGenerator.Range(int.MinValue, int.MaxValue);
         }
-        Random.InitState(seed);
+        OriginalRandomSeed.IsTestMode = true;
+        OriginalRandomSeed.TestSeed = seed;
+        TestingRandomGenerator.SetSeed(seed);
+        Debug.Log("Testing Random Seed set to: " + seed);
         return seed;
     }
     #endregion
@@ -147,7 +150,13 @@ internal static class TestUtils
 
     private static void SetRandomGameObjectPosition(GameObject gameObject, float radiusOfTargetPositionAroundHalalit)
     {
-        gameObject.transform.position = Utils.GetRandomVector2OnCircle(radiusOfTargetPositionAroundHalalit);
+        gameObject.transform.position = GetRandomVector2OnCircle(radiusOfTargetPositionAroundHalalit);
+    }
+
+    private static Vector2 GetRandomVector2OnCircle(float radius = 1)
+    {
+        float angle = TestingRandomGenerator.Range(0, 2 * Mathf.PI, true);
+        return Utils.RadianToVector2(angle) * radius;
     }
 
     internal static void RotaeEnemy(float degrees) 
@@ -177,6 +186,8 @@ internal static class TestUtils
 
     internal static void SetTestMode()
     {
+        OriginalRandomSeed.IsTestMode = true;
+        
         _asteroidContainer = GameObject.Find(ASTEROID_CONTAINER_NAME);
         _asteroidContainer.SetActive(false);
 

@@ -5,14 +5,22 @@ using UnityEngine.SceneManagement;
 
 public class OriginalRandomSeed : MonoBehaviour
 {
+    public static bool IsTestMode { get; set; }
+    public static int TestSeed { get; set; }
     private SeedfulRandomGenerator _seedfulRandomGenerator;
 
     private void Awake()
     {
-        
         int originalRandomSeed;
 
-        originalRandomSeed = PlayerStats._isDailyRun ? (int)PlayerStats._dailySeed : SeedlessRandomGenerator.GetNumber();
+        if (IsTestMode)
+        {
+            originalRandomSeed = TestSeed;
+        }
+        else
+        {
+            originalRandomSeed = PlayerStats._isDailyRun ? (int)PlayerStats._dailySeed : SeedlessRandomGenerator.GetNumber();
+        }
 
         Debug.Log("Generated Original Random seed: " + originalRandomSeed);
 

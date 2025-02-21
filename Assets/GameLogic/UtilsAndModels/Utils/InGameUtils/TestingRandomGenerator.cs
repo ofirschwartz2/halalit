@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Utils
@@ -9,15 +8,14 @@ namespace Assets.Utils
         private static System.Random seedlessRandom = new System.Random();
         private static System.Random seedfullRandom = null;
 
+        public static void SetSeed(int seed)
+        {
+            seedfullRandom = new System.Random(seed);
+        }
+
         public static void SetSeed()
         {
-            if (seedfullRandom != null)
-            {
-                throw new System.Exception("Seed is already set");
-            }
-
-            seedfullRandom = new System.Random(GetNumber());
-
+            SetSeed(GetNumber());
         }
 
         public static int GetNumber(bool fromSeed = false)
