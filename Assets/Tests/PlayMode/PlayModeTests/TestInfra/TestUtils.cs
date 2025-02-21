@@ -1,5 +1,6 @@
 using Assets.Enums;
 using Assets.Utils;
+using Assets.Tests.PlayMode.PlayModeTests.TestInfra;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,10 +68,10 @@ internal static class TestUtils
 
 
     #region Scene SetUp
-    internal static void DestroyAllGameObjects() 
+    internal static void DestroyAllGameObjects()
     {
-        var gameObjects = GameObject.FindObjectsOfType<GameObject>();
-        foreach (var gameObject in gameObjects)
+        var allGameObjects = Object.FindObjectsOfType<GameObject>();
+        foreach (var gameObject in allGameObjects)
         {
             Object.Destroy(gameObject);
         }
@@ -184,6 +185,8 @@ internal static class TestUtils
 
         var weaponAttack = GetWeaponAttack();
         weaponAttack.SetIsTesting(true);
+
+        TestTimeController.SetTestTimeScale();
     }
 
     #endregion

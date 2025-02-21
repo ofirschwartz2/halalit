@@ -10188,6 +10188,9 @@ MonoBehaviour:
   _joystick: {fileID: 1331181818}
   _engineFireForceMultiplier: 1
   _engineFireToSpeedMultiplier: 1
+  _normalColor: {r: 1, g: 0, b: 0, a: 1}
+  _nitroColor: {r: 0, g: 0, b: 1, a: 1}
+  _colorTransitionSpeed: 2
 --- !u!1 &2083128241
 GameObject:
   m_ObjectHideFlags: 0

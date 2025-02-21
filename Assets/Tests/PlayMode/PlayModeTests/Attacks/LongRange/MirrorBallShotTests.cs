@@ -1,5 +1,6 @@
 using Assets.Enums;
 using Assets.Utils;
+using Assets.Tests.PlayMode.PlayModeTests.TestInfra;
 using NUnit.Framework;
 using System.Collections;
 using System.Linq;
@@ -311,5 +312,6 @@ public class MirrorBallShotTests
     public void TearDown()
     {
         TestUtils.DestroyAllGameObjects();
+        TestTimeController.ResetTimeScale();
     }
 }
