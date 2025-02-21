@@ -65,6 +65,8 @@ class SpeedLimitTests
                 break;
         }
         yield return null;
+        yield return null;
+        yield return null;
 
         var gameObjectToPush = GameObject.FindGameObjectWithTag(gameObjectTagToPush.GetDescription());
         var gameObjectToPushRigidBody = gameObjectToPush.GetComponent<Rigidbody2D>();

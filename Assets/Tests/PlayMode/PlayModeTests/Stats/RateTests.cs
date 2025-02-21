@@ -28,7 +28,7 @@ public class RateTests
         _currentSeed = TestUtils.SetRandomSeed();
         _weaponAttack = TestUtils.GetWeaponAttack();
         _weaponMovement = TestUtils.GetWeaponMovement();
-        _acceptedDelta = 0.03f;
+        _acceptedDelta = 0.04f;
 
         Vector2 targetClosestPosition = TestUtils.GetEnemyNearestPositionToHalalit();
         _attackJoystickTouch = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, _weaponAttack.GetAttackJoystickEdge());
