@@ -34,7 +34,10 @@ class SpeedLimitTests
         [ValueSource(nameof(_givenMovement))] Vector2 gameObjectGivenMovement)
     {
         // GIVEN
+
         TestUtils.SetTestMode();
+        yield return null;
+        Time.timeScale = 1f;
 
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
 
@@ -64,7 +67,6 @@ class SpeedLimitTests
                 // Halalit is already in the scene
                 break;
         }
-        yield return null;
         yield return null;
         yield return null;
 
