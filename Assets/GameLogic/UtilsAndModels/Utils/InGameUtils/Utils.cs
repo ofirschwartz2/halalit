@@ -352,14 +352,17 @@ namespace Assets.Utils
         public static bool IsCenterInsideTheWorld(GameObject gameObject)
         {
             Vector3 position3 = new(gameObject.transform.position.x, gameObject.transform.position.y, 1); // TODO: why our InternalWorldBoxCollider2DBoxCollider2D Z=1?
-
+            Debug.Log($"gameObject: {gameObject.tag}");
+            Debug.Log($"position3: {position3}");
+            Debug.Log($"internalWorld: {_internalWorld.GetComponent<Collider2D>().bounds}");
             return _internalWorld.GetComponent<Collider2D>().bounds.Contains(position3); 
         }
 
         public static bool IsCenterInExternalSafeIsland(Vector2 position)
         {
             Vector3 position3 = new(position.x, position.y, 1); // TODO: why our InternalWorldBoxCollider2DBoxCollider2D Z=1?
-
+            Debug.Log($"position3: {position3}");
+            Debug.Log($"externalSafeIsland: {_externalSafeIsland.GetComponent<Collider2D>().bounds}");
             return _externalSafeIsland.GetComponent<Collider2D>().bounds.Contains(position3);
         }
         #endregion

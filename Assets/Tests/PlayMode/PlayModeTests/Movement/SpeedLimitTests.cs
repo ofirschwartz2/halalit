@@ -37,7 +37,6 @@ class SpeedLimitTests
 
         TestUtils.SetTestMode();
         yield return null;
-        Time.timeScale = 1f;
 
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
 
