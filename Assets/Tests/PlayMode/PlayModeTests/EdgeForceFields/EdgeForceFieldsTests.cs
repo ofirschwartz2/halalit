@@ -102,7 +102,7 @@ class EdgeForceFieldsTests
                 objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
                 break;
             case Tag.ITEM:
-                objectLoader.LoadItemInExternalSafeIsland();
+                objectLoader.LoadItemInExternalSafeIsland(InternalItemTag.ITEM_BASE);
                 break;
             case Tag.VALUABLE:
                 objectLoader.LoadValuableInExternalSafeIsland();
