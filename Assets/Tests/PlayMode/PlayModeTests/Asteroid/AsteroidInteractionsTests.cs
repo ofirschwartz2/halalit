@@ -111,7 +111,7 @@ class AsteroidInteractionsTests
                 objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
                 break;
             case Tag.ITEM:
-                objectLoader.LoadItemInExternalSafeIsland(InternalItemTag.ITEM_BASE);
+                objectLoader.LoadItemInExternalSafeIsland(ItemName.ITEM_BASE);
                 break;
             case Tag.VALUABLE:
                 objectLoader.LoadValuableInExternalSafeIsland();

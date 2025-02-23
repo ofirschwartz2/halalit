@@ -90,9 +90,9 @@ internal class ObjectLoader : MonoBehaviour
         return loadedAsteroid;
     }
 
-    public GameObject LoadItemInExternalSafeIsland(InternalItemTag internalItemTag)
+    public GameObject LoadItemInExternalSafeIsland(ItemName ItemName)
     {
-        var itemPrefab = _itemPrefabs.Find(item => item.InternalItemTag == internalItemTag).ItemPrefab;
+        var itemPrefab = _itemPrefabs.Find(item => item.ItemName == ItemName).ItemPrefab;
 
         Vector2 externalSafeIslandFreeLoadPosition = GetExternalSafeIslandFreeLoadPosition(itemPrefab);
         GameObject loadedItem = Instantiate(itemPrefab, externalSafeIslandFreeLoadPosition, Quaternion.identity, _externalSafeIsland.transform);

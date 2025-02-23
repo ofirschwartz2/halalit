@@ -48,6 +48,9 @@ namespace Assets.Enums
         [Description("Weapon movement drag")]
         WEAPON_STRENGH,
 
+        [Description("ItemBase")] 
+        ITEM_BASE,
+        
         // Utilities
         [Description("Nitro fuel")]
         NITRO_FUEL

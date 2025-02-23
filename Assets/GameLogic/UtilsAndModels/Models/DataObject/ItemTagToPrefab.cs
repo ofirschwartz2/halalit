@@ -5,6 +5,6 @@ using UnityEngine;
 [Serializable]
 public class ItemTagToPrefab
 { 
-    public InternalItemTag InternalItemTag;
+    public ItemName ItemName;
     public GameObject ItemPrefab;
 }

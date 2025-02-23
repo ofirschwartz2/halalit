@@ -53,7 +53,7 @@ class SpeedLimitTests
                 TestUtils.SetAsteroidPosition(TEST_POSITION);
                 break;
             case Tag.ITEM:
-                objectLoader.LoadItemInExternalSafeIsland(InternalItemTag.ITEM_BASE);
+                objectLoader.LoadItemInExternalSafeIsland(ItemName.ITEM_BASE);
                 yield return null;
                 TestUtils.SetItemPosition(TEST_POSITION);
                 break;
