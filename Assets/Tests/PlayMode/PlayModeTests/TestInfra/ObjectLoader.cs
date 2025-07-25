@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-
-
+using Assets.Enums;
 internal class ObjectLoader : MonoBehaviour
 {
     [SerializeField]
@@ -12,8 +11,10 @@ internal class ObjectLoader : MonoBehaviour
     private GameObject _enemyBasePrefab;
     [SerializeField]
     private GameObject _asteroidPrefab;
+
     [SerializeField]
-    private GameObject _itemBasePrefab;
+    private List<ItemTagToPrefab> _itemPrefabs;
+    
     [SerializeField]
     private GameObject _valuableBasePrefab;
 
@@ -89,10 +90,12 @@ internal class ObjectLoader : MonoBehaviour
         return loadedAsteroid;
     }
 
-    public GameObject LoadItemInExternalSafeIsland()
+    public GameObject LoadItemInExternalSafeIsland(ItemName ItemName)
     {
-        Vector2 externalSafeIslandFreeLoadPosition = GetExternalSafeIslandFreeLoadPosition(_itemBasePrefab);
-        GameObject loadedItem = Instantiate(_itemBasePrefab, externalSafeIslandFreeLoadPosition, Quaternion.identity, _externalSafeIsland.transform);
+        var itemPrefab = _itemPrefabs.Find(item => item.ItemName == ItemName).ItemPrefab;
+
+        Vector2 externalSafeIslandFreeLoadPosition = GetExternalSafeIslandFreeLoadPosition(itemPrefab);
+        GameObject loadedItem = Instantiate(itemPrefab, externalSafeIslandFreeLoadPosition, Quaternion.identity, _externalSafeIsland.transform);
         loadedItem.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
         return loadedItem;

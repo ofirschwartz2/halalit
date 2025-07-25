@@ -27,7 +27,6 @@ public class GrenadeTests
     public IEnumerator Shooting()
     {
         // GIVEN
-        var seed = TestUtils.SetRandomSeed();
         TestUtils.SetTestMode();
 
         TestUtils.SetUpShot(ATTACK_NAME);
@@ -40,7 +39,7 @@ public class GrenadeTests
 
         // THEN
         var shot = GameObject.FindGameObjectWithTag(ATTACK_TAG.GetDescription());
-        AssertWrapper.IsNotNull(shot, seed);
+        AssertWrapper.IsNotNull(shot, _currentSeed);
     }
 
     [UnityTest]

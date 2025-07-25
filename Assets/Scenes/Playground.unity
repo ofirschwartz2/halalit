@@ -2522,7 +2522,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1037661397}
-  - component: {fileID: 1037661396}
+  - component: {fileID: 1037661398}
   m_Layer: 0
   m_Name: ObjectLoader
   m_TagString: Untagged
@@ -2530,25 +2530,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1037661396
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1037661395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cacbc0bfe6f0d414ebfdb6835c6ea841, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _externalSafeIsland: {fileID: 1451220303}
-  _halalit: {fileID: 2130719621}
-  _enemyBasePrefab: {fileID: 5072172639208078113, guid: 235a16c82bb99a347b9b60318f79de27, type: 3}
-  _asteroidPrefab: {fileID: 6741412782414407016, guid: d17f6aba06990634e92f5f659cf1bf0d, type: 3}
-  _itemBasePrefab: {fileID: 9195436676840446505, guid: 4d6d8e29eb0888046837d54ee7155feb, type: 3}
-  _valuableBasePrefab: {fileID: 6122301198954446189, guid: 23128d9be8456fd41beade43a4d2a36c, type: 3}
-  _loadedObjectsDistance: 0.5
 --- !u!4 &1037661397
 Transform:
   m_ObjectHideFlags: 0
@@ -2564,6 +2545,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1037661398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1037661395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cacbc0bfe6f0d414ebfdb6835c6ea841, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _externalSafeIsland: {fileID: 1451220303}
+  _halalit: {fileID: 2130719621}
+  _enemyBasePrefab: {fileID: 5072172639208078113, guid: 235a16c82bb99a347b9b60318f79de27, type: 3}
+  _asteroidPrefab: {fileID: 6741412782414407016, guid: d17f6aba06990634e92f5f659cf1bf0d, type: 3}
+  _itemPrefabs:
+  - ItemName: 19
+    ItemPrefab: {fileID: 9195436676840446505, guid: 4d6d8e29eb0888046837d54ee7155feb, type: 3}
+  - ItemName: 20
+    ItemPrefab: {fileID: 6512664992176407847, guid: 85162c22d49ae4a07b935155dbcb7dc5, type: 3}
+  _valuableBasePrefab: {fileID: 1984189302029878180, guid: 161684b0011ec3a45a98d794ee68a316, type: 3}
+  _loadedObjectsDistance: 2
 --- !u!1 &1055539564
 GameObject:
   m_ObjectHideFlags: 0
@@ -10188,6 +10192,9 @@ MonoBehaviour:
   _joystick: {fileID: 1331181818}
   _engineFireForceMultiplier: 1
   _engineFireToSpeedMultiplier: 1
+  _normalColor: {r: 1, g: 0, b: 0, a: 1}
+  _nitroColor: {r: 0, g: 0, b: 1, a: 1}
+  _colorTransitionSpeed: 2
 --- !u!1 &2083128241
 GameObject:
   m_ObjectHideFlags: 0

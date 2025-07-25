@@ -39,6 +39,7 @@ public class HalalitMovement : MonoBehaviour, ISpeedForceController
     void FixedUpdate()
     {
         TryMove(_joystick.Horizontal, _joystick.Vertical, Time.deltaTime);
+        SpeedLimiter.LimitSpeed(_rigidBody);
     }
 
     #region Moving 

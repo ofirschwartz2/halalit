@@ -34,6 +34,7 @@ public class GameOver : MonoBehaviour
     }
     #endregion
 
+/* There is no case when Halalit is out of the screen, causes bug in the tests
     #region Instadeath
     private void Update() 
     {
@@ -43,6 +44,7 @@ public class GameOver : MonoBehaviour
         }
     }
     #endregion
+*/
 
     #region Enemy destruction
     private void OnGameOver(object initiator, GameOverEventArguments arguments)

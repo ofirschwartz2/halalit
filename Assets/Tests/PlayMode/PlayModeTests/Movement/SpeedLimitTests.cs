@@ -34,7 +34,9 @@ class SpeedLimitTests
         [ValueSource(nameof(_givenMovement))] Vector2 gameObjectGivenMovement)
     {
         // GIVEN
+
         TestUtils.SetTestMode();
+        yield return null;
 
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
 
@@ -51,7 +53,7 @@ class SpeedLimitTests
                 TestUtils.SetAsteroidPosition(TEST_POSITION);
                 break;
             case Tag.ITEM:
-                objectLoader.LoadItemInExternalSafeIsland();
+                objectLoader.LoadItemInExternalSafeIsland(ItemName.ITEM_BASE);
                 yield return null;
                 TestUtils.SetItemPosition(TEST_POSITION);
                 break;
@@ -64,6 +66,7 @@ class SpeedLimitTests
                 // Halalit is already in the scene
                 break;
         }
+        yield return null;
         yield return null;
 
         var gameObjectToPush = GameObject.FindGameObjectWithTag(gameObjectTagToPush.GetDescription());

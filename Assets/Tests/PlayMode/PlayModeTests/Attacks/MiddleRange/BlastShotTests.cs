@@ -1,5 +1,6 @@
 using Assets.Enums;
 using Assets.Utils;
+using Assets.Tests.PlayMode.PlayModeTests.TestInfra;
 using NUnit.Framework;
 using System.Collections;
 using UnityEngine;
@@ -225,5 +226,6 @@ public class BlastShotTests
     public void TearDown()
     {
         TestUtils.DestroyAllGameObjects();
+        TestTimeController.ResetTimeScale();
     }
 }

@@ -26,7 +26,7 @@ public class PickupClawTests
         TestUtils.SetTestMode();
         yield return null;
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
-        objectLoader.LoadItemInExternalSafeIsland();
+        objectLoader.LoadItemInExternalSafeIsland(ItemName.ITEM_BASE);
         yield return null;
         var maneuverRadius = TestUtils.GetPickupClawManeuverRadius();
         TestUtils.SetRandomItemPosition(maneuverRadius - 1);
@@ -52,7 +52,7 @@ public class PickupClawTests
         TestUtils.SetTestMode();
         yield return null;
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
-        objectLoader.LoadItemInExternalSafeIsland();
+        objectLoader.LoadItemInExternalSafeIsland(ItemName.ITEM_BASE);
         yield return null;
         var maneuverRadius = TestUtils.GetPickupClawManeuverRadius();
         TestUtils.SetRandomItemPosition(maneuverRadius - 1);
@@ -88,7 +88,7 @@ public class PickupClawTests
         TestUtils.SetTestMode();
         yield return null;
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
-        objectLoader.LoadItemInExternalSafeIsland();
+        objectLoader.LoadItemInExternalSafeIsland(ItemName.ITEM_BASE);
         yield return null;
 
         var pickupClawShooter = TestUtils.GetPickupClawShooter();
@@ -153,7 +153,7 @@ public class PickupClawTests
         TestUtils.SetTestMode();
         yield return null;
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
-        objectLoader.LoadItemInExternalSafeIsland();
+        objectLoader.LoadItemInExternalSafeIsland(ItemName.ITEM_BASE);
         yield return null;
 
         var pickupClawShooter = TestUtils.GetPickupClawShooter();
@@ -200,7 +200,7 @@ public class PickupClawTests
         TestUtils.SetTestMode();
         yield return null;
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
-        objectLoader.LoadItemInExternalSafeIsland();
+        objectLoader.LoadItemInExternalSafeIsland(ItemName.ITEM_BASE);
         objectLoader.LoadAsteroidInExternalSafeIsland(_currentSeed);
         objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
         yield return null;
@@ -271,7 +271,7 @@ public class PickupClawTests
         TestUtils.SetTestMode();
         yield return null;
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
-        objectLoader.LoadItemInExternalSafeIsland();
+        objectLoader.LoadItemInExternalSafeIsland(ItemName.ITEM_BASE);
         yield return null;
         var maneuverRadius = TestUtils.GetPickupClawManeuverRadius();
         TestUtils.SetRandomItemPosition(maneuverRadius - 1);
@@ -343,7 +343,7 @@ public class PickupClawTests
         TestUtils.SetTestMode();
         yield return null;
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
-        objectLoader.LoadItemInExternalSafeIsland();
+        objectLoader.LoadItemInExternalSafeIsland(ItemName.ITEM_BASE);
         yield return null;
         var maneuverRadius = TestUtils.GetPickupClawManeuverRadius();
         TestUtils.SetRandomItemPosition(maneuverRadius - 1);
@@ -420,7 +420,7 @@ public class PickupClawTests
         TestUtils.SetTestMode();
         yield return null;
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
-        objectLoader.LoadItemInExternalSafeIsland();
+        objectLoader.LoadItemInExternalSafeIsland(ItemName.ITEM_BASE);
         yield return null;
 
         var maneuverRadius = TestUtils.GetPickupClawManeuverRadius();

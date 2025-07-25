@@ -19,7 +19,6 @@ namespace Assets.Player
 
         private void Awake()
         {
-            Debug.Log("UtilityManager: Awake");
             _utilityFactory = new UtilityFactory();
             SetEventListeners();
             TryInitializeHalalitReference();
@@ -38,21 +37,17 @@ namespace Assets.Player
         {
             if (_halalit != null) return true;
 
-            Debug.Log("UtilityManager: Trying to initialize Halalit reference");
             _halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
             if (_halalit == null)
             {
-                Debug.LogWarning("UtilityManager: Could not find Halalit GameObject");
                 return false;
             }
 
-            Debug.Log("UtilityManager: Successfully initialized Halalit reference");
             return true;
         }
 
         private void SetEventListeners()
         {
-            Debug.Log("UtilityManager: Setting up event listeners");
             ItemEvent.PlayerUtilityPickUp += OnUtilityPickup;
         }
 
@@ -91,7 +86,6 @@ namespace Assets.Player
                 _currentUtility = _pendingUtility;
                 _pendingUtility = null;
                 UpdateUtilityButtonState();
-                Debug.Log("UtilityManager: Activated pending utility after previous utility finished");
             }
             else
             {
@@ -111,7 +105,6 @@ namespace Assets.Player
 
         private void OnUtilityPickup(object initiator, ItemEventArguments arguments)
         {
-            Debug.Log($"UtilityManager: Received pickup event for {arguments.Name}");
             
             try
             {
@@ -121,13 +114,11 @@ namespace Assets.Player
                 {
                     _pendingUtility = newUtility;
                     UpdateUtilityButtonState();
-                    Debug.Log("UtilityManager: Current utility is active, storing new utility as pending");
                     return;
                 }
                 
                 _currentUtility = newUtility;
                 UpdateUtilityButtonState();
-                Debug.Log($"UtilityManager: Stored new utility of type {arguments.Name}");
             }
             catch (System.ArgumentException e)
             {
