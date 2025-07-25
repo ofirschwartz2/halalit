@@ -160,6 +160,10 @@ namespace Assets.Player
             {
                 return "NF";
             }
+            if (utility is MagnetUtility)
+            {
+                return "MG";
+            }
             return "??";
         }
     }

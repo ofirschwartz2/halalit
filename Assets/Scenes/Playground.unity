@@ -4176,6 +4176,11 @@ MonoBehaviour:
     Stock: []
   _utilities:
   - ItemName: 19
+    GameObject: {fileID: 6783299616991623103, guid: 582058088826a41a8a013b63b115c625, type: 3}
+    MaxStock: 100
+    MinimumInitialStock: 90
+    Stock: []
+  - ItemName: 19
     GameObject: {fileID: 6512664992176407847, guid: 85162c22d49ae4a07b935155dbcb7dc5, type: 3}
     MaxStock: 100
     MinimumInitialStock: 90
