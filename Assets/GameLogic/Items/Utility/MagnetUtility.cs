@@ -67,5 +67,15 @@ namespace Items.Utility
             }
             _isActive = false;
         }
+
+        public bool ShouldDeactivate()
+        {
+            if (!_isActive) return false;
+            if (Time.time >= _deactivationTime)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 } 
