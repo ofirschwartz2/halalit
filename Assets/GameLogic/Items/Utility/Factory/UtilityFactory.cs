@@ -23,7 +23,8 @@ namespace Items.Factory
             return utilityType switch
             {
                 ItemName.NITRO_FUEL => new NitroUtility((NitroConfiguration)config),
-                ItemName.PUSHING_MAGNET => new MagnetUtility((MagnetConfiguration)config),
+                ItemName.PUSHING_MAGNET => new PushingMagnetUtility((PushingMagnetConfiguration)config),
+                ItemName.PULLING_MAGNET => new PullingMagnetUtility((PullingMagnetConfiguration)config),
                 _ => throw new System.ArgumentException($"Unknown utility type: {utilityType}")
             };
         }
@@ -33,7 +34,8 @@ namespace Items.Factory
             return utilityType switch
             {
                 ItemName.NITRO_FUEL => "NitroFuelConfig",
-                ItemName.PUSHING_MAGNET => "MagnetConfig",
+                ItemName.PUSHING_MAGNET => "PushingMagnetConfig",
+                ItemName.PULLING_MAGNET => "PullingMagnetConfig",
                 _ => throw new System.ArgumentException($"No configuration name mapping for utility type: {utilityType}")
             };
         }

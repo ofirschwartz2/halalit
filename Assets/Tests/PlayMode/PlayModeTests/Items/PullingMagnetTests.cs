@@ -7,10 +7,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
-public class PushingMagnetTests
+public class PullingMagnetTests
 {
     private int _currentSeed;
-           private const ItemName MAGNET_ITEM_NAME = ItemName.PUSHING_MAGNET;
+    private const ItemName MAGNET_ITEM_NAME = ItemName.PULLING_MAGNET;
 
     [SetUp]
     public void SetUp()
@@ -56,23 +56,9 @@ public class PushingMagnetTests
 
         // Verify magnet object is spawned at Halalit's position
         var allObjects = GameObject.FindObjectsOfType<GameObject>();
-        Debug.Log($"Test: Found {allObjects.Length} total objects in scene");
-        var spawnedMagnet = System.Array.Find(allObjects, obj => obj.GetComponent<PushingMagnetField>() != null);
-        if (spawnedMagnet != null)
-        {
-            Debug.Log($"Test: Found magnet object: '{spawnedMagnet.name}' with tag: '{spawnedMagnet.tag}'");
-        }
-        else
-        {
-            Debug.Log("Test: No magnet object found with PushingMagnetField component");
-            // List all objects to help debug
-            foreach (var obj in allObjects)
-            {
-                Debug.Log($"Test: Object '{obj.name}' has PushingMagnetField: {obj.GetComponent<PushingMagnetField>() != null}");
-            }
-        }
+        var spawnedMagnet = System.Array.Find(allObjects, obj => obj.GetComponent<PullingMagnetField>() != null);
         AssertWrapper.IsNotNull(spawnedMagnet, _currentSeed, "Magnet object should be spawned");
-        AssertWrapper.IsNotNull(spawnedMagnet.GetComponent<PushingMagnetField>(), _currentSeed, "Spawned magnet should have PushingMagnetField component");
+        AssertWrapper.IsNotNull(spawnedMagnet.GetComponent<PullingMagnetField>(), _currentSeed, "Spawned magnet should have PullingMagnetField component");
 
         // Verify magnet is at Halalit's position (with small tolerance)
         var halalitPosition = TestUtils.GetHalalit().transform.position;
@@ -82,7 +68,7 @@ public class PushingMagnetTests
     }
 
     [UnityTest]
-    public IEnumerator MagnetPushesEnemiesAwayTest()
+    public IEnumerator MagnetPullsEnemiesTowardTest()
     {
         // GIVEN
         TestUtils.SetTestMode();
@@ -95,7 +81,7 @@ public class PushingMagnetTests
         var enemy = TestUtils.GetEnemy();
         var enemyInitialPosition = enemy.transform.position;
 
-        // Position enemy near Halalit
+        // Position enemy away from Halalit
         TestUtils.SetEnemyPosition(Vector2.right * 2f);
         yield return null;
 
@@ -115,6 +101,18 @@ public class PushingMagnetTests
         var utilityButton = GameObject.Find("UtilityButton").GetComponent<Meta.UI.UtilityButton>();
         utilityButton.GetComponent<UnityEngine.UI.Button>().onClick.Invoke();
         yield return null;
+        
+        // Debug: Check if magnet was spawned
+        var allObjects = GameObject.FindObjectsOfType<GameObject>();
+        var spawnedMagnet = System.Array.Find(allObjects, obj => obj.GetComponent<PullingMagnetField>() != null);
+        if (spawnedMagnet != null)
+        {
+            Debug.Log($"Test: Pulling magnet spawned at position: {spawnedMagnet.transform.position}");
+        }
+        else
+        {
+            Debug.Log("Test: No pulling magnet found!");
+        }
 
         // Wait for physics to apply force
         yield return new WaitForFixedUpdate();
@@ -125,14 +123,26 @@ public class PushingMagnetTests
         var enemyNewPosition = enemy.transform.position;
         var enemyMovement = enemyNewPosition - enemyInitialPosition;
 
-        // Verify enemy has moved away from the magnet's position
+        // Verify enemy has moved toward the magnet's position
         AssertWrapper.Greater(enemyMovement.magnitude, 0.1f, "Enemy should have moved", _currentSeed);
 
-        // Verify movement direction is away from magnet (magnet is at origin)
-        var directionFromMagnet = enemyNewPosition.normalized;
-        var movementDirection = enemyMovement.normalized;
-        var dotProduct = Vector2.Dot(directionFromMagnet, movementDirection);
-        AssertWrapper.Greater(dotProduct, 0.5f, "Enemy should move away from magnet", _currentSeed);
+        // Verify movement direction is toward magnet (magnet is at origin)
+        var magnetPosition = Vector2.zero; // Magnet is at origin
+        
+        // Check if enemy moved closer to magnet
+        var initialDistanceToMagnet = Vector2.Distance((Vector2)enemyInitialPosition, magnetPosition);
+        var newDistanceToMagnet = Vector2.Distance((Vector2)enemyNewPosition, magnetPosition);
+        var movedCloser = newDistanceToMagnet < initialDistanceToMagnet;
+        
+        // Debug logs
+        Debug.Log($"Test: Enemy initial position: {enemyInitialPosition}");
+        Debug.Log($"Test: Enemy new position: {enemyNewPosition}");
+        Debug.Log($"Test: Enemy movement: {enemyMovement}");
+        Debug.Log($"Test: Initial distance to magnet: {initialDistanceToMagnet}");
+        Debug.Log($"Test: New distance to magnet: {newDistanceToMagnet}");
+        Debug.Log($"Test: Moved closer: {movedCloser}");
+        
+        AssertWrapper.IsTrue(movedCloser, "Enemy should move closer to magnet", _currentSeed);
     }
 
     [UnityTest]
@@ -213,7 +223,6 @@ public class PushingMagnetTests
         }
 
         // Activate magnet
-        Debug.Log("Test: Activating magnet utility");
         utilityButton.GetComponent<UnityEngine.UI.Button>().onClick.Invoke();
         yield return null;
 
@@ -222,12 +231,7 @@ public class PushingMagnetTests
 
         // Find the spawned magnet
         var allObjects = GameObject.FindObjectsOfType<GameObject>();
-        Debug.Log($"Test: Found {allObjects.Length} total objects in scene");
-        var spawnedMagnet = System.Array.Find(allObjects, obj => obj.GetComponent<PushingMagnetField>() != null);
-        if (spawnedMagnet != null)
-        {
-            Debug.Log($"Test: Found magnet object: '{spawnedMagnet.name}' with tag: '{spawnedMagnet.tag}'");
-        }
+        var spawnedMagnet = System.Array.Find(allObjects, obj => obj.GetComponent<PullingMagnetField>() != null);
         AssertWrapper.IsNotNull(spawnedMagnet, _currentSeed, "Magnet should be spawned");
 
         // Wait for magnet duration to expire (5 seconds + buffer)
@@ -235,7 +239,7 @@ public class PushingMagnetTests
 
         // Verify magnet object is destroyed
         allObjects = GameObject.FindObjectsOfType<GameObject>();
-        var remainingMagnet = System.Array.Find(allObjects, obj => obj.GetComponent<PushingMagnetField>() != null);
+        var remainingMagnet = System.Array.Find(allObjects, obj => obj.GetComponent<PullingMagnetField>() != null);
         AssertWrapper.IsNull(remainingMagnet, _currentSeed, "Magnet should be destroyed after duration expires");
 
         // Verify utility button is cleared (no longer interactable)
@@ -292,9 +296,9 @@ public class PushingMagnetTests
 
         // Verify second magnet works correctly
         var allObjects = GameObject.FindObjectsOfType<GameObject>();
-        var spawnedMagnet = System.Array.Find(allObjects, obj => obj.GetComponent<PushingMagnetField>() != null);
+        var spawnedMagnet = System.Array.Find(allObjects, obj => obj.GetComponent<PullingMagnetField>() != null);
         AssertWrapper.IsNotNull(spawnedMagnet, _currentSeed, "Second magnet should be spawned");
-        AssertWrapper.IsNotNull(spawnedMagnet.GetComponent<PushingMagnetField>(), _currentSeed, "Second magnet should have PushingMagnetField component");
+        AssertWrapper.IsNotNull(spawnedMagnet.GetComponent<PullingMagnetField>(), _currentSeed, "Second magnet should have PullingMagnetField component");
     }
 
     [TearDown]
