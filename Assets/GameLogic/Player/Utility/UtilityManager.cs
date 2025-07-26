@@ -72,10 +72,19 @@ namespace Assets.Player
 
         private void Update()
         {
-            if (_currentUtility?.IsActive == true && _currentUtility is NitroUtility nitro && nitro.ShouldDeactivate())
+            if (_currentUtility?.IsActive == true)
             {
-                _currentUtility.Deactivate();
-                HandleUtilityDeactivation();
+                bool shouldDeactivate = false;
+                if (_currentUtility is NitroUtility nitro)
+                    shouldDeactivate = nitro.ShouldDeactivate();
+                else if (_currentUtility is MagnetUtility magnet)
+                    shouldDeactivate = magnet.ShouldDeactivate();
+
+                if (shouldDeactivate)
+                {
+                    _currentUtility.Deactivate();
+                    HandleUtilityDeactivation();
+                }
             }
         }
 
@@ -159,6 +168,10 @@ namespace Assets.Player
             if (utility is NitroUtility)
             {
                 return "NF";
+            }
+            if (utility is MagnetUtility)
+            {
+                return "M>";
             }
             return "??";
         }

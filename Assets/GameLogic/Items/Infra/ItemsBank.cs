@@ -89,7 +89,11 @@ public class ItemsBank : SeedfulRandomGeneratorUser
     #region Accessors
     public GameObject GetItem(ItemName itemName)
     {
-        ItemStockDto itemStockDto = _allItems[itemName];
+        if (!_allItems.TryGetValue(itemName, out ItemStockDto itemStockDto))
+        {
+            Debug.LogError($"ItemsBank: Item {itemName} is not configured in the bank.");
+            throw new System.ArgumentException($"Item {itemName} is not configured in the bank.");
+        }
 
         IItemStats itemDto = itemStockDto.Stock[0];
         itemStockDto.Stock.RemoveAt(0);
@@ -107,7 +111,11 @@ public class ItemsBank : SeedfulRandomGeneratorUser
 
     public bool IsAvailable(ItemName itemName)
     {
-        return _allItems[itemName].Stock.Count > 0;
+        if (_allItems.TryGetValue(itemName, out ItemStockDto itemStock))
+        {
+            return itemStock.Stock.Count > 0;
+        }
+        return false;
     }
     #endregion
 }
