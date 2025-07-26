@@ -2566,6 +2566,8 @@ MonoBehaviour:
     ItemPrefab: {fileID: 9195436676840446505, guid: 4d6d8e29eb0888046837d54ee7155feb, type: 3}
   - ItemName: 20
     ItemPrefab: {fileID: 6512664992176407847, guid: 85162c22d49ae4a07b935155dbcb7dc5, type: 3}
+  - ItemName: 21
+    ItemPrefab: {fileID: 6783299616991623103, guid: 582058088826a41a8a013b63b115c625, type: 3}
   _valuableBasePrefab: {fileID: 1984189302029878180, guid: 161684b0011ec3a45a98d794ee68a316, type: 3}
   _loadedObjectsDistance: 2
 --- !u!1 &1055539564
@@ -4175,12 +4177,12 @@ MonoBehaviour:
     MinimumInitialStock: 3
     Stock: []
   _utilities:
-  - ItemName: 19
+  - ItemName: 21
     GameObject: {fileID: 6783299616991623103, guid: 582058088826a41a8a013b63b115c625, type: 3}
     MaxStock: 100
     MinimumInitialStock: 90
     Stock: []
-  - ItemName: 19
+  - ItemName: 20
     GameObject: {fileID: 6512664992176407847, guid: 85162c22d49ae4a07b935155dbcb7dc5, type: 3}
     MaxStock: 100
     MinimumInitialStock: 90

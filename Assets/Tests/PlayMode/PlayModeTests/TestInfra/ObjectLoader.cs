@@ -92,7 +92,19 @@ internal class ObjectLoader : MonoBehaviour
 
     public GameObject LoadItemInExternalSafeIsland(ItemName ItemName)
     {
-        var itemPrefab = _itemPrefabs.Find(item => item.ItemName == ItemName).ItemPrefab;
+        var itemTagToPrefab = _itemPrefabs.Find(item => item.ItemName == ItemName);
+        if (itemTagToPrefab == null)
+        {
+            Debug.LogError($"ObjectLoader: Item {ItemName} is not configured in _itemPrefabs list.");
+            throw new System.ArgumentException($"Item {ItemName} is not configured in ObjectLoader.");
+        }
+
+        var itemPrefab = itemTagToPrefab.ItemPrefab;
+        if (itemPrefab == null)
+        {
+            Debug.LogError($"ObjectLoader: ItemPrefab for {ItemName} is null.");
+            throw new System.ArgumentException($"ItemPrefab for {ItemName} is null.");
+        }
 
         Vector2 externalSafeIslandFreeLoadPosition = GetExternalSafeIslandFreeLoadPosition(itemPrefab);
         GameObject loadedItem = Instantiate(itemPrefab, externalSafeIslandFreeLoadPosition, Quaternion.identity, _externalSafeIsland.transform);

@@ -54,7 +54,7 @@ namespace Assets.Enums
         // Utilities
         [Description("Nitro fuel")]
         NITRO_FUEL,
-        [Description("Magnet utility")]
-        MAGNET
+        [Description("Pushing magnet utility")]
+        PUSHING_MAGNET
     }
 }

@@ -37,9 +37,17 @@ public class DropsBank : MonoBehaviour
 
             foreach (ItemDropDto drop in dropperDrops.Value)
             {
-                if (_itemsBank.IsAvailable(drop.ItemName))
+                try
                 {
-                    _allDroppables[dropperDrops.Key].Add(drop.ItemName, drop.GetDropChance());
+                    if (_itemsBank.IsAvailable(drop.ItemName))
+                    {
+                        _allDroppables[dropperDrops.Key].Add(drop.ItemName, drop.GetDropChance());
+                    }
+                }
+                catch (System.Collections.Generic.KeyNotFoundException)
+                {
+                    // Item is not configured in ItemsBank, skip it
+                    Debug.LogWarning($"DropsBank: Item {drop.ItemName} is not configured in ItemsBank, skipping from drops.");
                 }
             }
         }

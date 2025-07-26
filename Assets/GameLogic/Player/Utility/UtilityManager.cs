@@ -171,7 +171,7 @@ namespace Assets.Player
             }
             if (utility is MagnetUtility)
             {
-                return "PM";
+                return "M>";
             }
             return "??";
         }

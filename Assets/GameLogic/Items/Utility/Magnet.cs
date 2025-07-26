@@ -19,6 +19,6 @@ public class Magnet : MonoBehaviour
     {
         var itemStats = GetComponent<ItemStats>();
         Debug.Log("Magnet: Invoking PLAYER_UTILITY_PICKUP event");
-        ItemEvent.Invoke(EventName.PLAYER_UTILITY_PICKUP, this, new(ItemName.MAGNET, itemStats.itemStats));
+                       ItemEvent.Invoke(EventName.PLAYER_UTILITY_PICKUP, this, new(ItemName.PUSHING_MAGNET, itemStats.itemStats));
     }
 } 
