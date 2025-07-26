@@ -77,8 +77,10 @@ namespace Assets.Player
                 bool shouldDeactivate = false;
                 if (_currentUtility is NitroUtility nitro)
                     shouldDeactivate = nitro.ShouldDeactivate();
-                else if (_currentUtility is MagnetUtility magnet)
+                else if (_currentUtility is PushingMagnetUtility magnet)
                     shouldDeactivate = magnet.ShouldDeactivate();
+                else if (_currentUtility is PullingMagnetUtility pullingMagnet)
+                    shouldDeactivate = pullingMagnet.ShouldDeactivate();
 
                 if (shouldDeactivate)
                 {
@@ -169,9 +171,13 @@ namespace Assets.Player
             {
                 return "NF";
             }
-            if (utility is MagnetUtility)
+            if (utility is PushingMagnetUtility)
             {
                 return "M>";
+            }
+            if (utility is PullingMagnetUtility)
+            {
+                return "M<";
             }
             return "??";
         }

@@ -2,9 +2,9 @@ using Assets.Models;
 using System.Collections;
 using UnityEngine;
 
-public class MagnetField : MonoBehaviour
+public class PullingMagnetField : MonoBehaviour
 {
-    private MagnetConfiguration _config;
+    private PullingMagnetConfiguration _config;
     private float _endTime;
     private SpriteRenderer _circleRenderer;
     private bool _fading = false;
@@ -12,7 +12,7 @@ public class MagnetField : MonoBehaviour
     private static readonly float MinDistance = 0.2f;
     private static readonly float FadeDuration = 0.3f;
 
-    public void Initialize(MagnetConfiguration config)
+    public void Initialize(PullingMagnetConfiguration config)
     {
         _config = config;
         _endTime = Time.time + _config.Duration;
@@ -42,13 +42,19 @@ public class MagnetField : MonoBehaviour
         {
             if (hit.attachedRigidbody == null) continue;
             if (!IsEnemy(hit.gameObject)) continue;
-            Vector2 dir = (hit.transform.position - transform.position);
+            Vector2 dir = (transform.position - hit.transform.position); // Direction TOWARD magnet
             float dist = Mathf.Max(dir.magnitude, MinDistance);
             dir.Normalize();
             float force = _config.ForceStrength / Mathf.Pow(dist, 3);
             if (_config.ForceCurve != null)
                 force *= _config.ForceCurve.Evaluate(1f - Mathf.Clamp01(dist / _config.Radius));
             hit.attachedRigidbody.AddForce(dir * force, ForceMode2D.Force);
+            
+            // Debug log for first few frames
+            if (Time.frameCount < 10)
+            {
+                Debug.Log($"PullingMagnetField: Applied force {force} in direction {dir} to enemy at distance {dist}");
+            }
         }
     }
 

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4669176474374478986}
   - component: {fileID: 4321601613380327110}
   m_Layer: 0
-  m_Name: PushingMagnetForceField
+  m_Name: PullingMagnetForceField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: 36a58ef0f52a17e4a93613edf7d86198, type: 3}
-  m_Color: {r: 0.9622642, g: 0.41304737, b: 0.41304737, a: 0.2}
+  m_Color: {r: 0.4669811, g: 1, b: 0.4750804, a: 0.2}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -94,9 +94,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3341143644036709183}
   - component: {fileID: 797126446568374198}
-  - component: {fileID: 1047316637279984996}
+  - component: {fileID: 5128380415526902199}
   m_Layer: 0
-  m_Name: PushingMagnet
+  m_Name: PullingMagnet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -170,7 +170,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1047316637279984996
+--- !u!114 &5128380415526902199
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,6 +179,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7786188073608054050}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f57115d7293fa42a8b1fceb9ea07cb97, type: 3}
+  m_Script: {fileID: 11500000, guid: 102760727df064004b306e7fb3716578, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

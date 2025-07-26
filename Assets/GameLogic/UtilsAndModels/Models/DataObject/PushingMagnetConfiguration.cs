@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace Assets.Models
 {
-    [CreateAssetMenu(fileName = "MagnetConfig", menuName = "Utilities/Magnet Configuration")]
-    public class MagnetConfiguration : BaseUtilityConfiguration
+    [CreateAssetMenu(fileName = "PushingMagnetConfig", menuName = "Utilities/Pushing Magnet Configuration")]
+    public class PushingMagnetConfiguration : BaseUtilityConfiguration
     {
         [SerializeField] private float duration = 10f;
         [SerializeField] private float radius = 3f;

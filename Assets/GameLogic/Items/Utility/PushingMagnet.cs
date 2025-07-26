@@ -2,7 +2,7 @@ using Assets.Enums;
 using Assets.Utils;
 using UnityEngine;
 
-public class Magnet : MonoBehaviour
+public class PushingMagnet : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D other)
     {

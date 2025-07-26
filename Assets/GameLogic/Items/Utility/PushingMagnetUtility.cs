@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace Items.Utility
 {
-    public class MagnetUtility : IUtility
+    public class PushingMagnetUtility : IUtility
     {
-        private readonly MagnetConfiguration _configuration;
+        private readonly PushingMagnetConfiguration _configuration;
         private GameObject _magnetInstance;
         private bool _isActive;
         private float _deactivationTime;
@@ -13,7 +13,7 @@ namespace Items.Utility
 
         public bool IsActive => _isActive;
 
-        public MagnetUtility(MagnetConfiguration configuration)
+        public PushingMagnetUtility(PushingMagnetConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -31,19 +31,19 @@ namespace Items.Utility
             var prefab = Resources.Load<GameObject>(MagnetPrefabPath);
             if (prefab == null)
             {
-                Debug.LogError($"MagnetUtility: Could not find prefab at {MagnetPrefabPath}");
+                Debug.LogError($"PushingMagnetUtility: Could not find prefab at {MagnetPrefabPath}");
                 return;
             }
             _magnetInstance = Object.Instantiate(prefab, spawnPosition, Quaternion.identity);
 
-            var field = _magnetInstance.GetComponent<MagnetField>();
+            var field = _magnetInstance.GetComponent<PushingMagnetField>();
             if (field != null)
             {
                 field.Initialize(_configuration);
             }
             else
             {
-                Debug.LogError("MagnetUtility: Magnet prefab missing MagnetField component");
+                Debug.LogError("PushingMagnetUtility: Magnet prefab missing PushingMagnetField component");
             }
 
             _isActive = true;
@@ -55,7 +55,7 @@ namespace Items.Utility
             if (!_isActive) return;
             if (_magnetInstance != null)
             {
-                var field = _magnetInstance.GetComponent<MagnetField>();
+                var field = _magnetInstance.GetComponent<PushingMagnetField>();
                 if (field != null)
                 {
                     field.FadeAndDestroy();

@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a23ba97df6dc04ba69f5642e3d03bffa, type: 3}
-  m_Name: MagnetConfig
+  m_Script: {fileID: 11500000, guid: e865817af7cc84a4bbb0e98bf521665d, type: 3}
+  m_Name: PullingMagnetConfig
   m_EditorClassIdentifier: 
   duration: 5
   radius: 3
