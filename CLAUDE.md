@@ -53,6 +53,6 @@ He reads on his phone. He wants to decide, not to manage.
 6. **Behaviour changes come with a test,** or with a written reason why a test is not possible.
 7. **Do not hand-edit Unity data files** (`.unity`, `.prefab`, `.asset`, existing `.meta`). Scene and prefab work happens in the editor, by Ofir. If a change needs a field wired or a prefab made, list it under "Needs Ofir in Unity" in the pull request.
 8. **Never change `Assets/External/` or `Packages/`.** They are third-party.
-9. **Keep each file's line endings and encoding.** Most C# files here use CRLF and some start with a BOM. A diff must show only the lines you meant to change.
+9. **Keep each file's line endings and encoding.** C# files here are stored with LF line endings, and most start with a UTF-8 BOM. A diff must show only the lines you meant to change.
 10. **Every new C# file or folder under `Assets/` gets a `.meta` file** with a new random 32-character hex GUID, in the same format as a neighbouring `.meta`.
 11. **Write commits and pull requests for Ofir:** what changed, why, and how it was checked.
