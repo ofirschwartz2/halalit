@@ -8,6 +8,17 @@ First draft, 2026-11-20. Written by the game designer agent for Ofir and the tea
 - Paths are relative to the repo root. Short forms: `GL/` = `Assets/GameLogic/`, `PF/` = `Assets/Resources/Prefabs/`, `PG` = `Assets/Scenes/Playground.unity`.
 - Ofir: please correct anything that is wrong. Section 10 has the questions only you can answer.
 
+## Vision (decided by Ofir, 2026-11-21)
+
+This section is what Ofir wants the game to become. Everything after it describes the game as built.
+
+- **Spelunky-style depth.** The game was born from Spelunky. It should be full of specific interactions between a specific enemy, a specific weapon and a specific place or situation. In his words: "extremely detailed and thoughtful", so that "every little thing was very thoughtful and thought through".
+- **Rich and distinct.** Many enemies and many weapons. No enemy plays like another enemy, and no weapon plays like another weapon.
+- **The daily.** Every day has one daily run. It is random, and it is exactly the same for every player who plays that day, from one seed. The best players of that daily win.
+- **Weapons as NFTs.** Weapons become NFTs with their own stats, and dailies reward players with them. This is a direction only. Nothing blockchain is built until Ofir says the game is ready.
+
+What this means for the team: every offer for a weapon, an enemy or a behavior lists its specific interactions with what already exists. An offer that is an existing thing with different numbers is not an offer.
+
 ## 1. The game in one paragraph
 
 Halalit is a top-down twin-stick shooter played in one fixed rectangular arena in space. You fly a small ship, the Halalit. The left stick turns and thrusts it. The right stick aims a weapon that circles the ship and fires by itself when the stick is pushed far. Enemies come out of spawn holes. Asteroids drift across in a stream. Destroyed enemies and asteroids drop valuables (silver, gold, diamond), which are the only source of score, and sometimes items: a new weapon that replaces yours, an upgrade, or a one-use utility. You collect drops by touching them or by tapping them to send a pickup claw. The run ends when the ship's health reaches zero, and the game returns to the main menu. There are no levels, no waves and no win state, and today the score is not saved.
