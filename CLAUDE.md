@@ -4,6 +4,8 @@ Halalit is a 2D twin-stick space shooter made in Unity 2022.3 (C#, URP 2D). The 
 
 A team of AI agents works on this repo. Every session and every agent follows this file.
 
+**North star, Milestone 1: Friends daily.** A few of Ofir's friends install the app, play the same daily for a week, and a shared leaderboard shows who won each day. Rank work by what gets there. The full vision is at the top of `docs/GAME_DESIGN.md`.
+
 | Read this | For |
 |---|---|
 | `docs/team/WORKFLOW.md` | The board stages and shelves, the two approvals, the templates, the team meeting |

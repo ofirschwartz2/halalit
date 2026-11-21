@@ -17,7 +17,9 @@ This section is what Ofir wants the game to become. Everything after it describe
 - **The daily.** Every day has one daily run. It is random, and it is exactly the same for every player who plays that day, from one seed. The best players of that daily win.
 - **Weapons as NFTs.** Weapons become NFTs with their own stats, and dailies reward players with them. This is a direction only. Nothing blockchain is built until Ofir says the game is ready.
 
-What this means for the team: every offer for a weapon, an enemy or a behavior lists its specific interactions with what already exists. An offer that is an existing thing with different numbers is not an offer.
+**Milestone 1: Friends daily (Ofir, 2026-11-21).** The north star for now. It is done when a few of Ofir's friends install the app, play the same daily for a week, and a shared leaderboard shows who won each day. In his words: "I can take an application and send her between a few of my friends where we can play on a daily basis, where it's really fun." It needs, in order: Unity running somewhere, a phone build, the daily (the same run for everyone, scores saved, a leaderboard), a run worth replaying (difficulty that ramps, a result screen), and enough distinct weapons and enemies. NFTs come after it.
+
+What this means for the team: the backlog is ranked by Milestone 1, and every offer for a weapon, an enemy or a behavior lists its specific interactions with what already exists. An offer that is an existing thing with different numbers is not an offer.
 
 ## 1. The game in one paragraph
 
