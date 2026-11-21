@@ -45,11 +45,14 @@ An offer fits on one phone screen:
 > **What the player gets:** at most 2 short sentences.
 > **Why it is different:** 1 sentence.
 > **How it works:** up to 4 bullets with starting numbers.
+> **Interactions:** 2 or 3 specific ones with a named enemy, weapon or place, each marked "works today" or "needs code".
 > **Needs Ofir in Unity:** numbered steps, or "Nothing".
 > **Size:** S, M or L. **Risk without Unity:** low, medium or high.
 > **Feels right when:** 1 line Ofir can check by playing.
 
 A Foundations offer says "What you get" and "Done means" (2 to 4 checks) in place of the player lines.
+
+Ofir's vision is Spelunky-style depth (see `docs/GAME_DESIGN.md`). An offer that is an existing thing with different numbers is not an offer.
 
 Ofir answers on the board or in chat: yes, no, or "change this". The architect then adds the technical approach as a comment for the developer. Ofir does not need to read it.
 
@@ -86,7 +89,9 @@ Right now the team cannot run Unity, and Ofir has asked it to work anyway and te
 
 ## The team meeting
 
-Once a day, just before 9:00 Israel time, a scheduled task wakes the team lead chat. The team lead runs the playbook and ends with the brief. Ofir can also ask for a meeting at any time.
+Once a day, at 08:36 Israel time, a scheduled task wakes the team lead chat. The team lead first schedules the next day's meeting, then runs the playbook and ends with the brief. Ofir can also ask for a meeting at any time.
+
+Every Sunday the meeting includes the roster check in `docs/team/ROSTER.md`. The team grows and shrinks through offers that Ofir approves.
 
 ## Team lead playbook
 

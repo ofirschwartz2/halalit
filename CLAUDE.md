@@ -4,11 +4,14 @@ Halalit is a 2D twin-stick space shooter made in Unity 2022.3 (C#, URP 2D). The 
 
 A team of AI agents works on this repo. Every session and every agent follows this file.
 
+**North star, Milestone 1: Friends daily.** A few of Ofir's friends install the app, play the same daily for a week, and a shared leaderboard shows who won each day. Rank work by what gets there. The full vision is at the top of `docs/GAME_DESIGN.md`.
+
 | Read this | For |
 |---|---|
 | `docs/team/WORKFLOW.md` | The board stages and shelves, the two approvals, the templates, the team meeting |
 | `docs/ARCHITECTURE.md` | How the code is built and the rules for new code |
-| `docs/GAME_DESIGN.md` | The game as it is built, and the open design questions |
+| `docs/GAME_DESIGN.md` | Ofir's vision, the game as it is built, and the open design questions |
+| `docs/team/ROSTER.md` | Who is on the team, the bench, and how the team grows and shrinks |
 
 ## Ofir approves everything
 
@@ -32,6 +35,8 @@ Ofir talks to one entity: the **team lead**, which is the main session. The team
 | `architect` | `docs/ARCHITECTURE.md`, the technical approach, review of every code change | Write game code |
 | `unity-developer` | Implementing one approved card per branch, with tests | Change scope, merge |
 | `qa-engineer` | The test suite, test plans, the list of work not yet run in Unity | Weaken a test to make it pass |
+
+The roster changes with the work. Adding or retiring a role is an offer that Ofir approves (see `docs/team/ROSTER.md`).
 
 When the team lead hands work to a specialist, the hand-off names the approved card, the files or areas involved, what "done" means, and what to send back. A specialist that lacks any of these asks the team lead before starting.
 
