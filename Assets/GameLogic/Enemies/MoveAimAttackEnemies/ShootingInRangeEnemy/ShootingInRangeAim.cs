@@ -8,11 +8,17 @@ public class ShootingInRangeAim : MoveAimAttackAim
 
     private Vector2 _halalitDirection;
     private float _shootingAngle;
+    private EnemySharedBehavior _enemySharedBehavior;
+
+    void Awake()
+    {
+        _enemySharedBehavior = GetComponent<EnemySharedBehavior>();
+    }
     
     public override void Aim(Transform transform)
     {
         _halalitDirection = Utils.GetHalalitDirection(transform.position);
-        _shootingAngle = Utils.GetRandomAngleAround(_shootingRange);
+        _shootingAngle = Utils.GetRandomAngleAround(_enemySharedBehavior._seedfulRandomGenerator, _shootingRange);
     }
 
     public float GetShootingAngle()
