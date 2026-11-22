@@ -16,6 +16,12 @@ public class MoveAimAttackMove : MonoBehaviour
 
     private Vector2 _direction;
     private float _movingTime;
+    private EnemySharedBehavior _enemySharedBehavior;
+
+    void Awake()
+    {
+        _enemySharedBehavior = GetComponent<EnemySharedBehavior>();
+    }
     
     void Start()
     {
@@ -25,7 +31,7 @@ public class MoveAimAttackMove : MonoBehaviour
 
     public void SetDirection()
     {
-        _direction = Utils.GetRandomVector2OnCircle();
+        _direction = Utils.GetRandomVector2OnCircle(_enemySharedBehavior._seedfulRandomGenerator);
     }
 
     public void MovingState()
@@ -61,6 +67,6 @@ public class MoveAimAttackMove : MonoBehaviour
 
     public void SetNewDirection(string edgeTag)
     {
-        _direction = EnemyUtils.GetAnotherDirectionFromEdge(_rigidBody, edgeTag);
+        _direction = EnemyUtils.GetAnotherDirectionFromEdge(_enemySharedBehavior._seedfulRandomGenerator, _rigidBody, edgeTag);
     }
 }

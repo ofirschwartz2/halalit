@@ -33,22 +33,23 @@ public class EnemiesDestructor : MonoBehaviour
     private void OnEnemyDeath(object initiator, TargetDeathEventArguments arguments)
     {
         GameObject enemyToKill = ((MonoBehaviour)initiator).gameObject;
+        SeedfulRandomGenerator randomGenerator = enemyToKill.GetComponent<EnemySharedBehavior>()._seedfulRandomGenerator;
 
-        TryInvokeValuableDropEvent(enemyToKill);
-        TryInvokeItemDropEvent(enemyToKill);
+        TryInvokeValuableDropEvent(enemyToKill, randomGenerator);
+        TryInvokeItemDropEvent(enemyToKill, randomGenerator);
         InvokeExplosionEvent(enemyToKill);
         Destroy(enemyToKill);
     }
 
-    private void TryInvokeValuableDropEvent(GameObject enemyToKill)
+    private void TryInvokeValuableDropEvent(GameObject enemyToKill, SeedfulRandomGenerator randomGenerator)
     {
         var potentialValuableDrops = enemyToKill.GetComponent<PotentialValuableDrops>().GetValuablesToChances();
         foreach (var potentialValuableDrop in potentialValuableDrops)
         {
-            float randomSeededNumber = enemyToKill.GetComponent<EnemySharedBehavior>()._seedfulRandomGenerator.RangeZeroToOne();
+            float randomSeededNumber = randomGenerator.RangeZeroToOne();
             if (randomSeededNumber <= potentialValuableDrop.Value)
             {
-                Vector2 dropForce = SeedlessRandomGenerator.GetInsideUnitCircle() * enemyToKill.transform.localScale.x;
+                Vector2 dropForce = randomGenerator.GetInsideUnitCircle() * enemyToKill.transform.localScale.x;
                 ValuableDropEventArguments valuableDropEventArguments = new(enemyToKill.GetComponent<EnemyDropper>().GetDropper(), enemyToKill.transform.position, dropForce, potentialValuableDrop.Key);
                 ValuableDropEvent.Invoke(EventName.NEW_VALUABLE_DROP, this, valuableDropEventArguments);
                 return;
@@ -57,9 +58,9 @@ public class EnemiesDestructor : MonoBehaviour
     }
 
     // TODO: refactor? - first check chances, then drop if needed
-    private void TryInvokeItemDropEvent(GameObject enemyToKill)
+    private void TryInvokeItemDropEvent(GameObject enemyToKill, SeedfulRandomGenerator randomGenerator)
     {
-        Vector2 dropForce = SeedlessRandomGenerator.GetInsideUnitCircle() * enemyToKill.transform.localScale.x;
+        Vector2 dropForce = randomGenerator.GetInsideUnitCircle() * enemyToKill.transform.localScale.x;
         ItemDropEventArguments itemDropEventArguments = new(enemyToKill.GetComponent<EnemyDropper>().GetDropper(), enemyToKill.transform.position, dropForce);
         ItemDropEvent.Invoke(EventName.NEW_ITEM_DROP, this, itemDropEventArguments);
     }

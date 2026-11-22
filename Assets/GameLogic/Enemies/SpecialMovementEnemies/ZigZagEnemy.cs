@@ -16,11 +16,17 @@ public class ZigZagEnemy : MonoBehaviour
     private Vector2 _direction;
     private ZigZagDirection _zigZagDirectionFlag;
     private float _changeZigZagDirectionTime, _startMovementTime;
+    private EnemySharedBehavior _enemySharedBehavior;
+
+    void Awake()
+    {
+        _enemySharedBehavior = GetComponent<EnemySharedBehavior>();
+    }
 
     void Start()
     {
         _zigZagDirectionFlag = ZigZagDirection.ZAG;
-        _direction = Utils.GetRandomVector2OnCircle();
+        _direction = Utils.GetRandomVector2OnCircle(_enemySharedBehavior._seedfulRandomGenerator);
         SetChangeZigZagDirectionTime();
     }
 
@@ -63,7 +69,7 @@ public class ZigZagEnemy : MonoBehaviour
         if (Utils.DidHitEdge(other.gameObject.tag))
         {
             SetChangeZigZagDirectionTime();
-            _direction = EnemyUtils.GetAnotherDirectionFromEdge(_rigidBody, other.gameObject.tag);
+            _direction = EnemyUtils.GetAnotherDirectionFromEdge(_enemySharedBehavior._seedfulRandomGenerator, _rigidBody, other.gameObject.tag);
         }
     }
     #endregion
