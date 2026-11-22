@@ -7,6 +7,7 @@ using Unity.Services.Leaderboards;
 using UnityEngine;
 using Unity.Services.Core;
 using Unity.Services.CloudSave.Models;
+using Assets.Utils;
 
 
 #if UNITY_EDITOR
@@ -21,8 +22,8 @@ public static class PlayerStats
     public static bool _isNewHighScore, _isDailyRun;
     public static int? _dailySeed, _highScore, _dailyScore;
     public static string _playerId, _dateInFormat, _dailyScoreKey, _highScoreKey;
-    public static Dictionary<string, int> _dailySeeds;
     public static Dictionary<string, object> _playerHighScore, _playerDailyScore;
+    private static DateTime _dailyDate;
 
 #region Init
     public async static Task InitAllAsync()
@@ -53,7 +54,8 @@ public static class PlayerStats
     internal static void SetDefaultPlayerStatsValues()
     {
         _playerId = "";
-        _dateInFormat = DateTime.Now.ToString("dd-MM-yy");
+        _dailyDate = DailySeed.GetToday();
+        _dateInFormat = DailySeed.GetDateKey(_dailyDate);
         _isNewHighScore = false;
         _highScore = null;
         _isDailyRun = false;
@@ -147,47 +149,7 @@ public static class PlayerStats
 
     public static void SetDailySeeds()
     {
-        _dailySeeds = GetDailySeeds();
-        _dailySeed = GetDailySeed(_dateInFormat);
-    }
-
-    private static Dictionary<string, int> GetDailySeeds()
-    {
-        var dailySeedKeyPrefix = "DailySeed_";
-
-    return new Dictionary<string, int>()
-    {
-        { dailySeedKeyPrefix + "13-12-24", 1823848950 },
-        { dailySeedKeyPrefix + "14-12-24", -542789631 },
-        { dailySeedKeyPrefix + "15-12-24", 967123405 },
-        { dailySeedKeyPrefix + "16-12-24", -234567890 },
-        { dailySeedKeyPrefix + "17-12-24", 1357924680 },
-        { dailySeedKeyPrefix + "18-12-24", -891234567 },
-        { dailySeedKeyPrefix + "19-12-24", 456789123 },
-        { dailySeedKeyPrefix + "20-12-24", -123456789 },
-        { dailySeedKeyPrefix + "21-12-24", 2047483647 },
-        { dailySeedKeyPrefix + "22-12-24", -987654321 },
-        { dailySeedKeyPrefix + "23-12-24", 741852963 },
-        { dailySeedKeyPrefix + "24-12-24", -369258147 },
-        { dailySeedKeyPrefix + "25-12-24", 159753468 },
-        { dailySeedKeyPrefix + "26-12-24", -852963741 },
-        { dailySeedKeyPrefix + "27-12-24", 246813579 },
-        { dailySeedKeyPrefix + "28-12-24", -147258369 },
-        { dailySeedKeyPrefix + "29-12-24", 963852741 },
-        { dailySeedKeyPrefix + "30-12-24", -741852963 },
-        { dailySeedKeyPrefix + "31-12-24", 357159852 },
-        { dailySeedKeyPrefix + "01-01-25", -258369147 }
-        };
-    }
-
-    public static int GetDailySeed(string _dateInFormat)
-    {
-        string key = $"DailySeed_{_dateInFormat}";
-        if (_dailySeeds.TryGetValue(key, out int value) && value is int dailySeed)
-        {
-            return dailySeed;
-        }
-        return 0;
+        _dailySeed = DailySeed.GetSeed(_dailyDate);
     }
 
     public static void SetStartDaily()
