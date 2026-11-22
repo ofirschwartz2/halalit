@@ -7,7 +7,7 @@ using UnityEngine;
 [assembly: InternalsVisibleTo("TestsPlayMode")]
 #endif
 
-public class ShotgunShot : MonoBehaviour 
+public class ShotgunShot : SeedfulRandomGeneratorUser 
 {
     [SerializeField]
     private bool _useConfigFile;
@@ -43,12 +43,12 @@ public class ShotgunShot : MonoBehaviour
 
     private void SetSpeed()
     {
-        _speed = Utils.GetRandomBetween(_averageSpeed - _speedVariance, _averageSpeed + _speedVariance);
+        _speed = Utils.GetRandomBetween(_seedfulRandomGenerator, _averageSpeed - _speedVariance, _averageSpeed + _speedVariance);
     }
 
     private void SetLifeTime()
     {
-        _lifeTime = SeedlessRandomGenerator.Range(_averageLifeTime - _lifeTimeVariance, _averageLifeTime + _lifeTimeVariance);
+        _lifeTime = _seedfulRandomGenerator.Range(_averageLifeTime - _lifeTimeVariance, _averageLifeTime + _lifeTimeVariance);
         _startOfLifeTime = Time.time;
         _endOfLifeTime = _startOfLifeTime + _lifeTime;
     }

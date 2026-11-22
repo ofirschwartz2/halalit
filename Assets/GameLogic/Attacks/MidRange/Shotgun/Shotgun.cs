@@ -21,7 +21,7 @@ public class Shotgun : MonoBehaviour
 
     void Start()
     {
-        InstantiateShots((int)SeedlessRandomGenerator.Range(_numberOfShots.min, _numberOfShots.max + 1), _range);
+        InstantiateShots((int)CombatRandomGenerator.GetSeedfulRandomGenerator().Range(_numberOfShots.min, _numberOfShots.max + 1), _range);
         _endOfLifeTime = Time.time + _lifeTime;
     }
 
@@ -35,10 +35,13 @@ public class Shotgun : MonoBehaviour
 
     private void InstantiateShots(int numberOfShots, float shootingRange)
     {
+        var combatRandomGenerator = CombatRandomGenerator.GetSeedfulRandomGenerator();
+
         for (var i = 0; i < numberOfShots; i++)
         {
-            var angle = Utils.GetRandomAngleAround(shootingRange);
+            var angle = Utils.GetRandomAngleAround(combatRandomGenerator, shootingRange);
             GameObject shotgunShot = Instantiate(_shotgunShotPrefab, transform.position, Utils.GetRotationPlusAngle(transform.rotation, angle));
+            shotgunShot.GetComponent<ShotgunShot>().SetInitialSeedfulRandomGenerator(combatRandomGenerator.GetNumber());
             shotgunShot.GetComponent<AttackBehaviour>().Copy(GetComponent<AttackBehaviour>());
         }
     }

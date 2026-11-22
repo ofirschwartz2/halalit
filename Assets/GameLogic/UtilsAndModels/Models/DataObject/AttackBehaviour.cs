@@ -28,7 +28,7 @@ public class AttackBehaviour : MonoBehaviour, IHarmer
 
     private int GetCriticalDamage()
     {
-        bool isCriticalDamage = SeedlessRandomGenerator.Range(0, 100) < AttackStats.Luck;
+        bool isCriticalDamage = CombatRandomGenerator.GetSeedfulRandomGenerator().Range(0, 100) < AttackStats.Luck;
 
         if (isCriticalDamage)
         {

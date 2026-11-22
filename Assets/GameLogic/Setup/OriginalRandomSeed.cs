@@ -53,6 +53,7 @@ public class OriginalRandomSeed : MonoBehaviour
         itemsBank.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
         itemRankPicker.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
         itemDropper.SetInitialSeedfulRandomGenerator(_seedfulRandomGenerator.GetNumber());
+        CombatRandomGenerator.SetInitialSeed(_seedfulRandomGenerator.GetNumber());
     }
 
 #if UNITY_EDITOR

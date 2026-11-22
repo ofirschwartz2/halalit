@@ -145,14 +145,14 @@ namespace Assets.Utils
             return radians;
         }
 
-        public static float GetRandomAngleAround(float range)
+        public static float GetRandomAngleAround(SeedfulRandomGenerator randomGenerator, float range)
         {
-            return SeedlessRandomGenerator.Range(-range, range);
+            return randomGenerator.Range(-range, range);
         }
 
-        public static float GetRandomBetween(float bottom, float top)
+        public static float GetRandomBetween(SeedfulRandomGenerator randomGenerator, float bottom, float top)
         {
-            return SeedlessRandomGenerator.Range(bottom, top);
+            return randomGenerator.Range(bottom, top);
         }
 
         public static float GetEndOfLifeTime(float lifetime)
