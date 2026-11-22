@@ -166,6 +166,22 @@ internal static class TestUtils
         enemy[0].transform.rotation = Quaternion.Euler(0, 0, degrees);
     }
 
+    // Takes the menu load off the game over event, so that a death does not load the real menu,
+    // which signs in for real. It takes effect one frame later.
+    // GameOverEvent calls a snapshot of its handlers taken in Start(), so removing the handler is not enough:
+    // the second GameOverEvent takes a new snapshot, without the menu load, in its own Start().
+    internal static void UnhookMenuLoadFromGameOver()
+    {
+        GetHalalit().GetComponent<GameOver>().DestroyEventListeners();
+        GetEventSystem().AddComponent<GameOverEvent>();
+    }
+
+    internal static void KillHalalit()
+    {
+        var health = GetHalalit().GetComponent<Health>();
+        health.TryChangeHealth(-health.GetHealth());
+    }
+
     internal static void SetEnemiesHealth(int health)
     {
         var enemies = GetEnemies();
