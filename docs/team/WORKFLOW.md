@@ -89,7 +89,7 @@ Right now the team cannot run Unity, and Ofir has asked it to work anyway and te
 
 ## The team meeting
 
-Once a day, at 08:36 Israel time, a scheduled task wakes the team lead chat. The team lead first schedules the next day's meeting, then runs the playbook and ends with the brief. Ofir can also ask for a meeting at any time.
+Three times a day, at 08:36, 13:36 and 18:36 Israel time (Ofir's decision, 2026-11-22), a scheduled task wakes the team lead chat. The team lead first schedules the next meeting, then runs the playbook and ends with the brief. When nothing changed and nothing needs Ofir, the brief is one line. Ofir can also ask for a meeting at any time.
 
 Every Sunday the meeting includes the roster check in `docs/team/ROSTER.md`. The team grows and shrinks through offers that Ofir approves.
 
