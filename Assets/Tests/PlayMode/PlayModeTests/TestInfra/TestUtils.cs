@@ -300,6 +300,18 @@ internal static class TestUtils
         return itemsFactory.GetComponent<ItemDropper>();
     }
 
+    internal static ItemsBank GetItemsBank()
+    {
+        var itemsFactory = GameObject.FindGameObjectWithTag(Tag.ITEMS_FACTORY.GetDescription());
+        return itemsFactory.GetComponent<ItemsBank>();
+    }
+
+    internal static DropsBank GetDropsBank()
+    {
+        var itemsFactory = GameObject.FindGameObjectWithTag(Tag.ITEMS_FACTORY.GetDescription());
+        return itemsFactory.GetComponent<DropsBank>();
+    }
+
     internal static GameObject GetInternalWorld() 
     {
         return GameObject.FindGameObjectWithTag(Tag.INTERNAL_WORLD.GetDescription());

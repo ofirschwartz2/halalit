@@ -4213,7 +4213,7 @@ MonoBehaviour:
   _allDefaultDropsList:
   - Key: 1
     Value:
-    - ItemName: 19
+    - ItemName: 20
       OneOfChance: 2
     - ItemName: 8
       OneOfChance: 2
@@ -4225,7 +4225,7 @@ MonoBehaviour:
       OneOfChance: 3
     - ItemName: 0
       OneOfChance: 3
-    - ItemName: 19
+    - ItemName: 20
       OneOfChance: 3
   - Key: 5
     Value:
@@ -4233,7 +4233,7 @@ MonoBehaviour:
       OneOfChance: 3
     - ItemName: 0
       OneOfChance: 2
-    - ItemName: 19
+    - ItemName: 20
       OneOfChance: 2
   - Key: 6
     Value:
@@ -4241,7 +4241,7 @@ MonoBehaviour:
       OneOfChance: 3
     - ItemName: 0
       OneOfChance: 3
-    - ItemName: 19
+    - ItemName: 20
       OneOfChance: 3
 --- !u!114 &1751165548
 MonoBehaviour:
