@@ -17,8 +17,6 @@ using Assets.Utils;
 public static class PlayerStats
 {
 
-    const string HIGHSCORE_LEADERBOARD_ID = "1"; // TODO: move 
-
     public static bool _isNewHighScore, _isDailyRun;
     public static int? _dailySeed, _highScore, _dailyScore;
     public static string _playerId, _dateInFormat, _dailyScoreKey, _highScoreKey;
@@ -121,6 +119,18 @@ public static class PlayerStats
         _playerDailyScore[_dailyScoreKey] = _dailyScore;
 
         await CloudSaveService.Instance.Data.Player.SaveAsync(_playerDailyScore);
+
+        if (DailyLeaderboard.ShouldSubmitDaily(_dailyScore, _dailyDate, DailySeed.GetToday()))
+        {
+            try
+            {
+                await LeaderboardsService.Instance.AddPlayerScoreAsync(Constants.DAILY_LEADERBOARD_ID, (double)_dailyScore);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Error in SaveDailyScoreAsync, daily leaderboard submit: {e.Message}");
+            }
+        }
     }
 
     internal static async Task TrySaveNewHighScoreAsync()
@@ -140,7 +150,7 @@ public static class PlayerStats
         _playerHighScore[_highScoreKey] = _highScore;
 
         await CloudSaveService.Instance.Data.Player.SaveAsync(_playerHighScore);
-        await LeaderboardsService.Instance.AddPlayerScoreAsync(HIGHSCORE_LEADERBOARD_ID, (double)_highScore);
+        await LeaderboardsService.Instance.AddPlayerScoreAsync(Constants.HIGHSCORE_LEADERBOARD_ID, (double)_highScore);
     }
 
 #endregion

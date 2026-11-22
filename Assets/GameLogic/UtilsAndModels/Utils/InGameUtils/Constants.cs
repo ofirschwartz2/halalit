@@ -14,4 +14,8 @@
     // Health bar
     public const float HEALH_BAR_SCALE = 0.01f;
     public const float HEALTH_BAR_Y_OFFSET_ADITION = 0.5f; 
+
+    // Leaderboards
+    public const string HIGHSCORE_LEADERBOARD_ID = "1";
+    public const string DAILY_LEADERBOARD_ID = "daily";
 }

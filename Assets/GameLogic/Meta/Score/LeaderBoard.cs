@@ -9,7 +9,6 @@ using UnityEngine.UI;
 
 public class LeaderBoard : MonoBehaviour
 {
-    const string HIGHSCORE_LEADERBOARD_ID = "1";
     const string HIGHSCORE_TABLE_NAME = "HighscoreTable";
     const string LEADERBOARD_ENTRY_CONTAINER_NAME = "LeaderboardEntryContainer";
     const string LEADERBOARD_ENTRY_TEMPLATE_NAME = "LeaderboardEntryTemplate";
@@ -30,7 +29,7 @@ public class LeaderBoard : MonoBehaviour
 
     public async Task TryGetScores()
     {
-        _highScoresResponse = await LeaderboardsService.Instance.GetScoresAsync(HIGHSCORE_LEADERBOARD_ID);
+        _highScoresResponse = await LeaderboardsService.Instance.GetScoresAsync(Constants.HIGHSCORE_LEADERBOARD_ID);
     }
 
     public void DisplayScores()
