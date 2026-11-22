@@ -124,7 +124,7 @@ public class AsteroidInternalInstantiator : SeedfulRandomGeneratorUser
     #region Predicates
     private bool ShouldInstantiateAsteroidsInternaly(int originalAsteroidScale)
     {
-        return originalAsteroidScale > 1 && SeedlessRandomGenerator.IsTrueIn50Precent();
+        return originalAsteroidScale > 1 && _seedfulRandomGenerator.IsTrueIn50Precent();
     }
     #endregion
 

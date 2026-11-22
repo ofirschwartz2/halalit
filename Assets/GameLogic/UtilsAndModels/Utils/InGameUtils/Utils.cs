@@ -183,15 +183,15 @@ namespace Assets.Utils
             return new Vector2(x, y);
         }
 
-        public static Vector2 GetRandomVector2OnCircle(float radius = 1)
+        public static Vector2 GetRandomVector2OnCircle(SeedfulRandomGenerator randomGenerator, float radius = 1)
         {
-            float angle = SeedlessRandomGenerator.Range(0, 2 * Mathf.PI);
+            float angle = randomGenerator.Range(0, 2 * Mathf.PI);
             return RadianToVector2(angle) * radius;
         }
 
-        public static Vector2 GetRandomVector2OnHalfOfCircle(Vector2 halfCircleDirection)
+        public static Vector2 GetRandomVector2OnHalfOfCircle(SeedfulRandomGenerator randomGenerator, Vector2 halfCircleDirection)
         {
-            var randomVector = GetRandomVector2OnCircle();
+            var randomVector = GetRandomVector2OnCircle(randomGenerator);
             if (Vector2.Dot(randomVector, halfCircleDirection) < 0)
                 randomVector *= -1;
             return randomVector;

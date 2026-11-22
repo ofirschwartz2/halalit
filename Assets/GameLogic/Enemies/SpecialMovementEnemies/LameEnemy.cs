@@ -11,6 +11,12 @@ public class LameEnemy : MonoBehaviour
     private float _speedLimit;
 
     private Vector2 _direction;
+    private EnemySharedBehavior _enemySharedBehavior;
+
+    void Awake()
+    {
+        _enemySharedBehavior = GetComponent<EnemySharedBehavior>();
+    }
 
     void Start()
     {
@@ -26,12 +32,12 @@ public class LameEnemy : MonoBehaviour
 
     private void SetDirection() 
     {
-        _direction = Utils.GetRandomVector2OnCircle();
+        _direction = Utils.GetRandomVector2OnCircle(_enemySharedBehavior._seedfulRandomGenerator);
     }
 
     private void SetNewDirection(string edgeTag)
     {
-        _direction = EnemyUtils.GetAnotherDirectionFromEdge(_rigidBody, edgeTag);
+        _direction = EnemyUtils.GetAnotherDirectionFromEdge(_enemySharedBehavior._seedfulRandomGenerator, _rigidBody, edgeTag);
     }
 
     public void StopMovement()

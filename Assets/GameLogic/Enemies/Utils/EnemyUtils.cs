@@ -7,7 +7,7 @@ static class EnemyUtils
 {
     private const float DELTA_TIME_MULTIPLIER = 300f; // TODO (refactor): should be configurable
 
-    public static Vector2 GetAnotherDirectionFromEdge(Rigidbody2D rigidbody, string edge)
+    public static Vector2 GetAnotherDirectionFromEdge(SeedfulRandomGenerator randomGenerator, Rigidbody2D rigidbody, string edge)
     {
         rigidbody.velocity = new Vector2(0f, 0f);
         Dictionary<string, Vector2> newDirections = new()
@@ -18,7 +18,7 @@ static class EnemyUtils
             { Tag.LEFT_EDGE.GetDescription(), Vector2.right },
         };
         
-        return Utils.GetRandomVector2OnHalfOfCircle(newDirections[edge]);
+        return Utils.GetRandomVector2OnHalfOfCircle(randomGenerator, newDirections[edge]);
     }
 
     public static void MoveUnderSpeedLimit(Rigidbody2D rigidbody, Vector2 direction, float movementAmplitude, float speedLimit)
