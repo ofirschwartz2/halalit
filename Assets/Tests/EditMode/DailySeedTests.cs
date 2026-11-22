@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Threading;
 using Assets.Utils;
 using NUnit.Framework;
 
@@ -35,6 +37,30 @@ public class DailySeedTests
         AssertPinnedSeed(new DateTime(2026, 11, 22), 114539602);
         AssertPinnedSeed(new DateTime(2026, 11, 23), -1359240184);
         AssertPinnedSeed(new DateTime(2025, 1, 1), -665835459);
+    }
+
+    [Test]
+    public void DateKeyIgnoresDeviceCulture()
+    {
+        var day = new DateTime(2026, 11, 22);
+        var originalCulture = Thread.CurrentThread.CurrentCulture;
+
+        try
+        {
+            // Thai culture uses the Buddhist calendar, so a culture-dependent key would read "22-11-69"
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("th-TH");
+            var thaiKey = DailySeed.GetDateKey(day);
+
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            var invariantKey = DailySeed.GetDateKey(day);
+
+            AssertWrapper.AreEqual("22-11-26", thaiKey, "Date key changed with the device culture");
+            AssertWrapper.AreEqual("22-11-26", invariantKey, "Date key has the wrong format");
+        }
+        finally
+        {
+            Thread.CurrentThread.CurrentCulture = originalCulture;
+        }
     }
 
     private void AssertPinnedSeed(DateTime day, int expectedSeed)
