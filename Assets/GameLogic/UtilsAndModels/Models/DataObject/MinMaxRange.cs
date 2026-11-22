@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 
 [System.Serializable]
@@ -14,6 +16,7 @@ public class MinMaxRange
     }
 }
 
+#if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(MinMaxRange))]
 public class MinMaxRangeDrawer : PropertyDrawer
 {
@@ -40,3 +43,4 @@ public class MinMaxRangeDrawer : PropertyDrawer
         EditorGUI.EndProperty();
     }
 }
+#endif

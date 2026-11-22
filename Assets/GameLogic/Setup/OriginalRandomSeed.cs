@@ -28,7 +28,9 @@ public class OriginalRandomSeed : MonoBehaviour
 
         SetAllInitialSeedfulRandomGenerators();
 
+#if UNITY_EDITOR
         SetTestsInitialSeedfulRandomGenerators();
+#endif
     }
 
     void SetAllInitialSeedfulRandomGenerators()

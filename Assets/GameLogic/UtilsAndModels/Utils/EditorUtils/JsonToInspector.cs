@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using Assets.Enums;
 using Assets.Utils;
 using System.Collections;
@@ -48,3 +49,4 @@ public static class JsonToInspector
 
 
 }
+#endif
