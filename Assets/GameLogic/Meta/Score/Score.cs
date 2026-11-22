@@ -31,6 +31,7 @@ public class Score : MonoBehaviour
     private void SetEventListeners()
     {
         ValuableEvent.PlayerValuablePickUp += IncreaseScore;
+        GameOverEvent.GameOver += SetGameStats;
     }
     #endregion
 
@@ -44,6 +45,7 @@ public class Score : MonoBehaviour
     public void DestroyEventListeners()
     {
         ValuableEvent.PlayerValuablePickUp -= IncreaseScore;
+        GameOverEvent.GameOver -= SetGameStats;
     }
     #endregion
 
@@ -53,7 +55,7 @@ public class Score : MonoBehaviour
         scoreText.text = "Score: " + _score.ToString();
     }
 
-    public void SetGameStats()
+    private void SetGameStats(object initiator, GameOverEventArguments arguments)
     {
         TrySetHighScore();
 
@@ -70,7 +72,7 @@ public class Score : MonoBehaviour
 
     private void TrySetHighScore()
     {
-        if (_score > PlayerStats._highScore)
+        if (_score > (PlayerStats._highScore ?? 0))
         {
             PlayerStats._highScore = _score;
             PlayerStats._isNewHighScore = true;

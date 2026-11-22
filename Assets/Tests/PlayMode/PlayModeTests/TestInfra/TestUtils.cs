@@ -166,6 +166,12 @@ internal static class TestUtils
         enemy[0].transform.rotation = Quaternion.Euler(0, 0, degrees);
     }
 
+    internal static void KillHalalit()
+    {
+        var health = GetHalalit().GetComponent<Health>();
+        health.TryChangeHealth(-health.GetHealth());
+    }
+
     internal static void SetEnemiesHealth(int health)
     {
         var enemies = GetEnemies();
