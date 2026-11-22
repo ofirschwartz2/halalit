@@ -3,60 +3,61 @@ using System.ComponentModel;
 
 namespace Assets.Enums
 {
+    // Scenes store these numbers. Never change or reuse one; append new members with the next number.
     [Serializable]
     public enum ItemName
     {
         // Attacks
         [Description("Ball shot item")]
-        BALL_SHOT = AttackName.BALL_SHOT,
+        BALL_SHOT = 0,
         [Description("Laser beam item")]
-        LASER_BEAM = AttackName.LASER_BEAM,
+        LASER_BEAM = 1,
         [Description("Knockback wave item")]
-        KNOCKBACK_WAVE = AttackName.KNOCKBACK_WAVE,
+        KNOCKBACK_WAVE = 2,
         [Description("Boomerang item")]
-        BOOMERANG = AttackName.BOOMERANG,
+        BOOMERANG = 3,
         [Description("Mirror Ball shot item")]
-        MIRROR_BALL_SHOT = AttackName.MIRROR_BALL_SHOT,
+        MIRROR_BALL_SHOT = 4,
         [Description("Sword item")]
-        SWORD = AttackName.SWORD,
+        SWORD = 5,
         [Description("Blast shot item")] 
-        BLAST_SHOT = AttackName.BLAST_SHOT,
+        BLAST_SHOT = 6,
         [Description("Grenade item")]
-        GRENADE = AttackName.GRENADE,
+        GRENADE = 7,
         [Description("Shotgun item")]
-        SHOTGUN = AttackName.SHOTGUN,
+        SHOTGUN = 8,
         [Description("Spikes item")]
-        SPIKES = AttackName.SPIKES,
+        SPIKES = 9,
 
         // Upgrades
         [Description("Halalit max HP")]
-        HALALIT_VITALITY,
+        HALALIT_VITALITY = 10,
         [Description("Halalit defence")]
-        HALALIT_IMMUNITY,
+        HALALIT_IMMUNITY = 11,
         [Description("Halalit being affected by knockbacks")]
-        HALALIT_VIGOR,
+        HALALIT_VIGOR = 12,
         [Description("Claw rope length")]
-        CLAW_RANGE,
+        CLAW_RANGE = 13,
         [Description("Claw speed")]
-        CLAW_AGILITY,
+        CLAW_AGILITY = 14,
         [Description("Claw not stamble by collisions")]
-        CLAW_STABILITY,
+        CLAW_STABILITY = 15,
         [Description("Weapon fire rate")]
-        WEAPON_STAMINA,
+        WEAPON_STAMINA = 16,
         [Description("Weapon shakeness")]
-        WEAPON_DEXTERITY,
+        WEAPON_DEXTERITY = 17,
         [Description("Weapon movement drag")]
-        WEAPON_STRENGH,
+        WEAPON_STRENGH = 18,
 
         [Description("ItemBase")] 
-        ITEM_BASE,
+        ITEM_BASE = 19,
         
         // Utilities
         [Description("Nitro fuel")]
-        NITRO_FUEL,
+        NITRO_FUEL = 20,
         [Description("Pushing magnet utility")]
-        PUSHING_MAGNET,
+        PUSHING_MAGNET = 21,
         [Description("Pulling magnet utility")]
-        PULLING_MAGNET
+        PULLING_MAGNET = 22
     }
 }

@@ -77,6 +77,13 @@ public class DropsBank : MonoBehaviour
 
         return new Dictionary<ItemName, float>();
     }
+
+#if UNITY_EDITOR
+    internal List<KeyValuePair<Dropper, List<ItemDropDto>>> GetDefaultDropsList()
+    {
+        return _allDefaultDropsList;
+    }
+#endif
     #endregion
 
     #region Events actions
