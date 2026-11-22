@@ -8,9 +8,9 @@ public class DailyLeaderboardTests
     public void SameDaySubmits()
     {
         var runDay = new DateTime(2026, 11, 22, 0, 0, 0, DateTimeKind.Utc);
-        var today = new DateTime(2026, 11, 22, 0, 0, 0, DateTimeKind.Utc);
+        var laterToday = new DateTime(2026, 11, 22, 23, 59, 0, DateTimeKind.Utc);
 
-        var shouldSubmit = DailyLeaderboard.ShouldSubmitDaily(120, runDay, today);
+        var shouldSubmit = DailyLeaderboard.ShouldSubmitDaily(120, runDay, laterToday);
 
         AssertWrapper.IsTrue(shouldSubmit, "A daily score from today was not submitted");
     }
