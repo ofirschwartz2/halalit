@@ -58,13 +58,23 @@ public class ScoreTests
 
         // A first-time player on a daily run dies. No yield until PlayerStats is reset:
         // the real menu loads in the next frame and would upload whatever PlayerStats still holds.
+        // The finally block resets it even when the kill throws.
+        int? highScore;
+        bool isNewHighScore;
+        int? dailyScore;
         PlayerStats.SetDefaultPlayerStatsValues();
         PlayerStats.SetStartDaily();
-        TestUtils.KillHalalit();
-        var highScore = PlayerStats._highScore;
-        var isNewHighScore = PlayerStats._isNewHighScore;
-        var dailyScore = PlayerStats._dailyScore;
-        PlayerStats.SetDefaultPlayerStatsValues();
+        try
+        {
+            TestUtils.KillHalalit();
+            highScore = PlayerStats._highScore;
+            isNewHighScore = PlayerStats._isNewHighScore;
+            dailyScore = PlayerStats._dailyScore;
+        }
+        finally
+        {
+            PlayerStats.SetDefaultPlayerStatsValues();
+        }
 
         // THEN
         AssertWrapper.Greater(score, 0, "No Score Collected", _currentSeed);
