@@ -54,11 +54,18 @@ public class ScoreTests
 
         } while (newValuables.Length != 0);
 
+        // GIVEN
+        // A death must not load the real menu in a test run, because the menu signs in for real.
+        // The helper takes the menu load off the game over event. It takes effect one frame later.
+        TestUtils.UnhookMenuLoadFromGameOver();
+        yield return null;
+
         var score = TestUtils.GetScore();
 
-        // A first-time player on a daily run dies. No yield until PlayerStats is reset:
-        // the real menu loads in the next frame and would upload whatever PlayerStats still holds.
-        // The finally block resets it even when the kill throws.
+        // WHEN
+        // A first-time player on a daily run dies. Reset, kill, read and reset are one step with no yield.
+        // The finally block resets PlayerStats even when the kill throws,
+        // so no test score is left behind for a later test or a real menu.
         int? highScore;
         bool isNewHighScore;
         int? dailyScore;
@@ -75,8 +82,10 @@ public class ScoreTests
         {
             PlayerStats.SetDefaultPlayerStatsValues();
         }
+        yield return null;
 
         // THEN
+        AssertWrapper.IsFalse(TestUtils.IsGameOver(), "Game Over Loaded The Menu", _currentSeed);
         AssertWrapper.Greater(score, 0, "No Score Collected", _currentSeed);
         AssertWrapper.IsTrue(highScore == score, "High Score Not Set", _currentSeed);
         AssertWrapper.IsTrue(isNewHighScore, "New High Score Not Flagged", _currentSeed);
