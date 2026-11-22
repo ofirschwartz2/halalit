@@ -4,6 +4,7 @@ using Assets.Tests.PlayMode.PlayModeTests.TestInfra;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
@@ -11,10 +12,17 @@ using UnityEngine.TestTools;
 
 public class SameSeedTests
 {
-    private const int FIXED_UPDATES_BEFORE_RECORDING_DROPS = 100;
-    private const float DROP_POSITION_ACCEPTED_DELTA = 0.5f;
+    private const int NUMBER_OF_ENEMIES_TO_KILL = 10;
+    private const string NO_ITEM = "No Item";
 
     private int _currentSeed;
+    private bool _isTimeScaleChanged;
+
+    // Drop recording: filled by the drop event handlers at the moment of each drop.
+    private List<string> _recordedDrops;
+    private int _currentKillIndex;
+    private Transform _itemsParent;
+    private HashSet<int> _knownItemIds;
 
     [SetUp]
     public void SetUp()
@@ -45,33 +53,30 @@ public class SameSeedTests
         }
     }
 
+    // Records the roll results at the moment of each drop (which valuable, which item, the push it got),
+    // matched by kill order. Nothing depends on where a drop has rolled to afterwards.
     [UnityTest]
     public IEnumerator SameSeedSameDrops()
     {
         // GIVEN
-        var firstRunDrops = new List<KeyValuePair<string, Vector2>>();
+        var firstRunDrops = new List<string>();
         yield return KillEnemiesAndRecordDrops(firstRunDrops);
 
         // WHEN
+        TestTimeController.ResetTimeScale();
         TestUtils.SetRandomSeed(_currentSeed);
         SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
         yield return null;
 
-        var secondRunDrops = new List<KeyValuePair<string, Vector2>>();
+        var secondRunDrops = new List<string>();
         yield return KillEnemiesAndRecordDrops(secondRunDrops);
 
         // THEN
-        AssertWrapper.Greater(firstRunDrops.Count, 0, "Nothing Dropped", _currentSeed);
+        AssertWrapper.Greater(firstRunDrops.Count, NUMBER_OF_ENEMIES_TO_KILL - 1, "Not Every Kill Rolled An Item Drop", _currentSeed);
         AssertWrapper.AreEqual(firstRunDrops.Count, secondRunDrops.Count, "Different Number Of Drops", _currentSeed);
-        foreach (var firstRunDrop in firstRunDrops)
+        for (int i = 0; i < firstRunDrops.Count; i++)
         {
-            var matchingDropIndex = secondRunDrops.FindIndex(secondRunDrop =>
-                secondRunDrop.Key == firstRunDrop.Key &&
-                Mathf.Abs(secondRunDrop.Value.x - firstRunDrop.Value.x) <= DROP_POSITION_ACCEPTED_DELTA &&
-                Mathf.Abs(secondRunDrop.Value.y - firstRunDrop.Value.y) <= DROP_POSITION_ACCEPTED_DELTA);
-
-            AssertWrapper.IsTrue(matchingDropIndex >= 0, "No Matching Drop For " + firstRunDrop.Key + " At " + firstRunDrop.Value, _currentSeed);
-            secondRunDrops.RemoveAt(matchingDropIndex);
+            AssertWrapper.AreEqual(firstRunDrops[i], secondRunDrops[i], "Different Drop", _currentSeed);
         }
     }
 
@@ -95,56 +100,95 @@ public class SameSeedTests
         return enemyOrder;
     }
 
-    // Same steps as ValuablesTests.EnemySometimesDropValuable
-    private IEnumerator KillEnemiesAndRecordDrops(List<KeyValuePair<string, Vector2>> drops)
+    private IEnumerator KillEnemiesAndRecordDrops(List<string> drops)
     {
         TestUtils.SetTestMode();
+        _isTimeScaleChanged = true;
 
-        var numberOfEnemies = 10;
-        var positions = new List<Vector2>();
-        for (int i = 0; i < numberOfEnemies; i++)
-        {
-            positions.Add(new Vector2((i * 1f) + 1f, 0f));
-        }
         var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
-        var loadedEnemies = objectLoader.LoadEnemiesInExternalSafeIsland(numberOfEnemies, _currentSeed);
+        var loadedEnemies = objectLoader.LoadEnemiesInExternalSafeIsland(NUMBER_OF_ENEMIES_TO_KILL, _currentSeed);
         yield return null;
 
-        for (int i = 0; i < numberOfEnemies; i++)
+        // Inside the world, 2 apart, away from the Halalit and the edges, so nothing touches them.
+        for (int i = 0; i < NUMBER_OF_ENEMIES_TO_KILL; i++)
         {
-            TestUtils.SetGameObjectPosition(loadedEnemies[i], positions[i]);
-        }
-        TestUtils.SetEnemiesHealth(1);
-        TestUtils.SetUpShot(AttackName.BALL_SHOT);
-        var weaponMovement = TestUtils.GetWeaponMovement();
-        var weaponAttack = TestUtils.GetWeaponAttack();
-        yield return new WaitForSeconds(1);
-
-        var enemies = TestUtils.GetEnemies();
-
-        do
-        {
-            weaponMovement.TryChangeWeaponPosition(Vector2.right);
-            yield return null;
-
-            weaponAttack.HumbleFixedUpdate(Vector2.right);
-            yield return null;
-
-            enemies = TestUtils.GetEnemies();
-        } while (enemies.Length != 0);
-
-        for (int i = 0; i < FIXED_UPDATES_BEFORE_RECORDING_DROPS; i++)
-        {
-            yield return new WaitForFixedUpdate();
+            TestUtils.SetGameObjectPosition(loadedEnemies[i], new Vector2((i * 2f) - 9f, 5f));
         }
 
-        foreach (var valuable in TestUtils.GetValuables())
+        StartRecordingDrops(drops);
+        yield return null; // the new drop event components take their handler snapshot in Start()
+        yield return new WaitForFixedUpdate();
+
+        for (int i = 0; i < NUMBER_OF_ENEMIES_TO_KILL; i++)
         {
-            drops.Add(new KeyValuePair<string, Vector2>(valuable.name, valuable.transform.position));
+            _currentKillIndex = i;
+            var health = loadedEnemies[i].GetComponent<Health>();
+            health.TryChangeHealth(-health.GetHealth());
         }
-        foreach (var item in TestUtils.GetItems())
+        yield return null;
+
+        StopRecordingDrops();
+        AssertWrapper.AreEqual(0, TestUtils.GetEnemies().Length, "Enemies Left Alive", _currentSeed);
+    }
+
+    private void StartRecordingDrops(List<string> drops)
+    {
+        _recordedDrops = drops;
+        _itemsParent = TestUtils.GetItemDropper().transform;
+        _knownItemIds = new HashSet<int>();
+        foreach (Transform child in _itemsParent)
         {
-            drops.Add(new KeyValuePair<string, Vector2>(item.name, item.transform.position));
+            _knownItemIds.Add(child.gameObject.GetInstanceID());
+        }
+
+        // Added after ItemDropper and ValuableDropper, so these run right after the real drop.
+        ItemDropEvent.NewItemDrop += RecordItemDrop;
+        ValuableDropEvent.NewValuableDrop += RecordValuableDrop;
+
+        // The drop events call a snapshot of their handlers taken in Start(), so take a new snapshot.
+        TestUtils.GetEventSystem().AddComponent<ItemDropEvent>();
+        TestUtils.GetEventSystem().AddComponent<ValuableDropEvent>();
+    }
+
+    private void StopRecordingDrops()
+    {
+        ItemDropEvent.NewItemDrop -= RecordItemDrop;
+        ValuableDropEvent.NewValuableDrop -= RecordValuableDrop;
+    }
+
+    private void RecordItemDrop(object initiator, ItemDropEventArguments arguments)
+    {
+        string droppedItem = NO_ITEM;
+        foreach (Transform child in _itemsParent)
+        {
+            if (_knownItemIds.Add(child.gameObject.GetInstanceID()))
+            {
+                droppedItem = child.name;
+            }
+        }
+
+        _recordedDrops.Add("Kill " + _currentKillIndex + ": " + arguments.Dropper + " item " + droppedItem + ", force " + ToExactString(arguments.DropForce));
+    }
+
+    private void RecordValuableDrop(object initiator, ValuableDropEventArguments arguments)
+    {
+        _recordedDrops.Add("Kill " + _currentKillIndex + ": " + arguments.Dropper + " valuable " + arguments.ValuableName + ", force " + ToExactString(arguments.DropForce));
+    }
+
+    private static string ToExactString(Vector2 vector)
+    {
+        return "(" + vector.x.ToString("R", CultureInfo.InvariantCulture) + ", " + vector.y.ToString("R", CultureInfo.InvariantCulture) + ")";
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        StopRecordingDrops();
+        TestUtils.DestroyAllGameObjects();
+        if (_isTimeScaleChanged)
+        {
+            TestTimeController.ResetTimeScale();
+            _isTimeScaleChanged = false;
         }
     }
 }
