@@ -501,6 +501,12 @@ internal static class TestUtils
         return enemy.GetComponent<Health>().GetHealth();
     }
 
+    internal static float GetAsteroidHealth()
+    {
+        TesingWithOneAsteroidValidation();
+        return GetAsteroid().GetComponent<Health>().GetHealth();
+    }
+
     internal static List<int> GetAllEnemiesHealth()
     {
         TesingWithMultipleEnemiesValidation();

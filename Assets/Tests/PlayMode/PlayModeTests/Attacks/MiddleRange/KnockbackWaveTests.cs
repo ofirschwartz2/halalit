@@ -396,6 +396,8 @@ public class KnockbackWaveTests
         TestUtils.SetAsteroidPosition(touchOnJoystick.normalized * 3);
         yield return null;
 
+        var asteroidHealthBeforeHit = TestUtils.GetAsteroidHealth();
+
         // WHEN
         weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
         yield return null;
@@ -415,6 +417,7 @@ public class KnockbackWaveTests
         } while (shot != null);
 
         // THEN
+        AssertWrapper.Greater(asteroidHealthBeforeHit, TestUtils.GetAsteroidHealth(), "Wave did not reach the big asteroid", _currentSeed);
         AssertWrapper.AreEqual(0, TestUtils.GetAsteroidMovement().GetSpeed(), "Big asteroid was launched", _currentSeed);
     }
 
