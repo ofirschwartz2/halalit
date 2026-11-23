@@ -173,6 +173,110 @@ public class BoomerangTests
 
     }
 
+    private const float FETCH_MIN_DISTANCE_FROM_HALALIT = 2f;
+    [UnityTest]
+    public IEnumerator FetchesValuableToHalalit()
+    {
+        // GIVEN
+        yield return null;
+        TestUtils.SetTestMode();
+        TestUtils.SetUpShot(SHOT_NAME);
+        var weaponMovement = TestUtils.GetWeaponMovement();
+        var weaponAttack = TestUtils.GetWeaponAttack();
+        var halalit = TestUtils.GetHalalit();
+        var originalScore = TestUtils.GetScore();
+        var goldValue = TestUtils.GetValuableValues().Find(valuableValue => valuableValue.Key == ValuableName.GOLD).Value;
+        var touchOnJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
+
+        weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
+        yield return null;
+
+        weaponAttack.HumbleFixedUpdate(touchOnJoystick);
+        yield return null;
+
+        var shot = TestUtils.GetShot();
+        AssertWrapper.IsNotNull(shot, _currentSeed);
+
+        while (shot != null && Vector2.Distance(shot.transform.position, halalit.transform.position) <= FETCH_MIN_DISTANCE_FROM_HALALIT)
+        {
+            yield return null;
+        }
+        AssertWrapper.IsNotNull(shot, _currentSeed, "Shot Ended Before Getting Far From Halalit");
+
+        // WHEN
+        IEnumerator drop = TestUtils.DropValuable(ValuableName.GOLD, shot.transform.position);
+        while (drop.MoveNext())
+        {
+            yield return null;
+        }
+
+        while (shot != null)
+        {
+            yield return null;
+        }
+        yield return null;
+        yield return null;
+
+        // THEN
+        AssertWrapper.AreEqual(0, TestUtils.GetValuables().Length, "Valuable Was Not Brought To Halalit", _currentSeed);
+        AssertWrapper.AreEqual(originalScore + goldValue, TestUtils.GetScore(), "Score Did Not Rise By The Gold Value", _currentSeed);
+    }
+
+    [UnityTest]
+    public IEnumerator DropsValuableOnEnemy()
+    {
+        // GIVEN
+        yield return null;
+        TestUtils.SetTestMode();
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadEnemyInExternalSafeIsland(_currentSeed);
+        TestUtils.SetUpShot(AttackName.BOOMERANG);
+        var weaponMovement = TestUtils.GetWeaponMovement();
+        var weaponAttack = TestUtils.GetWeaponAttack();
+        TestUtils.SetRandomEnemyPosition();
+        yield return null;
+
+        var halalit = TestUtils.GetHalalit();
+        var originalScore = TestUtils.GetScore();
+        var targetClosestPosition = TestUtils.GetEnemyNearestPositionToHalalit();
+        var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(targetClosestPosition, weaponAttack.GetAttackJoystickEdge());
+
+        weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
+        yield return null;
+
+        weaponAttack.HumbleFixedUpdate(touchOnJoystick);
+        yield return null;
+
+        var shot = TestUtils.GetShot();
+        AssertWrapper.IsNotNull(shot, _currentSeed);
+
+        while (shot != null && Vector2.Distance(shot.transform.position, halalit.transform.position) <= FETCH_MIN_DISTANCE_FROM_HALALIT)
+        {
+            yield return null;
+        }
+        AssertWrapper.IsNotNull(shot, _currentSeed, "Shot Ended Before Getting Far From Halalit");
+
+        // WHEN
+        IEnumerator drop = TestUtils.DropValuable(ValuableName.GOLD, shot.transform.position);
+        while (drop.MoveNext())
+        {
+            yield return null;
+        }
+        var valuable = (GameObject)drop.Current;
+
+        while (shot != null)
+        {
+            yield return null;
+        }
+        yield return null;
+        yield return null;
+
+        // THEN
+        AssertWrapper.IsNotNull(valuable, _currentSeed, "Valuable Was Destroyed With The Boomerang");
+        AssertWrapper.AreEqual(originalScore, TestUtils.GetScore(), "Score Changed Though The Boomerang Hit An Enemy", _currentSeed);
+        AssertWrapper.Greater(Vector2.Distance(valuable.transform.position, halalit.transform.position), FETCH_MIN_DISTANCE_FROM_HALALIT, "Valuable Was Brought To Halalit Though The Boomerang Hit An Enemy", _currentSeed);
+    }
+
     [TearDown]
     public void TearDown()
     {

@@ -1,9 +1,10 @@
 using UnityEngine;
 using Assets.Utils;
 using Assets.Enums;
+using Assets.Models;
 using System.Linq;
 
-public class ItemMovement : MonoBehaviour
+public class ItemMovement : MonoBehaviour, IGrabbable
 {
     [SerializeField]
     protected Rigidbody2D _rigidBody;
