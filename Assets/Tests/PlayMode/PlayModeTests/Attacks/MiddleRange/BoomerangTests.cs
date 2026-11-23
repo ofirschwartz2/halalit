@@ -201,24 +201,23 @@ public class BoomerangTests
         {
             yield return null;
         }
-        AssertWrapper.IsNotNull(shot, _currentSeed, "Shot Ended Before Getting Far From Halalit");
+        AssertWrapper.IsTrue(shot != null, "Shot Ended Before Getting Far From Halalit", _currentSeed);
 
         // WHEN
-        IEnumerator drop = TestUtils.DropValuable(ValuableName.GOLD, shot.transform.position);
-        while (drop.MoveNext())
-        {
-            yield return null;
-        }
+        var valuable = TestUtils.DropValuable(ValuableName.GOLD, shot.transform.position);
+        var wasCarried = false;
 
         while (shot != null)
         {
+            wasCarried |= valuable != null && valuable.transform.parent == shot.transform;
             yield return null;
         }
         yield return null;
         yield return null;
 
         // THEN
-        AssertWrapper.AreEqual(0, TestUtils.GetValuables().Length, "Valuable Was Not Brought To Halalit", _currentSeed);
+        AssertWrapper.IsTrue(wasCarried, "Boomerang Did Not Fetch The Valuable", _currentSeed);
+        AssertWrapper.IsTrue(valuable == null, "Valuable Was Not Brought To Halalit", _currentSeed);
         AssertWrapper.AreEqual(originalScore + goldValue, TestUtils.GetScore(), "Score Did Not Rise By The Gold Value", _currentSeed);
     }
 
@@ -254,27 +253,30 @@ public class BoomerangTests
         {
             yield return null;
         }
-        AssertWrapper.IsNotNull(shot, _currentSeed, "Shot Ended Before Getting Far From Halalit");
+        AssertWrapper.IsTrue(shot != null, "Shot Ended Before Getting Far From Halalit", _currentSeed);
 
         // WHEN
-        IEnumerator drop = TestUtils.DropValuable(ValuableName.GOLD, shot.transform.position);
-        while (drop.MoveNext())
-        {
-            yield return null;
-        }
-        var valuable = (GameObject)drop.Current;
+        var valuable = TestUtils.DropValuable(ValuableName.GOLD, shot.transform.position);
+        var wasCarried = false;
+        var acceptedDelta = 2f;
+        Vector2 lastShotPosition;
 
-        while (shot != null)
+        do
         {
+            wasCarried |= valuable != null && valuable.transform.parent == shot.transform;
+            lastShotPosition = shot.transform.position;
             yield return null;
-        }
+        } while (shot != null);
         yield return null;
         yield return null;
 
         // THEN
-        AssertWrapper.IsNotNull(valuable, _currentSeed, "Valuable Was Destroyed With The Boomerang");
+        AssertWrapper.AreEqual(targetClosestPosition, lastShotPosition, "Shot Didn't Hit Enemy", _currentSeed, acceptedDelta);
+        AssertWrapper.IsTrue(wasCarried, "Boomerang Did Not Fetch The Valuable", _currentSeed);
+        AssertWrapper.IsTrue(valuable != null, "Valuable Was Destroyed With The Boomerang", _currentSeed);
+        AssertWrapper.IsTrue(valuable.transform.parent == null, "Valuable Was Not Released", _currentSeed);
         AssertWrapper.AreEqual(originalScore, TestUtils.GetScore(), "Score Changed Though The Boomerang Hit An Enemy", _currentSeed);
-        AssertWrapper.Greater(Vector2.Distance(valuable.transform.position, halalit.transform.position), FETCH_MIN_DISTANCE_FROM_HALALIT, "Valuable Was Brought To Halalit Though The Boomerang Hit An Enemy", _currentSeed);
+        AssertWrapper.AreEqual(targetClosestPosition, valuable.transform.position, "Valuable Was Not Dropped Where The Boomerang Hit The Enemy", _currentSeed, acceptedDelta);
     }
 
     [TearDown]
