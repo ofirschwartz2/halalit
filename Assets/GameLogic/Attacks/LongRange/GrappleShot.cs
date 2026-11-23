@@ -12,7 +12,7 @@ public class GrappleShot : MonoBehaviour
     private Rigidbody2D _halalitRigidBody;
     private bool _didPull;
 
-    void Start()
+    private void Awake()
     {
         _halalitRigidBody = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription()).GetComponent<Rigidbody2D>();
     }
