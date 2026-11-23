@@ -1,0 +1,79 @@
+# Runs the Unity EditMode and PlayMode tests on every pull request to master or develop.
+# Without the three Unity secrets (or on a pull request from a fork) the test job is skipped, not failed.
+name: Unity tests
+
+on:
+  pull_request:
+    branches:
+      - master
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: write
+
+concurrency:
+  group: "unity-tests-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  license:
+    name: Check Unity license secrets
+    runs-on: ubuntu-latest
+    outputs:
+      present: "${{ steps.check.outputs.present }}"
+    steps:
+      - name: Check that the Unity secrets are set
+        id: check
+        env:
+          L: "${{ secrets.UNITY_LICENSE }}"
+          E: "${{ secrets.UNITY_EMAIL }}"
+          P: "${{ secrets.UNITY_PASSWORD }}"
+        run: |
+          if [ -n "$L" ] && [ -n "$E" ] && [ -n "$P" ]; then echo "present=true"; else echo "present=false"; fi >> "$GITHUB_OUTPUT"
+
+  test:
+    name: Unity ${{ matrix.testMode }} tests
+    needs: license
+    if: needs.license.outputs.present == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        testMode:
+          - editmode
+          - playmode
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Cache the Unity Library folder
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: "Library-${{ matrix.testMode }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}"
+          restore-keys: |
+            Library-${{ matrix.testMode }}-
+
+      - name: Run the Unity tests
+        id: tests
+        uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_LICENSE: "${{ secrets.UNITY_LICENSE }}"
+          UNITY_EMAIL: "${{ secrets.UNITY_EMAIL }}"
+          UNITY_PASSWORD: "${{ secrets.UNITY_PASSWORD }}"
+        with:
+          projectPath: .
+          unityVersion: 2022.3.3f1
+          testMode: "${{ matrix.testMode }}"
+          githubToken: "${{ secrets.GITHUB_TOKEN }}"
+          checkName: "${{ matrix.testMode }} test results"
+
+      - name: Upload the test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: "test-results-${{ matrix.testMode }}"
+          path: "${{ steps.tests.outputs.artifactsPath }}"
