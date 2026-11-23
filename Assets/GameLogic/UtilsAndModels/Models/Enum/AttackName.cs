@@ -25,6 +25,8 @@ namespace Assets.Enums
         [Description("Shotgun")]
         SHOTGUN,
         [Description("Spikes")]
-        SPIKES
+        SPIKES,
+        [Description("Grapple shot")]
+        GRAPPLE_SHOT
     }
 }
