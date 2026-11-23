@@ -143,6 +143,16 @@ internal static class TestUtils
             valuablePosition);
     }
 
+    // Drops a valuable through the game's own drop event, so it is a full valuable prefab (with its Valuable script and inner collider).
+    // The drop event instantiates the valuable synchronously, so the new valuable is returned in the same frame.
+    internal static GameObject DropValuable(ValuableName valuableName, Vector2 position)
+    {
+        var valuablesBeforeDrop = GetValuables();
+        ValuableDropEvent.Invoke(EventName.NEW_VALUABLE_DROP, null, new(Dropper.DEFAULT, position, Vector2.zero, valuableName));
+
+        return GetValuables().First(valuable => !valuablesBeforeDrop.Contains(valuable));
+    }
+
     internal static void SetGameObjectPosition(GameObject gameObject, Vector2 position) 
     {
         gameObject.transform.position = position;
