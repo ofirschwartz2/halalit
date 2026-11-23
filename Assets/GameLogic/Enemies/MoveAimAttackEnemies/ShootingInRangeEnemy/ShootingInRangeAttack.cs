@@ -7,6 +7,8 @@ public class ShootingInRangeAttack : MoveAimAttackAttack
     private ShootingInRangeAim _shootingInRangeAim;
     [SerializeField]
     public GameObject _shotPrefab;
+    [SerializeField]
+    private float _extraSpawnDistance;
     
     private GameObject _projectiles;
 
@@ -25,7 +27,7 @@ public class ShootingInRangeAttack : MoveAimAttackAttack
     private Vector3 GetShootingStartPosition(Transform transform)
     {
         Vector3 halfExtents = GetComponent<CapsuleCollider2D>().bounds.extents;
-        Vector3 offset = _shootingInRangeAim.GetHalalitDirection().normalized * halfExtents.magnitude;
+        Vector3 offset = _shootingInRangeAim.GetHalalitDirection().normalized * (halfExtents.magnitude + _extraSpawnDistance);
         return transform.position + offset;
     }
 }

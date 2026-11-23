@@ -25,6 +25,7 @@ internal static class TestUtils
 
     // Resources paths:
     public const string SPRITE_CIRCLE_PATH = "Sprites/Circle";
+    public const string ENEMY_MINE_PREFAB_PATH = "Prefabs/Attacks/EnemyAttacks/EnemyMine";
 
     // Defaults:
     public const int ENEMIES_SEEDED_NUMBERS_LIST_DEFAULT_LENGTH = 5;
@@ -151,6 +152,12 @@ internal static class TestUtils
         ValuableDropEvent.Invoke(EventName.NEW_VALUABLE_DROP, null, new(Dropper.DEFAULT, position, Vector2.zero, valuableName));
 
         return GetValuables().First(valuable => !valuablesBeforeDrop.Contains(valuable));
+    }
+
+    // Loads the Mine Layer's mine straight from its prefab, as the Mine Layer would lay it (no movement, its own lifetime).
+    internal static GameObject LoadEnemyMine(Vector2 position)
+    {
+        return Object.Instantiate(Resources.Load<GameObject>(ENEMY_MINE_PREFAB_PATH), position, Quaternion.identity);
     }
 
     internal static void SetGameObjectPosition(GameObject gameObject, Vector2 position) 
