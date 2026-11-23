@@ -200,6 +200,12 @@ internal static class TestUtils
         }
     }
 
+    internal static void SetAsteroidScale(float scale, int index = 0)
+    {
+        var asteroids = GetAsteroids();
+        asteroids[index].transform.localScale = new Vector3(scale, scale, 0);
+    }
+
     internal static void SetTestMode()
     {
         OriginalRandomSeed.IsTestMode = true;

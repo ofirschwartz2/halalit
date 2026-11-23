@@ -324,6 +324,100 @@ public class KnockbackWaveTests
             acceptedDelta);
     }
 
+    [UnityTest]
+    public IEnumerator LaunchesSmallAsteroid()
+    {
+        // GIVEN
+        yield return null;
+        TestUtils.SetTestMode();
+        TestUtils.SetUpShot(ATTACK_NAME);
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadAsteroidInExternalSafeIsland(_currentSeed);
+        yield return null;
+
+        var asteroidScale = TestingRandomGenerator.Range(1f, 2f, true);
+        TestUtils.SetAsteroidScale(asteroidScale);
+        TestUtils.SetAsteroidsHealth(100);
+        var weaponMovement = TestUtils.GetWeaponMovement();
+        var weaponAttack = TestUtils.GetWeaponAttack();
+        var touchOnJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
+        TestUtils.SetAsteroidPosition(touchOnJoystick.normalized * 3);
+        yield return null;
+
+        // WHEN
+        weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
+        yield return null;
+
+        weaponAttack.HumbleFixedUpdate(touchOnJoystick);
+        yield return null;
+
+        // THEN
+        var shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
+        AssertWrapper.IsNotNull(shot, _currentSeed);
+
+        // GIVEN
+        var knockbackWave = shot.GetComponent<KnockbackWave>();
+        var expectedLaunchSpeed = Mathf.Min(knockbackWave.GetLaunchSpeedAtScaleOne() / asteroidScale, knockbackWave.GetMaxLaunchSpeed());
+        var acceptedSpeedDelta = 0.01f;
+        var acceptedAngleDelta = 1f;
+        Vector2 shotDirection;
+
+        // WHEN
+        do
+        {
+            shotDirection = shot.GetComponent<Rigidbody2D>().velocity.normalized;
+            yield return null;
+
+            shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
+        } while (shot != null && TestUtils.GetAsteroidMovement().GetSpeed() == 0);
+
+        // THEN
+        var asteroidMovement = TestUtils.GetAsteroidMovement();
+        AssertWrapper.AreEqual(expectedLaunchSpeed, asteroidMovement.GetSpeed(), "Launch speed not as expected", _currentSeed, acceptedSpeedDelta);
+        AssertWrapper.AreEqual(0, Vector2.Angle(shotDirection, asteroidMovement.GetDirection()), "Launch direction not along the wave", _currentSeed, acceptedAngleDelta);
+    }
+
+    [UnityTest]
+    public IEnumerator IgnoresBigAsteroid()
+    {
+        // GIVEN
+        yield return null;
+        TestUtils.SetTestMode();
+        TestUtils.SetUpShot(ATTACK_NAME);
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadAsteroidInExternalSafeIsland(_currentSeed);
+        yield return null;
+
+        TestUtils.SetAsteroidScale(TestingRandomGenerator.Range(2.5f, 4f, true));
+        TestUtils.SetAsteroidsHealth(100);
+        var weaponMovement = TestUtils.GetWeaponMovement();
+        var weaponAttack = TestUtils.GetWeaponAttack();
+        var touchOnJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
+        TestUtils.SetAsteroidPosition(touchOnJoystick.normalized * 3);
+        yield return null;
+
+        // WHEN
+        weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
+        yield return null;
+
+        weaponAttack.HumbleFixedUpdate(touchOnJoystick);
+        yield return null;
+
+        // THEN
+        var shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
+        AssertWrapper.IsNotNull(shot, _currentSeed);
+
+        // WHEN
+        do
+        {
+            yield return null;
+            shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
+        } while (shot != null);
+
+        // THEN
+        AssertWrapper.AreEqual(0, TestUtils.GetAsteroidMovement().GetSpeed(), "Big asteroid was launched", _currentSeed);
+    }
+
     [TearDown]
     public void TearDown()
     {
