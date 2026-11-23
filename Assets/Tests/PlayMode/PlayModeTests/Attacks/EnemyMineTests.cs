@@ -32,7 +32,7 @@ public class EnemyMineTests
         yield return new WaitForSeconds(lifetime - LIFETIME_MARGIN);
 
         // THEN
-        AssertWrapper.IsNotNull(mine, _currentSeed, "Mine vanished before its lifetime ended");
+        AssertWrapper.IsTrue(mine != null, "Mine vanished before its lifetime ended", _currentSeed);
         AssertWrapper.AreEqual(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT, (Vector2)mine.transform.position, "Mine moved", _currentSeed, 0.01f);
 
         // WHEN

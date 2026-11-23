@@ -157,7 +157,12 @@ internal static class TestUtils
     // Loads the Mine Layer's mine straight from its prefab, as the Mine Layer would lay it (no movement, its own lifetime).
     internal static GameObject LoadEnemyMine(Vector2 position)
     {
-        return Object.Instantiate(Resources.Load<GameObject>(ENEMY_MINE_PREFAB_PATH), position, Quaternion.identity);
+        var minePrefab = Resources.Load<GameObject>(ENEMY_MINE_PREFAB_PATH);
+        if (minePrefab == null)
+        {
+            throw new System.Exception($"EnemyMine prefab not found at Resources/{ENEMY_MINE_PREFAB_PATH}");
+        }
+        return Object.Instantiate(minePrefab, position, Quaternion.identity);
     }
 
     internal static void SetGameObjectPosition(GameObject gameObject, Vector2 position) 
