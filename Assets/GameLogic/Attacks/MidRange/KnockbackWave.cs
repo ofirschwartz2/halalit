@@ -19,6 +19,12 @@ class KnockbackWave : MonoBehaviour
     private float _growthRate;
     [SerializeField]
     private float _decreaseGrowthRate; // between 0-1
+    [SerializeField]
+    private float _maxLaunchScale = 2f;
+    [SerializeField]
+    private float _launchSpeedAtScaleOne = 12f;
+    [SerializeField]
+    private float _maxLaunchSpeed = 12f;
 
     private float _endOfLifeTime;
 
@@ -61,6 +67,29 @@ class KnockbackWave : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (ShouldLaunch(other.gameObject))
+        {
+            Launch(other.gameObject);
+        }
+    }
+
+    private void Launch(GameObject asteroid)
+    {
+        var scale = asteroid.transform.localScale.x;
+        var movement = asteroid.GetComponent<KinematicMovement>();
+        movement.SetDirection(transform.up);
+        movement.SetSpeed(Mathf.Min(_launchSpeedAtScaleOne / scale, _maxLaunchSpeed));
+    }
+
+    #region Predicates
+    private bool ShouldLaunch(GameObject other)
+    {
+        return other.CompareTag(Tag.ASTEROID.GetDescription()) && other.transform.localScale.x <= _maxLaunchScale;
+    }
+    #endregion
+
 #if UNITY_EDITOR
     internal float GetLifetime()
     {
@@ -70,6 +99,21 @@ class KnockbackWave : MonoBehaviour
     internal float GetSpeed()
     {
         return _speed;
+    }
+
+    internal float GetMaxLaunchScale()
+    {
+        return _maxLaunchScale;
+    }
+
+    internal float GetLaunchSpeedAtScaleOne()
+    {
+        return _launchSpeedAtScaleOne;
+    }
+
+    internal float GetMaxLaunchSpeed()
+    {
+        return _maxLaunchSpeed;
     }
 #endif
 
