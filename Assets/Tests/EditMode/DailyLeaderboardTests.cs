@@ -36,4 +36,24 @@ public class DailyLeaderboardTests
 
         AssertWrapper.IsFalse(shouldSubmit, "A run started on 22 Nov was submitted to the 23 Nov list");
     }
+
+    [Test]
+    public void DayIndexStaysBetweenTodayAndOldestArchivedDay()
+    {
+        AssertWrapper.AreEqual(0, DailyLeaderboard.ClampDayIndex(-1, 3), "Next day went past today");
+        AssertWrapper.AreEqual(0, DailyLeaderboard.ClampDayIndex(1, 0), "Previous day opened with no archived days");
+        AssertWrapper.AreEqual(2, DailyLeaderboard.ClampDayIndex(2, 3), "A day inside the archive was changed");
+        AssertWrapper.AreEqual(3, DailyLeaderboard.ClampDayIndex(4, 3), "Previous day went past the oldest archived day");
+        AssertWrapper.AreEqual(7, DailyLeaderboard.ClampDayIndex(8, 10), "Previous day went past 7 days");
+    }
+
+    [Test]
+    public void ListTitles()
+    {
+        var archivedDayStart = new DateTime(2026, 11, 21, 0, 0, 0, DateTimeKind.Utc);
+
+        AssertWrapper.AreEqual("Today", DailyLeaderboard.GetListTitle(false, 0, default), "Wrong title for today's list");
+        AssertWrapper.AreEqual("21-11-26", DailyLeaderboard.GetListTitle(false, 1, archivedDayStart), "Wrong title for a past day");
+        AssertWrapper.AreEqual("All time", DailyLeaderboard.GetListTitle(true, 1, archivedDayStart), "Wrong title for the all-time list");
+    }
 }
