@@ -62,6 +62,8 @@ namespace Assets.Enums
 
         // Attacks added after the pin
         [Description("Grapple shot item")]
-        GRAPPLE_SHOT = 23
+        GRAPPLE_SHOT = 23,
+        [Description("Swap shot item")]
+        SWAP_SHOT = 24
     }
 }
