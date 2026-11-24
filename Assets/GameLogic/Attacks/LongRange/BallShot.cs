@@ -8,10 +8,23 @@ public class BallShot : MonoBehaviour
     private Rigidbody2D _rigidBody;
     [SerializeField]
     private float _speed;
+    [SerializeField]
+    private float _lifetime;
+
+    private float _endOfLifeTime;
 
     void Start()
     {
+        _endOfLifeTime = Utils.GetEndOfLifeTime(_lifetime);
         _rigidBody.velocity = transform.up * _speed;
+    }
+
+    private void FixedUpdate()
+    {
+        if (HasLifetime() && Utils.ShouldDie(_endOfLifeTime))
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -25,4 +38,18 @@ public class BallShot : MonoBehaviour
         if (other.gameObject.CompareTag(Tag.INTERNAL_WORLD.GetDescription()))
             Destroy(gameObject);
     }
+
+    #region Predicates
+    private bool HasLifetime()
+    {
+        return _lifetime > 0;
+    }
+    #endregion
+
+#if UNITY_EDITOR
+    internal float GetLifeTime()
+    {
+        return _lifetime;
+    }
+#endif
 }
