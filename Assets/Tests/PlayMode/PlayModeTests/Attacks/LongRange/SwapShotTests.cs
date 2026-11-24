@@ -91,6 +91,7 @@ public class SwapShotTests
         TestUtils.SetAsteroidPosition(halalitStartPosition + touchOnJoystick.normalized * TARGET_DISTANCE);
         yield return null;
 
+        var originalAsteroidHealth = TestUtils.GetAsteroidHealth();
         var acceptedDelta = 0.01f;
 
         // WHEN
@@ -104,10 +105,6 @@ public class SwapShotTests
         var shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
         AssertWrapper.IsNotNull(shot, _currentSeed);
 
-        // GIVEN
-        var shotLifetime = shot.GetComponent<BallShot>().GetLifeTime();
-        var shotStartTime = Time.time;
-
         // WHEN
         do
         {
@@ -115,12 +112,11 @@ public class SwapShotTests
             shot = GameObject.FindGameObjectWithTag(Tag.SHOT.GetDescription());
         } while (shot != null);
 
-        var shotTimeAlive = Time.time - shotStartTime;
         yield return new WaitForFixedUpdate();
         yield return null;
 
         // THEN
-        AssertWrapper.IsTrue(shotLifetime <= 0 || shotTimeAlive < shotLifetime, "Shot was not ended by the asteroid", _currentSeed);
+        AssertWrapper.Less(TestUtils.GetAsteroidHealth(), originalAsteroidHealth, "Shot did not hit the asteroid", _currentSeed);
         AssertWrapper.AreEqual(halalitStartPosition, halalit.transform.position, "Halalit moved after hitting an asteroid", _currentSeed, acceptedDelta);
         AssertWrapper.AreEqual(0, TestUtils.GetAsteroidMovement().GetSpeed(), "Asteroid was moved", _currentSeed);
     }
