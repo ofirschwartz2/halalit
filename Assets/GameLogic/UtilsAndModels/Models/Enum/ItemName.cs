@@ -58,6 +58,10 @@ namespace Assets.Enums
         [Description("Pushing magnet utility")]
         PUSHING_MAGNET = 21,
         [Description("Pulling magnet utility")]
-        PULLING_MAGNET = 22
+        PULLING_MAGNET = 22,
+
+        // Attacks added after the pin
+        [Description("Grapple shot item")]
+        GRAPPLE_SHOT = 23
     }
 }
