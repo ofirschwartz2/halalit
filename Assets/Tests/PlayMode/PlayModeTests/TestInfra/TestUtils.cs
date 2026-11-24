@@ -683,6 +683,24 @@ internal static class TestUtils
             throw new System.Exception("There should be multiple Enemies in the scene. There are " + enemies.Length + " enemies in the scene");
         }
     }
+
+    internal static void AssertAttackPrefabHas<T>(AttackName attackName, int seed) where T : Component
+    {
+        GameObject attackPrefab = null;
+        try
+        {
+            attackPrefab = AttacksBank.GetAttackPrefab(attackName);
+        }
+        catch (KeyNotFoundException)
+        {
+            AssertWrapper.Fail($"{attackName} is not in AttacksBank (Needs Ofir in Unity)", seed);
+        }
+
+        if (attackPrefab == null || attackPrefab.GetComponent<T>() == null)
+        {
+            AssertWrapper.Fail($"{attackName} prefab has no {typeof(T).Name} component (Needs Ofir in Unity)", seed);
+        }
+    }
     #endregion
 
     #region Shot Actions
