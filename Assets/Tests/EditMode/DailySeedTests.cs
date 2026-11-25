@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Reflection;
 using System.Threading;
 using Assets.Utils;
 using NUnit.Framework;
@@ -115,6 +116,37 @@ public class DailySeedTests
         var localDate = DailySeed.GetIsraelDate(localInstant);
 
         AssertWrapper.IsTrue(localDate == utcDate, $"Device time gave {localDate:yyyy-MM-dd}, UTC gave {utcDate:yyyy-MM-dd}");
+    }
+
+    [Test]
+    public void MissingIsraelZoneFallsBackToUtcPlusTwo()
+    {
+        // A device without the Israel zone cannot be built in a test, so the cached zone is cleared by hand and put back after
+        var zoneField = typeof(DailySeed).GetField("_israelZone", BindingFlags.NonPublic | BindingFlags.Static);
+        var resolvedField = typeof(DailySeed).GetField("_isIsraelZoneResolved", BindingFlags.NonPublic | BindingFlags.Static);
+        AssertWrapper.IsTrue(zoneField != null && resolvedField != null, "DailySeed zone cache fields were renamed, update this test");
+
+        var originalZone = zoneField.GetValue(null);
+        var originalResolved = resolvedField.GetValue(null);
+
+        try
+        {
+            zoneField.SetValue(null, null);
+            resolvedField.SetValue(null, true);
+
+            // Winter: UTC+2 is exact
+            AssertIsraelDate(new DateTime(2026, 11, 24, 21, 59, 59, DateTimeKind.Utc), new DateTime(2026, 11, 24));
+            AssertIsraelDate(new DateTime(2026, 11, 24, 22, 0, 0, DateTimeKind.Utc), new DateTime(2026, 11, 25));
+
+            // Summer: the day changes one hour late, at 01:00 Israel time
+            AssertIsraelDate(new DateTime(2026, 7, 14, 21, 0, 0, DateTimeKind.Utc), new DateTime(2026, 7, 14));
+            AssertIsraelDate(new DateTime(2026, 7, 14, 22, 0, 0, DateTimeKind.Utc), new DateTime(2026, 7, 15));
+        }
+        finally
+        {
+            zoneField.SetValue(null, originalZone);
+            resolvedField.SetValue(null, originalResolved);
+        }
     }
 
     private void AssertPinnedSeed(DateTime day, int expectedSeed)
