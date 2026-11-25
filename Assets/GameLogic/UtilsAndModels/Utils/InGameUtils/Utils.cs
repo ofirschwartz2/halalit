@@ -401,6 +401,33 @@ namespace Assets.Utils
                 Debug.LogError($"Text component not found on '{childName}' game object.");
             }
         }
+
+        // The nearest valuable within the radius that nobody holds (no parent: not on the claw, a boomerang or a Coin Thief).
+        public static GameObject GetNearestFreeValuable(Vector2 center, float radius, Collider2D[] buffer, int layerMask)
+        {
+            var hitsCount = Physics2D.OverlapCircleNonAlloc(center, radius, buffer, layerMask);
+            var valuableTag = Tag.VALUABLE.GetDescription();
+            GameObject nearestValuable = null;
+            var nearestDistance = float.MaxValue;
+
+            for (int i = 0; i < hitsCount; i++)
+            {
+                var hitRigidbody = buffer[i].attachedRigidbody;
+                if (hitRigidbody == null || !hitRigidbody.CompareTag(valuableTag) || hitRigidbody.transform.parent != null)
+                {
+                    continue;
+                }
+
+                var distance = Vector2.Distance(center, hitRigidbody.position);
+                if (distance < nearestDistance)
+                {
+                    nearestDistance = distance;
+                    nearestValuable = hitRigidbody.gameObject;
+                }
+            }
+
+            return nearestValuable;
+        }
         #endregion
     }
 }

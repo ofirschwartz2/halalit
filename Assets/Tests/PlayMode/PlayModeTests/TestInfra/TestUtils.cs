@@ -27,6 +27,7 @@ internal static class TestUtils
     public const string SPRITE_CIRCLE_PATH = "Sprites/Circle";
     public const string ENEMY_MINE_PREFAB_PATH = "Prefabs/Attacks/EnemyAttacks/EnemyMine";
     public const string SHIELD_RAM_PREFAB_PATH = "Prefabs/Enemies/WaitAttackEnemies/ShieldRam";
+    public const string COIN_THIEF_PREFAB_PATH = "Prefabs/Enemies/WaitAttackEnemies/CoinThief";
     public const string BALL_SHOT_PREFAB_PATH = "Prefabs/Attacks/HalalitAttacks/LongRange/BallShot/BallShot";
     public const string SHOOTING_IN_RANGE_ENEMY_PREFAB_PATH = "Prefabs/Enemies/MoveAimAttackEnemies/ShootingInRangeEnemy";
     public const string ZIG_ZAG_ENEMY_PREFAB_PATH = "Prefabs/Enemies/SpecialMovementEnemies/ZigZagEnemy";
@@ -185,6 +186,28 @@ internal static class TestUtils
         shieldRam.GetComponent<EnemySharedBehavior>().SetInitialSeedfulRandomGenerator(seed);
         shieldRam.GetComponent<WaitAttackStateMachine>().enabled = false;
         return shieldRam;
+    }
+
+    // Loads the Coin Thief straight from its prefab, seeded, with its state machine on, so it waits, steals and eats as in a run.
+    internal static GameObject LoadCoinThief(Vector2 position, int seed)
+    {
+        var coinThiefPrefab = Resources.Load<GameObject>(COIN_THIEF_PREFAB_PATH);
+        if (coinThiefPrefab == null)
+        {
+            throw new System.Exception($"CoinThief prefab not found at Resources/{COIN_THIEF_PREFAB_PATH} (Needs Ofir in Unity)");
+        }
+        if (coinThiefPrefab.GetComponent<WaitAttackLootWait>() == null || coinThiefPrefab.GetComponent<WaitAttackStealAttack>() == null)
+        {
+            throw new System.Exception("CoinThief prefab lacks WaitAttackLootWait or WaitAttackStealAttack on its root (Needs Ofir in Unity)");
+        }
+        var enemyDropper = coinThiefPrefab.GetComponent<EnemyDropper>();
+        if (enemyDropper == null || enemyDropper.GetDropper() != Dropper.COIN_THIEF)
+        {
+            throw new System.Exception("CoinThief prefab's EnemyDropper is not set to COIN_THIEF (Needs Ofir in Unity)");
+        }
+        var coinThief = Object.Instantiate(coinThiefPrefab, position, Quaternion.identity);
+        coinThief.GetComponent<EnemySharedBehavior>().SetInitialSeedfulRandomGenerator(seed);
+        return coinThief;
     }
 
     // Loads an enemy that should carry ShotDodger straight from its prefab, with its seed, and switches off its own movement,
