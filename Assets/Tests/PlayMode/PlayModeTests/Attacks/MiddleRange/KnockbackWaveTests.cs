@@ -12,6 +12,11 @@ public class KnockbackWaveTests
     private int _currentSeed;
     private const Tag ATTACK_TAG = Tag.KNOCKBACK_WAVE;
     private const AttackName ATTACK_NAME = AttackName.KNOCKBACK_WAVE;
+    private const int ENEMY_HEALTH = 10;
+    // The wave is narrow: the two enemies stand side by side across its path, close to its centre line, without touching.
+    private static readonly Vector2 WAVE_DIRECTION = Vector2.right;
+    private static readonly Vector2 FIRST_ENEMY_OFFSET_FROM_HALALIT = new(4.5f, 0.7f);
+    private static readonly Vector2 SECOND_ENEMY_OFFSET_FROM_HALALIT = new(4.5f, -0.7f);
 
     [SetUp]
     public void SetUp()
@@ -276,6 +281,52 @@ public class KnockbackWaveTests
         // THEN
         AssertWrapper.Greater(targetOriginalHealth, targetHealthAfterHit, "Did Not Hit Target", _currentSeed);
         AssertWrapper.AreEqual(targetHealthAfterHit, TestUtils.GetEnemyHealth(), ">1 Hits", _currentSeed);
+    }
+
+    [UnityTest]
+    public IEnumerator HitsEachOfTwoEnemiesOnce()
+    {
+        // GIVEN
+        yield return null;
+        TestUtils.SetTestMode();
+        TestUtils.SetUpShot(ATTACK_NAME);
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        var enemies = objectLoader.LoadEnemiesInExternalSafeIsland(2, _currentSeed);
+        yield return null;
+
+        Vector2 halalitPosition = TestUtils.GetHalalit().transform.position;
+        TestUtils.SetGameObjectPosition(enemies[0], halalitPosition + FIRST_ENEMY_OFFSET_FROM_HALALIT);
+        TestUtils.SetGameObjectPosition(enemies[1], halalitPosition + SECOND_ENEMY_OFFSET_FROM_HALALIT);
+        TestUtils.SetEnemiesHealth(ENEMY_HEALTH);
+        yield return null;
+
+        var firstEnemyHealth = enemies[0].GetComponent<Health>();
+        var secondEnemyHealth = enemies[1].GetComponent<Health>();
+        var weaponMovement = TestUtils.GetWeaponMovement();
+        var weaponAttack = TestUtils.GetWeaponAttack();
+        var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(WAVE_DIRECTION, weaponAttack.GetAttackJoystickEdge());
+
+        // WHEN
+        weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
+        yield return null;
+
+        weaponAttack.HumbleFixedUpdate(touchOnJoystick);
+        yield return null;
+
+        // THEN
+        var shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
+        AssertWrapper.IsNotNull(shot, _currentSeed);
+
+        // WHEN
+        do
+        {
+            yield return null;
+            shot = GameObject.FindGameObjectWithTag(Tag.KNOCKBACK_WAVE.GetDescription());
+        } while (shot != null);
+
+        // THEN
+        AssertWrapper.AreEqual(ENEMY_HEALTH - TestUtils.DEFAULT_POWER_1, firstEnemyHealth.GetHealth(), "Wave did not hurt the first enemy exactly once", _currentSeed);
+        AssertWrapper.AreEqual(ENEMY_HEALTH - TestUtils.DEFAULT_POWER_1, secondEnemyHealth.GetHealth(), "Wave did not hurt the second enemy exactly once", _currentSeed);
     }
 
     [UnityTest]
