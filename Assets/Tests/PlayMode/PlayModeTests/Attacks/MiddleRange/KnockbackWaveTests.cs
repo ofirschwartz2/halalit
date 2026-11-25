@@ -13,10 +13,11 @@ public class KnockbackWaveTests
     private const Tag ATTACK_TAG = Tag.KNOCKBACK_WAVE;
     private const AttackName ATTACK_NAME = AttackName.KNOCKBACK_WAVE;
     private const int ENEMY_HEALTH = 10;
-    // The wave is narrow: the two enemies stand side by side across its path, close to its centre line, without touching.
+    // The enemy is 1 wide and 2 tall, so at y = +-1.1 the two enemies stand 0.2 apart and physics does not push them.
+    // Their near ends reach y = +-0.1, inside the wave, which is already about 1 across when it gets 4.5 out.
     private static readonly Vector2 WAVE_DIRECTION = Vector2.right;
-    private static readonly Vector2 FIRST_ENEMY_OFFSET_FROM_HALALIT = new(4.5f, 0.7f);
-    private static readonly Vector2 SECOND_ENEMY_OFFSET_FROM_HALALIT = new(4.5f, -0.7f);
+    private static readonly Vector2 FIRST_ENEMY_OFFSET_FROM_HALALIT = new(4.5f, 1.1f);
+    private static readonly Vector2 SECOND_ENEMY_OFFSET_FROM_HALALIT = new(4.5f, -1.1f);
 
     [SetUp]
     public void SetUp()
