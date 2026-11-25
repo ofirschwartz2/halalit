@@ -25,6 +25,7 @@ public class BallShot : MonoBehaviour
     {
         if (HasLifetime() && Utils.ShouldDie(_endOfLifeTime))
         {
+            OnLanded();
             Destroy(gameObject);
         }
     }
@@ -32,8 +33,13 @@ public class BallShot : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!_passesThrough && (other.gameObject.CompareTag(Tag.ENEMY.GetDescription()) || other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()) || other.gameObject.CompareTag(Tag.HALALIT.GetDescription())))
+        {
+            OnLanded();
             Destroy(gameObject);
+        }
     }
+
+    protected virtual void OnLanded() { }
 
     private void OnTriggerExit2D(Collider2D other)
     {
