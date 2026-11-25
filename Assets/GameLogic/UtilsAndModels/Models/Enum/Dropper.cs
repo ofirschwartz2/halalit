@@ -17,6 +17,7 @@ namespace Assets.Enums
         SHOOTING_LAZER_ASTERISK_ENEMY,
         SHOOTING_LAZER_RANGE_ENEMY,
         MINE_LAYER,
-        SHIELD_RAM
+        SHIELD_RAM,
+        COIN_THIEF
     }
 }
