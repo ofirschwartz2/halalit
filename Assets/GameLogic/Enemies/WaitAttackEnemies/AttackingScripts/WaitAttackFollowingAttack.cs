@@ -30,7 +30,7 @@ public class WaitAttackFollowingAttack: WaitAttackAttack
 
     private void RotateTowardsHalalit()
     {
-        var halalitDirection = Utils.GetHalalitDirection(transform.position);
+        var halalitDirection = EnemyTarget.GetDirection(transform.position);
         var targetRotation = Quaternion.LookRotation(Vector3.forward, halalitDirection);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
     }
@@ -50,8 +50,7 @@ public class WaitAttackFollowingAttack: WaitAttackAttack
 
     private void SetHalalitDirection()
     {
-        var halalit = GameObject.FindGameObjectWithTag(Tag.HALALIT.GetDescription());
-        var halalitPosition = halalit.transform.position;
+        var halalitPosition = EnemyTarget.GetPosition();
         _halalitDirection = Utils.NormalizeVector2(halalitPosition - transform.position);
     }
 

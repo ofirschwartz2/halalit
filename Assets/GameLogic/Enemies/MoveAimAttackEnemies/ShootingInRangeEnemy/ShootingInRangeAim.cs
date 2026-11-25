@@ -17,7 +17,7 @@ public class ShootingInRangeAim : MoveAimAttackAim
     
     public override void Aim(Transform transform)
     {
-        _halalitDirection = Utils.GetHalalitDirection(transform.position);
+        _halalitDirection = EnemyTarget.GetDirection(transform.position);
         _shootingAngle = Utils.GetRandomAngleAround(_enemySharedBehavior._seedfulRandomGenerator, _shootingRange);
     }
 
