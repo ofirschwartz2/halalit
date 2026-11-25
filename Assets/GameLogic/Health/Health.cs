@@ -169,7 +169,7 @@ public class Health : MonoBehaviour
                 other.GetComponent<TriggerHarmer>() :
                 other.GetComponentInParent<TriggerHarmer>();
 
-            HandleTriggerHarmer(other, triggerHarmer);
+            HandleTriggerHarmer(gameObject, triggerHarmer);
         }
     }
 
