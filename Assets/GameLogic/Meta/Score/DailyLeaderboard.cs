@@ -6,7 +6,7 @@ public static class DailyLeaderboard
     private const string TODAY_TITLE = "Today";
     private const string ALL_TIME_TITLE = "All time";
 
-    // A run that crosses midnight UTC belongs to the day it started, so it is not sent to the next day's list
+    // A run that crosses midnight Israel time belongs to the day it started, so it is not sent to the next day's list
     public static bool ShouldSubmitDaily(int? dailyScore, DateTime runDay, DateTime today)
     {
         return dailyScore != null && runDay.Date == today.Date;
@@ -31,6 +31,7 @@ public static class DailyLeaderboard
             return TODAY_TITLE;
         }
 
-        return DailySeed.GetDateKey(archivedDayStart);
+        // The list resets at midnight Israel time, which is the evening before in UTC
+        return DailySeed.GetDateKey(DailySeed.GetIsraelDate(archivedDayStart));
     }
 }

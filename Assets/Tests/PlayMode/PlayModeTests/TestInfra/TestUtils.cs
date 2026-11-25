@@ -27,6 +27,9 @@ internal static class TestUtils
     public const string SPRITE_CIRCLE_PATH = "Sprites/Circle";
     public const string ENEMY_MINE_PREFAB_PATH = "Prefabs/Attacks/EnemyAttacks/EnemyMine";
     public const string SHIELD_RAM_PREFAB_PATH = "Prefabs/Enemies/WaitAttackEnemies/ShieldRam";
+    public const string BALL_SHOT_PREFAB_PATH = "Prefabs/Attacks/HalalitAttacks/LongRange/BallShot/BallShot";
+    public const string SHOOTING_IN_RANGE_ENEMY_PREFAB_PATH = "Prefabs/Enemies/MoveAimAttackEnemies/ShootingInRangeEnemy";
+    public const string ZIG_ZAG_ENEMY_PREFAB_PATH = "Prefabs/Enemies/SpecialMovementEnemies/ZigZagEnemy";
 
     // Defaults:
     public const int ENEMIES_SEEDED_NUMBERS_LIST_DEFAULT_LENGTH = 5;
@@ -182,6 +185,45 @@ internal static class TestUtils
         shieldRam.GetComponent<EnemySharedBehavior>().SetInitialSeedfulRandomGenerator(seed);
         shieldRam.GetComponent<WaitAttackStateMachine>().enabled = false;
         return shieldRam;
+    }
+
+    // Loads an enemy that should carry ShotDodger straight from its prefab, with its seed, and switches off its own movement,
+    // so that only a dodge moves it. Its Start has not run yet: wait a frame before setting its health.
+    internal static GameObject LoadDodgingEnemy(string prefabPath, Vector2 position, int seed)
+    {
+        var enemyPrefab = Resources.Load<GameObject>(prefabPath);
+        if (enemyPrefab == null || enemyPrefab.GetComponent<ShotDodger>() == null)
+        {
+            throw new System.Exception($"ShotDodger missing on {prefabPath} (Needs Ofir in Unity)");
+        }
+
+        var enemy = Object.Instantiate(enemyPrefab, position, Quaternion.identity);
+        enemy.GetComponent<EnemySharedBehavior>().SetInitialSeedfulRandomGenerator(seed);
+
+        var moveAimAttackStateMachine = enemy.GetComponent<MoveAimAttackStateMachine>();
+        if (moveAimAttackStateMachine != null)
+        {
+            moveAimAttackStateMachine.enabled = false;
+        }
+
+        var zigZagEnemy = enemy.GetComponent<ZigZagEnemy>();
+        if (zigZagEnemy != null)
+        {
+            zigZagEnemy.enabled = false;
+        }
+
+        return enemy;
+    }
+
+    // Loads a Ball Shot straight from its prefab, flying in the given direction (BallShot flies along its transform.up).
+    internal static GameObject LoadBallShot(Vector2 position, Vector2 direction)
+    {
+        var ballShotPrefab = Resources.Load<GameObject>(BALL_SHOT_PREFAB_PATH);
+        if (ballShotPrefab == null)
+        {
+            throw new System.Exception($"BallShot prefab not found at Resources/{BALL_SHOT_PREFAB_PATH}");
+        }
+        return Object.Instantiate(ballShotPrefab, position, Quaternion.LookRotation(Vector3.forward, direction));
     }
 
     internal static void SetGameObjectPosition(GameObject gameObject, Vector2 position) 
