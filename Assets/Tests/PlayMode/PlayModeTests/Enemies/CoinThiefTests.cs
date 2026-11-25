@@ -12,10 +12,15 @@ public class CoinThiefTests
     private const float CARRY_DISTANCE_DELTA = 0.3f;
     private const float STEAL_TIMEOUT = 10f;
     private const float WAIT_MARGIN = 1f;
+    private const int HIGH_HEALTH = 100;
+    // After its wait, a hunting thief (3 units/s) would close well over this in OUT_OF_REACH_WATCH_TIME; a drifting one (0.5 units/s) cannot.
+    private const float OUT_OF_REACH_WATCH_TIME = 3f;
+    private const float MAX_DRIFT_CLOSING = 3.5f;
     private static readonly Vector2 THIEF_OFFSET_FROM_HALALIT = new(2, 0);
     private static readonly Vector2 COIN_IN_REACH_OFFSET_FROM_HALALIT = new(5, 0);
-    private static readonly Vector2 THIEF_FAR_OFFSET_FROM_HALALIT = new(-4, 0);
-    private static readonly Vector2 COIN_OUT_OF_REACH_OFFSET_FROM_HALALIT = new(6, 0);
+    // 10 units apart (loot radius is 8), on a line that does not pass through the Halalit.
+    private static readonly Vector2 THIEF_FAR_OFFSET_FROM_HALALIT = new(-5, 3);
+    private static readonly Vector2 COIN_OUT_OF_REACH_OFFSET_FROM_HALALIT = new(5, 3);
     private int _currentSeed;
 
     [SetUp]
@@ -53,13 +58,16 @@ public class CoinThiefTests
         var coinThief = TestUtils.LoadCoinThief(halalitPosition + THIEF_FAR_OFFSET_FROM_HALALIT, _currentSeed);
         var coin = TestUtils.DropValuable(ValuableName.GOLD, halalitPosition + COIN_OUT_OF_REACH_OFFSET_FROM_HALALIT);
         var waitingInterval = coinThief.GetComponent<WaitAttackLootWait>().GetWaitingInterval();
+        var initialDistance = Vector2.Distance(coinThief.transform.position, coin.transform.position);
 
         // WHEN
-        yield return new WaitForSeconds(waitingInterval + WAIT_MARGIN / 2);
+        yield return new WaitForSeconds(waitingInterval + OUT_OF_REACH_WATCH_TIME);
 
         // THEN
         AssertWrapper.IsNotNull(coin, _currentSeed, "Coin Out Of Reach Was Destroyed");
         AssertWrapper.IsTrue(coin.transform.parent == null, "Coin Thief Took A Coin Out Of Its Reach", _currentSeed);
+        var closedDistance = initialDistance - Vector2.Distance(coinThief.transform.position, coin.transform.position);
+        AssertWrapper.Less(closedDistance, MAX_DRIFT_CLOSING, "Coin Thief Hunted A Coin Out Of Its Reach", _currentSeed);
     }
 
     [UnityTest]
@@ -78,9 +86,16 @@ public class CoinThiefTests
         AssertWrapper.IsTrue(IsCarriedBy(coin, coinThief), "Coin Thief Did Not Steal The Coin In Its Reach", _currentSeed);
 
         // WHEN
-        yield return new WaitForSeconds(eatDelay + WAIT_MARGIN);
+        yield return new WaitForSeconds(eatDelay - WAIT_MARGIN);
 
         // THEN
+        AssertWrapper.IsTrue(IsCarriedBy(coin, coinThief), "Coin Thief Ate The Coin Before Its Eat Delay", _currentSeed);
+
+        // WHEN
+        yield return new WaitForSeconds(2 * WAIT_MARGIN);
+
+        // THEN
+        AssertWrapper.IsNotNull(coinThief, _currentSeed, "Coin Thief Was Destroyed, So The Coin Was Not Eaten");
         AssertWrapper.IsTrue(coin == null, "Coin Thief Did Not Eat The Coin After Its Eat Delay", _currentSeed);
         AssertWrapper.AreEqual(originalScore, TestUtils.GetScore(), "Score Changed When The Coin Thief Ate The Coin", _currentSeed);
     }
@@ -100,6 +115,8 @@ public class CoinThiefTests
 
         yield return WaitUntilCarried(coin, coinThief);
         AssertWrapper.IsTrue(IsCarriedBy(coin, coinThief), "Coin Thief Did Not Steal The Coin In Its Reach", _currentSeed);
+        TestUtils.SetEnemiesHealth(HIGH_HEALTH);
+        TestUtils.SetAsteroidsHealth(HIGH_HEALTH);
 
         // WHEN
         TestUtils.SetGameObjectPosition(asteroid, coinThief.transform.position);
