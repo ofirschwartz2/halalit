@@ -31,6 +31,7 @@ internal static class TestUtils
     public const string BALL_SHOT_PREFAB_PATH = "Prefabs/Attacks/HalalitAttacks/LongRange/BallShot/BallShot";
     public const string SHOOTING_IN_RANGE_ENEMY_PREFAB_PATH = "Prefabs/Enemies/MoveAimAttackEnemies/ShootingInRangeEnemy";
     public const string ZIG_ZAG_ENEMY_PREFAB_PATH = "Prefabs/Enemies/SpecialMovementEnemies/ZigZagEnemy";
+    public const string FOLLOWING_ENEMY_RADIUS_PREFAB_PATH = "Prefabs/Enemies/WaitAttackEnemies/FollowingEnemyRadius";
 
     // Defaults:
     public const int ENEMIES_SEEDED_NUMBERS_LIST_DEFAULT_LENGTH = 5;
@@ -186,6 +187,20 @@ internal static class TestUtils
         shieldRam.GetComponent<EnemySharedBehavior>().SetInitialSeedfulRandomGenerator(seed);
         shieldRam.GetComponent<WaitAttackStateMachine>().enabled = false;
         return shieldRam;
+    }
+
+    // Loads a wait-attack enemy straight from its prefab, seeded, with its state machine off, so a test drives its wait and attack by hand.
+    internal static GameObject LoadEnemyWithoutStateMachine(string prefabPath, Vector2 position, int seed)
+    {
+        var enemyPrefab = Resources.Load<GameObject>(prefabPath);
+        if (enemyPrefab == null)
+        {
+            throw new System.Exception($"Enemy prefab not found at Resources/{prefabPath}");
+        }
+        var enemy = Object.Instantiate(enemyPrefab, position, Quaternion.identity);
+        enemy.GetComponent<EnemySharedBehavior>().SetInitialSeedfulRandomGenerator(seed);
+        enemy.GetComponent<WaitAttackStateMachine>().enabled = false;
+        return enemy;
     }
 
     // Loads the Coin Thief straight from its prefab, seeded, with its state machine on, so it waits, steals and eats as in a run.

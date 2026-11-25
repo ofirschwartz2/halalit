@@ -64,6 +64,8 @@ namespace Assets.Enums
         [Description("Grapple shot item")]
         GRAPPLE_SHOT = 23,
         [Description("Swap shot item")]
-        SWAP_SHOT = 24
+        SWAP_SHOT = 24,
+        [Description("Decoy ship item")]
+        DECOY_SHIP = 25
     }
 }

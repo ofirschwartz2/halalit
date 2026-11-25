@@ -10,6 +10,8 @@ public class BallShot : MonoBehaviour
     private float _speed;
     [SerializeField]
     private float _lifetime;
+    [SerializeField]
+    private bool _passesThrough;
 
     private float _endOfLifeTime;
 
@@ -29,7 +31,7 @@ public class BallShot : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag(Tag.ENEMY.GetDescription()) || other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()) || other.gameObject.CompareTag(Tag.HALALIT.GetDescription()))
+        if (!_passesThrough && (other.gameObject.CompareTag(Tag.ENEMY.GetDescription()) || other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()) || other.gameObject.CompareTag(Tag.HALALIT.GetDescription())))
             Destroy(gameObject);
     }
 
