@@ -16,6 +16,7 @@ namespace Assets.Enums
         SHOOTING_IN_RANGE_ENEMY,
         SHOOTING_LAZER_ASTERISK_ENEMY,
         SHOOTING_LAZER_RANGE_ENEMY,
-        MINE_LAYER
+        MINE_LAYER,
+        SHIELD_RAM
     }
 }

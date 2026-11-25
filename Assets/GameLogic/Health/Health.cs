@@ -33,6 +33,7 @@ public class Health : MonoBehaviour
     private List<string> _contributorsDescriptions;
     private Canvas _privateCanvas;
     private bool _died;
+    private FrontArmor _frontArmor;
 
     #region Init
     private void Awake()
@@ -41,6 +42,7 @@ public class Health : MonoBehaviour
         _harmersDescriptions = new List<string>();
         _contributorsDescriptions = new List<string>();
         _died = false;
+        _frontArmor = GetComponent<FrontArmor>();
     }
 
     private void SetEventListeners()
@@ -216,7 +218,7 @@ public class Health : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (IsHarmer(other.gameObject) && other.gameObject.GetComponent<AttackBehaviour>().ShotType == AttackShotType.DESCRETE)
+        if (IsHarmer(other.gameObject) && other.gameObject.GetComponent<AttackBehaviour>().ShotType == AttackShotType.DESCRETE && !IsBlockedByArmor(other.gameObject))
         {
             HandleHealth(other.gameObject, false);
         }
@@ -224,7 +226,7 @@ public class Health : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (IsHarmer(other.gameObject) && other.gameObject.GetComponent<AttackBehaviour>().ShotType == AttackShotType.CONSECUTIVE)
+        if (IsHarmer(other.gameObject) && other.gameObject.GetComponent<AttackBehaviour>().ShotType == AttackShotType.CONSECUTIVE && !IsBlockedByArmor(other.gameObject))
         {
             HandleHealth(other.gameObject, false);
         }
@@ -266,6 +268,11 @@ public class Health : MonoBehaviour
     private bool IsContributor(GameObject other)
     {
         return _contributorsDescriptions.Contains(other.tag);
+    }
+
+    private bool IsBlockedByArmor(GameObject other)
+    {
+        return _frontArmor != null && _frontArmor.IsBlocking(other);
     }
     #endregion
 

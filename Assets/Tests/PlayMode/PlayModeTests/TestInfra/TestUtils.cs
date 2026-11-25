@@ -26,6 +26,7 @@ internal static class TestUtils
     // Resources paths:
     public const string SPRITE_CIRCLE_PATH = "Sprites/Circle";
     public const string ENEMY_MINE_PREFAB_PATH = "Prefabs/Attacks/EnemyAttacks/EnemyMine";
+    public const string SHIELD_RAM_PREFAB_PATH = "Prefabs/Enemies/WaitAttackEnemies/ShieldRam";
 
     // Defaults:
     public const int ENEMIES_SEEDED_NUMBERS_LIST_DEFAULT_LENGTH = 5;
@@ -163,6 +164,24 @@ internal static class TestUtils
             throw new System.Exception($"EnemyMine prefab not found at Resources/{ENEMY_MINE_PREFAB_PATH}");
         }
         return Object.Instantiate(minePrefab, position, Quaternion.identity);
+    }
+
+    // Loads the Shield Ram straight from its prefab, seeded, with its state machine off so it neither spins nor charges.
+    internal static GameObject LoadShieldRam(Vector2 position, int seed)
+    {
+        var shieldRamPrefab = Resources.Load<GameObject>(SHIELD_RAM_PREFAB_PATH);
+        if (shieldRamPrefab == null)
+        {
+            throw new System.Exception($"ShieldRam prefab not found at Resources/{SHIELD_RAM_PREFAB_PATH} (Needs Ofir in Unity)");
+        }
+        if (shieldRamPrefab.GetComponent<FrontArmor>() == null)
+        {
+            throw new System.Exception("ShieldRam prefab has no FrontArmor on its root (Needs Ofir in Unity)");
+        }
+        var shieldRam = Object.Instantiate(shieldRamPrefab, position, Quaternion.identity);
+        shieldRam.GetComponent<EnemySharedBehavior>().SetInitialSeedfulRandomGenerator(seed);
+        shieldRam.GetComponent<WaitAttackStateMachine>().enabled = false;
+        return shieldRam;
     }
 
     internal static void SetGameObjectPosition(GameObject gameObject, Vector2 position) 
