@@ -82,7 +82,8 @@ public class DecoyShipTests
                 secondDecoy = shot;
             }
         }
-        AssertWrapper.IsNotNull(firstDecoy, _currentSeed, "First decoy was gone before the second was fired");
+        // A destroyed GameObject is not a C# null, so IsNotNull would pass on it: use Unity's null check.
+        AssertWrapper.IsTrue(firstDecoy != null, "First decoy was gone before the second was fired", _currentSeed);
         AssertWrapper.IsNotNull(secondDecoy, _currentSeed, "Second decoy was not fired");
         AssertWrapper.AreEqual(secondDecoy.transform.position, EnemyTarget.GetPosition(), "Enemy target is not the newest decoy", _currentSeed, POSITION_DELTA);
 
@@ -201,6 +202,10 @@ public class DecoyShipTests
             yield return null;
             decoy = TestUtils.GetShot();
         }
+
+        // A shot destroyed on the hit still exists until the end of that frame: wait one frame before asking whether it lives.
+        yield return null;
+        decoy = TestUtils.GetShot();
 
         // THEN
         AssertWrapper.AreEqual(ENEMY_HEALTH - TestUtils.DEFAULT_POWER_1, firstEnemyHealth.GetHealth(), "Decoy did not hurt the first enemy exactly once", _currentSeed);
