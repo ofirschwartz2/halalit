@@ -63,16 +63,16 @@ public class CoinTossTests
         yield return TestUtils.CollectValuable(ValuableName.SILVER);
         AssertWrapper.AreEqual(0, TestUtils.GetValuables().Length, "A Valuable Is Left Before The Shot", _currentSeed);
 
-        var halalit = TestUtils.GetHalalit();
         var weaponMovement = TestUtils.GetWeaponMovement();
         var weaponAttack = TestUtils.GetWeaponAttack();
         var touchOnJoystick = TestUtils.GetRandomTouchOverAttackTrigger(weaponAttack.GetAttackJoystickEdge());
-        Vector2 halalitPosition = halalit.transform.position;
 
         // WHEN
         weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
         yield return null;
 
+        // The shot starts at the weapon, so its range is measured from there.
+        Vector2 firePosition = weaponAttack.transform.position;
         weaponAttack.HumbleFixedUpdate(touchOnJoystick);
         yield return null;
 
@@ -85,7 +85,7 @@ public class CoinTossTests
         var valuables = TestUtils.GetValuables();
         AssertWrapper.AreEqual(1, valuables.Length, "Coin Did Not Land As Exactly One Valuable", _currentSeed);
         AssertWrapper.IsTrue(TestUtils.GetValuableName(valuables[0]) == ValuableName.SILVER, "Coin Did Not Land As A Silver", _currentSeed);
-        AssertWrapper.AreEqual(COIN_RANGE, Vector2.Distance(halalitPosition, valuables[0].transform.position), "Coin Did Not Land At The End Of Its Range", _currentSeed, LANDING_DELTA);
+        AssertWrapper.AreEqual(COIN_RANGE, Vector2.Distance(firePosition, valuables[0].transform.position), "Coin Did Not Land At The End Of Its Range", _currentSeed, LANDING_DELTA);
     }
 
     [UnityTest]

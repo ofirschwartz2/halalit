@@ -161,10 +161,16 @@ internal static class TestUtils
     }
 
     // Drops a valuable on the Halalit and waits until the Halalit has picked it up, so the score rises by its value.
+    // Waits at most a few physics steps; the caller asserts the score, so a missed pickup fails there.
     internal static IEnumerator CollectValuable(ValuableName valuableName)
     {
-        DropValuable(valuableName, GetHalalit().transform.position);
-        yield return new WaitForFixedUpdate();
+        var maxFixedUpdatesToCollect = 10;
+        var valuable = DropValuable(valuableName, GetHalalit().transform.position);
+        for (int i = 0; i < maxFixedUpdatesToCollect && valuable != null; i++)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
         yield return null;
     }
 
