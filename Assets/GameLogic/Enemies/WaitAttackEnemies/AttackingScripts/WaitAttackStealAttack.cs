@@ -20,7 +20,7 @@ public class WaitAttackStealAttack : WaitAttackAttack
     [SerializeField]
     private float _movementAmplitude = 10f;
     [SerializeField]
-    private float _grabDistance = 0.5f;
+    private float _grabDistance = 1.3f;
     [SerializeField]
     private float _carryDistance = 1.2f;
     [SerializeField]
