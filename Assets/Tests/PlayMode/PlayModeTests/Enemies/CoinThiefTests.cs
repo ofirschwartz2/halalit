@@ -64,7 +64,7 @@ public class CoinThiefTests
         yield return new WaitForSeconds(waitingInterval + OUT_OF_REACH_WATCH_TIME);
 
         // THEN
-        AssertWrapper.IsNotNull(coin, _currentSeed, "Coin Out Of Reach Was Destroyed");
+        AssertWrapper.IsTrue(coin != null, "Coin Out Of Reach Was Destroyed", _currentSeed);
         AssertWrapper.IsTrue(coin.transform.parent == null, "Coin Thief Took A Coin Out Of Its Reach", _currentSeed);
         var closedDistance = initialDistance - Vector2.Distance(coinThief.transform.position, coin.transform.position);
         AssertWrapper.Less(closedDistance, MAX_DRIFT_CLOSING, "Coin Thief Hunted A Coin Out Of Its Reach", _currentSeed);
@@ -95,7 +95,7 @@ public class CoinThiefTests
         yield return new WaitForSeconds(2 * WAIT_MARGIN);
 
         // THEN
-        AssertWrapper.IsNotNull(coinThief, _currentSeed, "Coin Thief Was Destroyed, So The Coin Was Not Eaten");
+        AssertWrapper.IsTrue(coinThief != null, "Coin Thief Was Destroyed, So The Coin Was Not Eaten", _currentSeed);
         AssertWrapper.IsTrue(coin == null, "Coin Thief Did Not Eat The Coin After Its Eat Delay", _currentSeed);
         AssertWrapper.AreEqual(originalScore, TestUtils.GetScore(), "Score Changed When The Coin Thief Ate The Coin", _currentSeed);
     }
@@ -124,14 +124,14 @@ public class CoinThiefTests
         yield return null;
 
         // THEN
-        AssertWrapper.IsNotNull(coin, _currentSeed, "Coin Was Destroyed When The Coin Thief Was Hit");
+        AssertWrapper.IsTrue(coin != null, "Coin Was Destroyed When The Coin Thief Was Hit", _currentSeed);
         AssertWrapper.IsTrue(coin.transform.parent == null, "Coin Thief Did Not Drop The Coin When Hit", _currentSeed);
 
         // WHEN
         yield return new WaitForSeconds(waitingInterval / 2);
 
         // THEN
-        AssertWrapper.IsNotNull(coin, _currentSeed, "Dropped Coin Was Destroyed");
+        AssertWrapper.IsTrue(coin != null, "Dropped Coin Was Destroyed", _currentSeed);
         AssertWrapper.IsTrue(coin.transform.parent == null, "Coin Thief Took The Coin Back Before Its Wait Was Over", _currentSeed);
     }
 
