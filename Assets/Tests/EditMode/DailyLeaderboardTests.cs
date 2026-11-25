@@ -56,4 +56,13 @@ public class DailyLeaderboardTests
         AssertWrapper.AreEqual("21-11-26", DailyLeaderboard.GetListTitle(false, 1, archivedDayStart), "Wrong title for a past day");
         AssertWrapper.AreEqual("All time", DailyLeaderboard.GetListTitle(true, 1, archivedDayStart), "Wrong title for the all-time list");
     }
+
+    [Test]
+    public void PastDayTitleUsesIsraelDate()
+    {
+        // The daily list resets at midnight Israel time, which is 22:00 UTC the evening before in winter
+        var archivedDayStart = new DateTime(2026, 11, 20, 22, 0, 0, DateTimeKind.Utc);
+
+        AssertWrapper.AreEqual("21-11-26", DailyLeaderboard.GetListTitle(false, 1, archivedDayStart), "A past day was titled with its UTC date, not its Israel date");
+    }
 }
