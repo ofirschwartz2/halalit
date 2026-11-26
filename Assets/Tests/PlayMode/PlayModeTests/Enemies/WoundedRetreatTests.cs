@@ -130,6 +130,7 @@ public class WoundedRetreatTests
         Wound(enemy, ENEMY_HEALTH - woundedRetreat.GetWoundedHealth());
         yield return new WaitForSeconds(woundedRetreat.GetRetreatDuration() + RETREAT_END_MARGIN);
         AssertWrapper.IsFalse(woundedRetreat.IsRetreating(), "First retreat did not end", _currentSeed);
+        AssertWrapper.Greater(TestUtils.GetEnemyHealth(), woundedRetreat.GetWoundedHealth(), "Enemy did not heal after the first retreat, so a second wound cannot be checked", _currentSeed);
 
         // WHEN
         Wound(enemy, (int)TestUtils.GetEnemyHealth() - woundedRetreat.GetWoundedHealth());
