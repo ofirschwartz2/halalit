@@ -11,6 +11,9 @@ public class AttackBehaviour : MonoBehaviour, IHarmer
     // Mirror Shield (#200): melee attacks (Sword, Spikes) hurt it from the front and are never reflected.
     public bool IsMelee;
 
+    // Tripwire (#213): the shortest time between two shots, whatever the fire rate upgrades. 0 = no floor.
+    public float MinCooldown;
+
     public void Copy(AttackBehaviour attackBehaviour)
     {
         ShotType = attackBehaviour.ShotType;

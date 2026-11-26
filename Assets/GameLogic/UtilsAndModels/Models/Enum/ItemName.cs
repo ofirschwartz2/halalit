@@ -70,6 +70,8 @@ namespace Assets.Enums
         [Description("Coin toss item")]
         COIN_TOSS = 26,
         [Description("Bank shot item")]
-        BANK_SHOT = 27
+        BANK_SHOT = 27,
+        [Description("Tripwire item")]
+        TRIPWIRE = 28
     }
 }
