@@ -8,5 +8,7 @@ namespace Assets.Models
         event Action<int> Wounded;
         int GetCurrentHealth();
         void TryChangeHealth(int healthChange);
+        // Shows a health bar that starts hidden (the Mimic's, until it wakes).
+        void ShowHealthBar();
     }
 }

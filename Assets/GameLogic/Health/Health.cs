@@ -27,6 +27,8 @@ public class Health : MonoBehaviour, IHealth
     private List<Tag> _harmers;
     [SerializeField]
     private List<Tag> _contributors;
+    [SerializeField]
+    private bool _startsHidden;
 
     private int _health;
     private Slider _healthBarBorder;
@@ -36,6 +38,8 @@ public class Health : MonoBehaviour, IHealth
     private Canvas _privateCanvas;
     private bool _died;
     private FrontArmor _frontArmor;
+    private bool _isHealthBarHidden;
+    private bool _isHealthBarPlaced;
 
     public event Action<int> Wounded;
 
@@ -47,6 +51,7 @@ public class Health : MonoBehaviour, IHealth
         _contributorsDescriptions = new List<string>();
         _died = false;
         _frontArmor = GetComponent<FrontArmor>();
+        _isHealthBarHidden = _startsHidden;
     }
 
     private void SetEventListeners()
@@ -87,10 +92,24 @@ public class Health : MonoBehaviour, IHealth
     {
         yield return new WaitForSeconds(delayTime);
 
-        _healthBar.SetActive(true);
+        if (!_isHealthBarHidden)
+        {
+            _healthBar.SetActive(true);
+        }
 
         SetHealthBarScale();
         SetHealthBarPosition();
+        _isHealthBarPlaced = true;
+    }
+
+    // A bar that starts hidden is still sized and placed once by SetHealthBarVisible; this only switches it on.
+    public void ShowHealthBar()
+    {
+        _isHealthBarHidden = false;
+        if (_isHealthBarPlaced)
+        {
+            _healthBar.SetActive(true);
+        }
     }
 
     private void SetHealthBarScale()
@@ -299,6 +318,11 @@ public class Health : MonoBehaviour, IHealth
     {
         _health = health;
         _currentMaxHealth = health;
+    }
+
+    internal bool IsHealthBarVisible()
+    {
+        return _healthBar != null && _healthBar.activeSelf;
     }
 #endif
 }

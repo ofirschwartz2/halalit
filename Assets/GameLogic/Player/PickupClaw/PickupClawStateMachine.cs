@@ -1,5 +1,6 @@
 ﻿using Assets.Animators;
 using Assets.Enums;
+using Assets.Models;
 using Assets.Utils;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -99,7 +100,7 @@ public class PickupClawStateMachine : MonoBehaviour
 
     private void ChangeToReturningToHalalitWithTarget()
     {
-        _item.GetComponent<ItemMovement>().Grabbed(transform);
+        _item.GetComponentInParent<IGrabbable>().Grabbed(transform);
         _state = PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET;
         _pickupClawMovement.SetTarget(_halalit);
     }
@@ -108,7 +109,7 @@ public class PickupClawStateMachine : MonoBehaviour
     {
         if (_state == PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET && _item != null)
         {
-            _item.GetComponent<ItemMovement>().UnGrabbed();
+            _item.GetComponentInParent<IGrabbable>().UnGrabbed();
         }
 
         _state = PickupClawState.RETURNING_TO_HALALIT_WITHOUT_TARGET;

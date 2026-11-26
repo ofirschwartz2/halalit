@@ -117,5 +117,10 @@ public class ItemsBank : SeedfulRandomGeneratorUser
         }
         return false;
     }
+
+    public bool IsAttackItem(ItemName itemName)
+    {
+        return _attacks.Exists(attack => attack.ItemName == itemName);
+    }
     #endregion
 }
