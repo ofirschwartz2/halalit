@@ -179,7 +179,7 @@ public class BankShotTests
         // THEN
         AssertWrapper.IsNotNull(shot, _currentSeed, "Asteroid Removed The Disc");
         AssertWrapper.Less(shotRigidBody.velocity.x, 0, "Disc Did Not Bounce Back Toward The Halalit", _currentSeed);
-        AssertWrapper.AreEqual(ASTEROID_HEALTH, TestUtils.GetAsteroidHealth(), "Disc Harmed The Asteroid", _currentSeed);
+        AssertWrapper.AreEqual(ASTEROID_HEALTH, TestUtils.GetAsteroidHealth(), "Disc Harmed The Asteroid (Needs Ofir in Unity: Asteroid in the BankShot prefab's DescreteTriggerHarmer ignored target tags?)", _currentSeed);
     }
 
     [UnityTest]
