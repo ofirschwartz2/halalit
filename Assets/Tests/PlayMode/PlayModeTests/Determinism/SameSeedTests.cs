@@ -128,7 +128,11 @@ public class SameSeedTests
         yield return null;
 
         StopRecordingDrops();
-        AssertWrapper.AreEqual(0, TestUtils.GetEnemies().Length, "Enemies Left Alive", _currentSeed);
+        // Checks the killed enemies themselves: a weapon drop can be a Mimic (#214), which is a new, living enemy.
+        for (int i = 0; i < NUMBER_OF_ENEMIES_TO_KILL; i++)
+        {
+            AssertWrapper.IsNull(loadedEnemies[i], _currentSeed, "Enemy " + i + " Left Alive");
+        }
     }
 
     private void StartRecordingDrops(List<string> drops)

@@ -18,12 +18,13 @@ public class MimicTests
     // Health draws a dynamic health bar 1 second after its Start.
     private const float HEALTH_BAR_DELAY = 1f;
     private const float WAIT_MARGIN = 0.3f;
-    private const float MIN_APPROACH = 0.3f;
+    private const float MIN_APPROACH = 0.2f;
     private const float APPROACH_TIMEOUT = 1f;
     private const float CLAW_TIMEOUT = 10f;
     private const float COIN_THIEF_WATCH_TIME = 3f;
     private static readonly Vector2 FAR_OFFSET_FROM_HALALIT = new(3, 0);
-    private static readonly Vector2 CLOSE_OFFSET_FROM_HALALIT = new(1.2f, 0);
+    // Inside the 1.5 wake radius, but far enough that the Mimic can close MIN_APPROACH before its body touches the Halalit.
+    private static readonly Vector2 CLOSE_OFFSET_FROM_HALALIT = new(1.4f, 0);
     private static readonly Vector2 SHOT_OFFSET_FROM_MIMIC = new(-2.5f, 0);
     // 6 units apart (loot radius is 8), each more than the wake radius from the Halalit.
     private static readonly Vector2 COIN_THIEF_OFFSET_FROM_HALALIT = new(-3, 3);
@@ -95,6 +96,8 @@ public class MimicTests
         halalit.GetComponent<Health>().SetHealth(HALALIT_HEALTH);
         var startTime = Time.time;
         var startDistance = Vector2.Distance(halalit.transform.position, mimic.transform.position);
+        var touchingDistance = halalit.GetComponent<Collider2D>().bounds.extents.x + mimic.GetComponent<Collider2D>().bounds.extents.x;
+        AssertWrapper.Greater(startDistance - MIN_APPROACH, touchingDistance, "Test setup: the Mimic would touch the Halalit before it could charge", _currentSeed);
 
         // WHEN
         yield return new WaitForSeconds(disguisedWait.GetWakeDelay());

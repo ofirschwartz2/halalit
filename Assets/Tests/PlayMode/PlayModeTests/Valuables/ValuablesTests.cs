@@ -117,9 +117,7 @@ public class ValuablesTests
 
             weaponAttack.HumbleFixedUpdate(Vector2.right);
             yield return null;
-
-            enemies = TestUtils.GetEnemies();
-        } while (enemies.Length != 0);
+        } while (IsAnyEnemyAlive(loadedEnemies));
 
         // THEN
         var valuables = TestUtils.GetValuables();
@@ -280,6 +278,19 @@ public class ValuablesTests
         AssertWrapper.AreEqual(scoreHistory[0], valuableValues.Find(valuableValue => valuableValue.Key == ValuableName.GOLD).Value, "Score Not Added Right");
         AssertWrapper.AreEqual(scoreHistory[1], scoreHistory[0] + valuableValues.Find(valuableValue => valuableValue.Key == ValuableName.GOLD).Value, "Score Not Added Right");
         AssertWrapper.AreEqual(scoreHistory[2], scoreHistory[1] + valuableValues.Find(valuableValue => valuableValue.Key == ValuableName.GOLD).Value, "Score Not Added Right");
+    }
+
+    // Waits for the loaded enemies only: a weapon drop can be a Mimic (#214), a new enemy that may sit outside the line of fire.
+    private static bool IsAnyEnemyAlive(List<GameObject> enemies)
+    {
+        foreach (var enemy in enemies)
+        {
+            if (enemy != null)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     [TearDown]
