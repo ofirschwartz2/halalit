@@ -18,6 +18,7 @@ namespace Assets.Enums
         SHOOTING_LAZER_RANGE_ENEMY,
         MINE_LAYER,
         SHIELD_RAM,
-        COIN_THIEF
+        COIN_THIEF,
+        MIRROR_SHIELD
     }
 }

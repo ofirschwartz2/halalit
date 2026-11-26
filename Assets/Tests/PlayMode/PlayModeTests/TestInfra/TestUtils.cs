@@ -28,6 +28,7 @@ internal static class TestUtils
     public const string ENEMY_MINE_PREFAB_PATH = "Prefabs/Attacks/EnemyAttacks/EnemyMine";
     public const string SHIELD_RAM_PREFAB_PATH = "Prefabs/Enemies/WaitAttackEnemies/ShieldRam";
     public const string COIN_THIEF_PREFAB_PATH = "Prefabs/Enemies/WaitAttackEnemies/CoinThief";
+    public const string MIRROR_SHIELD_PREFAB_PATH = "Prefabs/Enemies/SpecialMovementEnemies/MirrorShield";
     public const string BALL_SHOT_PREFAB_PATH = "Prefabs/Attacks/HalalitAttacks/LongRange/BallShot/BallShot";
     public const string SHOOTING_IN_RANGE_ENEMY_PREFAB_PATH = "Prefabs/Enemies/MoveAimAttackEnemies/ShootingInRangeEnemy";
     public const string ZIG_ZAG_ENEMY_PREFAB_PATH = "Prefabs/Enemies/SpecialMovementEnemies/ZigZagEnemy";
@@ -188,19 +189,43 @@ internal static class TestUtils
     // Loads the Shield Ram straight from its prefab, seeded, with its state machine off so it neither spins nor charges.
     internal static GameObject LoadShieldRam(Vector2 position, int seed)
     {
-        var shieldRamPrefab = Resources.Load<GameObject>(SHIELD_RAM_PREFAB_PATH);
-        if (shieldRamPrefab == null)
-        {
-            throw new System.Exception($"ShieldRam prefab not found at Resources/{SHIELD_RAM_PREFAB_PATH} (Needs Ofir in Unity)");
-        }
-        if (shieldRamPrefab.GetComponent<FrontArmor>() == null)
-        {
-            throw new System.Exception("ShieldRam prefab has no FrontArmor on its root (Needs Ofir in Unity)");
-        }
-        var shieldRam = Object.Instantiate(shieldRamPrefab, position, Quaternion.identity);
-        shieldRam.GetComponent<EnemySharedBehavior>().SetInitialSeedfulRandomGenerator(seed);
+        var shieldRam = LoadArmoredEnemy("ShieldRam", SHIELD_RAM_PREFAB_PATH, position, seed);
         shieldRam.GetComponent<WaitAttackStateMachine>().enabled = false;
         return shieldRam;
+    }
+
+    // Loads the Mirror Shield straight from its prefab, seeded, standing still and not turning: tests set its rotation by hand.
+    internal static GameObject LoadMirrorShield(Vector2 position, int seed)
+    {
+        var mirrorShield = LoadArmoredEnemy("MirrorShield", MIRROR_SHIELD_PREFAB_PATH, position, seed);
+        if (mirrorShield.GetComponent<TargetFacer>() == null || mirrorShield.GetComponent<LameEnemy>() == null)
+        {
+            throw new System.Exception("MirrorShield prefab lacks TargetFacer or LameEnemy on its root (Needs Ofir in Unity)");
+        }
+        if (!mirrorShield.GetComponent<FrontArmor>().IsReflecting())
+        {
+            throw new System.Exception("MirrorShield prefab's FrontArmor does not reflect (Needs Ofir in Unity)");
+        }
+        mirrorShield.GetComponent<LameEnemy>().StopMovement();
+        mirrorShield.GetComponent<TargetFacer>().enabled = false;
+        return mirrorShield;
+    }
+
+    // Loads an enemy with a FrontArmor on its root straight from its prefab, with its seed.
+    private static GameObject LoadArmoredEnemy(string enemyName, string prefabPath, Vector2 position, int seed)
+    {
+        var enemyPrefab = Resources.Load<GameObject>(prefabPath);
+        if (enemyPrefab == null)
+        {
+            throw new System.Exception($"{enemyName} prefab not found at Resources/{prefabPath} (Needs Ofir in Unity)");
+        }
+        if (enemyPrefab.GetComponent<FrontArmor>() == null)
+        {
+            throw new System.Exception($"{enemyName} prefab has no FrontArmor on its root (Needs Ofir in Unity)");
+        }
+        var enemy = Object.Instantiate(enemyPrefab, position, Quaternion.identity);
+        enemy.GetComponent<EnemySharedBehavior>().SetInitialSeedfulRandomGenerator(seed);
+        return enemy;
     }
 
     // Loads a wait-attack enemy straight from its prefab, seeded, with its state machine off, so a test drives its wait and attack by hand.
@@ -812,6 +837,18 @@ internal static class TestUtils
         if (attackPrefab == null || attackPrefab.GetComponent<T>() == null)
         {
             AssertWrapper.Fail($"{attackName} prefab has no {typeof(T).Name} component (Needs Ofir in Unity)", seed);
+        }
+    }
+
+    // Fails unless every AttackBehaviour in the attack's prefab, its parts included, is marked IsMelee.
+    internal static void AssertMeleeAttack(AttackName attackName, int seed)
+    {
+        AssertAttackPrefabHas<AttackBehaviour>(attackName, seed);
+        var attackBehaviours = AttacksBank.GetAttackPrefab(attackName).GetComponentsInChildren<AttackBehaviour>(true);
+
+        if (attackBehaviours.Any(attackBehaviour => !attackBehaviour.IsMelee))
+        {
+            AssertWrapper.Fail($"{attackName} prefab has an AttackBehaviour without IsMelee (Needs Ofir in Unity)", seed);
         }
     }
     #endregion
