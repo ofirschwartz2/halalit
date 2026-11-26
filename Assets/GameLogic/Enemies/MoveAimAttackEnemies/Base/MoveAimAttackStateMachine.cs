@@ -83,7 +83,7 @@ public class MoveAimAttackStateMachine : MonoBehaviour, IPausableEnemyBehaviour
     }
 
     // Runs when something pauses this machine (WoundedRetreat, SpawnHole, destroy). Clears live aim rays and beams,
-    // so that on its return the enemy moves, then aims again before it shoots.
+    // so that on its return the enemy goes straight to aiming again (its moving time has passed) before it shoots.
     void OnDisable()
     {
         switch (_moveAimAttackEnemyState)
