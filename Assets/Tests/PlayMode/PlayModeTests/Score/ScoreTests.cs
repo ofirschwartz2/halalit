@@ -1,3 +1,4 @@
+using Assets.Enums;
 using Assets.Tests.PlayMode.PlayModeTests.TestInfra;
 using NUnit.Framework;
 using System.Collections;
@@ -90,6 +91,76 @@ public class ScoreTests
         AssertWrapper.IsTrue(highScore == score, "High Score Not Set", _currentSeed);
         AssertWrapper.IsTrue(isNewHighScore, "New High Score Not Flagged", _currentSeed);
         AssertWrapper.IsTrue(dailyScore == score, "Daily Score Not Set", _currentSeed);
+    }
+
+    [UnityTest]
+    public IEnumerator SpendNeverGoesBelowZero()
+    {
+        // GIVEN
+        yield return null;
+        TestUtils.SetTestMode();
+        var score = TestUtils.GetScoreText().GetComponent<Score>();
+        AssertWrapper.AreEqual(0, TestUtils.GetScore(), "Score Is Not 0 At Start", _currentSeed);
+
+        // WHEN
+        var didSpend = score.TrySpend(ValuableName.SILVER);
+
+        // THEN
+        AssertWrapper.IsFalse(didSpend, "Spent With No Score", _currentSeed);
+        AssertWrapper.AreEqual(0, TestUtils.GetScore(), "Score Is Not 0 After A Failed Spend", _currentSeed);
+    }
+
+    [UnityTest]
+    public IEnumerator GameOverSavesScoreAfterSpending()
+    {
+        // GIVEN
+        yield return null;
+        TestUtils.SetTestMode();
+        var score = TestUtils.GetScoreText().GetComponent<Score>();
+        var silverValue = TestUtils.GetValuableValues().Find(valuableValue => valuableValue.Key == ValuableName.SILVER).Value;
+        yield return TestUtils.CollectValuable(ValuableName.SILVER);
+        yield return TestUtils.CollectValuable(ValuableName.SILVER);
+        AssertWrapper.AreEqual(silverValue * 2, TestUtils.GetScore(), "Halalit Did Not Collect Two Silvers", _currentSeed);
+
+        // WHEN
+        var didSpend = score.TrySpend(ValuableName.SILVER);
+
+        // THEN
+        AssertWrapper.IsTrue(didSpend, "Did Not Spend With Enough Score", _currentSeed);
+        AssertWrapper.AreEqual(silverValue, TestUtils.GetScore(), "Score Did Not Drop By One Silver Value", _currentSeed);
+
+        // GIVEN
+        // A death must not load the real menu in a test run, because the menu signs in for real.
+        // The helper takes the menu load off the game over event. It takes effect one frame later.
+        TestUtils.UnhookMenuLoadFromGameOver();
+        yield return null;
+
+        var shownScore = TestUtils.GetScore();
+
+        // WHEN
+        // A first-time player on a daily run dies. Reset, kill, read and reset are one step with no yield.
+        // The finally block resets PlayerStats even when the kill throws,
+        // so no test score is left behind for a later test or a real menu.
+        int? highScore;
+        int? dailyScore;
+        PlayerStats.SetDefaultPlayerStatsValues();
+        PlayerStats.SetStartDaily();
+        try
+        {
+            TestUtils.KillHalalit();
+            highScore = PlayerStats._highScore;
+            dailyScore = PlayerStats._dailyScore;
+        }
+        finally
+        {
+            PlayerStats.SetDefaultPlayerStatsValues();
+        }
+        yield return null;
+
+        // THEN
+        AssertWrapper.IsFalse(TestUtils.IsGameOver(), "Game Over Loaded The Menu", _currentSeed);
+        AssertWrapper.IsTrue(highScore == shownScore, "High Score Is Not The Score Shown After Spending", _currentSeed);
+        AssertWrapper.IsTrue(dailyScore == shownScore, "Daily Score Is Not The Score Shown After Spending", _currentSeed);
     }
 
     [TearDown]

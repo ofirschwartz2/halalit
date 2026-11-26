@@ -66,6 +66,8 @@ namespace Assets.Enums
         [Description("Swap shot item")]
         SWAP_SHOT = 24,
         [Description("Decoy ship item")]
-        DECOY_SHIP = 25
+        DECOY_SHIP = 25,
+        [Description("Coin toss item")]
+        COIN_TOSS = 26
     }
 }

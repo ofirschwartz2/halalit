@@ -1,4 +1,5 @@
 ﻿using Assets.Enums;
+using Assets.Models;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -11,7 +12,7 @@ using UnityEngine.UI;
 [assembly: InternalsVisibleTo("PlayModeTests")]
 #endif
 
-public class Score : MonoBehaviour
+public class Score : MonoBehaviour, IScoreWallet
 {
     [SerializeField]
     private List<KeyValuePair<ValuableName, int>> _valuableValues;
@@ -51,7 +52,30 @@ public class Score : MonoBehaviour
 
     private void IncreaseScore(object initiator, ValuableEventArguments arguments)
     {
-        _score += _valuableValues.Find(valuable => valuable.Key == arguments.Name).Value;
+        _score += GetValuableValue(arguments.Name);
+        ShowScore();
+    }
+
+    public bool TrySpend(ValuableName valuableName)
+    {
+        var cost = GetValuableValue(valuableName);
+        if (!CanSpend(cost))
+        {
+            return false;
+        }
+
+        _score -= cost;
+        ShowScore();
+        return true;
+    }
+
+    private int GetValuableValue(ValuableName valuableName)
+    {
+        return _valuableValues.Find(valuable => valuable.Key == valuableName).Value;
+    }
+
+    private void ShowScore()
+    {
         scoreText.text = "Score: " + _score.ToString();
     }
 
@@ -83,6 +107,13 @@ public class Score : MonoBehaviour
     {
         return _score;
     }
+
+    #region Predicates
+    private bool CanSpend(int amount)
+    {
+        return _score >= amount;
+    }
+    #endregion
 
 #if UNITY_EDITOR
 

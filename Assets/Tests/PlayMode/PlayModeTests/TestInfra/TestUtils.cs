@@ -160,6 +160,20 @@ internal static class TestUtils
         return GetValuables().First(valuable => !valuablesBeforeDrop.Contains(valuable));
     }
 
+    // Drops a valuable on the Halalit and waits until the Halalit has picked it up, so the score rises by its value.
+    // Waits at most a few physics steps; the caller asserts the score, so a missed pickup fails there.
+    internal static IEnumerator CollectValuable(ValuableName valuableName)
+    {
+        var maxFixedUpdatesToCollect = 10;
+        var valuable = DropValuable(valuableName, GetHalalit().transform.position);
+        for (int i = 0; i < maxFixedUpdatesToCollect && valuable != null; i++)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
+        yield return null;
+    }
+
     // Loads the Mine Layer's mine straight from its prefab, as the Mine Layer would lay it (no movement, its own lifetime).
     internal static GameObject LoadEnemyMine(Vector2 position)
     {
