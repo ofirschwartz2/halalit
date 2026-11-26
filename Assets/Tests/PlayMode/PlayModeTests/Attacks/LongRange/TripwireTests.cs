@@ -218,10 +218,11 @@ public class TripwireTests
 
         // WHEN
         yield return PlaceHalalit(GetWireMiddle());
+        var isWireOnWhileShipOnIt = _secondPost.GetComponent<TripwirePost>().GetWire().IsWireOn();
         yield return PlaceHalalit(GetWireMiddle() + Vector2.up * OFF_WIRE_DISTANCE);
 
         // THEN
-        AssertWrapper.IsTrue(_secondPost.GetComponent<TripwirePost>().GetWire().IsWireOn(), "Test Setup: The Wire Was Off While The Ship Crossed", _currentSeed);
+        AssertWrapper.IsTrue(isWireOnWhileShipOnIt, "Test Setup: The Wire Was Off While The Ship Crossed", _currentSeed);
         AssertWrapper.AreEqual(healthBeforeCrossing, halalitHealth.GetHealth(), "Wire Hurt The Ship", _currentSeed);
     }
 
@@ -270,6 +271,7 @@ public class TripwireTests
         }
 
         // THEN
+        AssertWrapper.Greater(minCooldown, 0, "Tripwire Prefab Has No Min Cooldown (Needs Ofir in Unity)", _currentSeed);
         AssertWrapper.Less(TestUtils.DEFAULT_ATTACK_STATS_2.Rate * weaponAttack.GetCooldownInterval(), minCooldown, "Test Setup: Stamina Did Not Bring The Fire Rate Under The Floor", _currentSeed);
         AssertWrapper.Greater(shotTimes.Count, 1, "Fewer Than Two Posts Were Shot While Holding Fire", _currentSeed);
         for (int i = 1; i < shotTimes.Count; i++)
