@@ -2,6 +2,7 @@
 
 The rulebook for anyone, human or agent, who writes code in this repo: how the code is built today, the rules new code must follow, and the known debts.
 Checked by reading files at commit `e8b1c95` (2025-07-26): C#, `.asmdef`, `.meta`, scene and prefab YAML, git history. Nothing was compiled or run. "By reading" marks a conclusion that still needs a run in Unity.
+Updated 2026-11-26 after cards #153 to #219, read on `develop` at `00a0ea6`. Those cards are on `develop` only and none has run in Unity, so "fixed" in section 7 means fixed in code on `develop`.
 Unity 2022.3.3f1, C#, 2D physics. Ofir approves every idea and every change.
 
 ## 1. System map
@@ -113,6 +114,12 @@ Rules when extending:
 - New harm logic is a new `CollisionHarmer` or `TriggerHarmer` subclass, not a branch inside `Health`.
 - A new tag is appended to `Tag` and created in Unity's Tag Manager with the same string as its `[Description]`.
 
+Per-object health events (#201):
+- The bus (3.1) cannot serve spawned objects. A component that must react to its own object's health uses the `IHealth` interface (`Assets/GameLogic/UtilsAndModels/Models/Interface/IHealth.cs`): `event Action<int> Wounded`, `GetCurrentHealth()`, `TryChangeHealth(int)`. Assemblies that do not reference `Health` use it this way.
+- `Health.TryChangeHealth` raises `Wounded` with the health left, only for a hit that hurts and does not kill. A zero hit, a heal or a killing hit raises nothing.
+- Get it with `GetComponent<IHealth>()` in `Awake`, subscribe there, unsubscribe in `OnDestroy`. Example: `Assets/GameLogic/Enemies/Base/WoundedRetreat.cs`.
+- Add a new per-object health event to `IHealth` the same way. Do not add a static event for it.
+
 ### 3.3 Attacks
 - `AttackName` lists the 10 attacks. `AttacksBank` (scene) maps each to a prefab in a static dictionary. Every attack prefab carries `AttackBehaviour` (`ShotType` plus `AttackStats`: Power, CriticalHit, Luck, Rate, Weight) and its own script under `Assets/GameLogic/Attacks/{ShortRange,MidRange,LongRange}`.
 - `AttackToggle` holds the current attack and swaps it on `PLAYER_ATTACK_ITEM_PICKUP`. Each tick `WeaponAttack.HumbleFixedUpdate(touch)` reads it.
@@ -124,7 +131,7 @@ Rules when extending:
 
 Rules when extending:
 - A new attack is an `AttackName` member, a behaviour script, a prefab variant of `HalalitAttack.prefab`, an `AttacksBank` entry and an attack item (3.4).
-- `AttackToggle` maps `ItemName` to `AttackName` by member name, so the two names must match. Read D15 before adding an 11th attack.
+- `AttackToggle` maps `ItemName` to `AttackName` by member name, so the two names must match. `ItemName` members have explicit numbers (#118): append a new one with the next free number.
 - Movement and lifetime checks go in `FixedUpdate`. Tunables are serialized fields on the attack script.
 - Do not add new writes to a prefab asset.
 
@@ -156,18 +163,20 @@ Rules when extending:
 - New behaviour for an existing machine: subclass the abstract step. Do not copy a state machine to add a state.
 - End every enemy `FixedUpdate` with `SpeedLimiter.LimitSpeed(_rigidBody)`. Turn at edges with `Utils.DidHitEdge(tag)`.
 - Take random values from `EnemySharedBehavior._seedfulRandomGenerator`, in `Start` or later.
+- Pause marker (#201): every script that moves, aims or attacks an enemy implements the empty `IPausableEnemyBehaviour` (`Models/Interface`) and sits on the enemy's root. `WoundedRetreat` pauses an enemy by switching these off with `enabled = false`. No `Pause()` method, no type checks, no script names. Today: the 4 special-movement scripts, both state machines, `ShotDodger`. `TargetFacer` (#200) predates the rule and is not marked yet.
+- A script that leaves live shots or rays behind clears them in `OnDisable`. `MoveAimAttackStateMachine.OnDisable` calls `StopAiming()` / `StopAttacking()`; a new aim or attack step with live objects overrides those.
 
 ### 3.6 Randomness
 - `SeedfulRandomGenerator` wraps `System.Random(seed)`. A component that needs one derives from `SeedfulRandomGeneratorUser` (9 classes); `SetInitialSeedfulRandomGenerator(seed)` throws if called twice.
 - Seeds flow down a tree: `OriginalRandomSeed` → 7 scene systems; `EnemyBank` → each enemy (`EnemyEntity.Seed`, applied by `SpawnHole`); the asteroid instantiators → each asteroid (`AsteroidInitiator.InitAsteroid`).
 - The seeded tree decides: enemy order, group sizes and spawn positions; the asteroid line, positions, scales and split count; item stock, ranks and stats; item and valuable drop rolls; the start direction of Greek and Sinus enemies.
-- `SeedlessRandomGenerator` (static) is used at 17 call sites, plus 7 through `Utils` helpers. Some are visual (engine particles, item spin). Others are gameplay: critical hits, shotgun spread, enemy directions and aim, drop forces, whether an asteroid splits. The code follows no consistent rule (D8). `UnityEngine.Random` is not used.
+- Since #183 and #184, every gameplay roll is seeded: each enemy and asteroid has its own generator, and combat rolls (critical hits, shotgun, enemy aim) use one too. `SeedlessRandomGenerator` is left for visuals (engine particles, item spin), the root seed of a non-daily run, and two `Utils` helpers with no caller (D8). `UnityEngine.Random` is not used.
 - Example: `Assets/GameLogic/Setup/OriginalRandomSeed.cs`.
 
 Rules when extending:
 - New gameplay randomness uses a seeded generator: the owner's (`EnemySharedBehavior`, `AsteroidSharedBehavior`) or a new `SeedfulRandomGeneratorUser` seeded by whatever creates it.
 - A new scene-level user is added at the end of `OriginalRandomSeed.SetAllInitialSeedfulRandomGenerators`. The call order defines every seed.
-- Seedless is for visuals only. A seedless result must never decide whether a seeded draw happens (`AsteroidInternalInstantiator.cs:127` does; D8).
+- Seedless is for visuals only. A seedless result must never decide whether a seeded draw happens (`AsteroidInternalInstantiator.cs:127` did, until #183).
 - Do not use the generator in `Awake`; it may not be assigned yet.
 
 ### 3.7 Test hooks
@@ -181,11 +190,11 @@ Rules when extending:
 #endif
 ```
 - "Humble" methods: the Unity callback only reads input and passes it to a method that takes the input as parameters. That method is `internal` in the editor and `private` in builds (`#if UNITY_EDITOR internal #else private #endif`). Six exist: `WeaponAttack.HumbleFixedUpdate`, `WeaponMovement.TryChangeWeaponPosition`, `HalalitMovement.TryMove`, `PickupClawShooter.TryShootClaw`, `AttackToggle.SetNewAttack`, `ItemDropper.DropNewItem`.
-- `[assembly: InternalsVisibleTo("TestsPlayMode")]`, inside `#if UNITY_EDITOR`, exists in `Attacks`, `Health`, `Items`, `Player` and Meta. It does not exist in `Asteroid`, `Enemies`, `Setup`, `UtilsAndModels` or `World`.
+- `[assembly: InternalsVisibleTo("TestsPlayMode")]`, inside `#if UNITY_EDITOR`, exists in `Attacks`, `Enemies` (in `ShotDodger.cs`), `Health`, `Items`, `Player` and Meta. It does not exist in `Asteroid`, `Setup`, `UtilsAndModels` or `World`. One per assembly is enough; do not add a second.
 - Example: `Assets/GameLogic/Player/Weapon/WeaponAttack.cs`.
 
 Rules when extending:
-- Game code never calls an editor-only member. `Assets/GameLogic/Setup/OriginalRandomSeed.cs:31` does (D1).
+- Game code never calls an editor-only member.
 - Hooks read or inject. No test-only branch in game logic beyond the existing `WeaponAttack._isTesting`.
 - The first hook in an assembly without the attribute adds `InternalsVisibleTo("TestsPlayMode")` under `#if UNITY_EDITOR`.
 
@@ -235,7 +244,7 @@ A test for a new feature: one class per feature in the matching folder, followin
 2. No `UnityEditor` API or `using UnityEditor` in `Assets/GameLogic` outside `#if UNITY_EDITOR`. Game code never calls a member that exists only under `#if UNITY_EDITOR`.
 3. Enums are stored as ints in scenes and prefabs. Append new members at the end; never insert, reorder or delete (D11).
 4. Tags, layers and scene names come from `Tag`, `Layer`, `SceneName` with `GetDescription()`. No string literals for them.
-5. Events: subscribe in `Awake` via `SetEventListeners()`, unsubscribe in `OnDestroy` via `DestroyEventListeners()`, only from objects present at scene load. Never invoke from `Awake` or `Start`.
+5. Events: subscribe in `Awake` via `SetEventListeners()`, unsubscribe in `OnDestroy` via `DestroyEventListeners()`. Bus events (3.1) only from objects present at scene load; a spawned object listens to its own components through an interface event, as `IHealth.Wounded` (3.2). Never invoke from `Awake` or `Start`.
 6. No runtime state on assets: never write to a prefab asset or a ScriptableObject at runtime.
 7. Gameplay randomness comes from a `SeedfulRandomGenerator` in the seed tree. `SeedlessRandomGenerator` is for visuals only. No `UnityEngine.Random`.
 8. No `Debug.Log` in `Update`, `FixedUpdate`, coroutine loops or physics callbacks. Never log tokens or credentials.
@@ -253,21 +262,21 @@ Each row was re-checked in the files; none was observed at runtime. In "Where", 
 
 | # | Problem | Where | Why it matters | Fix |
 |---|---|---|---|---|
-| D1 | Editor-only code in player assemblies | `Assets/GameLogic/UtilsAndModels/Models/DataObject/MinMaxRange.cs:1,17-42`; `UtilsAndModels/Utils/EditorUtils/JsonToInspector.cs:5`; `Setup/OriginalRandomSeed.cs:31` calls a method defined only under `#if UNITY_EDITOR` (56-73); `Assets/External/Joystick Pack/Scripts/Editor/*.cs` (4 files) | A player build cannot compile (follows from C# rules; not built here) | S |
-| D2 | Score never reaches `PlayerStats` | `Assets/GameLogic/Meta/Score/Score.cs:56` (`SetGameStats` has no caller in code, scenes or prefabs); `Meta/GameOver.cs:52`; `Score.cs:73` (`_score > _highScore` is false while `_highScore` is null) | High score, daily score and leaderboard are never updated | S |
-| D3 | Stale build scene list | `ProjectSettings/EditorBuildSettings.asset`: 9 deleted `Assets/Scenes/Tests/*.unity`, no `Leaderboard` | `MainMenu.LeaderBoard()` loads a scene that is not in the build | S |
-| D4 | Daily seeds hardcoded | `Assets/GameLogic/Meta/PlayerStats.cs:154-191`: 13-12-24 to 01-01-25, else seed 0 | Every daily run after 01-01-25 uses seed 0 | M |
+| D1 | **Fixed by #153.** Editor-only code in player assemblies | `MinMaxRange.cs`, `JsonToInspector.cs`, `OriginalRandomSeed.cs` now guarded by `#if UNITY_EDITOR`; Joystick Pack editor scripts moved into an Editor-only asmdef (an exception to hard rule 8, recorded on #171) | A player build is still unproven until one is made in Unity | done |
+| D2 | **Fixed by #154.** Score never reached `PlayerStats` | `Meta/Score/Score.cs:82` `SetGameStats` now runs on `GameOverEvent`; a first score counts (`_highScore ?? 0`) | High score, daily score and leaderboard get the run's score | done |
+| D3 | **Fixed by #156.** Stale build scene list | `ProjectSettings/EditorBuildSettings.asset` now lists exactly MainMenu, Playground, Leaderboard | The leaderboard scene can load | done |
+| D4 | **Fixed by #159 and #204.** Daily seeds were hardcoded | `Meta/PlayerStats.cs:162` takes the seed from `DailySeed.GetSeed(date)`; the day follows Israel time | Every day has its own daily | done |
 | D5 | Event snapshot (3.1); `Health` subscribes per entity and never checks it is the player | `Assets/GameLogic/UtilsAndModels/Models/Event/*Event.cs`; `Health/Health.cs:48,233-241` | Late subscribers are ignored and destroyed ones still called; a vitality upgrade raises max health on every `Health` in the snapshot | M |
 | D6 | 2025 utility code: duplication and drift | `Assets/GameLogic/Items/Utility/*` (Pulling vs Pushing: `*Utility` identical after renaming, `*Field` one line and a debug block apart, plus pickups, configs and tests); `Player/Utility/UtilityManager.cs:78-83,168-183` (type checks); `Items/Utility/Utility.cs` (abstract, no subclass); `UtilsAndModels/Models/DataObject/BaseUtilityConfiguration.cs:7` (`IsActive` state on a ScriptableObject, read by `Items/Utility/NitroUtility.cs:15`) | Every fix must be made twice; each new utility needs edits in `UtilityManager`; state on an asset is shared by all users | M |
 | D7 | Logging on hot paths; token in logs | `Assets/GameLogic/UtilsAndModels/Utils/InGameUtils/Utils.cs:355-357,364-365` via `Enemies/Base/EnemySharedBehavior.cs:7` (per enemy per tick); `Player/Halalit/HalalitMovement.cs:94`; `Items/Utility/NitroUtility.cs:91`; `Items/Utility/PullingMagnetField.cs:54-57`; `Meta/Authentication.cs:38` (access token) | Frame time and log noise; a credential in device logs | S |
-| D8 | Mixed determinism | 17 `SeedlessRandomGenerator` call sites and 7 via `Utils`; `Assets/GameLogic/Asteroids/AsteroidInternalInstantiator.cs:127`; `GetInsideUnitCircle` returns a point in a square (`UtilsAndModels/Random/SeedfulRandomGenerator.cs:38`, `UtilsAndModels/Random/SeedlessRandomGenerator.cs:71`) | A seeded daily run is not the same run for two players | M |
+| D8 | **Mostly fixed by #183 and #184.** Mixed determinism | Left: `SeedfulRandomGenerator.GetInsideUnitCircle` (`UtilsAndModels/Random/SeedfulRandomGenerator.cs:38`) still returns a point in a square; `Utils.GetRandomVector` and `Utils.Get180RandomNormalizedVector` (`Utils.cs:89,115`) are seedless and have no caller | Drop forces lean to the diagonals; a new caller of the two helpers would break the daily | S |
 | D9 | Prefab asset mutated at runtime | `Assets/GameLogic/Player/Weapon/AttackToggle.cs:33,90` write; `Player/Weapon/WeaponAttack.cs:95` reads back each tick | The asset is shared state: stats outlive the scene and, in the editor, can outlive play mode (by reading) | M |
 | D10 | Sign-in initialised repeatedly | `Assets/GameLogic/Meta/Authentication.cs:10` (`InitializationTask` never assigned); `Meta/MainMenu.cs:31`; `Meta/PlayerStats.cs:43`. Also `async void Awake` in `Meta/MainMenu.cs:18` and `Meta/Score/LeaderBoard.cs:22` | `Initialize()` and `SetupEvents()` run on every menu load, so handlers stack up; an exception leaves the menu half set up | S |
 | D11 | Stale `List<Tag>` values. `PICKUP_CLAW_SHOOTER` and `ITEMS_FACTORY` were inserted mid-enum (commits `c84e769`, `0f25bec`, March 2024) | `Assets/Resources/Prefabs/Asteroids/Asteroid.prefab:241` (`_harmers` 17, 18 now mean `BAR_FILL`, `BAR_ICON`; were `ENEMY_SHOT`, `EXPLOSION`); `Assets/Resources/Prefabs/Enemies/Enemy.prefab:166` (`_knockbackers` 7, 23); `Assets/Resources/Prefabs/Enemies/MoveAimAttackEnemies/MoveAimAttackEnemy.prefab:28,32`; `Assets/Scenes/Playground.unity:10517` | By reading: asteroids no longer list enemy shots or explosions as harmers; shooting enemies no longer list enemy shots or asteroids; shock waves no longer knock enemies back | S |
-| D12 | `_singleHitter` hits one victim in total | `Assets/GameLogic/Health/Health.cs:170,176`; `Health/Harm/Trigger/DescreteTriggerHarmer.cs:24-31`; set only in `Assets/Resources/Prefabs/Attacks/HalalitAttacks/MidRange/KnockbackWave.prefab:145` | By reading: a knockback wave harms only the first target it touches | S |
+| D12 | **Fixed by #209.** `_singleHitter` hit one victim in total | `Health/Health.cs:176` now passes the victim to `HandleTriggerHarmer`. Still open: `DescreteTriggerHarmer._singleHitter` is a `[SerializeReference]` bool that Unity may not save, so hit-once may never be on in play (idea #220) | Check #220 in Unity | S |
 | D13 | Init order not pinned | `Assets/GameLogic/Enemies/Spawner/EnemyBank.cs:20-44` uses its generator in `Awake`; `Items/Infra/DropsBank.cs:42` needs `ItemsBank._allItems` from `ItemsBank.Start`; the `catch` at `DropsBank.cs:47` cannot fire (`TryGetValue` does not throw) | A scene edit can silently stop spawns or drops | S |
 | D14 | Upgrades without effect | `Assets/GameLogic/Items/Upgrade/**`: 7 of 9 upgrades have no consumer. `Health/Health.cs:235` ignores `HALALIT_HP_ADDITION` and adds 1 | Pickups do nothing (listed as To Do in `Halalit tasks.txt`) | M |
-| D15 | `ItemName` attack members alias `AttackName` ints; upgrades continue from 10 | `Assets/GameLogic/UtilsAndModels/Models/Enum/ItemName.cs:11-33` | An 11th attack gets value 10 and equals `HALALIT_VITALITY`. Give `ItemName` explicit values first | S |
+| D15 | **Fixed by #118.** `ItemName` attack members aliased `AttackName` ints | `UtilsAndModels/Models/Enum/ItemName.cs` members now have explicit numbers | An 11th attack takes the next free number | done |
 | D16 | Test code in runtime scene and assemblies | `ObjectLoader` component in `Assets/Scenes/Playground.unity`; `UtilsAndModels/Utils/InGameUtils/TestingRandomGenerator.cs`; `ExternalSafeIsland` check in `Enemies/Base/EnemySharedBehavior.cs:7` | By reading: a player build carries a missing script and test-only branches | M |
 | D17 | Consecutive harm cooldown is shared and accumulates | `Assets/GameLogic/Health/Harm/Trigger/ConsecutiveTriggerHarmer.cs:27-31` (`_nextHarmTime += Rate`, one timer per harmer) | By reading: a beam that idles then touches a target hits once per tick until it catches up; two targets share one hit rate | S |
 | D18 | Input and lookups in the physics tick | `Assets/GameLogic/Player/PickupClaw/PickupClawShooter.cs:30-38` (`GetMouseButtonDown` in `FixedUpdate`); `UtilsAndModels/Utils/InGameUtils/Utils.cs:244` (`FindGameObjectWithTag("Halalit")` per call); `Attacks/ShortRange/Sword.cs:53` | A click is missed when its frame has no physics step; avoidable per-tick cost | S |
@@ -277,7 +286,7 @@ Each row was re-checked in the files; none was observed at runtime. In "Where", 
 | D22 | Test infra leaks | 4 of 24 `[TearDown]`s call `TestTimeController.ResetTimeScale()`; `Assets/Tests/PlayMode/PlayModeTests/Items/NitroFuelTests.cs:59-65` invokes its own lambda, not the button | By reading: time scale leaks into later tests; the nitro test does not exercise activation | S |
 
 Verdicts on the two unverified candidates from the assessment:
-- **`_singleHitter` (D12): confirmed, by reading.** `Health.HandleHealth` passes `other`, the harmer's own GameObject, as `target`. So `DescreteTriggerHarmer._harmedTargets` only ever holds the harmer. With `_singleHitter` on, every call after the first hit returns 0, whoever the victim is. `KnockbackWaveTests.DoubleHitCheck` uses one enemy, so it passes either way. Fix: pass the victim's `gameObject` and add a two-enemy test.
+- **`_singleHitter` (D12): confirmed, by reading; fixed by #209.** `Health.HandleHealth` passes `other`, the harmer's own GameObject, as `target`. So `DescreteTriggerHarmer._harmedTargets` only ever holds the harmer. With `_singleHitter` on, every call after the first hit returns 0, whoever the victim is. `KnockbackWaveTests.DoubleHitCheck` uses one enemy, so it passes either way. Fix: pass the victim's `gameObject` and add a two-enemy test.
 - **`Utils.ShiftVectorByOffsetDegree`: confirmed, dormant.** `Utils.cs:125-131` adds an offset in radians to an angle in degrees and passes the sum to `Mathf.Cos` / `Mathf.Sin`. It has no caller in code, scenes or prefabs. Delete it; `Utils.AddAngleToVector` already rotates a direction by degrees.
 
 Not verifiable in this workspace: anything that needs a compile, a test run or the editor; the real `Awake` / `Start` order behind D13; the runtime effect of D11, D12 and D17; which package each Meta GUID maps to; the licence and visibility facts behind D21.
