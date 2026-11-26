@@ -81,6 +81,18 @@ public class ShootingLaserRangeAttack : MoveAimAttackAttack
         _laserBeamInitiated = true;
     }
 
+    public override void StopAttacking()
+    {
+        if (_laserBeamInitiated)
+        {
+            DestroyShot();
+        }
+        else
+        {
+            _shootingLaserRangeAim.StopAiming();
+        }
+    }
+
     private void OnDestroy()
     {
         if (_laserBeamInstance != null)

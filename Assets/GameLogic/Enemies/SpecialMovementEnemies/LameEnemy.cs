@@ -1,7 +1,8 @@
+using Assets.Models;
 using Assets.Utils;
 using UnityEngine;
 
-public class LameEnemy : MonoBehaviour
+public class LameEnemy : MonoBehaviour, IPausableEnemyBehaviour
 {
     [SerializeField]
     private Rigidbody2D _rigidBody;

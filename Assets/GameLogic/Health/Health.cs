@@ -1,5 +1,7 @@
 ﻿using Assets.Enums;
+using Assets.Models;
 using Assets.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,7 @@ using UnityEngine.UI;
 [assembly: InternalsVisibleTo("TestsPlayMode")]
 #endif
 
-public class Health : MonoBehaviour
+public class Health : MonoBehaviour, IHealth
 {
     [SerializeField]
     private GameObject _healthBar;
@@ -34,6 +36,8 @@ public class Health : MonoBehaviour
     private Canvas _privateCanvas;
     private bool _died;
     private FrontArmor _frontArmor;
+
+    public event Action<int> Wounded;
 
     #region Init
     private void Awake()
@@ -203,7 +207,16 @@ public class Health : MonoBehaviour
                 InvokeDeathEvent();
                 _died = true;
             }
+            else if (healthChange < 0)
+            {
+                Wounded?.Invoke(_health);
+            }
         }
+    }
+
+    public int GetCurrentHealth()
+    {
+        return _health;
     }
     #endregion
 

@@ -1,8 +1,9 @@
 using Assets.Enums;
+using Assets.Models;
 using Assets.Utils;
 using UnityEngine;
 
-public class ZigZagEnemy : MonoBehaviour
+public class ZigZagEnemy : MonoBehaviour, IPausableEnemyBehaviour
 {
     [SerializeField]
     private Rigidbody2D _rigidBody;

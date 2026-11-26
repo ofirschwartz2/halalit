@@ -29,4 +29,6 @@ public abstract class MoveAimAttackAim : MonoBehaviour
     }
 
     public abstract void Aim(Transform transform);
+
+    public virtual void StopAiming() {}
 }
