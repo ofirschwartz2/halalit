@@ -8,10 +8,15 @@ public class AttackBehaviour : MonoBehaviour, IHarmer
     public AttackShotType ShotType;
     public AttackStats AttackStats;
 
+    // Mirror Shield (#200): melee attacks (Sword, Spikes) hurt it from the front and are never reflected.
+    public bool IsMelee;
+
     public void Copy(AttackBehaviour attackBehaviour)
     {
         ShotType = attackBehaviour.ShotType;
         AttackStats = attackBehaviour.AttackStats;
+
+        IsMelee = attackBehaviour.IsMelee;
     }
 
     public int GetHarm()
