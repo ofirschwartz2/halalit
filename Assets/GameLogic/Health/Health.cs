@@ -42,6 +42,7 @@ public class Health : MonoBehaviour, IHealth
     private bool _isHealthBarPlaced;
 
     public event Action<int> Wounded;
+    public event Action<GameObject> HarmedBy;
 
     #region Init
     private void Awake()
@@ -192,14 +193,19 @@ public class Health : MonoBehaviour, IHealth
                 other.GetComponent<TriggerHarmer>() :
                 other.GetComponentInParent<TriggerHarmer>();
 
-            HandleTriggerHarmer(gameObject, triggerHarmer);
+            HandleTriggerHarmer(gameObject, triggerHarmer, other);
         }
     }
 
-    private void HandleTriggerHarmer(GameObject target, TriggerHarmer triggerHarmer)
+    private void HandleTriggerHarmer(GameObject target, TriggerHarmer triggerHarmer, GameObject harmer)
     {
         int harm = triggerHarmer.GetTriggerHarm(target);
         TryChangeHealth(-harm);
+
+        if (harm > 0 && !_died)
+        {
+            HarmedBy?.Invoke(harmer);
+        }
     }
 
     private void HandleCollisionHarmer(CollisionHarmer collisionHarmer)

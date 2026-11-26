@@ -75,6 +75,7 @@ public class ShootingLaserRangeAttack : MoveAimAttackAttack
         if (_laserBeamInstance == null)
         {
             _laserBeamInstance = Instantiate(_laserBeamPrefab, shootingStartPosition, shootRotation, _projectiles.transform).GetComponent<ConsecutiveAttack>();
+            ShotOwner.Mark(_laserBeamInstance.gameObject, transform);
         }
         
         _laserBeamInstance.StartConsecitiveAttack(GetShootingPoint(), transform.rotation);

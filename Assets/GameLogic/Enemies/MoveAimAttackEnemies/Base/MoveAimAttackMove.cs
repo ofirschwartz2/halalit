@@ -50,7 +50,7 @@ public class MoveAimAttackMove : MonoBehaviour
 
     private void RotateTowardsHalalit() 
     {
-        var halalitDirection = EnemyTarget.GetDirection(transform.position);
+        var halalitDirection = EnemyTarget.GetDirection(transform);
         var targetRotation = Quaternion.LookRotation(Vector3.forward, halalitDirection);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
     }

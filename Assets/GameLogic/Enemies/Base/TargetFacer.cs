@@ -10,7 +10,7 @@ public class TargetFacer : MonoBehaviour, IPausableEnemyBehaviour
 
     void FixedUpdate()
     {
-        var targetRotation = Quaternion.LookRotation(Vector3.forward, EnemyTarget.GetDirection(transform.position));
+        var targetRotation = Quaternion.LookRotation(Vector3.forward, EnemyTarget.GetDirection(transform));
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _turnDegreesPerSecond * Time.fixedDeltaTime);
     }
 }

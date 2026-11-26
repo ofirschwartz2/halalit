@@ -19,7 +19,7 @@ public class WaitAttackRadiusWait : WaitAttackWait
 
     private void RotateTowardsHalalit()
     {
-        var halalitDirection = EnemyTarget.GetDirection(transform.position);
+        var halalitDirection = EnemyTarget.GetDirection(transform);
         var targetRotation = Quaternion.LookRotation(Vector3.forward, halalitDirection);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
     }
@@ -36,7 +36,7 @@ public class WaitAttackRadiusWait : WaitAttackWait
 
     private bool IsHalalitInRadius()
     {
-        return Utils.GetDistanceBetweenTwoPoints(transform.position, EnemyTarget.GetPosition()) < _waitingRadius;
+        return Utils.GetDistanceBetweenTwoPoints(transform.position, EnemyTarget.GetPosition(transform)) < _waitingRadius;
     }
 
     public override void SetWaiting()
