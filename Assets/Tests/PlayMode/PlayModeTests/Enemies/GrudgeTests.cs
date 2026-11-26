@@ -13,6 +13,9 @@ public class GrudgeTests
     private const float GRUDGE_END_MARGIN = 0.5f;
     private const float SHOT_DISTANCE_FROM_ENEMY = 1.5f;
     private const float MAX_WAIT_FOR_HIT = 5f;
+    private const float STEER_GRUDGE_DURATION = 3f;
+    private const float STEER_CHECK_TIME = 0.5f;
+    private const float MIN_STEER_DISTANCE = 0.5f;
     private static readonly Vector2 SHOOTER_OFFSET_FROM_ENEMY = new(0, 4);
     private static readonly Vector2 THIRD_ENEMY_OFFSET_FROM_ENEMY = new(0, -4);
     private int _currentSeed;
@@ -166,6 +169,48 @@ public class GrudgeTests
         AssertWrapper.Greater(ENEMY_HEALTH, victim.GetComponent<Health>().GetHealth(), "Enemy shot did not hurt the enemy (Needs Ofir in Unity: Enemy Shot in its harmers)", _currentSeed);
         AssertWrapper.IsFalse(EnemyTarget.HasGrudge(victim.transform), "A shot with no owner started a grudge", _currentSeed);
         AssertWrapper.AreEqual(Utils.GetHalalitPosition(), EnemyTarget.GetPosition(victim.transform), "Enemy hurt by a shot with no owner stopped aiming at the Halalit", _currentSeed);
+    }
+
+    [UnityTest]
+    public IEnumerator OwnShotStartsNoGrudge()
+    {
+        // GIVEN
+        yield return null;
+        TestUtils.SetTestMode();
+        var victim = LoadPlainEnemy(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
+        TestUtils.GetGrudge(victim);
+        yield return null;
+        TestUtils.SetEnemiesHealth(ENEMY_HEALTH);
+
+        // WHEN
+        var shot = TestUtils.LoadEnemyShot(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT + Vector2.left * SHOT_DISTANCE_FROM_ENEMY, Vector2.right, victim.transform);
+        yield return WaitForShotToLand(shot);
+
+        // THEN
+        AssertWrapper.Greater(ENEMY_HEALTH, victim.GetComponent<Health>().GetHealth(), "Enemy shot did not hurt the enemy (Needs Ofir in Unity: Enemy Shot in its harmers)", _currentSeed);
+        AssertWrapper.IsFalse(EnemyTarget.HasGrudge(victim.transform), "An enemy hurt by its own shot started a grudge on itself", _currentSeed);
+        AssertWrapper.AreEqual(Utils.GetHalalitPosition(), EnemyTarget.GetPosition(victim.transform), "Enemy hurt by its own shot stopped aiming at the Halalit", _currentSeed);
+    }
+
+    [UnityTest]
+    public IEnumerator GrudgePushesPlainEnemyTowardItsTarget()
+    {
+        // GIVEN
+        yield return null;
+        TestUtils.SetTestMode();
+        var holder = LoadPlainEnemy(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT);
+        var target = LoadPlainEnemy(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT + SHOOTER_OFFSET_FROM_ENEMY);
+        TestUtils.GetGrudge(holder);
+        yield return new WaitForFixedUpdate();
+        var distanceAtGrudge = Vector2.Distance(holder.transform.position, target.transform.position);
+
+        // WHEN
+        EnemyTarget.SetGrudge(holder.transform, target.transform, Utils.GetEndOfLifeTime(STEER_GRUDGE_DURATION));
+        yield return new WaitForSeconds(STEER_CHECK_TIME);
+
+        // THEN
+        AssertWrapper.IsTrue(EnemyTarget.HasGrudge(holder.transform), "Grudge ended before the steering check", _currentSeed);
+        AssertWrapper.Less(Vector2.Distance(holder.transform.position, target.transform.position), distanceAtGrudge - MIN_STEER_DISTANCE, "Plain enemy with a grudge did not move toward its target", _currentSeed);
     }
 
     // The plain enemy from the scene's ObjectLoader (a Lame Enemy, its movement stopped), placed at position.
