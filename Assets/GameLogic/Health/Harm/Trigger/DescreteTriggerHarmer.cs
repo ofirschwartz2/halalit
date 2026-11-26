@@ -13,15 +13,20 @@ class DescreteTriggerHarmer : TriggerHarmer
     private bool _singleHitter;
     [SerializeField]
     private List<Tag> _ignoredTargetTags = new();
+    // Seconds before the same target can be harmed again (Tripwire, #213). 0 = off.
+    [SerializeField]
+    private float _sameTargetCooldown;
 
     private HashSet<GameObject> _harmedTargets;
     private List<string> _ignoredTargetTagsDescriptions;
+    private Dictionary<GameObject, float> _nextHarmTimes;
 
     private void Awake()
     {
         InitHarmer();
         _harmedTargets = new HashSet<GameObject>();
         _ignoredTargetTagsDescriptions = _ignoredTargetTags.Select(tag => Utils.GetDescription(tag)).ToList();
+        _nextHarmTimes = new Dictionary<GameObject, float>();
     }
 
     public override int GetTriggerHarm(GameObject target)
@@ -29,6 +34,16 @@ class DescreteTriggerHarmer : TriggerHarmer
         if (IsIgnoredTarget(target))
         {
             return 0;
+        }
+
+        if (HasSameTargetCooldown())
+        {
+            if (IsCoolingDownFor(target))
+            {
+                return 0;
+            }
+
+            _nextHarmTimes[target] = Time.time + _sameTargetCooldown;
         }
 
         try
@@ -73,5 +88,22 @@ class DescreteTriggerHarmer : TriggerHarmer
 
         return false;
     }
+
+    private bool HasSameTargetCooldown()
+    {
+        return _sameTargetCooldown > 0;
+    }
+
+    private bool IsCoolingDownFor(GameObject target)
+    {
+        return _nextHarmTimes.TryGetValue(target, out float nextHarmTime) && Time.time < nextHarmTime;
+    }
     #endregion
+
+#if UNITY_EDITOR
+    internal float GetSameTargetCooldown()
+    {
+        return _sameTargetCooldown;
+    }
+#endif
 }

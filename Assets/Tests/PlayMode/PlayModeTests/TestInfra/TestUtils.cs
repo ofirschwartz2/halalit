@@ -335,6 +335,13 @@ internal static class TestUtils
         return Object.Instantiate(ballShotPrefab, position, Quaternion.LookRotation(Vector3.forward, direction));
     }
 
+    // Loads a Tripwire post straight from its AttacksBank prefab, flying in the given direction (it flies along its transform.up).
+    internal static GameObject LoadTripwirePost(Vector2 position, Vector2 direction)
+    {
+        var tripwirePrefab = AttacksBank.GetAttackPrefab(AttackName.TRIPWIRE);
+        return Object.Instantiate(tripwirePrefab, position, Quaternion.LookRotation(Vector3.forward, direction));
+    }
+
     internal static void SetGameObjectPosition(GameObject gameObject, Vector2 position) 
     {
         gameObject.transform.position = position;

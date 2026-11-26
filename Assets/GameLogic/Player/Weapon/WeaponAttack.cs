@@ -130,7 +130,7 @@ class WeaponAttack : MonoBehaviour
     private void InstantiateDescreteAttack(GameObject attackPrefab)
     {
         Instantiate(attackPrefab, transform.position, transform.rotation, _projectiles.transform);
-        _cooldownTime = Time.time + _currentAttack.Value.Rate * _cooldownMultiplier; 
+        _cooldownTime = Time.time + Mathf.Max(_currentAttack.Value.Rate * _cooldownMultiplier, attackPrefab.GetComponent<AttackBehaviour>().MinCooldown);
     }
 
     private bool TryConsecutiveAttack(Vector2 attackJoystickTouch, GameObject attackPrefab)
