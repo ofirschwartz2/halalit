@@ -1,9 +1,10 @@
 using Assets.Enums;
+using Assets.Models;
 using Assets.Utils;
 using System;
 using UnityEngine;
 
-public class MoveAimAttackStateMachine : MonoBehaviour
+public class MoveAimAttackStateMachine : MonoBehaviour, IPausableEnemyBehaviour
 {
     [SerializeField]
     private MoveAimAttackEnemyState _moveAimAttackEnemyState;
@@ -79,6 +80,23 @@ public class MoveAimAttackStateMachine : MonoBehaviour
         {
             _moveAimAttackAttack.AttackingState(transform);
         }
+    }
+
+    // Runs when something pauses this machine (WoundedRetreat, SpawnHole, destroy). Clears live aim rays and beams,
+    // so that on its return the enemy moves, then aims again before it shoots.
+    void OnDisable()
+    {
+        switch (_moveAimAttackEnemyState)
+        {
+            case MoveAimAttackEnemyState.AIMING:
+                _moveAimAttackAim.StopAiming();
+                break;
+            case MoveAimAttackEnemyState.ATTACKING:
+                _moveAimAttackAttack.StopAttacking();
+                break;
+        }
+
+        _moveAimAttackEnemyState = MoveAimAttackEnemyState.MOVING;
     }
 
     #region Triggers

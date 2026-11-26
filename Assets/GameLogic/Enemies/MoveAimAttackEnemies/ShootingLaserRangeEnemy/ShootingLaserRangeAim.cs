@@ -60,4 +60,12 @@ public class ShootingLaserRangeAim : MoveAimAttackAim
         Destroy(_aimingShotFrom);
         Destroy(_aimingShotTo);
     }
+
+    public override void StopAiming()
+    {
+        if (_aimingShotFrom != null || _aimingShotTo != null)
+        {
+            DestroyAimingRays();
+        }
+    }
 }

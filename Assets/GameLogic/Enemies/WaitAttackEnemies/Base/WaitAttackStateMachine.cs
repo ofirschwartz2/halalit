@@ -1,7 +1,8 @@
 using Assets.Enums;
+using Assets.Models;
 using UnityEngine;
 
-public class WaitAttackStateMachine : MonoBehaviour
+public class WaitAttackStateMachine : MonoBehaviour, IPausableEnemyBehaviour
 {
     [SerializeField]
     private Rigidbody2D _rigidBody;

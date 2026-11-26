@@ -32,6 +32,8 @@ public abstract class MoveAimAttackAttack : MonoBehaviour
 
     public abstract void Shoot(Transform transform);
 
+    public virtual void StopAttacking() {}
+
     private GameObject GetWeapon(string weaponNumber)
     {        
         if (!_weapons.ContainsKey(Constants.WEAPON_GAME_OBJECT_NAME + weaponNumber))

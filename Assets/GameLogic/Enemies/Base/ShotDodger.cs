@@ -1,4 +1,5 @@
 ﻿using Assets.Enums;
+using Assets.Models;
 using Assets.Utils;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 // Side Step: an enemy with this component jumps sideways when a straight player shot flies at it.
 // A straight shot is a collider on the PlayerShots layer, tagged Shot, whose rigidbody moves by velocity.
-public class ShotDodger : MonoBehaviour
+public class ShotDodger : MonoBehaviour, IPausableEnemyBehaviour
 {
     [SerializeField]
     private Rigidbody2D _rigidBody;

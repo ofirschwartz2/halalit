@@ -1,9 +1,10 @@
 using Assets.Enums;
+using Assets.Models;
 using Assets.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SinusEnemy : MonoBehaviour
+public class SinusEnemy : MonoBehaviour, IPausableEnemyBehaviour
 {
     [SerializeField]
     private Rigidbody2D _rigidBody;

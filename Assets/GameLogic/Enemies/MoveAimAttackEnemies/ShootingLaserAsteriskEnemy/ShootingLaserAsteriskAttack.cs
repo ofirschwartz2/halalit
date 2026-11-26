@@ -97,7 +97,24 @@ public class ShootingLaserAsteriskAttack : MoveAimAttackAttack
         return Time.time > _attackingTime - _endShootingBeforeFinishAttack;
     }
 
+    // Removes the beams at once, so a paused enemy stops firing in the same tick.
+    public override void StopAttacking()
+    {
+        if (_laserBeams != null)
+        {
+            DestroyLaserBeams();
+            _laserBeams.Clear();
+        }
+
+        _shootingLazerAsteriskAim.StopAiming();
+    }
+
     private void OnDestroy()
+    {
+        DestroyLaserBeams();
+    }
+
+    private void DestroyLaserBeams()
     {
         foreach (ConsecutiveAttack laserBeam in _laserBeams)
         {

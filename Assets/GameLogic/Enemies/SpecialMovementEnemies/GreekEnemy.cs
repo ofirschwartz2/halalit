@@ -1,11 +1,12 @@
 using Assets.Enums;
+using Assets.Models;
 using Assets.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 
-public class GreekEnemy : MonoBehaviour
+public class GreekEnemy : MonoBehaviour, IPausableEnemyBehaviour
 {
     [SerializeField]
     private Rigidbody2D _rigidBody;

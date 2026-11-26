@@ -46,4 +46,12 @@ public class ShootingLaserAsteriskAim : MoveAimAttackAim
             Destroy(aimingShot);
         }
     }
+
+    public override void StopAiming()
+    {
+        if (_aimingShots != null)
+        {
+            DestroyAimingShots();
+        }
+    }
 }

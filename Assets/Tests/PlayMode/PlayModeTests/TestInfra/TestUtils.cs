@@ -32,6 +32,8 @@ internal static class TestUtils
     public const string SHOOTING_IN_RANGE_ENEMY_PREFAB_PATH = "Prefabs/Enemies/MoveAimAttackEnemies/ShootingInRangeEnemy";
     public const string ZIG_ZAG_ENEMY_PREFAB_PATH = "Prefabs/Enemies/SpecialMovementEnemies/ZigZagEnemy";
     public const string FOLLOWING_ENEMY_RADIUS_PREFAB_PATH = "Prefabs/Enemies/WaitAttackEnemies/FollowingEnemyRadius";
+    public const string SHOOTING_LASER_ASTERISK_ENEMY_PREFAB_PATH = "Prefabs/Enemies/MoveAimAttackEnemies/ShootingLaserAsteriskEnemy";
+    public const string ENEMIES_PREFABS_PATH = "Prefabs/Enemies";
 
     // Defaults:
     public const int ENEMIES_SEEDED_NUMBERS_LIST_DEFAULT_LENGTH = 5;
@@ -265,6 +267,36 @@ internal static class TestUtils
         }
 
         return enemy;
+    }
+
+    // Loads an enemy straight from its prefab, seeded, with all its scripts on, as it is after its spawn hole closes.
+    internal static GameObject LoadEnemy(string prefabPath, Vector2 position, int seed)
+    {
+        var enemyPrefab = Resources.Load<GameObject>(prefabPath);
+        if (enemyPrefab == null)
+        {
+            throw new System.Exception($"Enemy prefab not found at Resources/{prefabPath}");
+        }
+        var enemy = Object.Instantiate(enemyPrefab, position, Quaternion.identity);
+        enemy.GetComponent<EnemySharedBehavior>().SetInitialSeedfulRandomGenerator(seed);
+        return enemy;
+    }
+
+    internal static WoundedRetreat GetWoundedRetreat(GameObject enemy)
+    {
+        var woundedRetreat = enemy.GetComponent<WoundedRetreat>();
+        if (woundedRetreat == null)
+        {
+            throw new System.Exception("WoundedRetreat missing on enemy prefab (Needs Ofir in Unity, #201)");
+        }
+        return woundedRetreat;
+    }
+
+    // Laser beams fired by enemies: consecutive attacks on the EnemyShots layer.
+    internal static List<ConsecutiveAttack> GetEnemyLaserBeams()
+    {
+        var enemyShotsLayer = LayerMask.NameToLayer(Layer.ENEMY_SHOTS.GetDescription());
+        return Object.FindObjectsOfType<ConsecutiveAttack>().Where(laserBeam => laserBeam.gameObject.layer == enemyShotsLayer).ToList();
     }
 
     // Loads a Ball Shot straight from its prefab, flying in the given direction (BallShot flies along its transform.up).
