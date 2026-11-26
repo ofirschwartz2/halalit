@@ -196,6 +196,37 @@ public class MirrorShieldTests
         AssertWrapper.AreEqual(0, facingError, "Mirror Shield does not face the Halalit", _currentSeed, FACING_DELTA_DEGREES);
     }
 
+    // Wounded Retreat pauses TargetFacer, so a fleeing Mirror Shield does not keep its mirror towards the Halalit (#221).
+    [UnityTest]
+    public IEnumerator FleeingStopsFacing()
+    {
+        // GIVEN
+        yield return null;
+        TestUtils.SetTestMode();
+        var mirrorShield = TestUtils.LoadMirrorShield(TestUtils.DEFAULT_POSITION_TO_THE_RIGHT, _currentSeed);
+        var woundedRetreat = TestUtils.GetWoundedRetreat(mirrorShield);
+        var targetFacer = mirrorShield.GetComponent<TargetFacer>();
+        Vector2 halalitPosition = TestUtils.GetHalalit().transform.position;
+        mirrorShield.transform.rotation = Quaternion.LookRotation(Vector3.forward, TestUtils.DEFAULT_POSITION_TO_THE_RIGHT - halalitPosition);
+        yield return null;
+
+        TestUtils.SetEnemiesHealth(ENEMY_HEALTH);
+        targetFacer.enabled = true;
+        var startRotation = mirrorShield.transform.rotation;
+
+        // WHEN
+        mirrorShield.GetComponent<Health>().TryChangeHealth(-(ENEMY_HEALTH - woundedRetreat.GetWoundedHealth()));
+        for (int i = 0; i < TURN_FIXED_STEPS; i++)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
+        // THEN
+        AssertWrapper.IsTrue(woundedRetreat.IsRetreating(), "Wounding hit did not start the Mirror Shield's retreat", _currentSeed);
+        AssertWrapper.IsFalse(targetFacer.enabled, "TargetFacer was not paused during the retreat", _currentSeed);
+        AssertWrapper.Less(Quaternion.Angle(startRotation, mirrorShield.transform.rotation), TURN_DELTA_DEGREES, "Fleeing Mirror Shield kept turning towards the Halalit", _currentSeed);
+    }
+
     private IEnumerator FireAtEnemy(Vector2 halalitPosition)
     {
         var weaponMovement = TestUtils.GetWeaponMovement();

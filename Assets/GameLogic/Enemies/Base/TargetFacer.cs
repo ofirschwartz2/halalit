@@ -1,8 +1,9 @@
-﻿using Assets.Utils;
+﻿using Assets.Models;
+using Assets.Utils;
 using UnityEngine;
 
 // Mirror Shield (#200): turns the enemy to face what enemies aim at (the Halalit, or a Decoy Ship) at a constant rate.
-public class TargetFacer : MonoBehaviour
+public class TargetFacer : MonoBehaviour, IPausableEnemyBehaviour
 {
     [SerializeField]
     private float _turnDegreesPerSecond = 90f;
