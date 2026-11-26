@@ -7,7 +7,7 @@ using UnityEngine;
 // It wakes when the Halalit comes within _wakeRadius (also while carried), when it is hit, or when a claw lets go of it:
 // it drops its item disguise, shows its health bar and, after _wakeDelay, the state machine starts its first charge.
 // Awake, it waits exactly like _awakeWait (the prefab's WaitAttackIntervalWait).
-public class WaitAttackDisguisedWait : WaitAttackWait, IGrabbable, IPausableEnemyBehaviour
+public class WaitAttackDisguisedWait : WaitAttackWait, IGrabbable
 {
     [SerializeField]
     private Rigidbody2D _rigidBody;
@@ -28,7 +28,6 @@ public class WaitAttackDisguisedWait : WaitAttackWait, IGrabbable, IPausableEnem
     private string _sortingLayerBeforeGrab;
     private bool _isHidden;
     private bool _isCarried;
-    private bool _wasHit;
     private float _endOfWakeDelayTime;
 
     #region Init
@@ -107,9 +106,13 @@ public class WaitAttackDisguisedWait : WaitAttackWait, IGrabbable, IPausableEnem
         _endOfWakeDelayTime = Time.time + _wakeDelay;
     }
 
+    // Wakes at once, inside the hit, so that a hit that also starts WoundedRetreat never leaves it disguised or carried.
     private void OnWounded(int healthLeft)
     {
-        _wasHit = true;
+        if (_isHidden)
+        {
+            Wake();
+        }
     }
 
     #region Grabbing
@@ -161,7 +164,7 @@ public class WaitAttackDisguisedWait : WaitAttackWait, IGrabbable, IPausableEnem
     #region Predicates
     private bool ShouldWake()
     {
-        return _wasHit || IsHalalitInWakeRadius();
+        return IsHalalitInWakeRadius();
     }
 
     private bool IsHalalitInWakeRadius()

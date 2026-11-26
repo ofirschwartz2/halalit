@@ -12,6 +12,7 @@ public class MimicTests
     private const int ROLLS = 600;
     private const float ROLLS_DELTA = 35f;
     private const int HIGH_HEALTH = 100;
+    private const int WOUNDING_HIT = 5;
     private const int HALALIT_HEALTH = 1000;
     private const float HIDDEN_WATCH_TIME = 3f;
     private const float MAX_HIDDEN_DRIFT = 0.3f;
@@ -139,6 +140,41 @@ public class MimicTests
         AssertWrapper.Less(mimic.GetComponent<Health>().GetHealth(), HIGH_HEALTH, "Ball Shot did not hurt the Mimic", _currentSeed);
         AssertWrapper.IsFalse(disguisedWait.IsHidden(), "Mimic did not wake when shot", _currentSeed);
         AssertWrapper.IsTrue(mimic.GetComponent<Health>().IsHealthBarVisible(), "Shot Mimic does not show its health bar", _currentSeed);
+    }
+
+    // A strong hit (power 5) that also starts Wounded Retreat must wake the Mimic at once, even while a claw carries it.
+    [UnityTest]
+    public IEnumerator WakesWhenWoundingHitStartsRetreat()
+    {
+        // GIVEN
+        yield return null;
+        TestUtils.SetTestMode();
+        Vector2 halalitPosition = TestUtils.GetHalalit().transform.position;
+        var mimic = TestUtils.LoadMimic(halalitPosition + TestUtils.DEFAULT_POSITION_TO_THE_RIGHT, _currentSeed);
+        var disguisedWait = mimic.GetComponent<WaitAttackDisguisedWait>();
+        var woundedRetreat = TestUtils.GetWoundedRetreat(mimic);
+        yield return null;
+        TestUtils.SetEnemiesHealth(woundedRetreat.GetWoundedHealth() + WOUNDING_HIT);
+        var grabber = new GameObject("MimicTestGrabber");
+        grabber.transform.position = mimic.transform.position;
+        disguisedWait.Grabbed(grabber.transform);
+        AssertWrapper.IsTrue(mimic.transform.parent == grabber.transform, "Test setup: the hidden Mimic was not carried", _currentSeed);
+        var startTime = Time.time;
+
+        // WHEN
+        mimic.GetComponent<Health>().TryChangeHealth(-WOUNDING_HIT);
+
+        // THEN
+        AssertWrapper.IsTrue(woundedRetreat.IsRetreating(), "Test setup: the hit did not start the retreat", _currentSeed);
+        AssertWrapper.IsFalse(disguisedWait.IsHidden(), "Mimic stayed disguised after a hit that started its retreat", _currentSeed);
+        AssertWrapper.IsTrue(mimic.transform.parent == null, "Mimic is still carried after a hit that started its retreat", _currentSeed);
+
+        // WHEN
+        yield return new WaitForSeconds(Mathf.Max(0, startTime + HEALTH_BAR_DELAY + WAIT_MARGIN - Time.time));
+
+        // THEN
+        AssertWrapper.IsTrue(mimic != null, "Retreating Mimic was destroyed", _currentSeed);
+        AssertWrapper.IsTrue(mimic.GetComponent<Health>().IsHealthBarVisible(), "Retreating Mimic does not show its health bar", _currentSeed);
     }
 
     [UnityTest]
