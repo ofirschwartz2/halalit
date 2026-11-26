@@ -20,10 +20,10 @@ public class AttackBehaviour : MonoBehaviour, IHarmer
         
         if (criticalDamage > 0)
         {
-            return criticalDamage;
+            return ApplyHarmMultiplier(criticalDamage);
         }
 
-        return AttackStats.Power;
+        return ApplyHarmMultiplier(AttackStats.Power);
     }
 
     private int GetCriticalDamage()
@@ -36,5 +36,18 @@ public class AttackBehaviour : MonoBehaviour, IHarmer
         }
 
         return 0;
+    }
+
+    // Harm multiplier: set at runtime on the instance (Bank Shot). Not serialized; 1 keeps every other attack's harm as it was.
+    private float _harmMultiplier = 1f;
+
+    public void SetHarmMultiplier(float harmMultiplier)
+    {
+        _harmMultiplier = harmMultiplier;
+    }
+
+    private int ApplyHarmMultiplier(int harm)
+    {
+        return Mathf.CeilToInt(harm * _harmMultiplier);
     }
 }
