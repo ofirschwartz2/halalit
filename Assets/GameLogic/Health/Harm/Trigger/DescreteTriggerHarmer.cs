@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Assets.Enums;
+using Assets.Utils;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 class DescreteTriggerHarmer : TriggerHarmer
@@ -8,17 +11,26 @@ class DescreteTriggerHarmer : TriggerHarmer
     private IHarmer _harmer;
     [SerializeReference]
     private bool _singleHitter;
+    [SerializeField]
+    private List<Tag> _ignoredTargetTags = new();
 
     private HashSet<GameObject> _harmedTargets;
+    private List<string> _ignoredTargetTagsDescriptions;
 
     private void Awake()
     {
         InitHarmer();
         _harmedTargets = new HashSet<GameObject>();
+        _ignoredTargetTagsDescriptions = _ignoredTargetTags.Select(tag => Utils.GetDescription(tag)).ToList();
     }
 
     public override int GetTriggerHarm(GameObject target)
     {
+        if (IsIgnoredTarget(target))
+        {
+            return 0;
+        }
+
         try
         {
             if (_singleHitter)
@@ -47,4 +59,19 @@ class DescreteTriggerHarmer : TriggerHarmer
             _harmer = harmer;
         }
     }
+
+    #region Predicates
+    private bool IsIgnoredTarget(GameObject target)
+    {
+        foreach (string ignoredTag in _ignoredTargetTagsDescriptions)
+        {
+            if (target.CompareTag(ignoredTag))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    #endregion
 }
