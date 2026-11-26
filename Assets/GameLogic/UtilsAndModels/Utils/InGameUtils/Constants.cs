@@ -19,4 +19,7 @@
     public const string HIGHSCORE_LEADERBOARD_ID = "1";
     public const string DAILY_LEADERBOARD_ID = "daily";
     public const int DAILY_LEADERBOARD_PAST_DAYS = 7;
+
+    // Enemies
+    public const int MAX_LATCHED_LEECHES = 2;
 }

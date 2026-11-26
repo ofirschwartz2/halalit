@@ -387,6 +387,31 @@ internal static class TestUtils
         return grudge;
     }
 
+    // Leech (#215)
+    public const string LEECH_PREFAB_PATH = "Prefabs/Enemies/SpecialMovementEnemies/Leech";
+
+    // Loads the Leech straight from its prefab, seeded, with all its scripts on, so it drifts and latches as in a run.
+    internal static GameObject LoadLeech(Vector2 position, int seed)
+    {
+        var leechPrefab = Resources.Load<GameObject>(LEECH_PREFAB_PATH);
+        if (leechPrefab == null)
+        {
+            throw new System.Exception($"Leech prefab not found at Resources/{LEECH_PREFAB_PATH} (Needs Ofir in Unity)");
+        }
+        if (leechPrefab.GetComponent<LeechEnemy>() == null || leechPrefab.GetComponent<LameEnemy>() != null)
+        {
+            throw new System.Exception("Leech prefab needs LeechEnemy and no LameEnemy on its root (Needs Ofir in Unity)");
+        }
+        var enemyDropper = leechPrefab.GetComponent<EnemyDropper>();
+        if (enemyDropper == null || enemyDropper.GetDropper() != Dropper.LEECH)
+        {
+            throw new System.Exception("Leech prefab's EnemyDropper is not set to LEECH (Needs Ofir in Unity)");
+        }
+        var leech = Object.Instantiate(leechPrefab, position, Quaternion.identity);
+        leech.GetComponent<EnemySharedBehavior>().SetInitialSeedfulRandomGenerator(seed);
+        return leech;
+    }
+
     // Loads a Tripwire post straight from its AttacksBank prefab, flying in the given direction (it flies along its transform.up).
     internal static GameObject LoadTripwirePost(Vector2 position, Vector2 direction)
     {
