@@ -19,6 +19,7 @@ namespace Assets.Enums
         MINE_LAYER,
         SHIELD_RAM,
         COIN_THIEF,
-        MIRROR_SHIELD
+        MIRROR_SHIELD,
+        MIMIC
     }
 }

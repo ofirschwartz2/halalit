@@ -317,6 +317,31 @@ internal static class TestUtils
         return woundedRetreat;
     }
 
+    // Mimic (#214)
+    public const string MIMIC_PREFAB_PATH = "Prefabs/Enemies/WaitAttackEnemies/Mimic";
+
+    // Loads the Mimic straight from its prefab, seeded, with all its scripts on, so it hides, wakes and charges as in a run.
+    internal static GameObject LoadMimic(Vector2 position, int seed)
+    {
+        var mimicPrefab = Resources.Load<GameObject>(MIMIC_PREFAB_PATH);
+        if (mimicPrefab == null)
+        {
+            throw new System.Exception($"Mimic prefab not found at Resources/{MIMIC_PREFAB_PATH} (Needs Ofir in Unity)");
+        }
+        if (mimicPrefab.GetComponent<WaitAttackDisguisedWait>() == null)
+        {
+            throw new System.Exception("Mimic prefab lacks WaitAttackDisguisedWait on its root (Needs Ofir in Unity)");
+        }
+        var enemyDropper = mimicPrefab.GetComponent<EnemyDropper>();
+        if (enemyDropper == null || enemyDropper.GetDropper() != Dropper.MIMIC)
+        {
+            throw new System.Exception("Mimic prefab's EnemyDropper is not set to MIMIC (Needs Ofir in Unity)");
+        }
+        var mimic = Object.Instantiate(mimicPrefab, position, Quaternion.identity);
+        mimic.GetComponent<EnemySharedBehavior>().SetInitialSeedfulRandomGenerator(seed);
+        return mimic;
+    }
+
     // Laser beams fired by enemies: consecutive attacks on the EnemyShots layer.
     internal static List<ConsecutiveAttack> GetEnemyLaserBeams()
     {
