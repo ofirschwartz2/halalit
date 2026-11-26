@@ -30,6 +30,7 @@ internal static class TestUtils
     public const string COIN_THIEF_PREFAB_PATH = "Prefabs/Enemies/WaitAttackEnemies/CoinThief";
     public const string MIRROR_SHIELD_PREFAB_PATH = "Prefabs/Enemies/SpecialMovementEnemies/MirrorShield";
     public const string BALL_SHOT_PREFAB_PATH = "Prefabs/Attacks/HalalitAttacks/LongRange/BallShot/BallShot";
+    public const string ENEMIES_BALL_SHOT_PREFAB_PATH = "Prefabs/Attacks/EnemyAttacks/EnemiesBallShot";
     public const string SHOOTING_IN_RANGE_ENEMY_PREFAB_PATH = "Prefabs/Enemies/MoveAimAttackEnemies/ShootingInRangeEnemy";
     public const string ZIG_ZAG_ENEMY_PREFAB_PATH = "Prefabs/Enemies/SpecialMovementEnemies/ZigZagEnemy";
     public const string FOLLOWING_ENEMY_RADIUS_PREFAB_PATH = "Prefabs/Enemies/WaitAttackEnemies/FollowingEnemyRadius";
@@ -333,6 +334,32 @@ internal static class TestUtils
             throw new System.Exception($"BallShot prefab not found at Resources/{BALL_SHOT_PREFAB_PATH}");
         }
         return Object.Instantiate(ballShotPrefab, position, Quaternion.LookRotation(Vector3.forward, direction));
+    }
+
+    // Loads an enemy Ball Shot straight from its prefab, flying in the given direction, fired by owner (null: no owner, as a player shot).
+    internal static GameObject LoadEnemyShot(Vector2 position, Vector2 direction, Transform owner)
+    {
+        var enemyShotPrefab = Resources.Load<GameObject>(ENEMIES_BALL_SHOT_PREFAB_PATH);
+        if (enemyShotPrefab == null)
+        {
+            throw new System.Exception($"EnemiesBallShot prefab not found at Resources/{ENEMIES_BALL_SHOT_PREFAB_PATH}");
+        }
+        var enemyShot = Object.Instantiate(enemyShotPrefab, position, Quaternion.LookRotation(Vector3.forward, direction));
+        if (owner != null)
+        {
+            ShotOwner.Mark(enemyShot, owner);
+        }
+        return enemyShot;
+    }
+
+    internal static Grudge GetGrudge(GameObject enemy)
+    {
+        var grudge = enemy.GetComponent<Grudge>();
+        if (grudge == null)
+        {
+            throw new System.Exception("Grudge missing on enemy prefab (Needs Ofir in Unity, #216)");
+        }
+        return grudge;
     }
 
     // Loads a Tripwire post straight from its AttacksBank prefab, flying in the given direction (it flies along its transform.up).

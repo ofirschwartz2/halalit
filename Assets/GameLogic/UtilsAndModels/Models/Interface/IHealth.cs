@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace Assets.Models
 {
@@ -6,6 +7,8 @@ namespace Assets.Models
     {
         // Raised by a hit that hurts but does not kill, with the health left after the hit.
         event Action<int> Wounded;
+        // Raised by a shot or laser that hurts but does not kill, with the object that hit (Grudge, #216).
+        event Action<GameObject> HarmedBy;
         int GetCurrentHealth();
         void TryChangeHealth(int healthChange);
     }

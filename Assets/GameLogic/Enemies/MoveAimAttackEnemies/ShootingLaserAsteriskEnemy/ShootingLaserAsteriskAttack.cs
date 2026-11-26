@@ -64,6 +64,7 @@ public class ShootingLaserAsteriskAttack : MoveAimAttackAttack
     private void StartShootOneLaserBeam(Vector2 startPosition, int laserBeamNumber) 
     {
         ConsecutiveAttack laserBeam = Instantiate(_laserBeamPrefab, startPosition, Utils.GetRorationOutwards(transform.position, startPosition), _projectiles.transform).GetComponent<ConsecutiveAttack>();
+        ShotOwner.Mark(laserBeam.gameObject, transform);
 
         laserBeam.StartConsecitiveAttack(GetShootingPoint(laserBeamNumber.ToString()), GetShootingRotation(laserBeamNumber.ToString()));
         laserBeam.gameObject.layer = LayerMask.NameToLayer("EnemyShots");

@@ -57,7 +57,8 @@ public class FrontArmor : MonoBehaviour
         Vector2 spawnPosition = (Vector2)transform.position + direction * (_collider.bounds.extents.magnitude + _reflectSpawnDistance);
 
         Destroy(shot.gameObject);
-        Instantiate(_reflectedShotPrefab, spawnPosition, Quaternion.LookRotation(Vector3.forward, direction), _projectiles);
+        var reflectedShot = Instantiate(_reflectedShotPrefab, spawnPosition, Quaternion.LookRotation(Vector3.forward, direction), _projectiles);
+        ShotOwner.Mark(reflectedShot, transform);
     }
 
     // A shot flying into the plate bounces off it like a mirror. A shot with no such velocity (moved by its transform,

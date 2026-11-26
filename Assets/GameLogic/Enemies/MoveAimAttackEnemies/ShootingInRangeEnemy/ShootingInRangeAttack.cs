@@ -21,7 +21,8 @@ public class ShootingInRangeAttack : MoveAimAttackAttack
     {
         Vector3 shootingStartPosition = GetShootingStartPosition(transform);
         var shootRotation = Utils.GetRotationPlusAngle(transform.rotation, _shootingInRangeAim.GetShootingAngle());
-        Instantiate(_shotPrefab, shootingStartPosition, shootRotation, _projectiles.transform);
+        var shot = Instantiate(_shotPrefab, shootingStartPosition, shootRotation, _projectiles.transform);
+        ShotOwner.Mark(shot, transform);
     }
 
     private Vector3 GetShootingStartPosition(Transform transform)
