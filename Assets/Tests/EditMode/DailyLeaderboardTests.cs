@@ -104,10 +104,9 @@ public class DailyLeaderboardTests
     }
 
     [Test]
-    public void PlayerRowKeepsItsPlaceOrGoesUnderTheRowsAfterAGap()
+    public void PlayerRowGoesUnderTheShownRowsAfterAGap()
     {
-        AssertWrapper.AreEqual(4, DailyLeaderboard.GetPlayerRowIndex(4, 10), "Your row moved although it was among the shown rows");
-        AssertWrapper.AreEqual(11, DailyLeaderboard.GetPlayerRowIndex(-1, 10), "Your row was not put under the 10 shown rows after one empty row");
-        AssertWrapper.AreEqual(21, DailyLeaderboard.GetPlayerRowIndex(-1, 20), "Your row did not follow a longer list: it was not put under 20 shown rows after one empty row");
+        AssertWrapper.AreEqual(11, DailyLeaderboard.GetRowIndexUnderShownRows(10), "Your row was not put under the 10 shown rows after one empty row");
+        AssertWrapper.AreEqual(21, DailyLeaderboard.GetRowIndexUnderShownRows(20), "Your row did not follow a longer list: it was not put under 20 shown rows after one empty row");
     }
 }

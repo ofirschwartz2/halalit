@@ -26,6 +26,12 @@ public static class PlayerPlace
         return GetEntryOrNullAsync(async () =>
         {
             var versionEntry = await LeaderboardsService.Instance.GetVersionPlayerScoreAsync(leaderboardId, versionId);
+
+            if (versionEntry == null)
+            {
+                return null;
+            }
+
             return new LeaderboardEntry(versionEntry.PlayerId, versionEntry.PlayerName, versionEntry.Rank, versionEntry.Score);
         });
     }
@@ -63,7 +69,7 @@ public static class PlayerPlace
         }
     }
 
-    // A player with no score on the list gets EntryNotFound, which is not an error here. Other errors go on to the screen
+    // EntryNotFound and NotFound both mean you have no score on the list, which is not an error here. Other errors go on to the screen
     private static async Task<LeaderboardEntry> GetEntryOrNullAsync(Func<Task<LeaderboardEntry>> getEntryAsync)
     {
         try
@@ -72,7 +78,7 @@ public static class PlayerPlace
         }
         catch (LeaderboardsException exception)
         {
-            if (exception.Reason == LeaderboardsExceptionReason.EntryNotFound)
+            if (exception.Reason == LeaderboardsExceptionReason.EntryNotFound || exception.Reason == LeaderboardsExceptionReason.NotFound)
             {
                 return null;
             }

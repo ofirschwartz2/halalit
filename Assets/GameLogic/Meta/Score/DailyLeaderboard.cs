@@ -60,10 +60,9 @@ public static class DailyLeaderboard
         return DID_NOT_PLAY_LINE;
     }
 
-    // Your row keeps its place when you are among the shown rows. Otherwise it goes under them, after one empty row as a gap
-    public static int GetPlayerRowIndex(int indexInShownRows, int shownRows)
+    // When you are below the shown rows, your row goes under them, after one empty row as a gap
+    public static int GetRowIndexUnderShownRows(int shownRows)
     {
-        bool isAmongShownRows = indexInShownRows >= 0 && indexInShownRows < shownRows;
-        return isAmongShownRows ? indexInShownRows : shownRows + 1;
+        return shownRows + 1;
     }
 }

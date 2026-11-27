@@ -187,7 +187,7 @@ public class LeaderBoard : MonoBehaviour
 
         if (playerEntry != null && playerIndex == -1)
         {
-            AddRow(playerEntry, DailyLeaderboard.GetPlayerRowIndex(playerIndex, entries.Count), true);
+            AddRow(playerEntry, DailyLeaderboard.GetRowIndexUnderShownRows(entries.Count), true);
         }
     }
 
