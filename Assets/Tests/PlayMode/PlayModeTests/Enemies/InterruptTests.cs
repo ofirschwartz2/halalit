@@ -28,6 +28,19 @@ public class InterruptTests
         TestUtils.FOLLOWING_ENEMY_INTERVAL_PREFAB_PATH,
         TestUtils.FOLLOWING_ENEMY_RADIUS_PREFAB_PATH
     };
+    // The only enemy prefabs that may carry Interrupt: the three shooters and their base, the two Followings,
+    // and the Mimic and Coin Thief, which are made from the Followings and whose waits never open the window.
+    private static readonly string[] ENEMY_PREFAB_NAMES_WITH_INTERRUPT =
+    {
+        "MoveAimAttackEnemy",
+        "ShootingInRangeEnemy",
+        "ShootingLaserRangeEnemy",
+        "ShootingLaserAsteriskEnemy",
+        "FollowingEnemyInterval",
+        "FollowingEnemyRadius",
+        "Mimic",
+        "CoinThief"
+    };
     private int _currentSeed;
 
     [SetUp]
@@ -52,6 +65,30 @@ public class InterruptTests
             AssertWrapper.IsNotNull(prefabs[i], _currentSeed, $"No enemy prefab at Resources/{INTERRUPTIBLE_ENEMY_PREFAB_PATHS[i]}");
             // Unity's != also sees the stand-in object that GetComponent returns in the editor for a missing component.
             AssertWrapper.IsTrue(prefabs[i].GetComponent<Interrupt>() != null, $"{prefabs[i].name} has no Interrupt (Needs Ofir in Unity, #238)", _currentSeed);
+        }
+    }
+
+    // The "not here" half of the Unity steps: Interrupt on the WaitAtackEnemy base, the Shield Ram or the Mine Layer fails this test.
+    // It loads only the prefabs that exist, so it passes before the Shield Ram and Mine Layer prefabs are made.
+    [UnityTest]
+    public IEnumerator OnlyTheCardsEnemiesHaveInterrupt()
+    {
+        // GIVEN
+        yield return null;
+
+        // WHEN
+        var prefabs = Resources.LoadAll<GameObject>(TestUtils.ENEMIES_PREFABS_PATH);
+
+        // THEN
+        foreach (var prefab in prefabs)
+        {
+            // Unity's == also sees the stand-in object that GetComponent returns in the editor for a missing component.
+            if (prefab.GetComponent<Interrupt>() == null)
+            {
+                continue;
+            }
+
+            AssertWrapper.IsTrue(ENEMY_PREFAB_NAMES_WITH_INTERRUPT.Contains(prefab.name), $"{prefab.name} has Interrupt, which card #238 does not include: remove it (Needs Ofir in Unity, #238)", _currentSeed);
         }
     }
 
