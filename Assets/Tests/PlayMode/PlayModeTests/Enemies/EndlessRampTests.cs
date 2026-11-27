@@ -81,7 +81,7 @@ public class EndlessRampTests
         yield return null;
         TestUtils.SetTestMode(keepEnemiesContainer: true);
         _isTimeScaleChanged = true;
-        TestUtils.UnhookMenuLoadFromGameOver();
+        TestUtils.UnhookResultsCardFromGameOver();
         var enemyBank = TestUtils.GetEnemyBank();
         TestUtils.TakeEnemyGroups(enemyBank, 1, _currentSeed);
         AssertWrapper.IsFalse(enemyBank.NoMoreEnemies(), "The enemy bank was empty after its whole first fill was taken: it did not refill", _currentSeed);
@@ -180,7 +180,7 @@ public class EndlessRampTests
         TestUtils.SetTestMode(keepEnemiesContainer: true);
         TestTimeController.SetCustomTimeScale(REAL_TIME_SCALE);
         _isTimeScaleChanged = true;
-        TestUtils.UnhookMenuLoadFromGameOver();
+        TestUtils.UnhookResultsCardFromGameOver();
         ParkHalalitOutsideTheWorld();
         var firstGap = TestUtils.GetSpawnHoleInstantiator().GetInstantiationGap(0);
 
@@ -210,7 +210,7 @@ public class EndlessRampTests
         TestUtils.SetTestMode(keepEnemiesContainer: true);
         TestTimeController.SetCustomTimeScale(REAL_TIME_SCALE);
         _isTimeScaleChanged = true;
-        TestUtils.UnhookMenuLoadFromGameOver();
+        TestUtils.UnhookResultsCardFromGameOver();
         ParkHalalitOutsideTheWorld();
         var firstGap = TestUtils.GetSpawnHoleInstantiator().GetInstantiationGap(0);
         var startTime = Time.time;
@@ -248,7 +248,7 @@ public class EndlessRampTests
         yield return null;
         TestUtils.SetTestMode(keepEnemiesContainer: true);
         _isTimeScaleChanged = true;
-        TestUtils.UnhookMenuLoadFromGameOver();
+        TestUtils.UnhookResultsCardFromGameOver();
         ParkHalalitOutsideTheWorld();
         var spawnHoleInstantiator = TestUtils.GetSpawnHoleInstantiator();
         AssertGapListIsTyped(spawnHoleInstantiator);
@@ -291,7 +291,7 @@ public class EndlessRampTests
         yield return null;
         TestUtils.SetTestMode(keepEnemiesContainer: true);
         _isTimeScaleChanged = true;
-        TestUtils.UnhookMenuLoadFromGameOver();
+        TestUtils.UnhookResultsCardFromGameOver();
         ParkHalalitOutsideTheWorld();
         var spawnHoleInstantiator = TestUtils.GetSpawnHoleInstantiator();
         AssertGapListIsTyped(spawnHoleInstantiator);
