@@ -62,7 +62,17 @@ public class DailyTwistTests
         AssertPinnedTwist(new DateTime(2026, 11, 21), DailyTwistName.SWARM);
         AssertPinnedTwist(new DateTime(2026, 11, 22), DailyTwistName.BIG_ROCKS);
         AssertPinnedTwist(new DateTime(2026, 11, 23), DailyTwistName.SWARM);
+        // 28 Nov to 6 Dec: three whole blocks, the dates of the play check on #286.
+        // 30 Nov and 1 Dec are both Swarm because one block ends and the next starts there, so these also pin where the blocks start
         AssertPinnedTwist(new DateTime(2026, 11, 28), DailyTwistName.GLASS_DAY);
+        AssertPinnedTwist(new DateTime(2026, 11, 29), DailyTwistName.BIG_ROCKS);
+        AssertPinnedTwist(new DateTime(2026, 11, 30), DailyTwistName.SWARM);
+        AssertPinnedTwist(new DateTime(2026, 12, 1), DailyTwistName.SWARM);
+        AssertPinnedTwist(new DateTime(2026, 12, 2), DailyTwistName.GLASS_DAY);
+        AssertPinnedTwist(new DateTime(2026, 12, 3), DailyTwistName.BIG_ROCKS);
+        AssertPinnedTwist(new DateTime(2026, 12, 4), DailyTwistName.SWARM);
+        AssertPinnedTwist(new DateTime(2026, 12, 5), DailyTwistName.GLASS_DAY);
+        AssertPinnedTwist(new DateTime(2026, 12, 6), DailyTwistName.BIG_ROCKS);
     }
 
     [Test]

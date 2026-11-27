@@ -112,6 +112,8 @@ public class DailyTwistTests
     [UnityTest]
     public IEnumerator DailyRunPlaysItsDatesTwist()
     {
+        AssertBlockDaysHaveDifferentTwists();
+
         for (var i = 0; i < DAILY_BLOCK_DAYS; i++)
         {
             // GIVEN
@@ -220,6 +222,19 @@ public class DailyTwistTests
     private int GetHalalitHealth()
     {
         return TestUtils.GetHalalit().GetComponent<Health>().GetHealth();
+    }
+
+    // DailyRunPlaysItsDatesTwist catches a daily that ignores its date only if each of its days has its own twist, and none is NONE.
+    // A changed twist list can break that, so check it rather than trust the dates' comment
+    private void AssertBlockDaysHaveDifferentTwists()
+    {
+        var blockTwistNames = new System.Collections.Generic.HashSet<DailyTwistName>();
+        for (var i = 0; i < DAILY_BLOCK_DAYS; i++)
+        {
+            blockTwistNames.Add(DailyTwists.PickForDate(DAILY_BLOCK_FIRST_DATE.AddDays(i)).Name);
+        }
+
+        AssertWrapper.IsTrue(blockTwistNames.Count == DAILY_BLOCK_DAYS && !blockTwistNames.Contains(DailyTwistName.NONE), $"The {DAILY_BLOCK_DAYS} dailies from {DAILY_BLOCK_FIRST_DATE:yyyy-MM-dd} do not have {DAILY_BLOCK_DAYS} different twists, so this test could not tell a daily that ignores its date. Pick other dates", _currentSeed);
     }
 
     // Asteroids fly in one at a time, every 3 s from the start
