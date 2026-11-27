@@ -15,7 +15,8 @@ This section is what Ofir wants the game to become. Everything after it describe
 - **Spelunky-style depth.** The game was born from Spelunky. It should be full of specific interactions between a specific enemy, a specific weapon and a specific place or situation. In his words: "extremely detailed and thoughtful", so that "every little thing was very thoughtful and thought through".
 - **Rich and distinct.** Many enemies and many weapons. No enemy plays like another enemy, and no weapon plays like another weapon.
 - **The daily.** Every day has one daily run. It is random, and it is exactly the same for every player who plays that day, from one seed. The best players of that daily win.
-- **Weapons as NFTs.** Weapons become NFTs with their own stats, and dailies reward players with them. This is a direction only. Nothing blockchain is built until Ofir says the game is ready.
+- **A roguelite (Ofir, 2026-11-27).** Every run starts fresh. All players start from the same place, with the same ship and the same class. A run is full of randomness: some is shared (the daily seed, the same for everyone that day) and some is unique to each player. Every item has its own drop rate. NFTs are the only thing that makes one player different from another. In his words: "only the NFTs are the things that are the difference between the different players". (Roguelite rather than roguelike, because something, the NFTs, carries over between runs.)
+- **NFT items and non-NFT items (Ofir, 2026-11-21 and 2026-11-27).** Weapons become NFTs with their own stats, and dailies reward players with them. There are NFT items and non-NFT items, each with its own drop rate. This is a direction only. Nothing blockchain is built until Ofir says the game is ready. Open points are questions 14 and 15.
 
 **Milestone 1: Friends daily (Ofir, 2026-11-21).** The north star for now. It is done when a few of Ofir's friends install the app, play the same daily for a week, and a shared leaderboard shows who won each day. In his words: "I can take an application and send her between a few of my friends where we can play on a daily basis, where it's really fun." It needs, in order: Unity running somewhere, a phone build, the daily (the same run for everyone, scores saved, a leaderboard), a run worth replaying (difficulty that ramps, a result screen), and enough distinct weapons and enemies. NFTs come after it.
 
@@ -345,6 +346,8 @@ Answered questions keep their number. Each shows Ofir's answer and its date.
     - *Survival, with score breaking ties:* plays like pure survival, because times rarely tie.
     - *Score with a survival multiplier:* valuables are worth more the longer the ship lives, for example ×2 after 2 minutes (a starting value). Greed still scores, and the last ships in the replay have the most to gain. Coin Toss coins must not get the multiplier, or throwing and picking them up again farms score.
     - **Designer's lean, not a decision:** keep the highest score, show each ship's score in the replay, and add the multiplier if replays show that early deaths often win.
+14. How does an NFT item reach a run: does its owner start with it, or does it join that player's drops with its own drop rate? And does it count in the daily, which is otherwise the same for everyone? For after Milestone 1.
+15. On iPhone, Apple's rule 3.1.1 lets an app show users their own NFTs, provided owning one does not unlock features or functionality. Should NFT items be cosmetic on iPhone, sold through Apple's in-app purchase (which press reports say may unlock content), or carry stats only on other platforms? Not legal advice: check before building. For after Milestone 1.
 
 ## 11. Ideas parked for proposal
 
