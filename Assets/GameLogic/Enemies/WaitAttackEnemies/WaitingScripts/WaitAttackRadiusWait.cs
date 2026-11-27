@@ -39,6 +39,13 @@ public class WaitAttackRadiusWait : WaitAttackWait
         return Utils.GetDistanceBetweenTwoPoints(transform.position, EnemyTarget.GetPosition(transform)) < _waitingRadius;
     }
 
+    // The charge waits for the Halalit to come within the radius, and nobody knows when that will be.
+    // So the wind-up runs from the last seconds of the wait until the charge.
+    public override bool IsWindingUp(float seconds)
+    {
+        return Time.time > _waitingTime - seconds;
+    }
+
     public override void SetWaiting()
     {
         SetWaitingTime();

@@ -25,6 +25,11 @@ public class WaitAttackIntervalWait : WaitAttackWait
         return Time.time > _waitingTime;
     }
 
+    public override bool IsWindingUp(float seconds)
+    {
+        return Time.time > _waitingTime - seconds;
+    }
+
     public override void SetWaiting()
     {
         SetWaitingTime();

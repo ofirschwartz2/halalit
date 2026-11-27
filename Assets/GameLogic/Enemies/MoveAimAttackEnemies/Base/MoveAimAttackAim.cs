@@ -19,6 +19,12 @@ public abstract class MoveAimAttackAim : MonoBehaviour
         return Time.time > _aimingTime;
     }
 
+    // Interrupt (#238): true in the last seconds of the aim.
+    public bool IsAimEnding(float seconds)
+    {
+        return Time.time > _aimingTime - seconds;
+    }
+
     public void AimingState(Transform transform)
     {
         if (!_didAim)
