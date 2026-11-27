@@ -9,6 +9,9 @@ public class Authentication : MonoBehaviour
 
     public static Task InitializationTask { get; private set; }
 
+    // Initialize runs on every menu load (#176), so SetupEvents adds its handlers only once
+    private static bool _areEventsSetUp;
+
     internal static async Task Initialize()
     {
         try
@@ -28,15 +31,16 @@ public class Authentication : MonoBehaviour
     // Setup authentication event handlers if desired
     static void SetupEvents()
     {
+        if (_areEventsSetUp)
+        {
+            return;
+        }
+
         AuthenticationService.Instance.SignedIn += () =>
         {
             // Shows how to get a playerID
             PlayerStats._playerId = AuthenticationService.Instance.PlayerId;
-            Debug.Log($"PlayerID: {AuthenticationService.Instance.PlayerId}");
-
-            // Shows how to get an access token
-            Debug.Log($"Access Token: {AuthenticationService.Instance.AccessToken}");
-
+            Debug.Log("Player signed in.");
         };
 
         AuthenticationService.Instance.SignInFailed += (err) =>
@@ -53,6 +57,9 @@ public class Authentication : MonoBehaviour
         {
             Debug.Log("Player session could not be refreshed and expired.");
         };
+
+        // Set last, so a set-up that throws is tried again on the next load
+        _areEventsSetUp = true;
     }
 
     private static async Task SignInAnonymously()
