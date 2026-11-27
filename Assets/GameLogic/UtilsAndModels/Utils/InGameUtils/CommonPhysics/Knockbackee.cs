@@ -16,6 +16,7 @@ public class Knockbackee : MonoBehaviour
 
     private float _speedBeforeKnockback;
     private float _angularSpeedBeforeKnockback;
+    private Vector2 _velocityBeforeKnockback;
     private List<string> _knockbackersDescriptions;
     private KinematicMovement _kinematicMovement;
 
@@ -38,11 +39,13 @@ public class Knockbackee : MonoBehaviour
         {
             _speedBeforeKnockback = _kinematicMovement.GetSpeed();
             _angularSpeedBeforeKnockback = _kinematicMovement.GetRotationSpeed();
+            _velocityBeforeKnockback = _kinematicMovement.GetDirection().normalized * _kinematicMovement.GetSpeed();
         }
         else
         {
             _speedBeforeKnockback = _rigidbody2D.velocity.magnitude;
             _angularSpeedBeforeKnockback = _rigidbody2D.angularVelocity;
+            _velocityBeforeKnockback = _rigidbody2D.velocity;
         }
     }
 
@@ -54,6 +57,12 @@ public class Knockbackee : MonoBehaviour
     public float GetAngularSpeedBeforeKnockback()
     {
         return _angularSpeedBeforeKnockback;
+    }
+
+    // The velocity going into the physics step, read before any bounce or knockback changes it (Crash Damage, #232).
+    public Vector2 GetVelocityBeforeKnockback()
+    {
+        return _velocityBeforeKnockback;
     }
     #endregion
 

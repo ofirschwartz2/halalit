@@ -419,6 +419,17 @@ internal static class TestUtils
         return Object.Instantiate(tripwirePrefab, position, Quaternion.LookRotation(Vector3.forward, direction));
     }
 
+    // Crash Damage (#232)
+    internal static CrashDamage GetCrashDamage(GameObject enemy)
+    {
+        var crashDamage = enemy.GetComponent<CrashDamage>();
+        if (crashDamage == null)
+        {
+            throw new System.Exception($"CrashDamage missing on {enemy.name} (Needs Ofir in Unity, #232)");
+        }
+        return crashDamage;
+    }
+
     internal static void SetGameObjectPosition(GameObject gameObject, Vector2 position) 
     {
         gameObject.transform.position = position;
