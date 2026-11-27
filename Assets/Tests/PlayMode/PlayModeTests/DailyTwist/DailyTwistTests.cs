@@ -26,7 +26,9 @@ public class DailyTwistTests
     private const float ASTEROID_SCALE_TOP = 5f; // the scene's _asteroidMaxScale 4, plus 1
     private const float ASTEROID_SCALE_DELTA = 0.001f;
     private const float MAX_SECONDS_TO_FIRST_ASTEROID = 10f;
+    private const int DAILY_BLOCK_DAYS = 3; // one day per twist
     private static readonly System.DateTime DAILY_DATE = new System.DateTime(2026, 11, 23); // a negative daily seed: -1359240184
+    private static readonly System.DateTime DAILY_BLOCK_FIRST_DATE = new System.DateTime(2026, 11, 22); // 22 to 24 Nov 2026: Big Rocks, Swarm, Glass Day
     private int _currentSeed;
     private bool _isTimeScaleChanged;
 
@@ -105,31 +107,36 @@ public class DailyTwistTests
         AssertWrapper.AreEqual(BIG_ROCKS_ASTEROID_MIN_SCALE, asteroidExternalInstantiator.GetAsteroidMinScale(), "Big Rocks did not raise the smallest asteroid scale to 3", _currentSeed, KNOB_DELTA);
     }
 
-    // A player's daily, not a test run: the twist comes from the daily seed in PlayerStats
+    // A player's daily, not a test run: the twist comes from the daily's date in PlayerStats.
+    // One daily for each day of a block (#273). Each of its days has a different twist, so a pick that ignored the daily's date could not pass
     [UnityTest]
     public IEnumerator DailyRunPlaysItsDatesTwist()
     {
-        // GIVEN
-        var dailySeed = DailySeed.GetSeed(DAILY_DATE);
-        DailyTwists.SetCurrent(DailyTwists.Get(DailyTwistName.NONE));
-        TestUtils.SetPlayerRun(true, dailySeed);
+        AssertBlockDaysHaveDifferentTwists();
 
-        // WHEN
-        yield return LoadPlayground();
+        for (var i = 0; i < DAILY_BLOCK_DAYS; i++)
+        {
+            // GIVEN
+            var dailyDate = DAILY_BLOCK_FIRST_DATE.AddDays(i);
+            DailyTwists.SetCurrent(DailyTwists.Get(DailyTwistName.NONE));
+            TestUtils.SetPlayerRun(true, dailyDate);
 
-        // THEN
-        var datesTwist = DailyTwists.PickForSeed(dailySeed);
-        AssertWrapper.IsTrue(DailyTwists.Current.Name == datesTwist.Name, $"The daily of {DAILY_DATE:yyyy-MM-dd} played {DailyTwists.Current.Name}, not its date's {datesTwist.Name}", _currentSeed);
+            // WHEN
+            yield return LoadPlayground();
+
+            // THEN
+            var datesTwist = DailyTwists.PickForDate(dailyDate);
+            AssertWrapper.IsTrue(DailyTwists.Current.Name == datesTwist.Name, $"The daily of {dailyDate:yyyy-MM-dd} played {DailyTwists.Current.Name}, not its date's {datesTwist.Name}", _currentSeed);
+        }
     }
 
-    // PLAY after a daily: the daily's twist is still the run's twist and the daily seed is still set, but this run is not a daily
+    // PLAY after a daily: the daily's twist is still the run's twist and the daily's date and seed are still set, but this run is not a daily
     [UnityTest]
     public IEnumerator PlayAfterADailyHasNoTwist()
     {
         // GIVEN
-        var dailySeed = DailySeed.GetSeed(DAILY_DATE);
-        DailyTwists.SetCurrent(DailyTwists.PickForSeed(dailySeed));
-        TestUtils.SetPlayerRun(false, dailySeed);
+        DailyTwists.SetCurrent(DailyTwists.PickForDate(DAILY_DATE));
+        TestUtils.SetPlayerRun(false, DAILY_DATE);
 
         // WHEN
         yield return LoadPlayground();
@@ -215,6 +222,19 @@ public class DailyTwistTests
     private int GetHalalitHealth()
     {
         return TestUtils.GetHalalit().GetComponent<Health>().GetHealth();
+    }
+
+    // DailyRunPlaysItsDatesTwist catches a daily that ignores its date only if each of its days has its own twist, and none is NONE.
+    // A changed twist list can break that, so check it rather than trust the dates' comment
+    private void AssertBlockDaysHaveDifferentTwists()
+    {
+        var blockTwistNames = new System.Collections.Generic.HashSet<DailyTwistName>();
+        for (var i = 0; i < DAILY_BLOCK_DAYS; i++)
+        {
+            blockTwistNames.Add(DailyTwists.PickForDate(DAILY_BLOCK_FIRST_DATE.AddDays(i)).Name);
+        }
+
+        AssertWrapper.IsTrue(blockTwistNames.Count == DAILY_BLOCK_DAYS && !blockTwistNames.Contains(DailyTwistName.NONE), $"The {DAILY_BLOCK_DAYS} dailies from {DAILY_BLOCK_FIRST_DATE:yyyy-MM-dd} do not have {DAILY_BLOCK_DAYS} different twists, so this test could not tell a daily that ignores its date. Pick other dates", _currentSeed);
     }
 
     // Asteroids fly in one at a time, every 3 s from the start

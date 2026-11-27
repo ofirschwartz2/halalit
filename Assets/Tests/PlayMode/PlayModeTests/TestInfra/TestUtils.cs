@@ -94,12 +94,14 @@ internal static class TestUtils
         DailyTwists.SetCurrent(DailyTwists.Get(DailyTwistName.NONE));
     }
 
-    // Daily Twist (#239): the next Playground load runs as a player's run, not a test run, so its seed and twist come from PlayerStats
-    internal static void SetPlayerRun(bool isDailyRun, int? dailySeed)
+    // Daily Twist (#239): the next Playground load runs as a player's run, not a test run, so its seed and twist come from PlayerStats.
+    // The seed comes from the date, as when the menu signs in (#273)
+    internal static void SetPlayerRun(bool isDailyRun, System.DateTime dailyDate)
     {
         OriginalRandomSeed.IsTestMode = false;
         PlayerStats._isDailyRun = isDailyRun;
-        PlayerStats._dailySeed = dailySeed;
+        PlayerStats._dailyDate = dailyDate;
+        PlayerStats.SetDailySeeds();
     }
 
     // Back to test mode, with the PlayerStats values a run has before the menu signs in
@@ -108,6 +110,7 @@ internal static class TestUtils
         OriginalRandomSeed.IsTestMode = true;
         PlayerStats._isDailyRun = false;
         PlayerStats._dailySeed = null;
+        PlayerStats._dailyDate = System.DateTime.MinValue;
     }
     #endregion
 

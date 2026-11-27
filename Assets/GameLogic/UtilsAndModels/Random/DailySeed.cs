@@ -35,11 +35,21 @@ namespace Assets.Utils
 
         public static int GetSeed(DateTime day)
         {
-            int dayNumber = (int)(new DateTime(day.Year, day.Month, day.Day).Ticks / TimeSpan.TicksPerDay);
+            return GetHash(GetDayNumber(day));
+        }
 
+        // Days since 1 Jan of year 1, so never below 0. The time of day is ignored
+        public static int GetDayNumber(DateTime day)
+        {
+            return (int)(new DateTime(day.Year, day.Month, day.Day).Ticks / TimeSpan.TicksPerDay);
+        }
+
+        // The daily's hash of a day number. Daily Twist (#273) also hashes its block numbers with it
+        public static int GetHash(int number)
+        {
             unchecked
             {
-                uint h = (uint)dayNumber;
+                uint h = (uint)number;
                 h ^= h >> 16;
                 h *= 0x85EBCA6Bu;
                 h ^= h >> 13;
