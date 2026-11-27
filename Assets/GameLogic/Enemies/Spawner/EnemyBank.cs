@@ -1,3 +1,4 @@
+using Assets.Models;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -39,15 +40,26 @@ public class EnemyBank : SeedfulRandomGeneratorUser
 
         foreach (var enemyPrefab in _enemyPrefabsBank)
         {
+            var isPaired = enemyPrefab.Key.TryGetComponent<IPairedEnemy>(out _);
             for (int i = 0; i < enemyPrefab.Value; i++)
             {
-                _enemyEntityList.Add(new EnemyEntity(
-                    enemyPrefab.Key,
-                    _seedfulRandomGenerator.GetNumber()));
+                _enemyEntityList.Add(CreateEnemyEntity(enemyPrefab.Key, isPaired));
             }
         }
 
         _seedfulRandomGenerator.ShuffleList(_enemyEntityList);
+    }
+
+    // Tether Twins (#237): a paired entry draws its partner's seed right after its own. Unpaired entries draw as before.
+    private EnemyEntity CreateEnemyEntity(GameObject prefab, bool isPaired)
+    {
+        var seed = _seedfulRandomGenerator.GetNumber();
+        if (!isPaired)
+        {
+            return new EnemyEntity(prefab, seed);
+        }
+
+        return new EnemyEntity(prefab, seed, _seedfulRandomGenerator.GetNumber());
     }
 
     private void SetSpawnHoleEnemyAmountsList()

@@ -22,6 +22,7 @@ namespace Assets.Enums
         MIRROR_SHIELD,
         MIMIC,
         LEECH,
-        MENDER
+        MENDER,
+        TETHER_TWIN
     }
 }
