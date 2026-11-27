@@ -28,6 +28,14 @@ public class PlayerPlaceTests
     }
 
     [Test]
+    public void RoundNumbersEndInTh()
+    {
+        AssertWrapper.AreEqual("10th", PlayerPlace.GetOrdinal(10), "Wrong ordinal for 10");
+        AssertWrapper.AreEqual("20th", PlayerPlace.GetOrdinal(20), "Wrong ordinal for 20");
+        AssertWrapper.AreEqual("100th", PlayerPlace.GetOrdinal(100), "Wrong ordinal for 100");
+    }
+
+    [Test]
     public void PlaceTextStartsFromRankZero()
     {
         AssertWrapper.AreEqual("12th of 40 so far", PlayerPlace.GetPlaceText(11, 40, true), "Wrong place text for a list that is still open");
@@ -35,8 +43,16 @@ public class PlayerPlaceTests
     }
 
     [Test]
+    public void OnlyPlayerIsFirstOfOne()
+    {
+        AssertWrapper.AreEqual("1st of 1 so far", PlayerPlace.GetPlaceText(0, 1, true), "Wrong place text for the only player on a list that is still open");
+        AssertWrapper.AreEqual("1st of 1", PlayerPlace.GetPlaceText(0, 1, false), "Wrong place text for the only player on a closed list");
+    }
+
+    [Test]
     public void PlayerCountIsNeverBelowThePlace()
     {
         AssertWrapper.AreEqual("12th of 12", PlayerPlace.GetPlaceText(11, 5, false), "The player count was lower than the place");
+        AssertWrapper.AreEqual("1st of 1 so far", PlayerPlace.GetPlaceText(0, 0, true), "The player count stayed at 0 although you are on the list");
     }
 }

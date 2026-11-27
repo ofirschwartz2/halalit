@@ -83,9 +83,31 @@ public class DailyLeaderboardTests
     }
 
     [Test]
+    public void OnlyTodaysPlaceIsSoFar()
+    {
+        AssertWrapper.AreEqual("You: 1st of 1 so far", DailyLeaderboard.GetPlaceLine(false, 0, 0, 1), "Today's place did not say so far, though today's list is still open");
+        AssertWrapper.AreEqual("You: 1st of 1", DailyLeaderboard.GetPlaceLine(false, 1, 0, 1), "Yesterday's place said so far, though yesterday's list is closed");
+    }
+
+    [Test]
+    public void AllTimeNoScoreLineIgnoresTheDayItWasOpenedFrom()
+    {
+        // All time opened while a past day is shown keeps that day's index, as ShowAllTime passes _dayIndex
+        AssertWrapper.AreEqual("You have no score yet", DailyLeaderboard.GetPlaceLine(true, 1, null, 25), "The all-time list showed a past day's line because it was opened from yesterday");
+    }
+
+    [Test]
+    public void PlaceLinesOnAnEmptyDay()
+    {
+        AssertWrapper.AreEqual("You have not played today", DailyLeaderboard.GetPlaceLine(false, 0, null, 0), "Wrong line for today when nobody has played yet");
+        AssertWrapper.AreEqual("You did not play", DailyLeaderboard.GetPlaceLine(false, 1, null, 0), "Wrong line for a past day nobody played");
+    }
+
+    [Test]
     public void PlayerRowKeepsItsPlaceOrGoesUnderTheRowsAfterAGap()
     {
         AssertWrapper.AreEqual(4, DailyLeaderboard.GetPlayerRowIndex(4, 10), "Your row moved although it was among the shown rows");
         AssertWrapper.AreEqual(11, DailyLeaderboard.GetPlayerRowIndex(-1, 10), "Your row was not put under the 10 shown rows after one empty row");
+        AssertWrapper.AreEqual(21, DailyLeaderboard.GetPlayerRowIndex(-1, 20), "Your row did not follow a longer list: it was not put under 20 shown rows after one empty row");
     }
 }
