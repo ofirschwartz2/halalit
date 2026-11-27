@@ -515,6 +515,29 @@ internal static class TestUtils
         return interrupt;
     }
 
+    // Endless Ramp (#248)
+    // Takes groups from the enemy bank until fills * GetEnemiesPerFill() enemies are out: the first fill, then the refills.
+    // The bank refills itself and never runs out, so this asks at most that many times: a bad bank fails here instead of hanging the editor.
+    internal static List<List<EnemyEntity>> TakeEnemyGroups(EnemyBank enemyBank, int fills, int seed)
+    {
+        var enemiesPerFill = enemyBank.GetEnemiesPerFill();
+        AssertWrapper.Greater(enemiesPerFill, 0, "The scene's enemy bank has no enemies", seed);
+
+        var enemiesToTake = fills * enemiesPerFill;
+        var enemyGroups = new List<List<EnemyEntity>>();
+        var takenEnemies = 0;
+        for (int i = 0; i < enemiesToTake && takenEnemies < enemiesToTake; i++)
+        {
+            var enemyGroup = enemyBank.GetNextSpawnHoleEnemiesList();
+            AssertWrapper.IsTrue(enemyGroup != null, $"The enemy bank ran out after {takenEnemies} enemies, though it refills itself", seed);
+            enemyGroups.Add(enemyGroup);
+            takenEnemies += enemyGroup.Count;
+        }
+
+        AssertWrapper.AreEqual(enemiesToTake, takenEnemies, $"Took {takenEnemies} enemies for {fills} fills of {enemiesPerFill}: a group spans two fills, or the bank gave empty groups", seed);
+        return enemyGroups;
+    }
+
     internal static void SetGameObjectPosition(GameObject gameObject, Vector2 position) 
     {
         gameObject.transform.position = position;
@@ -578,15 +601,19 @@ internal static class TestUtils
         asteroids[index].transform.localScale = new Vector3(scale, scale, 0);
     }
 
-    internal static void SetTestMode()
+    // keepEnemiesContainer (#248): leaves the enemy spawner running, for tests of the spawner itself
+    internal static void SetTestMode(bool keepEnemiesContainer = false)
     {
         OriginalRandomSeed.IsTestMode = true;
         
         _asteroidContainer = GameObject.Find(ASTEROID_CONTAINER_NAME);
         _asteroidContainer.SetActive(false);
 
-        _enemiesContainer = GameObject.Find(ENEMIES_CONTAINER_NAME);
-        _enemiesContainer.SetActive(false);
+        if (!keepEnemiesContainer)
+        {
+            _enemiesContainer = GameObject.Find(ENEMIES_CONTAINER_NAME);
+            _enemiesContainer.SetActive(false);
+        }
 
         var weaponAttack = GetWeaponAttack();
         weaponAttack.SetIsTesting(true);
@@ -688,6 +715,18 @@ internal static class TestUtils
     {
         var itemsFactory = GameObject.FindGameObjectWithTag(Tag.ITEMS_FACTORY.GetDescription());
         return itemsFactory.GetComponent<DropsBank>();
+    }
+
+    internal static EnemyBank GetEnemyBank()
+    {
+        var enemiesSpawner = GameObject.FindGameObjectWithTag(Tag.ENEMIES_SPAWNER.GetDescription());
+        return enemiesSpawner.GetComponent<EnemyBank>();
+    }
+
+    internal static SpawnHoleInstantiator GetSpawnHoleInstantiator()
+    {
+        var enemiesSpawner = GameObject.FindGameObjectWithTag(Tag.ENEMIES_SPAWNER.GetDescription());
+        return enemiesSpawner.GetComponent<SpawnHoleInstantiator>();
     }
 
     internal static GameObject GetInternalWorld() 

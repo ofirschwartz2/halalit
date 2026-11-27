@@ -13,6 +13,7 @@ using UnityEngine.TestTools;
 public class SameSeedTests
 {
     private const int NUMBER_OF_ENEMIES_TO_KILL = 10;
+    private const int NUMBER_OF_ENEMY_FILLS = 3; // the first fill and two refills (#248)
     private const string NO_ITEM = "No Item";
 
     private int _currentSeed;
@@ -32,9 +33,10 @@ public class SameSeedTests
     }
 
     [UnityTest]
-    public IEnumerator SameSeedSameEnemyOrder()
+    public IEnumerator SameSeedSameEnemyOrderThroughTwoRefills()
     {
         // GIVEN
+        yield return null;
         var firstRunEnemyOrder = GetEnemyOrder();
 
         // WHEN
@@ -80,21 +82,18 @@ public class SameSeedTests
         }
     }
 
+    // The bank refills itself and never runs out (#248), so this takes a fixed number of fills instead of reading until null.
     private List<string> GetEnemyOrder()
     {
-        var enemyBank = GameObject.FindGameObjectWithTag(Tag.ENEMIES_SPAWNER.GetDescription()).GetComponent<EnemyBank>();
         var enemyOrder = new List<string>();
 
-        var spawnHoleEnemies = enemyBank.GetNextSpawnHoleEnemiesList();
-        while (spawnHoleEnemies != null)
+        foreach (var spawnHoleEnemies in TestUtils.TakeEnemyGroups(TestUtils.GetEnemyBank(), NUMBER_OF_ENEMY_FILLS, _currentSeed))
         {
             enemyOrder.Add("Group Size " + spawnHoleEnemies.Count);
             foreach (var enemyEntity in spawnHoleEnemies)
             {
                 enemyOrder.Add(enemyEntity.Prefab.name + " " + enemyEntity.Seed);
             }
-
-            spawnHoleEnemies = enemyBank.GetNextSpawnHoleEnemiesList();
         }
 
         return enemyOrder;

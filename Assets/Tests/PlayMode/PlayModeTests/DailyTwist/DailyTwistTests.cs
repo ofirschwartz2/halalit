@@ -17,11 +17,6 @@ public class DailyTwistTests
     private const float SWARM_SPAWN_INTERVAL_MULTIPLIER = 0.6f;
     private const float BIG_ROCKS_ASTEROID_MIN_SCALE = 3f;
     private const float KNOB_DELTA = 0.0001f;
-    private const float SCENE_SPAWN_INTERVAL = 5f;
-    private const float SWARM_SPAWN_INTERVAL = 3f;
-    private const float SPAWN_TIME_DELTA = 0.5f;
-    private const float MAX_SECONDS_TO_FIRST_SPAWN = 10f;
-    private const float REAL_TIME_SCALE = 1f;
     private const float SCENE_ASTEROID_MIN_SCALE = 1f;
     private const float ASTEROID_SCALE_TOP = 5f; // the scene's _asteroidMaxScale 4, plus 1
     private const float ASTEROID_SCALE_DELTA = 0.001f;
@@ -138,37 +133,6 @@ public class DailyTwistTests
         AssertWrapper.IsTrue(DailyTwists.Current.IsNone(), $"PLAY after a daily kept the daily's twist, {DailyTwists.Current.Name}", _currentSeed);
     }
 
-    // With the enemy bank empty, the spawner removes itself at its first spawn time instead of looking for a free place,
-    // so the time is exact: 3 s on Swarm, 5 s on a normal day. It looks once a second.
-    [UnityTest]
-    public IEnumerator SwarmFirstSpawnComesAfter3Seconds()
-    {
-        // GIVEN
-        UseRealTimeScale();
-        TestUtils.SetTestTwist(DailyTwistName.SWARM);
-        yield return LoadPlayground();
-        var startTime = Time.time;
-        var spawnHolesAtStart = Object.FindObjectsOfType<SpawnHole>().Length;
-        var enemySpawner = GameObject.FindGameObjectWithTag(Tag.ENEMIES_SPAWNER.GetDescription());
-        var enemyBank = enemySpawner.GetComponent<EnemyBank>();
-        while (!enemyBank.NoMoreEnemies())
-        {
-            enemyBank.GetNextSpawnHoleEnemiesList();
-        }
-
-        // WHEN
-        while (enemySpawner != null && Time.time - startTime < MAX_SECONDS_TO_FIRST_SPAWN)
-        {
-            yield return null;
-        }
-        var secondsToFirstSpawn = Time.time - startTime;
-
-        // THEN
-        AssertWrapper.IsTrue(spawnHolesAtStart == 0, "A spawn hole opened as the Playground loaded, before Swarm's first spawn time", _currentSeed);
-        AssertWrapper.Greater(secondsToFirstSpawn, SWARM_SPAWN_INTERVAL - SPAWN_TIME_DELTA, $"Swarm's first spawn came after {secondsToFirstSpawn} s, before its 3 s", _currentSeed);
-        AssertWrapper.Less(secondsToFirstSpawn, SCENE_SPAWN_INTERVAL - SPAWN_TIME_DELTA, $"Swarm's first spawn came after {secondsToFirstSpawn} s, no sooner than a normal day's 5 s", _currentSeed);
-    }
-
     // The first asteroid's size is one seeded draw, from 1 to 5 on a normal day. With the same seed, Big Rocks puts that same draw on 3 to 5
     [UnityTest]
     public IEnumerator BigRocksFirstAsteroidTakesTheSameDrawFrom3To5()
@@ -241,21 +205,13 @@ public class DailyTwistTests
         _isTimeScaleChanged = true;
     }
 
-    // Time scale 1, whatever an earlier test left (D22), so a timed check is not stretched by editor hitches. TearDown puts back the scale this saved
-    private void UseRealTimeScale()
-    {
-        TestTimeController.SetTestTimeScale();
-        TestTimeController.SetCustomTimeScale(REAL_TIME_SCALE);
-        _isTimeScaleChanged = true;
-    }
-
     [TearDown]
     public void TearDown()
     {
         TestUtils.ResetTestTwist();
         TestUtils.ResetPlayerRun();
         TestUtils.DestroyAllGameObjects();
-        // Only after a test saved a scale (SetTestMode, SpeedUpTime, UseRealTimeScale): ResetTimeScale restores the saved scale, and that is 0 if none was saved yet
+        // Only after a test saved a scale (SetTestMode, SpeedUpTime): ResetTimeScale restores the saved scale, and that is 0 if none was saved yet
         if (_isTimeScaleChanged)
         {
             TestTimeController.ResetTimeScale();
