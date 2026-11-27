@@ -14,6 +14,8 @@ public class DailyTwistTests
     private const float BIG_ROCKS_ASTEROID_MIN_SCALE = 3f;
     private const float SPAWN_INTERVAL_DELTA = 0.001f;
     private const int DAYS_IN_A_ROW = 60;
+    private const string PREFABS_FOLDER = "Assets/Resources";
+    private const string FOLLOWS_DAILY_TWIST_FIELD = "_followsDailyTwist";
 
     [Test]
     public void SameDateSameTwist()
@@ -130,6 +132,35 @@ public class DailyTwistTests
             AssertWrapper.IsFalse(string.IsNullOrWhiteSpace(twist.Description), $"{name} has no description");
             AssertWrapper.AreEqual(twist.Title + ": " + twist.Description, twist.GetDisplayLine(), $"{name} shows the wrong line on the menu");
         }
+    }
+
+    [Test]
+    public void NoPrefabFollowsTheTwist()
+    {
+        // Needs Ofir in Unity, step 3: only the Halalit in the Playground ticks Follows Daily Twist.
+        // On a prefab, Glass Day would give every enemy or asteroid made from it 12 health
+        var checkedHealthCount = 0;
+
+        foreach (var prefabGuid in UnityEditor.AssetDatabase.FindAssets("t:Prefab", new[] { PREFABS_FOLDER }))
+        {
+            var prefabPath = UnityEditor.AssetDatabase.GUIDToAssetPath(prefabGuid);
+            var prefab = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.GameObject>(prefabPath);
+            if (prefab == null)
+            {
+                continue;
+            }
+
+            foreach (var health in prefab.GetComponentsInChildren<Health>(true))
+            {
+                var followsDailyTwist = new UnityEditor.SerializedObject(health).FindProperty(FOLLOWS_DAILY_TWIST_FIELD);
+
+                AssertWrapper.IsTrue(followsDailyTwist != null, $"Health has no {FOLLOWS_DAILY_TWIST_FIELD} field, update this test");
+                AssertWrapper.IsFalse(followsDailyTwist.boolValue, $"{prefabPath} ticks Follows Daily Twist. Only the Halalit in the Playground should (Needs Ofir in Unity)");
+                checkedHealthCount++;
+            }
+        }
+
+        AssertWrapper.IsTrue(checkedHealthCount > 0, $"Found no Health on any prefab in {PREFABS_FOLDER}, so nothing was checked");
     }
 
     private void AssertPinnedTwist(DateTime day, DailyTwistName expectedName)
