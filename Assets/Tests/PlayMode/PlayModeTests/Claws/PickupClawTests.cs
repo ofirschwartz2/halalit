@@ -146,6 +146,55 @@ public class PickupClawTests
 
     }
 
+    // A collected or tarnished valuable is hidden for the rest of its frame before it is destroyed (#231).
+    [UnityTest]
+    public IEnumerator ItemHiddenWhileGrabbing()
+    {
+        // GIVEN
+        TestUtils.SetTestMode();
+        yield return null;
+        var objectLoader = GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>();
+        objectLoader.LoadItemInExternalSafeIsland(ItemName.ITEM_BASE);
+        yield return null;
+
+        var pickupClawShooter = TestUtils.GetPickupClawShooter();
+        var maneuverRadius = TestUtils.GetPickupClawManeuverRadius();
+        float totalTime = 10f;
+        float elapsedTime = 0f;
+        int fixedUpdatesAfterHiding = 5;
+        TestUtils.SetRandomItemPosition(maneuverRadius - 1);
+        yield return null;
+
+        pickupClawShooter.TryShootClaw(TestUtils.GetItemPosition());
+        yield return null;
+
+        var pickupClaw = TestUtils.GetPickupClaw();
+        AssertWrapper.IsNotNull(pickupClaw, _currentSeed);
+        var pickupClawStateMachine = TestUtils.GetPickupClawStateMachine(pickupClaw);
+        var state = pickupClawStateMachine.GetState();
+
+        while (state == PickupClawState.MOVING_TO_TARGET)
+        {
+            yield return new WaitForFixedUpdate();
+            state = pickupClawStateMachine.GetState();
+            elapsedTime += Time.fixedDeltaTime;
+            AssertWrapper.Greater(totalTime, elapsedTime, "Stuck in MOVING_TO_TARGET state", _currentSeed);
+        }
+
+        AssertWrapper.AreEqual((int)state, (int)PickupClawState.GRABBING, "Not GRABBING after MOVING_TO_TARGET", _currentSeed);
+
+        // WHEN
+        pickupClawStateMachine.GetItem().SetActive(false);
+        for (int i = 0; i < fixedUpdatesAfterHiding; i++)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
+        // THEN
+        state = pickupClawStateMachine.GetState();
+        AssertWrapper.AreEqual((int)state, (int)PickupClawState.RETURNING_TO_HALALIT_WITHOUT_TARGET, "Claw Did Not Return Empty From A Hidden Item", _currentSeed);
+    }
+
     [UnityTest]
     public IEnumerator PressOnItemOutOfRange()
     {
