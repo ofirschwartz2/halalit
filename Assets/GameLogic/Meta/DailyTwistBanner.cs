@@ -13,6 +13,12 @@ public class DailyTwistBanner : MonoBehaviour
 
     private void Start()
     {
+        // An unwired label is skipped, so the banner does not throw on every Playground load
+        if (_twistText == null)
+        {
+            return;
+        }
+
         if (DailyTwists.Current.IsNone())
         {
             _twistText.gameObject.SetActive(false);
