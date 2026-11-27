@@ -110,6 +110,7 @@ public class ChainSparkTests
         yield return FireAt(anchor, Vector2.down);
 
         // THEN
+        AssertWrapper.AreEqual(TARGET_HEALTH - BOLT_HARM, GetHealth(first), "Test Setup: The Bolt Did Not Hit The First Enemy", _currentSeed);
         // From the left enemy, the right one is 4 away, beyond the 3 unit jump radius, so only the tie decides.
         AssertWrapper.AreEqual(TARGET_HEALTH - JUMP_HARM, GetHealth(left), "On A Tie The Spark Did Not Jump To The Enemy On The Left", _currentSeed);
         AssertWrapper.AreEqual(TARGET_HEALTH, GetHealth(right), "On A Tie The Spark Jumped To The Enemy On The Right", _currentSeed);
@@ -160,6 +161,7 @@ public class ChainSparkTests
         yield return FireAt(anchor, Vector2.down);
 
         // THEN
+        AssertWrapper.AreEqual(TARGET_HEALTH - BOLT_HARM, GetHealth(enemies[0]), "Test Setup: The Bolt Did Not Hit The First Enemy", _currentSeed);
         AssertWrapper.AreEqual(TARGET_HEALTH - JUMP_HARM, GetHealth(mirrorShield), "The Spark Did Not Go Round The Mirror Shield's Plate", _currentSeed);
     }
 
@@ -185,6 +187,7 @@ public class ChainSparkTests
         yield return FireAt(anchor, Vector2.down);
 
         // THEN
+        AssertWrapper.AreEqual(TARGET_HEALTH - BOLT_HARM, GetHealth(enemies[0]), "Test Setup: The Bolt Did Not Hit The First Enemy", _currentSeed);
         AssertWrapper.AreEqual(TARGET_HEALTH - JUMP_HARM, GetHealth(mimic), "The Spark Did Not Jump To The Hidden Mimic", _currentSeed);
         AssertWrapper.IsFalse(disguisedWait.IsHidden(), "The Spark's Jump Did Not Wake The Hidden Mimic", _currentSeed);
     }
@@ -221,6 +224,66 @@ public class ChainSparkTests
         AssertWrapper.AreEqual(TARGET_HEALTH - BOLT_HARM, GetHealth(enemies[0]), "Test Setup: The Bolt Did Not Hit The First Enemy", _currentSeed);
         AssertWrapper.AreEqual(1, linesAfterHit, "There Is Not Exactly One Spark Line Right After The Hit", _currentSeed);
         AssertWrapper.AreEqual(0, linesAfterLifetime, "The Spark Line Was Not Removed After Its Lifetime", _currentSeed);
+    }
+
+    [UnityTest]
+    public IEnumerator SkipsDeadTarget()
+    {
+        // GIVEN
+        yield return SetUpChainSpark();
+        yield return LoadEnemiesWithHealth(3);
+        var enemies = _loadedEnemies;
+        Vector2 anchor = GetAnchor();
+        var first = enemies[0];
+        var dead = enemies[1];
+        var farther = enemies[2];
+        TestUtils.SetGameObjectPosition(first, anchor);
+        TestUtils.SetGameObjectPosition(dead, anchor + Vector2.right * NEAR_DISTANCE);
+        TestUtils.SetGameObjectPosition(farther, anchor + Vector2.left * FARTHER_DISTANCE);
+        dead.GetComponent<Health>().SetHealth(0);
+        yield return PlaceHalalit(anchor + Vector2.down * HALALIT_DISTANCE_BELOW_TARGETS);
+
+        // WHEN
+        yield return FireAt(anchor, Vector2.down);
+
+        // THEN
+        AssertWrapper.AreEqual(TARGET_HEALTH - BOLT_HARM, GetHealth(first), "Test Setup: The Bolt Did Not Hit The First Enemy", _currentSeed);
+        AssertWrapper.AreEqual(0, GetHealth(dead), "The Spark Jumped To An Enemy With No Health Left", _currentSeed);
+        // From the dead enemy, the farther one is 4.5 away, beyond the jump radius: it is hit only if the dead one was skipped.
+        AssertWrapper.AreEqual(TARGET_HEALTH - JUMP_HARM, GetHealth(farther), "The Spark Did Not Skip The Dead Enemy For The Next Live One", _currentSeed);
+    }
+
+    [UnityTest]
+    public IEnumerator BoltStoppedByPlateGivesNoSpark()
+    {
+        // GIVEN
+        yield return SetUpChainSpark();
+        yield return LoadEnemiesWithHealth(1);
+        var enemies = _loadedEnemies;
+        Vector2 anchor = GetAnchor();
+        Vector2 boltStart = anchor + Vector2.down * BOLT_START_DISTANCE;
+        var shieldRam = TestUtils.LoadShieldRam(anchor, _currentSeed);
+        shieldRam.transform.rotation = Quaternion.LookRotation(Vector3.forward, boltStart - anchor);
+        yield return null;
+        TestUtils.SetEnemiesHealth(TARGET_HEALTH);
+        TestUtils.SetGameObjectPosition(enemies[0], anchor + Vector2.right * NEAR_DISTANCE);
+        yield return PlaceHalalit(anchor + Vector2.down * HALALIT_DISTANCE_BELOW_TARGETS);
+
+        // WHEN
+        var bolt = TestUtils.LoadChainSpark(boltStart, Vector2.up);
+        // Half the bolt's lifetime: if it is gone by then, it hit the plate rather than dying of old age.
+        var hitTimeout = Time.time + bolt.GetComponent<BallShot>().GetLifeTime() / 2f;
+        while (bolt != null && Time.time < hitTimeout)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+        var boltHitPlate = bolt == null;
+        yield return new WaitForFixedUpdate();
+
+        // THEN
+        AssertWrapper.IsTrue(boltHitPlate, "Test Setup: The Bolt Did Not Reach The Shield Ram's Plate", _currentSeed);
+        AssertWrapper.AreEqual(TARGET_HEALTH, GetHealth(shieldRam), "Test Setup: The Shield Ram's Plate Did Not Block The Bolt", _currentSeed);
+        AssertWrapper.AreEqual(TARGET_HEALTH, GetHealth(enemies[0]), "A Bolt Stopped By A Front Plate Still Sparked To A Nearby Enemy", _currentSeed);
     }
 
     private IEnumerator SetUpChainSpark()
