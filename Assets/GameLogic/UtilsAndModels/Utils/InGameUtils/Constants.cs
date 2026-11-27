@@ -22,4 +22,8 @@
 
     // Enemies
     public const int MAX_LATCHED_LEECHES = 2;
+
+    // Player names
+    public const int PLAYER_NAME_MIN_LENGTH = 3;
+    public const int PLAYER_NAME_MAX_LENGTH = 12;
 }
