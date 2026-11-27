@@ -110,9 +110,13 @@ public class ShootingLaserAsteriskAttack : MoveAimAttackAttack
         _shootingLazerAsteriskAim.StopAiming();
     }
 
+    // _laserBeams is null if the enemy is destroyed before Start runs, as while it waits in its spawn hole (#290).
     private void OnDestroy()
     {
-        DestroyLaserBeams();
+        if (_laserBeams != null)
+        {
+            DestroyLaserBeams();
+        }
     }
 
     private void DestroyLaserBeams()
