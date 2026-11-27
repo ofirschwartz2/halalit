@@ -65,4 +65,27 @@ public class DailyLeaderboardTests
 
         AssertWrapper.AreEqual("21-11-26", DailyLeaderboard.GetListTitle(false, 1, archivedDayStart), "A past day was titled with its UTC date, not its Israel date");
     }
+
+    [Test]
+    public void PlaceLinesWithARank()
+    {
+        AssertWrapper.AreEqual("You: 12th of 40 so far", DailyLeaderboard.GetPlaceLine(false, 0, 11, 40), "Wrong place line for today's list");
+        AssertWrapper.AreEqual("You: 3rd of 9", DailyLeaderboard.GetPlaceLine(false, 2, 2, 9), "Wrong place line for a past day");
+        AssertWrapper.AreEqual("You: 1st of 25", DailyLeaderboard.GetPlaceLine(true, 0, 0, 25), "Wrong place line for the all-time list");
+    }
+
+    [Test]
+    public void PlaceLinesWithoutARank()
+    {
+        AssertWrapper.AreEqual("You have not played today", DailyLeaderboard.GetPlaceLine(false, 0, null, 40), "Wrong line for today when you have not played");
+        AssertWrapper.AreEqual("You did not play", DailyLeaderboard.GetPlaceLine(false, 2, null, 9), "Wrong line for a past day you did not play");
+        AssertWrapper.AreEqual("You have no score yet", DailyLeaderboard.GetPlaceLine(true, 0, null, 25), "Wrong line for the all-time list with no score");
+    }
+
+    [Test]
+    public void PlayerRowKeepsItsPlaceOrGoesUnderTheRowsAfterAGap()
+    {
+        AssertWrapper.AreEqual(4, DailyLeaderboard.GetPlayerRowIndex(4, 10), "Your row moved although it was among the shown rows");
+        AssertWrapper.AreEqual(11, DailyLeaderboard.GetPlayerRowIndex(-1, 10), "Your row was not put under the 10 shown rows after one empty row");
+    }
 }

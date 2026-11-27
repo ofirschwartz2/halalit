@@ -5,6 +5,10 @@ public static class DailyLeaderboard
 {
     private const string TODAY_TITLE = "Today";
     private const string ALL_TIME_TITLE = "All time";
+    private const string PLACE_LINE_START = "You: ";
+    private const string NO_SCORE_YET_LINE = "You have no score yet";
+    private const string NOT_PLAYED_TODAY_LINE = "You have not played today";
+    private const string DID_NOT_PLAY_LINE = "You did not play";
 
     // A run that crosses midnight Israel time belongs to the day it started, so it is not sent to the next day's list
     public static bool ShouldSubmitDaily(int? dailyScore, DateTime runDay, DateTime today)
@@ -33,5 +37,33 @@ public static class DailyLeaderboard
 
         // The list resets at midnight Israel time, which is the evening before in UTC
         return DailySeed.GetDateKey(DailySeed.GetIsraelDate(archivedDayStart));
+    }
+
+    // Your place on the list on screen. Today's list is still open, so its place is "so far"
+    public static string GetPlaceLine(bool isAllTime, int dayIndex, int? rank, int playerCount)
+    {
+        if (rank != null)
+        {
+            return PLACE_LINE_START + PlayerPlace.GetPlaceText(rank.Value, playerCount, !isAllTime && dayIndex == 0);
+        }
+
+        if (isAllTime)
+        {
+            return NO_SCORE_YET_LINE;
+        }
+
+        if (dayIndex == 0)
+        {
+            return NOT_PLAYED_TODAY_LINE;
+        }
+
+        return DID_NOT_PLAY_LINE;
+    }
+
+    // Your row keeps its place when you are among the shown rows. Otherwise it goes under them, after one empty row as a gap
+    public static int GetPlayerRowIndex(int indexInShownRows, int shownRows)
+    {
+        bool isAmongShownRows = indexInShownRows >= 0 && indexInShownRows < shownRows;
+        return isAmongShownRows ? indexInShownRows : shownRows + 1;
     }
 }

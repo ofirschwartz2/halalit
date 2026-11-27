@@ -23,6 +23,10 @@ public class LeaderBoard : MonoBehaviour
 
     [SerializeField]
     private TMP_Text _listTitleText;
+    [SerializeField]
+    private TMP_Text _placeText;
+    [SerializeField]
+    private Color _playerRowColor = Color.yellow;
 
     private Transform _entryContainer;
     private Transform _entryTemplate;
@@ -41,6 +45,11 @@ public class LeaderBoard : MonoBehaviour
         if (_listTitleText == null)
         {
             Debug.LogWarning("LeaderBoard: _listTitleText is not wired in the Leaderboard scene, so the list title is not shown.");
+        }
+
+        if (_placeText == null)
+        {
+            Debug.LogWarning("LeaderBoard: _placeText is not wired in the Leaderboard scene, so your place is not shown.");
         }
 
         _isLoading = true;
@@ -66,8 +75,15 @@ public class LeaderBoard : MonoBehaviour
         catch (Exception exception)
         {
             Debug.LogError($"LeaderBoard: could not load the list. {exception.Message}");
+
+            if (this == null)
+            {
+                return;
+            }
+
             SetListTitle(COULD_NOT_LOAD_TITLE);
-            DisplayScores(new List<LeaderboardEntry>());
+            SetPlaceText(string.Empty);
+            DisplayScores(new List<LeaderboardEntry>(), null);
         }
         finally
         {
@@ -80,9 +96,17 @@ public class LeaderBoard : MonoBehaviour
         if (isAllTime)
         {
             var allTimePage = await LeaderboardsService.Instance.GetScoresAsync(Constants.HIGHSCORE_LEADERBOARD_ID);
+            var allTimePlayerEntry = await PlayerPlace.GetPlayerEntryAsync(Constants.HIGHSCORE_LEADERBOARD_ID);
+
+            if (this == null)
+            {
+                return;
+            }
+
             _isAllTime = true;
             SetListTitle(DailyLeaderboard.GetListTitle(true, _dayIndex, default));
-            DisplayScores(allTimePage.Results);
+            SetPlaceText(DailyLeaderboard.GetPlaceLine(true, _dayIndex, allTimePlayerEntry?.Rank, allTimePage.Total));
+            DisplayScores(allTimePage.Results, allTimePlayerEntry);
             return;
         }
 
@@ -95,25 +119,37 @@ public class LeaderBoard : MonoBehaviour
         int archivedDays = _archivedVersions == null ? 0 : _archivedVersions.Count;
         int dayIndex = DailyLeaderboard.ClampDayIndex(requestedDayIndex, archivedDays);
         List<LeaderboardEntry> entries;
+        int playerCount;
+        LeaderboardEntry playerEntry;
         DateTime archivedDayStart = default;
 
         if (dayIndex == 0)
         {
             var todayPage = await LeaderboardsService.Instance.GetScoresAsync(Constants.DAILY_LEADERBOARD_ID);
             entries = todayPage.Results;
+            playerCount = todayPage.Total;
+            playerEntry = await PlayerPlace.GetPlayerEntryAsync(Constants.DAILY_LEADERBOARD_ID);
         }
         else
         {
             var version = _archivedVersions[dayIndex - 1];
             var versionPage = await LeaderboardsService.Instance.GetVersionScoresAsync(Constants.DAILY_LEADERBOARD_ID, version.Id);
             entries = versionPage.Results;
+            playerCount = versionPage.Total;
             archivedDayStart = version.Start;
+            playerEntry = await PlayerPlace.GetVersionPlayerEntryAsync(Constants.DAILY_LEADERBOARD_ID, version.Id);
+        }
+
+        if (this == null)
+        {
+            return;
         }
 
         _isAllTime = false;
         _dayIndex = dayIndex;
         SetListTitle(DailyLeaderboard.GetListTitle(false, dayIndex, archivedDayStart));
-        DisplayScores(entries);
+        SetPlaceText(DailyLeaderboard.GetPlaceLine(false, dayIndex, playerEntry?.Rank, playerCount));
+        DisplayScores(entries, playerEntry);
     }
 
     private void SetListTitle(string title)
@@ -124,7 +160,15 @@ public class LeaderBoard : MonoBehaviour
         }
     }
 
-    public void DisplayScores(List<LeaderboardEntry> entries)
+    private void SetPlaceText(string placeLine)
+    {
+        if (_placeText != null)
+        {
+            _placeText.text = placeLine;
+        }
+    }
+
+    public void DisplayScores(List<LeaderboardEntry> entries, LeaderboardEntry playerEntry)
     {
         foreach (Transform child in _entryContainer)
         {
@@ -134,16 +178,46 @@ public class LeaderBoard : MonoBehaviour
             }
         }
 
+        int playerIndex = playerEntry == null ? -1 : entries.FindIndex(entry => entry.PlayerId == playerEntry.PlayerId);
+
         for (int i = 0; i < entries.Count; i++)
         {
-            Transform entryTransform = Instantiate(_entryTemplate, _entryContainer);
-            RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
-            entryRectTransform.anchoredPosition = new Vector2(0, -70 * i);
-            entryTransform.gameObject.SetActive(true);
+            AddRow(entries[i], i, i == playerIndex);
+        }
 
-            Utils.SetTMProTextOnComponent(entryTransform, ID_TEXT_NAME, (i + 1).ToString());
-            Utils.SetTMProTextOnComponent(entryTransform, PLAYER_NAME_TEXT_NAME, entries[i].PlayerName);
-            Utils.SetTMProTextOnComponent(entryTransform, SCORE_TEXT_NAME, entries[i].Score.ToString());
+        if (playerEntry != null && playerIndex == -1)
+        {
+            AddRow(playerEntry, DailyLeaderboard.GetPlayerRowIndex(playerIndex, entries.Count), true);
+        }
+    }
+
+    private void AddRow(LeaderboardEntry entry, int rowIndex, bool isPlayer)
+    {
+        Transform entryTransform = Instantiate(_entryTemplate, _entryContainer);
+        RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
+        entryRectTransform.anchoredPosition = new Vector2(0, -70 * rowIndex);
+        entryTransform.gameObject.SetActive(true);
+
+        Utils.SetTMProTextOnComponent(entryTransform, ID_TEXT_NAME, (entry.Rank + 1).ToString());
+        Utils.SetTMProTextOnComponent(entryTransform, PLAYER_NAME_TEXT_NAME, entry.PlayerName);
+        Utils.SetTMProTextOnComponent(entryTransform, SCORE_TEXT_NAME, entry.Score.ToString());
+
+        if (isPlayer)
+        {
+            MarkPlayerRow(entryTransform);
+        }
+    }
+
+    private void MarkPlayerRow(Transform row)
+    {
+        foreach (string textName in new[] { ID_TEXT_NAME, PLAYER_NAME_TEXT_NAME, SCORE_TEXT_NAME })
+        {
+            var text = row.Find(textName).GetComponent<TMP_Text>();
+
+            if (text != null)
+            {
+                text.color = _playerRowColor;
+            }
         }
     }
 
