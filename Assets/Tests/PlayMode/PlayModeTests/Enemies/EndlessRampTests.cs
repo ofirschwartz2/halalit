@@ -23,6 +23,10 @@ public class EndlessRampTests
     private const float RETRY_MARGIN = 0.5f;
     private const float BLOCKED_SECONDS_AFTER_FIRST_GAP = 1.5f;
     private const float MAX_SECONDS_TO_HOLE_AFTER_UNBLOCKING = 3f;
+    private const int MAX_FRAMES_TO_SPAWNER_START = 10;
+    private const float FIRST_HOLE_EARLY_MARGIN = 0.1f;
+    private const float FIRST_HOLE_LATE_MARGIN = 0.6f; // the 0.1 s check and a few frames; a failed spot search would add 1 s
+    private const float MAX_SECONDS_TO_WAIT_AFTER_FIRST_GAP = 2.5f; // long enough to see a hole at a normal day's 5 s, so that failure shows its time
     private const float REAL_TIME_SCALE = 1f;
     private const string SPOT_SEARCH_BLOCKER_NAME = "SpotSearchBlocker";
     private int _currentSeed;
@@ -57,9 +61,11 @@ public class EndlessRampTests
         for (int fill = 1; fill < FILLS_TO_TAKE; fill++)
         {
             AssertWrapper.IsTrue(GetSortedPrefabNames(fills[fill]).SequenceEqual(GetSortedPrefabNames(fills[0])), $"Fill {fill + 1} has other enemies than fill 1, the scene's bank", _currentSeed);
+            // Shares no seed at all, so a refill that replays a saved list in a new order also fails. Seeds are drawn from 0 to 2^31, so a chance match is about 1 in 10 million.
             for (int earlierFill = 0; earlierFill < fill; earlierFill++)
             {
-                AssertWrapper.IsFalse(GetSeeds(fills[fill]).SequenceEqual(GetSeeds(fills[earlierFill])), $"Fill {fill + 1} repeats the seeds of fill {earlierFill + 1}", _currentSeed);
+                var sharedSeeds = GetSeeds(fills[fill]).Intersect(GetSeeds(fills[earlierFill])).Count();
+                AssertWrapper.IsTrue(sharedSeeds == 0, $"Fill {fill + 1} reuses {sharedSeeds} seeds of fill {earlierFill + 1}: a refill must draw new seeds, not replay a list", _currentSeed);
             }
         }
     }
@@ -147,9 +153,52 @@ public class EndlessRampTests
         }
     }
 
+    // The spawner's real timing follows its planned gap, Swarm's cut included: no hole before the first gap ends, and one soon after.
+    // Replaces #250's SwarmFirstSpawnComesAfter3Seconds, which emptied the bank in a loop that never ends now that the bank refills.
+    // The ship is parked outside the world and asteroids are off, so the first spot search finds a place. Time scale 1, so editor hitches do not stretch the timing.
+    [UnityTest]
+    public IEnumerator SwarmFirstSpawnHoleOpensWhenItsCutGapEnds()
+    {
+        // GIVEN
+        yield return null;
+        yield return null;
+        var swarmMultiplier = DailyTwists.Get(DailyTwistName.SWARM).SpawnIntervalMultiplier;
+        TestUtils.SetRandomSeed(_currentSeed);
+        TestUtils.SetTestTwist(DailyTwistName.SWARM);
+        SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
+        // Start runs in the frame the scene loads, before the test resumes, so the first frame that sees Swarm's multiplier has the time the first gap counts from
+        var framesAfterLoad = 0;
+        do
+        {
+            yield return null;
+            framesAfterLoad++;
+        } while (!DidSpawnerStartWith(swarmMultiplier) && framesAfterLoad < MAX_FRAMES_TO_SPAWNER_START);
+        var spawnerStartTime = Time.time;
+        AssertWrapper.IsTrue(DidSpawnerStartWith(swarmMultiplier), $"The spawner had not started with Swarm's multiplier {framesAfterLoad} frames after the Playground loaded", _currentSeed);
+        TestUtils.SetTestMode(keepEnemiesContainer: true);
+        TestTimeController.SetCustomTimeScale(REAL_TIME_SCALE);
+        _isTimeScaleChanged = true;
+        TestUtils.UnhookMenuLoadFromGameOver();
+        ParkHalalitOutsideTheWorld();
+        var firstGap = TestUtils.GetSpawnHoleInstantiator().GetInstantiationGap(0);
+
+        // WHEN
+        while (!IsAnySpawnHoleOpen() && Time.time - spawnerStartTime < firstGap + MAX_SECONDS_TO_WAIT_AFTER_FIRST_GAP)
+        {
+            yield return null;
+        }
+        var secondsToFirstHole = Time.time - spawnerStartTime;
+
+        // THEN
+        AssertWrapper.IsTrue(IsAnySpawnHoleOpen(), $"No spawn hole opened within {firstGap + MAX_SECONDS_TO_WAIT_AFTER_FIRST_GAP} s on Swarm, whose first gap is {firstGap} s", _currentSeed);
+        AssertWrapper.Greater(secondsToFirstHole, firstGap - FIRST_HOLE_EARLY_MARGIN, $"On Swarm the first spawn hole opened after {secondsToFirstHole:0.00} s, before its gap of {firstGap} s ended", _currentSeed);
+        AssertWrapper.Less(secondsToFirstHole, firstGap + FIRST_HOLE_LATE_MARGIN, $"On Swarm the first spawn hole opened after {secondsToFirstHole:0.00} s, not within {FIRST_HOLE_LATE_MARGIN} s after its gap of {firstGap} s", _currentSeed);
+    }
+
     // A failed spot search looks again 1 s later (#248). Before, it waited a whole gap plus 1 s, about 6 s with the scene's gaps.
     // A trigger over the whole world makes every search fail until it is removed. Time scale 1, so editor hitches do not stretch the timing.
-    // The ship blocks about half the spots and a search tries 10, so very rarely a search still fails after the trigger is gone, and the hole comes 1 s late.
+    // The ship is parked outside the world first. In the middle, with the edge force fields, it blocks 70% of the spots,
+    // so about 1 search in 35 would still fail after the trigger is gone, and the hole would come 1 s late.
     [UnityTest]
     public IEnumerator FailedSpotSearchRetriesWithinASecond()
     {
@@ -160,26 +209,29 @@ public class EndlessRampTests
         TestTimeController.SetCustomTimeScale(REAL_TIME_SCALE);
         _isTimeScaleChanged = true;
         TestUtils.UnhookMenuLoadFromGameOver();
+        ParkHalalitOutsideTheWorld();
         var firstGap = TestUtils.GetSpawnHoleInstantiator().GetInstantiationGap(0);
         var startTime = Time.time;
         var spotSearchBlocker = CreateSpotSearchBlocker();
+        var didHoleOpenWhileBlocked = false;
         while (Time.time < startTime + firstGap + BLOCKED_SECONDS_AFTER_FIRST_GAP)
         {
             yield return null;
+            didHoleOpenWhileBlocked = didHoleOpenWhileBlocked || IsAnySpawnHoleOpen();
         }
-        AssertWrapper.IsTrue(Object.FindObjectsOfType<SpawnHole>().Length == 0, "A spawn hole opened while a trigger covered the whole world", _currentSeed);
+        AssertWrapper.IsFalse(didHoleOpenWhileBlocked, "A spawn hole opened while a trigger covered the whole world", _currentSeed);
 
         // WHEN
         Object.Destroy(spotSearchBlocker);
         var unblockTime = Time.time;
-        while (Object.FindObjectsOfType<SpawnHole>().Length == 0 && Time.time - unblockTime < MAX_SECONDS_TO_HOLE_AFTER_UNBLOCKING)
+        while (!IsAnySpawnHoleOpen() && Time.time - unblockTime < MAX_SECONDS_TO_HOLE_AFTER_UNBLOCKING)
         {
             yield return null;
         }
         var secondsToHole = Time.time - unblockTime;
 
         // THEN
-        AssertWrapper.IsTrue(Object.FindObjectsOfType<SpawnHole>().Length > 0, $"No spawn hole opened within {MAX_SECONDS_TO_HOLE_AFTER_UNBLOCKING} s after the trigger was removed", _currentSeed);
+        AssertWrapper.IsTrue(IsAnySpawnHoleOpen(), $"No spawn hole opened within {MAX_SECONDS_TO_HOLE_AFTER_UNBLOCKING} s after the trigger was removed", _currentSeed);
         AssertWrapper.Less(secondsToHole, FAILED_SEARCH_RETRY_SECONDS + RETRY_MARGIN, $"The spawn hole opened {secondsToHole} s after the trigger was removed, not within about {FAILED_SEARCH_RETRY_SECONDS} s", _currentSeed);
     }
 
@@ -218,6 +270,25 @@ public class EndlessRampTests
     private List<int> GetSeeds(List<EnemyEntity> enemies)
     {
         return enemies.Select(enemy => enemy.Seed).ToList();
+    }
+
+    private bool IsAnySpawnHoleOpen()
+    {
+        return Object.FindObjectsOfType<SpawnHole>().Length > 0;
+    }
+
+    // True once the spawner of the scene loaded last has run Start: before Start its multiplier is 0, and the scene loaded before had another twist
+    private bool DidSpawnerStartWith(float spawnIntervalMultiplier)
+    {
+        var enemiesSpawner = GameObject.FindGameObjectWithTag(Tag.ENEMIES_SPAWNER.GetDescription());
+        return enemiesSpawner != null && Mathf.Abs(enemiesSpawner.GetComponent<SpawnHoleInstantiator>().GetSpawnIntervalMultiplier() - spawnIntervalMultiplier) < GAP_DELTA;
+    }
+
+    // ObjectLoader's parking place, outside the world, where the ship stays alive (ObjectLoaderTests). With the ship there and nothing else in the arena,
+    // only the edge force fields block spots, and a 10-try search fails about once in 45,000.
+    private void ParkHalalitOutsideTheWorld()
+    {
+        GameObject.Find(TestUtils.OBJECT_LOADER_NAME).GetComponent<ObjectLoader>().MoveHalalitToExternalSafeIsland();
     }
 
     // An untagged trigger over the whole internal world. Every spot the spawner tries touches it, and nothing in the game reacts to an untagged trigger.
