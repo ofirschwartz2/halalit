@@ -39,6 +39,8 @@ namespace Assets.Enums
         [Description("Tripwire")]
         TRIPWIRE,
         [Description("Chain spark")]
-        CHAIN_SPARK
+        CHAIN_SPARK,
+        [Description("Charge lance")]
+        CHARGE_LANCE
     }
 }

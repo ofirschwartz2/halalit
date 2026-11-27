@@ -64,12 +64,12 @@ public class LeechTests
         var halalitMovement = TestUtils.GetHalalitMovement();
         var fakeLeech = new GameObject("FakeLeech");
         AssertWrapper.AreEqual(1f, ShipLatches.GetThrustFactor(), "Thrust is changed with nothing latched", _currentSeed);
-        var freeForce = PushOnce(halalitMovement);
+        var freeForce = TestUtils.PushHalalitOnce(halalitMovement);
         AssertWrapper.Greater(freeForce.magnitude, 0, "Test setup: the Halalit pushed with no force", _currentSeed);
 
         // WHEN
         AssertWrapper.IsTrue(ShipLatches.TryLatch(fakeLeech.transform, FAKE_THRUST_FACTOR), "A free slot refused the latch", _currentSeed);
-        var latchedForce = PushOnce(halalitMovement);
+        var latchedForce = TestUtils.PushHalalitOnce(halalitMovement);
 
         // THEN
         AssertWrapper.AreEqual(freeForce * FAKE_THRUST_FACTOR, latchedForce, "One latch did not scale the thrust by its factor", _currentSeed, FORCE_DELTA);
@@ -256,15 +256,6 @@ public class LeechTests
         AssertWrapper.IsFalse(leech.IsLatched(), "A disabled Leech latched", _currentSeed);
         AssertWrapper.AreEqual(0, ShipLatches.GetLatchedCount(), "A disabled Leech took a slot", _currentSeed);
         AssertWrapper.AreEqual(healthBeforeTouch - touchHarm, halalitHealth.GetHealth(), "A disabled Leech did not do its touch damage", _currentSeed);
-    }
-
-    // One push to the right from a standstill, facing right, so two pushes differ only by the thrust factor.
-    private Vector2 PushOnce(HalalitMovement halalitMovement)
-    {
-        halalitMovement.transform.rotation = Quaternion.identity;
-        halalitMovement.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-        halalitMovement.TryMove(1, 0, Time.fixedDeltaTime);
-        return halalitMovement.GetCurrentForce();
     }
 
     private IEnumerator WaitUntilLatched(LeechEnemy leech)

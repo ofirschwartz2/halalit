@@ -30,12 +30,22 @@ class WeaponAttack : MonoBehaviour
     private float _cooldownTime;
     private ConsecutiveAttack _consecutiveAttack;
     private bool _shootingConsecutivaly, _isTesting;
+    private HalalitMovement _halalitMovement;
+    private SpriteRenderer _spriteRenderer;
+    private Color _baseColor;
+    private GameObject _chargedAttackPrefab;
+    private ChargedAttack _chargedAttack;
+    private bool _isCharging;
+    private float _chargeStartTime;
 
     #region Init
     private void Awake()
     {
         SetEventListeners();
         SetUpgradeActions();
+        _halalitMovement = _halalit.GetComponent<HalalitMovement>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _baseColor = _spriteRenderer.color;
     }
 
     private void SetEventListeners()
@@ -96,11 +106,33 @@ class WeaponAttack : MonoBehaviour
         AttackShotType shotType = attackPrefab.Value.GetComponent<AttackBehaviour>().ShotType;
         // TODO (refactor): this should be via event raise, not in update
 
+        TrySwitchChargedAttack(attackPrefab.Value);
+
         return TryAttack(attackJoystickTouch, attackPrefab.Value, shotType);
+    }
+
+    // Charge Lance (#236): on an attack switch, a charge in progress ends, and the new prefab's ChargedAttack is cached (null for other attacks).
+    private void TrySwitchChargedAttack(GameObject attackPrefab)
+    {
+        if (attackPrefab != _chargedAttackPrefab)
+        {
+            if (_isCharging)
+            {
+                StopCharging();
+            }
+
+            _chargedAttackPrefab = attackPrefab;
+            _chargedAttack = attackPrefab.GetComponent<ChargedAttack>();
+        }
     }
 
     private bool TryAttack(Vector2 attackJoystickTouch, GameObject attackPrefab, AttackShotType shotType)
     {
+        if (_chargedAttack != null)
+        {
+            return TryChargedAttack(attackJoystickTouch, attackPrefab);
+        }
+
         if (shotType == AttackShotType.DESCRETE)
         {
             return TryDescreteAttack(attackJoystickTouch, attackPrefab);
@@ -127,10 +159,68 @@ class WeaponAttack : MonoBehaviour
         return false;
     }
 
-    private void InstantiateDescreteAttack(GameObject attackPrefab)
+    private GameObject InstantiateDescreteAttack(GameObject attackPrefab)
     {
-        Instantiate(attackPrefab, transform.position, transform.rotation, _projectiles.transform);
+        GameObject attack = Instantiate(attackPrefab, transform.position, transform.rotation, _projectiles.transform);
         _cooldownTime = Time.time + Mathf.Max(_currentAttack.Value.Rate * _cooldownMultiplier, attackPrefab.GetComponent<AttackBehaviour>().MinCooldown);
+        return attack;
+    }
+
+    // Charge Lance (#236): holding the stick past the edge charges, and letting go fires, unless the hold was too short.
+    // The cooldown runs from the release, and a charge starts only after it.
+    private bool TryChargedAttack(Vector2 attackJoystickTouch, GameObject attackPrefab)
+    {
+        if (ShouldAttack(attackJoystickTouch))
+        {
+            if (!_isCharging && IsCoolDownPassed())
+            {
+                StartCharging();
+            }
+
+            if (_isCharging)
+            {
+                UpdateChargeColor();
+            }
+
+            return false;
+        }
+
+        if (!_isCharging)
+        {
+            return false;
+        }
+
+        float heldTime = Time.time - _chargeStartTime;
+        StopCharging();
+
+        if (heldTime < _chargedAttack.GetMinHoldTime())
+        {
+            return false;
+        }
+
+        GameObject releasedAttack = InstantiateDescreteAttack(attackPrefab);
+        releasedAttack.GetComponent<ChargedAttack>().Release(_chargedAttack.GetChargeLevel(heldTime));
+        return true;
+    }
+
+    private void StartCharging()
+    {
+        _isCharging = true;
+        _chargeStartTime = Time.time;
+        _halalitMovement.SetWeaponThrustFactor(_chargedAttack.GetChargingThrustFactor());
+    }
+
+    private void UpdateChargeColor()
+    {
+        int chargeLevel = _chargedAttack.GetChargeLevel(Time.time - _chargeStartTime);
+        _spriteRenderer.color = _chargedAttack.GetChargeColor(_baseColor, chargeLevel);
+    }
+
+    private void StopCharging()
+    {
+        _isCharging = false;
+        _halalitMovement.SetWeaponThrustFactor(1f);
+        _spriteRenderer.color = _baseColor;
     }
 
     private bool TryConsecutiveAttack(Vector2 attackJoystickTouch, GameObject attackPrefab)
@@ -245,6 +335,11 @@ class WeaponAttack : MonoBehaviour
     internal void SetIsTesting(bool isTesting)
     {
         _isTesting = isTesting;
+    }
+
+    internal bool IsCharging()
+    {
+        return _isCharging;
     }
 #endif
 }

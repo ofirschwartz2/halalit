@@ -1159,4 +1159,32 @@ internal static class TestUtils
         yield return Time.time - lastHitTime;
     }
     #endregion
+
+    #region Charge Lance
+    // Charge Lance (#236)
+    // Holds the attack stick at the given touch for the given time: one weapon tick per physics step, as in play.
+    internal static IEnumerator HoldAttack(WeaponAttack weaponAttack, Vector2 attackJoystickTouch, float seconds)
+    {
+        var holdEndTime = Time.time + seconds;
+        while (Time.time < holdEndTime)
+        {
+            weaponAttack.HumbleFixedUpdate(attackJoystickTouch);
+            yield return new WaitForFixedUpdate();
+        }
+    }
+
+    // One push to the right from a standstill, facing right, so two pushes differ only by the thrust factor.
+    internal static Vector2 PushHalalitOnce(HalalitMovement halalitMovement)
+    {
+        halalitMovement.transform.rotation = Quaternion.identity;
+        halalitMovement.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        halalitMovement.TryMove(1, 0, Time.fixedDeltaTime);
+        return halalitMovement.GetCurrentForce();
+    }
+
+    internal static GameObject GetEnemyShot()
+    {
+        return GameObject.FindGameObjectWithTag(Tag.ENEMY_SHOT.GetDescription());
+    }
+    #endregion
 }
