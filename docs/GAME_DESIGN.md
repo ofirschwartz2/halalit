@@ -332,7 +332,8 @@ Answered questions keep their number. Each shows Ofir's answer and its date.
    - **Partly answered (Ofir, 2026-11-21):** friends playing a daily, with Spelunky-style depth (the vision above). Run length stays open (question 2).
 6. What should the daily run be: one attempt per day on a shared seed with its own leaderboard, or something else?
    - **Partly answered (Ofir):** one random run a day, the same for every player, from one seed (2026-11-21). It has its own leaderboard (#172, approved 2026-11-22). The day follows Israel time (#204, 2026-11-25).
-   - Still open: how many tries a day (as built, one), and who wins (question 13).
+   - **Tries a day, answered (Ofir, 2026-11-27, 10:06):** one. The daily seed starts each day, each player plays the daily once, then waits for the next day. As built.
+   - Still open: who wins (question 13).
 7. Should a weapon pickup always replace the current weapon, or should the player choose?
 8. Should the ship be able to regain health during a run?
 9. Should asteroids be able to kill the ship, by damage or by crushing it out of the arena? Today they only push.
@@ -403,7 +404,12 @@ Edge cases: a later weapon pickup replaces the NFT for the rest of the run, as w
 **Open questions for Ofir**
 
 1. In the daily, may an NFT be stronger at all, or only different? Lean: only different.
+   - **Answered (Ofir, 2026-11-27, 10:06):** "different".
 2. How does an NFT enter a daily: at the start in place of the Ball Shot, or at a moment the seed sets for everyone? This is the open part of question 14. Lean: the seed's moment.
+   - **Ofir, 2026-11-27, 10:06**, answering about the daily itself: "we should just have the daily seed each day at the start of the day and then each user can play the daily only one time and after that the player has to wait for the next day to play another daily". That settles one try a day (question 6). When an NFT enters a run is still open, and the lean stands until he decides.
 3. Which NFT may a player bring: any, one chosen per week, or only when the seed drops that type? Lean: one per week, so a big collection cannot pick each day's best fit.
+   - **Answered (Ofir, 2026-11-27, 10:06):** each player starts a run with a few NFT slots, for example 1, 3 or 5, maybe one slot per kind (one for a weapon, one for clothing, and so on). There is a cap on how many NFTs a run can use, daily or not. In his words: "there is a cap to how many NFTs you can use in a run daily or not". Whether a player may change the loadout every day is still open; the designer's "one per week" lean is not decided.
 4. Outside the daily, do NFTs keep their full roll? Then the all-time high score board favours big rolls. Lean: yes, and the daily board is the one that counts.
+   - **Answered (Ofir, 2026-11-27, 10:06):** yes.
 5. Are clothing NFTs looks only, everywhere? Lean: yes.
+   - **Answered (Ofir, 2026-11-27, 10:06):** yes.
