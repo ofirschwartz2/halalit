@@ -86,7 +86,7 @@ public class ScoreTests
         yield return null;
 
         // THEN
-        AssertWrapper.IsFalse(TestUtils.IsGameOver(), "Game Over Opened The Results Card", _currentSeed);
+        AssertWrapper.IsFalse(TestUtils.IsGameOver(), "Game Over Opened The Results Card Or Loaded The Menu", _currentSeed);
         AssertWrapper.Greater(score, 0, "No Score Collected", _currentSeed);
         AssertWrapper.IsTrue(highScore == score, "High Score Not Set", _currentSeed);
         AssertWrapper.IsTrue(isNewHighScore, "New High Score Not Flagged", _currentSeed);
@@ -158,7 +158,7 @@ public class ScoreTests
         yield return null;
 
         // THEN
-        AssertWrapper.IsFalse(TestUtils.IsGameOver(), "Game Over Opened The Results Card", _currentSeed);
+        AssertWrapper.IsFalse(TestUtils.IsGameOver(), "Game Over Opened The Results Card Or Loaded The Menu", _currentSeed);
         AssertWrapper.IsTrue(highScore == shownScore, "High Score Is Not The Score Shown After Spending", _currentSeed);
         AssertWrapper.IsTrue(dailyScore == shownScore, "Daily Score Is Not The Score Shown After Spending", _currentSeed);
     }

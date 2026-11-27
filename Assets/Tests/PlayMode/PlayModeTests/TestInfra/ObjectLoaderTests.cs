@@ -37,6 +37,8 @@ class ObjectLoaderTests
 
         AssertWrapper.IsTrue(IsHalalitInExternalSafeIsland, "Halalit was not moved into the external safe island", _currentSeed);
         AssertWrapper.AreEqual(TestUtils.PLAYGROUND_SCENE_NAME, SceneManager.GetActiveScene().name, "the scene has changed, maybe halalit died?", _currentSeed);
+        // A death now opens the results card and keeps the scene (#249), so the scene check alone no longer sees it
+        AssertWrapper.IsFalse(TestUtils.IsGameOver(), "halalit died while it was moved: game over opened the results card", _currentSeed);
     }
 
     [UnityTest]

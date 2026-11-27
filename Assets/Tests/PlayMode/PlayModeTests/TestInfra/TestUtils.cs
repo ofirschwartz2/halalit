@@ -972,11 +972,12 @@ internal static class TestUtils
     #endregion
 
     #region Predicates
-    // A death opens the results card (#249)
+    // A death opens the results card (#249). While the Playground has no wired card, GameOver loads the menu as before, so that counts too:
+    // without it, a test that expects no game over would pass even when the death loaded the real menu, which signs in for real
     internal static bool IsGameOver()
     {
         var resultsCard = GetResultsCard();
-        return resultsCard != null && resultsCard.IsOpen();
+        return (resultsCard != null && resultsCard.IsOpen()) || SceneManager.GetActiveScene().name == SceneName.MAIN_MENU.GetDescription();
     }
 
     internal static bool IsSomewhereOnInternalWorldEdges(Vector2 position)
