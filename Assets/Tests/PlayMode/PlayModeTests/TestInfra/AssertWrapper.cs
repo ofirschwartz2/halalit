@@ -34,16 +34,16 @@ internal static class AssertWrapper
         Assert.AreNotEqual(expected, actual, failMessage);
     }
 
-    internal static void IsNull(Object obj, int? seed = null, string failMessage = "Not a Null Object")
+    internal static void IsNull(UnityEngine.Object obj, int? seed = null, string failMessage = "Not a Null Object")
     {
         failMessage = CombineFailMessageWithSeed(failMessage, seed);
-        Assert.IsNull(obj, failMessage);
+        Assert.IsNull(NullIfUnityNull(obj), failMessage);
     }
 
-    internal static void IsNotNull(Object obj, int? seed = null, string failMessage = "Null Object")
+    internal static void IsNotNull(UnityEngine.Object obj, int? seed = null, string failMessage = "Null Object")
     {
         failMessage = CombineFailMessageWithSeed(failMessage, seed);
-        Assert.IsNotNull(obj, failMessage);
+        Assert.IsNotNull(NullIfUnityNull(obj), failMessage);
     }
     
     internal static void GreaterOrEqual(float greater, float smaller, string failMessage, int? seed = null, float acceptedDelta = 0)
@@ -80,6 +80,14 @@ internal static class AssertWrapper
     {
         failMessage = CombineFailMessageWithSeed(failMessage, seed);
         Assert.Less(smaller, greater, failMessage);
+    }
+
+    // Unity's == null is also true for a destroyed object, and in the editor for the stand-in ("fake null")
+    // that GetComponent returns for a missing component or that an unassigned serialized field holds.
+    // NUnit checks only the C# reference, so it gets a real null in those cases (#254).
+    private static UnityEngine.Object NullIfUnityNull(UnityEngine.Object obj)
+    {
+        return obj == null ? null : obj;
     }
 
     private static string CombineFailMessageWithSeed(string failMessage, int? seed)
