@@ -282,7 +282,7 @@ public class EndlessRampTests
 
     // Each placed hole moves the gap list one row down, so the gap after it is the next row of the list (#248).
     // The ship is parked outside the world, and each hole is removed as soon as it is seen, before its enemies come out 1 s later.
-    // So nothing blocks the next spot search. Removing the enemies instead would throw: a laser enemy still in its hole has not run Start.
+    // So nothing blocks the next spot search.
     [UnityTest]
     public IEnumerator EachPlacedHoleMovesOneRowDown()
     {
