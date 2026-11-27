@@ -27,8 +27,8 @@ public class EndlessRampTests
     private const float FIRST_HOLE_EARLY_MARGIN = 0.1f;
     private const float FIRST_HOLE_LATE_MARGIN = 0.6f; // the 0.1 s check and a few frames; a failed spot search would add 1 s
     private const float MAX_SECONDS_TO_WAIT_AFTER_FIRST_GAP = 2.5f; // long enough to see a hole at a normal day's 5 s, so that failure shows its time
-    private const int HOLES_TO_PLACE = 2; // a third hole would need a free spot clear of two groups of enemies, which can take many tries
-    private const float PLACEMENT_MARGIN_SECONDS = 3f; // room for a few failed spot searches, 1 s each, while the first group of enemies moves about
+    private const int HOLES_TO_PLACE = 2; // two placements, each checked for one row down
+    private const float PLACEMENT_MARGIN_SECONDS = 3f; // room for a few failed spot searches, 1 s each; each hole is removed before its enemies come out, so searches rarely fail
     private const float REAL_TIME_SCALE = 1f;
     private const string SPOT_SEARCH_BLOCKER_NAME = "SpotSearchBlocker";
     private int _currentSeed;
@@ -281,7 +281,8 @@ public class EndlessRampTests
     }
 
     // Each placed hole moves the gap list one row down, so the gap after it is the next row of the list (#248).
-    // The ship is parked outside the world, so the spot searches find a place.
+    // The ship is parked outside the world, and each hole is removed as soon as it is seen, before its enemies come out 1 s later.
+    // So nothing blocks the next spot search. Removing the enemies instead would throw: a laser enemy still in its hole has not run Start.
     [UnityTest]
     public IEnumerator EachPlacedHoleMovesOneRowDown()
     {
@@ -309,6 +310,7 @@ public class EndlessRampTests
                 if (seenSpawnHoles.Add(spawnHole.GetInstanceID()))
                 {
                     rowsAfterPlacedHoles.Add(spawnHoleInstantiator.GetInstantiationRatesIndex());
+                    Object.Destroy(spawnHole.gameObject);
                 }
             }
         }
