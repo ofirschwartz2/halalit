@@ -543,6 +543,7 @@ internal static class TestUtils
 
     // Tether Twins (#237)
     public const string TETHER_TWIN_PREFAB_PATH = "Prefabs/Enemies/SpecialMovementEnemies/TetherTwin";
+    public const string SPAWNING_HOLE_PREFAB_PATH = "Prefabs/Spawn/SpawningHole";
 
     // Makes a pair of Tether Twins from one paired entry, as a spawn hole does, seeded, with all their scripts on.
     // The second twin is moved before any physics step. Frozen twins neither move nor turn, so a test sets their line by hand.

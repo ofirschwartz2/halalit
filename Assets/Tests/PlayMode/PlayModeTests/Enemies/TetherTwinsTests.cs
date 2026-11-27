@@ -39,8 +39,27 @@ public class TetherTwinsTests
     private const float SPACING_MARGIN = 0.5f;
     private const float DRIFT_TIME = 2f;
     private const float MIN_DRIFT_DISTANCE = 1f;
+    // A twin cut on purpose, to show that a line can cut a twin at all, must neither die nor flee.
+    private const int CUT_TWIN_HEALTH = 1000;
+    private const int MIRROR_SHIELD_HEALTH = 100;
+    // LoadTetherTwins seeds a pair with seed and seed + 1, so a second pair takes the next two.
+    private const int OTHER_PAIR_SEED_OFFSET = 2;
+    // Inside the flail's reach (3), with a gap to the survivor's body.
+    private const float FLAIL_SWEEP_DISTANCE = 2.5f;
+    private const float FLAIL_WATCH_TURNS = 1.25f;
+    private const float DECOY_DISTANCE_ABOVE = 6f;
+    private const string DECOY_NAME = "TestDecoy";
+    private const float SWAP_SHOT_DISTANCE = 4f;
+    private const float SWAP_TIMEOUT = 2f;
+    private const float SWAP_POSITION_DELTA = 0.5f;
+    private const float POSITION_DELTA = 0.01f;
+    private const float SPAWN_HOLE_DISTANCE_ABOVE = 3f;
+    // Each phase of the scene's spawn hole (opening, open, closing) takes 1 s.
+    private const float SPAWN_HOLE_PHASE_TIMEOUT = 2f;
+    private const float MIN_SPAWN_POINT_GAP = 0.5f;
     private int _currentSeed;
     private bool _isTimeScaleChanged;
+    private GameObject _decoy;
 
     [SetUp]
     public void SetUp()
@@ -63,6 +82,8 @@ public class TetherTwinsTests
         var tetherTwin = tetherTwinPrefab.GetComponent<TetherTwin>();
         AssertWrapper.IsNotNull(tetherTwin, _currentSeed, "TetherTwin prefab has no TetherTwin (Needs Ofir in Unity, #237)");
         AssertWrapper.IsNull(tetherTwinPrefab.GetComponent<LameEnemy>(), _currentSeed, "TetherTwin prefab still has LameEnemy (Needs Ofir in Unity, #237)");
+        AssertWrapper.IsNull(tetherTwinPrefab.GetComponent<Interrupt>(), _currentSeed, "TetherTwin prefab has Interrupt: remove it (Needs Ofir in Unity, #237)");
+        AssertWrapper.IsNull(tetherTwinPrefab.GetComponent<ShotDodger>(), _currentSeed, "TetherTwin prefab has ShotDodger: remove it (Needs Ofir in Unity, #237)");
         var enemyDropper = tetherTwinPrefab.GetComponent<EnemyDropper>();
         AssertWrapper.IsTrue(enemyDropper != null && enemyDropper.GetDropper() == Dropper.TETHER_TWIN, "TetherTwin prefab's EnemyDropper is not set to TETHER_TWIN (Needs Ofir in Unity, #237)", _currentSeed);
 
@@ -75,6 +96,8 @@ public class TetherTwinsTests
         AssertWrapper.IsTrue(tetherBody != null && tetherBody.bodyType == RigidbodyType2D.Kinematic && tetherBody.sleepMode == RigidbodySleepMode2D.NeverSleep, "Tether prefab needs a Kinematic Rigidbody2D that never sleeps (Needs Ofir in Unity, #237)", _currentSeed);
         var attackBehaviour = tetherPrefab.GetComponent<AttackBehaviour>();
         AssertWrapper.IsTrue(attackBehaviour != null && attackBehaviour.ShotType == AttackShotType.DESCRETE, "Tether prefab needs a DESCRETE AttackBehaviour (Needs Ofir in Unity, #237)", _currentSeed);
+        AssertWrapper.Greater(attackBehaviour.AttackStats.Power, 0, "Tether prefab's AttackBehaviour has no Power (Needs Ofir in Unity, #237)", _currentSeed);
+        AssertWrapper.AreEqual(0, attackBehaviour.AttackStats.Luck, "Tether prefab's AttackBehaviour has Luck: a critical hit would do more than its Power per touch (Needs Ofir in Unity, #237)", _currentSeed);
         var harmer = tetherPrefab.GetComponent<DescreteTriggerHarmer>();
         AssertWrapper.IsNotNull(harmer, _currentSeed, "Tether prefab has no DescreteTriggerHarmer (Needs Ofir in Unity, #237)");
         AssertWrapper.Greater(harmer.GetSameTargetCooldown(), 0, "Tether prefab's DescreteTriggerHarmer has no Same Target Cooldown (Needs Ofir in Unity, #237)", _currentSeed);
@@ -192,7 +215,7 @@ public class TetherTwinsTests
         halalitHealth.SetHealth(HALALIT_HEALTH);
         var twins = LoadLevelTwins(TWINS_DISTANCE);
         var tether = GetTether(twins);
-        var tetherHarm = tether.GetComponent<AttackBehaviour>().AttackStats.Power;
+        var tetherHarm = GetTetherHarm(tether);
         var sameTargetCooldown = tether.GetComponent<DescreteTriggerHarmer>().GetSameTargetCooldown();
         AssertWrapper.Greater(sameTargetCooldown, 0, "Tether's DescreteTriggerHarmer has no Same Target Cooldown (Needs Ofir in Unity, #237)", _currentSeed);
         yield return WaitUntilHarmful(tether);
@@ -239,7 +262,7 @@ public class TetherTwinsTests
         yield return SetUpScene();
         var twins = LoadLevelTwins(TWINS_DISTANCE);
         var tether = GetTether(twins);
-        var tetherHarm = tether.GetComponent<AttackBehaviour>().AttackStats.Power;
+        var tetherHarm = GetTetherHarm(tether);
         var enemy = GetObjectLoader().LoadEnemyInExternalSafeIsland(_currentSeed);
         yield return null;
         enemy.GetComponent<Health>().SetHealth(ENEMY_HEALTH);
@@ -255,7 +278,8 @@ public class TetherTwinsTests
         AssertWrapper.AreEqual(ENEMY_HEALTH - tetherHarm, enemy.GetComponent<Health>().GetHealth(), "The tether did not hurt the enemy on it once (Needs Ofir in Unity: Enemy Shot in its harmers?)", _currentSeed);
     }
 
-    // Turned a quarter, a twin's long body (Lame's capsule) lies along the line, as near to the harm segment as it gets
+    // Turned a quarter, a twin's long body (Lame's capsule) lies along the line, as near to the harm segment as it gets.
+    // A twin of a second pair sits on the line, so the test also sees that a line cuts a twin at all.
     [UnityTest]
     public IEnumerator TwinsAreNotHurtByTheirOwnTether()
     {
@@ -267,11 +291,13 @@ public class TetherTwinsTests
         {
             twin.transform.rotation = Quaternion.Euler(0, 0, TURNED_DEGREES);
         }
+        var twinOnTheLine = LoadOtherPair(GetLineMiddle(twins), Vector2.up)[0];
         yield return null;
         foreach (var twin in twins)
         {
             twin.GetComponent<Health>().SetHealth(TWIN_HEALTH);
         }
+        twinOnTheLine.GetComponent<Health>().SetHealth(CUT_TWIN_HEALTH);
 
         // WHEN
         var wasHarmful = false;
@@ -284,6 +310,7 @@ public class TetherTwinsTests
 
         // THEN
         AssertWrapper.IsTrue(wasHarmful, "Test setup: the tether never came on", _currentSeed);
+        AssertWrapper.Less(twinOnTheLine.GetComponent<Health>().GetHealth(), CUT_TWIN_HEALTH, "Test setup: a twin of another pair sitting on the line was not cut, so this test cannot see a twin cut by a line (Needs Ofir in Unity: Enemy Shot in the twin's harmers?)", _currentSeed);
         foreach (var twin in twins)
         {
             AssertWrapper.AreEqual(TWIN_HEALTH, twin.GetComponent<Health>().GetHealth(), "A twin was hurt by its own tether", _currentSeed);
@@ -315,6 +342,15 @@ public class TetherTwinsTests
         // THEN
         AssertWrapper.IsTrue(didReachOn, "Test setup: the tether's cycle never reached ON", _currentSeed);
         AssertWrapper.IsFalse(wasShown, "The tether showed between twins farther apart than its max distance", _currentSeed);
+
+        // WHEN
+        // Without this step the test would also pass with a tether that never comes on.
+        TestUtils.SetGameObjectPosition(twins[0], GetAnchor() + Vector2.left * TWINS_DISTANCE / 2);
+        TestUtils.SetGameObjectPosition(twins[1], GetAnchor() + Vector2.right * TWINS_DISTANCE / 2);
+        yield return WaitUntilHarmful(tether);
+
+        // THEN
+        AssertWrapper.IsTrue(tether.IsHarmful(), "With the twins back within its max distance the tether still did not come on", _currentSeed);
     }
 
     [UnityTest]
@@ -395,6 +431,8 @@ public class TetherTwinsTests
         yield return SetUpScene();
         var twins = LoadLevelTwins(TWINS_DISTANCE);
         var tether = GetTether(twins);
+        // Without this check the test would also pass for a pair that never got a tether.
+        AssertWrapper.IsNotNull(tether, _currentSeed, "Test setup: the pair got no tether");
         yield return null;
 
         // WHEN
@@ -516,6 +554,280 @@ public class TetherTwinsTests
         AssertWrapper.AreEqual(twins[0].transform.position, EnemyTarget.GetPosition(enemy.transform), "The cut enemy does not aim at the twin that owns the tether", _currentSeed);
     }
 
+    // The ship sits still on the line's path through the off time and the blink: the blink never hurts it.
+    // The lit line does, which also shows that the ship was on the line's path all along.
+    [UnityTest]
+    public IEnumerator BlinkNeverHurtsAShipOnTheLine()
+    {
+        // GIVEN
+        yield return SetUpScene();
+        var halalit = TestUtils.GetHalalit();
+        var halalitHealth = halalit.GetComponent<Health>();
+        halalitHealth.SetHealth(HALALIT_HEALTH);
+        var twins = LoadLevelTwins(TWINS_DISTANCE);
+        var tether = GetTether(twins);
+
+        // WHEN
+        TestUtils.SetGameObjectPosition(halalit, GetLineMiddle(twins));
+        var healthThroughBlink = HALALIT_HEALTH;
+        var wasShownInFlicker = false;
+        var timeout = Time.time + tether.GetOffDuration() + TIME_MARGIN;
+        while (tether.GetState() != TetherState.ON && Time.time < timeout)
+        {
+            yield return new WaitForFixedUpdate();
+            if (tether.GetState() != TetherState.ON)
+            {
+                healthThroughBlink = halalitHealth.GetHealth();
+                wasShownInFlicker |= tether.GetState() == TetherState.FLICKERING && tether.IsVisible();
+            }
+        }
+        var wasOn = tether.GetState() == TetherState.ON;
+        yield return new WaitForFixedUpdate();
+        var healthOnceOn = halalitHealth.GetHealth();
+
+        // THEN
+        AssertWrapper.IsTrue(wasShownInFlicker, "Test setup: the line did not blink while the ship sat on it", _currentSeed);
+        AssertWrapper.IsTrue(wasOn, "Test setup: the line never came on", _currentSeed);
+        AssertWrapper.AreEqual(HALALIT_HEALTH, healthThroughBlink, "The blinking line hurt the ship", _currentSeed);
+        AssertWrapper.Less(healthOnceOn, HALALIT_HEALTH, "Test setup: the lit line did not hurt the ship, so the ship was not on its path", _currentSeed);
+    }
+
+    // A ship that sits still on the line's path from before the line comes on, long enough to fall asleep, is hurt when it comes on,
+    // then at most once per same-target cooldown while it stays on: the offer's cap. Unity may or may not send a new touch as the
+    // line's ends are rewritten each tick; either way the count stays within the cap.
+    [UnityTest]
+    public IEnumerator StillShipOnALitLineIsHurtAtMostOncePerCooldown()
+    {
+        // GIVEN
+        yield return SetUpScene();
+        var halalit = TestUtils.GetHalalit();
+        var halalitHealth = halalit.GetComponent<Health>();
+        halalitHealth.SetHealth(HALALIT_HEALTH);
+        var twins = LoadLevelTwins(TWINS_DISTANCE);
+        var tether = GetTether(twins);
+        var tetherHarm = GetTetherHarm(tether);
+        var sameTargetCooldown = tether.GetComponent<DescreteTriggerHarmer>().GetSameTargetCooldown();
+        AssertWrapper.Greater(sameTargetCooldown, 0, "Tether's DescreteTriggerHarmer has no Same Target Cooldown (Needs Ofir in Unity, #237)", _currentSeed);
+        TestUtils.SetGameObjectPosition(halalit, GetLineMiddle(twins));
+
+        // WHEN
+        yield return WaitUntilHarmful(tether);
+        var wasOn = tether.IsHarmful();
+        var onStartTime = Time.time;
+        while (tether.IsHarmful() && Time.time < onStartTime + tether.GetOnDuration() + TIME_MARGIN)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+        var healthLost = HALALIT_HEALTH - halalitHealth.GetHealth();
+
+        // THEN
+        var maxHits = Mathf.FloorToInt(tether.GetOnDuration() / sameTargetCooldown) + 1;
+        AssertWrapper.IsTrue(wasOn, "Test setup: the tether never came on", _currentSeed);
+        AssertWrapper.GreaterOrEqual(healthLost, tetherHarm, "The line did not hurt a ship that sat still on its path when it came on (Needs Ofir in Unity: the Tether's body must never sleep)", _currentSeed);
+        AssertWrapper.GreaterOrEqual(maxHits * tetherHarm, healthLost, $"A ship that sat on the lit line lost {healthLost} in {tether.GetOnDuration()} s: more than {tetherHarm} per {sameTargetCooldown} s", _currentSeed);
+    }
+
+    // The flail turns round its survivor for more than a whole turn, so it passes along the survivor's long body twice, and never cuts it.
+    // A twin of a second pair stands in the flail's sweep, so the test also sees that the flail cuts a twin at all.
+    [UnityTest]
+    public IEnumerator FlailNeverCutsItsSurvivor()
+    {
+        // GIVEN
+        yield return SetUpScene();
+        var twins = LoadLevelTwins(TWINS_DISTANCE);
+        var tether = GetTether(twins);
+        var survivor = twins[1];
+        var twinInTheSweep = LoadOtherPair((Vector2)survivor.transform.position + Vector2.up * FLAIL_SWEEP_DISTANCE, Vector2.right)[0];
+        yield return null;
+        survivor.GetComponent<Health>().SetHealth(TWIN_HEALTH);
+        twinInTheSweep.GetComponent<Health>().SetHealth(CUT_TWIN_HEALTH);
+
+        // WHEN
+        Kill(twins[0]);
+        yield return null;
+        var wasFlailHarmful = false;
+        var endTime = Time.time + FLAIL_WATCH_TURNS / tether.GetFlailTurnsPerSecond();
+        while (Time.time < endTime)
+        {
+            yield return new WaitForFixedUpdate();
+            wasFlailHarmful |= tether.GetState() == TetherState.FLAIL && tether.IsHarmful();
+        }
+
+        // THEN
+        AssertWrapper.IsTrue(wasFlailHarmful, "Test setup: the flail never came on", _currentSeed);
+        AssertWrapper.Less(twinInTheSweep.GetComponent<Health>().GetHealth(), CUT_TWIN_HEALTH, "Test setup: the flail did not cut a twin standing in its sweep, so this test cannot see a twin cut by a flail (Needs Ofir in Unity: Enemy Shot in the twin's harmers?)", _currentSeed);
+        AssertWrapper.AreEqual(TWIN_HEALTH, survivor.GetComponent<Health>().GetHealth(), "The flail cut its own survivor", _currentSeed);
+    }
+
+    // Mirror Shield (#200): its plate blocks and sends back only Shot. The line is an Enemy Shot, so it hurts a Mirror Shield whose plate
+    // faces the tether object (the side its FrontArmor judges a hit from), and the plate neither blocks it nor removes it with a send-back.
+    [UnityTest]
+    public IEnumerator TetherHurtsMirrorShieldThroughItsPlate()
+    {
+        // GIVEN
+        yield return SetUpScene();
+        var twins = LoadLevelTwins(TWINS_DISTANCE);
+        var tether = GetTether(twins);
+        var tetherHarm = GetTetherHarm(tether);
+        var lineMiddle = GetLineMiddle(twins);
+        var mirrorShield = TestUtils.LoadMirrorShield(lineMiddle, _currentSeed);
+        mirrorShield.transform.rotation = Quaternion.LookRotation(Vector3.forward, (Vector2)tether.transform.position - lineMiddle);
+        yield return null;
+        mirrorShield.GetComponent<Health>().SetHealth(MIRROR_SHIELD_HEALTH);
+        var enemyShotsBefore = GameObject.FindGameObjectsWithTag(Tag.ENEMY_SHOT.GetDescription()).Length;
+
+        // WHEN
+        yield return WaitUntilHarmful(tether);
+        yield return new WaitForFixedUpdate();
+        yield return null;
+
+        // THEN
+        AssertWrapper.IsNotNull(tether, _currentSeed, "The Mirror Shield's plate removed the line");
+        AssertWrapper.IsTrue(tether.IsHarmful(), "Test setup: the tether never came on", _currentSeed);
+        AssertWrapper.AreEqual(MIRROR_SHIELD_HEALTH - tetherHarm, mirrorShield.GetComponent<Health>().GetHealth(), "The line did not hurt the Mirror Shield once through its plate (Needs Ofir in Unity: Enemy Shot in its harmers?)", _currentSeed);
+        AssertWrapper.AreEqual(enemyShotsBefore, GameObject.FindGameObjectsWithTag(Tag.ENEMY_SHOT.GetDescription()).Length, "The Mirror Shield sent a shot back off the line", _currentSeed);
+    }
+
+    // Decoy (#163): the pair drifts toward the newest decoy, not the ship, because it asks EnemyTarget. The decoy is on the far side from the ship.
+    [UnityTest]
+    public IEnumerator PairDriftsTowardDecoy()
+    {
+        // GIVEN
+        yield return SetUpScene();
+        var twins = LoadLevelTwins(TWINS_DISTANCE, frozen: false);
+        _decoy = new GameObject(DECOY_NAME);
+        _decoy.transform.position = GetAnchor() + Vector2.up * DECOY_DISTANCE_ABOVE;
+        EnemyTarget.AddDecoy(_decoy.transform);
+        Vector2 decoyPosition = _decoy.transform.position;
+        var startDistance = Vector2.Distance(GetLineMiddle(twins), decoyPosition);
+
+        // WHEN
+        yield return new WaitForSeconds(DRIFT_TIME);
+
+        // THEN
+        var endDistance = Vector2.Distance(GetLineMiddle(twins), decoyPosition);
+        AssertWrapper.Less(endDistance, startDistance - MIN_DRIFT_DISTANCE, $"The point between the twins went from {startDistance} to {endDistance} from the decoy in {DRIFT_TIME} s: it did not drift toward the decoy", _currentSeed);
+    }
+
+    // Swap Shot (#161) swaps the ship with a twin as with any enemy, and that twin's end of the line moves with it
+    [UnityTest]
+    public IEnumerator SwapShotMovesItsTwinsEndOfTheLine()
+    {
+        // GIVEN
+        yield return SetUpScene();
+        TestUtils.AssertAttackPrefabHas<SwapShot>(AttackName.SWAP_SHOT, _currentSeed);
+        TestUtils.SetUpShot(AttackName.SWAP_SHOT);
+        var twins = LoadLevelTwins(TWINS_DISTANCE);
+        var tether = GetTether(twins);
+        var halalit = TestUtils.GetHalalit();
+        // Straight below the first twin, so the shot flies up into it, clear of the line
+        TestUtils.SetGameObjectPosition(halalit, (Vector2)twins[0].transform.position + Vector2.down * SWAP_SHOT_DISTANCE);
+        yield return new WaitForFixedUpdate();
+        Vector2 halalitStartPosition = halalit.transform.position;
+        var weaponMovement = TestUtils.GetWeaponMovement();
+        var weaponAttack = TestUtils.GetWeaponAttack();
+        var touchOnJoystick = TestUtils.GetTouchOverAttackTriggetTowardsPosition(Vector2.up, weaponAttack.GetAttackJoystickEdge());
+
+        // WHEN
+        weaponMovement.TryChangeWeaponPosition(touchOnJoystick);
+        yield return null;
+        weaponAttack.HumbleFixedUpdate(touchOnJoystick);
+        var swapTimeout = Time.time + SWAP_TIMEOUT;
+        while (Vector2.Distance(twins[0].transform.position, halalitStartPosition) > SWAP_POSITION_DELTA && Time.time < swapTimeout)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+        // One more step, so the line is drawn from where physics has put the twin
+        yield return new WaitForFixedUpdate();
+        yield return WaitUntilHarmful(tether);
+
+        // THEN
+        AssertWrapper.AreEqual(halalitStartPosition, twins[0].transform.position, "Test setup: the Swap Shot did not swap the ship with the twin", _currentSeed, SWAP_POSITION_DELTA);
+        AssertWrapper.IsTrue(tether.IsHarmful(), "The line did not come on after the swap", _currentSeed);
+        AssertWrapper.AreEqual(GetLineMiddle(twins), (tether.GetHarmStart() + tether.GetHarmEnd()) / 2f, "The line did not move with the swapped twin", _currentSeed, POSITION_DELTA);
+    }
+
+    // A spawn hole lets a paired entry out as two linked bodies, each at a spawn point of its own, and switches them on.
+    // With one spawn point per entry, as before #237, the partner would throw and the hole would never finish.
+    // Reads the scene's bank, so it fails until the Tether Twin is in it. The bank's groups are read on a first load and replayed with
+    // the same seed, as SameSeedTests does, so the test knows which group holds a pair before its hole takes it. The scene's spawner
+    // is stopped, so only the test's hole takes groups from the bank.
+    [UnityTest]
+    public IEnumerator SpawnHoleLetsOutALinkedPair()
+    {
+        // GIVEN
+        yield return null;
+        var firstFillGroups = TestUtils.TakeEnemyGroups(TestUtils.GetEnemyBank(), 1, _currentSeed);
+        var pairGroupIndex = firstFillGroups.FindIndex(enemyGroup => enemyGroup.Any(enemy => enemy.HasPartner));
+        AssertWrapper.IsTrue(pairGroupIndex >= 0, "The scene's enemy bank has no paired entry: add TetherTwin to the EnemyBank with count 2 (Needs Ofir in Unity, #237)", _currentSeed);
+        var pairGroupEntries = firstFillGroups[pairGroupIndex].Count;
+        var pairGroupPairs = firstFillGroups[pairGroupIndex].Count(enemy => enemy.HasPartner);
+
+        TestUtils.SetRandomSeed(_currentSeed);
+        SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);
+        yield return null;
+        yield return null;
+        TestUtils.SetTestMode(keepEnemiesContainer: true);
+        _isTimeScaleChanged = true;
+        TestUtils.GetSpawnHoleInstantiator().StopAllCoroutines();
+        TestUtils.SetGameObjectPosition(TestUtils.GetHalalit(), GetAnchor() + Vector2.down * HALALIT_DISTANCE_BELOW);
+        var enemyBank = TestUtils.GetEnemyBank();
+        for (int takenGroups = 0; takenGroups < pairGroupIndex; takenGroups++)
+        {
+            enemyBank.GetNextSpawnHoleEnemiesList();
+        }
+        var spawningHolePrefab = Resources.Load<GameObject>(TestUtils.SPAWNING_HOLE_PREFAB_PATH);
+        AssertWrapper.IsNotNull(spawningHolePrefab, _currentSeed, $"Test setup: no spawn hole prefab at Resources/{TestUtils.SPAWNING_HOLE_PREFAB_PATH}");
+
+        // WHEN
+        Object.Instantiate(spawningHolePrefab, GetAnchor() + Vector2.up * SPAWN_HOLE_DISTANCE_ABOVE, Quaternion.identity);
+        var bodiesTimeout = Time.time + SPAWN_HOLE_PHASE_TIMEOUT;
+        while (TestUtils.GetEnemies().Length == 0 && Time.time < bodiesTimeout)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+        var bodies = TestUtils.GetEnemies();
+        var bodyTwins = bodies.Select(body => body.GetComponent<TetherTwin>()).Where(bodyTwin => bodyTwin != null).ToList();
+        var switchOnTimeout = Time.time + SPAWN_HOLE_PHASE_TIMEOUT;
+        while (bodyTwins.Any(bodyTwin => !bodyTwin.enabled) && Time.time < switchOnTimeout)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
+        // THEN
+        AssertWrapper.AreEqual(pairGroupEntries + pairGroupPairs, bodies.Length, $"The spawn hole let out {bodies.Length} bodies for {pairGroupEntries} entries with {pairGroupPairs} pairs: a paired entry is two bodies", _currentSeed);
+        AssertWrapper.AreEqual(2 * pairGroupPairs, bodyTwins.Count, "The spawn hole did not let out both twins of every pair", _currentSeed);
+        foreach (var bodyTwin in bodyTwins)
+        {
+            var partner = bodyTwin.GetPartner();
+            AssertWrapper.IsTrue(partner != null && partner != bodyTwin && partner.GetPartner() == bodyTwin && bodyTwins.Contains(partner), "A twin from the spawn hole has no partner from the same hole", _currentSeed);
+            AssertWrapper.IsTrue(bodyTwin.GetTether() != null && bodyTwin.GetTether() == partner.GetTether(), "Two twins from the spawn hole do not share one tether", _currentSeed);
+        }
+        AssertWrapper.IsTrue(bodyTwins.All(bodyTwin => bodyTwin.enabled), "The spawn hole never switched its twins on: it got stuck", _currentSeed);
+        for (int first = 0; first < bodies.Length; first++)
+        {
+            for (int second = first + 1; second < bodies.Length; second++)
+            {
+                AssertWrapper.Greater(Vector2.Distance(bodies[first].transform.position, bodies[second].transform.position), MIN_SPAWN_POINT_GAP, "Two bodies came out of the spawn hole at one point: each body needs a spawn point of its own", _currentSeed);
+            }
+        }
+    }
+
+    // The card's normal loot: the scene's DropsBank has a TETHER_TWIN row that drops something, copied from LAME_ENEMY
+    [UnityTest]
+    public IEnumerator TetherTwinHasALootRow()
+    {
+        // GIVEN
+        yield return null;
+
+        // WHEN
+        var tetherTwinDrops = TestUtils.GetDropsBank().GetDefaultDropsList().Find(dropperDrops => dropperDrops.Key == Dropper.TETHER_TWIN);
+
+        // THEN
+        AssertWrapper.IsTrue(tetherTwinDrops != null, "DropsBank has no TETHER_TWIN row: copy the LAME_ENEMY row (Needs Ofir in Unity, #237)", _currentSeed);
+        AssertWrapper.Greater(tetherTwinDrops.Value.Count, 0, "DropsBank's TETHER_TWIN row drops nothing: copy the LAME_ENEMY row (Needs Ofir in Unity, #237)", _currentSeed);
+    }
+
     // Test mode, with the Halalit moved below the middle of the world, where the twins go
     private IEnumerator SetUpScene()
     {
@@ -541,6 +853,20 @@ public class TetherTwinsTests
     private Tether GetTether(List<GameObject> twins)
     {
         return twins[0].GetComponent<TetherTwin>().GetTether();
+    }
+
+    // The line's harm per touch. Above 0, or a test that expects a hit would also pass with a line that does nothing.
+    private int GetTetherHarm(Tether tether)
+    {
+        var tetherHarm = tether.GetComponent<AttackBehaviour>().AttackStats.Power;
+        AssertWrapper.Greater(tetherHarm, 0, "Tether's AttackBehaviour has no Power (Needs Ofir in Unity, #237)", _currentSeed);
+        return tetherHarm;
+    }
+
+    // A second pair: its first twin at firstPosition, its second TWINS_DISTANCE along direction, seeded apart from the first pair
+    private List<GameObject> LoadOtherPair(Vector2 firstPosition, Vector2 direction)
+    {
+        return TestUtils.LoadTetherTwins(firstPosition, firstPosition + direction * TWINS_DISTANCE, _currentSeed + OTHER_PAIR_SEED_OFFSET);
     }
 
     private Vector2 GetLineMiddle(List<GameObject> twins)
@@ -580,6 +906,12 @@ public class TetherTwinsTests
     public void TearDown()
     {
         EnemyTarget.ClearAllGrudges();
+        // EnemyTarget keeps its decoys in a static list (D22)
+        if (_decoy != null)
+        {
+            EnemyTarget.RemoveDecoy(_decoy.transform);
+            _decoy = null;
+        }
         TestUtils.DestroyAllGameObjects();
         // Only after a test saved a scale (SetTestMode): ResetTimeScale restores the saved scale, and that is 0 if none was saved yet
         if (_isTimeScaleChanged)
