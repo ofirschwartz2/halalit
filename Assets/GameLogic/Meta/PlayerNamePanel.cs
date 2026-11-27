@@ -23,6 +23,13 @@ public class PlayerNamePanel : MonoBehaviour
 
     private void Awake()
     {
+        if (!IsWired())
+        {
+            Debug.LogError("PlayerNamePanel: Panel, Name Input or Message Text is not wired in the MainMenu scene, so the name panel is off.");
+            enabled = false;
+            return;
+        }
+
         _panel.SetActive(false);
         _nameInput.characterLimit = Constants.PLAYER_NAME_MAX_LENGTH;
     }
@@ -115,6 +122,11 @@ public class PlayerNamePanel : MonoBehaviour
     }
 
     #region Predicates
+    private bool IsWired()
+    {
+        return _panel != null && _nameInput != null && _messageText != null;
+    }
+
     private static bool HasChosenName()
     {
         return PlayerPrefs.GetInt(NAME_CHOSEN_KEY, 0) == 1;
