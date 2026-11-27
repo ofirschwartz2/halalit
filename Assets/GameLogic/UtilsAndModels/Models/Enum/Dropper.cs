@@ -21,6 +21,7 @@ namespace Assets.Enums
         COIN_THIEF,
         MIRROR_SHIELD,
         MIMIC,
-        LEECH
+        LEECH,
+        MENDER
     }
 }
