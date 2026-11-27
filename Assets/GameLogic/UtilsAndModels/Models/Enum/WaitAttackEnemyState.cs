@@ -7,6 +7,7 @@ namespace Assets.Enums
     public enum WaitAttackEnemyState
     {
         WAITING,
-        ATTACKING
+        ATTACKING,
+        STUNNED
     }
 }

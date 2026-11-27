@@ -8,6 +8,7 @@ namespace Assets.Enums
     {
         MOVING,
         AIMING,
-        ATTACKING
+        ATTACKING,
+        STUNNED
     }
 }

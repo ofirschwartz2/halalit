@@ -34,7 +34,9 @@ internal static class TestUtils
     public const string SHOOTING_IN_RANGE_ENEMY_PREFAB_PATH = "Prefabs/Enemies/MoveAimAttackEnemies/ShootingInRangeEnemy";
     public const string ZIG_ZAG_ENEMY_PREFAB_PATH = "Prefabs/Enemies/SpecialMovementEnemies/ZigZagEnemy";
     public const string FOLLOWING_ENEMY_RADIUS_PREFAB_PATH = "Prefabs/Enemies/WaitAttackEnemies/FollowingEnemyRadius";
+    public const string FOLLOWING_ENEMY_INTERVAL_PREFAB_PATH = "Prefabs/Enemies/WaitAttackEnemies/FollowingEnemyInterval";
     public const string SHOOTING_LASER_ASTERISK_ENEMY_PREFAB_PATH = "Prefabs/Enemies/MoveAimAttackEnemies/ShootingLaserAsteriskEnemy";
+    public const string SHOOTING_LASER_RANGE_ENEMY_PREFAB_PATH = "Prefabs/Enemies/MoveAimAttackEnemies/ShootingLaserRangeEnemy";
     public const string ENEMIES_PREFABS_PATH = "Prefabs/Enemies";
 
     // Defaults:
@@ -500,6 +502,17 @@ internal static class TestUtils
     {
         var chainSparkPrefab = AttacksBank.GetAttackPrefab(AttackName.CHAIN_SPARK);
         return Object.Instantiate(chainSparkPrefab, position, Quaternion.LookRotation(Vector3.forward, direction));
+    }
+
+    // Interrupt (#238)
+    internal static Interrupt GetInterrupt(GameObject enemy)
+    {
+        var interrupt = enemy.GetComponent<Interrupt>();
+        if (interrupt == null)
+        {
+            throw new System.Exception($"Interrupt missing on {enemy.name} (Needs Ofir in Unity, #238)");
+        }
+        return interrupt;
     }
 
     internal static void SetGameObjectPosition(GameObject gameObject, Vector2 position) 
