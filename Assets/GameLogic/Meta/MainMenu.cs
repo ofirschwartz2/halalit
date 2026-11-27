@@ -91,12 +91,13 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    // Shown even when today's daily is already played. An unwired label is skipped, so the menu still works
+    // Shown even when today's daily is already played. An unwired label is skipped, so the menu still works.
+    // PlayerStats.InitAllAsync sets the daily's date before its seed, so a set seed means the date is set too
     private void TrySetDailyTwistText()
     {
         if (_dailyTwistText != null && PlayerStats._dailySeed != null)
         {
-            _dailyTwistText.text = DailyTwists.PickForSeed(PlayerStats._dailySeed.Value).GetDisplayLine();
+            _dailyTwistText.text = DailyTwists.PickForDate(PlayerStats._dailyDate).GetDisplayLine();
         }
     }
     #endregion

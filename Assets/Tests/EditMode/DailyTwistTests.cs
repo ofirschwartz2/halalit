@@ -14,8 +14,12 @@ public class DailyTwistTests
     private const float BIG_ROCKS_ASTEROID_MIN_SCALE = 3f;
     private const float SPAWN_INTERVAL_DELTA = 0.001f;
     private const int DAYS_IN_A_ROW = 60;
+    private const int DAYS_IN_A_YEAR = 365;
+    private const int MOST_DAYS_IN_A_ROW_OF_ONE_TWIST = 2;
     private const string PREFABS_FOLDER = "Assets/Resources";
     private const string FOLLOWS_DAILY_TWIST_FIELD = "_followsDailyTwist";
+    // One row per name but NONE, as EveryTwistHasTitleAndDescription checks
+    private static readonly int TWIST_COUNT = Enum.GetValues(typeof(DailyTwistName)).Length - 1;
 
     [Test]
     public void SameDateSameTwist()
@@ -30,28 +34,73 @@ public class DailyTwistTests
     }
 
     [Test]
-    public void PinnedTwists()
+    public void SameDateSameTwistOnEveryCall()
     {
-        // Worked out from the DailySeed hash. If one fails, find out why before changing it:
-        // a changed twist list deals a different twist for every date, and phones on an older build would play another twist
-        AssertPinnedTwist(new DateTime(2026, 11, 21), DailyTwistName.BIG_ROCKS);
-        AssertPinnedTwist(new DateTime(2026, 11, 22), DailyTwistName.SWARM);
-        AssertPinnedTwist(new DateTime(2026, 11, 23), DailyTwistName.GLASS_DAY);
-        AssertPinnedTwist(new DateTime(2026, 11, 28), DailyTwistName.BIG_ROCKS);
+        // The pick keeps nothing between calls: a year of dates picked again, last date first, gives the same twists
+        var firstDay = new DateTime(2026, 11, 21);
+        var firstNames = new DailyTwistName[DAYS_IN_A_YEAR];
+
+        for (var i = 0; i < DAYS_IN_A_YEAR; i++)
+        {
+            firstNames[i] = DailyTwists.PickForDate(firstDay.AddDays(i)).Name;
+        }
+
+        for (var i = DAYS_IN_A_YEAR - 1; i >= 0; i--)
+        {
+            var day = firstDay.AddDays(i);
+            var name = DailyTwists.PickForDate(day).Name;
+
+            AssertWrapper.IsTrue(name == firstNames[i], $"{day:yyyy-MM-dd} gave {firstNames[i]}, then {name}");
+        }
     }
 
     [Test]
-    public void PickForDateMatchesPickForSeed()
+    public void PinnedTwists()
     {
-        var firstDay = new DateTime(2026, 11, 21);
+        // Worked out outside Unity from the DailySeed hash and the block rule (#273). If one fails, find out why before changing it:
+        // a changed twist list deals a different twist for every date, and phones on an older build would play another twist
+        AssertPinnedTwist(new DateTime(2026, 11, 21), DailyTwistName.SWARM);
+        AssertPinnedTwist(new DateTime(2026, 11, 22), DailyTwistName.BIG_ROCKS);
+        AssertPinnedTwist(new DateTime(2026, 11, 23), DailyTwistName.SWARM);
+        AssertPinnedTwist(new DateTime(2026, 11, 28), DailyTwistName.GLASS_DAY);
+    }
 
-        for (var i = 0; i < DAYS_IN_A_ROW; i++)
+    [Test]
+    public void EveryBlockHasEveryTwistOnce()
+    {
+        var blockFirstDay = GetFirstBlockDayFrom(new DateTime(2026, 11, 21));
+
+        for (var block = 0; block < DAYS_IN_A_YEAR / TWIST_COUNT; block++)
+        {
+            var namesInBlock = new HashSet<DailyTwistName>();
+            for (var i = 0; i < TWIST_COUNT; i++)
+            {
+                namesInBlock.Add(DailyTwists.PickForDate(blockFirstDay.AddDays(i)).Name);
+            }
+
+            AssertWrapper.IsFalse(namesInBlock.Contains(DailyTwistName.NONE), $"A day in the block from {blockFirstDay:yyyy-MM-dd} had no twist");
+            AssertWrapper.AreEqual(TWIST_COUNT, namesInBlock.Count, $"The {TWIST_COUNT} days from {blockFirstDay:yyyy-MM-dd} did not give every twist once");
+
+            blockFirstDay = blockFirstDay.AddDays(TWIST_COUNT);
+        }
+    }
+
+    [Test]
+    public void SameTwistAtMostTwoDaysInARow()
+    {
+        // The last day of one block and the first day of the next can share a twist, but a third day cannot
+        var firstDay = new DateTime(2026, 11, 21);
+        var previousName = DailyTwists.PickForDate(firstDay).Name;
+        var daysInARow = 1;
+
+        for (var i = 1; i < DAYS_IN_A_YEAR; i++)
         {
             var day = firstDay.AddDays(i);
-            var twistForDate = DailyTwists.PickForDate(day);
-            var twistForSeed = DailyTwists.PickForSeed(DailySeed.GetSeed(day));
+            var name = DailyTwists.PickForDate(day).Name;
+            daysInARow = name == previousName ? daysInARow + 1 : 1;
 
-            AssertWrapper.IsTrue(twistForDate.Name == twistForSeed.Name, $"On {day:yyyy-MM-dd} the date picked {twistForDate.Name} and its seed picked {twistForSeed.Name}");
+            AssertWrapper.IsTrue(daysInARow <= MOST_DAYS_IN_A_ROW_OF_ONE_TWIST, $"{name} came {daysInARow} days in a row, up to {day:yyyy-MM-dd}");
+            previousName = name;
         }
     }
 
@@ -77,11 +126,26 @@ public class DailyTwistTests
     }
 
     [Test]
-    public void NegativeSeedsPickATwist()
+    public void NegativeBlockHashesPickATwist()
     {
-        AssertSeedPicksATwist(int.MinValue);
-        AssertSeedPicksATwist(-1);
-        AssertSeedPicksATwist(0);
+        // About half the block hashes are below 0 as an int. Every day of those blocks must still pick a twist, without throwing.
+        // So must the first and last dates a DateTime holds: day 0, whose block hash is 0, and the highest day number
+        var firstDay = new DateTime(2026, 11, 21);
+        var negativeHashDayCount = 0;
+
+        for (var i = 0; i < DAYS_IN_A_ROW; i++)
+        {
+            var day = firstDay.AddDays(i);
+            if (DailySeed.GetHash(GetBlockNumber(day)) < 0)
+            {
+                AssertDatePicksATwist(day);
+                negativeHashDayCount++;
+            }
+        }
+
+        AssertWrapper.IsTrue(negativeHashDayCount > 0, $"No block in {DAYS_IN_A_ROW} days had a negative hash, so nothing was checked");
+        AssertDatePicksATwist(DateTime.MinValue);
+        AssertDatePicksATwist(DateTime.MaxValue);
     }
 
     [Test]
@@ -170,10 +234,26 @@ public class DailyTwistTests
         AssertWrapper.IsTrue(twist.Name == expectedName, $"Twist for {day:yyyy-MM-dd} is {twist.Name}, expected {expectedName}");
     }
 
-    private void AssertSeedPicksATwist(int seed)
+    private void AssertDatePicksATwist(DateTime day)
     {
-        var twist = DailyTwists.PickForSeed(seed);
+        var twist = DailyTwists.PickForDate(day);
 
-        AssertWrapper.IsFalse(twist.IsNone(), $"Seed {seed} picked no twist");
+        AssertWrapper.IsFalse(twist.IsNone(), $"{day:yyyy-MM-dd} picked no twist");
+    }
+
+    // The days are dealt in blocks of one day per twist, counted from day 0, 1 Jan of year 1 (#273)
+    private int GetBlockNumber(DateTime day)
+    {
+        return DailySeed.GetDayNumber(day) / TWIST_COUNT;
+    }
+
+    private DateTime GetFirstBlockDayFrom(DateTime day)
+    {
+        while (DailySeed.GetDayNumber(day) % TWIST_COUNT != 0)
+        {
+            day = day.AddDays(1);
+        }
+
+        return day;
     }
 }

@@ -37,7 +37,7 @@ public class OriginalRandomSeed : MonoBehaviour
 #endif
     }
 
-    // Only the daily has a twist. It comes from the daily seed's value and draws nothing from the generators
+    // Only the daily has a twist. It comes from the daily's date and draws nothing from the generators
     private DailyTwist GetRunTwist()
     {
         if (IsTestMode)
@@ -47,7 +47,7 @@ public class OriginalRandomSeed : MonoBehaviour
 
         if (PlayerStats._isDailyRun)
         {
-            return DailyTwists.PickForSeed((int)PlayerStats._dailySeed);
+            return DailyTwists.PickForDate(PlayerStats._dailyDate);
         }
 
         return DailyTwists.Get(DailyTwistName.NONE);

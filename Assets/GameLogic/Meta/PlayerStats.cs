@@ -21,7 +21,7 @@ public static class PlayerStats
     public static int? _dailySeed, _highScore, _dailyScore;
     public static string _playerId, _dateInFormat, _dailyScoreKey, _highScoreKey;
     public static Dictionary<string, object> _playerHighScore, _playerDailyScore;
-    private static DateTime _dailyDate;
+    public static DateTime _dailyDate;
 
 #region Init
     public async static Task InitAllAsync()
