@@ -34,10 +34,13 @@ public class BallShot : MonoBehaviour
     {
         if (!_passesThrough && (other.gameObject.CompareTag(Tag.ENEMY.GetDescription()) || other.gameObject.CompareTag(Tag.ASTEROID.GetDescription()) || other.gameObject.CompareTag(Tag.HALALIT.GetDescription())))
         {
+            OnHit(other);
             OnLanded();
             Destroy(gameObject);
         }
     }
+
+    protected virtual void OnHit(Collider2D other) { }
 
     protected virtual void OnLanded() { }
 

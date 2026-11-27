@@ -37,6 +37,8 @@ namespace Assets.Enums
         [Description("Bank shot")]
         BANK_SHOT,
         [Description("Tripwire")]
-        TRIPWIRE
+        TRIPWIRE,
+        [Description("Chain spark")]
+        CHAIN_SPARK
     }
 }
