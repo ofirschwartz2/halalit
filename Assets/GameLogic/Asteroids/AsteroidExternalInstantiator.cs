@@ -2,10 +2,17 @@
 using Assets.Utils;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+
+#if UNITY_EDITOR
+[assembly: InternalsVisibleTo("TestsPlayMode")]
+#endif
 
 public class AsteroidExternalInstantiator : SeedfulRandomGeneratorUser
 {
+    private const float DEFAULT_MIN_SCALE = 1f;
+
     [SerializeField]
     private GameObject _asteroidPrefab;
     [SerializeField]
@@ -28,11 +35,13 @@ public class AsteroidExternalInstantiator : SeedfulRandomGeneratorUser
     private float _instantiationLineSlope;
     private float _timeToInstantiation;
     private int _instantiatedAsteroidsCount;
+    private float _asteroidMinScale;
 
     void Start()
     {
         _timeToInstantiation = 0;
         _instantiatedAsteroidsCount = 0;
+        _asteroidMinScale = DailyTwists.Current.GetAsteroidMinScale(DEFAULT_MIN_SCALE);
         _instantiationLineCenterPoint = GetRandomInstantiationLineCenterPoint();
         _instantiationLineSlope = GetAsteroidInstantiationLineSlope();
         _asteroidsDirection = GetAsteroidDirection();
@@ -135,7 +144,7 @@ public class AsteroidExternalInstantiator : SeedfulRandomGeneratorUser
 
     private float GetRandomAsteroidScale()
     {
-        return _seedfulRandomGenerator.Range(1, (float)(_asteroidMaxScale + 1));
+        return _seedfulRandomGenerator.Range(_asteroidMinScale, (float)(_asteroidMaxScale + 1));
     }
     #endregion
 
@@ -155,4 +164,11 @@ public class AsteroidExternalInstantiator : SeedfulRandomGeneratorUser
         return new Vector2(-_instantiationLineCenterPoint.x, -_instantiationLineCenterPoint.y).normalized;
     }
     #endregion
+
+#if UNITY_EDITOR
+    internal float GetAsteroidMinScale()
+    {
+        return _asteroidMinScale;
+    }
+#endif
 }
