@@ -351,6 +351,7 @@ Answered questions keep their number. Each shows Ofir's answer and its date.
 14. How does an NFT item reach a run: does its owner start with it, or does it join that player's drops with its own drop rate? And does it count in the daily, which is otherwise the same for everyone? For after Milestone 1.
     - **Partly answered (Ofir, 2026-11-27):** players get NFTs as in-game drops and as gifts for the top places in a daily. NFT weapons can be used in the daily, and fairness comes from balance: no weapon may change the whole game (see "Fairness: skill over gear" in the Vision). Still open: how exactly an owned NFT item enters a run.
 15. On iPhone, Apple's rule 3.1.1 lets an app show users their own NFTs, provided owning one does not unlock features or functionality. Should NFT items be cosmetic on iPhone, sold through Apple's in-app purchase (which press reports say may unlock content), or carry stats only on other platforms? Not legal advice: check before building. For after Milestone 1.
+    - **Ofir, 2026-11-27, 09:52:** a hard requirement, and a problem for the vision. But NFTs are still far away. **For now:** keep the idea that specific drops give specific weapons with specific stats, as built, with no NFTs. **Later, still open:** remove that element on iPhone or on all phones, make it a web game, or wait in case Apple allows it someday. In his words: "We need to think about it." Research on each platform's rules is idea #264.
 
 ## 11. Ideas parked for proposal
 
