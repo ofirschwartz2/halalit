@@ -4,6 +4,7 @@ The rulebook for anyone, human or agent, who writes code in this repo: how the c
 Checked by reading files at commit `e8b1c95` (2025-07-26): C#, `.asmdef`, `.meta`, scene and prefab YAML, git history. Nothing was compiled or run. "By reading" marks a conclusion that still needs a run in Unity.
 Updated 2026-11-26 after cards #153 to #219, read on `develop` at `00a0ea6`. Those cards are on `develop` only and none has run in Unity, so "fixed" in section 7 means fixed in code on `develop`.
 Sections 3.7, 3.8 and 5 updated 2026-11-27 after #239 (Daily Twist), read on `develop` at `c3913e9`.
+Section 5 null checks added 2026-11-27 after #254, read on `develop` at `6d8f5ae`.
 Unity 2022.3.3f1, C#, 2D physics. Ofir approves every idea and every change.
 
 ## 1. System map
@@ -269,6 +270,10 @@ New code follows the majority style, not this one.
      - `ResetTimeScale` puts back the last saved scale. That is 0 if nothing has been saved yet, and a scale of 0 stops time for the tests that follow.
      - If some tests in a class save no scale, set a flag where a test saves one and check it in `[TearDown]`, as `SameSeedTests` and `DailyTwistTests` do.
      - Also undo every static the test set: `TestUtils.ResetTestTwist()` after `SetTestTwist`, and `TestUtils.ResetPlayerRun()` after `SetPlayerRun` (D22).
+- Null checks in tests (#254, on `develop`, not run in Unity):
+  - `AssertWrapper.IsNull` and `IsNotNull` take a `UnityEngine.Object` and follow Unity's `== null`. A destroyed object counts as null, and so does the editor's stand-in for a missing component or an unassigned serialized field. Their self-test is `Assets/Tests/EditMode/AssertWrapperTests.cs`.
+  - Do not give them an `object` overload. A Unity object passed as `object` or as an interface would then quietly get NUnit's plain reference check, which counts a destroyed object or a stand-in as present.
+  - Any other null check uses `==` or `!=` on a typed Unity reference: a `GameObject`, a component, or a generic `T` constrained to `Component`. Never on an `object`, an interface or an unconstrained generic. `is null`, `?.` and `??` skip Unity's check in the same way.
 - `Assets/Tests/PlayMode/PlayModeTests/TestInfra/TestUtils.cs` holds scene getters by `Tag`, setup helpers, default `AttackStats` and shot-tracking coroutines. Add helpers there, not in test classes.
 - EditMode `PlaygroundTests` checks scene wiring: tagged objects exist and carry the expected components. It opens no scene itself, so it checks whichever scene is open in the editor.
 - Not referenced by any test (by grep): enemy behaviours and state machines, the spawner, `ItemsBank`, `DropsBank`, `ItemRankPicker`, upgrades, the score handoff, menus, the event-bus snapshot, one attack hitting two victims (except `MirrorBallShot`).
