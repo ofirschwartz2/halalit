@@ -37,7 +37,7 @@ public class ChainSpark : BallShot
         _asteroidTag = Tag.ASTEROID.GetDescription();
     }
 
-    // One spark per bolt: Destroy waits for the end of the frame, so a bolt can enter more targets. The first hit decides, even a blocked one.
+    // One spark per bolt: Destroy waits for the end of the frame, so a bolt can enter more targets. Only a hit that sparks uses it up; a blocked hit does not.
     protected override void OnHit(Collider2D other)
     {
         if (_didSpark)
@@ -45,13 +45,13 @@ public class ChainSpark : BallShot
             return;
         }
 
-        _didSpark = true;
         var firstTarget = other.attachedRigidbody;
         if (firstTarget == null || !IsTarget(firstTarget) || IsBlockedByArmor(firstTarget))
         {
             return;
         }
 
+        _didSpark = true;
         RunChain(firstTarget);
     }
 
