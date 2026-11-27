@@ -22,6 +22,8 @@ There are two approvals. Neither can be skipped, assumed, or given by an agent.
 
 Silence is not approval. A card without an answer waits, and the team works on something already approved. Ideas that come from the team go through the same two approvals as Ofir's own.
 
+Standing permission (Ofir, 2026-11-26, 16:48, chat: "Continue now and always auto approve everything until all my weekly tokens are done"): until his weekly Claude usage runs out, the team lead gives both approvals on his behalf. Offers are approved, open questions take the team's recommendation, and pull requests that passed QA and the architect's review are merged into `develop`. Every such approval is written on the card as "Auto-approved under Ofir's 2026-11-26 instruction" so he can reverse it. The hard rules still hold: nothing unrun goes to `master`, no hand edits of Unity data, and settings only Ofir can change (repository visibility, secrets, accounts) stay his.
+
 Standing permission (Ofir, 2026-11-21): the team lead may merge team files, docs and repo housekeeping, and reports each merge in the next brief. Game code and Unity data always wait for his OK.
 
 ## The team
