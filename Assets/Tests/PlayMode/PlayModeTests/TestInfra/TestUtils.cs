@@ -78,6 +78,17 @@ internal static class TestUtils
         Debug.Log("Testing Random Seed set to: " + seed);
         return seed;
     }
+
+    // Daily Twist (#239): the twist OriginalRandomSeed gives the next Playground load in test mode
+    internal static void SetTestTwist(DailyTwistName dailyTwistName)
+    {
+        OriginalRandomSeed.TestTwist = dailyTwistName;
+    }
+
+    internal static void ResetTestTwist()
+    {
+        OriginalRandomSeed.TestTwist = DailyTwistName.NONE;
+    }
     #endregion
 
 
