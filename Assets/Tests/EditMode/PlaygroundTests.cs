@@ -351,4 +351,23 @@ public class PlaygroundTests
         AssertWrapper.IsNotNull(originalRandomSeed);
 
     }
+
+    [Test]
+    public void DailyTwistBannerTests()
+    {
+        // DAILY TWIST BANNER (#239, Needs Ofir in Unity): one on the HUD, its label wired and switched on, Show Seconds above 0
+        var dailyTwistBanners = Object.FindObjectsOfType<DailyTwistBanner>();
+        AssertWrapper.IsTrue(dailyTwistBanners.Length == 1, $"The Playground should have one active DailyTwistBanner, it has {dailyTwistBanners.Length} (Needs Ofir in Unity)");
+
+        var serializedDailyTwistBanner = new UnityEditor.SerializedObject(dailyTwistBanners[0]);
+        var twistText = serializedDailyTwistBanner.FindProperty("_twistText");
+        var showSeconds = serializedDailyTwistBanner.FindProperty("_showSeconds");
+        AssertWrapper.IsTrue(twistText != null && showSeconds != null, "DailyTwistBanner fields were renamed, update this test");
+        AssertWrapper.IsTrue(twistText.objectReferenceValue != null, "DailyTwistBanner's Twist Text is not wired (Needs Ofir in Unity)");
+        AssertWrapper.IsTrue(showSeconds.floatValue > 0, "DailyTwistBanner's Show Seconds is 0, so the twist line hides at once (Needs Ofir in Unity)");
+
+        // The banner only hides the label, so a label that starts switched off never shows
+        var twistLabel = (Component)twistText.objectReferenceValue;
+        AssertWrapper.IsTrue(twistLabel.gameObject.activeInHierarchy, "The twist label starts switched off, so the twist line never shows (Needs Ofir in Unity)");
+    }
 }

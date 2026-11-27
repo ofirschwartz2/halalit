@@ -7,6 +7,7 @@ public class OriginalRandomSeed : MonoBehaviour
 {
     public static bool IsTestMode { get; set; }
     public static int TestSeed { get; set; }
+    public static DailyTwistName TestTwist { get; set; }
     private SeedfulRandomGenerator _seedfulRandomGenerator;
 
     private void Awake()
@@ -24,6 +25,9 @@ public class OriginalRandomSeed : MonoBehaviour
 
         Debug.Log("Generated Original Random seed: " + originalRandomSeed);
 
+        // Set on every load: the twist is static, so PLAY after a daily would otherwise keep the daily's twist
+        DailyTwists.SetCurrent(GetRunTwist());
+
         _seedfulRandomGenerator = new SeedfulRandomGenerator(originalRandomSeed);
 
         SetAllInitialSeedfulRandomGenerators();
@@ -31,6 +35,22 @@ public class OriginalRandomSeed : MonoBehaviour
 #if UNITY_EDITOR
         SetTestsInitialSeedfulRandomGenerators();
 #endif
+    }
+
+    // Only the daily has a twist. It comes from the daily seed's value and draws nothing from the generators
+    private DailyTwist GetRunTwist()
+    {
+        if (IsTestMode)
+        {
+            return DailyTwists.Get(TestTwist);
+        }
+
+        if (PlayerStats._isDailyRun)
+        {
+            return DailyTwists.PickForSeed((int)PlayerStats._dailySeed);
+        }
+
+        return DailyTwists.Get(DailyTwistName.NONE);
     }
 
     void SetAllInitialSeedfulRandomGenerators()

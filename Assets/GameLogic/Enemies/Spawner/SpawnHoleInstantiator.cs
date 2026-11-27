@@ -19,10 +19,12 @@ public class SpawnHoleInstantiator : SeedfulRandomGeneratorUser
     private float _nextInstantiationTime;
     private float _minX, _maxX, _minY, _maxY;
     private Vector3 _instantiationPosition;
+    private float _spawnIntervalMultiplier;
 
     void Start()
     {
         _instantiationRatesIndex = 0;
+        _spawnIntervalMultiplier = DailyTwists.Current.GetSpawnInterval(1f);
         _nextInstantiationTime = GetNextInstantiationTime();
         SetInstantiationBounds();
 
@@ -69,7 +71,7 @@ public class SpawnHoleInstantiator : SeedfulRandomGeneratorUser
     private float GetNextInstantiationTime()
     {
 
-        var nextInstantiationTime = Time.time + _instantiationRate[_instantiationRatesIndex];
+        var nextInstantiationTime = Time.time + _instantiationRate[_instantiationRatesIndex] * _spawnIntervalMultiplier;
 
         if (_instantiationRatesIndex != _instantiationRate.Length - 1)
         {
@@ -104,4 +106,11 @@ public class SpawnHoleInstantiator : SeedfulRandomGeneratorUser
         _minY = internalWorldBounds.min.y + _instantiationDistanceFree;
         _maxY = internalWorldBounds.max.y - _instantiationDistanceFree;
     }
+
+#if UNITY_EDITOR
+    internal float GetSpawnIntervalMultiplier()
+    {
+        return _spawnIntervalMultiplier;
+    }
+#endif
 }

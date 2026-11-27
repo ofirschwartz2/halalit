@@ -78,6 +78,35 @@ internal static class TestUtils
         Debug.Log("Testing Random Seed set to: " + seed);
         return seed;
     }
+
+    // Daily Twist (#239): the twist OriginalRandomSeed gives the next Playground load in test mode
+    internal static void SetTestTwist(DailyTwistName dailyTwistName)
+    {
+        OriginalRandomSeed.TestTwist = dailyTwistName;
+    }
+
+    // Also clears the run's twist, which is static and would otherwise outlive the test (D22)
+    internal static void ResetTestTwist()
+    {
+        OriginalRandomSeed.TestTwist = DailyTwistName.NONE;
+        DailyTwists.SetCurrent(DailyTwists.Get(DailyTwistName.NONE));
+    }
+
+    // Daily Twist (#239): the next Playground load runs as a player's run, not a test run, so its seed and twist come from PlayerStats
+    internal static void SetPlayerRun(bool isDailyRun, int? dailySeed)
+    {
+        OriginalRandomSeed.IsTestMode = false;
+        PlayerStats._isDailyRun = isDailyRun;
+        PlayerStats._dailySeed = dailySeed;
+    }
+
+    // Back to test mode, with the PlayerStats values a run has before the menu signs in
+    internal static void ResetPlayerRun()
+    {
+        OriginalRandomSeed.IsTestMode = true;
+        PlayerStats._isDailyRun = false;
+        PlayerStats._dailySeed = null;
+    }
     #endregion
 
 

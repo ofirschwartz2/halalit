@@ -11,6 +11,8 @@ public class MainMenu : MonoBehaviour
     private Text _highScoreText;
     [SerializeField]
     private Text _dailyScoreText;
+    [SerializeField]
+    private Text _dailyTwistText;
 
     [SerializeField]
     private Button _dailyButton;
@@ -21,6 +23,7 @@ public class MainMenu : MonoBehaviour
         await TrySetNewDailyScoreAsync();
         await TrySetNewHighScoreAsync();
         TrySetScoreTexts();
+        TrySetDailyTwistText();
 
         _dailyButton.interactable = PlayerStats._dailyScore == null;
 
@@ -85,6 +88,15 @@ public class MainMenu : MonoBehaviour
         if (PlayerStats._dailyScore != null)
         {
             _dailyScoreText.text = "Daily Score: " + PlayerStats._dailyScore;
+        }
+    }
+
+    // Shown even when today's daily is already played. An unwired label is skipped, so the menu still works
+    private void TrySetDailyTwistText()
+    {
+        if (_dailyTwistText != null && PlayerStats._dailySeed != null)
+        {
+            _dailyTwistText.text = DailyTwists.PickForSeed(PlayerStats._dailySeed.Value).GetDisplayLine();
         }
     }
     #endregion

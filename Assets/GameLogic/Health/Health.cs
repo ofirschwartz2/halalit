@@ -29,6 +29,8 @@ public class Health : MonoBehaviour, IHealth
     private List<Tag> _contributors;
     [SerializeField]
     private bool _startsHidden;
+    [SerializeField]
+    private bool _followsDailyTwist;
 
     private int _health;
     private Slider _healthBarBorder;
@@ -137,6 +139,11 @@ public class Health : MonoBehaviour, IHealth
 
     private void SetMembersValues()
     {
+        if (_followsDailyTwist)
+        {
+            _currentMaxHealth = DailyTwists.Current.GetStartHealth(_currentMaxHealth);
+        }
+
         _health = _currentMaxHealth;
 
         Slider[] sliderComponents = _healthBar.GetComponentsInChildren<Slider>();
