@@ -77,7 +77,7 @@ public class PickupClawStateMachine : MonoBehaviour
 
     private void TryChangeToReturningToHalalitWithoutTarget()
     {
-        if (_item == null || ShouldClawRetract())
+        if (IsItemGone() || ShouldClawRetract())
         {
             ChangeToReturningToHalalitWithoutTarget();
         }
@@ -107,7 +107,7 @@ public class PickupClawStateMachine : MonoBehaviour
 
     private void ChangeToReturningToHalalitWithoutTarget()
     {
-        if (_state == PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET && _item != null)
+        if (_state == PickupClawState.RETURNING_TO_HALALIT_WITH_TARGET && !IsItemGone())
         {
             _item.GetComponentInParent<IGrabbable>().UnGrabbed();
         }
@@ -136,7 +136,7 @@ public class PickupClawStateMachine : MonoBehaviour
 
     private void TryChangeToReturningToHalalit()
     {
-        if (_item == null || !TryChangeToReturningToHalalitWithTarget())
+        if (IsItemGone() || !TryChangeToReturningToHalalitWithTarget())
         {
             TryChangeToReturningToHalalitWithoutTarget();
         }
@@ -158,6 +158,12 @@ public class PickupClawStateMachine : MonoBehaviour
     #endregion
 
     #region Predicates
+    // A collected or tarnished valuable is hidden in the frame before it is destroyed (#231).
+    private bool IsItemGone()
+    {
+        return _item == null || !_item.activeInHierarchy;
+    }
+
     private bool IsClawOnTarget(GameObject target)
     {
         return Utils.Are2VectorsAlmostEqual(target.transform.position, transform.position, _isOnTargetDelta);
