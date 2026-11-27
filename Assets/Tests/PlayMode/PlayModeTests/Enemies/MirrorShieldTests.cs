@@ -48,7 +48,7 @@ public class MirrorShieldTests
 
         // THEN
         AssertWrapper.AreEqual(ENEMY_HEALTH, TestUtils.GetEnemyHealth(), "Shot from the front hurt the Mirror Shield", _currentSeed);
-        var enemyShot = GetEnemyShot();
+        var enemyShot = TestUtils.GetEnemyShot();
         AssertWrapper.IsNotNull(enemyShot, _currentSeed, "Shot from the front was not sent back");
         Vector2 enemyShotPosition = enemyShot.transform.position;
         var enemyShotDirection = enemyShot.GetComponent<Rigidbody2D>().velocity.normalized;
@@ -75,14 +75,14 @@ public class MirrorShieldTests
         yield return WaitUntilShotIsGone();
         yield return new WaitForFixedUpdate();
 
-        var enemyShot = GetEnemyShot();
+        var enemyShot = TestUtils.GetEnemyShot();
         AssertWrapper.IsNotNull(enemyShot, _currentSeed, "Shot from the front was not sent back");
 
         // WHEN
         do
         {
             yield return null;
-            enemyShot = GetEnemyShot();
+            enemyShot = TestUtils.GetEnemyShot();
         } while (enemyShot != null);
 
         // THEN
@@ -110,7 +110,7 @@ public class MirrorShieldTests
 
         // THEN
         AssertWrapper.AreEqual(ENEMY_HEALTH - TestUtils.DEFAULT_POWER_1, TestUtils.GetEnemyHealth(), "Shot from the back did not hurt the Mirror Shield exactly once", _currentSeed);
-        AssertWrapper.IsNull(GetEnemyShot(), _currentSeed, "Shot from the back was sent back");
+        AssertWrapper.IsNull(TestUtils.GetEnemyShot(), _currentSeed, "Shot from the back was sent back");
     }
 
     [UnityTest]
@@ -134,7 +134,7 @@ public class MirrorShieldTests
 
         // THEN
         AssertWrapper.Less(TestUtils.GetEnemyHealth(), ENEMY_HEALTH, "Sword at the front did not hurt the Mirror Shield", _currentSeed);
-        AssertWrapper.IsNull(GetEnemyShot(), _currentSeed, "Sword at the front was sent back");
+        AssertWrapper.IsNull(TestUtils.GetEnemyShot(), _currentSeed, "Sword at the front was sent back");
     }
 
     // Shield Ram keeps its plate in block mode: the Sword, now marked melee, is still blocked at its front.
@@ -160,7 +160,7 @@ public class MirrorShieldTests
 
         // THEN
         AssertWrapper.AreEqual(ENEMY_HEALTH, TestUtils.GetEnemyHealth(), "Sword at the front hurt the Shield Ram", _currentSeed);
-        AssertWrapper.IsNull(GetEnemyShot(), _currentSeed, "Shield Ram sent a shot back");
+        AssertWrapper.IsNull(TestUtils.GetEnemyShot(), _currentSeed, "Shield Ram sent a shot back");
     }
 
     [UnityTest]
@@ -251,11 +251,6 @@ public class MirrorShieldTests
             yield return null;
             shot = TestUtils.GetShot();
         } while (shot != null);
-    }
-
-    private GameObject GetEnemyShot()
-    {
-        return GameObject.FindGameObjectWithTag(Tag.ENEMY_SHOT.GetDescription());
     }
 
     [TearDown]
