@@ -82,7 +82,6 @@ public class DecoyShipTests
                 secondDecoy = shot;
             }
         }
-        // A destroyed GameObject is not a C# null, so IsNotNull would pass on it: use Unity's null check.
         AssertWrapper.IsTrue(firstDecoy != null, "First decoy was gone before the second was fired", _currentSeed);
         AssertWrapper.IsNotNull(secondDecoy, _currentSeed, "Second decoy was not fired");
         AssertWrapper.AreEqual(secondDecoy.transform.position, EnemyTarget.GetPosition(), "Enemy target is not the newest decoy", _currentSeed, POSITION_DELTA);
