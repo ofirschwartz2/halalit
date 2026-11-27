@@ -9,8 +9,16 @@ public class MenderTests
 {
     private const int FULL_HEALTH = 10;
     private const int MISSING_HEALTH = 5;
-    private const int SMALL_MISSING_HEALTH = 2;
     private const int ONE_MISSING_HEALTH = 1;
+    // The less hurt enemy of HealsMostHurtInRange ends at 3 of 7. It misses less than the most hurt (5 of 10), yet has less health
+    // left and a smaller share of its max, so only "misses the most health" picks the most hurt. Both stay above the Wounded
+    // Retreat threshold (2), so neither flees.
+    private const int LESS_HURT_MAX_HEALTH = 7;
+    private const int LESS_HURT_MISSING_HEALTH = 4;
+    // More than the enemy in NeverHealsTheShip misses, so the ship would be the patient if the Mender counted it.
+    private const int SHIP_MISSING_HEALTH = 8;
+    // Inside the follow radius (8). The near side of the enemy's body, half a unit nearer, is outside the heal radius (4).
+    private const float OUT_OF_HEAL_RANGE_DISTANCE = 6f;
     // Past the first heal, which lands on the first search (every 0.25 s) after the heal interval, and well before a second heal.
     private const float HEAL_MARGIN = 0.5f;
     private const float FOLLOW_START_DISTANCE = 6f;
@@ -19,7 +27,7 @@ public class MenderTests
     // The follow tolerance (0.5) plus room to coast to a stop.
     private const float FOLLOW_MARGIN = 1f;
     private const float MENDERS_DISTANCE = 2f;
-    // Keeps the Halalit clear of every Mender and enemy in these tests, a drifting Mender included.
+    // Keeps the Halalit clear of every Mender and enemy in these tests, a drifting Mender included. NeverHealsTheShip moves it closer.
     private const float HALALIT_DISTANCE_BELOW = 6f;
     private int _currentSeed;
 
@@ -42,15 +50,17 @@ public class MenderTests
         var lessHurt = LoadPatient(anchor + Vector2.left * mender.GetFollowDistance());
         yield return null;
         Hurt(mostHurt, MISSING_HEALTH);
-        Hurt(lessHurt, SMALL_MISSING_HEALTH);
+        Hurt(lessHurt, LESS_HURT_MAX_HEALTH, LESS_HURT_MISSING_HEALTH);
+        AssertWrapper.Less(GetHealth(lessHurt), GetHealth(mostHurt), "Test setup: the less hurt enemy does not have the least health left", _currentSeed);
+        AssertWrapper.Less((float)GetHealth(lessHurt) / LESS_HURT_MAX_HEALTH, (float)GetHealth(mostHurt) / FULL_HEALTH, "Test setup: the less hurt enemy does not have the smallest share of its max health", _currentSeed);
 
         // WHEN
         yield return StartMenders(mender);
         yield return new WaitForSeconds(mender.GetHealInterval() + HEAL_MARGIN);
 
         // THEN
-        AssertWrapper.AreEqual(FULL_HEALTH - MISSING_HEALTH + mender.GetHealAmount(), GetHealth(mostHurt), "The Mender did not heal the most hurt enemy by its heal amount", _currentSeed);
-        AssertWrapper.AreEqual(FULL_HEALTH - SMALL_MISSING_HEALTH, GetHealth(lessHurt), "The Mender healed an enemy that was not the most hurt", _currentSeed);
+        AssertWrapper.AreEqual(FULL_HEALTH - MISSING_HEALTH + mender.GetHealAmount(), GetHealth(mostHurt), "The Mender did not heal the enemy that misses the most health by its heal amount", _currentSeed);
+        AssertWrapper.AreEqual(LESS_HURT_MAX_HEALTH - LESS_HURT_MISSING_HEALTH, GetHealth(lessHurt), "The Mender healed the enemy with the least health left, not the one that misses the most", _currentSeed);
     }
 
     [UnityTest]
@@ -94,6 +104,14 @@ public class MenderTests
 
         // THEN
         AssertWrapper.AreEqual(FULL_HEALTH - MISSING_HEALTH, GetHealth(patient), "The Mender healed through an asteroid", _currentSeed);
+
+        // WHEN
+        // Without this step the test would also pass with a Mender that never heals.
+        Object.Destroy(asteroid);
+        yield return WaitForHealthChange(patient, FULL_HEALTH - MISSING_HEALTH, mender.GetHealInterval() + HEAL_MARGIN);
+
+        // THEN
+        AssertWrapper.AreEqual(FULL_HEALTH - MISSING_HEALTH + mender.GetHealAmount(), GetHealth(patient), "With the asteroid gone the Mender still did not heal, so the asteroid was not what stopped it", _currentSeed);
     }
 
     [UnityTest]
@@ -233,6 +251,108 @@ public class MenderTests
         AssertWrapper.Greater(distance, mender.GetFollowDistance() - FOLLOW_MARGIN, "The Mender came too close to the hurt enemy", _currentSeed);
     }
 
+    [UnityTest]
+    public IEnumerator IgnoresEnemyAtFullHealth()
+    {
+        // GIVEN
+        yield return SetUpScene();
+        Vector2 anchor = GetAnchor();
+        var mender = LoadSwitchedOffMender(anchor);
+        var healthyEnemy = LoadPatient(anchor + Vector2.right * mender.GetFollowDistance());
+        yield return null;
+        healthyEnemy.GetComponent<Health>().SetHealth(FULL_HEALTH);
+
+        // WHEN
+        yield return StartMenders(mender);
+        var beamShown = false;
+        var endTime = Time.time + mender.GetHealInterval() + HEAL_MARGIN;
+        while (Time.time < endTime)
+        {
+            beamShown |= mender.IsBeamShown();
+            yield return new WaitForFixedUpdate();
+        }
+
+        // THEN
+        AssertWrapper.IsFalse(beamShown, "The Mender aimed its heal beam at an enemy at full health", _currentSeed);
+    }
+
+    [UnityTest]
+    public IEnumerator HealsOnlyWithinHealRadius()
+    {
+        // GIVEN
+        yield return SetUpScene();
+        Vector2 anchor = GetAnchor();
+        var mender = LoadSwitchedOffMender(anchor);
+        // Pinned, so it cannot close in: the test is about how far the heal reaches, not about following.
+        mender.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePosition;
+        var patient = LoadPatient(anchor + Vector2.right * OUT_OF_HEAL_RANGE_DISTANCE);
+        yield return null;
+        Hurt(patient, MISSING_HEALTH);
+
+        // WHEN
+        yield return StartMenders(mender);
+        yield return new WaitForSeconds(mender.GetHealInterval() + HEAL_MARGIN);
+
+        // THEN
+        AssertWrapper.AreEqual(FULL_HEALTH - MISSING_HEALTH, GetHealth(patient), "The Mender healed an enemy outside its heal radius", _currentSeed);
+
+        // WHEN
+        TestUtils.SetGameObjectPosition(patient, anchor + Vector2.right * mender.GetFollowDistance());
+        yield return WaitForHealthChange(patient, FULL_HEALTH - MISSING_HEALTH, mender.GetHealInterval() + HEAL_MARGIN);
+
+        // THEN
+        AssertWrapper.AreEqual(FULL_HEALTH - MISSING_HEALTH + mender.GetHealAmount(), GetHealth(patient), "The Mender did not heal the enemy once it was inside the heal radius", _currentSeed);
+    }
+
+    [UnityTest]
+    public IEnumerator NeverHealsTheShip()
+    {
+        // GIVEN
+        yield return SetUpScene();
+        Vector2 anchor = GetAnchor();
+        var mender = LoadSwitchedOffMender(anchor);
+        var patient = LoadPatient(anchor + Vector2.right * mender.GetFollowDistance());
+        // The ship mirrors the enemy on the left, where a tie would go, and misses more health: if the Mender counted it, it would win.
+        var halalit = TestUtils.GetHalalit();
+        TestUtils.SetGameObjectPosition(halalit, anchor + Vector2.left * mender.GetFollowDistance());
+        yield return null;
+        Hurt(patient, MISSING_HEALTH);
+        Hurt(halalit, SHIP_MISSING_HEALTH);
+
+        // WHEN
+        yield return StartMenders(mender);
+        yield return new WaitForSeconds(mender.GetHealInterval() + HEAL_MARGIN);
+
+        // THEN
+        AssertWrapper.AreEqual(FULL_HEALTH - SHIP_MISSING_HEALTH, GetHealth(halalit), "The Mender healed the ship", _currentSeed);
+        AssertWrapper.AreEqual(FULL_HEALTH - MISSING_HEALTH + mender.GetHealAmount(), GetHealth(patient), "The Mender did not heal the hurt enemy next to the ship", _currentSeed);
+    }
+
+    [UnityTest]
+    public IEnumerator BeamHidesWhenHealedEnemyIsGone()
+    {
+        // GIVEN
+        yield return SetUpScene();
+        Vector2 anchor = GetAnchor();
+        var mender = LoadSwitchedOffMender(anchor);
+        var patient = LoadPatient(anchor + Vector2.right * mender.GetFollowDistance());
+        yield return null;
+        Hurt(patient, MISSING_HEALTH);
+        yield return StartMenders(mender);
+        yield return WaitForHealthChange(patient, FULL_HEALTH - MISSING_HEALTH, mender.GetHealInterval() + HEAL_MARGIN);
+        AssertWrapper.Greater(GetHealth(patient), FULL_HEALTH - MISSING_HEALTH, "Test setup: the Mender did not heal", _currentSeed);
+        AssertWrapper.IsTrue(mender.IsBeamShown(), "Test setup: the beam did not show with the heal", _currentSeed);
+
+        // WHEN
+        // The enemy goes at the end of this frame. The check comes a frame or two later, long before the beam's own 0.5 s are up.
+        Object.Destroy(patient);
+        yield return null;
+        yield return new WaitForFixedUpdate();
+
+        // THEN
+        AssertWrapper.IsFalse(mender.IsBeamShown(), "The beam stayed on after the healed enemy was gone", _currentSeed);
+    }
+
     // Test mode, with the Halalit moved below the spot the tests use.
     private IEnumerator SetUpScene()
     {
@@ -268,10 +388,16 @@ public class MenderTests
     }
 
     // Sets the max health to FULL_HEALTH, then takes missingHealth away. Health must have run its Start (a frame after loading).
-    private void Hurt(GameObject enemy, int missingHealth)
+    private void Hurt(GameObject target, int missingHealth)
     {
-        var health = enemy.GetComponent<Health>();
-        health.SetHealth(FULL_HEALTH);
+        Hurt(target, FULL_HEALTH, missingHealth);
+    }
+
+    // Sets the max health to maxHealth, then takes missingHealth away. Health must have run its Start (a frame after loading).
+    private void Hurt(GameObject target, int maxHealth, int missingHealth)
+    {
+        var health = target.GetComponent<Health>();
+        health.SetHealth(maxHealth);
         health.TryChangeHealth(-missingHealth);
     }
 
