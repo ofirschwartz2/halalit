@@ -422,6 +422,31 @@ internal static class TestUtils
         return leech;
     }
 
+    // Mender (#230)
+    public const string MENDER_PREFAB_PATH = "Prefabs/Enemies/SpecialMovementEnemies/Mender";
+
+    // Loads the Mender straight from its prefab, seeded, with all its scripts on, so it follows and heals as in a run.
+    internal static GameObject LoadMender(Vector2 position, int seed)
+    {
+        var menderPrefab = Resources.Load<GameObject>(MENDER_PREFAB_PATH);
+        if (menderPrefab == null)
+        {
+            throw new System.Exception($"Mender prefab not found at Resources/{MENDER_PREFAB_PATH} (Needs Ofir in Unity, #230)");
+        }
+        if (menderPrefab.GetComponent<MenderEnemy>() == null || menderPrefab.GetComponent<LameEnemy>() != null)
+        {
+            throw new System.Exception("Mender prefab needs MenderEnemy and no LameEnemy on its root (Needs Ofir in Unity, #230)");
+        }
+        var enemyDropper = menderPrefab.GetComponent<EnemyDropper>();
+        if (enemyDropper == null || enemyDropper.GetDropper() != Dropper.MENDER)
+        {
+            throw new System.Exception("Mender prefab's EnemyDropper is not set to MENDER (Needs Ofir in Unity, #230)");
+        }
+        var mender = Object.Instantiate(menderPrefab, position, Quaternion.identity);
+        mender.GetComponent<EnemySharedBehavior>().SetInitialSeedfulRandomGenerator(seed);
+        return mender;
+    }
+
     // Loads a Tripwire post straight from its AttacksBank prefab, flying in the given direction (it flies along its transform.up).
     internal static GameObject LoadTripwirePost(Vector2 position, Vector2 direction)
     {
