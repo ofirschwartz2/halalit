@@ -318,25 +318,45 @@ Not found: any number for difficulty over time, enemy health scaling, or a score
 
 ## 10. Open questions for Ofir
 
+Answered questions keep their number. Each shows Ofir's answer and its date.
+
 1. Which platform is the first release for: Android phone only, or also iOS or PC?
+   - **Answered (Ofir, 2026-11-21):** iOS first, Android later.
 2. How long should one good run last: about 2, 5 or 15 minutes?
 3. How should a run end: only by dying while it gets harder, or by clearing a set number of waves or levels?
 4. Is the committed Playground setup (15 enemies of three types, four drop tables, 90 to 100 of each utility in stock) the game you want, or a debug state left from the laser work?
 5. Who is the player: someone after a quick arcade session, or someone who wants builds and depth?
+   - **Partly answered (Ofir, 2026-11-21):** friends playing a daily, with Spelunky-style depth (the vision above). Run length stays open (question 2).
 6. What should the daily run be: one attempt per day on a shared seed with its own leaderboard, or something else?
+   - **Partly answered (Ofir):** one random run a day, the same for every player, from one seed (2026-11-21). It has its own leaderboard (#172, approved 2026-11-22). The day follows Israel time (#204, 2026-11-25).
+   - Still open: how many tries a day (as built, one), and who wins (question 13).
 7. Should a weapon pickup always replace the current weapon, or should the player choose?
 8. Should the ship be able to regain health during a run?
 9. Should asteroids be able to kill the ship, by damage or by crushing it out of the arena? Today they only push.
 10. Should score come only from collected valuables, or also from kills or time survived?
 11. Are the seven upgrades that do nothing, and the Weight stat, still planned as written in your task file, or may we propose changes?
 12. Will the first release have sound, and is there a reference game for the look and feel?
+    - **Partly answered (Ofir, 2026-11-21):** the game was born from Spelunky, the model for its depth. Sound and the look stay open.
+13. Who wins each day: the highest score or the last ship standing? It comes from the daily replay idea (#244) and is tied to questions 3 and 10.
+    - **Open.** Ofir, 2026-11-27: "I don't have the answer for it." And: "I'm okay with just going with one decision, and worst case we can change it later."
+    - **Working rule until he decides:** the highest score wins, as built.
+    - *Highest score:* every pickup is a risk taken for points, as in Spelunky, whose daily ranks by money. A bold player can beat a careful one. But the last ship standing in the replay may lose the day.
+    - *Longest survival:* matches the replay's crown. But caution wins, and valuables stop mattering, along with Coin Thief (#164) and Coin Toss (#198). It needs a run nobody can outlast: as built, a cleared arena is safe forever.
+    - *Survival, with score breaking ties:* plays like pure survival, because times rarely tie.
+    - *Score with a survival multiplier:* valuables are worth more the longer the ship lives, for example ×2 after 2 minutes (a starting value). Greed still scores, and the last ships in the replay have the most to gain. Coin Toss coins must not get the multiplier, or throwing and picking them up again farms score.
+    - **Designer's lean, not a decision:** keep the highest score, show each ship's score in the replay, and add the multiplier if replays show that early deaths often win.
 
 ## 11. Ideas parked for proposal
 
-None of these is approved. Nobody works on any of them until Ofir approves a written proposal.
+An idea here is not approved. Nobody works on one until Ofir approves a written proposal, as happened for item 5.
 
 1. Give a run a shape: a spawn schedule that ramps, and a result screen when it ends.
+   - Approved as two cards, auto-approved 2026-11-27: #248 (endless ramp) and #249 (results card).
 2. Make drops readable: an icon per weapon, a colour per rank, and a HUD tag for the current weapon.
 3. Add a way to recover health, for example a rare heal drop or a Vitality that also heals.
 4. Make the claw work without a third finger: collect automatically in range, or the homing claw already on Ofir's list.
 5. Make the daily real: a seed derived from the date, a fully seeded run, and a daily leaderboard.
+   - **Built in `develop`** (#159, #183, #184, #204, #172, #190). **Not run in Unity.**
+6. Daily replay video ([#244](https://github.com/ofirschwartz2/halalit/issues/244)), Ofir's idea, 2026-11-27: everyone's ship in one arena, dropping out as each player died, the last ship standing crowned. Who wins is question 13. Step 1 (the in-game replay) is approved, auto-approved 2026-11-27. The share-as-video step is a later offer.
+7. Show my place in each daily ([#245](https://github.com/ofirschwartz2/halalit/issues/245)), Ofir's idea, 2026-11-27: for example "12th of 40". Approved, auto-approved 2026-11-27.
+8. NFT pilot ([#246](https://github.com/ofirschwartz2/halalit/issues/246)), Ofir's idea, 2026-11-27: a pilot NFT, visible in a see-through cockpit. Parked until after Milestone 1. On iOS an NFT must stay cosmetic (App Store rule 3.1.1).
