@@ -366,3 +366,43 @@ An idea here is not approved. Nobody works on one until Ofir approves a written 
 6. Daily replay video ([#244](https://github.com/ofirschwartz2/halalit/issues/244)), Ofir's idea, 2026-11-27: everyone's ship in one arena, dropping out as each player died, the last ship standing crowned. Who wins is question 13. Step 1 (the in-game replay) is approved, auto-approved 2026-11-27. The share-as-video step is a later offer.
 7. Show my place in each daily ([#245](https://github.com/ofirschwartz2/halalit/issues/245)), Ofir's idea, 2026-11-27: for example "12th of 40". Approved, auto-approved 2026-11-27.
 8. NFT pilot ([#246](https://github.com/ofirschwartz2/halalit/issues/246)), Ofir's idea, 2026-11-27: a pilot NFT, visible in a see-through cockpit. Parked until after Milestone 1. On iOS an NFT must stay cosmetic (App Store rule 3.1.1).
+
+## 12. Fairness with your own weapons (thinking, not decided)
+
+Game designer, 2026-11-27. Thinking for after Milestone 1, not a decision and not a card. It explores Ofir's rule in the Vision: NFT weapons may come into the daily, but none may change the whole game, and skill decides most of the result.
+
+**What the ranks mean today.** Computed from section 8 and the prefabs.
+
+- Higher ranks only gain: every range is as good as the rank below, or better. A Legendary is 1 attack item in 333.
+- Legendary Power is about 3 to 4 times Common for Laser Beam, Knockback Wave and Shotgun, and 8 to 15 times for the other seven (range midpoints). A Legendary also attacks 1.25 to 1.85 times as often.
+- Hits decide, not Power. Enemies have 7 health and asteroids 5. A Common Ball Shot needs 4 or 7 hits per enemy, an Epic or Legendary 1. Today Power above 7 adds nothing, and 5 or 6 kills an enemy in the same 2 hits as 4.
+- So a Legendary Ball Shot NFT, brought in as it is, kills every enemy in one hit from the first second. The starting Ball Shot needs 7. That is the case to rule out. Prizes for a daily's top places would also snowball: winners get stronger weapons and win again.
+- The daily already shares weapon luck. The seed rolls every dropped weapon at run start, so the third Shotgun to drop is the same item for every player (`GL/Items/Infra/ItemsBank.cs:28`). An NFT is the first thing from outside the seed.
+
+**How other games do it.** The examples come from the designer's general knowledge and were not looked up. Check them before relying on them, especially the World of Warcraft dates.
+
+| Approach | Seen in | Gain | Cost |
+|---|---|---|---|
+| Sidegrades: every plus has a minus | Team Fortress 2 unlocks, Mario Kart parts | Owning gives a style, not power | Needs a real minus. Weight, the obvious one, does nothing yet |
+| One stat budget, spread differently | Pokémon base stat totals | Every NFT is unique, and none is stronger | Every stat needs a fair price, and Power's value jumps in steps (7 health) |
+| Normalise stats in the daily | Pokémon tournaments (all at level 50), Guild Wars 2 PvP | Fair by construction, easy to explain | The roll stops mattering there. World of Warcraft did this for PvP in 2016 and undid it in 2018 |
+| The daily sets the loadout; the NFT changes looks and one small trait | Spelunky (characters are looks only), Gods Unchained NFT cards (quality is looks only) | The fairest, and the safest on iPhone (question 15) | The NFT's own stats matter least |
+| Cap how far apart rolls can be | Forza car classes, Splinterlands NFT cards (level cap per league) | A good roll keeps part of its value | A high cap keeps the gap. A low cap is normalising by another name |
+| Strong here, weak there | Spelunky items, Pokémon types | Luck becomes whether today suits your weapon. Fits the vision | The hardest to design. A big collection lets a player pick each day's best fit |
+
+**What I would combine.** Designer's lean, not a decision.
+
+1. **Size from the day, shape from you.** In the daily, the seed sets how strong a weapon is, as it already does for drops. The NFT sets its shape and its looks, and its rank still shows. Outside the daily it keeps its full roll.
+2. **One budget per rank.** A shape spreads the same budget. More Power costs Rate. A crit chance costs Power at the same average damage: that is the good-or-bad luck Ofir allows. Weight joins once it does something. The budget counts hits to kill, not raw Power.
+3. **Every shape has a bad day.** A heavy shape (Power 5 or 6) kills asteroids in 1 hit but enemies still in 2 (works today). A lucky shape (Power 3, sometimes triple damage) kills a Laser range in 1 hit during its 1 s aim, or needs 3 (crit code works today, but every item has crit 0). A heavy weapon pushes a charging Following enemy off its line but swings slower (needs code).
+4. **The same moment for everyone.** Every ship starts with the Ball Shot. The NFT takes the place of the day's first weapon drop, at that drop's rank. A player without an NFT gets the seed's weapon.
+
+Edge cases: a later weapon pickup replaces the NFT for the rest of the run, as with any weapon (question 7). CriticalHit must stay above 1, or a crit hits softer than a normal shot (`AttackBehaviour.cs:35`).
+
+**Open questions for Ofir**
+
+1. In the daily, may an NFT be stronger at all, or only different? Lean: only different.
+2. How does an NFT enter a daily: at the start in place of the Ball Shot, or at a moment the seed sets for everyone? This is the open part of question 14. Lean: the seed's moment.
+3. Which NFT may a player bring: any, one chosen per week, or only when the seed drops that type? Lean: one per week, so a big collection cannot pick each day's best fit.
+4. Outside the daily, do NFTs keep their full roll? Then the all-time high score board favours big rolls. Lean: yes, and the daily board is the one that counts.
+5. Are clothing NFTs looks only, everywhere? Lean: yes.
