@@ -27,8 +27,12 @@ public class ShootingLaserAsteriskAttackTests
         TestUtils.SetTestMode();
         var enemy = TestUtils.LoadEnemy(TestUtils.SHOOTING_LASER_ASTERISK_ENEMY_PREFAB_PATH, TestUtils.DEFAULT_POSITION_TO_THE_RIGHT, _currentSeed);
         enemy.GetComponent<MoveAimAttackStateMachine>().enabled = false;
-        enemy.GetComponent<ShootingLaserAsteriskAttack>().enabled = false;
+        var attack = enemy.GetComponent<ShootingLaserAsteriskAttack>();
+        attack.enabled = false;
         yield return null;
+        // Unity calls OnDestroy only on an object that has been active, and Start only on a script that is on.
+        AssertWrapper.IsTrue(enemy.activeInHierarchy, "Test setup: the laser asterisk is not active, so Unity would not call its OnDestroy", _currentSeed);
+        AssertWrapper.IsFalse(attack.enabled, "Test setup: the attack was switched back on, so its Start may have run", _currentSeed);
 
         // WHEN
         Object.Destroy(enemy);
@@ -36,6 +40,35 @@ public class ShootingLaserAsteriskAttackTests
 
         // THEN
         AssertWrapper.IsNull(enemy, _currentSeed, "The laser asterisk was not destroyed, so its OnDestroy did not run");
+    }
+
+    // A spawn hole switches off all the enemy's Behaviours except the few it keeps on (SpawnHole.DisableEnemyScripts), so most have not started.
+    // Here all of them are off, so the test does not depend on which few the hole keeps on. Destroying the enemy then must log no exception.
+    [UnityTest]
+    public IEnumerator DestroyedBeforeAnyScriptStartsLogsNoError()
+    {
+        // GIVEN
+        yield return null;
+        TestUtils.SetTestMode();
+        var enemy = TestUtils.LoadEnemy(TestUtils.SHOOTING_LASER_ASTERISK_ENEMY_PREFAB_PATH, TestUtils.DEFAULT_POSITION_TO_THE_RIGHT, _currentSeed);
+        var behaviours = enemy.GetComponents<Behaviour>();
+        foreach (var behaviour in behaviours)
+        {
+            behaviour.enabled = false;
+        }
+        yield return null;
+        AssertWrapper.IsTrue(enemy.activeInHierarchy, "Test setup: the laser asterisk is not active, so Unity would not call its OnDestroy", _currentSeed);
+        foreach (var behaviour in behaviours)
+        {
+            AssertWrapper.IsFalse(behaviour.enabled, $"Test setup: {behaviour.GetType().Name} on the laser asterisk was switched back on, so its Start may have run", _currentSeed);
+        }
+
+        // WHEN
+        Object.Destroy(enemy);
+        yield return null;
+
+        // THEN
+        AssertWrapper.IsNull(enemy, _currentSeed, "The laser asterisk was not destroyed, so its scripts' OnDestroy did not run");
     }
 
     [TearDown]
