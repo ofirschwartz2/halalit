@@ -3,6 +3,7 @@
 The rulebook for anyone, human or agent, who writes code in this repo: how the code is built today, the rules new code must follow, and the known debts.
 Checked by reading files at commit `e8b1c95` (2025-07-26): C#, `.asmdef`, `.meta`, scene and prefab YAML, git history. Nothing was compiled or run. "By reading" marks a conclusion that still needs a run in Unity.
 Updated 2026-11-26 after cards #153 to #219, read on `develop` at `00a0ea6`. Those cards are on `develop` only and none has run in Unity, so "fixed" in section 7 means fixed in code on `develop`.
+Sections 3.7, 3.8 and 5 updated 2026-11-27 after #239 (Daily Twist), read on `develop` at `c3913e9`.
 Unity 2022.3.3f1, C#, 2D physics. Ofir approves every idea and every change.
 
 ## 1. System map
@@ -190,13 +191,46 @@ Rules when extending:
 #endif
 ```
 - "Humble" methods: the Unity callback only reads input and passes it to a method that takes the input as parameters. That method is `internal` in the editor and `private` in builds (`#if UNITY_EDITOR internal #else private #endif`). Six exist: `WeaponAttack.HumbleFixedUpdate`, `WeaponMovement.TryChangeWeaponPosition`, `HalalitMovement.TryMove`, `PickupClawShooter.TryShootClaw`, `AttackToggle.SetNewAttack`, `ItemDropper.DropNewItem`.
-- `[assembly: InternalsVisibleTo("TestsPlayMode")]`, inside `#if UNITY_EDITOR`, exists in `Attacks`, `Enemies` (in `ShotDodger.cs`), `Health`, `Items`, `Player` and Meta. It does not exist in `Asteroid`, `Setup`, `UtilsAndModels` or `World`. One per assembly is enough; do not add a second.
+- `[assembly: InternalsVisibleTo("TestsPlayMode")]`, inside `#if UNITY_EDITOR`, exists in every game assembly except `Setup` and `World`:
+  - once in `Asteroid` (`AsteroidExternalInstantiator.cs`, #239), `Enemies` (`ShotDodger.cs`), `Health` (`Health.cs`), `UtilsAndModels` (`EnemyTarget.cs`, #163) and Meta (`GameOver.cs`);
+  - repeated in older files: 10 copies in `Attacks`, 6 in `Player`, 2 in `Items`. The copies do no harm. One per assembly is enough, so search the assembly's folder before adding one.
+- Three attributes name an assembly that does not exist, so they grant nothing (D19): `"TestsMode"` in `Attacks/MidRange/Boomerang.cs`, and `"PlayModeTests"` in `Meta/PlayerStats.cs` and `Meta/Score/Score.cs`. Meta still reaches the tests through `GameOver.cs`.
+- For EditMode tests, `Player` also grants `TestsEditMode` (`WeaponMovement.cs`). The test assembly `TestsPlayMode` grants `TestsEditMode` in `TestUtils.cs`, which is how EditMode tests use `AssertWrapper` and `TestUtils`.
 - Example: `Assets/GameLogic/Player/Weapon/WeaponAttack.cs`.
 
 Rules when extending:
 - Game code never calls an editor-only member.
 - Hooks read or inject. No test-only branch in game logic beyond the existing `WeaponAttack._isTesting`.
 - The first hook in an assembly without the attribute adds `InternalsVisibleTo("TestsPlayMode")` under `#if UNITY_EDITOR`.
+
+### 3.8 Daily twist
+- Every daily has one twist, the same on every phone that day (#239). PLAY and test runs have none, unless a test sets one.
+- The data lives in `UtilsAndModels`:
+  - `DailyTwistName` (`Models/Enum`): one member per twist, with `NONE` first.
+  - `DailyTwist` (`Models/DataObject`): a plain class with a name, a title, a description and one readonly field per knob. Each knob has a `Get…(sceneValue)` method that returns the scene's own number when the knob is at its neutral value.
+  - `DailyTwists` (`Random`): the table `PICKABLE`, the pick, and the run's twist `Current`.
+- The pick is `PICKABLE[(uint)dailySeed % PICKABLE.Length]` (`PickForSeed`; `PickForDate` hashes the date first). It reads the seed's value and creates no generator, so no seeded draw moves (3.6).
+- `OriginalRandomSeed.Awake` calls `DailyTwists.SetCurrent` on every Playground load. It sets `TestTwist` in test mode, the pick on a daily run, and `NONE` otherwise. Setting it on every load is what stops PLAY from keeping the last daily's twist.
+- Consumers read `DailyTwists.Current` in `Start`, never in `Awake`. Every `Awake` in the scene runs before any `Start`, so no Script Execution Order is needed.
+- There are three knobs, each read once in `Start`:
+  - start health: `Health`, only where the serialized `_followsDailyTwist` ("Follows Daily Twist") is on. That is the Halalit in the Playground scene, never a prefab.
+  - spawn gap multiplier: `SpawnHoleInstantiator`, applied in one place only, so it never compounds.
+  - smallest asteroid scale: `AsteroidExternalInstantiator`, still one draw per asteroid.
+- `MainMenu` shows today's twist, worked out from `PlayerStats._dailySeed`. `DailyTwistBanner` shows the run's twist on the HUD for a few seconds.
+- Tests:
+  - EditMode `Assets/Tests/EditMode/DailyTwistTests.cs`: the pick, the table, the knob methods, and that no prefab follows the twist.
+  - PlayMode `DailyTwist/DailyTwistTests.cs`: each knob in the scene, and the daily and PLAY branches.
+  - Call `TestUtils.SetTestTwist` before loading the scene, and `ResetTestTwist` in `[TearDown]`.
+- Example: `Assets/GameLogic/UtilsAndModels/Random/DailyTwists.cs`.
+
+Rules when extending:
+- A twist that uses the existing knobs: append a member to `DailyTwistName` and one row to the end of `PICKABLE`. Never insert, reorder or delete in either (rule 3, and version skew below). In the same pull request, work out the new `PinnedTwists` values by hand from the `DailySeed` hash.
+- A new knob: add a readonly field with a neutral value to `DailyTwist`, a constructor parameter and a `Get…(sceneValue)` method. Give every existing row the neutral value. Add one consumer that reads the knob in `Start`. Test the method in EditMode and the consumer in PlayMode.
+- A knob never writes to a prefab asset (rule 6). It never adds, removes or reorders a seeded draw. Change a number that is read in `Start`, or the range of an existing draw, as Big Rocks does. This is why Lucky Day waits for D9.
+- A knob on a component that also sits on prefabs is opt-in and off by default, as `_followsDailyTwist` is. Add an EditMode check that no prefab turns it on, as `NoPrefabFollowsTheTwist` does.
+- Version skew: any change to `PICKABLE` or to the pick gives every date a new twist. Phones on an older build then play a different twist from phones on a newer one. Ship such a change only in a build everyone installs. A failing `PinnedTwists` is that warning, so find out why before changing the expected values.
+- The twist is a pure function of the date, so a leaderboard can name a day's twist without saving anything. After the list changes, past days come out wrong.
+- Card #273 will change the pick so that twists rotate by date. Until it lands, the same twist can come several days in a row.
 
 ## 4. Code conventions actually used
 
@@ -223,14 +257,18 @@ New code follows the majority style, not this one.
 
 ## 5. Testing architecture
 
-- 101 tests: 91 `[UnityTest]` in 24 PlayMode classes under `Assets/Tests/PlayMode/PlayModeTests/<Feature>/`, and 10 `[Test]` in `Assets/Tests/EditMode/PlaygroundTests.cs`. There is no CI. Tests run from the Unity Test Runner.
+- 101 tests: 91 `[UnityTest]` in 24 PlayMode classes under `Assets/Tests/PlayMode/PlayModeTests/<Feature>/`, and 10 `[Test]` in `Assets/Tests/EditMode/PlaygroundTests.cs`. Tests run from the Unity Test Runner.
+- CI: `.github/workflows/unity-tests.yml` (#155; on `develop`, not yet on `master`) runs on pull requests and on demand. Its test job runs the EditMode and PlayMode tests in Unity 2022.3.3f1. It is skipped, not failed, until Ofir adds the three Unity secrets `UNITY_LICENSE`, `UNITY_EMAIL` and `UNITY_PASSWORD` (idea #270). Until then no test has run in CI, so passing checks on a pull request say nothing about the tests.
 - PlayMode tests run the real `Playground` scene. Template: `Assets/Tests/PlayMode/PlayModeTests/Attacks/LongRange/BallShotTests.cs`.
   1. `[SetUp]`: `_currentSeed = TestUtils.SetRandomSeed();` then `SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);`. This puts `OriginalRandomSeed` in test mode with that seed.
   2. The body is marked `// GIVEN`, `// WHEN`, `// THEN`. `TestUtils.SetTestMode()` switches off `AsteroidsContainer` and `EnemiesContainer`, stops `WeaponAttack` from reading the joystick, and sets time scale to 5 through `TestTimeController`.
   3. Actors come from the scene's `ObjectLoader`: `LoadEnemyInExternalSafeIsland(seed)`, `LoadAsteroidInExternalSafeIsland(seed)`, `LoadItemInExternalSafeIsland(ItemName)`, `LoadValuableInExternalSafeIsland()`. They appear parked in `ExternalSafeIsland`; move them with `TestUtils.Set…Position`.
   4. Drive the game through the humble methods (3.7) with `yield return null` between steps. Random test input comes from `TestUtils.GetRandomTouch…`, seeded by the same seed.
   5. Assert with `AssertWrapper.X(..., message, _currentSeed)`. A failure prints the seed; rerun with `TestUtils.SetRandomSeed(<seed>)`.
-  6. `[TearDown]`: `TestUtils.DestroyAllGameObjects()` and `TestTimeController.ResetTimeScale()`.
+  6. `[TearDown]`: `TestUtils.DestroyAllGameObjects()`. Then call `TestTimeController.ResetTimeScale()` only if the test saved a scale, which `SetTestMode` and `TestTimeController.SetTestTimeScale` do.
+     - `ResetTimeScale` puts back the last saved scale. That is 0 if nothing has been saved yet, and a scale of 0 stops time for the tests that follow.
+     - If some tests in a class save no scale, set a flag where a test saves one and check it in `[TearDown]`, as `SameSeedTests` and `DailyTwistTests` do.
+     - Also undo every static the test set: `TestUtils.ResetTestTwist()` after `SetTestTwist`, and `TestUtils.ResetPlayerRun()` after `SetPlayerRun` (D22).
 - `Assets/Tests/PlayMode/PlayModeTests/TestInfra/TestUtils.cs` holds scene getters by `Tag`, setup helpers, default `AttackStats` and shot-tracking coroutines. Add helpers there, not in test classes.
 - EditMode `PlaygroundTests` checks scene wiring: tagged objects exist and carry the expected components. It opens no scene itself, so it checks whichever scene is open in the editor.
 - Not referenced by any test (by grep): enemy behaviours and state machines, the spawner, `ItemsBank`, `DropsBank`, `ItemRankPicker`, upgrades, the score handoff, menus, the event-bus snapshot, one attack hitting two victims (except `MirrorBallShot`).
