@@ -178,6 +178,16 @@ internal static class TestUtils
         yield return null;
     }
 
+    internal static ValuableTarnish GetTarnish(GameObject valuable)
+    {
+        var tarnish = valuable.GetComponent<ValuableTarnish>();
+        if (tarnish == null)
+        {
+            throw new System.Exception($"ValuableTarnish missing on {valuable.name} (Needs Ofir in Unity, #231)");
+        }
+        return tarnish;
+    }
+
     // Loads the Mine Layer's mine straight from its prefab, as the Mine Layer would lay it (no movement, its own lifetime).
     internal static GameObject LoadEnemyMine(Vector2 position)
     {

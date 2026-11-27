@@ -16,6 +16,7 @@ public abstract class Valuable : MonoBehaviour
         if (other.gameObject.CompareTag(Tag.HALALIT.GetDescription()))
         {
             OnPlayerValuablePickedUp(this, new(_valuableName));
+            gameObject.SetActive(false);
             Destroy(gameObject);
         }
     }

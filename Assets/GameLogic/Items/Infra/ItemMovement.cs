@@ -19,6 +19,7 @@ public class ItemMovement : MonoBehaviour, IGrabbable
     private float _rotationSpeed;
     private bool _removedTransparencyPeriodDone;
     private float _transparencyPeriod;
+    private bool _isGrabbed;
 
     public void Start()
     {
@@ -73,6 +74,7 @@ public class ItemMovement : MonoBehaviour, IGrabbable
         transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer(Layer.ITEM_TRIGGERS.GetDescription());
         transform.GetChild(0).gameObject.GetComponent<Collider2D>().isTrigger = true;
         GetComponent<SpriteRenderer>().sortingLayerName = Assets.Enums.SortingLayer.FRONT.GetDescription();
+        _isGrabbed = true;
     }
 
     public void UnGrabbed()
@@ -82,6 +84,13 @@ public class ItemMovement : MonoBehaviour, IGrabbable
         transform.parent = null;
         GetComponent<SpriteRenderer>().sortingLayerName = Assets.Enums.SortingLayer.DEFAULT.GetDescription();
         SetTransperancyPeriod();
+        _isGrabbed = false;
+    }
+
+    // True while the claw, a Boomerang or a Coin Thief carries this item (#231: a carried valuable does not tarnish).
+    public bool IsGrabbed()
+    {
+        return _isGrabbed;
     }
 
     private void OnTriggerExit2D(Collider2D other)
