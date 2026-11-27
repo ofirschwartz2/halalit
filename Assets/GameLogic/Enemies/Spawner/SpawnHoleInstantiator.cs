@@ -128,5 +128,10 @@ private
     {
         return _spawnIntervalMultiplier;
     }
+
+    internal int GetInstantiationRatesIndex()
+    {
+        return _instantiationRatesIndex;
+    }
 #endif
 }
