@@ -58,4 +58,17 @@ public class AttackBehaviour : MonoBehaviour, IHarmer
     {
         return Mathf.CeilToInt(harm * _harmMultiplier);
     }
+
+    // Armor breaking: set at runtime on the instance (a full Charge Lance, #236). Not serialized; false keeps every other attack blocked by front plates as it was.
+    private bool _isArmorBreaking;
+
+    public void SetArmorBreaking(bool isArmorBreaking)
+    {
+        _isArmorBreaking = isArmorBreaking;
+    }
+
+    public bool IsArmorBreaking()
+    {
+        return _isArmorBreaking;
+    }
 }

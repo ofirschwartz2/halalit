@@ -38,7 +38,7 @@ public class FrontArmor : MonoBehaviour
 
     public bool IsBlocking(GameObject harmer)
     {
-        return IsBlockedTag(harmer) && IsInsideArc(harmer.transform.position) && !(_reflects && IsMelee(harmer));
+        return IsBlockedTag(harmer) && IsInsideArc(harmer.transform.position) && !(_reflects && IsMelee(harmer)) && !IsArmorBreaking(harmer);
     }
 
     #region Reflect
@@ -86,6 +86,13 @@ public class FrontArmor : MonoBehaviour
     {
         var attackBehaviour = harmer.GetComponent<AttackBehaviour>();
         return attackBehaviour != null && attackBehaviour.IsMelee;
+    }
+
+    // Charge Lance (#236): a full lance breaks through the plate, so it is neither blocked nor reflected.
+    private bool IsArmorBreaking(GameObject harmer)
+    {
+        var attackBehaviour = harmer.GetComponent<AttackBehaviour>();
+        return attackBehaviour != null && attackBehaviour.IsArmorBreaking();
     }
 
     private bool IsDescrete(GameObject harmer)

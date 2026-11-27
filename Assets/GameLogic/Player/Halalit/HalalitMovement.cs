@@ -23,6 +23,7 @@ public class HalalitMovement : MonoBehaviour, ISpeedForceController
     private float _speedLimit;
 
     private Vector2 _currentForce;
+    private float _weaponThrustFactor = 1f;
 
     public float GetSpeedLimit() => _speedLimit;
     public void SetSpeedLimit(float value) 
@@ -35,6 +36,12 @@ public class HalalitMovement : MonoBehaviour, ISpeedForceController
     public void SetForceMultiplier(float value) => _forceMultiplier = value;
 
     public Vector2 GetCurrentForce() => _currentForce;
+
+    // Charge Lance (#236): the weapon slows the ship while it charges. It stacks with latched Leeches.
+    public void SetWeaponThrustFactor(float weaponThrustFactor)
+    {
+        _weaponThrustFactor = weaponThrustFactor;
+    }
 
     void FixedUpdate()
     {
@@ -84,7 +91,7 @@ public class HalalitMovement : MonoBehaviour, ISpeedForceController
 
             float horizontalForce = Utils.GetDirectionalForce(direction.x, Math.Abs(joystickHorizontal), _forceMultiplier);
             float verticalForce = Utils.GetDirectionalForce(direction.y, Math.Abs(joystickVertical), _forceMultiplier);
-            _currentForce = ShipLatches.GetThrustFactor() * new Vector2(horizontalForce, verticalForce);
+            _currentForce = ShipLatches.GetThrustFactor() * _weaponThrustFactor * new Vector2(horizontalForce, verticalForce);
 
             _rigidBody.AddForce(_currentForce);
             
