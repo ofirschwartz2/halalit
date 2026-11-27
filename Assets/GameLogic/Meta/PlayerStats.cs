@@ -168,18 +168,26 @@ public static class PlayerStats
         
         if (_isNewHighScore)
         {
+            // A run that ends during the save can set a newer best (#249). Its flag then stays on, so the save chained after this one sends it
+            int? highScoreBeingSaved = _highScore;
             await SavePlayerHighScoreAsync();
-            _isNewHighScore = false;
+
+            if (_highScore == highScoreBeingSaved)
+            {
+                _isNewHighScore = false;
+            }
         }
     }
 
     public static async Task SavePlayerHighScoreAsync()
     {
+        // Copied before the first await, so Cloud Save and the leaderboard get the same best even when a run ends during the save (#249)
+        int? highScore = _highScore;
         _playerHighScore = new Dictionary<string, object>();
-        _playerHighScore[_highScoreKey] = _highScore;
+        _playerHighScore[_highScoreKey] = highScore;
 
         await CloudSaveService.Instance.Data.Player.SaveAsync(_playerHighScore);
-        await LeaderboardsService.Instance.AddPlayerScoreAsync(Constants.HIGHSCORE_LEADERBOARD_ID, (double)_highScore);
+        await LeaderboardsService.Instance.AddPlayerScoreAsync(Constants.HIGHSCORE_LEADERBOARD_ID, (double)highScore);
     }
 
 #endregion

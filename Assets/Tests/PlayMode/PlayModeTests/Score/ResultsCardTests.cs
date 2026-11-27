@@ -48,6 +48,7 @@ public class ResultsCardTests
         var score = TestUtils.GetScore();
         AssertWrapper.AreEqual(silverValue * 2, score, "Halalit Did Not Collect Two Silvers", _currentSeed);
         PlayerStats.SetDefaultPlayerStatsValues();
+        AssertWrapper.IsFalse(resultsCard.IsPanelShown(), "The Results Card Is On Screen Before The Death", _currentSeed);
 
         // WHEN
         TestUtils.KillHalalit();
@@ -58,6 +59,7 @@ public class ResultsCardTests
 
         // THEN
         AssertWrapper.IsTrue(resultsCard.IsOpen(), "Results Card Did Not Open", _currentSeed);
+        AssertWrapper.IsTrue(resultsCard.IsPanelShown(), "The Results Card Is Not On Screen After The Death", _currentSeed);
         AssertWrapper.AreEqual("Score: " + score, resultsCard.GetScoreText(), "Score Text Is Not The Run's Score", _currentSeed);
         AssertWrapper.AreEqual("New best: " + score, resultsCard.GetBestText(), "Best Text Is Not A New Best Of The Run's Score", _currentSeed);
         AssertWrapper.IsTrue(resultsCard.IsAgainShown(), "Again Is Hidden After A Normal Run", _currentSeed);
@@ -96,6 +98,36 @@ public class ResultsCardTests
         AssertWrapper.AreEqual("Best: " + savedBest, resultsCard.GetBestText(), "Best Text Is Not The Saved Best When The Run Is Not A New Best", _currentSeed);
     }
 
+    // The new-best flag means a best is waiting to be saved. It stays on while an earlier save runs, or after one failed offline,
+    // so a lower run after Again must say "Best: N", not "New best" with the earlier run's best
+    [UnityTest]
+    public IEnumerator LowerRunAfterAnUnsavedBestShowsBest()
+    {
+        // GIVEN
+        yield return null;
+        TestUtils.SetTestMode();
+        yield return null;
+        var resultsCard = GetResultsCardWithFakeServices(CountingSave);
+        yield return TestUtils.CollectValuable(ValuableName.SILVER);
+        var score = TestUtils.GetScore();
+        AssertWrapper.Greater(score, 0, "Halalit Did Not Collect A Silver", _currentSeed);
+        // An earlier run's best, above this run's score, that is not saved yet
+        PlayerStats.SetDefaultPlayerStatsValues();
+        var unsavedBest = score + BEST_ABOVE_SCORE;
+        PlayerStats._highScore = unsavedBest;
+        PlayerStats._isNewHighScore = true;
+
+        // WHEN
+        TestUtils.KillHalalit();
+        yield return null;
+        yield return null;
+
+        // THEN
+        AssertWrapper.IsTrue(resultsCard.IsOpen(), "Results Card Did Not Open", _currentSeed);
+        AssertWrapper.AreEqual("Score: " + score, resultsCard.GetScoreText(), "Score Text Is Not The Run's Score", _currentSeed);
+        AssertWrapper.AreEqual("Best: " + unsavedBest, resultsCard.GetBestText(), "A Run Below An Unsaved Best Says New Best", _currentSeed);
+    }
+
     // The save is faked as a real save that worked, which switches the daily off, so Again and the place are read after that
     [UnityTest]
     public IEnumerator DailyDeathHidesAgainAndShowsPlace()
@@ -117,6 +149,7 @@ public class ResultsCardTests
 
         // THEN
         AssertWrapper.IsTrue(resultsCard.IsOpen(), "Results Card Did Not Open After A Daily", _currentSeed);
+        AssertWrapper.IsTrue(resultsCard.IsPanelShown(), "The Results Card Is Not On Screen After A Daily", _currentSeed);
         AssertWrapper.IsFalse(resultsCard.IsAgainShown(), "Again Is Shown After A Daily", _currentSeed);
         AssertWrapper.IsTrue(resultsCard.IsDailyLabelShown(), "Daily Label Is Hidden After A Daily", _currentSeed);
         AssertWrapper.AreEqual(FAKE_PLACE_TEXT, resultsCard.GetPlaceText(), "Place Text Is Not Today's Place", _currentSeed);
@@ -140,6 +173,7 @@ public class ResultsCardTests
         yield return null;
         yield return null;
         AssertWrapper.IsTrue(resultsCard.IsOpen(), "Results Card Did Not Open While The Save Runs", _currentSeed);
+        AssertWrapper.IsTrue(resultsCard.IsPanelShown(), "The Results Card Is Not On Screen While The Save Runs", _currentSeed);
         AssertWrapper.AreEqual("Saving...", resultsCard.GetPlaceText(), "Place Text Does Not Say Saving While The Save Runs", _currentSeed);
 
         // WHEN
@@ -168,7 +202,7 @@ public class ResultsCardTests
         yield return null;
 
         // THEN
-        AssertWrapper.IsTrue(resultsCard.IsOpen(), "Results Card Closed After A Failed Save", _currentSeed);
+        AssertWrapper.IsTrue(resultsCard.IsPanelShown(), "Results Card Closed After A Failed Save", _currentSeed);
         AssertWrapper.AreEqual("Place could not load", resultsCard.GetPlaceText(), "Place Text Does Not Say The Place Could Not Load", _currentSeed);
     }
 
@@ -297,6 +331,29 @@ public class ResultsCardTests
 
         // THEN
         AssertWrapper.IsFalse(unwiredResultsCard.isActiveAndEnabled, "A ResultsCard With Empty Fields Stayed On, So GameOver Would Open It", _currentSeed);
+    }
+
+    // A card that is not open stored no time scale. If its buttons answered, they would put back that empty 0 and stop time in the next scene.
+    // This test adds its own card with no field wired, so it does not need the Playground's card
+    [UnityTest]
+    public IEnumerator ButtonOnACardThatIsNotOpenDoesNothing()
+    {
+        // GIVEN
+        yield return null;
+        TestUtils.SetTestMode();
+        yield return null;
+        var unwiredResultsCard = new GameObject(UNWIRED_RESULTS_CARD_NAME).AddComponent<ResultsCard>();
+        yield return null;
+        var timeScaleBefore = Time.timeScale;
+
+        // WHEN
+        unwiredResultsCard.PlayAgain();
+        yield return null;
+        yield return null;
+
+        // THEN
+        AssertWrapper.AreEqual(timeScaleBefore, Time.timeScale, "A Button On A Card That Is Not Open Changed The Time Scale", _currentSeed);
+        AssertWrapper.IsTrue(unwiredResultsCard != null, "A Button On A Card That Is Not Open Loaded A Scene", _currentSeed);
     }
 
     // Fails with the step to do while the Playground has no card, or has one with an empty field. Both service calls are faked before the death

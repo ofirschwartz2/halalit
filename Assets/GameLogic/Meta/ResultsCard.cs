@@ -101,10 +101,13 @@ public class ResultsCard : MonoBehaviour
     {
         int score = _score.GetScore();
         int best = PlayerStats._highScore ?? score;
+        // The flag means a best is waiting to be saved. It stays on while an earlier save runs, or after one failed offline,
+        // so only a run that is the best itself says "New best"
+        bool isNewBest = PlayerStats._isNewHighScore && score == best;
         _isDaily = PlayerStats._isDailyRun;
 
         _scoreText.text = SCORE_TEXT + score;
-        _bestText.text = (PlayerStats._isNewHighScore ? NEW_BEST_TEXT : BEST_TEXT) + best;
+        _bestText.text = (isNewBest ? NEW_BEST_TEXT : BEST_TEXT) + best;
         _placeText.text = _isDaily ? SAVING_TEXT : string.Empty;
         _dailyLabel.SetActive(_isDaily);
         _againButton.SetActive(!_isDaily);
@@ -184,9 +187,15 @@ public class ResultsCard : MonoBehaviour
     }
     #endregion
 
-    // Every button leaves through here. The time scale goes back first, so the next scene does not start frozen
+    // Every button leaves through here. The time scale goes back first, so the next scene does not start frozen.
+    // A card that is not open stored no time scale, so its buttons do nothing: putting back the empty 0 would stop time in the next scene
     private void LeaveTo(SceneName sceneName)
     {
+        if (!_isOpen)
+        {
+            return;
+        }
+
         Time.timeScale = _timeScaleBeforeOpen;
         SceneManager.LoadScene(sceneName.GetDescription());
     }
@@ -233,6 +242,12 @@ public class ResultsCard : MonoBehaviour
     internal bool IsDailyLabelShown()
     {
         return _dailyLabel.activeSelf;
+    }
+
+    // Unlike IsOpen, false until the card is really on screen
+    internal bool IsPanelShown()
+    {
+        return _panel.activeInHierarchy;
     }
 #endif
 }
