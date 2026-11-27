@@ -25,6 +25,7 @@ public class ChainSpark : BallShot
     private int _targetsLayerMask;
     private string _enemyTag;
     private string _asteroidTag;
+    private bool _didSpark;
 
     // Awake, not Start: the shot can hit in its first physics step, before its Start.
     private void Awake()
@@ -36,8 +37,15 @@ public class ChainSpark : BallShot
         _asteroidTag = Tag.ASTEROID.GetDescription();
     }
 
+    // One spark per bolt: Destroy waits for the end of the frame, so a bolt can enter more targets. The first hit decides, even a blocked one.
     protected override void OnHit(Collider2D other)
     {
+        if (_didSpark)
+        {
+            return;
+        }
+
+        _didSpark = true;
         var firstTarget = other.attachedRigidbody;
         if (firstTarget == null || !IsTarget(firstTarget) || IsBlockedByArmor(firstTarget))
         {

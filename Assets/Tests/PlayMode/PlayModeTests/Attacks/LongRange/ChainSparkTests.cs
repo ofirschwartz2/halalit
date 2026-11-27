@@ -18,6 +18,7 @@ public class ChainSparkTests
     private const int JUMP_HARM = 3;
     private const float NEAR_DISTANCE = 2f;
     private const float FARTHER_DISTANCE = 2.5f;
+    private const float PAIR_DISTANCE = 0.2f;
     private const float BOLT_START_DISTANCE = 1.5f;
     private const float HALALIT_DISTANCE_BELOW_TARGETS = 4f;
     // Longer than the bolt's 0.5 second lifetime, so the bolt has hit or died by then.
@@ -284,6 +285,32 @@ public class ChainSparkTests
         AssertWrapper.IsTrue(boltHitPlate, "Test Setup: The Bolt Did Not Reach The Shield Ram's Plate", _currentSeed);
         AssertWrapper.AreEqual(TARGET_HEALTH, GetHealth(shieldRam), "Test Setup: The Shield Ram's Plate Did Not Block The Bolt", _currentSeed);
         AssertWrapper.AreEqual(TARGET_HEALTH, GetHealth(enemies[0]), "A Bolt Stopped By A Front Plate Still Sparked To A Nearby Enemy", _currentSeed);
+    }
+
+    [UnityTest]
+    public IEnumerator SparksOncePerBolt()
+    {
+        // GIVEN
+        yield return SetUpChainSpark();
+        yield return LoadEnemiesWithHealth(3);
+        var enemies = _loadedEnemies;
+        Vector2 anchor = GetAnchor();
+        var pairLeft = enemies[0];
+        var pairRight = enemies[1];
+        var third = enemies[2];
+        // One on each side of the bolt's path, so the bolt enters both in the same physics step, even as the two push each other apart.
+        TestUtils.SetGameObjectPosition(pairLeft, anchor + Vector2.left * PAIR_DISTANCE / 2f);
+        TestUtils.SetGameObjectPosition(pairRight, anchor + Vector2.right * PAIR_DISTANCE / 2f);
+        TestUtils.SetGameObjectPosition(third, anchor + Vector2.right * NEAR_DISTANCE);
+        yield return PlaceHalalit(anchor + Vector2.down * HALALIT_DISTANCE_BELOW_TARGETS);
+
+        // WHEN
+        yield return FireAt(anchor, Vector2.down);
+
+        // THEN
+        AssertWrapper.IsTrue(GetHealth(pairLeft) <= TARGET_HEALTH - BOLT_HARM && GetHealth(pairRight) <= TARGET_HEALTH - BOLT_HARM, "Test Setup: The Bolt Did Not Enter Both Enemies Of The Pair", _currentSeed);
+        // Whichever enemy of the pair the bolt enters first, its one spark reaches the third enemy once. A second spark would hit it again.
+        AssertWrapper.AreEqual(TARGET_HEALTH - JUMP_HARM, GetHealth(third), "The Third Enemy Was Not Hit By Exactly One Spark", _currentSeed);
     }
 
     private IEnumerator SetUpChainSpark()
