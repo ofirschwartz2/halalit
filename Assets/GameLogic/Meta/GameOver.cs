@@ -10,6 +10,8 @@ using UnityEngine.SceneManagement;
 
 public class GameOver : MonoBehaviour
 {
+    private ResultsCard _resultsCard;
+
     #region Init
     private void Awake()
     {
@@ -19,6 +21,12 @@ public class GameOver : MonoBehaviour
     private void SetEventListeners()
     {
         GameOverEvent.GameOver += OnGameOver;
+    }
+
+    // The card is found, not wired, so the Halalit needs no new field (#249)
+    private void Start()
+    {
+        _resultsCard = FindObjectOfType<ResultsCard>();
     }
     #endregion
 
@@ -49,7 +57,15 @@ public class GameOver : MonoBehaviour
     #region Enemy destruction
     private void OnGameOver(object initiator, GameOverEventArguments arguments)
     {
-        SceneManager.LoadScene(SceneName.MAIN_MENU.GetDescription());
+        // Until the Playground has a wired results card, a death loads the menu as before (#249). An unwired card switches itself off
+        if (_resultsCard == null || !_resultsCard.isActiveAndEnabled)
+        {
+            Debug.LogWarning("GameOver: the Playground has no wired ResultsCard, so the menu loads.");
+            SceneManager.LoadScene(SceneName.MAIN_MENU.GetDescription());
+            return;
+        }
+
+        _resultsCard.Open();
     }
     #endregion
 }

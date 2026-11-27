@@ -115,12 +115,12 @@ public class Score : MonoBehaviour, IScoreWallet
     }
     #endregion
 
-#if UNITY_EDITOR
-
     public int GetScore()
     {
         return _score;
     }
+
+#if UNITY_EDITOR
 
     internal List<KeyValuePair<ValuableName, int>> GetValuableValues()
     {

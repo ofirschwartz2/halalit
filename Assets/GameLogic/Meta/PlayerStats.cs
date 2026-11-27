@@ -28,6 +28,8 @@ public static class PlayerStats
     {
         await InitAuthenticationAsync();
 
+        // The results card may still be saving the run (#249). This save and the reset wait for it, so they never run on top of it
+        await WaitQuietlyAsync(_runScoresSave);
         await TrySaveHighScoresAsync();
 
         SetDefaultPlayerStatsValues();
@@ -96,6 +98,33 @@ public static class PlayerStats
 
 #region Save Scores
     
+    // The run's save, started by the results card when it opens (#249). A later save waits for it, so two saves never overlap
+    private static Task _runScoresSave = Task.CompletedTask;
+
+    internal static Task SaveRunScoresAsync()
+    {
+        _runScoresSave = SaveAfterAsync(_runScoresSave);
+        return _runScoresSave;
+    }
+
+    private static async Task SaveAfterAsync(Task previousSave)
+    {
+        await WaitQuietlyAsync(previousSave);
+        await TrySaveHighScoresAsync();
+    }
+
+    private static async Task WaitQuietlyAsync(Task save)
+    {
+        try
+        {
+            await save;
+        }
+        catch (Exception)
+        {
+            // The results card already logged this failure, and the flags still mark what is left to save
+        }
+    }
+
     internal static async Task TrySaveHighScoresAsync()
     {
         await TrySaveNewHighScoreAsync();

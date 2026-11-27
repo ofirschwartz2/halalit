@@ -370,4 +370,24 @@ public class PlaygroundTests
         var twistLabel = (Component)twistText.objectReferenceValue;
         AssertWrapper.IsTrue(twistLabel.gameObject.activeInHierarchy, "The twist label starts switched off, so the twist line never shows (Needs Ofir in Unity)");
     }
+
+    [Test]
+    public void ResultsCardTests()
+    {
+        // RESULTS CARD (#249, Needs Ofir in Unity): one on the HUD, its six fields wired, and its panel a child, not the card's own object
+        var resultsCards = Object.FindObjectsOfType<ResultsCard>();
+        AssertWrapper.IsTrue(resultsCards.Length == 1, $"The Playground should have one active ResultsCard, it has {resultsCards.Length} (Needs Ofir in Unity)");
+
+        var serializedResultsCard = new UnityEditor.SerializedObject(resultsCards[0]);
+        foreach (var fieldName in new[] { "_panel", "_scoreText", "_bestText", "_placeText", "_dailyLabel", "_againButton" })
+        {
+            var field = serializedResultsCard.FindProperty(fieldName);
+            AssertWrapper.IsTrue(field != null, $"ResultsCard has no field {fieldName}, update this test");
+            AssertWrapper.IsTrue(field.objectReferenceValue != null, $"ResultsCard's {fieldName} is not wired (Needs Ofir in Unity)");
+        }
+
+        // The card hides its panel when the Playground starts, so a panel on the card's own object would switch the whole card off
+        var panel = (GameObject)serializedResultsCard.FindProperty("_panel").objectReferenceValue;
+        AssertWrapper.IsTrue(panel != resultsCards[0].gameObject, "ResultsCard's Panel is the card's own object, so the card would switch itself off (Needs Ofir in Unity)");
+    }
 }
