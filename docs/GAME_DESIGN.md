@@ -10,7 +10,7 @@ First draft, 2026-11-20. Written by the game designer agent for Ofir and the tea
 
 ## Vision (decided by Ofir, 2026-11-21)
 
-This section is what Ofir wants the game to become. Everything after it describes the game as built.
+This section is what Ofir wants the game to become. Everything after it describes the game as built. It is a general direction, not a spec. In Ofir's words (2026-11-27): "All of these ideas are basically only general ideas that will change in some way ... everything is extremely liquid and open to discussion." So the team builds by Milestone 1 and the approved cards, and raises vision questions as offers or open questions. It does not treat the vision details as fixed requirements.
 
 - **Spelunky-style depth.** The game was born from Spelunky. It should be full of specific interactions between a specific enemy, a specific weapon and a specific place or situation. In his words: "extremely detailed and thoughtful", so that "every little thing was very thoughtful and thought through".
 - **Rich and distinct.** Many enemies and many weapons. No enemy plays like another enemy, and no weapon plays like another weapon.
