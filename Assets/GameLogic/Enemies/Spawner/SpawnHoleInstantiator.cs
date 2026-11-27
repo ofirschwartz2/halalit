@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class SpawnHoleInstantiator : SeedfulRandomGeneratorUser
 {
+    // Endless Ramp (#248): checks often enough that a gap plays as written, not as the next whole second
+    private const float SPAWN_CHECK_SECONDS = 0.1f;
+    private const float FAILED_SEARCH_RETRY_SECONDS = 1f;
+
     [SerializeField]
     private float[] _instantiationRate;
     [SerializeField]
@@ -36,11 +40,10 @@ public class SpawnHoleInstantiator : SeedfulRandomGeneratorUser
         {
             if (Time.time >= _nextInstantiationTime)
             {
-                _nextInstantiationTime = GetNextInstantiationTime();
                 InstantiateSpawnHole();
             }
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(SPAWN_CHECK_SECONDS);
         }
     }
 
@@ -56,22 +59,24 @@ public class SpawnHoleInstantiator : SeedfulRandomGeneratorUser
         }
     }
 
+    // The next gap starts only once a hole is placed (#248). A failed search looks again 1 s later and keeps its row of the gap list.
     private void TryInstantiatingSpawnHole()
     {
         if (TryGetRandomInstantiationPosition())
         {
             Instantiate(_spawnHolePrefab, _instantiationPosition, Quaternion.identity);
+            _nextInstantiationTime = GetNextInstantiationTime();
         }
         else
         {
-            _nextInstantiationTime = _nextInstantiationTime + 1f;
+            _nextInstantiationTime = Time.time + FAILED_SEARCH_RETRY_SECONDS;
         }
     }
 
     private float GetNextInstantiationTime()
     {
 
-        var nextInstantiationTime = Time.time + _instantiationRate[_instantiationRatesIndex] * _spawnIntervalMultiplier;
+        var nextInstantiationTime = Time.time + GetInstantiationGap(_instantiationRatesIndex);
 
         if (_instantiationRatesIndex != _instantiationRate.Length - 1)
         {
@@ -79,6 +84,17 @@ public class SpawnHoleInstantiator : SeedfulRandomGeneratorUser
         }
 
         return nextInstantiationTime;
+    }
+
+    // The gap before hole holeIndex: its row of the scene's gap list, holding the last row after the end, times the daily twist's multiplier
+#if UNITY_EDITOR
+internal
+#else
+private
+#endif
+    float GetInstantiationGap(int holeIndex)
+    {
+        return _instantiationRate[Mathf.Min(holeIndex, _instantiationRate.Length - 1)] * _spawnIntervalMultiplier;
     }
 
     private bool TryGetRandomInstantiationPosition()
@@ -111,6 +127,11 @@ public class SpawnHoleInstantiator : SeedfulRandomGeneratorUser
     internal float GetSpawnIntervalMultiplier()
     {
         return _spawnIntervalMultiplier;
+    }
+
+    internal int GetInstantiationRatesIndex()
+    {
+        return _instantiationRatesIndex;
     }
 #endif
 }
