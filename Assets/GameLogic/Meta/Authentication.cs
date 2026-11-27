@@ -75,4 +75,10 @@ public class Authentication : MonoBehaviour
         return AuthenticationService.Instance.PlayerId;
     }
 
+    // Returns the name Unity stored, which is expected to end in a tag such as "#1234" (unconfirmed)
+    public static async Task<string> UpdatePlayerNameAsync(string playerName)
+    {
+        return await AuthenticationService.Instance.UpdatePlayerNameAsync(playerName);
+    }
+
 }
