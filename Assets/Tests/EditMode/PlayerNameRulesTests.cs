@@ -12,6 +12,12 @@ public class PlayerNameRulesTests
     }
 
     [Test]
+    public void DigitsOnlyIsValid()
+    {
+        AssertWrapper.IsTrue(PlayerNameRules.IsValid("2026"), "A name of digits only was refused");
+    }
+
+    [Test]
     public void TooShortOrTooLongIsRefused()
     {
         AssertWrapper.IsFalse(PlayerNameRules.IsValid(null), "A missing name was accepted");
@@ -29,10 +35,32 @@ public class PlayerNameRulesTests
     }
 
     [Test]
+    public void SpacesAtEitherEndAreRefusedUntilCleaned()
+    {
+        AssertWrapper.IsFalse(PlayerNameRules.IsValid(" Ofir"), "A name starting with a space was accepted, so the space could reach Unity");
+        AssertWrapper.IsFalse(PlayerNameRules.IsValid("Ofir "), "A name ending with a space was accepted, so the space could reach Unity");
+        AssertWrapper.IsTrue(PlayerNameRules.IsValid(PlayerNameRules.Clean(" Ofir ")), "A name typed with spaces around it was refused after cleaning");
+    }
+
+    [Test]
+    public void NameWithUnityTagIsRefused()
+    {
+        // Unity adds a tag such as "#12345" to the name it stores, so a name read back from Unity cannot be sent again as it is
+        AssertWrapper.IsFalse(PlayerNameRules.IsValid("Ofir#12345"), "A name with Unity's # tag was accepted");
+    }
+
+    [Test]
     public void HebrewLettersAreRefused()
     {
         // "Ofir" in Hebrew letters, escaped so this file stays ASCII
         AssertWrapper.IsFalse(PlayerNameRules.IsValid("\u05D0\u05D5\u05E4\u05D9\u05E8"), "A name in Hebrew letters was accepted, but the menu fonts may not draw it");
+    }
+
+    [Test]
+    public void EmojiIsRefused()
+    {
+        // "Ofir" and a smiling face, escaped so this file stays ASCII. The emoji is two chars in a C# string
+        AssertWrapper.IsFalse(PlayerNameRules.IsValid("Ofir\uD83D\uDE00"), "A name with an emoji was accepted, but the menu fonts may not draw it");
     }
 
     [Test]
@@ -53,6 +81,13 @@ public class PlayerNameRulesTests
     public void CleanTrimsSpaces()
     {
         AssertWrapper.AreEqual("Ofir", PlayerNameRules.Clean("  Ofir "), "Spaces around a name were kept");
+    }
+
+    [Test]
+    public void CleanTrimsTabsAndLineBreaks()
+    {
+        // A name copied from a message can bring a tab or a line break the player cannot see
+        AssertWrapper.AreEqual("Ofir", PlayerNameRules.Clean("\tOfir\r\n"), "A tab or line break around a name was kept, so the name would be refused");
     }
 
     [Test]
