@@ -343,6 +343,25 @@ namespace Assets.Utils
             return Vector2.Distance(a, b) <= delta;
         }
 
+        // A deterministic "nearest" test: the shorter distance from center wins; on a tie the lower x wins, then the lower y.
+        public static bool IsNearerThan(Vector2 center, Vector2 candidate, Vector2 best)
+        {
+            float candidateDistance = (candidate - center).sqrMagnitude;
+            float bestDistance = (best - center).sqrMagnitude;
+
+            if (candidateDistance != bestDistance)
+            {
+                return candidateDistance < bestDistance;
+            }
+
+            if (candidate.x != best.x)
+            {
+                return candidate.x < best.x;
+            }
+
+            return candidate.y < best.y;
+        }
+
         public static bool IsCloserClockwise(float degreeFrom, float degreeTo) 
         {
             var a = degreeTo > degreeFrom ? degreeTo - degreeFrom > 180 : degreeFrom - degreeTo < 180;

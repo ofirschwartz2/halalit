@@ -440,6 +440,14 @@ internal static class TestUtils
         return crashDamage;
     }
 
+    // Chain Spark (#229)
+    // Loads a Chain Spark straight from its AttacksBank prefab, flying in the given direction (BallShot flies along its transform.up).
+    internal static GameObject LoadChainSpark(Vector2 position, Vector2 direction)
+    {
+        var chainSparkPrefab = AttacksBank.GetAttackPrefab(AttackName.CHAIN_SPARK);
+        return Object.Instantiate(chainSparkPrefab, position, Quaternion.LookRotation(Vector3.forward, direction));
+    }
+
     internal static void SetGameObjectPosition(GameObject gameObject, Vector2 position) 
     {
         gameObject.transform.position = position;
