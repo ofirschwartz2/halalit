@@ -18,6 +18,8 @@ public class LeechTests
     private const float WAIT_MARGIN = 0.3f;
     // Above the shake-off speed and below the global speed limit (20 in Playground).
     private const float SHAKE_OFF_EXTRA_SPEED = 2f;
+    // Covers the gap to the Halalit well within TOUCH_TIMEOUT.
+    private const float DISABLED_LEECH_PUSH_SPEED = 5f;
     private static readonly Vector2 RIGHT_OF_HALALIT = new(1.5f, 0);
     private static readonly Vector2 LEFT_OF_HALALIT = new(-1.5f, 0);
     // Close enough that the third Leech touches the Halalit long before the latched ones harm it again.
@@ -222,6 +224,38 @@ public class LeechTests
         AssertWrapper.IsFalse(leech.IsLatched(), "Disabled Leech stayed latched", _currentSeed);
         AssertWrapper.AreEqual(0, ShipLatches.GetLatchedCount(), "Disabled Leech kept its slot", _currentSeed);
         AssertWrapper.AreEqual(1f, ShipLatches.GetThrustFactor(), "Disabled Leech still slows the thrust", _currentSeed);
+    }
+
+    [UnityTest]
+    public IEnumerator DisabledLeechDoesNotLatch()
+    {
+        // GIVEN
+        yield return null;
+        TestUtils.SetTestMode();
+        var halalit = TestUtils.GetHalalit();
+        var halalitHealth = halalit.GetComponent<Health>();
+        var leech = TestUtils.LoadLeech((Vector2)halalit.transform.position + RIGHT_OF_HALALIT, _currentSeed).GetComponent<LeechEnemy>();
+        leech.enabled = false;
+        yield return null;
+        halalitHealth.SetHealth(HALALIT_HEALTH);
+        var touchHarm = leech.GetComponent<CollisionHarmer>().GetCollisionHarm();
+        AssertWrapper.Greater(touchHarm, 0, "Test setup: a disabled Leech has no touch damage", _currentSeed);
+        var healthBeforeTouch = halalitHealth.GetHealth();
+
+        // WHEN
+        // A disabled Leech does not drift, so push it into the Halalit.
+        var leechRigidbody = leech.GetComponent<Rigidbody2D>();
+        leechRigidbody.velocity = ((Vector2)halalit.transform.position - leechRigidbody.position).normalized * DISABLED_LEECH_PUSH_SPEED;
+        var touchTimeout = Time.time + TOUCH_TIMEOUT;
+        while (halalitHealth.GetHealth() == healthBeforeTouch && Time.time < touchTimeout)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
+        // THEN
+        AssertWrapper.IsFalse(leech.IsLatched(), "A disabled Leech latched", _currentSeed);
+        AssertWrapper.AreEqual(0, ShipLatches.GetLatchedCount(), "A disabled Leech took a slot", _currentSeed);
+        AssertWrapper.AreEqual(healthBeforeTouch - touchHarm, halalitHealth.GetHealth(), "A disabled Leech did not do its touch damage", _currentSeed);
     }
 
     // One push to the right from a standstill, facing right, so two pushes differ only by the thrust factor.

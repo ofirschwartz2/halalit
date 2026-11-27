@@ -188,7 +188,7 @@ public class LeechEnemy : MonoBehaviour, IPausableEnemyBehaviour, ILatcher
     #region Predicates
     private bool CanLatch()
     {
-        return _state == LeechState.DRIFTING && ShipLatches.HasFreeSlot();
+        return enabled && _state == LeechState.DRIFTING && ShipLatches.HasFreeSlot();
     }
 
     private bool ShouldFallOff()
