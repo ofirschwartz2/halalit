@@ -19,10 +19,12 @@ public class TarnishTests
     // The test counts physics steps from the drop; the valuable's clock may start one step later.
     private const float BLINK_SAMPLE_MARGIN = 0.1f;
     private const float POSITION_DELTA = 0.1f;
-    private const float VELOCITY_DELTA = 0.2f;
+    private const float VELOCITY_DELTA = 0.05f;
+    // The Diamond must still move clearly faster than VELOCITY_DELTA when it tarnishes, or a Gold at rest would pass too.
+    private const float MIN_SPEED_AT_TARNISH = 4 * VELOCITY_DELTA;
     private static readonly Vector2 COIN_OFFSET_FROM_HALALIT = new(5, 0);
     private static readonly Vector2 MOVING_COIN_OFFSET_FROM_HALALIT = new(3, 0);
-    // With the valuables' drag this is still well above VELOCITY_DELTA after one step, and stays inside the world.
+    // With the valuables' linear drag (0.3) this is about 0.32 after 8 seconds, and the coin stays inside the world (about 11 units).
     private static readonly Vector2 MOVING_COIN_VELOCITY = new(3.5f, 0);
     private int _currentSeed;
 
@@ -93,18 +95,23 @@ public class TarnishTests
         Vector2 dropPosition = (Vector2)TestUtils.GetHalalit().transform.position + MOVING_COIN_OFFSET_FROM_HALALIT;
         var valuablesBeforeDrop = TestUtils.GetValuables();
         var diamond = TestUtils.DropValuable(ValuableName.DIAMOND, dropPosition);
+        var stepDuration = TestUtils.GetTarnish(diamond).GetStepDuration();
         var diamondRigidBody = diamond.GetComponent<Rigidbody2D>();
         diamondRigidBody.velocity = MOVING_COIN_VELOCITY;
         var lastDiamondVelocity = diamondRigidBody.velocity;
+        var watchedTime = 0f;
 
         // WHEN
-        while (diamond != null && diamond.activeSelf)
+        while (diamond != null && diamond.activeSelf && watchedTime < stepDuration + WAIT_MARGIN)
         {
             lastDiamondVelocity = diamondRigidBody.velocity;
             yield return new WaitForFixedUpdate();
+            watchedTime += Time.fixedDeltaTime;
         }
 
         // THEN
+        AssertWrapper.IsTrue(diamond == null || !diamond.activeSelf, "Moving Diamond Did Not Tarnish After Its Step Duration", _currentSeed);
+        AssertWrapper.Greater(lastDiamondVelocity.magnitude, MIN_SPEED_AT_TARNISH, "Diamond Was Too Slow When It Tarnished To Check The Velocity", _currentSeed);
         var newValuables = GetNewValuables(valuablesBeforeDrop);
         AssertWrapper.AreEqual(1, newValuables.Length, "Tarnished Diamond Did Not Leave Exactly One Valuable", _currentSeed);
         AssertWrapper.AreEqual(lastDiamondVelocity, newValuables[0].GetComponent<Rigidbody2D>().velocity, "Gold Did Not Keep The Diamond's Velocity", _currentSeed, VELOCITY_DELTA);
