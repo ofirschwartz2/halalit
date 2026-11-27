@@ -84,7 +84,7 @@ public class HalalitMovement : MonoBehaviour, ISpeedForceController
 
             float horizontalForce = Utils.GetDirectionalForce(direction.x, Math.Abs(joystickHorizontal), _forceMultiplier);
             float verticalForce = Utils.GetDirectionalForce(direction.y, Math.Abs(joystickVertical), _forceMultiplier);
-            _currentForce = new Vector2(horizontalForce, verticalForce);
+            _currentForce = ShipLatches.GetThrustFactor() * new Vector2(horizontalForce, verticalForce);
 
             _rigidBody.AddForce(_currentForce);
             

@@ -20,6 +20,7 @@ namespace Assets.Enums
         SHIELD_RAM,
         COIN_THIEF,
         MIRROR_SHIELD,
-        MIMIC
+        MIMIC,
+        LEECH
     }
 }
