@@ -243,6 +243,11 @@ public class Health : MonoBehaviour, IHealth
     {
         return _health;
     }
+
+    public int GetMaxHealth()
+    {
+        return _currentMaxHealth;
+    }
     #endregion
 
     #region Events
