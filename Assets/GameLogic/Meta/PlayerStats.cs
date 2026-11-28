@@ -319,6 +319,12 @@ public static class PlayerStats
         _runScoresSave = Task.CompletedTask;
         _load = null;
     }
+
+    // Read by the tests' guard (#307). Two delegates for the same static method compare equal
+    internal static bool IsSignInReal()
+    {
+        return _signIn == (Func<Task>)Authentication.Initialize;
+    }
 #endif
 #endregion
 

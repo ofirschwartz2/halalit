@@ -361,7 +361,7 @@ public class ResultsCardTests
     {
         var resultsCard = TestUtils.GetResultsCard();
         AssertWrapper.IsTrue(resultsCard != null, "The Playground Has No ResultsCard (Needs Ofir in Unity)", _currentSeed);
-        // GameOver loads the real menu, which signs in for real, when the card is off, and a card with an empty field switches itself off.
+        // GameOver loads the menu when the card is off, and a card with an empty field switches itself off.
         // So the test stops here, before the death
         AssertWrapper.IsTrue(resultsCard.isActiveAndEnabled, "The Playground's ResultsCard Switched Itself Off Because A Field Is Not Wired (Needs Ofir in Unity)", _currentSeed);
         resultsCard.SetServices(saveRunScores, LoadFakePlaceText);

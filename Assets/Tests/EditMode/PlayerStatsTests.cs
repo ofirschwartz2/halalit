@@ -52,7 +52,7 @@ public class PlayerStatsTests
     public void TearDown()
     {
         Application.logMessageReceived -= CountPlayerStatsWarning;
-        PlayerStats.ResetServices();
+        TestServices.UseFakes();
         PlayerStats.SetDefaultPlayerStatsValues();
     }
 

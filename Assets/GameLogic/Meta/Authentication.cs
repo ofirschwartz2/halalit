@@ -75,4 +75,12 @@ public class Authentication : MonoBehaviour
         return await AuthenticationService.Instance.UpdatePlayerNameAsync(playerName);
     }
 
+#if UNITY_EDITOR
+    // Read by the tests' set-up fixtures and guard (#307): no test may start Unity Services
+    internal static bool AreServicesStarted()
+    {
+        return UnityServices.State != ServicesInitializationState.Uninitialized;
+    }
+#endif
+
 }
