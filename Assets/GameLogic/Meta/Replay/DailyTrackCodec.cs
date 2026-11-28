@@ -54,6 +54,83 @@ public static class DailyTrackCodec
         return positions;
     }
 
+    #region Replay
+    // Null for no track, an empty path or a path that does not decode, so that player is shown without a ship
+    public static Vector2[] GetPathOrNull(DailyTrack track)
+    {
+        if (track == null)
+        {
+            return null;
+        }
+
+        try
+        {
+            Vector2[] path = DailyTrackCodec.GetPositions(track);
+            return path.Length == 0 ? null : path;
+        }
+        catch (FormatException)
+        {
+            return null;
+        }
+    }
+
+    // Where the ship is at a moment of the run: linear between two samples, the first sample before 0, the last after the end.
+    // Callers pass a path with at least one position
+    public static Vector2 GetPosition(Vector2[] positions, float sampleSeconds, float time)
+    {
+        if (positions.Length == 1 || sampleSeconds <= 0f || time <= 0f)
+        {
+            return positions[0];
+        }
+
+        float samplePosition = time / sampleSeconds;
+        int index = Mathf.FloorToInt(samplePosition);
+
+        if (index >= positions.Length - 1)
+        {
+            return positions[positions.Length - 1];
+        }
+
+        return Vector2.Lerp(positions[index], positions[index + 1], samplePosition - index);
+    }
+
+    // The score at a moment of the run, read by time: a change at sample n counts from n * SampleSeconds, never as a position index.
+    // From the death on it is the run's final score, which past the 30-minute cap, or on the death sample, can sit just after the death
+    public static int GetScore(DailyTrack track, float time)
+    {
+        if (track.Scores == null || track.ScoreSampleIndexes == null)
+        {
+            return 0;
+        }
+
+        int changes = Mathf.Min(track.Scores.Length, track.ScoreSampleIndexes.Length);
+
+        if (changes == 0)
+        {
+            return 0;
+        }
+
+        if (time >= track.SurvivalSeconds)
+        {
+            return track.Scores[changes - 1];
+        }
+
+        int score = 0;
+
+        for (int i = 0; i < changes; i++)
+        {
+            if (track.ScoreSampleIndexes[i] * track.SampleSeconds > time)
+            {
+                break;
+            }
+
+            score = track.Scores[i];
+        }
+
+        return score;
+    }
+    #endregion
+
     #region Sampling
     // Sample n is due at n times the sample time, until the 30-minute cap
     public static bool IsSampleDue(int samplesTaken, float elapsedSeconds)

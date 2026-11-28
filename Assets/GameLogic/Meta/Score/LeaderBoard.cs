@@ -27,6 +27,10 @@ public class LeaderBoard : MonoBehaviour
     private TMP_Text _placeText;
     [SerializeField]
     private Color _playerRowColor = Color.yellow;
+    [SerializeField]
+    private GameObject _watchButton;
+    [SerializeField]
+    private DailyReplay _dailyReplay;
 
     private Transform _entryContainer;
     private Transform _entryTemplate;
@@ -50,6 +54,11 @@ public class LeaderBoard : MonoBehaviour
         if (_placeText == null)
         {
             Debug.LogWarning("LeaderBoard: _placeText is not wired in the Leaderboard scene, so your place is not shown.");
+        }
+
+        if (_watchButton == null || _dailyReplay == null)
+        {
+            Debug.LogWarning("LeaderBoard: _watchButton or _dailyReplay is not wired in the Leaderboard scene, so a finished day cannot be watched.");
         }
 
         _isLoading = true;
@@ -83,6 +92,7 @@ public class LeaderBoard : MonoBehaviour
 
             SetListTitle(COULD_NOT_LOAD_TITLE);
             SetPlaceText(string.Empty);
+            SetWatchButton(false);
             DisplayScores(new List<LeaderboardEntry>(), null);
         }
         finally
@@ -107,6 +117,7 @@ public class LeaderBoard : MonoBehaviour
             SetListTitle(DailyLeaderboard.GetListTitle(true, _dayIndex, default));
             SetPlaceText(DailyLeaderboard.GetPlaceLine(true, _dayIndex, allTimePlayerEntry?.Rank, allTimePage.Total));
             DisplayScores(allTimePage.Results, allTimePlayerEntry);
+            SetWatchButton(DailyLeaderboard.CanWatch(true, _dayIndex));
             return;
         }
 
@@ -150,6 +161,7 @@ public class LeaderBoard : MonoBehaviour
         SetListTitle(DailyLeaderboard.GetListTitle(false, dayIndex, archivedDayStart));
         SetPlaceText(DailyLeaderboard.GetPlaceLine(false, dayIndex, playerEntry?.Rank, playerCount));
         DisplayScores(entries, playerEntry);
+        SetWatchButton(DailyLeaderboard.CanWatch(false, dayIndex));
     }
 
     private void SetListTitle(string title)
@@ -165,6 +177,14 @@ public class LeaderBoard : MonoBehaviour
         if (_placeText != null)
         {
             _placeText.text = placeLine;
+        }
+    }
+
+    private void SetWatchButton(bool isShown)
+    {
+        if (_watchButton != null)
+        {
+            _watchButton.SetActive(isShown);
         }
     }
 
@@ -247,6 +267,18 @@ public class LeaderBoard : MonoBehaviour
     public void ShowAllTime()
     {
         TryShowList(true, _dayIndex);
+    }
+
+    // Daily replay (#244): only a finished day can be watched
+    public void Watch()
+    {
+        if (_isLoading || !DailyLeaderboard.CanWatch(_isAllTime, _dayIndex) || _archivedVersions == null || _dailyReplay == null)
+        {
+            return;
+        }
+
+        var version = _archivedVersions[_dayIndex - 1];
+        _dailyReplay.Open(version.Id, DailySeed.GetIsraelDate(version.Start));
     }
 
     public void BackToMainMenu()
