@@ -63,7 +63,7 @@ public class EndlessRampTests
         for (int fill = 1; fill < FILLS_TO_TAKE; fill++)
         {
             AssertWrapper.IsTrue(GetSortedPrefabNames(fills[fill]).SequenceEqual(GetSortedPrefabNames(fills[0])), $"Fill {fill + 1} has other enemies than fill 1, the scene's bank", _currentSeed);
-            // Shares no seed at all, so a refill that replays a saved list in a new order also fails. Seeds are drawn from 0 to 2^31, so a chance match is about 1 in 10 million.
+            // Shares no seed at all, partner seeds included (#237), so a refill that replays a saved list in a new order also fails. Seeds are drawn from 0 to 2^31, so a chance match is under 1 in a million.
             for (int earlierFill = 0; earlierFill < fill; earlierFill++)
             {
                 var sharedSeeds = GetSeeds(fills[fill]).Intersect(GetSeeds(fills[earlierFill])).Count();
@@ -365,9 +365,12 @@ public class EndlessRampTests
         return enemies.Select(enemy => enemy.Prefab.name).OrderBy(prefabName => prefabName).ToList();
     }
 
+    // Tether Twins (#237): a paired entry's partner seed is a seed too, and a refill must draw it anew
     private List<int> GetSeeds(List<EnemyEntity> enemies)
     {
-        return enemies.Select(enemy => enemy.Seed).ToList();
+        return enemies.Select(enemy => enemy.Seed)
+            .Concat(enemies.Where(enemy => enemy.HasPartner).Select(enemy => enemy.PartnerSeed))
+            .ToList();
     }
 
     private bool IsAnySpawnHoleOpen()

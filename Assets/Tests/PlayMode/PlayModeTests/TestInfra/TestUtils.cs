@@ -540,6 +540,46 @@ internal static class TestUtils
         return enemyGroups;
     }
 
+    // Tether Twins (#237)
+    public const string TETHER_TWIN_PREFAB_PATH = "Prefabs/Enemies/SpecialMovementEnemies/TetherTwin";
+    public const string SPAWNING_HOLE_PREFAB_PATH = "Prefabs/Spawn/SpawningHole";
+
+    // Makes a pair of Tether Twins from one paired entry, as a spawn hole does, seeded, with all their scripts on.
+    // The second twin is moved before any physics step. Frozen twins neither move nor turn, so a test sets their line by hand.
+    internal static List<GameObject> LoadTetherTwins(Vector2 firstPosition, Vector2 secondPosition, int seed, bool frozen = true)
+    {
+        var tetherTwinPrefab = Resources.Load<GameObject>(TETHER_TWIN_PREFAB_PATH);
+        if (tetherTwinPrefab == null)
+        {
+            throw new System.Exception($"TetherTwin prefab not found at Resources/{TETHER_TWIN_PREFAB_PATH} (Needs Ofir in Unity, #237)");
+        }
+        var tetherTwin = tetherTwinPrefab.GetComponent<TetherTwin>();
+        if (tetherTwin == null || tetherTwinPrefab.GetComponent<LameEnemy>() != null)
+        {
+            throw new System.Exception("TetherTwin prefab needs TetherTwin and no LameEnemy on its root (Needs Ofir in Unity, #237)");
+        }
+        if (tetherTwin.GetTetherPrefab() == null)
+        {
+            throw new System.Exception("TetherTwin prefab's Tether Prefab field is empty (Needs Ofir in Unity, #237)");
+        }
+        var enemyDropper = tetherTwinPrefab.GetComponent<EnemyDropper>();
+        if (enemyDropper == null || enemyDropper.GetDropper() != Dropper.TETHER_TWIN)
+        {
+            throw new System.Exception("TetherTwin prefab's EnemyDropper is not set to TETHER_TWIN (Needs Ofir in Unity, #237)");
+        }
+
+        var twins = SpawnHole.InstantiateEnemyEntity(new EnemyEntity(tetherTwinPrefab, seed, seed + 1), firstPosition, null);
+        SetGameObjectPosition(twins[1], secondPosition);
+        if (frozen)
+        {
+            foreach (var twin in twins)
+            {
+                twin.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+            }
+        }
+        return twins;
+    }
+
     internal static void SetGameObjectPosition(GameObject gameObject, Vector2 position) 
     {
         gameObject.transform.position = position;

@@ -1,4 +1,5 @@
 using Assets.Enums;
+using Assets.Models;
 using Assets.Utils;
 using System.Collections.Generic;
 using System.Linq;
@@ -163,15 +164,40 @@ public class SpawnHole : MonoBehaviour
 
         foreach (var enemyEntity in _enemyEntities)
         {
-            var newEnemy = Instantiate(enemyEntity.Prefab, transform.position, Quaternion.identity, transform.parent);
-            SetSeedfulRandomGeneratorUser(newEnemy, enemyEntity.Seed);
-            newEnemy.transform.localScale = Vector3.zero;
+            foreach (var newEnemy in InstantiateEnemyEntity(enemyEntity, transform.position, transform.parent))
+            {
+                newEnemy.transform.localScale = Vector3.zero;
 
-            DisableEnemyScripts(newEnemy);
-            
-            _enemies.Add(newEnemy);
+                DisableEnemyScripts(newEnemy);
+
+                _enemies.Add(newEnemy);
+            }
         }
-        _enemiesSpawnFinalPoints = EnemyUtils.GetEvenPositionsAroundCircle(transform, _enemyEntities.Count, transform.localScale.magnitude);
+        // One point per body, not per entry: a paired entry makes two bodies (#237)
+        _enemiesSpawnFinalPoints = EnemyUtils.GetEvenPositionsAroundCircle(transform, _enemies.Count, transform.localScale.magnitude);
+    }
+
+    // Makes an entry's body, seeded. A paired entry (Tether Twins, #237) also makes its partner, seeded with the partner seed, and pairs the two.
+#if UNITY_EDITOR
+internal
+#else
+private
+#endif
+    static List<GameObject> InstantiateEnemyEntity(EnemyEntity enemyEntity, Vector3 position, Transform parent)
+    {
+        var newEnemy = Instantiate(enemyEntity.Prefab, position, Quaternion.identity, parent);
+        SetSeedfulRandomGeneratorUser(newEnemy, enemyEntity.Seed);
+        var newEnemies = new List<GameObject> { newEnemy };
+
+        if (enemyEntity.HasPartner)
+        {
+            var partner = Instantiate(enemyEntity.Prefab, position, Quaternion.identity, parent);
+            SetSeedfulRandomGeneratorUser(partner, enemyEntity.PartnerSeed);
+            newEnemy.GetComponent<IPairedEnemy>().PairWith(partner);
+            newEnemies.Add(partner);
+        }
+
+        return newEnemies;
     }
 
     private void SpawningEnemies()
@@ -239,7 +265,7 @@ public class SpawnHole : MonoBehaviour
         _enemiesSpawnFinalPoints = new List<Vector2>();
     }
 
-    private void SetSeedfulRandomGeneratorUser(GameObject newEnemy, int seed)
+    private static void SetSeedfulRandomGeneratorUser(GameObject newEnemy, int seed)
     {
         var enemySharedBehavior = newEnemy.GetComponent<EnemySharedBehavior>();
         enemySharedBehavior.SetInitialSeedfulRandomGenerator(seed);

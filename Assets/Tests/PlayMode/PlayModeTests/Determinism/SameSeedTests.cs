@@ -83,6 +83,7 @@ public class SameSeedTests
     }
 
     // The bank refills itself and never runs out (#248), so this takes a fixed number of fills instead of reading until null.
+    // A paired entry's partner seed is part of the order (Tether Twins, #237).
     private List<string> GetEnemyOrder()
     {
         var enemyOrder = new List<string>();
@@ -92,7 +93,7 @@ public class SameSeedTests
             enemyOrder.Add("Group Size " + spawnHoleEnemies.Count);
             foreach (var enemyEntity in spawnHoleEnemies)
             {
-                enemyOrder.Add(enemyEntity.Prefab.name + " " + enemyEntity.Seed);
+                enemyOrder.Add(enemyEntity.Prefab.name + " " + enemyEntity.Seed + (enemyEntity.HasPartner ? " partner " + enemyEntity.PartnerSeed : ""));
             }
         }
 
