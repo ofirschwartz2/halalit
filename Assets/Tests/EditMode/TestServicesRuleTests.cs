@@ -3,7 +3,7 @@ using System.IO;
 using NUnit.Framework;
 using UnityEngine;
 
-// No test may sign in for real or post a score to the friends' leaderboard (#307). EditModeServicesSetUp puts PlayerStats on fakes
+// No test may sign in for real or post a score to the friends' leaderboard (#307). EditModeServicesSetUp puts PlayerStats, LeaderBoard and DailyReplay on fakes
 // before the first test, and only TestServices may put the real services back
 public class TestServicesRuleTests
 {
@@ -15,7 +15,7 @@ public class TestServicesRuleTests
     private const string RESET_SERVICES_CALL = "ResetServices(";
     private const string USE_REAL_SERVICES_CALL = "UseRealServices(";
 
-    // Calls that reach Unity's servers with no PlayerStats fake in between: the SDK itself, and the game methods that call it directly.
+    // Calls that reach Unity's servers with no PlayerStats, LeaderBoard or DailyReplay fake in between: the SDK itself, and the game methods that call it directly.
     // The scans skip comments and string literals, so this list does not find itself
     private static readonly string[] DIRECT_SERVICE_CALLS =
     {
@@ -28,6 +28,9 @@ public class TestServicesRuleTests
         "PlayerPlace.GetPlayerEntryAsync",
         "PlayerPlace.GetVersionPlayerEntryAsync",
         "PlayerPlace.GetPlayerCountAsync",
+        "PlayerPlace.GetPageAsync",
+        "PlayerPlace.GetPastDaysAsync",
+        "PlayerPlace.GetPastDayPageAsync",
         "DailyTrackStore.SaveAsync",
         "DailyTrackStore.LoadDayAsync",
     };
@@ -47,13 +50,20 @@ public class TestServicesRuleTests
         AssertWrapper.IsFalse(PlayerStats.IsSignInReal(), "PlayerStats is on the real sign-in, so the set-up fixture did not run or a test put the real services back. Do not run the full suite: a test could sign in or post a score for real");
     }
 
+    // Only reads, so it is safe to run even when the set-up fixture did not run
+    [Test]
+    public void EveryTestStartsOnTheFakeLeaderboard()
+    {
+        AssertWrapper.IsFalse(LeaderBoard.IsListLoadReal(), "LeaderBoard is on the real list load, so the set-up fixture did not run or a test put the real services back. Do not run the full suite: a test could ask Unity's servers for the friends' leaderboard");
+    }
+
     [Test]
     public void OnlyTestServicesPutsTheRealServicesBack()
     {
         // A test that puts the real services back in its [TearDown] leaves every later test on them, so its deaths could post for real
         var scriptsThatCallIt = FindTestScriptsThatCall(RESET_SERVICES_CALL, TEST_SERVICES_SCRIPT);
 
-        AssertWrapper.IsTrue(scriptsThatCallIt.Count == 0, $"These scripts call PlayerStats.{RESET_SERVICES_CALL}), which puts the real services back for every later test: {string.Join(", ", scriptsThatCallIt)}. Call TestServices.UseFakes() instead");
+        AssertWrapper.IsTrue(scriptsThatCallIt.Count == 0, $"These scripts call {RESET_SERVICES_CALL}) on PlayerStats, LeaderBoard or DailyReplay, which puts the real services back for every later test: {string.Join(", ", scriptsThatCallIt)}. Call TestServices.UseFakes() instead");
     }
 
     [Test]
@@ -68,7 +78,7 @@ public class TestServicesRuleTests
     [Test]
     public void NoTestCallsUnityServicesItself()
     {
-        // The fakes cover only PlayerStats. A test that calls the SDK, or a game method that calls it directly, goes past them
+        // The fakes cover only PlayerStats, LeaderBoard and DailyReplay. A test that calls the SDK, or a game method that calls it directly, goes past them
         var gameCode = ReadCodeWithoutCommentsOrLiterals(GAME_CODE_FOLDER, nameof(Authentication) + ".cs");
         var testCode = ReadCodeWithoutCommentsOrLiterals(TESTS_FOLDER, TEST_SERVICES_SCRIPT);
         var callsInTests = new List<string>();
@@ -87,7 +97,7 @@ public class TestServicesRuleTests
             }
         }
 
-        AssertWrapper.IsTrue(callsInTests.Count == 0, $"Tests call Unity's services directly, past the fakes: {string.Join("; ", callsInTests)}. Go through PlayerStats on the fakes, or ask the architect for a swappable service");
+        AssertWrapper.IsTrue(callsInTests.Count == 0, $"Tests call Unity's services directly, past the fakes: {string.Join("; ", callsInTests)}. Go through PlayerStats, LeaderBoard or DailyReplay on the fakes, or ask the architect for a swappable service");
     }
 
     // The scripts that call the method, apart from the allowed ones. Fails if the call is not found in the first allowed script,

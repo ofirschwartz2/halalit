@@ -6,8 +6,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
-// Daily replay (#244). The Leaderboard scene signs in to Unity's servers when it opens, so the viewer is built here on its own, in the Playground.
-// Only the unwired case can be tested today: a wired viewer needs test hooks to set its fields and to fake the day's load (see PR #297)
+// Daily replay (#244). This test builds the viewer on its own, in the Playground, to check the unwired case.
+// The wired viewer and its faked day load are tested through the Leaderboard scene in LeaderBoardTests (#312), once Ofir has wired it
 public class DailyReplayTests
 {
     private const string NOT_WIRED_WARNING = "DailyReplay: Panel, Arena, Ship Prefab, Clock Text, Status Text or Results Text is not wired in the Leaderboard scene, so Watch does nothing.";
