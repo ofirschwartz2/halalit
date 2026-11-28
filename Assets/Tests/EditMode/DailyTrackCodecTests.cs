@@ -1,0 +1,101 @@
+﻿using System.Collections.Generic;
+using NUnit.Framework;
+using UnityEngine;
+
+public class DailyTrackCodecTests
+{
+    private const float ONE_STEP = 1f / 255f;
+
+    [Test]
+    public void PositionsComeBackWithinOneStep()
+    {
+        var positions = new List<Vector2>
+        {
+            new Vector2(0f, 0f),
+            new Vector2(1f, 1f),
+            new Vector2(0.5f, 0.25f),
+            new Vector2(0.123f, 0.987f)
+        };
+
+        var track = DailyTrackCodec.FromJson(DailyTrackCodec.ToJson(positions, new List<int>(), new List<int>(), 1f));
+        var decoded = DailyTrackCodec.GetPositions(track);
+
+        AssertWrapper.AreEqual(positions.Count, decoded.Length, "The track did not come back with one position per sample");
+        for (int i = 0; i < positions.Count; i++)
+        {
+            AssertWrapper.AreEqual(positions[i], decoded[i], $"Position {i} moved by more than one step", null, ONE_STEP);
+        }
+    }
+
+    [Test]
+    public void PositionOutsideTheBoxClampsToItsEdge()
+    {
+        var positions = new List<Vector2> { new Vector2(-0.4f, 1.7f) };
+
+        var track = DailyTrackCodec.FromJson(DailyTrackCodec.ToJson(positions, new List<int>(), new List<int>(), 1f));
+        var decoded = DailyTrackCodec.GetPositions(track);
+
+        AssertWrapper.AreEqual(new Vector2(0f, 1f), decoded[0], "A position outside the box was not kept on its edge");
+    }
+
+    [Test]
+    public void ScoresAndSurvivalComeBack()
+    {
+        var positions = new List<Vector2> { Vector2.zero, Vector2.one, Vector2.zero };
+        var scoreSampleIndexes = new List<int> { 1, 2 };
+        var scores = new List<int> { 10, 35 };
+
+        var track = DailyTrackCodec.FromJson(DailyTrackCodec.ToJson(positions, scoreSampleIndexes, scores, 42.37f));
+
+        AssertWrapper.IsTrue(track.Version == 1, $"The track's version is {track.Version}, expected 1");
+        AssertWrapper.AreEqual(Constants.DAILY_TRACK_SAMPLE_SECONDS, track.SampleSeconds, "The track's sample time did not come back");
+        AssertWrapper.IsTrue(track.ScoreSampleIndexes.Length == 2 && track.ScoreSampleIndexes[0] == 1 && track.ScoreSampleIndexes[1] == 2, "The score sample indexes did not come back");
+        AssertWrapper.IsTrue(track.Scores.Length == 2 && track.Scores[0] == 10 && track.Scores[1] == 35, "The scores did not come back");
+        AssertWrapper.AreEqual(42.37f, track.SurvivalSeconds, "The survival time did not come back", null, 0.001f);
+    }
+
+    [Test]
+    public void FiveMinutesFitInFourThousandCharacters()
+    {
+        // 5 minutes at 4 samples a second, with a score change every 10 samples
+        var positions = new List<Vector2>();
+        var scoreSampleIndexes = new List<int>();
+        var scores = new List<int>();
+        for (int i = 0; i < 1200; i++)
+        {
+            positions.Add(new Vector2((i % 100) / 100f, (i % 37) / 37f));
+            if (i % 10 == 0)
+            {
+                scoreSampleIndexes.Add(i);
+                scores.Add(i * 5);
+            }
+        }
+
+        var json = DailyTrackCodec.ToJson(positions, scoreSampleIndexes, scores, 300f);
+        var positionsOnly = DailyTrackCodec.ToJson(positions, new List<int>(), new List<int>(), 300f);
+
+        AssertWrapper.IsTrue(positionsOnly.Length <= 4000, $"5 minutes of positions take {positionsOnly.Length} characters of JSON, more than 4,000");
+        AssertWrapper.AreEqual(1200, DailyTrackCodec.GetPositions(DailyTrackCodec.FromJson(json)).Length, "5 minutes of track did not come back with 1,200 samples");
+    }
+
+    [Test]
+    public void DeathAtZeroSecondsEncodesAndDecodes()
+    {
+        // Sample 0 at the start and the death sample, both at the same moment
+        var positions = new List<Vector2> { new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f) };
+
+        var track = DailyTrackCodec.FromJson(DailyTrackCodec.ToJson(positions, new List<int>(), new List<int>(), 0f));
+
+        AssertWrapper.IsTrue(track != null, "A death at 0 seconds gave no track");
+        AssertWrapper.AreEqual(0f, track.SurvivalSeconds, "A death at 0 seconds did not keep 0 as the survival time");
+        AssertWrapper.AreEqual(2, DailyTrackCodec.GetPositions(track).Length, "A death at 0 seconds lost a sample");
+        AssertWrapper.IsTrue(track.Scores.Length == 0, "A death at 0 seconds gained a score change");
+    }
+
+    [Test]
+    public void NoJsonMeansNoTrack()
+    {
+        AssertWrapper.IsTrue(DailyTrackCodec.FromJson(null) == null, "A missing track was read as a track");
+        AssertWrapper.IsTrue(DailyTrackCodec.FromJson(string.Empty) == null, "An empty track was read as a track");
+    }
+}
