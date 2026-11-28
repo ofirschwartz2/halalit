@@ -124,7 +124,7 @@ public class DailyReplay : MonoBehaviour
         }
         catch (Exception exception)
         {
-            Debug.LogError($"DailyReplay: could not load the replay. {exception.Message}");
+            Debug.LogWarning($"DailyReplay: could not load the replay. {exception.Message}");
 
             if (this == null)
             {
