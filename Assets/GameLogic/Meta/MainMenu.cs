@@ -20,8 +20,6 @@ public class MainMenu : MonoBehaviour
     private async void Awake()
     {
         await PlayerInitialization();
-        await TrySetNewDailyScoreAsync();
-        await TrySetNewHighScoreAsync();
         TrySetScoreTexts();
         TrySetDailyTwistText();
 
@@ -46,7 +44,8 @@ public class MainMenu : MonoBehaviour
     #region ButtonMethods
     public void StartGame()
     {
-        SceneManager.LoadScene(SceneName.PLAYGROUND.GetDescription());
+        PlayerStats.SetStartNormal();
+        LoadPlayground();
     }
 
     public void StartDaily()
@@ -54,7 +53,7 @@ public class MainMenu : MonoBehaviour
         if (!_dailyButton.interactable) return;
 
         PlayerStats.SetStartDaily();
-        StartGame();
+        LoadPlayground();
     }
 
     public void LeaderBoard()
@@ -67,6 +66,11 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
     #endregion
+
+    private void LoadPlayground()
+    {
+        SceneManager.LoadScene(SceneName.PLAYGROUND.GetDescription());
+    }
 
     #region Setters
     private void TrySetScoreTexts()
@@ -101,24 +105,4 @@ public class MainMenu : MonoBehaviour
         }
     }
     #endregion
-
-    private async Task TrySetNewDailyScoreAsync()
-    {
-        if (PlayerStats._isDailyRun)
-        {
-            await PlayerStats.SaveDailyScoreAsync();
-
-            PlayerStats._isDailyRun = false;
-        }
-    }
-
-    private async Task TrySetNewHighScoreAsync()
-    {
-        if (PlayerStats._isNewHighScore)
-        {
-            await PlayerStats.SavePlayerHighScoreAsync();
-
-            PlayerStats._isNewHighScore = false;
-        }
-    }
 }
