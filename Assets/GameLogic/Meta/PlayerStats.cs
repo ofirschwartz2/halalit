@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using Unity.Services.CloudSave;
 using Unity.Services.Leaderboards;
@@ -11,7 +12,7 @@ using Assets.Utils;
 
 
 #if UNITY_EDITOR
-[assembly: InternalsVisibleTo("PlayModeTests")]
+[assembly: InternalsVisibleTo("TestsEditMode")]
 #endif
 
 public static class PlayerStats
@@ -25,14 +26,33 @@ public static class PlayerStats
     // Daily replay (#244): the daily's track as JSON, handed over by DailyTrackRecorder when the ship dies. Null after a normal run
     public static string _dailyTrack;
 
+    // The online services, swapped for fakes by the tests (#175)
+    private static Func<Task> _signIn;
+    private static Func<Dictionary<string, object>, Task> _saveScores;
+    private static Func<HashSet<string>, Task<Dictionary<string, int>>> _loadScores;
+    private static Func<string, double, Task> _submitScore;
+    private static Func<DateTime, string, Task> _saveDailyTrack;
+
+    static PlayerStats()
+    {
+        UseRealServices();
+    }
+
 #region Init
     public async static Task InitAllAsync()
     {
-        await InitAuthenticationAsync();
+        await _signIn();
 
-        // The results card may still be saving the run (#249). This save and the reset wait for it, so they never run on top of it
-        await WaitQuietlyAsync(_runScoresSave);
-        await TrySaveHighScoresAsync();
+        // The results card may still be saving the run (#249). This save joins its chain, so it never runs on top of it.
+        // A failed save does not stop the reset below (#175). Otherwise the daily stays on, and the next PLAY becomes a daily
+        try
+        {
+            await SaveRunScoresAsync();
+        }
+        catch (Exception exception)
+        {
+            Debug.LogWarning($"PlayerStats: could not save the last run's scores. {exception.Message}");
+        }
 
         SetDefaultPlayerStatsValues();
 
@@ -76,7 +96,7 @@ public static class PlayerStats
     {
         try
         {
-            var playerStats = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string>() { _highScoreKey, _dailyScoreKey });
+            var playerStats = await _loadScores(new HashSet<string>() { _highScoreKey, _dailyScoreKey });
 
             UpdateScoreFromPlayerStats(playerStats, _dailyScoreKey, ref _dailyScore);
             UpdateScoreFromPlayerStats(playerStats, _highScoreKey, ref _highScore);
@@ -89,12 +109,25 @@ public static class PlayerStats
         }
     }
 
-    private static void UpdateScoreFromPlayerStats(IDictionary<string, Item> playerStats, string key, ref int? score)
+    private static void UpdateScoreFromPlayerStats(IDictionary<string, int> playerStats, string key, ref int? score)
     {
-        if (playerStats.TryGetValue(key, out var scoreObject))
+        if (playerStats.TryGetValue(key, out var savedScore))
         {
-            score = scoreObject.Value.GetAs<int>();
+            score = savedScore;
         }
+    }
+
+    private static async Task<Dictionary<string, int>> LoadScoresFromCloudAsync(HashSet<string> keys)
+    {
+        var items = await CloudSaveService.Instance.Data.Player.LoadAsync(keys);
+        var scores = new Dictionary<string, int>();
+
+        foreach (var keyAndItem in items)
+        {
+            scores[keyAndItem.Key] = keyAndItem.Value.Value.GetAs<int>();
+        }
+
+        return scores;
     }
     
 #endregion
@@ -128,10 +161,41 @@ public static class PlayerStats
         }
     }
 
+    // Each save is tried on its own (#175). A failed high score no longer skips the daily score, which left the daily on for the next run.
+    // The first failure is passed on, so the results card still sees it. A second one is logged here
     internal static async Task TrySaveHighScoresAsync()
     {
-        await TrySaveNewHighScoreAsync();
-        await TrySaveNewDailyScoreAsync();
+        Exception firstFailure = null;
+
+        try
+        {
+            await TrySaveNewHighScoreAsync();
+        }
+        catch (Exception exception)
+        {
+            firstFailure = exception;
+        }
+
+        try
+        {
+            await TrySaveNewDailyScoreAsync();
+        }
+        catch (Exception exception)
+        {
+            if (firstFailure == null)
+            {
+                firstFailure = exception;
+            }
+            else
+            {
+                Debug.LogWarning($"PlayerStats: could not save the daily score either. {exception.Message}");
+            }
+        }
+
+        if (firstFailure != null)
+        {
+            ExceptionDispatchInfo.Capture(firstFailure).Throw();
+        }
     }
 
     internal static async Task TrySaveNewDailyScoreAsync()
@@ -145,12 +209,12 @@ public static class PlayerStats
         }
     }
 
-    public static async Task SaveDailyScoreAsync()
+    private static async Task SaveDailyScoreAsync()
     {
         _playerDailyScore = new Dictionary<string, object>();
         _playerDailyScore[_dailyScoreKey] = _dailyScore;
 
-        await CloudSaveService.Instance.Data.Player.SaveAsync(_playerDailyScore);
+        await _saveScores(_playerDailyScore);
 
         if (DailyLeaderboard.ShouldSubmitDaily(_dailyScore, _dailyDate, DailySeed.GetToday()))
         {
@@ -158,7 +222,7 @@ public static class PlayerStats
 
             try
             {
-                await LeaderboardsService.Instance.AddPlayerScoreAsync(Constants.DAILY_LEADERBOARD_ID, (double)_dailyScore);
+                await _submitScore(Constants.DAILY_LEADERBOARD_ID, (double)_dailyScore);
             }
             catch (Exception e)
             {
@@ -178,7 +242,7 @@ public static class PlayerStats
 
         try
         {
-            await DailyTrackStore.SaveAsync(_dailyDate, _dailyTrack);
+            await _saveDailyTrack(_dailyDate, _dailyTrack);
         }
         catch (Exception e)
         {
@@ -203,15 +267,15 @@ public static class PlayerStats
         }
     }
 
-    public static async Task SavePlayerHighScoreAsync()
+    private static async Task SavePlayerHighScoreAsync()
     {
         // Copied before the first await, so Cloud Save and the leaderboard get the same best even when a run ends during the save (#249)
         int? highScore = _highScore;
         _playerHighScore = new Dictionary<string, object>();
         _playerHighScore[_highScoreKey] = highScore;
 
-        await CloudSaveService.Instance.Data.Player.SaveAsync(_playerHighScore);
-        await LeaderboardsService.Instance.AddPlayerScoreAsync(Constants.HIGHSCORE_LEADERBOARD_ID, (double)highScore);
+        await _saveScores(_playerHighScore);
+        await _submitScore(Constants.HIGHSCORE_LEADERBOARD_ID, (double)highScore);
     }
 
 #endregion
@@ -228,6 +292,40 @@ public static class PlayerStats
         _isDailyRun = true;
     }
 
+    // PLAY always starts a normal run, even when a daily was left on (#175)
+    public static void SetStartNormal()
+    {
+        _isDailyRun = false;
+    }
+
+#endregion
+
+#region Services
+    private static void UseRealServices()
+    {
+        _signIn = InitAuthenticationAsync;
+        _saveScores = data => CloudSaveService.Instance.Data.Player.SaveAsync(data);
+        _loadScores = LoadScoresFromCloudAsync;
+        _submitScore = (leaderboardId, score) => LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardId, score);
+        _saveDailyTrack = DailyTrackStore.SaveAsync;
+    }
+
+#if UNITY_EDITOR
+    internal static void SetServices(Func<Task> signIn, Func<Dictionary<string, object>, Task> saveScores, Func<HashSet<string>, Task<Dictionary<string, int>>> loadScores, Func<string, double, Task> submitScore, Func<DateTime, string, Task> saveDailyTrack)
+    {
+        _signIn = signIn;
+        _saveScores = saveScores;
+        _loadScores = loadScores;
+        _submitScore = submitScore;
+        _saveDailyTrack = saveDailyTrack;
+    }
+
+    internal static void ResetServices()
+    {
+        UseRealServices();
+        _runScoresSave = Task.CompletedTask;
+    }
+#endif
 #endregion
 
 }
