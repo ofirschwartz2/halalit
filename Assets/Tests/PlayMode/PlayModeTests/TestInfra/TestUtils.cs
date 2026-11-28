@@ -604,8 +604,8 @@ internal static class TestUtils
     }
 
     // Takes GameOver's handler off the game over event, so that a death in a test neither opens the results card nor saves (#249).
-    // Score still hands the score to PlayerStats. In a Playground without a card, the death does not load the real menu either,
-    // which signs in for real. It takes effect one frame later.
+    // Score still hands the score to PlayerStats. In a Playground without a card, the death does not load the menu either.
+    // It takes effect one frame later.
     // GameOverEvent calls a snapshot of its handlers taken in Start(), so removing the handler is not enough:
     // the second GameOverEvent takes a new snapshot, without GameOver's handler, in its own Start().
     internal static void UnhookResultsCardFromGameOver()
@@ -1013,7 +1013,7 @@ internal static class TestUtils
 
     #region Predicates
     // A death opens the results card (#249). While the Playground has no wired card, GameOver loads the menu as before, so that counts too:
-    // without it, a test that expects no game over would pass even when the death loaded the real menu, which signs in for real
+    // without it, a test that expects no game over would pass even when the death loaded the menu
     internal static bool IsGameOver()
     {
         var resultsCard = GetResultsCard();

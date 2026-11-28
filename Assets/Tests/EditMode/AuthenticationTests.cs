@@ -17,7 +17,8 @@ public class AuthenticationTests
     private const string VERBATIM_STRING_LITERAL = @"(?:@\$|\$@|@)""(?:[^""]|"""")*""";
     private const string STRING_LITERAL = @"""(?:[^""\\\n]|\\.)*""";
     private const string CHAR_LITERAL = @"'(?:[^'\\\n]|\\.)*'";
-    private static readonly Regex COMMENT_OR_LITERAL = new Regex(string.Join("|", LINE_COMMENT, BLOCK_COMMENT, VERBATIM_STRING_LITERAL, STRING_LITERAL, CHAR_LITERAL), RegexOptions.Singleline);
+    // Also used by TestServicesRuleTests (#307)
+    internal static readonly Regex COMMENT_OR_LITERAL = new Regex(string.Join("|", LINE_COMMENT, BLOCK_COMMENT, VERBATIM_STRING_LITERAL, STRING_LITERAL, CHAR_LITERAL), RegexOptions.Singleline);
 
     [Test]
     public void NoGameCodeReadsTheAccessToken()

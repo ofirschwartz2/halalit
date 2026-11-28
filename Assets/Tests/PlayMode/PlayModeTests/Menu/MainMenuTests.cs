@@ -345,12 +345,12 @@ public class MainMenuTests
     }
     #endregion
 
-    // A sign-in left pending is never finished here: finishing it after ResetServices would run the rest of the load on the real services
+    // A sign-in left pending is never finished here: finishing it after the reset would run the rest of the load on the next test's fakes
     [TearDown]
     public void TearDown()
     {
         TestUtils.DestroyAllGameObjects();
-        PlayerStats.ResetServices();
+        TestServices.UseFakes();
         PlayerStats.SetDefaultPlayerStatsValues();
     }
 }
