@@ -126,6 +126,97 @@ public class DailyReplayRulesTests
         AssertWrapper.AreEqual(0f, DailyReplayRules.GetEndSeconds(new List<DailyReplayEntry>()), "A day with no tracks did not end at 0");
     }
 
+    [Test]
+    public void FullTieKeepsListOrderForTwentyPlayers()
+    {
+        // 20 is the most a replay shows. List.Sort is not stable above 16 items, so 3 tied players cannot show that the list order decides last
+        var entries = new List<DailyReplayEntry>();
+        for (int i = 0; i < 20; i++)
+        {
+            entries.Add(CreateEntry("Player" + i, 450, 100f));
+        }
+
+        var ranking = DailyReplayRules.GetRanking(entries);
+
+        for (int place = 0; place < entries.Count; place++)
+        {
+            AssertWrapper.AreEqual(place, ranking[place], $"On a full tie of 20 players, place {place + 1} went to entry {ranking[place]}, not to entry {place}");
+        }
+    }
+
+    [Test]
+    public void ScoreTieGoesToTheShipOverAPlayerWithoutATrack()
+    {
+        // A player without a track counts as surviving 0 seconds, so being earlier in the list does not win the tie
+        var entries = new List<DailyReplayEntry>
+        {
+            CreateEntryWithoutTrack("Dana", 450),
+            CreateEntry("Ofir", 450, 1f)
+        };
+
+        AssertWrapper.AreEqual(1, DailyReplayRules.GetWinnerIndex(entries), "A score tie went to the player without a track");
+    }
+
+    [Test]
+    public void RankingFollowsTheCrownRule()
+    {
+        // Seeded: a failure prints the seed. To replay it, pass the seed to GetSeed
+        int seed = GetSeed();
+        var random = new System.Random(seed);
+        var entries = new List<DailyReplayEntry>();
+        float longestSurvival = 0f;
+
+        // Few distinct scores and survival times, so ties on score and on both happen often
+        for (int i = 0; i < 20; i++)
+        {
+            int score = random.Next(0, 4) * 100;
+            int survivalChoice = random.Next(0, 3);
+
+            if (survivalChoice == 0)
+            {
+                entries.Add(CreateEntryWithoutTrack("Player" + i, score));
+            }
+            else
+            {
+                float survival = survivalChoice * 30f;
+                entries.Add(CreateEntry("Player" + i, score, survival));
+                longestSurvival = System.Math.Max(longestSurvival, survival);
+            }
+        }
+
+        var ranking = DailyReplayRules.GetRanking(entries);
+
+        AssertWrapper.AreEqual(entries.Count, ranking.Count, "The ranking does not hold every player", seed);
+        AssertWrapper.AreEqual(entries.Count, new HashSet<int>(ranking).Count, "The ranking holds a player twice", seed);
+        AssertWrapper.AreEqual(ranking[0], DailyReplayRules.GetWinnerIndex(entries), "The winner is not first in the ranking", seed);
+        AssertWrapper.AreEqual(longestSurvival, DailyReplayRules.GetEndSeconds(entries), "The replay does not end with the longest survival", seed);
+
+        for (int place = 1; place < ranking.Count; place++)
+        {
+            var ahead = entries[ranking[place - 1]];
+            var behind = entries[ranking[place]];
+            float aheadSurvival = DailyReplayRules.GetSurvivalSeconds(ahead);
+            float behindSurvival = DailyReplayRules.GetSurvivalSeconds(behind);
+
+            bool isInCrownOrder = ahead.Score > behind.Score
+                || (ahead.Score == behind.Score && aheadSurvival > behindSurvival)
+                || (ahead.Score == behind.Score && aheadSurvival == behindSurvival && ranking[place - 1] < ranking[place]);
+
+            AssertWrapper.IsTrue(isInCrownOrder, $"Place {place} ({ahead.PlayerName}, {ahead.Score}, {aheadSurvival} s) is not ahead of place {place + 1} ({behind.PlayerName}, {behind.Score}, {behindSurvival} s) by the crown rule", seed);
+        }
+    }
+
+    [Test]
+    public void DeathAtTheStartNeverFlies()
+    {
+        AssertWrapper.IsFalse(DailyReplayRules.IsAlive(CreateEntry("Dana", 0, 0f), 0f), "A ship whose player died at 0 seconds flew");
+    }
+
+    private static int GetSeed(int seed = 0)
+    {
+        return seed != 0 ? seed : System.Environment.TickCount;
+    }
+
     private static DailyReplayEntry CreateEntry(string playerName, int score, float survivalSeconds)
     {
         var entry = CreateEntryWithoutTrack(playerName, score);

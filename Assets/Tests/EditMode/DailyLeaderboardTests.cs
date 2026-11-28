@@ -113,6 +113,14 @@ public class DailyLeaderboardTests
     }
 
     [Test]
+    public void TodayCanNeverBeWatched()
+    {
+        // The screen asks with the all-time flag on and off, and day index 0 is today either way
+        AssertWrapper.IsFalse(DailyLeaderboard.CanWatch(false, 0), "Today could be watched from the daily list");
+        AssertWrapper.IsFalse(DailyLeaderboard.CanWatch(true, 0), "Today could be watched from the all-time list");
+    }
+
+    [Test]
     public void PlayerRowGoesUnderTheShownRowsAfterAGap()
     {
         AssertWrapper.AreEqual(11, DailyLeaderboard.GetRowIndexUnderShownRows(10), "Your row was not put under the 10 shown rows after one empty row");

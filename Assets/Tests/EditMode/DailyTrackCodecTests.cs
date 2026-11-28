@@ -244,6 +244,84 @@ public class DailyTrackCodecTests
         AssertWrapper.AreEqual(0, DailyTrackCodec.GetScore(track, 10f), "A run that never scored showed a final score");
     }
 
+    [Test]
+    public void OneSamplePathStaysOnItsSample()
+    {
+        // A death at once leaves a path of one sample: the ship must stay there, not read past the end
+        var positions = new[] { new Vector2(0.3f, 0.7f) };
+
+        AssertWrapper.AreEqual(positions[0], DailyTrackCodec.GetPosition(positions, 0.25f, -1f), "Before the start, a one-sample ship was elsewhere");
+        AssertWrapper.AreEqual(positions[0], DailyTrackCodec.GetPosition(positions, 0.25f, 0f), "At the start, a one-sample ship was elsewhere");
+        AssertWrapper.AreEqual(positions[0], DailyTrackCodec.GetPosition(positions, 0.25f, 0.1f), "Between samples, a one-sample ship was elsewhere");
+        AssertWrapper.AreEqual(positions[0], DailyTrackCodec.GetPosition(positions, 0.25f, 100f), "Long after the end, a one-sample ship was elsewhere");
+    }
+
+    [Test]
+    public void PositionWithoutASampleTimeStaysOnTheFirstSample()
+    {
+        // A damaged track with no sample time must not divide by zero
+        var positions = new[] { new Vector2(0.2f, 0.3f), new Vector2(1f, 1f) };
+
+        AssertWrapper.AreEqual(positions[0], DailyTrackCodec.GetPosition(positions, 0f, 5f), "With no sample time, the ship left its first sample");
+    }
+
+    [Test]
+    public void EmptyTrackHasNoPositions()
+    {
+        // The viewer shows no ship for a path without positions. This is the part of that it can test without Unity's servers
+        var roundTrip = DailyTrackCodec.FromJson(DailyTrackCodec.ToJson(new List<Vector2>(), new List<int>(), new List<int>(), 0f));
+        var noPositions = CreateScoreTrack(new int[0], new int[0], 5f);
+        var nullPositions = CreateScoreTrack(new int[0], new int[0], 5f);
+        nullPositions.Positions = null;
+
+        AssertWrapper.AreEqual(0, DailyTrackCodec.GetPositions(roundTrip).Length, "A track recorded with no positions came back with positions");
+        AssertWrapper.AreEqual(0, DailyTrackCodec.GetPositions(noPositions).Length, "An empty position string gave positions");
+        AssertWrapper.AreEqual(0, DailyTrackCodec.GetPositions(nullPositions).Length, "A missing position string gave positions");
+    }
+
+    [Test]
+    public void ShipIsOnEachSampleAtItsTime()
+    {
+        // Seeded: a failure prints the seed. To replay it, pass the seed to GetSeed
+        int seed = GetSeed();
+        var random = new System.Random(seed);
+        var positions = new Vector2[random.Next(2, 50)];
+        for (int i = 0; i < positions.Length; i++)
+        {
+            positions[i] = new Vector2((float)random.NextDouble(), (float)random.NextDouble());
+        }
+
+        for (int i = 0; i < positions.Length; i++)
+        {
+            float sampleTime = i * Constants.DAILY_TRACK_SAMPLE_SECONDS;
+            AssertWrapper.AreEqual(positions[i], DailyTrackCodec.GetPosition(positions, Constants.DAILY_TRACK_SAMPLE_SECONDS, sampleTime), $"At {sampleTime} s the ship was not on sample {i} of {positions.Length}", seed, 0.0001f);
+
+            if (i < positions.Length - 1)
+            {
+                float halfwayTime = sampleTime + Constants.DAILY_TRACK_SAMPLE_SECONDS / 2f;
+                AssertWrapper.AreEqual((positions[i] + positions[i + 1]) / 2f, DailyTrackCodec.GetPosition(positions, Constants.DAILY_TRACK_SAMPLE_SECONDS, halfwayTime), $"At {halfwayTime} s the ship was not halfway between samples {i} and {i + 1}", seed, 0.0001f);
+            }
+        }
+    }
+
+    [Test]
+    public void ScoreWithMissingOrUnpairedChangesDoesNotBreak()
+    {
+        var missingScores = CreateScoreTrack(null, null, 5f);
+        // A damaged track with more scores than sample indexes: only whole pairs count
+        var unpaired = CreateScoreTrack(new[] { 4 }, new[] { 10, 35 }, 5f);
+
+        AssertWrapper.AreEqual(0, DailyTrackCodec.GetScore(missingScores, 3f), "A track without score arrays showed a score");
+        AssertWrapper.AreEqual(0, DailyTrackCodec.GetScore(missingScores, 10f), "A track without score arrays showed a final score");
+        AssertWrapper.AreEqual(10, DailyTrackCodec.GetScore(unpaired, 2f), "A track with an unpaired score did not show its paired score");
+        AssertWrapper.AreEqual(10, DailyTrackCodec.GetScore(unpaired, 10f), "A track with an unpaired score showed the unpaired score as final");
+    }
+
+    private static int GetSeed(int seed = 0)
+    {
+        return seed != 0 ? seed : System.Environment.TickCount;
+    }
+
     private static DailyTrack CreateScoreTrack(int[] scoreSampleIndexes, int[] scores, float survivalSeconds)
     {
         return new DailyTrack
