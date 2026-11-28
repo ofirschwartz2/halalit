@@ -20,7 +20,7 @@ public static class PlayerStats
 
     public static bool _isNewHighScore, _isDailyRun;
     public static int? _dailySeed, _highScore, _dailyScore;
-    public static string _playerId, _dateInFormat, _dailyScoreKey, _highScoreKey;
+    public static string _dateInFormat, _dailyScoreKey, _highScoreKey;
     public static Dictionary<string, object> _playerHighScore, _playerDailyScore;
     public static DateTime _dailyDate;
     // Daily replay (#244): the daily's track as JSON, handed over by DailyTrackRecorder when the ship dies. Null after a normal run
@@ -39,7 +39,21 @@ public static class PlayerStats
     }
 
 #region Init
-    public async static Task InitAllAsync()
+    // The running load (#176). The menu and the leaderboard both load, so a second call joins it instead of signing in on top of it
+    private static Task _load;
+
+    // A finished load is never reused, so each screen gets fresh scores, and a failed sign-in is tried again on the next screen
+    public static Task InitAllAsync()
+    {
+        if (_load == null || _load.IsCompleted)
+        {
+            _load = LoadAsync();
+        }
+
+        return _load;
+    }
+
+    private static async Task LoadAsync()
     {
         await _signIn();
 
@@ -61,21 +75,8 @@ public static class PlayerStats
         await SyncPlayerFromServerAsync();
     }
 
-    private static async Task InitAuthenticationAsync()
-    {
-        if (Authentication.InitializationTask == null)
-        {
-            await Authentication.Initialize();
-        }
-        else
-        {
-            await Authentication.InitializationTask;
-        }
-    }
-
     internal static void SetDefaultPlayerStatsValues()
     {
-        _playerId = "";
         _dailyDate = DailySeed.GetToday();
         _dateInFormat = DailySeed.GetDateKey(_dailyDate);
         _isNewHighScore = false;
@@ -92,21 +93,13 @@ public static class PlayerStats
 #endregion
 
 #region Sync Player Info
+    // A failure is not logged here (#176): the screen that awaits the load logs it once
     public static async Task SyncPlayerFromServerAsync()
     {
-        try
-        {
-            var playerStats = await _loadScores(new HashSet<string>() { _highScoreKey, _dailyScoreKey });
+        var playerStats = await _loadScores(new HashSet<string>() { _highScoreKey, _dailyScoreKey });
 
-            UpdateScoreFromPlayerStats(playerStats, _dailyScoreKey, ref _dailyScore);
-            UpdateScoreFromPlayerStats(playerStats, _highScoreKey, ref _highScore);
-
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Error in SyncPlayerFromServerAsync: {e.Message}. _dailyScoreKey: {_dailyScoreKey}, _highScoreKey: {_highScoreKey}");
-            throw;
-        }
+        UpdateScoreFromPlayerStats(playerStats, _dailyScoreKey, ref _dailyScore);
+        UpdateScoreFromPlayerStats(playerStats, _highScoreKey, ref _highScore);
     }
 
     private static void UpdateScoreFromPlayerStats(IDictionary<string, int> playerStats, string key, ref int? score)
@@ -303,7 +296,7 @@ public static class PlayerStats
 #region Services
     private static void UseRealServices()
     {
-        _signIn = InitAuthenticationAsync;
+        _signIn = Authentication.Initialize;
         _saveScores = data => CloudSaveService.Instance.Data.Player.SaveAsync(data);
         _loadScores = LoadScoresFromCloudAsync;
         _submitScore = (leaderboardId, score) => LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardId, score);
@@ -324,6 +317,7 @@ public static class PlayerStats
     {
         UseRealServices();
         _runScoresSave = Task.CompletedTask;
+        _load = null;
     }
 #endif
 #endregion

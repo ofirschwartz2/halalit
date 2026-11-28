@@ -14,16 +14,17 @@ public class PlayerStatsTests
     private const string SECOND_SAVE_FAILURE_WARNING = "PlayerStats: could not save the daily score either";
     private const string PLAYER_STATS_LOG_PREFIX = "PlayerStats:";
     private const string SCORE_LOAD_FAILURE = "Fake score load failure";
-    private const string SCORE_LOAD_ERROR = "Error in SyncPlayerFromServerAsync: " + SCORE_LOAD_FAILURE;
     private const int RUN_SCORE = 40;
     private const int SAVED_HIGH_SCORE = 70;
 
     private List<string> _savedKeys;
     private List<string> _submittedLeaderboards;
     private int _saveCalls;
+    private int _signInCalls;
     private int _playerStatsWarnings;
     private bool _shouldHighScoreSaveFail, _shouldDailyScoreSaveFail, _shouldScoreLoadFail;
     private TaskCompletionSource<bool> _pendingSave;
+    private TaskCompletionSource<bool> _pendingSignIn;
     private Dictionary<string, int> _scoresOnServer;
 
     [SetUp]
@@ -34,10 +35,12 @@ public class PlayerStatsTests
         _savedKeys = new List<string>();
         _submittedLeaderboards = new List<string>();
         _saveCalls = 0;
+        _signInCalls = 0;
         _shouldHighScoreSaveFail = false;
         _shouldDailyScoreSaveFail = false;
         _shouldScoreLoadFail = false;
         _pendingSave = null;
+        _pendingSignIn = null;
         _scoresOnServer = new Dictionary<string, int>();
         _playerStatsWarnings = 0;
 
@@ -213,13 +216,13 @@ public class PlayerStatsTests
     public void FailedScoreLoadStillEndsTheDaily()
     {
         // GIVEN
-        // Offline after a daily: the daily's save fails, then the score load fails
+        // Offline after a daily: the daily's save fails, then the score load fails.
+        // The load logs no error of its own (#176): the screen that awaits it logs the failure once
         PlayerStats.SetStartDaily();
         PlayerStats._dailyScore = RUN_SCORE;
         _shouldDailyScoreSaveFail = true;
         _shouldScoreLoadFail = true;
         LogAssert.Expect(LogType.Warning, new Regex(LOAD_SAVE_WARNING));
-        LogAssert.Expect(LogType.Error, new Regex(SCORE_LOAD_ERROR));
 
         // WHEN
         var load = PlayerStats.InitAllAsync();
@@ -227,6 +230,7 @@ public class PlayerStatsTests
         // THEN
         AssertWrapper.IsTrue(load.IsCompleted, "The load did not finish, though every fake service had finished");
         AssertWrapper.IsTrue(load.IsFaulted, "The load hid the failed score load, so the menu cannot know its scores are missing");
+        AssertWrapper.AreEqual(SCORE_LOAD_FAILURE, load.Exception.InnerException.Message, "The load did not pass on the score load's failure");
         AssertWrapper.IsFalse(PlayerStats._isDailyRun, "The daily stayed on after a failed score load, so the next PLAY would be a daily");
         AssertWrapper.IsTrue(PlayerStats._dailySeed != null, "The load did not set today's daily seed before the score load");
     }
@@ -263,6 +267,40 @@ public class PlayerStatsTests
         AssertWrapper.IsTrue(PlayerStats._dailySeed == null, "The load reset the scores before the card's save finished");
     }
 
+    [Test]
+    public void SecondLoadJoinsTheRunningLoad()
+    {
+        // GIVEN
+        // The menu's load is still signing in when the leaderboard asks for its own (#176)
+        _pendingSignIn = new TaskCompletionSource<bool>();
+        var firstLoad = PlayerStats.InitAllAsync();
+
+        // WHEN
+        var secondLoad = PlayerStats.InitAllAsync();
+
+        // THEN
+        AssertWrapper.IsFalse(firstLoad.IsCompleted, "The first load finished, though its sign-in is still running");
+        AssertWrapper.AreSame(firstLoad, secondLoad, "The second load started its own load instead of joining the running one");
+        AssertWrapper.AreEqual(1, _signInCalls, "Two loads signed in on top of each other");
+    }
+
+    [Test]
+    public void LoadAfterAFinishedLoadSignsInAgain()
+    {
+        // GIVEN
+        // A finished load is never reused, so the next screen gets fresh scores and a failed sign-in is tried again
+        var firstLoad = PlayerStats.InitAllAsync();
+        AssertWrapper.IsTrue(firstLoad.IsCompleted, "The first load did not finish, though every fake service had finished");
+
+        // WHEN
+        var secondLoad = PlayerStats.InitAllAsync();
+
+        // THEN
+        AssertWrapper.IsTrue(secondLoad.IsCompleted, "The second load did not finish, though every fake service had finished");
+        AssertWrapper.IsFalse(secondLoad.IsFaulted, "The second load failed, though every fake service worked");
+        AssertWrapper.AreEqual(2, _signInCalls, "The second load reused the first, finished load instead of signing in again");
+    }
+
     #region Fakes
     private void SetDailyThatIsANewBest()
     {
@@ -274,6 +312,13 @@ public class PlayerStatsTests
 
     private Task FakeSignIn()
     {
+        _signInCalls++;
+
+        if (_pendingSignIn != null)
+        {
+            return _pendingSignIn.Task;
+        }
+
         return Task.CompletedTask;
     }
 

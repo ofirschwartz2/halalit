@@ -1,5 +1,6 @@
 using Assets.Enums;
 using Assets.Utils;
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,40 +18,52 @@ public class MainMenu : MonoBehaviour
     [SerializeField]
     private Button _dailyButton;
 
+    // PLAY and DAILY wait for the scores (#176). A tap before the load ends is ignored
+    private bool _isLoading;
+
     private async void Awake()
     {
-        await PlayerInitialization();
+        _isLoading = true;
+        _dailyButton.interactable = false;
+        bool didLoad = false;
+
+        try
+        {
+            await PlayerStats.InitAllAsync();
+            didLoad = true;
+        }
+        catch (Exception exception)
+        {
+            // A warning, not an error: being offline is expected
+            Debug.LogWarning($"MainMenu: could not load your scores. {exception.Message}");
+        }
+
+        // The load can outlive the menu, for example after LDRBRD
+        if (this == null)
+        {
+            return;
+        }
+
+        _isLoading = false;
         TrySetScoreTexts();
         TrySetDailyTwistText();
 
-        _dailyButton.interactable = PlayerStats._dailyScore == null;
-
-    }
-
-    private static async Task PlayerInitialization() // TODO: FIX
-    {
-        if (Authentication.InitializationTask == null)
-        {
-            await Authentication.Initialize();
-        }
-        else
-        {
-            await Authentication.InitializationTask;
-        }
-
-        await PlayerStats.InitAllAsync();
+        // Without your scores the game cannot know whether you already played today, so DAILY stays off after a failed load
+        _dailyButton.interactable = didLoad && PlayerStats._dailyScore == null;
     }
 
     #region ButtonMethods
     public void StartGame()
     {
+        if (_isLoading) return;
+
         PlayerStats.SetStartNormal();
         LoadPlayground();
     }
 
     public void StartDaily()
     {
-        if (!_dailyButton.interactable) return;
+        if (_isLoading || !_dailyButton.interactable) return;
 
         PlayerStats.SetStartDaily();
         LoadPlayground();
@@ -105,4 +118,16 @@ public class MainMenu : MonoBehaviour
         }
     }
     #endregion
+
+#if UNITY_EDITOR
+    internal bool IsLoading()
+    {
+        return _isLoading;
+    }
+
+    internal bool IsDailyButtonOn()
+    {
+        return _dailyButton.interactable;
+    }
+#endif
 }

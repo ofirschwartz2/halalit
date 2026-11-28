@@ -62,7 +62,22 @@ public class LeaderBoard : MonoBehaviour
         }
 
         _isLoading = true;
-        await PlayerStats.InitAllAsync();
+
+        // A failed load still shows today's list (#176), as "Could not load" if the sign-in failed. Before, every list button stayed dead
+        try
+        {
+            await PlayerStats.InitAllAsync();
+        }
+        catch (Exception exception)
+        {
+            Debug.LogWarning($"LeaderBoard: could not load your scores. {exception.Message}");
+        }
+
+        if (this == null)
+        {
+            return;
+        }
+
         _isLoading = false;
 
         ShowToday();
