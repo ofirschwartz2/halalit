@@ -60,6 +60,12 @@ public static class DailyLeaderboard
         return DID_NOT_PLAY_LINE;
     }
 
+    // Daily replay (#244): Watch is for finished days only. Today's list is still open, and all time is not one day
+    public static bool CanWatch(bool isAllTime, int dayIndex)
+    {
+        return !isAllTime && dayIndex > 0;
+    }
+
     // When you are below the shown rows, your row goes under them, after one empty row as a gap
     public static int GetRowIndexUnderShownRows(int shownRows)
     {

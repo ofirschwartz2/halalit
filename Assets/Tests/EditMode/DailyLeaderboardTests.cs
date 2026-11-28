@@ -104,6 +104,15 @@ public class DailyLeaderboardTests
     }
 
     [Test]
+    public void OnlyAFinishedDayCanBeWatched()
+    {
+        AssertWrapper.IsFalse(DailyLeaderboard.CanWatch(false, 0), "Today, which is still open, could be watched");
+        AssertWrapper.IsTrue(DailyLeaderboard.CanWatch(false, 1), "Yesterday could not be watched");
+        AssertWrapper.IsTrue(DailyLeaderboard.CanWatch(false, 7), "The oldest shown day could not be watched");
+        AssertWrapper.IsFalse(DailyLeaderboard.CanWatch(true, 1), "The all-time list could be watched");
+    }
+
+    [Test]
     public void PlayerRowGoesUnderTheShownRowsAfterAGap()
     {
         AssertWrapper.AreEqual(11, DailyLeaderboard.GetRowIndexUnderShownRows(10), "Your row was not put under the 10 shown rows after one empty row");
