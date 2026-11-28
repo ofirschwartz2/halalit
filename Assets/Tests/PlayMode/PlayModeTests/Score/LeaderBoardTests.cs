@@ -21,7 +21,7 @@ public class LeaderBoardTests
     private const string PLAYER_ID = "player";
     private const string PAST_DAY_VERSION_ID = "past-day-version";
     private const string OLDER_PAST_DAY_VERSION_ID = "older-past-day-version";
-    private const string REPLAY_LOAD_ERROR = "^DailyReplay: could not load the replay";
+    private const string REPLAY_LOAD_WARNING = "^DailyReplay: could not load the replay";
     private const string REPLAY_LOAD_FAILURE = "Fake replay load failure";
 
     private int _currentSeed;
@@ -243,7 +243,7 @@ public class LeaderBoardTests
     }
 
     // Offline, Watch logs the failure and stays usable: a second tap tries again.
-    // DailyReplay.TryLoad logs this as an error today. Card #314: make it a warning, as #308 did for the list. That change must update this expectation.
+    // DailyReplay.TryLoad logs this as a warning, as LeaderBoard does for the list (#308, #314).
     // The "Could not load" status line is not checked: the test assembly cannot read DailyReplay's text without a test hook
     [UnityTest]
     public IEnumerator OfflineReplayCanBeTriedAgain()
@@ -257,8 +257,8 @@ public class LeaderBoardTests
         leaderBoard.ShowPreviousDay();
         yield return WaitForTheLoadToEnd(leaderBoard);
         AssertWrapper.IsTrue(leaderBoard.IsWatchShown(), "Watch is hidden on a finished day. If the LeaderBoard's Watch Button is not wired, wire it (Needs Ofir in Unity)", _currentSeed);
-        LogAssert.Expect(LogType.Error, new Regex(REPLAY_LOAD_ERROR));
-        LogAssert.Expect(LogType.Error, new Regex(REPLAY_LOAD_ERROR));
+        LogAssert.Expect(LogType.Warning, new Regex(REPLAY_LOAD_WARNING));
+        LogAssert.Expect(LogType.Warning, new Regex(REPLAY_LOAD_WARNING));
 
         // WHEN
         leaderBoard.Watch();
