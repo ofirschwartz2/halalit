@@ -10,12 +10,15 @@ First draft, 2026-11-20. Written by the game designer agent for Ofir and the tea
 
 ## Vision (decided by Ofir, 2026-11-21)
 
-This section is what Ofir wants the game to become. Everything after it describes the game as built.
+This section is what Ofir wants the game to become. Everything after it describes the game as built. It is a general direction, not a spec. In Ofir's words (2026-11-27): "All of these ideas are basically only general ideas that will change in some way ... everything is extremely liquid and open to discussion." So the team builds by Milestone 1 and the approved cards, and raises vision questions as offers or open questions. It does not treat the vision details as fixed requirements.
 
 - **Spelunky-style depth.** The game was born from Spelunky. It should be full of specific interactions between a specific enemy, a specific weapon and a specific place or situation. In his words: "extremely detailed and thoughtful", so that "every little thing was very thoughtful and thought through".
 - **Rich and distinct.** Many enemies and many weapons. No enemy plays like another enemy, and no weapon plays like another weapon.
 - **The daily.** Every day has one daily run. It is random, and it is exactly the same for every player who plays that day, from one seed. The best players of that daily win.
-- **Weapons as NFTs.** Weapons become NFTs with their own stats, and dailies reward players with them. This is a direction only. Nothing blockchain is built until Ofir says the game is ready.
+- **A roguelite (Ofir, 2026-11-27).** Every run starts fresh. All players start from the same place, with the same ship and the same class. A run is full of randomness: some is shared (the daily seed, the same for everyone that day) and some is unique to each player. Every item has its own drop rate. NFTs are the only thing that makes one player different from another. In his words: "only the NFTs are the things that are the difference between the different players". (Roguelite rather than roguelike, because something, the NFTs, carries over between runs.)
+- **NFT items and non-NFT items (Ofir, 2026-11-21 and 2026-11-27).** Weapons become NFTs with their own stats, and dailies reward players with them. There are NFT items and non-NFT items, each with its own drop rate. This is a direction only. Nothing blockchain is built until Ofir says the game is ready. Open points are questions 14 and 15.
+- **How players get them (Ofir, 2026-11-27, 09:48).** It fits the daily. Everyone starts at the same level. Over time players get NFTs as drops during the game, and the top places of a daily are gifted special NFTs. There are clothing NFTs and weapon NFTs. Each weapon has its own stats, and every item is unique: a gun type might have about 100 versions with different stats, but yours is one of a kind. In his words: "I think it could be extremely cool that every item would be unique." (As built, each dropped weapon already rolls its stats from ranges by rank, Common to Legendary. A one-of-a-kind NFT would keep one such roll.)
+- **Fairness: skill over gear (Ofir, 2026-11-27, 09:50).** Fairness is a big element. Players can use their own weapons in the daily, but no weapon gives an asymmetric power that changes the whole game. Luck can matter, good or bad, but the result depends mostly on the player's skill, not only on their weapons. In his words: "I know it's an extremely difficult task, but we need to think in that area." The game designer is exploring ways to do this (section 12).
 
 **Milestone 1: Friends daily (Ofir, 2026-11-21).** The north star for now. It is done when a few of Ofir's friends install the app, play the same daily for a week, and a shared leaderboard shows who won each day. In his words: "I can take an application and send her between a few of my friends where we can play on a daily basis, where it's really fun." It needs, in order: Unity running somewhere, a phone build, the daily (the same run for everyone, scores saved, a leaderboard), a run worth replaying (difficulty that ramps, a result screen), and enough distinct weapons and enemies. NFTs come after it.
 
@@ -318,25 +321,95 @@ Not found: any number for difficulty over time, enemy health scaling, or a score
 
 ## 10. Open questions for Ofir
 
+Answered questions keep their number. Each shows Ofir's answer and its date.
+
 1. Which platform is the first release for: Android phone only, or also iOS or PC?
+   - **Answered (Ofir, 2026-11-21):** iOS first, Android later.
 2. How long should one good run last: about 2, 5 or 15 minutes?
 3. How should a run end: only by dying while it gets harder, or by clearing a set number of waves or levels?
 4. Is the committed Playground setup (15 enemies of three types, four drop tables, 90 to 100 of each utility in stock) the game you want, or a debug state left from the laser work?
 5. Who is the player: someone after a quick arcade session, or someone who wants builds and depth?
+   - **Partly answered (Ofir, 2026-11-21):** friends playing a daily, with Spelunky-style depth (the vision above). Run length stays open (question 2).
 6. What should the daily run be: one attempt per day on a shared seed with its own leaderboard, or something else?
+   - **Partly answered (Ofir):** one random run a day, the same for every player, from one seed (2026-11-21). It has its own leaderboard (#172, approved 2026-11-22). The day follows Israel time (#204, 2026-11-25).
+   - **Tries a day, answered (Ofir, 2026-11-27, 10:06):** one. The daily seed starts each day, each player plays the daily once, then waits for the next day. As built.
+   - Still open: who wins (question 13).
 7. Should a weapon pickup always replace the current weapon, or should the player choose?
 8. Should the ship be able to regain health during a run?
 9. Should asteroids be able to kill the ship, by damage or by crushing it out of the arena? Today they only push.
 10. Should score come only from collected valuables, or also from kills or time survived?
 11. Are the seven upgrades that do nothing, and the Weight stat, still planned as written in your task file, or may we propose changes?
 12. Will the first release have sound, and is there a reference game for the look and feel?
+    - **Partly answered (Ofir, 2026-11-21):** the game was born from Spelunky, the model for its depth. Sound and the look stay open.
+13. Who wins each day: the highest score or the last ship standing? It comes from the daily replay idea (#244) and is tied to questions 3 and 10.
+    - **Open.** Ofir, 2026-11-27: "I don't have the answer for it." And: "I'm okay with just going with one decision, and worst case we can change it later."
+    - **Working rule until he decides:** the highest score wins, as built.
+    - *Highest score:* every pickup is a risk taken for points, as in Spelunky, whose daily ranks by money. A bold player can beat a careful one. But the last ship standing in the replay may lose the day.
+    - *Longest survival:* matches the replay's crown. But caution wins, and valuables stop mattering, along with Coin Thief (#164) and Coin Toss (#198). It needs a run nobody can outlast: as built, a cleared arena is safe forever.
+    - *Survival, with score breaking ties:* plays like pure survival, because times rarely tie.
+    - *Score with a survival multiplier:* valuables are worth more the longer the ship lives, for example ×2 after 2 minutes (a starting value). Greed still scores, and the last ships in the replay have the most to gain. Coin Toss coins must not get the multiplier, or throwing and picking them up again farms score.
+    - **Designer's lean, not a decision:** keep the highest score, show each ship's score in the replay, and add the multiplier if replays show that early deaths often win.
+14. How does an NFT item reach a run: does its owner start with it, or does it join that player's drops with its own drop rate? And does it count in the daily, which is otherwise the same for everyone? For after Milestone 1.
+    - **Partly answered (Ofir, 2026-11-27):** players get NFTs as in-game drops and as gifts for the top places in a daily. NFT weapons can be used in the daily, and fairness comes from balance: no weapon may change the whole game (see "Fairness: skill over gear" in the Vision). Still open: how exactly an owned NFT item enters a run.
+15. On iPhone, Apple's rule 3.1.1 lets an app show users their own NFTs, provided owning one does not unlock features or functionality. Should NFT items be cosmetic on iPhone, sold through Apple's in-app purchase (which press reports say may unlock content), or carry stats only on other platforms? Not legal advice: check before building. For after Milestone 1.
+    - **Ofir, 2026-11-27, 09:52:** a hard requirement, and a problem for the vision. But NFTs are still far away. **For now:** keep the idea that specific drops give specific weapons with specific stats, as built, with no NFTs. **Later, still open:** remove that element on iPhone or on all phones, make it a web game, or wait in case Apple allows it someday. In his words: "We need to think about it." Research on each platform's rules is idea #264.
 
 ## 11. Ideas parked for proposal
 
-None of these is approved. Nobody works on any of them until Ofir approves a written proposal.
+An idea here is not approved. Nobody works on one until Ofir approves a written proposal, as happened for item 5.
 
 1. Give a run a shape: a spawn schedule that ramps, and a result screen when it ends.
+   - Approved as two cards, auto-approved 2026-11-27: #248 (endless ramp) and #249 (results card).
 2. Make drops readable: an icon per weapon, a colour per rank, and a HUD tag for the current weapon.
 3. Add a way to recover health, for example a rare heal drop or a Vitality that also heals.
 4. Make the claw work without a third finger: collect automatically in range, or the homing claw already on Ofir's list.
 5. Make the daily real: a seed derived from the date, a fully seeded run, and a daily leaderboard.
+   - **Built in `develop`** (#159, #183, #184, #204, #172, #190). **Not run in Unity.**
+6. Daily replay video ([#244](https://github.com/ofirschwartz2/halalit/issues/244)), Ofir's idea, 2026-11-27: everyone's ship in one arena, dropping out as each player died, the last ship standing crowned. Who wins is question 13. Step 1 (the in-game replay) is approved, auto-approved 2026-11-27. The share-as-video step is a later offer.
+7. Show my place in each daily ([#245](https://github.com/ofirschwartz2/halalit/issues/245)), Ofir's idea, 2026-11-27: for example "12th of 40". Approved, auto-approved 2026-11-27.
+8. NFT pilot ([#246](https://github.com/ofirschwartz2/halalit/issues/246)), Ofir's idea, 2026-11-27: a pilot NFT, visible in a see-through cockpit. Parked until after Milestone 1. On iOS an NFT must stay cosmetic (App Store rule 3.1.1).
+
+## 12. Fairness with your own weapons (thinking, not decided)
+
+Game designer, 2026-11-27. Thinking for after Milestone 1, not a decision and not a card. It explores Ofir's rule in the Vision: NFT weapons may come into the daily, but none may change the whole game, and skill decides most of the result.
+
+**What the ranks mean today.** Computed from section 8 and the prefabs.
+
+- Higher ranks only gain: every range is as good as the rank below, or better. A Legendary is 1 attack item in 333.
+- Legendary Power is about 3 to 4 times Common for Laser Beam, Knockback Wave and Shotgun, and 8 to 15 times for the other seven (range midpoints). A Legendary also attacks 1.25 to 1.85 times as often.
+- Hits decide, not Power. Enemies have 7 health and asteroids 5. A Common Ball Shot needs 4 or 7 hits per enemy, an Epic or Legendary 1. Today Power above 7 adds nothing, and 5 or 6 kills an enemy in the same 2 hits as 4.
+- So a Legendary Ball Shot NFT, brought in as it is, kills every enemy in one hit from the first second. The starting Ball Shot needs 7. That is the case to rule out. Prizes for a daily's top places would also snowball: winners get stronger weapons and win again.
+- The daily already shares weapon luck. The seed rolls every dropped weapon at run start, so the third Shotgun to drop is the same item for every player (`GL/Items/Infra/ItemsBank.cs:28`). An NFT is the first thing from outside the seed.
+
+**How other games do it.** The examples come from the designer's general knowledge and were not looked up. Check them before relying on them, especially the World of Warcraft dates.
+
+| Approach | Seen in | Gain | Cost |
+|---|---|---|---|
+| Sidegrades: every plus has a minus | Team Fortress 2 unlocks, Mario Kart parts | Owning gives a style, not power | Needs a real minus. Weight, the obvious one, does nothing yet |
+| One stat budget, spread differently | Pokémon base stat totals | Every NFT is unique, and none is stronger | Every stat needs a fair price, and Power's value jumps in steps (7 health) |
+| Normalise stats in the daily | Pokémon tournaments (all at level 50), Guild Wars 2 PvP | Fair by construction, easy to explain | The roll stops mattering there. World of Warcraft did this for PvP in 2016 and undid it in 2018 |
+| The daily sets the loadout; the NFT changes looks and one small trait | Spelunky (characters are looks only), Gods Unchained NFT cards (quality is looks only) | The fairest, and the safest on iPhone (question 15) | The NFT's own stats matter least |
+| Cap how far apart rolls can be | Forza car classes, Splinterlands NFT cards (level cap per league) | A good roll keeps part of its value | A high cap keeps the gap. A low cap is normalising by another name |
+| Strong here, weak there | Spelunky items, Pokémon types | Luck becomes whether today suits your weapon. Fits the vision | The hardest to design. A big collection lets a player pick each day's best fit |
+
+**What I would combine.** Designer's lean, not a decision.
+
+1. **Size from the day, shape from you.** In the daily, the seed sets how strong a weapon is, as it already does for drops. The NFT sets its shape and its looks, and its rank still shows. Outside the daily it keeps its full roll.
+2. **One budget per rank.** A shape spreads the same budget. More Power costs Rate. A crit chance costs Power at the same average damage: that is the good-or-bad luck Ofir allows. Weight joins once it does something. The budget counts hits to kill, not raw Power.
+3. **Every shape has a bad day.** A heavy shape (Power 5 or 6) kills asteroids in 1 hit but enemies still in 2 (works today). A lucky shape (Power 3, sometimes triple damage) kills a Laser range in 1 hit during its 1 s aim, or needs 3 (crit code works today, but every item has crit 0). A heavy weapon pushes a charging Following enemy off its line but swings slower (needs code).
+4. **The same moment for everyone.** Every ship starts with the Ball Shot. The NFT takes the place of the day's first weapon drop, at that drop's rank. A player without an NFT gets the seed's weapon.
+
+Edge cases: a later weapon pickup replaces the NFT for the rest of the run, as with any weapon (question 7). CriticalHit must stay above 1, or a crit hits softer than a normal shot (`AttackBehaviour.cs:35`).
+
+**Open questions for Ofir**
+
+1. In the daily, may an NFT be stronger at all, or only different? Lean: only different.
+   - **Answered (Ofir, 2026-11-27, 10:06):** "different".
+2. How does an NFT enter a daily: at the start in place of the Ball Shot, or at a moment the seed sets for everyone? This is the open part of question 14. Lean: the seed's moment.
+   - **Ofir, 2026-11-27, 10:06**, answering about the daily itself: "we should just have the daily seed each day at the start of the day and then each user can play the daily only one time and after that the player has to wait for the next day to play another daily". That settles one try a day (question 6). When an NFT enters a run is still open, and the lean stands until he decides.
+3. Which NFT may a player bring: any, one chosen per week, or only when the seed drops that type? Lean: one per week, so a big collection cannot pick each day's best fit.
+   - **Answered (Ofir, 2026-11-27, 10:06):** each player starts a run with a few NFT slots, for example 1, 3 or 5, maybe one slot per kind (one for a weapon, one for clothing, and so on). There is a cap on how many NFTs a run can use, daily or not. In his words: "there is a cap to how many NFTs you can use in a run daily or not". Whether a player may change the loadout every day is still open; the designer's "one per week" lean is not decided.
+4. Outside the daily, do NFTs keep their full roll? Then the all-time high score board favours big rolls. Lean: yes, and the daily board is the one that counts.
+   - **Answered (Ofir, 2026-11-27, 10:06):** yes.
+5. Are clothing NFTs looks only, everywhere? Lean: yes.
+   - **Answered (Ofir, 2026-11-27, 10:06):** yes.
