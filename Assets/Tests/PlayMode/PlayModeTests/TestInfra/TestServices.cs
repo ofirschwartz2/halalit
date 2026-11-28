@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 // Keeps PlayerStats, LeaderBoard and DailyReplay on quiet fakes for the whole test run (#307, #312), so no test signs in for real or posts a score to the friends' leaderboard.
 // The set-up fixture of each test assembly calls StartRunOnFakes before the first test and UseRealServices after the last one.
-// A test that swaps in its own fakes puts these back with UseFakes in its [TearDown], never with PlayerStats.ResetServices
+// A test that swaps in its own fakes puts these back with UseFakes in its [TearDown], never with a ResetServices
 internal static class TestServices
 {
     // Read only by the guard tests

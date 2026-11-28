@@ -5,7 +5,7 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
-// No test may sign in for real or post a score to the friends' leaderboard (#307). PlayModeServicesSetUp puts PlayerStats on fakes
+// No test may sign in for real or post a score to the friends' leaderboard (#307). PlayModeServicesSetUp puts PlayerStats, LeaderBoard and DailyReplay on fakes
 // before the first test. If these tests fail, the set-up fixture did not run: do not run the full suite, because its deaths could post for real
 public class RealServicesGuardTests
 {

@@ -243,7 +243,7 @@ public class LeaderBoardTests
     }
 
     // Offline, Watch logs the failure and stays usable: a second tap tries again.
-    // DailyReplay.TryLoad logs this as an error today. Idea: make it a warning, as #308 did for the list. That change must update this expectation.
+    // DailyReplay.TryLoad logs this as an error today. Card #314: make it a warning, as #308 did for the list. That change must update this expectation.
     // The "Could not load" status line is not checked: the test assembly cannot read DailyReplay's text without a test hook
     [UnityTest]
     public IEnumerator OfflineReplayCanBeTriedAgain()
