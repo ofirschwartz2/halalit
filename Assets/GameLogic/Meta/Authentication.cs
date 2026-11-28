@@ -7,9 +7,7 @@ using UnityEngine;
 public class Authentication : MonoBehaviour
 {
 
-    public static Task InitializationTask { get; private set; }
-
-    // Initialize runs on every menu load (#176), so SetupEvents adds its handlers only once
+    // Initialize runs once per load of the menu or the leaderboard (#176), so SetupEvents adds its handlers only once
     private static bool _areEventsSetUp;
 
     internal static async Task Initialize()
@@ -38,14 +36,7 @@ public class Authentication : MonoBehaviour
 
         AuthenticationService.Instance.SignedIn += () =>
         {
-            // Shows how to get a playerID
-            PlayerStats._playerId = AuthenticationService.Instance.PlayerId;
             Debug.Log("Player signed in.");
-        };
-
-        AuthenticationService.Instance.SignInFailed += (err) =>
-        {
-            Debug.LogError(err);
         };
 
         AuthenticationService.Instance.SignedOut += () =>
@@ -73,13 +64,9 @@ public class Authentication : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogException(e);
+            // A warning, not an error: being offline is expected
+            Debug.LogWarning($"Authentication: could not sign in. {e.Message}");
         }
-    }
-
-    public static string GetPlayerId()
-    {
-        return AuthenticationService.Instance.PlayerId;
     }
 
     // Returns the name Unity stored, which is expected to end in a tag such as "#1234" (unconfirmed)
