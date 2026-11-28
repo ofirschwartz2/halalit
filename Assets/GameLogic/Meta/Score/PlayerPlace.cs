@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Services.Leaderboards;
 using Unity.Services.Leaderboards.Exceptions;
@@ -41,6 +42,51 @@ public static class PlayerPlace
     {
         var page = await LeaderboardsService.Instance.GetScoresAsync(leaderboardId, new GetScoresOptions { Limit = 1 });
         return page.Total;
+    }
+
+    // The list's first page, as LeaderBoard showed it before (#312)
+    public static async Task<LeaderboardPage> GetPageAsync(string leaderboardId)
+    {
+        var page = await LeaderboardsService.Instance.GetScoresAsync(leaderboardId);
+        return ToPage(page.Results, page.Total);
+    }
+
+    // The daily list's finished days, newest first. Null if Unity sends no list, which LeaderBoard shows as no past days
+    public static async Task<List<LeaderboardDay>> GetPastDaysAsync(string leaderboardId, int limit)
+    {
+        var versions = await LeaderboardsService.Instance.GetVersionsAsync(leaderboardId, new GetVersionsOptions { Limit = limit });
+
+        if (versions.Results == null)
+        {
+            return null;
+        }
+
+        var days = new List<LeaderboardDay>(versions.Results.Count);
+
+        foreach (var version in versions.Results)
+        {
+            days.Add(new LeaderboardDay { VersionId = version.Id, Start = version.Start });
+        }
+
+        return days;
+    }
+
+    // The first page of a finished day's list
+    public static async Task<LeaderboardPage> GetPastDayPageAsync(string leaderboardId, string versionId)
+    {
+        var page = await LeaderboardsService.Instance.GetVersionScoresAsync(leaderboardId, versionId);
+        return ToPage(page.Results, page.Total);
+    }
+
+    // Null for null, so "no score on the list" stays null
+    public static LeaderboardRow ToRow(LeaderboardEntry entry)
+    {
+        if (entry == null)
+        {
+            return null;
+        }
+
+        return new LeaderboardRow { PlayerId = entry.PlayerId, PlayerName = entry.PlayerName, Rank = entry.Rank, Score = entry.Score };
     }
 
     // Unity's Rank starts at 0 for first place. Two calls can disagree for a moment, so the count is never below the place
@@ -92,5 +138,23 @@ public static class PlayerPlace
 
             throw;
         }
+    }
+
+    // Rows stays null if Unity sends no rows, so the screen fails as it did before and says "Could not load"
+    private static LeaderboardPage ToPage(List<LeaderboardEntry> entries, int total)
+    {
+        List<LeaderboardRow> rows = null;
+
+        if (entries != null)
+        {
+            rows = new List<LeaderboardRow>(entries.Count);
+
+            foreach (var entry in entries)
+            {
+                rows.Add(ToRow(entry));
+            }
+        }
+
+        return new LeaderboardPage { Rows = rows, Total = total };
     }
 }

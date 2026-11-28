@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -42,6 +43,15 @@ public class DailyReplay : MonoBehaviour
     private bool _isReady;
     // A load that finishes after Close, or after a newer Open, is dropped
     private int _loadNumber;
+
+    // The day's online load, swapped for a fake by the tests (#312). Static, so a test can set it before it loads the scene
+    private static Func<string, DateTime, Task<List<DailyReplayEntry>>> _loadDay;
+
+    // Unity may run this off the main thread while it loads the scene, so it only sets the call: no Unity API and no log
+    static DailyReplay()
+    {
+        UseRealServices();
+    }
 
     #region Init
     private void Awake()
@@ -98,7 +108,7 @@ public class DailyReplay : MonoBehaviour
     {
         try
         {
-            List<DailyReplayEntry> entries = await DailyTrackStore.LoadDayAsync(versionId, israelDay);
+            List<DailyReplayEntry> entries = await _loadDay(versionId, israelDay);
 
             if (this == null)
             {
@@ -257,5 +267,24 @@ public class DailyReplay : MonoBehaviour
     {
         return _panel != null && _arena != null && _shipPrefab != null && _clockText != null && _statusText != null && _resultsText != null;
     }
+    #endregion
+
+    #region Services
+    private static void UseRealServices()
+    {
+        _loadDay = DailyTrackStore.LoadDayAsync;
+    }
+
+#if UNITY_EDITOR
+    internal static void SetServices(Func<string, DateTime, Task<List<DailyReplayEntry>>> loadDay)
+    {
+        _loadDay = loadDay;
+    }
+
+    internal static void ResetServices()
+    {
+        UseRealServices();
+    }
+#endif
     #endregion
 }

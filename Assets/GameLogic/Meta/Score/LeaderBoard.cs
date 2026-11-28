@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
-using Unity.Services.Leaderboards;
-using Unity.Services.Leaderboards.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -34,10 +32,24 @@ public class LeaderBoard : MonoBehaviour
 
     private Transform _entryContainer;
     private Transform _entryTemplate;
-    private List<LeaderboardVersion> _archivedVersions;
+    private List<LeaderboardDay> _archivedVersions;
     private int _dayIndex;
     private bool _isAllTime;
     private bool _isLoading;
+
+    // The list's online calls, swapped for fakes by the tests (#312). Static, because the scene's Awake can load the list
+    // before a test gets control, so a test sets them before it loads the scene
+    private static Func<string, Task<LeaderboardPage>> _loadPage;
+    private static Func<string, Task<LeaderboardRow>> _loadPlayerRow;
+    private static Func<string, int, Task<List<LeaderboardDay>>> _loadPastDays;
+    private static Func<string, string, Task<LeaderboardPage>> _loadPastDayPage;
+    private static Func<string, string, Task<LeaderboardRow>> _loadPastDayPlayerRow;
+
+    // Unity may run this off the main thread while it loads the scene, so it only sets the calls: no Unity API and no log
+    static LeaderBoard()
+    {
+        UseRealServices();
+    }
 
     public async void Awake()
     {
@@ -98,7 +110,7 @@ public class LeaderBoard : MonoBehaviour
         }
         catch (Exception exception)
         {
-            Debug.LogError($"LeaderBoard: could not load the list. {exception.Message}");
+            Debug.LogWarning($"LeaderBoard: could not load the list. {exception.Message}");
 
             if (this == null)
             {
@@ -108,7 +120,7 @@ public class LeaderBoard : MonoBehaviour
             SetListTitle(COULD_NOT_LOAD_TITLE);
             SetPlaceText(string.Empty);
             SetWatchButton(false);
-            DisplayScores(new List<LeaderboardEntry>(), null);
+            DisplayScores(new List<LeaderboardRow>(), null);
         }
         finally
         {
@@ -120,8 +132,8 @@ public class LeaderBoard : MonoBehaviour
     {
         if (isAllTime)
         {
-            var allTimePage = await LeaderboardsService.Instance.GetScoresAsync(Constants.HIGHSCORE_LEADERBOARD_ID);
-            var allTimePlayerEntry = await PlayerPlace.GetPlayerEntryAsync(Constants.HIGHSCORE_LEADERBOARD_ID);
+            var allTimePage = await _loadPage(Constants.HIGHSCORE_LEADERBOARD_ID);
+            var allTimePlayerEntry = await _loadPlayerRow(Constants.HIGHSCORE_LEADERBOARD_ID);
 
             if (this == null)
             {
@@ -131,39 +143,38 @@ public class LeaderBoard : MonoBehaviour
             _isAllTime = true;
             SetListTitle(DailyLeaderboard.GetListTitle(true, _dayIndex, default));
             SetPlaceText(DailyLeaderboard.GetPlaceLine(true, _dayIndex, allTimePlayerEntry?.Rank, allTimePage.Total));
-            DisplayScores(allTimePage.Results, allTimePlayerEntry);
+            DisplayScores(allTimePage.Rows, allTimePlayerEntry);
             SetWatchButton(DailyLeaderboard.CanWatch(true, _dayIndex));
             return;
         }
 
         if (requestedDayIndex > 0 && _archivedVersions == null)
         {
-            var versions = await LeaderboardsService.Instance.GetVersionsAsync(Constants.DAILY_LEADERBOARD_ID, new GetVersionsOptions { Limit = Constants.DAILY_LEADERBOARD_PAST_DAYS });
-            _archivedVersions = versions.Results;
+            _archivedVersions = await _loadPastDays(Constants.DAILY_LEADERBOARD_ID, Constants.DAILY_LEADERBOARD_PAST_DAYS);
         }
 
         int archivedDays = _archivedVersions == null ? 0 : _archivedVersions.Count;
         int dayIndex = DailyLeaderboard.ClampDayIndex(requestedDayIndex, archivedDays);
-        List<LeaderboardEntry> entries;
+        List<LeaderboardRow> entries;
         int playerCount;
-        LeaderboardEntry playerEntry;
+        LeaderboardRow playerEntry;
         DateTime archivedDayStart = default;
 
         if (dayIndex == 0)
         {
-            var todayPage = await LeaderboardsService.Instance.GetScoresAsync(Constants.DAILY_LEADERBOARD_ID);
-            entries = todayPage.Results;
+            var todayPage = await _loadPage(Constants.DAILY_LEADERBOARD_ID);
+            entries = todayPage.Rows;
             playerCount = todayPage.Total;
-            playerEntry = await PlayerPlace.GetPlayerEntryAsync(Constants.DAILY_LEADERBOARD_ID);
+            playerEntry = await _loadPlayerRow(Constants.DAILY_LEADERBOARD_ID);
         }
         else
         {
             var version = _archivedVersions[dayIndex - 1];
-            var versionPage = await LeaderboardsService.Instance.GetVersionScoresAsync(Constants.DAILY_LEADERBOARD_ID, version.Id);
-            entries = versionPage.Results;
+            var versionPage = await _loadPastDayPage(Constants.DAILY_LEADERBOARD_ID, version.VersionId);
+            entries = versionPage.Rows;
             playerCount = versionPage.Total;
             archivedDayStart = version.Start;
-            playerEntry = await PlayerPlace.GetVersionPlayerEntryAsync(Constants.DAILY_LEADERBOARD_ID, version.Id);
+            playerEntry = await _loadPastDayPlayerRow(Constants.DAILY_LEADERBOARD_ID, version.VersionId);
         }
 
         if (this == null)
@@ -203,7 +214,7 @@ public class LeaderBoard : MonoBehaviour
         }
     }
 
-    public void DisplayScores(List<LeaderboardEntry> entries, LeaderboardEntry playerEntry)
+    public void DisplayScores(List<LeaderboardRow> entries, LeaderboardRow playerEntry)
     {
         foreach (Transform child in _entryContainer)
         {
@@ -226,7 +237,7 @@ public class LeaderBoard : MonoBehaviour
         }
     }
 
-    private void AddRow(LeaderboardEntry entry, int rowIndex, bool isPlayer)
+    private void AddRow(LeaderboardRow entry, int rowIndex, bool isPlayer)
     {
         Transform entryTransform = Instantiate(_entryTemplate, _entryContainer);
         RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
@@ -293,7 +304,7 @@ public class LeaderBoard : MonoBehaviour
         }
 
         var version = _archivedVersions[_dayIndex - 1];
-        _dailyReplay.Open(version.Id, DailySeed.GetIsraelDate(version.Start));
+        _dailyReplay.Open(version.VersionId, DailySeed.GetIsraelDate(version.Start));
     }
 
     public void BackToMainMenu()
@@ -302,4 +313,62 @@ public class LeaderBoard : MonoBehaviour
     }
 #endregion
 
+#region Services
+    // _loadPage is the method itself, not a lambda, so IsListLoadReal can compare it
+    private static void UseRealServices()
+    {
+        _loadPage = PlayerPlace.GetPageAsync;
+        _loadPlayerRow = async leaderboardId => PlayerPlace.ToRow(await PlayerPlace.GetPlayerEntryAsync(leaderboardId));
+        _loadPastDays = PlayerPlace.GetPastDaysAsync;
+        _loadPastDayPage = PlayerPlace.GetPastDayPageAsync;
+        _loadPastDayPlayerRow = async (leaderboardId, versionId) => PlayerPlace.ToRow(await PlayerPlace.GetVersionPlayerEntryAsync(leaderboardId, versionId));
+    }
+
+#if UNITY_EDITOR
+    internal static void SetServices(Func<string, Task<LeaderboardPage>> loadPage, Func<string, Task<LeaderboardRow>> loadPlayerRow, Func<string, int, Task<List<LeaderboardDay>>> loadPastDays, Func<string, string, Task<LeaderboardPage>> loadPastDayPage, Func<string, string, Task<LeaderboardRow>> loadPastDayPlayerRow)
+    {
+        _loadPage = loadPage;
+        _loadPlayerRow = loadPlayerRow;
+        _loadPastDays = loadPastDays;
+        _loadPastDayPage = loadPastDayPage;
+        _loadPastDayPlayerRow = loadPastDayPlayerRow;
+    }
+
+    internal static void ResetServices()
+    {
+        UseRealServices();
+    }
+
+    // Read by the tests' guard (#312), as PlayerStats.IsSignInReal. Two delegates for the same static method compare equal
+    internal static bool IsListLoadReal()
+    {
+        return _loadPage == (Func<string, Task<LeaderboardPage>>)PlayerPlace.GetPageAsync;
+    }
+#endif
+#endregion
+
+#if UNITY_EDITOR
+    // Null while the field is not wired in the Leaderboard scene
+    internal string GetListTitle()
+    {
+        return _listTitleText == null ? null : _listTitleText.text;
+    }
+
+    // Null while the field is not wired in the Leaderboard scene
+    internal string GetPlaceText()
+    {
+        return _placeText == null ? null : _placeText.text;
+    }
+
+    // False while the button is not wired in the Leaderboard scene
+    internal bool IsWatchShown()
+    {
+        return _watchButton != null && _watchButton.activeSelf;
+    }
+
+    internal bool IsLoading()
+    {
+        return _isLoading;
+    }
+#endif
 }

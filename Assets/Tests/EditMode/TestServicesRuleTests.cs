@@ -28,6 +28,9 @@ public class TestServicesRuleTests
         "PlayerPlace.GetPlayerEntryAsync",
         "PlayerPlace.GetVersionPlayerEntryAsync",
         "PlayerPlace.GetPlayerCountAsync",
+        "PlayerPlace.GetPageAsync",
+        "PlayerPlace.GetPastDaysAsync",
+        "PlayerPlace.GetPastDayPageAsync",
         "DailyTrackStore.SaveAsync",
         "DailyTrackStore.LoadDayAsync",
     };
@@ -47,13 +50,20 @@ public class TestServicesRuleTests
         AssertWrapper.IsFalse(PlayerStats.IsSignInReal(), "PlayerStats is on the real sign-in, so the set-up fixture did not run or a test put the real services back. Do not run the full suite: a test could sign in or post a score for real");
     }
 
+    // Only reads, so it is safe to run even when the set-up fixture did not run
+    [Test]
+    public void EveryTestStartsOnTheFakeLeaderboard()
+    {
+        AssertWrapper.IsFalse(LeaderBoard.IsListLoadReal(), "LeaderBoard is on the real list load, so the set-up fixture did not run or a test put the real services back. Do not run the full suite: a test could ask Unity's servers for the friends' leaderboard");
+    }
+
     [Test]
     public void OnlyTestServicesPutsTheRealServicesBack()
     {
         // A test that puts the real services back in its [TearDown] leaves every later test on them, so its deaths could post for real
         var scriptsThatCallIt = FindTestScriptsThatCall(RESET_SERVICES_CALL, TEST_SERVICES_SCRIPT);
 
-        AssertWrapper.IsTrue(scriptsThatCallIt.Count == 0, $"These scripts call PlayerStats.{RESET_SERVICES_CALL}), which puts the real services back for every later test: {string.Join(", ", scriptsThatCallIt)}. Call TestServices.UseFakes() instead");
+        AssertWrapper.IsTrue(scriptsThatCallIt.Count == 0, $"These scripts call {RESET_SERVICES_CALL}) on PlayerStats, LeaderBoard or DailyReplay, which puts the real services back for every later test: {string.Join(", ", scriptsThatCallIt)}. Call TestServices.UseFakes() instead");
     }
 
     [Test]

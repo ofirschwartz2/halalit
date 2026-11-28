@@ -188,7 +188,7 @@ public class MainMenuTests
     }
 
     // LDRBRD stays live during the load. The leaderboard's own load must join the menu's, not sign in on top of it ("already signing in").
-    // The sign-in is never finished here: a finished load would let the leaderboard ask Unity's real Leaderboards service for its list
+    // The sign-in is never finished here, so this test checks only the join. A finished load would show the list from TestServices' fakes (#312)
     [UnityTest]
     public IEnumerator LeaderboardOpenedDuringTheMenuLoadJoinsIt()
     {

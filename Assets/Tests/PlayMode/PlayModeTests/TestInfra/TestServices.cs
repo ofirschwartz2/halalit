@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-// Keeps PlayerStats on quiet fakes for the whole test run (#307), so no test signs in for real or posts a score to the friends' leaderboard.
+// Keeps PlayerStats, LeaderBoard and DailyReplay on quiet fakes for the whole test run (#307, #312), so no test signs in for real or posts a score to the friends' leaderboard.
 // The set-up fixture of each test assembly calls StartRunOnFakes before the first test and UseRealServices after the last one.
 // A test that swaps in its own fakes puts these back with UseFakes in its [TearDown], never with PlayerStats.ResetServices
 internal static class TestServices
@@ -21,12 +21,14 @@ internal static class TestServices
         IsRunOnFakes = true;
     }
 
-    // Both calls run in one synchronous call, so no real call can run between them
+    // These calls run in one synchronous call, so no real call can run between them
     internal static void UseFakes()
     {
         // Also clears a running load and the save chain, so the next test starts on a fresh load
         PlayerStats.ResetServices();
         PlayerStats.SetServices(FakeSignIn, FakeSaveScores, FakeLoadScores, FakeSubmitScore, FakeSaveDailyTrack);
+        LeaderBoard.SetServices(FakeLoadPage, FakeLoadPlayerRow, FakeLoadPastDays, FakeLoadPastDayPage, FakeLoadPastDayPlayerRow);
+        DailyReplay.SetServices(FakeLoadDay);
         SignInCalls = 0;
         SaveCalls = 0;
         SubmitCalls = 0;
@@ -37,6 +39,8 @@ internal static class TestServices
     {
         IsRunOnFakes = false;
         PlayerStats.ResetServices();
+        LeaderBoard.ResetServices();
+        DailyReplay.ResetServices();
     }
 
     #region Fakes
@@ -67,6 +71,37 @@ internal static class TestServices
     private static Task FakeSaveDailyTrack(DateTime israelDay, string trackJson)
     {
         return Task.CompletedTask;
+    }
+
+    // The Leaderboard scene opens on an empty list: no rows, no place, no past days
+    private static Task<LeaderboardPage> FakeLoadPage(string leaderboardId)
+    {
+        return Task.FromResult(new LeaderboardPage { Rows = new List<LeaderboardRow>(), Total = 0 });
+    }
+
+    private static Task<LeaderboardRow> FakeLoadPlayerRow(string leaderboardId)
+    {
+        return Task.FromResult<LeaderboardRow>(null);
+    }
+
+    private static Task<List<LeaderboardDay>> FakeLoadPastDays(string leaderboardId, int limit)
+    {
+        return Task.FromResult(new List<LeaderboardDay>());
+    }
+
+    private static Task<LeaderboardPage> FakeLoadPastDayPage(string leaderboardId, string versionId)
+    {
+        return Task.FromResult(new LeaderboardPage { Rows = new List<LeaderboardRow>(), Total = 0 });
+    }
+
+    private static Task<LeaderboardRow> FakeLoadPastDayPlayerRow(string leaderboardId, string versionId)
+    {
+        return Task.FromResult<LeaderboardRow>(null);
+    }
+
+    private static Task<List<DailyReplayEntry>> FakeLoadDay(string versionId, DateTime israelDay)
+    {
+        return Task.FromResult(new List<DailyReplayEntry>());
     }
     #endregion
 }

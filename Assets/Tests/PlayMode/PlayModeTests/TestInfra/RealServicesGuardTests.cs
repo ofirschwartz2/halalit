@@ -29,6 +29,13 @@ public class RealServicesGuardTests
         AssertWrapper.IsFalse(PlayerStats.IsSignInReal(), "PlayerStats is on the real sign-in, so the set-up fixture did not run or a test put the real services back. Do not run the full suite: a death could post a test score to the friends' leaderboard");
     }
 
+    // Only reads, so it is safe to run even when the set-up fixture did not run
+    [Test]
+    public void EveryTestStartsOnTheFakeLeaderboard()
+    {
+        AssertWrapper.IsFalse(LeaderBoard.IsListLoadReal(), "LeaderBoard is on the real list load, so the set-up fixture did not run or a test put the real services back. Do not run the full suite: a test that opens the Leaderboard scene could ask Unity's servers for the friends' leaderboard");
+    }
+
     // Only the seed: switching to the fakes here would also run before the two checks above, and EveryTestStartsOnTheFakeSignIn could then never fail
     [SetUp]
     public void SetUp()
