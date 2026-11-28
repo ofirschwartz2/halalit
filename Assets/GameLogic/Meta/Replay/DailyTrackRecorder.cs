@@ -15,7 +15,6 @@ public class DailyTrackRecorder : MonoBehaviour
     private List<int> _scores;
     private int _lastScore;
     private float _elapsedSeconds;
-    private float _nextSampleSeconds;
     private bool _isRecording;
 
     #region Init
@@ -43,7 +42,6 @@ public class DailyTrackRecorder : MonoBehaviour
 
         _isRecording = true;
         TakeSample();
-        _nextSampleSeconds = Constants.DAILY_TRACK_SAMPLE_SECONDS;
     }
     #endregion
 
@@ -68,14 +66,14 @@ public class DailyTrackRecorder : MonoBehaviour
 
         _elapsedSeconds += Time.fixedDeltaTime;
 
-        if (_elapsedSeconds >= _nextSampleSeconds)
+        if (DailyTrackCodec.IsSampleDue(_positions.Count, _elapsedSeconds))
         {
             TakeSample();
-            _nextSampleSeconds += Constants.DAILY_TRACK_SAMPLE_SECONDS;
         }
     }
 
-    // One last sample at the death position. A second game over is ignored
+    // One last sample at the death position. Past the 30-minute cap only the final score is kept, so the replay ends on the listed score.
+    // A second game over is ignored
     private void OnGameOver(object initiator, GameOverEventArguments arguments)
     {
         if (!_isRecording)
@@ -83,7 +81,15 @@ public class DailyTrackRecorder : MonoBehaviour
             return;
         }
 
-        TakeSample();
+        if (DailyTrackCodec.CanAddSample(_positions.Count))
+        {
+            TakeSample();
+        }
+        else
+        {
+            TryAddScoreChange(DailyTrackCodec.GetSampleIndex(_elapsedSeconds));
+        }
+
         _isRecording = false;
 
         if (PlayerStats._isDailyRun)
@@ -92,14 +98,9 @@ public class DailyTrackRecorder : MonoBehaviour
         }
     }
 
-    // Samples stop after 30 minutes. The survival time keeps counting
+    // Callers check the 30-minute cap first. The survival time keeps counting after it
     private void TakeSample()
     {
-        if (_positions.Count >= Constants.DAILY_TRACK_MAX_SAMPLES)
-        {
-            return;
-        }
-
         _positions.Add(GetNormalisedPosition());
         TryAddScoreChange(_positions.Count - 1);
     }

@@ -10,6 +10,7 @@ public class DailyTrack
     // One byte per axis per sample (x, then y), 0 to 255 across the InternalWorld box, as Base64
     public string Positions;
     // The sample at which the score changed, and the new score, pair by pair
+    // The final score of a run past the 30-minute cap has an index beyond the last position: read scores by time (index * SampleSeconds), never as a position index
     public int[] ScoreSampleIndexes;
     public int[] Scores;
     public float SurvivalSeconds;

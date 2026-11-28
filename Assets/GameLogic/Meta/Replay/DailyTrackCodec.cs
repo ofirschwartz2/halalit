@@ -54,6 +54,25 @@ public static class DailyTrackCodec
         return positions;
     }
 
+    #region Sampling
+    // Sample n is due at n times the sample time, until the 30-minute cap
+    public static bool IsSampleDue(int samplesTaken, float elapsedSeconds)
+    {
+        return CanAddSample(samplesTaken) && elapsedSeconds >= samplesTaken * Constants.DAILY_TRACK_SAMPLE_SECONDS;
+    }
+
+    public static bool CanAddSample(int samplesTaken)
+    {
+        return samplesTaken < Constants.DAILY_TRACK_MAX_SAMPLES;
+    }
+
+    // The sample a moment falls on. Past the cap it is beyond the last position, so it is used for score timing only
+    public static int GetSampleIndex(float elapsedSeconds)
+    {
+        return Mathf.CeilToInt(elapsedSeconds / Constants.DAILY_TRACK_SAMPLE_SECONDS);
+    }
+    #endregion
+
     private static string EncodePositions(IList<Vector2> normalisedPositions)
     {
         var bytes = new byte[normalisedPositions.Count * 2];

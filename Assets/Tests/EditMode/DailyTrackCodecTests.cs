@@ -55,8 +55,9 @@ public class DailyTrackCodecTests
     }
 
     [Test]
-    public void FiveMinutesFitInFourThousandCharacters()
+    public void FiveMinutesOfPathFitInFourThousandCharacters()
     {
+        // 4,000 is the path budget; score pairs come on top, see BusiestCappedTrackStaysUnder32KiB.
         // 5 minutes at 4 samples a second, with a score change every 10 samples
         var positions = new List<Vector2>();
         var scoreSampleIndexes = new List<int>();
@@ -98,6 +99,36 @@ public class DailyTrackCodecTests
         // The replay's speed and the cap both rest on these two numbers. Changing one without the other changes the cap's length
         AssertWrapper.AreEqual(0.25f, Constants.DAILY_TRACK_SAMPLE_SECONDS, "The track is not sampled 4 times a second");
         AssertWrapper.AreEqual(30f * 60f, Constants.DAILY_TRACK_MAX_SAMPLES * Constants.DAILY_TRACK_SAMPLE_SECONDS, "The sample cap is not 30 minutes of track", null, 0.001f);
+    }
+
+    [Test]
+    public void SampleIsDueEveryQuarterSecond()
+    {
+        AssertWrapper.IsFalse(DailyTrackCodec.IsSampleDue(4, 0.99f), "Sample 4 was due before 1 second");
+        AssertWrapper.IsTrue(DailyTrackCodec.IsSampleDue(4, 1f), "Sample 4 was not due at 1 second");
+        AssertWrapper.IsTrue(DailyTrackCodec.IsSampleDue(0, 0f), "Sample 0 was not due at the start");
+    }
+
+    [Test]
+    public void NoSampleIsDueAtTheCap()
+    {
+        // Well past the time the next sample would be due
+        AssertWrapper.IsFalse(DailyTrackCodec.IsSampleDue(Constants.DAILY_TRACK_MAX_SAMPLES, 3600f), "A sample was due after the 30-minute cap");
+    }
+
+    [Test]
+    public void SamplesCanBeAddedUpToTheCap()
+    {
+        AssertWrapper.IsTrue(DailyTrackCodec.CanAddSample(Constants.DAILY_TRACK_MAX_SAMPLES - 1), "The last sample before the cap could not be added");
+        AssertWrapper.IsFalse(DailyTrackCodec.CanAddSample(Constants.DAILY_TRACK_MAX_SAMPLES), "A sample could be added at the cap");
+    }
+
+    [Test]
+    public void SampleIndexOfAMoment()
+    {
+        // Past the cap, the final score's index lies beyond the last position
+        AssertWrapper.IsTrue(DailyTrackCodec.GetSampleIndex(0f) == 0, $"0 seconds gave sample {DailyTrackCodec.GetSampleIndex(0f)}, expected 0");
+        AssertWrapper.IsTrue(DailyTrackCodec.GetSampleIndex(1800.1f) == 7201, $"1800.1 seconds gave sample {DailyTrackCodec.GetSampleIndex(1800.1f)}, expected 7201");
     }
 
     [Test]
