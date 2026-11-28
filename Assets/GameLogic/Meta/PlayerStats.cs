@@ -22,6 +22,8 @@ public static class PlayerStats
     public static string _playerId, _dateInFormat, _dailyScoreKey, _highScoreKey;
     public static Dictionary<string, object> _playerHighScore, _playerDailyScore;
     public static DateTime _dailyDate;
+    // Daily replay (#244): the daily's track as JSON, handed over by DailyTrackRecorder when the ship dies. Null after a normal run
+    public static string _dailyTrack;
 
 #region Init
     public async static Task InitAllAsync()
@@ -65,6 +67,7 @@ public static class PlayerStats
         _highScoreKey = "HighScore";
         _playerHighScore = new Dictionary<string, object>();
         _playerDailyScore = new Dictionary<string, object>();
+        _dailyTrack = null;
     }
 #endregion
 
@@ -151,6 +154,8 @@ public static class PlayerStats
 
         if (DailyLeaderboard.ShouldSubmitDaily(_dailyScore, _dailyDate, DailySeed.GetToday()))
         {
+            await TrySaveDailyTrackAsync();
+
             try
             {
                 await LeaderboardsService.Instance.AddPlayerScoreAsync(Constants.DAILY_LEADERBOARD_ID, (double)_dailyScore);
@@ -159,6 +164,25 @@ public static class PlayerStats
             {
                 Debug.LogError($"Error in SaveDailyScoreAsync, daily leaderboard submit: {e.Message}");
             }
+        }
+    }
+
+    // Daily replay (#244): saved before the score, so a friend who sees the score can also load the ship.
+    // A failed track never blocks the score
+    private static async Task TrySaveDailyTrackAsync()
+    {
+        if (_dailyTrack == null)
+        {
+            return;
+        }
+
+        try
+        {
+            await DailyTrackStore.SaveAsync(_dailyDate, _dailyTrack);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Error in SaveDailyScoreAsync, daily track save: {e.Message}");
         }
     }
 

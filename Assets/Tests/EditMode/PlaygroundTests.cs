@@ -425,6 +425,15 @@ public class PlaygroundTests
         AssertWrapper.IsTrue(IsAnyButtonCalling(panel, resultsCard, nameof(ResultsCard.OpenMenu)), "No button on the results card's Panel calls ResultsCard.OpenMenu, so after a daily the player is stuck on the card (Needs Ofir in Unity)");
     }
 
+    [Test]
+    public void DailyTrackRecorderTests()
+    {
+        // DAILY REPLAY (#244, Needs Ofir in Unity): one recorder, on the Halalit, so the daily records the player's ship and no other object
+        var dailyTrackRecorders = Object.FindObjectsOfType<DailyTrackRecorder>();
+        AssertWrapper.IsTrue(dailyTrackRecorders.Length == 1, $"The Playground should have one active DailyTrackRecorder, it has {dailyTrackRecorders.Length} (Needs Ofir in Unity)");
+        AssertWrapper.IsTrue(dailyTrackRecorders[0].gameObject == TestUtils.GetHalalit(), $"The DailyTrackRecorder is on {dailyTrackRecorders[0].gameObject.name}, not on the Halalit (Needs Ofir in Unity)");
+    }
+
     // Results card (#249): the open scene's only active card
     private static ResultsCard GetOnlyResultsCard()
     {

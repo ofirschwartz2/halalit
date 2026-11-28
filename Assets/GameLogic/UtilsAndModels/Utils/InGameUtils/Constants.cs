@@ -20,6 +20,10 @@
     public const string DAILY_LEADERBOARD_ID = "daily";
     public const int DAILY_LEADERBOARD_PAST_DAYS = 7;
 
+    // Daily replay (#244): 4 samples a second of game time, for at most 30 minutes
+    public const float DAILY_TRACK_SAMPLE_SECONDS = 0.25f;
+    public const int DAILY_TRACK_MAX_SAMPLES = 7200;
+
     // Enemies
     public const int MAX_LATCHED_LEECHES = 2;
 
