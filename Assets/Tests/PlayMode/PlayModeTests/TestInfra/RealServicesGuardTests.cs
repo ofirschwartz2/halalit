@@ -14,14 +14,22 @@ public class RealServicesGuardTests
     private int _currentSeed;
     private bool _didLoadPlayground;
 
+    // The proof that the fixture ran. The fake sign-in alone is not: the death test below, and the tear-down of any earlier test,
+    // also switch to the fakes, and NUnit may run them first. Only the fixture sets this flag. Only reads
+    [Test]
+    public void SetUpFixturePutTheRunOnTheFakes()
+    {
+        AssertWrapper.IsTrue(TestServices.IsRunOnFakes, "PlayModeServicesSetUp did not run before this test. Do not run the full suite: a death could post a test score to the friends' leaderboard. Check that the fixture has no namespace line");
+    }
+
     // Only reads, so it is safe to run even when the set-up fixture did not run
     [Test]
     public void EveryTestStartsOnTheFakeSignIn()
     {
-        AssertWrapper.IsFalse(PlayerStats.IsSignInReal(), "PlayerStats is on the real sign-in, so the set-up fixture did not run. Do not run the full suite: a death could post a test score to the friends' leaderboard");
+        AssertWrapper.IsFalse(PlayerStats.IsSignInReal(), "PlayerStats is on the real sign-in, so the set-up fixture did not run or a test put the real services back. Do not run the full suite: a death could post a test score to the friends' leaderboard");
     }
 
-    // Only the seed: switching to the fakes here would also run before EveryTestStartsOnTheFakeSignIn, which could then never fail
+    // Only the seed: switching to the fakes here would also run before the two checks above, and EveryTestStartsOnTheFakeSignIn could then never fail
     [SetUp]
     public void SetUp()
     {

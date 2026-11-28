@@ -9,7 +9,7 @@ public class EditModeServicesSetUp
     [OneTimeSetUp]
     public void UseFakeServices()
     {
-        TestServices.UseFakes();
+        TestServices.StartRunOnFakes();
     }
 
     // The real services come back even when the check fails

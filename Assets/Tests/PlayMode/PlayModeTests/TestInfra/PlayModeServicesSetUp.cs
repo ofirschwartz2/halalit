@@ -8,7 +8,7 @@ public class PlayModeServicesSetUp
     [OneTimeSetUp]
     public void UseFakeServices()
     {
-        TestServices.UseFakes();
+        TestServices.StartRunOnFakes();
     }
 
     // The real services come back even when the check fails. Otherwise Play in the editor could run on the fakes if domain reload is ever turned off
