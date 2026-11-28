@@ -137,10 +137,15 @@ public class DailyReplay : MonoBehaviour
 
         foreach (DailyReplayEntry entry in _entries)
         {
-            Vector2[] path = GetPathOrNull(entry.Track);
+            Vector2[] path = DailyTrackCodec.GetPathOrNull(entry.Track);
             DailyReplayShip ship = null;
 
-            if (path != null)
+            if (path == null)
+            {
+                // A track that cannot be shown counts as no track, so the end time and the results agree with the arena
+                entry.Track = null;
+            }
+            else
             {
                 ship = Instantiate(_shipPrefab, _arena);
                 ship.Init(entry.PlayerName, entry.IsPlayer, _playerColor);
@@ -245,25 +250,6 @@ public class DailyReplay : MonoBehaviour
         _ships.Clear();
         _paths.Clear();
         _isOut.Clear();
-    }
-
-    // Null for no track, an empty path or a path that does not decode, so that player is shown without a ship
-    private static Vector2[] GetPathOrNull(DailyTrack track)
-    {
-        if (track == null)
-        {
-            return null;
-        }
-
-        try
-        {
-            Vector2[] path = DailyTrackCodec.GetPositions(track);
-            return path.Length == 0 ? null : path;
-        }
-        catch (FormatException)
-        {
-            return null;
-        }
     }
 
     #region Predicates

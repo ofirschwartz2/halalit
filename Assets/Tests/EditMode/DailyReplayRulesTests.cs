@@ -9,9 +9,9 @@ public class DailyReplayRulesTests
     {
         var entries = new List<DailyReplayEntry>
         {
-            CreateEntry("Dana", 120, 300f),
-            CreateEntry("Ofir", 450, 90f),
-            CreateEntry("Yoni", 300, 600f)
+            CreateEntry(3, "Dana", 120, 300f),
+            CreateEntry(1, "Ofir", 450, 90f),
+            CreateEntry(2, "Yoni", 300, 600f)
         };
 
         AssertWrapper.AreEqual(1, DailyReplayRules.GetWinnerIndex(entries), "The highest score was not crowned");
@@ -22,8 +22,8 @@ public class DailyReplayRulesTests
     {
         var entries = new List<DailyReplayEntry>
         {
-            CreateEntry("Dana", 450, 100f),
-            CreateEntry("Ofir", 450, 250f)
+            CreateEntry(1, "Dana", 450, 100f),
+            CreateEntry(2, "Ofir", 450, 250f)
         };
 
         AssertWrapper.AreEqual(1, DailyReplayRules.GetWinnerIndex(entries), "A tie on score did not go to the longer survival");
@@ -34,9 +34,9 @@ public class DailyReplayRulesTests
     {
         var entries = new List<DailyReplayEntry>
         {
-            CreateEntry("Dana", 450, 100f),
-            CreateEntry("Ofir", 450, 100f),
-            CreateEntry("Yoni", 450, 100f)
+            CreateEntry(1, "Dana", 450, 100f),
+            CreateEntry(2, "Ofir", 450, 100f),
+            CreateEntry(3, "Yoni", 450, 100f)
         };
 
         AssertWrapper.AreEqual(0, DailyReplayRules.GetWinnerIndex(entries), "A tie on score and survival did not go to the earlier entry");
@@ -58,8 +58,8 @@ public class DailyReplayRulesTests
         // A player on an older build has no track, so no ship, but the list's score still counts
         var entries = new List<DailyReplayEntry>
         {
-            CreateEntry("Dana", 120, 300f),
-            CreateEntryWithoutTrack("Ofir", 450)
+            CreateEntry(2, "Dana", 120, 300f),
+            CreateEntryWithoutTrack(1, "Ofir", 450)
         };
 
         AssertWrapper.AreEqual(1, DailyReplayRules.GetWinnerIndex(entries), "The highest score was not crowned because it had no track");
@@ -72,12 +72,33 @@ public class DailyReplayRulesTests
     {
         var entries = new List<DailyReplayEntry>
         {
-            CreateEntry("Dana", 120, 75.4f),
-            CreateEntry("Ofir", 450, 600f),
-            CreateEntry("Yoni", 120, 200f)
+            CreateEntry(2, "Dana", 120, 75.4f),
+            CreateEntry(1, "Ofir", 450, 600f),
+            CreateEntry(3, "Yoni", 120, 200f)
         };
 
-        AssertWrapper.AreEqual("1. Ofir  450  10:00\n2. Yoni  120  3:20\n3. Dana  120  1:15", DailyReplayRules.GetResultsText(entries), "The results lines are wrong");
+        // The lines follow the crown order, and each shows the place on the day's list. On a score tie the list put Dana ahead,
+        // while the crown rule puts the longer survival ahead, so the places show out of order (Ofir's open tie question)
+        AssertWrapper.AreEqual("1. Ofir  450  10:00\n3. Yoni  120  3:20\n2. Dana  120  1:15", DailyReplayRules.GetResultsText(entries), "The results lines are wrong");
+    }
+
+    [Test]
+    public void PlayerBelowTheListShowsTheirRealPlace()
+    {
+        // You are added under the top 20 when you are below them. Your line shows your place on the day's list, not your line number
+        var player = CreateEntry(35, "Dana", 40, 20f);
+        player.IsPlayer = true;
+        var entries = new List<DailyReplayEntry>
+        {
+            CreateEntry(1, "Ofir", 450, 600f),
+            CreateEntry(2, "Yoni", 300, 200f),
+            player
+        };
+
+        var lines = DailyReplayRules.GetResultsText(entries).Split('\n');
+
+        AssertWrapper.AreEqual("35. Dana  40  0:20", lines[2], "A player below the list did not show their place on the day's list");
+        AssertWrapper.IsTrue(lines[2].StartsWith("35. ", System.StringComparison.Ordinal), $"A player below the list showed \"{lines[2]}\", not their place 35");
     }
 
     [Test]
@@ -98,7 +119,7 @@ public class DailyReplayRulesTests
     [Test]
     public void ShipFliesUntilItsPlayerDied()
     {
-        var entry = CreateEntry("Dana", 120, 30f);
+        var entry = CreateEntry(1, "Dana", 120, 30f);
 
         AssertWrapper.IsTrue(DailyReplayRules.IsAlive(entry, 0f), "A ship was out at the start");
         AssertWrapper.IsTrue(DailyReplayRules.IsAlive(entry, 29.9f), "A ship was out before its player died");
@@ -109,7 +130,7 @@ public class DailyReplayRulesTests
     [Test]
     public void PlayerWithoutATrackNeverFlies()
     {
-        AssertWrapper.IsFalse(DailyReplayRules.IsAlive(CreateEntryWithoutTrack("Dana", 120), 0f), "A player without a track flew");
+        AssertWrapper.IsFalse(DailyReplayRules.IsAlive(CreateEntryWithoutTrack(1, "Dana", 120), 0f), "A player without a track flew");
     }
 
     [Test]
@@ -117,9 +138,9 @@ public class DailyReplayRulesTests
     {
         var entries = new List<DailyReplayEntry>
         {
-            CreateEntry("Dana", 120, 30f),
-            CreateEntry("Ofir", 450, 2400f),
-            CreateEntryWithoutTrack("Yoni", 300)
+            CreateEntry(2, "Dana", 120, 30f),
+            CreateEntry(1, "Ofir", 450, 2400f),
+            CreateEntryWithoutTrack(3, "Yoni", 300)
         };
 
         AssertWrapper.AreEqual(2400f, DailyReplayRules.GetEndSeconds(entries), "The replay did not end with the longest survival, past the 30-minute cap");
@@ -133,7 +154,7 @@ public class DailyReplayRulesTests
         var entries = new List<DailyReplayEntry>();
         for (int i = 0; i < 20; i++)
         {
-            entries.Add(CreateEntry("Player" + i, 450, 100f));
+            entries.Add(CreateEntry(i + 1, "Player" + i, 450, 100f));
         }
 
         var ranking = DailyReplayRules.GetRanking(entries);
@@ -150,8 +171,8 @@ public class DailyReplayRulesTests
         // A player without a track counts as surviving 0 seconds, so being earlier in the list does not win the tie
         var entries = new List<DailyReplayEntry>
         {
-            CreateEntryWithoutTrack("Dana", 450),
-            CreateEntry("Ofir", 450, 1f)
+            CreateEntryWithoutTrack(1, "Dana", 450),
+            CreateEntry(2, "Ofir", 450, 1f)
         };
 
         AssertWrapper.AreEqual(1, DailyReplayRules.GetWinnerIndex(entries), "A score tie went to the player without a track");
@@ -174,12 +195,12 @@ public class DailyReplayRulesTests
 
             if (survivalChoice == 0)
             {
-                entries.Add(CreateEntryWithoutTrack("Player" + i, score));
+                entries.Add(CreateEntryWithoutTrack(i + 1, "Player" + i, score));
             }
             else
             {
                 float survival = survivalChoice * 30f;
-                entries.Add(CreateEntry("Player" + i, score, survival));
+                entries.Add(CreateEntry(i + 1, "Player" + i, score, survival));
                 longestSurvival = System.Math.Max(longestSurvival, survival);
             }
         }
@@ -209,7 +230,7 @@ public class DailyReplayRulesTests
     [Test]
     public void DeathAtTheStartNeverFlies()
     {
-        AssertWrapper.IsFalse(DailyReplayRules.IsAlive(CreateEntry("Dana", 0, 0f), 0f), "A ship whose player died at 0 seconds flew");
+        AssertWrapper.IsFalse(DailyReplayRules.IsAlive(CreateEntry(1, "Dana", 0, 0f), 0f), "A ship whose player died at 0 seconds flew");
     }
 
     private static int GetSeed(int seed = 0)
@@ -217,9 +238,9 @@ public class DailyReplayRulesTests
         return seed != 0 ? seed : System.Environment.TickCount;
     }
 
-    private static DailyReplayEntry CreateEntry(string playerName, int score, float survivalSeconds)
+    private static DailyReplayEntry CreateEntry(int place, string playerName, int score, float survivalSeconds)
     {
-        var entry = CreateEntryWithoutTrack(playerName, score);
+        var entry = CreateEntryWithoutTrack(place, playerName, score);
         entry.Track = new DailyTrack
         {
             Version = 1,
@@ -232,10 +253,11 @@ public class DailyReplayRulesTests
         return entry;
     }
 
-    private static DailyReplayEntry CreateEntryWithoutTrack(string playerName, int score)
+    private static DailyReplayEntry CreateEntryWithoutTrack(int place, string playerName, int score)
     {
         return new DailyReplayEntry
         {
+            Place = place,
             PlayerName = playerName,
             Score = score,
             IsPlayer = false,

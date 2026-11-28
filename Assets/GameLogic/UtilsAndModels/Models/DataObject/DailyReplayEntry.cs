@@ -2,6 +2,8 @@
 // It holds no Unity Services types, so the replay rules can be tested without Unity's servers
 public class DailyReplayEntry
 {
+    // The place on the day's list, 1 = first. A player added from below the top 20 keeps their real place
+    public int Place;
     public string PlayerName;
     // The score on the day's list
     public int Score;

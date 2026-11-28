@@ -55,6 +55,25 @@ public static class DailyTrackCodec
     }
 
     #region Replay
+    // Null for no track, an empty path or a path that does not decode, so that player is shown without a ship
+    public static Vector2[] GetPathOrNull(DailyTrack track)
+    {
+        if (track == null)
+        {
+            return null;
+        }
+
+        try
+        {
+            Vector2[] path = DailyTrackCodec.GetPositions(track);
+            return path.Length == 0 ? null : path;
+        }
+        catch (FormatException)
+        {
+            return null;
+        }
+    }
+
     // Where the ship is at a moment of the run: linear between two samples, the first sample before 0, the last after the end.
     // Callers pass a path with at least one position
     public static Vector2 GetPosition(Vector2[] positions, float sampleSeconds, float time)

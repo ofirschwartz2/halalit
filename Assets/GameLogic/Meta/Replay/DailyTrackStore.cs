@@ -64,6 +64,8 @@ public static class DailyTrackStore
         {
             entries.Add(new DailyReplayEntry
             {
+                // Unity's Rank starts at 0, as in LeaderBoard.AddRow, so both screens show the same place
+                Place = listEntries[i].Rank + 1,
                 PlayerName = listEntries[i].PlayerName,
                 // The game submits whole scores; the list keeps them as doubles
                 Score = Convert.ToInt32(listEntries[i].Score),

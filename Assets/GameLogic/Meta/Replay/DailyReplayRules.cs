@@ -90,7 +90,7 @@ public static class DailyReplayRules
         return winnerIndex == -1 ? string.Empty : WINNER_TEXT + entries[winnerIndex].PlayerName;
     }
 
-    // One line per player in crown order: place, name, score and survival time
+    // One line per player in crown order: the place on the day's list, name, score and survival time
     public static string GetResultsText(IList<DailyReplayEntry> entries)
     {
         List<int> ranking = GetRanking(entries);
@@ -105,7 +105,7 @@ public static class DailyReplayRules
                 text.Append(LINE_END);
             }
 
-            text.Append(place + 1).Append(PLACE_END).Append(entry.PlayerName)
+            text.Append(entry.Place).Append(PLACE_END).Append(entry.PlayerName)
                 .Append(COLUMN_GAP).Append(entry.Score)
                 .Append(COLUMN_GAP).Append(entry.Track == null ? NO_REPLAY_TEXT : FormatClock(entry.Track.SurvivalSeconds));
         }

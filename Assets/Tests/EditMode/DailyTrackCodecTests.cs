@@ -322,6 +322,35 @@ public class DailyTrackCodecTests
         return seed != 0 ? seed : System.Environment.TickCount;
     }
 
+    [Test]
+    public void TrackThatCannotBeShownHasNoPath()
+    {
+        // The viewer shows such a player without a ship and counts them as having no track
+        var emptyPositions = CreateScoreTrack(new int[0], new int[0], 5f);
+        var invalidBase64 = CreateScoreTrack(new int[0], new int[0], 5f);
+        invalidBase64.Positions = "not base64!";
+        // One byte is half a position, so no whole position
+        var oneByte = CreateScoreTrack(new int[0], new int[0], 5f);
+        oneByte.Positions = "AA==";
+
+        AssertWrapper.IsTrue(DailyTrackCodec.GetPathOrNull(null) == null, "A missing track gave a path");
+        AssertWrapper.IsTrue(DailyTrackCodec.GetPathOrNull(emptyPositions) == null, "A track with no positions gave a path");
+        AssertWrapper.IsTrue(DailyTrackCodec.GetPathOrNull(invalidBase64) == null, "A track whose positions are not Base64 gave a path");
+        AssertWrapper.IsTrue(DailyTrackCodec.GetPathOrNull(oneByte) == null, "A track with one byte of positions gave a path");
+    }
+
+    [Test]
+    public void ValidTrackHasAPath()
+    {
+        var positions = new List<Vector2> { new Vector2(0.5f, 0.5f) };
+        var track = DailyTrackCodec.FromJson(DailyTrackCodec.ToJson(positions, new List<int>(), new List<int>(), 0f));
+
+        var path = DailyTrackCodec.GetPathOrNull(track);
+
+        AssertWrapper.IsTrue(path != null, "A valid one-sample track gave no path");
+        AssertWrapper.AreEqual(1, path.Length, "A valid one-sample track did not give one position");
+    }
+
     private static DailyTrack CreateScoreTrack(int[] scoreSampleIndexes, int[] scores, float survivalSeconds)
     {
         return new DailyTrack
