@@ -12,17 +12,11 @@ public class EditModeServicesSetUp
         TestServices.StartRunOnFakes();
     }
 
-    // The real services come back even when the check fails
+    // No check that Unity Services never started, unlike PlayModeServicesSetUp. Unity does not reset code when it leaves Play mode,
+    // so after Ofir plays in the editor the services are still running in edit mode, and the check would fail when no test is at fault
     [OneTimeTearDown]
-    public void CheckAndUseRealServices()
+    public void UseRealServices()
     {
-        try
-        {
-            AssertWrapper.IsFalse(Authentication.AreServicesStarted(), "A test started Unity Services, so it may have signed in or saved for real");
-        }
-        finally
-        {
-            TestServices.UseRealServices();
-        }
+        TestServices.UseRealServices();
     }
 }

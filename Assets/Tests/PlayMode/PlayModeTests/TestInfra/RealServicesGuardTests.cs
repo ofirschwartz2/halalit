@@ -12,7 +12,7 @@ public class RealServicesGuardTests
     private const int MAX_FRAMES_TO_SAVE = 10;
 
     private int _currentSeed;
-    private bool _didLoadPlayground;
+    private bool _didLoadPlayground, _didSetTestMode;
 
     // The proof that the fixture ran. The fake sign-in alone is not: the death test below, and the tear-down of any earlier test,
     // also switch to the fakes, and NUnit may run them first. Only the fixture sets this flag. Only reads
@@ -48,6 +48,7 @@ public class RealServicesGuardTests
         _didLoadPlayground = true;
         yield return null;
         TestUtils.SetTestMode();
+        _didSetTestMode = true;
         yield return null;
         yield return TestUtils.CollectValuable(ValuableName.SILVER);
         PlayerStats.SetDefaultPlayerStatsValues();
@@ -69,13 +70,19 @@ public class RealServicesGuardTests
     [TearDown]
     public void TearDown()
     {
-        // Only after the Playground test, which always calls SetTestMode: ResetTimeScale restores the saved scale, and that is 0 if none was saved yet
         if (_didLoadPlayground)
         {
             TestUtils.DestroyAllGameObjects();
-            TestTimeController.ResetTimeScale();
-            _didLoadPlayground = false;
         }
+
+        // Only after SetTestMode saved a scale: ResetTimeScale restores the saved scale, and that is 0 if none was saved yet
+        if (_didSetTestMode)
+        {
+            TestTimeController.ResetTimeScale();
+        }
+
+        _didLoadPlayground = false;
+        _didSetTestMode = false;
 
         TestServices.UseFakes();
         PlayerStats.SetDefaultPlayerStatsValues();
