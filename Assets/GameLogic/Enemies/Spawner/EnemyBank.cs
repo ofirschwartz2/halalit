@@ -40,7 +40,7 @@ public class EnemyBank : SeedfulRandomGeneratorUser
 
         foreach (var enemyPrefab in _enemyPrefabsBank)
         {
-            var isPaired = enemyPrefab.Key.TryGetComponent<IPairedEnemy>(out _);
+            var isPaired = enemyPrefab.Key != null && enemyPrefab.Key.TryGetComponent<IPairedEnemy>(out _);
             for (int i = 0; i < enemyPrefab.Value; i++)
             {
                 _enemyEntityList.Add(CreateEnemyEntity(enemyPrefab.Key, isPaired));

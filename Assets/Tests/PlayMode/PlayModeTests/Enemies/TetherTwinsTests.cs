@@ -418,7 +418,7 @@ public class TetherTwinsTests
         AssertWrapper.IsNull(twins[0], _currentSeed, "Test setup: the killed twin is still there");
         AssertWrapper.IsTrue(tether.GetState() == TetherState.FLAIL, "The tether did not turn into a flail when one twin died", _currentSeed);
         AssertWrapper.IsTrue(tether.IsHarmful(), "The flail is not harmful", _currentSeed);
-        AssertWrapper.Greater(harmStartDistance, survivor.GetComponent<TetherTwin>().GetBodyRadius(), "The flail's harm starts inside the survivor's body", _currentSeed);
+        AssertWrapper.Greater(harmStartDistance - tether.GetComponent<EdgeCollider2D>().edgeRadius, survivor.GetComponent<TetherTwin>().GetBodyRadius() + LENGTH_DELTA, "The flail's trigger edge, with its rounded end, reaches the survivor's body", _currentSeed);
         AssertWrapper.AreEqual(tether.GetFlailLength(), endDirection.magnitude, "The flail does not end at its length from the survivor", _currentSeed, LENGTH_DELTA);
         AssertWrapper.AreEqual(expectedTurn, Vector2.Angle(startDirection, endDirection), $"The flail did not turn about {expectedTurn} degrees in {FLAIL_CHECK_TIME} s", _currentSeed, ANGLE_MARGIN);
         AssertWrapper.IsTrue(tether.GetComponent<ShotOwner>().GetOwner() == survivor.transform, "The survivor does not own the flail", _currentSeed);

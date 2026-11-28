@@ -5,7 +5,7 @@ using UnityEngine;
 // Tether Twins (#237): the line between two twins, one per pair. It harms for _onDuration, then is off for _offDuration, blinking
 // without harm for the last _flickerDuration of it. It is also off while a twin is paused or spawning, while the twins are more than
 // _maxDistance apart, or while an asteroid is between them. It is drawn centre to centre but harms only between the two insets
-// (body radius plus _bodyMargin), because the twins are hurt by enemy shots too. When one twin dies, the survivor swings a stub of
+// (body radius plus the edge radius plus _bodyMargin), because the twins are hurt by enemy shots too. When one twin dies, the survivor swings a stub of
 // _flailLength that turns _flailTurnsPerSecond and is always on. When both twins are gone, the tether removes itself.
 public class Tether : MonoBehaviour
 {
@@ -229,7 +229,7 @@ public class Tether : MonoBehaviour
 
     private float GetInset(TetherTwin twin)
     {
-        return twin.GetBodyRadius() + _bodyMargin;
+        return twin.GetBodyRadius() + _edgeCollider.edgeRadius + _bodyMargin;
     }
     #endregion
 
