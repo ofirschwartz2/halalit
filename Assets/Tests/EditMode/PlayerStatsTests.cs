@@ -231,6 +231,7 @@ public class PlayerStatsTests
         AssertWrapper.IsTrue(load.IsCompleted, "The load did not finish, though every fake service had finished");
         AssertWrapper.IsTrue(load.IsFaulted, "The load hid the failed score load, so the menu cannot know its scores are missing");
         AssertWrapper.AreEqual(SCORE_LOAD_FAILURE, load.Exception.InnerException.Message, "The load did not pass on the score load's failure");
+        AssertWrapper.AreEqual(1, _playerStatsWarnings, "PlayerStats logged the failure more than once, though only the screen that awaits the load should log the score load's failure");
         AssertWrapper.IsFalse(PlayerStats._isDailyRun, "The daily stayed on after a failed score load, so the next PLAY would be a daily");
         AssertWrapper.IsTrue(PlayerStats._dailySeed != null, "The load did not set today's daily seed before the score load");
     }
@@ -299,6 +300,28 @@ public class PlayerStatsTests
         AssertWrapper.IsTrue(secondLoad.IsCompleted, "The second load did not finish, though every fake service had finished");
         AssertWrapper.IsFalse(secondLoad.IsFaulted, "The second load failed, though every fake service worked");
         AssertWrapper.AreEqual(2, _signInCalls, "The second load reused the first, finished load instead of signing in again");
+    }
+
+    [Test]
+    public void LoadAfterAFailedLoadSignsInAgain()
+    {
+        // GIVEN
+        // Offline on the menu: its load fails. A failed load is never reused, so the next screen tries again (#176)
+        _shouldScoreLoadFail = true;
+        var failedLoad = PlayerStats.InitAllAsync();
+        AssertWrapper.IsTrue(failedLoad.IsCompleted, "The first load did not finish, though every fake service had finished");
+        AssertWrapper.IsTrue(failedLoad.IsFaulted, "The first load hid the failed score load");
+        _shouldScoreLoadFail = false;
+        _scoresOnServer[PlayerStats._highScoreKey] = SAVED_HIGH_SCORE;
+
+        // WHEN
+        var secondLoad = PlayerStats.InitAllAsync();
+
+        // THEN
+        AssertWrapper.AreEqual(2, _signInCalls, "The second load reused the failed load instead of signing in again");
+        AssertWrapper.IsTrue(secondLoad.IsCompleted, "The second load did not finish, though every fake service had finished");
+        AssertWrapper.IsFalse(secondLoad.IsFaulted, "The second load failed, though every fake service worked this time");
+        AssertWrapper.IsTrue(PlayerStats._highScore == SAVED_HIGH_SCORE, "The second load did not read the saved high score");
     }
 
     #region Fakes
