@@ -93,6 +93,55 @@ public class DailyTrackCodecTests
     }
 
     [Test]
+    public void SamplingIsFourASecondForThirtyMinutes()
+    {
+        // The replay's speed and the cap both rest on these two numbers. Changing one without the other changes the cap's length
+        AssertWrapper.AreEqual(0.25f, Constants.DAILY_TRACK_SAMPLE_SECONDS, "The track is not sampled 4 times a second");
+        AssertWrapper.AreEqual(30f * 60f, Constants.DAILY_TRACK_MAX_SAMPLES * Constants.DAILY_TRACK_SAMPLE_SECONDS, "The sample cap is not 30 minutes of track", null, 0.001f);
+    }
+
+    [Test]
+    public void ThirtyMinutePathFitsInTwentyThousandCharacters()
+    {
+        // The recorder stops sampling at the cap. The approach budgets about 19 KB for the capped path
+        var positions = new List<Vector2>();
+        for (int i = 0; i < Constants.DAILY_TRACK_MAX_SAMPLES; i++)
+        {
+            positions.Add(new Vector2((i % 100) / 100f, (i % 37) / 37f));
+        }
+
+        var json = DailyTrackCodec.ToJson(positions, new List<int>(), new List<int>(), 1800f);
+
+        AssertWrapper.IsTrue(json.Length <= 20000, $"30 minutes of positions take {json.Length} characters of JSON, more than 20,000");
+        AssertWrapper.AreEqual(Constants.DAILY_TRACK_MAX_SAMPLES, DailyTrackCodec.GetPositions(DailyTrackCodec.FromJson(json)).Length, "30 minutes of track did not come back with every sample");
+    }
+
+    [Test]
+    public void BusiestCappedTrackStaysUnder32KiB()
+    {
+        // Cloud Save allows 5 MiB of public data per player and states no limit for one value.
+        // At the cap, with the score changing every 2.5 seconds, a track under 32 KiB leaves room for at least 160 capped dailies
+        var positions = new List<Vector2>();
+        var scoreSampleIndexes = new List<int>();
+        var scores = new List<int>();
+        for (int i = 0; i < Constants.DAILY_TRACK_MAX_SAMPLES; i++)
+        {
+            positions.Add(new Vector2((i % 100) / 100f, (i % 37) / 37f));
+            if (i % 10 == 0)
+            {
+                scoreSampleIndexes.Add(i);
+                scores.Add(i * 5);
+            }
+        }
+
+        var json = DailyTrackCodec.ToJson(positions, scoreSampleIndexes, scores, 1800f);
+        var track = DailyTrackCodec.FromJson(json);
+
+        AssertWrapper.IsTrue(json.Length <= 32768, $"The busiest capped track takes {json.Length} characters of JSON, more than 32 KiB");
+        AssertWrapper.IsTrue(track.Scores.Length == scores.Count && track.Scores[track.Scores.Length - 1] == scores[scores.Count - 1], "The busiest capped track lost score changes");
+    }
+
+    [Test]
     public void NoJsonMeansNoTrack()
     {
         AssertWrapper.IsTrue(DailyTrackCodec.FromJson(null) == null, "A missing track was read as a track");
