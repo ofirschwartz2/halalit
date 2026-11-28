@@ -11,13 +11,18 @@ public class PlayerStatsTests
     private const string HIGH_SCORE_SAVE_FAILURE = "Fake high score save failure";
     private const string DAILY_SCORE_SAVE_FAILURE = "Fake daily score save failure";
     private const string LOAD_SAVE_WARNING = "PlayerStats: could not save the last run's scores";
+    private const string SECOND_SAVE_FAILURE_WARNING = "PlayerStats: could not save the daily score either";
+    private const string PLAYER_STATS_LOG_PREFIX = "PlayerStats:";
+    private const string SCORE_LOAD_FAILURE = "Fake score load failure";
+    private const string SCORE_LOAD_ERROR = "Error in SyncPlayerFromServerAsync: " + SCORE_LOAD_FAILURE;
     private const int RUN_SCORE = 40;
     private const int SAVED_HIGH_SCORE = 70;
 
     private List<string> _savedKeys;
     private List<string> _submittedLeaderboards;
     private int _saveCalls;
-    private bool _shouldHighScoreSaveFail, _shouldDailyScoreSaveFail;
+    private int _playerStatsWarnings;
+    private bool _shouldHighScoreSaveFail, _shouldDailyScoreSaveFail, _shouldScoreLoadFail;
     private TaskCompletionSource<bool> _pendingSave;
     private Dictionary<string, int> _scoresOnServer;
 
@@ -31,15 +36,19 @@ public class PlayerStatsTests
         _saveCalls = 0;
         _shouldHighScoreSaveFail = false;
         _shouldDailyScoreSaveFail = false;
+        _shouldScoreLoadFail = false;
         _pendingSave = null;
         _scoresOnServer = new Dictionary<string, int>();
+        _playerStatsWarnings = 0;
 
+        Application.logMessageReceived += CountPlayerStatsWarning;
         PlayerStats.SetServices(FakeSignIn, FakeSaveScores, FakeLoadScores, FakeSubmitScore, FakeSaveDailyTrack);
     }
 
     [TearDown]
     public void TearDown()
     {
+        Application.logMessageReceived -= CountPlayerStatsWarning;
         PlayerStats.ResetServices();
         PlayerStats.SetDefaultPlayerStatsValues();
     }
@@ -78,9 +87,75 @@ public class PlayerStatsTests
         // THEN
         AssertWrapper.IsTrue(save.IsCompleted, "The save did not finish, though every fake service had finished");
         AssertWrapper.IsTrue(save.IsFaulted, "The save hid the daily score failure, so the results card cannot show it");
+        AssertWrapper.AreEqual(DAILY_SCORE_SAVE_FAILURE, save.Exception.InnerException.Message, "The save did not pass on the daily score failure");
         AssertWrapper.IsTrue(_savedKeys.Contains(PlayerStats._highScoreKey), "The high score was not saved");
         AssertWrapper.IsTrue(_submittedLeaderboards.Contains(Constants.HIGHSCORE_LEADERBOARD_ID), "The high score was not sent to its leaderboard");
         AssertWrapper.IsFalse(PlayerStats._isNewHighScore, "The high score was saved, but its flag stayed on");
+        AssertWrapper.IsFalse(_submittedLeaderboards.Contains(Constants.DAILY_LEADERBOARD_ID), "The daily score was sent to the daily leaderboard, though its save failed");
+        AssertWrapper.IsTrue(PlayerStats._isDailyRun, "The daily score was not saved, but its flag was cleared, so the menu's save does not retry it");
+    }
+
+    [Test]
+    public void SuccessfulSavesSendBothScoresAndEndTheDaily()
+    {
+        // GIVEN
+        SetDailyThatIsANewBest();
+
+        // WHEN
+        var save = PlayerStats.TrySaveHighScoresAsync();
+
+        // THEN
+        AssertWrapper.IsTrue(save.IsCompleted, "The save did not finish, though every fake service had finished");
+        AssertWrapper.IsFalse(save.IsFaulted, "The save failed, though every fake service worked");
+        AssertWrapper.IsTrue(_savedKeys.Contains(PlayerStats._highScoreKey), "The high score was not saved");
+        AssertWrapper.IsTrue(_savedKeys.Contains(PlayerStats._dailyScoreKey), "The daily score was not saved");
+        AssertWrapper.IsTrue(_submittedLeaderboards.Contains(Constants.HIGHSCORE_LEADERBOARD_ID), "The high score was not sent to its leaderboard");
+        AssertWrapper.IsTrue(_submittedLeaderboards.Contains(Constants.DAILY_LEADERBOARD_ID), "The daily score was not sent to the daily leaderboard");
+        AssertWrapper.IsFalse(PlayerStats._isNewHighScore, "The high score was saved, but its flag stayed on");
+        AssertWrapper.IsFalse(PlayerStats._isDailyRun, "The daily was saved, but the daily stayed on for the next run");
+        AssertWrapper.AreEqual(0, _playerStatsWarnings, "A save that worked logged a warning");
+    }
+
+    [Test]
+    public void BothFailedSavesPassOnTheFirstAndLogTheSecondOnce()
+    {
+        // GIVEN
+        // Offline: both saves fail
+        SetDailyThatIsANewBest();
+        _shouldHighScoreSaveFail = true;
+        _shouldDailyScoreSaveFail = true;
+        LogAssert.Expect(LogType.Warning, new Regex(SECOND_SAVE_FAILURE_WARNING));
+
+        // WHEN
+        var save = PlayerStats.TrySaveHighScoresAsync();
+
+        // THEN
+        AssertWrapper.IsTrue(save.IsCompleted, "The save did not finish, though every fake service had finished");
+        AssertWrapper.IsTrue(save.IsFaulted, "The save hid both failures, so the results card cannot show them");
+        AssertWrapper.AreEqual(HIGH_SCORE_SAVE_FAILURE, save.Exception.InnerException.Message, "The save did not pass on the first failure, the high score's");
+        AssertWrapper.AreEqual(1, _playerStatsWarnings, "The second failure was not logged as exactly one warning");
+        AssertWrapper.AreEqual(0, _submittedLeaderboards.Count, "A score was sent to a leaderboard, though its save failed");
+        AssertWrapper.IsTrue(PlayerStats._isNewHighScore, "The high score was not saved, but its flag was cleared");
+        AssertWrapper.IsTrue(PlayerStats._isDailyRun, "The daily score was not saved, but its flag was cleared");
+    }
+
+    [TestCase(true, false)]
+    [TestCase(false, true)]
+    public void OneFailedSaveLogsNoWarning(bool shouldHighScoreSaveFail, bool shouldDailyScoreSaveFail)
+    {
+        // GIVEN
+        // The failure is passed on to the results card, which logs it. Logging it here as well would log it twice
+        SetDailyThatIsANewBest();
+        _shouldHighScoreSaveFail = shouldHighScoreSaveFail;
+        _shouldDailyScoreSaveFail = shouldDailyScoreSaveFail;
+
+        // WHEN
+        var save = PlayerStats.TrySaveHighScoresAsync();
+
+        // THEN
+        AssertWrapper.IsTrue(save.IsCompleted, "The save did not finish, though every fake service had finished");
+        AssertWrapper.IsTrue(save.IsFaulted, "The save hid its failure, so the warning count below says nothing");
+        AssertWrapper.AreEqual(0, _playerStatsWarnings, "One failed save was logged by PlayerStats, so the results card's warning is doubled");
     }
 
     [Test]
@@ -103,6 +178,57 @@ public class PlayerStatsTests
         AssertWrapper.IsFalse(PlayerStats._isDailyRun, "The daily stayed on after the load, so the next PLAY would be a daily");
         AssertWrapper.IsTrue(PlayerStats._highScore == SAVED_HIGH_SCORE, "The load did not read the saved high score after a failed save");
         AssertWrapper.IsTrue(PlayerStats._dailySeed != null, "The load did not set today's daily seed after a failed save");
+    }
+
+    [TestCase(true, false)]
+    [TestCase(true, true)]
+    public void LoadAfterAnyOtherFailedSaveEndsTheDaily(bool shouldHighScoreSaveFail, bool shouldDailyScoreSaveFail)
+    {
+        // GIVEN
+        // The daily-only failure is LoadAfterAFailedDailySaveEndsTheDaily. Here the high score save fails, alone or with the daily's
+        SetDailyThatIsANewBest();
+        _shouldHighScoreSaveFail = shouldHighScoreSaveFail;
+        _shouldDailyScoreSaveFail = shouldDailyScoreSaveFail;
+        _scoresOnServer[PlayerStats._highScoreKey] = SAVED_HIGH_SCORE;
+
+        if (shouldHighScoreSaveFail && shouldDailyScoreSaveFail)
+        {
+            LogAssert.Expect(LogType.Warning, new Regex(SECOND_SAVE_FAILURE_WARNING));
+        }
+
+        LogAssert.Expect(LogType.Warning, new Regex(LOAD_SAVE_WARNING));
+
+        // WHEN
+        var load = PlayerStats.InitAllAsync();
+
+        // THEN
+        AssertWrapper.IsTrue(load.IsCompleted, "The load did not finish, though every fake service had finished");
+        AssertWrapper.IsFalse(load.IsFaulted, "A failed save broke the menu's load");
+        AssertWrapper.IsFalse(PlayerStats._isDailyRun, "The daily stayed on after the load, so the next PLAY would be a daily");
+        AssertWrapper.IsTrue(PlayerStats._highScore == SAVED_HIGH_SCORE, "The load did not read the saved high score after a failed save");
+        AssertWrapper.IsTrue(PlayerStats._dailySeed != null, "The load did not set today's daily seed after a failed save");
+    }
+
+    [Test]
+    public void FailedScoreLoadStillEndsTheDaily()
+    {
+        // GIVEN
+        // Offline after a daily: the daily's save fails, then the score load fails
+        PlayerStats.SetStartDaily();
+        PlayerStats._dailyScore = RUN_SCORE;
+        _shouldDailyScoreSaveFail = true;
+        _shouldScoreLoadFail = true;
+        LogAssert.Expect(LogType.Warning, new Regex(LOAD_SAVE_WARNING));
+        LogAssert.Expect(LogType.Error, new Regex(SCORE_LOAD_ERROR));
+
+        // WHEN
+        var load = PlayerStats.InitAllAsync();
+
+        // THEN
+        AssertWrapper.IsTrue(load.IsCompleted, "The load did not finish, though every fake service had finished");
+        AssertWrapper.IsTrue(load.IsFaulted, "The load hid the failed score load, so the menu cannot know its scores are missing");
+        AssertWrapper.IsFalse(PlayerStats._isDailyRun, "The daily stayed on after a failed score load, so the next PLAY would be a daily");
+        AssertWrapper.IsTrue(PlayerStats._dailySeed != null, "The load did not set today's daily seed before the score load");
     }
 
     [Test]
@@ -176,6 +302,11 @@ public class PlayerStatsTests
 
     private Task<Dictionary<string, int>> FakeLoadScores(HashSet<string> keys)
     {
+        if (_shouldScoreLoadFail)
+        {
+            return Task.FromException<Dictionary<string, int>>(new Exception(SCORE_LOAD_FAILURE));
+        }
+
         return Task.FromResult(_scoresOnServer);
     }
 
@@ -188,6 +319,14 @@ public class PlayerStatsTests
     private Task FakeSaveDailyTrack(DateTime israelDay, string trackJson)
     {
         return Task.CompletedTask;
+    }
+
+    private void CountPlayerStatsWarning(string message, string stackTrace, LogType type)
+    {
+        if (type == LogType.Warning && message.StartsWith(PLAYER_STATS_LOG_PREFIX))
+        {
+            _playerStatsWarnings++;
+        }
     }
     #endregion
 }
