@@ -7,6 +7,7 @@ Sections 3.7, 3.8 and 5 updated 2026-11-27 after #239 (Daily Twist), read on `de
 Section 5 null checks added 2026-11-27 after #254, read on `develop` at `6d8f5ae`.
 Updated 2026-11-28 after #251, #268, #275, #278, #280, #284, #286, #291, #292, #293, #294 and #297 (new section 3.9 for Meta), read on `develop` at `11842c6`. None of these has run in Unity.
 Sections 3.7, 3.9, 5 and 7 (D10, D19, new D23) updated 2026-11-28 after #304 (#175) and #305 (#176), read on `develop` at `9f163cd`. Neither has run in Unity.
+Sections 3.9, 5 and 7 (D23) updated 2026-11-28 after #311 (#307, fakes by default) and #313 (#312, #308: the Leaderboard screen on swappable services), read on `develop` at `e5cb110`. Neither has run in Unity.
 Unity 2022.3.3f1, C#, 2D physics. Ofir approves every idea and every change.
 
 ## 1. System map
@@ -267,14 +268,16 @@ Rules when extending:
 - Changes that re-deal the dates should share one build. #242 (Lucky Day and Bounty) is the next one.
 
 ### 3.9 Meta: services, results card and replay
-The Meta assembly is the only one that calls Unity Services (Authentication, Cloud Save, Leaderboards). The test assemblies do not reference those packages, and adding one needs Ofir (rule 1). So a test cannot call the SDK itself, but any Meta code it runs can. That is why service calls are swappable (below). Until card #307, the real services are the default, so a test that does not swap them can sign in and save for real (D23). Meta code is split so that almost everything else can be tested.
+The Meta assembly is the only one that calls Unity Services (Authentication, Cloud Save, Leaderboards). The test assemblies do not reference those packages, and adding one needs Ofir (rule 1). So a test cannot call the SDK itself, but any Meta code it runs can. That is why service calls are swappable (below). Since #307 every test run starts on quiet fakes, so a test reaches the real services only if it puts them back, which the rule tests forbid (section 5). Meta code is split so that almost everything else can be tested.
 
 - Thin SDK classes. Only these call the SDK, and they hold as few rules as they can:
   - `Authentication`: sign-in (`Initialize`), `UpdatePlayerNameAsync` (#275). Since #176 `Initialize` has one caller, `PlayerStats._signIn`, and it is the only code that starts Unity Services.
   - `PlayerStats`: the load (sign-in, then your scores), private Cloud Save scores and the leaderboard submits, all through swappable fields (below).
   - `PlayerPlace` (#245): your entry on a list, or null when Unity answers `EntryNotFound` or `NotFound`, and the list's player count. Unity's `Rank` starts at 0. A past day's `LeaderboardVersionEntry` is copied into a `LeaderboardEntry`, so both lists use one row type.
+    - Since #312 it also owns the Leaderboard screen's list reads: a list's first page (`GetPageAsync`), the daily's finished days (`GetPastDaysAsync`) and a finished day's page (`GetPastDayPageAsync`).
+    - It hands them back as plain `LeaderboardRow`, `LeaderboardPage` and `LeaderboardDay` (`UtilsAndModels/Models/DataObject`; `ToRow` turns a null entry into null). So no screen and no test names a Leaderboards type, and a test can build a list.
   - `DailyTrackStore` (#244): the only class that reads or writes replay tracks.
-  - Known exception: `LeaderBoard` still loads its lists from the SDK itself.
+  - `LeaderBoard` no longer calls the SDK (#312), so no screen does.
 - The single load (#176):
   - `MainMenu` and `LeaderBoard` both await `PlayerStats.InitAllAsync()` in `Awake`. It starts a load only when none is running, so a screen opened during a load joins it and the sign-in never runs on top of itself.
   - A finished or failed load is never reused. Each screen gets fresh scores, and a failed sign-in is tried again on the next screen.
@@ -283,7 +286,7 @@ The Meta assembly is the only one that calls Unity Services (Authentication, Clo
   - The load does not log its own failure. The screen that awaits it logs one warning.
   - The menu holds `_isLoading` until the load ends, and PLAY and DAILY ignore taps until then. DAILY comes on only after a load that worked and found no daily score for today. PLAY always starts a normal run (`SetStartNormal`, #175). LDRBRD and EXIT stay live.
   - `Authentication.Initialize` runs once per load. Its event handlers are added once per app run (#284).
-- Pure rules. Static classes with no SDK types and no scene, tested in EditMode: `PlayerNameRules`, `DailyLeaderboard`, `PlayerPlace.GetPlaceText` / `GetOrdinal`, `DailyReplayRules`, `DailyTrackCodec`. They take plain data: `DailyTrack` and `DailyReplayEntry` live in `UtilsAndModels/Models/DataObject`.
+- Pure rules. Static classes with no SDK types and no scene, tested in EditMode: `PlayerNameRules`, `DailyLeaderboard`, `PlayerPlace.GetPlaceText` / `GetOrdinal`, `DailyReplayRules`, `DailyTrackCodec`. They take plain data: `DailyTrack`, `DailyReplayEntry` and the three leaderboard types live in `UtilsAndModels/Models/DataObject`.
 - The results card and the death flow (#249):
   - `GameOver` finds the `ResultsCard` in `Start` and calls `Open()` on a death. `Open` sets the time scale to 0 and waits one frame, because nothing pins whether `Score` has handed the score over yet. Then it shows the score and best and calls `PlayerStats.SaveRunScoresAsync`.
   - Saves are chained: each waits for the one before, and the load's save joins the chain, so two saves never overlap.
@@ -294,23 +297,30 @@ The Meta assembly is the only one that calls Unity Services (Authentication, Clo
   - `async void` only at a Unity entry point (`Awake`, a button method), with a `try` / `catch` around the awaits. The work itself is `async Task`.
   - After every `await`, check `this == null` before touching the scene: the scene may have been unloaded.
   - A busy flag (`_isSaving`, `_isLoading`) ignores a second tap. A load number drops a result that comes back after Close or a newer Open (`DailyReplay`).
-  - A failed call is logged once and shown as a line of text ("Could not load"), never thrown on. Where being offline is expected, log a warning, not an error (`ResultsCard`, `PlayerNamePanel`).
+  - A failed call is logged once and shown as a line of text ("Could not load"), never thrown on. Where being offline is expected, log a warning, not an error (`ResultsCard`, `PlayerNamePanel`, and `LeaderBoard`'s list since #308). `DailyReplay`'s load still logs an error; card #314 makes it a warning.
   - Copy a value before the first `await` if a later run can change it (`PlayerStats.SavePlayerHighScoreAsync`).
 - Unwired guard: a component that waits for Ofir's scene wiring checks its fields in `Awake`, logs one warning or error that names them, and sets `enabled = false`. A half-wired scene then still loads, and the PlayMode tests still run. `PlaygroundTests` checks the Playground's wiring.
 - Swappable services: code that a test must run and that calls a service keeps those calls in `Func<Task…>` fields. A test swaps them through an editor-only `SetServices` hook (3.7). There are two shapes:
-  - A scene component sets the fields in `Awake`. Example: `ResultsCard` (the run's save and the place). The fake lives as long as the component.
-  - A static class sets them in its static constructor. Example: `PlayerStats` since #175, with five fields (sign-in, save scores, load scores, submit, save track), all set by `UseRealServices`. Here the fake outlives the test.
-  - So every test that calls `PlayerStats.SetServices` undoes it in `[TearDown]` with `ResetServices`, which also clears the save chain and the running load.
-  - Never finish a fake's pending task after the reset: the rest of that load would run on whatever is installed next.
-  - To test a scene whose `Awake` loads, set the fakes first and load the scene inside the test, as `MainMenuTests.LoadMenu` does (section 5).
-  - Today each test class installs its fakes by hand, and `ResetServices` puts the real services back. A test that does not fake reaches the real services. For example, when the ship dies in a Playground with no wired card, `GameOver` loads the menu, which signs in for real. Card #307 makes the fakes the default (D23). Until then, "no test saves or loads for real" holds only for tests that fake.
+  - A scene component sets the fields in `Awake`. Example: `ResultsCard` (the run's save and the place). The fake lives as long as the component, so this works only when the test reaches the component before it calls a service.
+  - Static fields set in a static constructor by `UseRealServices`. Here the fake outlives the test.
+    - `PlayerStats` since #175: five fields (sign-in, save scores, load scores, submit, save track).
+    - `LeaderBoard` since #312: five list reads (page, your row, past days, a past day's page, your row on it). `DailyReplay` since #312: the day's load.
+    - These two are scene components, but their fields are static because the scene's `Awake` can call the service before a test gets control. A test installs its fakes, then loads the scene.
+    - A static constructor on a MonoBehaviour only assigns delegates. Unity may run it off the main thread while it loads a scene, so no Unity API and no log in it.
+  - Next to `SetServices`, each static class has an editor-only `ResetServices`. `PlayerStats.IsSignInReal` and `LeaderBoard.IsListLoadReal` compare a field with the real method, so that field's real value must be a method group, not a lambda.
+- Fakes by default (#307, #312):
+  - `TestServices.UseFakes` (`Assets/Tests/PlayMode/PlayModeTests/TestInfra/TestServices.cs`) puts `PlayerStats`, `LeaderBoard` and `DailyReplay` on quiet, instant fakes: no sign-in, empty lists, no past days, an empty replay. They never log.
+  - The set-up fixtures `PlayModeServicesSetUp` and `EditModeServicesSetUp` have no namespace, so they cover every test in their assembly. They call `TestServices.StartRunOnFakes` before the first test and `TestServices.UseRealServices` after the last. The PlayMode one also fails the run if a test started Unity Services (`Authentication.AreServicesStarted`).
+  - A test that installs its own fakes puts the defaults back with `TestServices.UseFakes()` in `[TearDown]`, never with `ResetServices`.
+  - Never finish a fake's pending task after the tear-down: the rest of that load would run on whatever is installed next.
+  - To test a scene whose `Awake` loads, set the fakes first and load the scene inside the test, as `MainMenuTests.LoadMenu` and `LeaderBoardTests.LoadLeaderBoard` do (section 5).
 - Replay record (#294): `DailyTrackRecorder` sits on the Halalit.
   - In `FixedUpdate` it samples the position every 0.25 s of game time, as 0 to 1 across the `InternalWorld` box, plus every score change and the survival time. Sampling stops at 7,200 samples (30 minutes); the survival time and the final score keep counting.
   - On game over it hands the JSON to `PlayerStats._dailyTrack`, only after a daily, as `Score` hands over the score.
   - `PlayerStats.SaveDailyScoreAsync` saves the track just before the leaderboard submit, only on the run's own day. A failed track save is logged and never blocks the score.
   - `DailyTrackCodec` writes the JSON with `JsonUtility`: a version number, one byte per axis in Base64. Read scores by time (index × `SampleSeconds`), never as a position index.
 - Replay watch (#297): `LeaderBoard.Watch` shows only on a finished day (`DailyLeaderboard.CanWatch`).
-  - It opens `DailyReplay`, which calls `DailyTrackStore.LoadDayAsync`. That reads the archived list's top 20 plus you, then each player's track by player id, all at once. A track that is missing or cannot be read means no ship for that player.
+  - It opens `DailyReplay`, which calls its swappable day load, `DailyTrackStore.LoadDayAsync` for real. That reads the archived list's top 20 plus you, then each player's track by player id, all at once. A track that is missing or cannot be read means no ship for that player.
   - `DailyReplay.Update` plays it on unscaled time.
   - The crown rule lives in `DailyReplayRules.CompareForCrown` only (Ofir's provisional rule: highest score, then longer survival).
 - Cloud Save public data:
@@ -323,6 +333,7 @@ The Meta assembly is the only one that calls Unity Services (Authentication, Clo
 Rules when extending:
 - A new SDK call goes in a thin SDK class, never in a screen. Until it has compiled on the Mac, the pull request lists it under "Unconfirmed SDK calls", with the package version from `Packages/packages-lock.json`.
 - A new service call on a path that a test can reach goes behind a `SetServices` hook, never as a direct SDK call. Nothing but `PlayerStats._signIn` calls `Authentication.Initialize`.
+- A new swappable class, or a new field on one, gets a quiet fake in `TestServices.UseFakes` and its reset in `TestServices.UseRealServices`. A new thin-SDK method that calls the SDK directly goes in `TestServicesRuleTests.DIRECT_SERVICE_CALLS`.
 - A new rule goes in a pure static class with an EditMode test.
 - A new screen component uses the unwired guard and the async pattern. If a PlayMode test must reach it, its service calls are swappable.
 - Code that changes the time scale puts it back on every way out.
@@ -352,7 +363,7 @@ New code follows the majority style, not this one.
 
 ## 5. Testing architecture
 
-- 459 tests on `develop` (2026-11-28, by grep at `9f163cd`): 326 `[UnityTest]` in 57 PlayMode classes under `Assets/Tests/PlayMode/PlayModeTests/<Feature>/`, and 133 `[Test]` in 14 EditMode classes under `Assets/Tests/EditMode/`. Most EditMode tests cover pure rules (3.8, 3.9); `PlaygroundTests` checks scene wiring. Tests run from the Unity Test Runner.
+- 478 tests on `develop` (2026-11-28, by grep at `e5cb110`): 336 `[UnityTest]` and 3 `[Test]` in 59 PlayMode classes under `Assets/Tests/PlayMode/PlayModeTests/<Feature>/`, and 139 `[Test]` in 15 EditMode classes under `Assets/Tests/EditMode/`. Most EditMode tests cover pure rules (3.8, 3.9); `PlaygroundTests` checks scene wiring. Tests run from the Unity Test Runner.
 - CI: `.github/workflows/unity-tests.yml` (#155; on `develop`, not yet on `master`) runs on pull requests and on demand. Its test job runs the EditMode and PlayMode tests in Unity 2022.3.3f1. It is skipped, not failed, until Ofir adds the three Unity secrets `UNITY_LICENSE`, `UNITY_EMAIL` and `UNITY_PASSWORD` (idea #270). Until then no test has run in CI, so passing checks on a pull request say nothing about the tests.
 - PlayMode tests run the real `Playground` scene. Template: `Assets/Tests/PlayMode/PlayModeTests/Attacks/LongRange/BallShotTests.cs`.
   1. `[SetUp]`: `_currentSeed = TestUtils.SetRandomSeed();` then `SceneManager.LoadScene(TestUtils.PLAYGROUND_SCENE_NAME);`. This puts `OriginalRandomSeed` in test mode with that seed.
@@ -372,17 +383,23 @@ New code follows the majority style, not this one.
   - The test runner already fails a test on any logged error or exception, so a test for "no error" needs no extra call.
   - Do not use `LogAssert.NoUnexpectedReceived()` in this suite. It also fails on plain info logs, and the Playground logs some on every load (the seed, the first attack), so it fails even when the code is right.
   - An expected warning or error is declared with `LogAssert.Expect` before it happens, as `DailyReplayTests` does.
-- Enemy spawner tests: `TestUtils.SetTestMode(keepEnemiesContainer: true)` keeps the spawner running. Read the bank only through `TestUtils.TakeEnemyGroups` (3.5). A death in a test opens the results card; `TestUtils.UnhookResultsCardFromGameOver()` stops that, and `TestUtils.IsGameOver` means "the card is open, or the menu loaded". Today's Playground has no card, so a death that is not unhooked loads the menu on the real services (D23, card #307).
+- Enemy spawner tests: `TestUtils.SetTestMode(keepEnemiesContainer: true)` keeps the spawner running. Read the bank only through `TestUtils.TakeEnemyGroups` (3.5). A death in a test opens the results card; `TestUtils.UnhookResultsCardFromGameOver()` stops that, and `TestUtils.IsGameOver` means "the card is open, or the menu loaded". Today's Playground has no card, so a death that is not unhooked loads the menu, on the fakes since #307.
 - Menu tests (#176, `Menu/MainMenuTests.cs`) are the only PlayMode tests that load `MainMenu` on purpose:
   - `[SetUp]` fakes `PlayerStats`' services with `SetServices`. Each test sets how the fakes behave: pending, failing, or today's daily already played.
   - The test loads the scene itself (`LoadMenu`) after the fakes are set, so the menu's `Awake` never starts its load before them. `LoadMenu` asserts that the fake sign-in ran once. A load that joined a real one, or used the real services, fails there.
   - A pending fake sign-in is never finished after the test.
-  - `[TearDown]`: `TestUtils.DestroyAllGameObjects()`, `PlayerStats.ResetServices()`, `PlayerStats.SetDefaultPlayerStatsValues()`.
-  - The Leaderboard scene is opened only while the sign-in is still pending (`LeaderboardOpenedDuringTheMenuLoadJoinsIt`). After a finished load, `LeaderBoard` asks the real Leaderboards service for its list (3.9, known exception).
+  - `[TearDown]`: `TestUtils.DestroyAllGameObjects()`, `TestServices.UseFakes()`, `PlayerStats.SetDefaultPlayerStatsValues()`.
+  - `LeaderboardOpenedDuringTheMenuLoadJoinsIt` opens the Leaderboard scene while the sign-in is still pending and checks only the join. A finished load would show `TestServices`' empty fake list.
   - EditMode `PlayerStatsTests` drives the load and the saves with the same kind of fakes, with no scene.
+- Leaderboard tests (#312, `Score/LeaderBoardTests.cs`, 9 tests) load the Leaderboard scene on fakes:
+  - Each test sets `LeaderBoard.SetServices` (and `DailyReplay.SetServices` with a counting fake when it presses Watch), then loads the scene and waits for `!IsLoading()`.
+  - They read the screen through editor-only getters: `GetListTitle`, `GetPlaceText`, `IsWatchShown`. Each check that something did not happen is paired with one where it did, so an unwired scene cannot pass it.
+  - All 9 stop with "(Needs Ofir in Unity)" until the scene's List Title Text, Place Text, Watch Button and an active, wired `DailyReplay` are set.
+  - No test reads `DailyReplay`'s own text yet. An editor-only string getter would do it, with no new assembly reference (idea #299).
+- Guards (#307, #312): `TestServicesRuleTests` (EditMode) scans the test scripts. Only `TestServices` may call `ResetServices(`, only the two fixtures may call `UseRealServices(`, and no test may call the SDK or a method in `DIRECT_SERVICE_CALLS`. `EveryTestStartsOnTheFakeSignIn` and `EveryTestStartsOnTheFakeLeaderboard` are in both assemblies (`RealServicesGuardTests` in PlayMode).
 - `Assets/Tests/PlayMode/PlayModeTests/TestInfra/TestUtils.cs` holds scene getters by `Tag`, setup helpers, default `AttackStats` and shot-tracking coroutines. Add helpers there, not in test classes.
 - EditMode `PlaygroundTests` checks scene wiring: tagged objects exist and carry the expected components. It opens no scene itself, so it checks whichever scene is open in the editor.
-- Not tested (by grep, 2026-11-28): `ItemRankPicker`, upgrades, `PlayerNamePanel`, the event-bus snapshot, one attack hitting two victims (except `MirrorBallShot`). `LeaderBoard` is loaded only by `MainMenuTests`, which never lets it show a list: its lists come straight from Unity's servers. Its rules are tested in EditMode (3.9).
+- Not tested (by grep, 2026-11-28): `ItemRankPicker`, upgrades, `PlayerNamePanel`, the event-bus snapshot, one attack hitting two victims (except `MirrorBallShot`). `DailyReplay` is reached only through `LeaderBoardTests` and its own unwired case (`DailyReplayTests`). Its replay playback is not tested.
 - Static state survives between tests: `OriginalRandomSeed.IsTestMode`, time scale, static events (D22).
 
 A test for a new feature: one class per feature in the matching folder, following the six steps. One behaviour per `[UnityTest]`. Pass `_currentSeed` to every assert. Use `acceptedDelta` for physics results. If the feature adds a scene object, add it to `PlaygroundTests`. If the test must load a new prefab, add it to `ObjectLoader._itemPrefabs` in the scene.
@@ -433,7 +450,7 @@ Each row was re-checked in the files; none was observed at runtime. In "Where", 
 | D20 | Unity 2022.3.3f1 predates the CVE-2025-59489 fix | `ProjectSettings/ProjectVersion.txt`; Unity advisory `unity.com/security/sept-2025-01` lists 2022.3.62f2 as patched | Shipped builds would carry a known high-severity flaw | M |
 | D21 | Asset Store packs committed | `Assets/External/GabrielAguiarProductions/*` (`Assets/External` is 247 MB) | Licence exposure if the repo is public (from the assessment notes; not checkable in the files) | M; L if history must be purged |
 | D22 | Test infra leaks | 4 of 24 `[TearDown]`s call `TestTimeController.ResetTimeScale()`; `Assets/Tests/PlayMode/PlayModeTests/Items/NitroFuelTests.cs:59-65` invokes its own lambda, not the button | By reading: time scale leaks into later tests; the nitro test does not exercise activation | S |
-| D23 | Tests use the real Unity Services by default | `Meta/PlayerStats.cs` sets the real services in its static constructor, and `ResetServices` puts them back (called in the tear-downs of `MainMenuTests` and EditMode `PlayerStatsTests`); `Meta/GameOver.cs` loads `MainMenu` while the Playground has no wired card | By reading: a test where the ship dies signs in for real as the editor's player and can post a test score to the friends' leaderboard | S, card #307 |
+| D23 | **Fixed by #307 and #312.** Tests used the real Unity Services by default | The set-up fixtures put `PlayerStats`, `LeaderBoard` and `DailyReplay` on `TestServices`' fakes before the first test; tear-downs put the fakes back with `TestServices.UseFakes()`; `TestServicesRuleTests` and the guard tests check it (3.9, section 5) | A test where the ship dies, or that opens the menu or the Leaderboard, stays on the fakes. Check in Unity that the PlayMode fixture's "Unity Services started" check passes | done |
 
 Verdicts on the two unverified candidates from the assessment:
 - **`_singleHitter` (D12): confirmed, by reading; fixed by #209.** `Health.HandleHealth` passes `other`, the harmer's own GameObject, as `target`. So `DescreteTriggerHarmer._harmedTargets` only ever holds the harmer. With `_singleHitter` on, every call after the first hit returns 0, whoever the victim is. `KnockbackWaveTests.DoubleHitCheck` uses one enemy, so it passes either way. Fix: pass the victim's `gameObject` and add a two-enemy test.
