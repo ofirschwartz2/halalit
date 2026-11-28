@@ -28,6 +28,8 @@ public static class PlayerStats
     {
         await InitAuthenticationAsync();
 
+        // The results card may still be saving the run (#249). This save and the reset wait for it, so they never run on top of it
+        await WaitQuietlyAsync(_runScoresSave);
         await TrySaveHighScoresAsync();
 
         SetDefaultPlayerStatsValues();
@@ -96,6 +98,33 @@ public static class PlayerStats
 
 #region Save Scores
     
+    // The run's save, started by the results card when it opens (#249). A later save waits for it, so two saves never overlap
+    private static Task _runScoresSave = Task.CompletedTask;
+
+    internal static Task SaveRunScoresAsync()
+    {
+        _runScoresSave = SaveAfterAsync(_runScoresSave);
+        return _runScoresSave;
+    }
+
+    private static async Task SaveAfterAsync(Task previousSave)
+    {
+        await WaitQuietlyAsync(previousSave);
+        await TrySaveHighScoresAsync();
+    }
+
+    private static async Task WaitQuietlyAsync(Task save)
+    {
+        try
+        {
+            await save;
+        }
+        catch (Exception)
+        {
+            // The results card already logged this failure, and the flags still mark what is left to save
+        }
+    }
+
     internal static async Task TrySaveHighScoresAsync()
     {
         await TrySaveNewHighScoreAsync();
@@ -139,18 +168,26 @@ public static class PlayerStats
         
         if (_isNewHighScore)
         {
+            // A run that ends during the save can set a newer best (#249). Its flag then stays on, so the save chained after this one sends it
+            int? highScoreBeingSaved = _highScore;
             await SavePlayerHighScoreAsync();
-            _isNewHighScore = false;
+
+            if (_highScore == highScoreBeingSaved)
+            {
+                _isNewHighScore = false;
+            }
         }
     }
 
     public static async Task SavePlayerHighScoreAsync()
     {
+        // Copied before the first await, so Cloud Save and the leaderboard get the same best even when a run ends during the save (#249)
+        int? highScore = _highScore;
         _playerHighScore = new Dictionary<string, object>();
-        _playerHighScore[_highScoreKey] = _highScore;
+        _playerHighScore[_highScoreKey] = highScore;
 
         await CloudSaveService.Instance.Data.Player.SaveAsync(_playerHighScore);
-        await LeaderboardsService.Instance.AddPlayerScoreAsync(Constants.HIGHSCORE_LEADERBOARD_ID, (double)_highScore);
+        await LeaderboardsService.Instance.AddPlayerScoreAsync(Constants.HIGHSCORE_LEADERBOARD_ID, (double)highScore);
     }
 
 #endregion

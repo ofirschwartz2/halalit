@@ -15,7 +15,6 @@ internal static class TestUtils
     #region Constants
     // Scenes:
     public const string PLAYGROUND_SCENE_NAME = "Playground";
-    public const string MAIN_MENU_SCENE_NAME= "MainMenu";
 
     // GameObjects names:
     public const string OBJECT_LOADER_NAME = "ObjectLoader";
@@ -564,11 +563,12 @@ internal static class TestUtils
         enemy[0].transform.rotation = Quaternion.Euler(0, 0, degrees);
     }
 
-    // Takes the menu load off the game over event, so that a death does not load the real menu,
+    // Takes GameOver's handler off the game over event, so that a death in a test neither opens the results card nor saves (#249).
+    // Score still hands the score to PlayerStats. In a Playground without a card, the death does not load the real menu either,
     // which signs in for real. It takes effect one frame later.
     // GameOverEvent calls a snapshot of its handlers taken in Start(), so removing the handler is not enough:
-    // the second GameOverEvent takes a new snapshot, without the menu load, in its own Start().
-    internal static void UnhookMenuLoadFromGameOver()
+    // the second GameOverEvent takes a new snapshot, without GameOver's handler, in its own Start().
+    internal static void UnhookResultsCardFromGameOver()
     {
         GetHalalit().GetComponent<GameOver>().DestroyEventListeners();
         GetEventSystem().AddComponent<GameOverEvent>();
@@ -972,9 +972,12 @@ internal static class TestUtils
     #endregion
 
     #region Predicates
+    // A death opens the results card (#249). While the Playground has no wired card, GameOver loads the menu as before, so that counts too:
+    // without it, a test that expects no game over would pass even when the death loaded the real menu, which signs in for real
     internal static bool IsGameOver()
     {
-        return SceneManager.GetActiveScene().name == MAIN_MENU_SCENE_NAME;
+        var resultsCard = GetResultsCard();
+        return (resultsCard != null && resultsCard.IsOpen()) || SceneManager.GetActiveScene().name == SceneName.MAIN_MENU.GetDescription();
     }
 
     internal static bool IsSomewhereOnInternalWorldEdges(Vector2 position)
@@ -1227,6 +1230,14 @@ internal static class TestUtils
     internal static GameObject GetEnemyShot()
     {
         return GameObject.FindGameObjectWithTag(Tag.ENEMY_SHOT.GetDescription());
+    }
+    #endregion
+
+    #region Results Card
+    // Results card (#249): null until the Playground has one
+    internal static ResultsCard GetResultsCard()
+    {
+        return Object.FindObjectOfType<ResultsCard>();
     }
     #endregion
 }

@@ -56,9 +56,9 @@ public class ScoreTests
         } while (newValuables.Length != 0);
 
         // GIVEN
-        // A death must not load the real menu in a test run, because the menu signs in for real.
-        // The helper takes the menu load off the game over event. It takes effect one frame later.
-        TestUtils.UnhookMenuLoadFromGameOver();
+        // A death must not open the results card in this test, because the card saves the scores (#249).
+        // The helper takes the card off the game over event. It takes effect one frame later.
+        TestUtils.UnhookResultsCardFromGameOver();
         yield return null;
 
         var score = TestUtils.GetScore();
@@ -86,7 +86,7 @@ public class ScoreTests
         yield return null;
 
         // THEN
-        AssertWrapper.IsFalse(TestUtils.IsGameOver(), "Game Over Loaded The Menu", _currentSeed);
+        AssertWrapper.IsFalse(TestUtils.IsGameOver(), "Game Over Opened The Results Card Or Loaded The Menu", _currentSeed);
         AssertWrapper.Greater(score, 0, "No Score Collected", _currentSeed);
         AssertWrapper.IsTrue(highScore == score, "High Score Not Set", _currentSeed);
         AssertWrapper.IsTrue(isNewHighScore, "New High Score Not Flagged", _currentSeed);
@@ -130,9 +130,9 @@ public class ScoreTests
         AssertWrapper.AreEqual(silverValue, TestUtils.GetScore(), "Score Did Not Drop By One Silver Value", _currentSeed);
 
         // GIVEN
-        // A death must not load the real menu in a test run, because the menu signs in for real.
-        // The helper takes the menu load off the game over event. It takes effect one frame later.
-        TestUtils.UnhookMenuLoadFromGameOver();
+        // A death must not open the results card in this test, because the card saves the scores (#249).
+        // The helper takes the card off the game over event. It takes effect one frame later.
+        TestUtils.UnhookResultsCardFromGameOver();
         yield return null;
 
         var shownScore = TestUtils.GetScore();
@@ -158,7 +158,7 @@ public class ScoreTests
         yield return null;
 
         // THEN
-        AssertWrapper.IsFalse(TestUtils.IsGameOver(), "Game Over Loaded The Menu", _currentSeed);
+        AssertWrapper.IsFalse(TestUtils.IsGameOver(), "Game Over Opened The Results Card Or Loaded The Menu", _currentSeed);
         AssertWrapper.IsTrue(highScore == shownScore, "High Score Is Not The Score Shown After Spending", _currentSeed);
         AssertWrapper.IsTrue(dailyScore == shownScore, "Daily Score Is Not The Score Shown After Spending", _currentSeed);
     }

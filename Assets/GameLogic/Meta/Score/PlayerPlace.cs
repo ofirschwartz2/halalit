@@ -36,6 +36,13 @@ public static class PlayerPlace
         });
     }
 
+    // How many players are on the list. Only the page's Total is read, so one row is enough
+    public static async Task<int> GetPlayerCountAsync(string leaderboardId)
+    {
+        var page = await LeaderboardsService.Instance.GetScoresAsync(leaderboardId, new GetScoresOptions { Limit = 1 });
+        return page.Total;
+    }
+
     // Unity's Rank starts at 0 for first place. Two calls can disagree for a moment, so the count is never below the place
     public static string GetPlaceText(int rank, int playerCount, bool isSoFar)
     {

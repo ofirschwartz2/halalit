@@ -4,6 +4,8 @@ using UnityEngine.EventSystems;
 
 public class PlaygroundTests
 {
+    // Where a Button keeps its OnClick entries in the scene (Unity's own field names)
+    private const string ON_CLICK_CALLS_PATH = "m_OnClick.m_PersistentCalls.m_Calls";
 
     [Test]
     public void HUDTests()
@@ -369,5 +371,120 @@ public class PlaygroundTests
         // The banner only hides the label, so a label that starts switched off never shows
         var twistLabel = (Component)twistText.objectReferenceValue;
         AssertWrapper.IsTrue(twistLabel.gameObject.activeInHierarchy, "The twist label starts switched off, so the twist line never shows (Needs Ofir in Unity)");
+    }
+
+    [Test]
+    public void ResultsCardTests()
+    {
+        // RESULTS CARD (#249, Needs Ofir in Unity): one on the HUD, with its six fields wired
+        var serializedResultsCard = new UnityEditor.SerializedObject(GetOnlyResultsCard());
+        foreach (var fieldName in new[] { "_panel", "_scoreText", "_bestText", "_placeText", "_dailyLabel", "_againButton" })
+        {
+            GetResultsCardField(serializedResultsCard, fieldName);
+        }
+    }
+
+    [Test]
+    public void ResultsCardPartsAreOnItsPanel()
+    {
+        // RESULTS CARD (#249, Needs Ofir in Unity): the card hides its panel during the run, so every part it fills in must sit on the panel.
+        // A part wired elsewhere shows during the run, or never shows on the card. The HUD's own score line also reads "Score: N", so no PlayMode test sees that mistake
+        var resultsCard = GetOnlyResultsCard();
+        var serializedResultsCard = new UnityEditor.SerializedObject(resultsCard);
+        var panelTransform = ((GameObject)GetResultsCardField(serializedResultsCard, "_panel")).transform;
+
+        // Hiding a panel that holds the card would switch the card off with it
+        AssertWrapper.IsFalse(resultsCard.transform.IsChildOf(panelTransform), "ResultsCard sits on or inside its own Panel, so hiding the panel switches the card off (Needs Ofir in Unity)");
+
+        foreach (var fieldName in new[] { "_scoreText", "_bestText", "_placeText" })
+        {
+            var text = (Component)GetResultsCardField(serializedResultsCard, fieldName);
+            AssertWrapper.IsTrue(text.transform.IsChildOf(panelTransform), $"ResultsCard's {fieldName} is not on its Panel, so the card does not show it (Needs Ofir in Unity)");
+        }
+
+        foreach (var fieldName in new[] { "_dailyLabel", "_againButton" })
+        {
+            var part = (GameObject)GetResultsCardField(serializedResultsCard, fieldName);
+            AssertWrapper.IsTrue(part.transform.IsChildOf(panelTransform), $"ResultsCard's {fieldName} is not on its Panel, so it shows during the run (Needs Ofir in Unity)");
+        }
+    }
+
+    [Test]
+    public void ResultsCardButtonsCallTheCard()
+    {
+        // RESULTS CARD (#249, Needs Ofir in Unity): Again, Leaderboard and Menu sit on the panel, and each one's OnClick calls the card.
+        // A daily hides Again, so without a working Leaderboard or Menu button the player is stuck on a frozen card. No PlayMode test can press those two: both scenes sign in for real
+        var resultsCard = GetOnlyResultsCard();
+        var serializedResultsCard = new UnityEditor.SerializedObject(resultsCard);
+        var panel = (GameObject)GetResultsCardField(serializedResultsCard, "_panel");
+        var againButton = (GameObject)GetResultsCardField(serializedResultsCard, "_againButton");
+
+        AssertWrapper.IsTrue(HasOnClickList(againButton), "ResultsCard's Again Button has no Button component (Needs Ofir in Unity). If it has one, Unity renamed the OnClick data: update this test");
+        AssertWrapper.IsTrue(IsAnyButtonCalling(againButton, resultsCard, nameof(ResultsCard.PlayAgain)), "Again's OnClick does not call ResultsCard.PlayAgain (Needs Ofir in Unity)");
+        AssertWrapper.IsTrue(IsAnyButtonCalling(panel, resultsCard, nameof(ResultsCard.OpenLeaderboard)), "No button on the results card's Panel calls ResultsCard.OpenLeaderboard (Needs Ofir in Unity)");
+        AssertWrapper.IsTrue(IsAnyButtonCalling(panel, resultsCard, nameof(ResultsCard.OpenMenu)), "No button on the results card's Panel calls ResultsCard.OpenMenu, so after a daily the player is stuck on the card (Needs Ofir in Unity)");
+    }
+
+    // Results card (#249): the open scene's only active card
+    private static ResultsCard GetOnlyResultsCard()
+    {
+        var resultsCards = Object.FindObjectsOfType<ResultsCard>();
+        AssertWrapper.IsTrue(resultsCards.Length == 1, $"The Playground should have one active ResultsCard, it has {resultsCards.Length} (Needs Ofir in Unity)");
+        return resultsCards[0];
+    }
+
+    // Results card (#249): the object wired into one of the card's fields
+    private static Object GetResultsCardField(UnityEditor.SerializedObject serializedResultsCard, string fieldName)
+    {
+        var field = serializedResultsCard.FindProperty(fieldName);
+        AssertWrapper.IsTrue(field != null, $"ResultsCard has no field {fieldName}, update this test");
+        AssertWrapper.IsTrue(field.objectReferenceValue != null, $"ResultsCard's {fieldName} is not wired (Needs Ofir in Unity)");
+        return field.objectReferenceValue;
+    }
+
+    // Buttons are read through their saved OnClick list, so this test assembly needs no reference to UnityEngine.UI
+    private static bool HasOnClickList(GameObject buttonObject)
+    {
+        foreach (var component in buttonObject.GetComponents<Component>())
+        {
+            if (component != null && new UnityEditor.SerializedObject(component).FindProperty(ON_CLICK_CALLS_PATH) != null)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // True when a button on root or under it, switched off or not, has an OnClick entry that calls this method on the card and is not set to Off
+    private static bool IsAnyButtonCalling(GameObject root, ResultsCard resultsCard, string methodName)
+    {
+        foreach (var component in root.GetComponentsInChildren<Component>(true))
+        {
+            // A missing script is an empty component
+            if (component == null)
+            {
+                continue;
+            }
+
+            var onClickCalls = new UnityEditor.SerializedObject(component).FindProperty(ON_CLICK_CALLS_PATH);
+            if (onClickCalls == null)
+            {
+                continue;
+            }
+
+            for (int i = 0; i < onClickCalls.arraySize; i++)
+            {
+                var onClickCall = onClickCalls.GetArrayElementAtIndex(i);
+                if (onClickCall.FindPropertyRelative("m_Target").objectReferenceValue == resultsCard
+                    && onClickCall.FindPropertyRelative("m_MethodName").stringValue == methodName
+                    && onClickCall.FindPropertyRelative("m_CallState").intValue != (int)UnityEngine.Events.UnityEventCallState.Off)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
