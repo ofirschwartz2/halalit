@@ -297,7 +297,7 @@ The Meta assembly is the only one that calls Unity Services (Authentication, Clo
   - `async void` only at a Unity entry point (`Awake`, a button method), with a `try` / `catch` around the awaits. The work itself is `async Task`.
   - After every `await`, check `this == null` before touching the scene: the scene may have been unloaded.
   - A busy flag (`_isSaving`, `_isLoading`) ignores a second tap. A load number drops a result that comes back after Close or a newer Open (`DailyReplay`).
-  - A failed call is logged once and shown as a line of text ("Could not load"), never thrown on. Where being offline is expected, log a warning, not an error (`ResultsCard`, `PlayerNamePanel`, and `LeaderBoard`'s list since #308). `DailyReplay`'s load still logs an error; card #314 makes it a warning.
+  - A failed call is logged once and shown as a line of text ("Could not load"), never thrown on. Where being offline is expected, log a warning, not an error (`ResultsCard`, `PlayerNamePanel`, `LeaderBoard`'s list since #308, and `DailyReplay`'s load since #314).
   - Copy a value before the first `await` if a later run can change it (`PlayerStats.SavePlayerHighScoreAsync`).
 - Unwired guard: a component that waits for Ofir's scene wiring checks its fields in `Awake`, logs one warning or error that names them, and sets `enabled = false`. A half-wired scene then still loads, and the PlayMode tests still run. `PlaygroundTests` checks the Playground's wiring.
 - Swappable services: code that a test must run and that calls a service keeps those calls in `Func<Task…>` fields. A test swaps them through an editor-only `SetServices` hook (3.7). There are two shapes:
